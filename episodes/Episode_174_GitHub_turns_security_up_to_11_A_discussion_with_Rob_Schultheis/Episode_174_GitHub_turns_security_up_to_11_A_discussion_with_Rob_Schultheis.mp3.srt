@@ -1,0 +1,2772 @@
+0
+00:00:05,429 --> 00:00:10,369
+Hello and welcome to the open source security podcast episode 174 with myself,
+
+1
+00:00:10,380 --> 00:00:12,899
+Kurt Siefried and my partner Thought Crime, Josh Pressers.
+
+2
+00:00:12,909 --> 00:00:16,389
+-- Hey, Kurt.
+-- And I am pleased to say today we are joined by Rob Shell.
+
+3
+00:00:16,790 --> 00:00:19,649
+He is a software engineer at github and Rob is
+
+4
+00:00:19,659 --> 00:00:22,120
+here to talk to us about the awesome things github
+
+5
+00:00:22,229 --> 00:00:25,950
+-- is doing with security. So say hello, Rob. Hello.
+-- And it's great to be here.
+
+6
+00:00:25,959 --> 00:00:27,809
+-- Thank you for having me.
+-- No, thank you, man.
+
+7
+00:00:27,819 --> 00:00:30,025
+It's been so the, the audience doesn't know this,
+
+8
+00:00:30,035 --> 00:00:32,506
+but we've had enormous technical difficulties and Kurt and
+
+9
+00:00:32,515 --> 00:00:34,245
+I look like incompetent idiots at this point,
+
+10
+00:00:34,256 --> 00:00:35,965
+but I'm hoping this one will stick.
+
+11
+00:00:35,976 --> 00:00:40,395
+-- So here we go.
+-- The internet works sometimes it's, it's amazing.
+
+12
+00:00:40,666 --> 00:00:43,566
+You know, it's funny, I always think about this is like 10 years ago,
+
+13
+00:00:43,976 --> 00:00:45,895
+this would be unheard of being able to
+
+14
+00:00:45,905 --> 00:00:48,326
+record three people in different parts of the world
+
+15
+00:00:48,585 --> 00:00:49,195
+and
+
+16
+00:00:49,425 --> 00:00:51,765
+in, in a manner that that's useful for podcasting,
+
+17
+00:00:51,776 --> 00:00:53,395
+-- obviously with high quality
+-- without
+
+18
+00:00:53,501 --> 00:00:55,381
+-- installed software.
+-- Yeah. Right. Right.
+
+19
+00:00:55,391 --> 00:00:58,481
+And now we're like, I feel like I'm banging rocks together today anyway.
+
+20
+00:00:58,492 --> 00:00:59,591
+Thank you so much, Rob.
+
+21
+00:00:59,602 --> 00:01:02,562
+So why don't you give us a little intro and then we'll go from there.
+
+22
+00:01:02,571 --> 00:01:05,402
+Yeah, absolutely. I've been a software engineer at github
+
+23
+00:01:05,622 --> 00:01:11,202
+for about 2.5 years now and a lot of what I have worked on there is around our
+
+24
+00:01:11,211 --> 00:01:15,071
+github security Advisory Database and this is a database
+
+25
+00:01:15,082 --> 00:01:17,452
+that is driving a lot of features at github
+
+26
+00:01:17,790 --> 00:01:20,309
+and beyond. It's actually externally available.
+
+27
+00:01:20,319 --> 00:01:22,540
+So I want to talk a lot about the advisory database.
+
+28
+00:01:22,550 --> 00:01:25,269
+Yeah, we've just added a brand new feature.
+
+29
+00:01:25,379 --> 00:01:26,610
+Uh So for a long time, github
+
+30
+00:01:26,769 --> 00:01:29,510
+has been reading the CV E feed, we might,
+
+31
+00:01:29,519 --> 00:01:32,129
+should talk about what CV ES even are uh upfront.
+
+32
+00:01:32,139 --> 00:01:37,750
+But if you have a public repo on github and you maintain a open source package,
+
+33
+00:01:37,760 --> 00:01:41,379
+we will assign CV ES to you for your package if you
+
+34
+00:01:41,389 --> 00:01:43,599
+ask us for them and we'll do that through our whole github
+
+35
+00:01:43,800 --> 00:01:46,239
+advisory database feature set.
+
+36
+00:01:46,614 --> 00:01:48,875
+That's so freaking cool. You have no idea.
+
+37
+00:01:48,885 --> 00:01:51,834
+-- Like I'm, I'm
+-- giddy and even some, I mean github
+
+38
+00:01:51,974 --> 00:01:54,154
+made a couple of subtle changes to the interface.
+
+39
+00:01:54,165 --> 00:01:56,095
+The one where you can now have, as I understand,
+
+40
+00:01:56,105 --> 00:01:58,754
+you can have private issues and sort of private
+
+41
+00:01:58,764 --> 00:02:01,194
+conversations about these issues in a public github.
+
+42
+00:02:01,205 --> 00:02:04,824
+-- Is that
+-- correct? That is true. And we're not calling them private issues.
+
+43
+00:02:04,834 --> 00:02:09,425
+We've called it a private fork. So it's a little bit interesting.
+
+44
+00:02:09,434 --> 00:02:11,654
+So private issues are something,
+
+45
+00:02:11,664 --> 00:02:14,445
+a lot of people want github to make for a lot of reasons
+
+46
+00:02:14,705 --> 00:02:15,315
+and
+
+47
+00:02:15,630 --> 00:02:19,610
+it's difficult. One of the main challenges around that is sort of abuse factor. So
+
+48
+00:02:19,809 --> 00:02:22,240
+we have custom made something just for the security
+
+49
+00:02:22,250 --> 00:02:25,529
+case where a maintainer becomes aware that there is
+
+50
+00:02:25,539 --> 00:02:28,190
+a security problem with their open source package that
+
+51
+00:02:28,199 --> 00:02:31,289
+maintainer can create something called a draft security advisory.
+
+52
+00:02:31,300 --> 00:02:33,490
+It's under the security tab on your repo
+
+53
+00:02:33,679 --> 00:02:37,110
+and from that draft security advisory, uh they can create something,
+
+54
+00:02:37,199 --> 00:02:40,929
+a private fork which gives them a space to fix this issue
+
+55
+00:02:41,149 --> 00:02:41,979
+with others.
+
+56
+00:02:41,990 --> 00:02:46,100
+Um in a way where it never touches their public commit history until they are ready
+
+57
+00:02:46,300 --> 00:02:50,940
+-- to disclose this issue publicly.
+-- That is OK. Let's before we,
+
+58
+00:02:51,080 --> 00:02:54,259
+before we go down this rathole because I, I know we're going to get there.
+
+59
+00:02:54,550 --> 00:02:58,690
+I let's start at the beginning and I wanna kind of dwell on
+
+60
+00:02:59,039 --> 00:03:01,759
+what? So first of all, we mentioned CV E we mentioned github
+
+61
+00:03:01,880 --> 00:03:03,509
+security advisories and now we're,
+
+62
+00:03:03,520 --> 00:03:05,089
+we're on to something called private forks and I
+
+63
+00:03:05,100 --> 00:03:07,009
+feel like let's start at the very beginning,
+
+64
+00:03:07,020 --> 00:03:07,160
+right.
+
+65
+00:03:07,169 --> 00:03:08,289
+Let's just talk about
+
+66
+00:03:08,399 --> 00:03:08,630
+github
+
+67
+00:03:08,800 --> 00:03:11,399
+added the ability to publish security advisory.
+
+68
+00:03:11,410 --> 00:03:14,550
+This has been more at least a year now. I think it's been, it feels like forever, but
+
+69
+00:03:14,660 --> 00:03:15,199
+let's just,
+
+70
+00:03:15,210 --> 00:03:18,240
+let's start there and then we'll weave this tapestry
+
+71
+00:03:18,250 --> 00:03:20,559
+which is going to eventually end with private repos.
+
+72
+00:03:20,570 --> 00:03:22,759
+Why don't, why don't you explain to us what a github
+
+73
+00:03:22,940 --> 00:03:26,440
+-- security advisor is?
+-- Well, let me even back up just a little bit more.
+
+74
+00:03:26,449 --> 00:03:29,149
+If you think about the state of open source before github
+
+75
+00:03:29,279 --> 00:03:29,960
+existed,
+
+76
+00:03:33,369 --> 00:03:34,889
+the open source wasn't thing.
+
+77
+00:03:35,419 --> 00:03:39,759
+Um There were people doing it, there were places like source forge CV S yo. Right.
+
+78
+00:03:39,770 --> 00:03:40,330
+Yeah.
+
+79
+00:03:41,300 --> 00:03:41,669
+And github
+
+80
+00:03:41,820 --> 00:03:45,169
+came along and it kind of standard. OK. You want to participate in open source.
+
+81
+00:03:45,179 --> 00:03:46,940
+Here's how you do it. You can put your code here.
+
+82
+00:03:46,949 --> 00:03:49,820
+Other people will come and help you write the code.
+
+83
+00:03:49,830 --> 00:03:51,039
+If you're doing something interesting,
+
+84
+00:03:51,300 --> 00:03:53,975
+that's been Github's bread and butter for 10 years now,
+
+85
+00:03:53,985 --> 00:03:56,014
+we're trying to do the same thing for security.
+
+86
+00:03:56,024 --> 00:03:58,735
+So the the state of security ecosystem these days
+
+87
+00:03:58,744 --> 00:04:02,214
+is that there's many players with many different interests.
+
+88
+00:04:02,225 --> 00:04:04,615
+And if you're an open source maintainer,
+
+89
+00:04:04,755 --> 00:04:08,375
+you will interact with security researchers. You may want to get a CD.
+
+90
+00:04:08,384 --> 00:04:13,044
+All these things are not easy or straightforward to do until last month when github
+
+91
+00:04:13,145 --> 00:04:14,255
+announced these features.
+
+92
+00:04:15,839 --> 00:04:15,850
+Uh
+
+93
+00:04:16,108 --> 00:04:16,890
+No, I can't.
+
+94
+00:04:16,899 --> 00:04:20,950
+I mean, I, I've assigned 6000 CV S so, and I've helped a lot of people and so is Josh. And
+
+95
+00:04:21,510 --> 00:04:25,369
+-- yeah, we can't argue with you on that one, but you are correct. I
+-- know,
+
+96
+00:04:25,510 --> 00:04:29,859
+I love the work you guys have done with. Uh it was the old Distributed Weakness
+
+97
+00:04:30,070 --> 00:04:31,369
+Foundation was that
+
+98
+00:04:32,040 --> 00:04:33,980
+FDWF? Um
+
+99
+00:04:34,720 --> 00:04:39,670
+So for your listeners who may know what DWF is or was github
+
+100
+00:04:39,809 --> 00:04:43,059
+is fulfilling a lot of the same function in the CBE ecosystem?
+
+101
+00:04:43,540 --> 00:04:45,380
+So Josh backing up,
+
+102
+00:04:46,130 --> 00:04:46,440
+Github
+
+103
+00:04:46,609 --> 00:04:49,079
+introduced security advisories Yeah. Yeah. Yeah.
+
+104
+00:04:49,089 --> 00:04:51,600
+So that is our attempt to do it for security,
+
+105
+00:04:51,609 --> 00:04:55,459
+-- what github uh initially did for open source,
+-- which is huge.
+
+106
+00:04:55,470 --> 00:04:59,399
+And in fact, this is something Kurt and I have talked about at length is the fact that
+
+107
+00:04:59,649 --> 00:05:05,260
+when Kurt created the DWF, there was a lot of effort put forth mostly by him
+
+108
+00:05:05,369 --> 00:05:08,109
+to try to make this a thing in the open source universe.
+
+109
+00:05:08,119 --> 00:05:10,149
+And it was, I think it was partially
+
+110
+00:05:10,549 --> 00:05:13,540
+people, I won't say they don't care, but they kind of don't care.
+
+111
+00:05:13,709 --> 00:05:15,790
+And additionally, there's just a lot of friction there.
+
+112
+00:05:15,799 --> 00:05:17,380
+Whereas like they're already in
+
+113
+00:05:17,670 --> 00:05:17,940
+github,
+
+114
+00:05:18,119 --> 00:05:23,279
+-- that's, this is huge. I
+-- think the, the tooling issue is a huge problem because
+
+115
+00:05:23,459 --> 00:05:24,559
+literally
+
+116
+00:05:24,700 --> 00:05:28,100
+if you ask somebody to do something that not only requires additional effort, but
+
+117
+00:05:28,394 --> 00:05:29,195
+there's additional tooling.
+
+118
+00:05:29,204 --> 00:05:31,334
+Now they have to install that tooling, maintain that tooling.
+
+119
+00:05:31,424 --> 00:05:32,614
+Understand that tooling,
+
+120
+00:05:32,765 --> 00:05:33,654
+it's just not going to fly.
+
+121
+00:05:33,665 --> 00:05:36,904
+And one thing for most of our listeners that I don't think maybe is
+
+122
+00:05:36,915 --> 00:05:41,114
+quite clear is the majority of open source security projects have security flaws,
+
+123
+00:05:41,325 --> 00:05:46,214
+but typically it's so few. It's, you know, a literally a handful per year.
+
+124
+00:05:46,464 --> 00:05:47,575
+So it's not,
+
+125
+00:05:47,695 --> 00:05:49,614
+you know, it's like a, it's like fixing a flat tire,
+
+126
+00:05:49,625 --> 00:05:51,295
+you do it once every five years and,
+
+127
+00:05:51,304 --> 00:05:54,135
+and everybody's terrible at it except for the tow truck guy who
+
+128
+00:05:54,464 --> 00:05:55,404
+five times a day.
+
+129
+00:05:56,109 --> 00:05:58,600
+That's right. And we're trying to be that tow truck guy.
+
+130
+00:05:58,679 --> 00:06:01,559
+So when your open source package gets a vulnerability,
+
+131
+00:06:01,570 --> 00:06:04,809
+we'll show up and help you get that CV E published into the system.
+
+132
+00:06:04,910 --> 00:06:08,000
+The CV E system has been amazing. It's been around since 1999
+
+133
+00:06:08,100 --> 00:06:11,790
+and it's done a great job of like centralizing a list of
+
+134
+00:06:11,799 --> 00:06:16,135
+vulnerabilities in not just software but devices that run on software and,
+
+135
+00:06:16,144 --> 00:06:17,714
+and a lot of things in CBE,
+
+136
+00:06:17,725 --> 00:06:20,024
+one of the main challenges for open source specifically
+
+137
+00:06:20,035 --> 00:06:22,845
+has been just getting access to that CBE system.
+
+138
+00:06:22,855 --> 00:06:24,315
+Like, oh, I've got a vulnerability,
+
+139
+00:06:24,325 --> 00:06:26,635
+I'd like to let people know that about this vulnerability.
+
+140
+00:06:26,644 --> 00:06:29,665
+I'd like to let people know that I fixed it. How do I get the CBE?
+
+141
+00:06:32,170 --> 00:06:34,609
+Uh Kurt and I both know the answer to that and the, the, the,
+
+142
+00:06:35,109 --> 00:06:37,790
+there's a variety of answers. The,
+
+143
+00:06:38,200 --> 00:06:42,809
+the, the worst is become uh AC N A with Miter and
+
+144
+00:06:43,049 --> 00:06:45,690
+I don't know how involved you are in the github process of doing that,
+
+145
+00:06:45,700 --> 00:06:48,940
+but it is not an activity for the timid to say the least.
+
+146
+00:06:49,109 --> 00:06:50,579
+Yeah, and understandably.
+
+147
+00:06:50,589 --> 00:06:53,390
+So the CV E database is really standardized and
+
+148
+00:06:53,399 --> 00:06:55,570
+there's rules about what can be included in it,
+
+149
+00:06:55,579 --> 00:06:57,299
+rules about how to count.
+
+150
+00:06:57,309 --> 00:06:57,769
+Like,
+
+151
+00:06:58,130 --> 00:06:58,190
+yy,
+
+152
+00:06:58,670 --> 00:06:59,059
+if you
+
+153
+00:06:59,209 --> 00:07:00,320
+make 10
+
+154
+00:07:00,570 --> 00:07:05,880
+cross site scripting attacks in your N PM, do you file 10 CV S or do you file one? That's
+
+155
+00:07:06,630 --> 00:07:08,970
+-- usually it's around three or four,
+-- right?
+
+156
+00:07:09,489 --> 00:07:10,470
+It's in the middle.
+
+157
+00:07:10,480 --> 00:07:13,299
+So these rules can be a little bit arcane and,
+
+158
+00:07:13,309 --> 00:07:17,209
+and possibly hard to understand for someone who's just basically trying to say,
+
+159
+00:07:17,220 --> 00:07:18,660
+hey, I fixed a security hole.
+
+160
+00:07:18,670 --> 00:07:21,660
+No, there, there, it's not. Possibly, there's no possibly about it.
+
+161
+00:07:21,670 --> 00:07:25,649
+They are incredibly difficult and I know a huge number of people
+
+162
+00:07:25,660 --> 00:07:28,154
+in the open source world that gave up because they were like,
+
+163
+00:07:28,165 --> 00:07:28,505
+screw it.
+
+164
+00:07:28,515 --> 00:07:29,964
+This isn't worth the effort. I don't care.
+
+165
+00:07:29,975 --> 00:07:33,244
+I don't want to see the ID and I, I understand, I totally get it.
+
+166
+00:07:33,255 --> 00:07:36,964
+-- You know, it's like Kurt's tire analogy.
+-- Yeah. So we, we offer that feature.
+
+167
+00:07:37,255 --> 00:07:38,915
+All right. So, so let's, let's explain.
+
+168
+00:07:38,924 --> 00:07:41,834
+I, I want to understand this feature because I've read all your documentation.
+
+169
+00:07:41,845 --> 00:07:43,804
+I've actually never done it, which is,
+
+170
+00:07:44,140 --> 00:07:45,679
+I, I don't want to,
+
+171
+00:07:45,820 --> 00:07:46,839
+I guess, be a pest.
+
+172
+00:07:46,850 --> 00:07:50,200
+We'll say like just playing around and saying like, I wonder what this button does.
+
+173
+00:07:50,209 --> 00:07:54,040
+We, we encourage people to test all the time. You're welcome to
+
+174
+00:07:54,190 --> 00:07:56,390
+make fake security advisories in your refund
+
+175
+00:07:56,880 --> 00:07:59,920
+and send CBE requests in, please. Not too many because
+
+176
+00:08:00,329 --> 00:08:05,679
+-- we do read each one. Right.
+-- Right. Ok. So, and, and this is where I guess
+
+177
+00:08:06,000 --> 00:08:07,000
+I'm most curious.
+
+178
+00:08:07,010 --> 00:08:07,920
+So it sounds like,
+
+179
+00:08:07,929 --> 00:08:11,019
+and why don't I will tell the story and then you can correct me
+
+180
+00:08:11,029 --> 00:08:14,220
+because I think it'll be more amusing that way because I'm wrong a lot.
+
+181
+00:08:14,230 --> 00:08:15,839
+So, from what I understand,
+
+182
+00:08:16,000 --> 00:08:19,470
+you have the ability to create a private fork if you want
+
+183
+00:08:19,720 --> 00:08:23,010
+for kind of fixing and dealing with your security issue.
+
+184
+00:08:23,019 --> 00:08:27,260
+Now, let's say I don't want to do that because for a variety of reasons
+
+185
+00:08:27,470 --> 00:08:29,739
+I think we embargo too much stuff in security and that's
+
+186
+00:08:29,750 --> 00:08:32,380
+the topic for another day and it's in the archives.
+
+187
+00:08:32,390 --> 00:08:36,950
+So, go look it up. So, anyway, let's say, I say uh this fix is a security issue.
+
+188
+00:08:36,960 --> 00:08:37,900
+So I go into
+
+189
+00:08:38,159 --> 00:08:39,140
+github. I can,
+
+190
+00:08:39,460 --> 00:08:41,080
+II, I don't even remember how to do it.
+
+191
+00:08:41,090 --> 00:08:45,640
+There's, do I click a button to say I need a new security issue for my project.
+
+192
+00:08:45,650 --> 00:08:46,119
+How does that
+
+193
+00:08:46,380 --> 00:08:46,409
+work?
+
+194
+00:08:46,510 --> 00:08:48,559
+Yeah. So on your repo, there's a security tab,
+
+195
+00:08:48,989 --> 00:08:49,609
+-- right?
+-- And
+
+196
+00:08:49,750 --> 00:08:51,520
+under that tab, there's something called advisories.
+
+197
+00:08:52,270 --> 00:08:52,640
+OK?
+
+198
+00:08:53,039 --> 00:08:57,000
+-- And within that tab, there's a button called Open New Draft advisory,
+-- right? Right.
+
+199
+00:08:57,010 --> 00:09:00,320
+OK. Now this is coming back to me and this is, this is where I was
+
+200
+00:09:00,440 --> 00:09:01,960
+becoming concerned. I was gonna
+
+201
+00:09:02,419 --> 00:09:03,320
+annoy you guys.
+
+202
+00:09:03,440 --> 00:09:05,929
+So you kind of fill everything out and you guys have done
+
+203
+00:09:05,940 --> 00:09:10,179
+a nice job of giving me some kind of templated formatting here.
+
+204
+00:09:10,190 --> 00:09:10,440
+Right?
+
+205
+00:09:10,450 --> 00:09:13,469
+And I think this is one of the challenges in the advisory world
+
+206
+00:09:13,479 --> 00:09:16,229
+is understanding what should I say and how should I say it?
+
+207
+00:09:16,690 --> 00:09:17,270
+And
+
+208
+00:09:17,530 --> 00:09:20,080
+you guys have done a nice job here from what I've gathered.
+
+209
+00:09:20,349 --> 00:09:21,909
+So I fill it out
+
+210
+00:09:22,130 --> 00:09:24,320
+and then I hit submit
+
+211
+00:09:24,450 --> 00:09:27,039
+and that goes, but it doesn't get published and I hit submit, right?
+
+212
+00:09:27,049 --> 00:09:29,039
+It goes to you guys first,
+
+213
+00:09:29,380 --> 00:09:30,919
+-- right? OK.
+-- So
+
+214
+00:09:31,140 --> 00:09:32,309
+you are close.
+
+215
+00:09:32,809 --> 00:09:33,549
+Yes,
+
+216
+00:09:33,989 --> 00:09:35,460
+close is good. I can live with close.
+
+217
+00:09:35,479 --> 00:09:38,219
+So you're gonna open your draft security advisory just like you said,
+
+218
+00:09:38,229 --> 00:09:40,679
+you're presented with a form we're gonna ask you some information, you know,
+
+219
+00:09:40,690 --> 00:09:43,780
+what is a short summary of this vulnerability?
+
+220
+00:09:43,989 --> 00:09:46,760
+What are the affected packages? What are the affected versions?
+
+221
+00:09:46,770 --> 00:09:48,570
+You might not know this information yet.
+
+222
+00:09:48,830 --> 00:09:52,320
+So much of it's optional, but you do have to type in at least the description
+
+223
+00:09:52,950 --> 00:09:53,510
+and
+
+224
+00:09:53,619 --> 00:09:56,239
+hit enter and it creates a draft security advisory.
+
+225
+00:09:56,250 --> 00:10:00,200
+So at that point, nothing's happened except there's this record in your repo, at
+
+226
+00:10:00,580 --> 00:10:03,440
+that point, you as a maintainer get to decide. Ok.
+
+227
+00:10:03,450 --> 00:10:06,380
+Am I gonna fix it or do I just want to let people know, hey,
+
+228
+00:10:06,390 --> 00:10:08,359
+this exists and I'm not gonna fix it.
+
+229
+00:10:08,369 --> 00:10:09,710
+That's good though. That's
+
+230
+00:10:10,309 --> 00:10:14,059
+II I just got into this argument yesterday actually, with somebody is the fact that
+
+231
+00:10:14,340 --> 00:10:20,109
+just saying no is better than maybe, right. Yes or no are where you want to be.
+
+232
+00:10:20,119 --> 00:10:23,280
+You don't want this and maybe it's there, maybe I'll fix it someday. I don't know.
+
+233
+00:10:23,289 --> 00:10:23,940
+I don't really care. Right?
+
+234
+00:10:23,950 --> 00:10:27,409
+-- That is the worst possible answer to any question
+-- totally with you.
+
+235
+00:10:27,419 --> 00:10:30,280
+And someone can see that, you know, advisory and say,
+
+236
+00:10:30,289 --> 00:10:31,549
+oh there's an open security issue.
+
+237
+00:10:31,559 --> 00:10:34,559
+It's unfixed. I'm not gonna use that package. I'm gonna look for an alternative.
+
+238
+00:10:34,989 --> 00:10:35,570
+It's important
+
+239
+00:10:35,880 --> 00:10:39,919
+you're sitting there with this draft advisory and let's say in the simple case,
+
+240
+00:10:39,929 --> 00:10:41,429
+you decide, you know what I'm not gonna fix it.
+
+241
+00:10:41,562 --> 00:10:43,452
+At that point, you have two options.
+
+242
+00:10:43,461 --> 00:10:45,452
+You can publish the advisory and it goes to
+
+243
+00:10:45,461 --> 00:10:49,992
+github and we'll publicly publish it in github.com/advisories,
+
+244
+00:10:50,002 --> 00:10:52,091
+which is our advisory database that's public.
+
+245
+00:10:52,322 --> 00:10:55,731
+Awesome. And what if I decide to fix it?
+
+246
+00:10:55,882 --> 00:11:00,851
+-- What does that look like?
+-- Right. So if you decide to fix it, there's a lot of options.
+
+247
+00:11:00,861 --> 00:11:05,531
+If you're a big popular package, you might want to prepare your fix in private,
+
+248
+00:11:05,671 --> 00:11:08,562
+get it ready, write a draft blog post,
+
+249
+00:11:08,763 --> 00:11:11,703
+your blog that says, hey, we've got a big security advisory.
+
+250
+00:11:11,713 --> 00:11:14,473
+We just published version 1.2 0.3.
+
+251
+00:11:14,484 --> 00:11:18,783
+Please go download it and, and that's sort of the, the full featured case.
+
+252
+00:11:18,794 --> 00:11:21,104
+Like you're gonna totally fix this issue in private,
+
+253
+00:11:21,114 --> 00:11:24,273
+get everything ready and then with one bang one button, push,
+
+254
+00:11:24,283 --> 00:11:25,984
+it's all gonna go public at the same time.
+
+255
+00:11:25,994 --> 00:11:29,643
+Nice. So that's what the private fork is for and this is getting all complicated.
+
+256
+00:11:29,653 --> 00:11:34,604
+Now, option B you may be a small project and maybe your fix is just a one line fix.
+
+257
+00:11:34,953 --> 00:11:35,823
+The private fork is
+
+258
+00:11:36,156 --> 00:11:37,596
+overkill for that kind of case.
+
+259
+00:11:37,806 --> 00:11:41,625
+So what you could go ahead and do is just do your fix, put it in your master branch.
+
+260
+00:11:41,635 --> 00:11:42,596
+You know, it's public.
+
+261
+00:11:42,606 --> 00:11:44,676
+If someone's really watching your repo, they can say, oh,
+
+262
+00:11:44,685 --> 00:11:47,315
+they just fixed the security issue and once you've made your fix,
+
+263
+00:11:47,325 --> 00:11:48,515
+you can publish at that time.
+
+264
+00:11:48,606 --> 00:11:50,515
+The key here is when the advisory goes
+
+265
+00:11:50,526 --> 00:11:53,085
+public is totally within the maintainer control.
+
+266
+00:11:53,276 --> 00:11:53,815
+OK,
+
+267
+00:11:54,176 --> 00:11:56,236
+github's not gonna tell you when you should publish.
+
+268
+00:11:56,645 --> 00:11:58,445
+OK. Which is good. Which is cool.
+
+269
+00:11:58,575 --> 00:11:59,435
+And, and I guess
+
+270
+00:11:59,565 --> 00:12:03,075
+how much, when, when you guys get a hold of this,
+
+271
+00:12:03,539 --> 00:12:05,559
+do you, I, I assume
+
+272
+00:12:05,780 --> 00:12:07,080
+in there's some sort of
+
+273
+00:12:07,330 --> 00:12:12,200
+review stage, be it humans or machines or whatever and how often do you have to make,
+
+274
+00:12:12,210 --> 00:12:15,440
+maybe ask questions or make suggestions to these projects?
+
+275
+00:12:15,530 --> 00:12:20,440
+Yes. So there is absolutely a human review stage. So we screen everything
+
+276
+00:12:20,570 --> 00:12:21,840
+that comes in from advisories
+
+277
+00:12:21,945 --> 00:12:27,364
+to a make sure it's on topic. So it's not offensive or an ad or something like that.
+
+278
+00:12:27,465 --> 00:12:31,525
+Oh, that's true, I suppose because it, you have like a big github
+
+279
+00:12:31,664 --> 00:12:34,465
+advisory page. That'd be a marvelous place to put an ad.
+
+280
+00:12:34,534 --> 00:12:38,635
+I've had, I have had people try and stuff, the CV database with advertising
+
+281
+00:12:38,765 --> 00:12:43,315
+-- and making requests and stuff.
+-- I've seen some questionable CV ES in the list. Uh,
+
+282
+00:12:43,655 --> 00:12:44,645
+I read quite a few.
+
+283
+00:12:45,400 --> 00:12:48,179
+It happens so we're gonna screen it to make sure it's on topic.
+
+284
+00:12:48,190 --> 00:12:50,419
+We're gonna screen it to make sure that, you know what,
+
+285
+00:12:50,429 --> 00:12:52,940
+this isn't just some bug you're fixing.
+
+286
+00:12:52,950 --> 00:12:56,380
+It's a legitimate security issue that gets pretty fuzzy.
+
+287
+00:12:56,500 --> 00:13:00,489
+Yeah. No, really. I mean, it, it's a hard question is something, a security issue and
+
+288
+00:13:00,669 --> 00:13:02,940
+you know what, you know, what kills me here always is
+
+289
+00:13:03,229 --> 00:13:06,179
+the really bad security issues are always very clear
+
+290
+00:13:06,190 --> 00:13:08,429
+cut where usually the fix is easy to understand.
+
+291
+00:13:08,440 --> 00:13:10,729
+The problem is easy to understand everyone's on the same page.
+
+292
+00:13:10,739 --> 00:13:14,099
+But then there's like this weird middle squishy area where it's like, it sort of is,
+
+293
+00:13:14,109 --> 00:13:18,489
+it sort of isn't and the patch is terrible and it's gonna take me three times as long to
+
+294
+00:13:18,500 --> 00:13:20,539
+deal with this stupid low severity issue than it
+
+295
+00:13:20,549 --> 00:13:22,250
+did to take care of that critical last week.
+
+296
+00:13:22,260 --> 00:13:22,690
+You know.
+
+297
+00:13:22,940 --> 00:13:26,729
+That's right. And a lot of what's in the CBE database or things like
+
+298
+00:13:26,840 --> 00:13:28,219
+denial of service attacks,
+
+299
+00:13:28,229 --> 00:13:30,789
+you kind of have to look at each one individually and decide.
+
+300
+00:13:30,799 --> 00:13:33,020
+Is that really a security issue or is this just
+
+301
+00:13:33,590 --> 00:13:36,299
+we are going to generally trust maintainers?
+
+302
+00:13:36,309 --> 00:13:38,099
+So when a maintainer says, hey, you know what,
+
+303
+00:13:38,109 --> 00:13:42,059
+this is a security vulnerability and I want to tell my users about it,
+
+304
+00:13:42,070 --> 00:13:44,320
+we're gonna more often trust you than not
+
+305
+00:13:44,640 --> 00:13:47,140
+where things get messy is when they're coming from
+
+306
+00:13:47,299 --> 00:13:50,380
+non maintainers, like security research from the community,
+
+307
+00:13:51,349 --> 00:13:52,390
+which is a quick point.
+
+308
+00:13:52,400 --> 00:13:56,309
+We might want to come back to that, but we are not supporting researchers directly
+
+309
+00:13:56,409 --> 00:13:57,489
+at this time in github.
+
+310
+00:13:57,659 --> 00:13:57,780
+So
+
+311
+00:13:58,070 --> 00:14:01,739
+all the features we're talking about are for open source maintainers only.
+
+312
+00:14:01,840 --> 00:14:03,369
+OK. That's actually good to know.
+
+313
+00:14:03,380 --> 00:14:07,929
+And I, I also don't disagree with that that point because I run a bike bounty
+
+314
+00:14:08,309 --> 00:14:08,969
+and
+
+315
+00:14:09,219 --> 00:14:11,330
+it is very kind people always, you know,
+
+316
+00:14:12,049 --> 00:14:12,070
+I
+
+317
+00:14:12,280 --> 00:14:16,349
+won't say everyone but most researchers are, they file their issue as critical.
+
+318
+00:14:16,359 --> 00:14:16,659
+It's like
+
+319
+00:14:16,919 --> 00:14:20,190
+not critical. And then you argue with them why it's not critical.
+
+320
+00:14:20,200 --> 00:14:22,409
+It's like no, your denial of service issue in this, like,
+
+321
+00:14:22,419 --> 00:14:24,679
+unused website over here is not a critical issue.
+
+322
+00:14:24,690 --> 00:14:25,289
+Just no.
+
+323
+00:14:25,830 --> 00:14:28,340
+And, and I, that that's always going to be the challenge, right?
+
+324
+00:14:28,349 --> 00:14:30,340
+Is these researchers find,
+
+325
+00:14:30,890 --> 00:14:34,710
+we will say probably borderline security issues and they want to
+
+326
+00:14:34,719 --> 00:14:37,390
+pretend it's huge and I get it because it's their baby.
+
+327
+00:14:37,400 --> 00:14:40,989
+-- But from your perspective, like,
+-- don't do that and they're trying to build a career.
+
+328
+00:14:41,000 --> 00:14:41,869
+Yeah. Right. Right.
+
+329
+00:14:41,880 --> 00:14:42,010
+Well,
+
+330
+00:14:42,020 --> 00:14:43,309
+I would say the one thing here is at least
+
+331
+00:14:43,320 --> 00:14:46,369
+these discussions are starting to happen more in public because,
+
+332
+00:14:46,479 --> 00:14:48,690
+I mean, I remember 5, 10 years ago,
+
+333
+00:14:48,909 --> 00:14:52,400
+nobody really got to see discussions of security bugs, right?
+
+334
+00:14:52,409 --> 00:14:54,890
+You would only ever see the advisory with the timeline at the bottom.
+
+335
+00:14:54,900 --> 00:14:56,909
+It was like, terrible. It took like two years.
+
+336
+00:14:57,280 --> 00:14:57,609
+But
+
+337
+00:14:57,880 --> 00:15:00,030
+there was never the discussion of, you know,
+
+338
+00:15:00,039 --> 00:15:02,530
+and that's something I tried to capture and make public is like because, yeah,
+
+339
+00:15:02,539 --> 00:15:03,700
+denial service is a great example.
+
+340
+00:15:03,710 --> 00:15:04,479
+The ping of death, right?
+
+341
+00:15:04,489 --> 00:15:08,609
+You send a oversized pink packet and windows and everything just fell over,
+
+342
+00:15:08,739 --> 00:15:10,169
+like died twitching.
+
+343
+00:15:10,440 --> 00:15:12,789
+You know, clearly that that's a problem
+
+344
+00:15:13,010 --> 00:15:16,419
+on the flip side, you know, something like maybe, well,
+
+345
+00:15:16,429 --> 00:15:18,200
+I opened up a million connections to the Apache
+
+346
+00:15:18,210 --> 00:15:20,150
+web server and it got a little bit slow.
+
+347
+00:15:20,909 --> 00:15:21,190
+Well,
+
+348
+00:15:21,750 --> 00:15:25,320
+yeah, but on the flip side, you know, I've had cases where somebody is like, well, no,
+
+349
+00:15:25,330 --> 00:15:26,510
+no, but this is a security plan.
+
+350
+00:15:26,520 --> 00:15:29,289
+So specifically says it can handle that kind of load
+
+351
+00:15:29,460 --> 00:15:31,940
+without getting slow. And I'm like, oh, ok. Well, I think, you know,
+
+352
+00:15:32,239 --> 00:15:33,650
+intended for this to work.
+
+353
+00:15:34,039 --> 00:15:36,570
+And so I, I think part of the benefit here is we're,
+
+354
+00:15:36,580 --> 00:15:38,280
+we're starting to have these discussions more in public.
+
+355
+00:15:38,289 --> 00:15:40,539
+And I think that will be probably one of the best things
+
+356
+00:15:40,549 --> 00:15:42,619
+actually to come from this get up thing is all these,
+
+357
+00:15:42,739 --> 00:15:45,080
+you know, in the issue, trackers and stuff. There'll be that
+
+358
+00:15:45,309 --> 00:15:48,859
+conversation where, you know, you can then refer to later to educate people.
+
+359
+00:15:48,869 --> 00:15:50,219
+Absolutely. And
+
+360
+00:15:50,440 --> 00:15:53,460
+I really like that point. The rough guideline we're using
+
+361
+00:15:53,719 --> 00:15:56,520
+to determine whether something is a security vulnerability or not.
+
+362
+00:15:56,530 --> 00:16:00,570
+Is, does this bug have consequences in the real world?
+
+363
+00:16:01,159 --> 00:16:01,450
+-- No, I,
+-- I
+
+364
+00:16:01,460 --> 00:16:03,090
+-- like
+-- that. Well, I mean, it's better than that.
+
+365
+00:16:03,099 --> 00:16:08,530
+Does it violate a trust boundary? Which is the, the current official CV E is the
+
+366
+00:16:08,890 --> 00:16:09,840
+ability or not? And I'm like,
+
+367
+00:16:10,190 --> 00:16:12,409
+what's the trust boundary? And they're like, yeah, shut up Kurt.
+
+368
+00:16:14,799 --> 00:16:16,349
+It's everyone's favorite catchphrase, Kurt.
+
+369
+00:16:16,820 --> 00:16:17,219
+Yeah.
+
+370
+00:16:18,530 --> 00:16:21,219
+So one question because I'm just looking at this.
+
+371
+00:16:21,229 --> 00:16:22,099
+So it says, quote unquote,
+
+372
+00:16:22,109 --> 00:16:23,929
+this process may take up to three working days
+
+373
+00:16:23,940 --> 00:16:25,479
+and we may contact you for more information,
+
+374
+00:16:25,489 --> 00:16:26,130
+learn more.
+
+375
+00:16:26,409 --> 00:16:30,340
+I'm curious is that three days actually like a maximum sl a like for example,
+
+376
+00:16:30,349 --> 00:16:32,580
+what if you get like 1000 issues reported in one day?
+
+377
+00:16:32,590 --> 00:16:37,299
+We have not crossed that bridge yet. So please don't go write a script to do that to us.
+
+378
+00:16:37,450 --> 00:16:39,580
+That sounds like a challenge. Everybody.
+
+379
+00:16:39,989 --> 00:16:44,020
+The 72 hours we're gonna do our very best to live by that.
+
+380
+00:16:44,122 --> 00:16:46,762
+If we should get something like 1000 requests,
+
+381
+00:16:46,771 --> 00:16:49,361
+we're gonna employ some tools to try and filter out what,
+
+382
+00:16:49,442 --> 00:16:52,262
+what was automatically generated and what is legitimate.
+
+383
+00:16:52,271 --> 00:16:54,081
+And github has a whole suite of tools for
+
+384
+00:16:54,091 --> 00:16:56,651
+finding that kind of we call it spammy interactions.
+
+385
+00:16:56,661 --> 00:16:59,461
+So we'll go down that road and hopefully we'll be able
+
+386
+00:16:59,471 --> 00:17:03,632
+to filter out the legitimate ones from the non-legitimate ones and,
+
+387
+00:17:03,642 --> 00:17:07,602
+and prioritize those, the 72 hour window is gonna be a challenge for us.
+
+388
+00:17:07,612 --> 00:17:09,862
+So we picked that with the idea that
+
+389
+00:17:10,013 --> 00:17:11,513
+we can still have weekends. Right.
+
+390
+00:17:12,063 --> 00:17:12,563
+Well, you have to be
+
+391
+00:17:12,673 --> 00:17:15,273
+good three working days, which I think is very fair
+
+392
+00:17:15,483 --> 00:17:16,854
+for something that's free.
+
+393
+00:17:17,124 --> 00:17:17,534
+That's true.
+
+394
+00:17:17,604 --> 00:17:22,284
+We are gonna read that request when it comes in and that is a new kind of job at
+
+395
+00:17:22,534 --> 00:17:25,154
+github and it's been an interesting one to carve out.
+
+396
+00:17:25,163 --> 00:17:27,553
+So this has been the bulk of what I've been doing at
+
+397
+00:17:27,953 --> 00:17:28,193
+github.
+
+398
+00:17:28,233 --> 00:17:32,504
+Github really likes processes that operate operationalize into software.
+
+399
+00:17:32,524 --> 00:17:33,024
+-- Well,
+-- it has
+
+400
+00:17:33,034 --> 00:17:35,793
+to, I mean, the current, you know, the current CV database is heavily
+
+401
+00:17:36,556 --> 00:17:40,225
+on capacity by the fact that each CV E is artisan
+
+402
+00:17:40,336 --> 00:17:41,615
+-- handcrafted.
+-- Yep.
+
+403
+00:17:41,625 --> 00:17:43,586
+So as we're doing all this curation,
+
+404
+00:17:43,595 --> 00:17:46,845
+we're building out our tooling internally to try and make that
+
+405
+00:17:46,855 --> 00:17:50,206
+process of curating these requests as efficient as possible for us.
+
+406
+00:17:50,215 --> 00:17:52,546
+And that's a really big part of operating at
+
+407
+00:17:52,676 --> 00:17:54,026
+the scale we operate at.
+
+408
+00:17:54,046 --> 00:17:58,406
+It is still a new thing in github to kind of outside of the support
+
+409
+00:17:58,416 --> 00:18:01,615
+organization to kind of have requests that come in that we have to look at
+
+410
+00:18:01,797 --> 00:18:04,517
+one with a person and I don't think we'll ever completely
+
+411
+00:18:04,527 --> 00:18:06,708
+get away from having a human in the loop here.
+
+412
+00:18:06,718 --> 00:18:07,067
+Sure.
+
+413
+00:18:07,078 --> 00:18:10,098
+Well, I, I think you kind of always need that because, well, I mean, the,
+
+414
+00:18:10,108 --> 00:18:11,647
+the classic example is, you know, Tavis
+
+415
+00:18:11,838 --> 00:18:14,498
+Ormandy hits you up on Twitter on Friday saying, you know,
+
+416
+00:18:14,508 --> 00:18:17,338
+can company X please send me their security contact now,
+
+417
+00:18:18,147 --> 00:18:22,037
+-- you know, and then it's like uh oh,
+-- better run the coffee everyone.
+
+418
+00:18:22,047 --> 00:18:23,417
+It's gonna be a long weekend.
+
+419
+00:18:23,527 --> 00:18:27,177
+We're looking really hard at the broader ecosystem and
+
+420
+00:18:27,317 --> 00:18:27,537
+how
+
+421
+00:18:27,689 --> 00:18:32,089
+we best support researchers. So I do want to talk about that side of the things.
+
+422
+00:18:32,099 --> 00:18:32,489
+-- All right,
+-- let
+
+423
+00:18:32,500 --> 00:18:35,680
+-- me,
+-- let me back this up for one second first before we move on.
+
+424
+00:18:35,760 --> 00:18:38,189
+So we were talking about filing advisories.
+
+425
+00:18:38,199 --> 00:18:42,750
+Now, how do I make sure I get a CV E when I'm filing an advisory with github.
+
+426
+00:18:42,930 --> 00:18:45,510
+Indeed. Right now today, you have to ask us for one.
+
+427
+00:18:45,660 --> 00:18:48,969
+So when you make your draft advisory, like we described,
+
+428
+00:18:48,979 --> 00:18:51,729
+there is a option to do two things.
+
+429
+00:18:51,739 --> 00:18:54,842
+One is publish the advisory and the other is request the CBE.
+
+430
+00:18:54,852 --> 00:18:55,171
+Gotch,
+
+431
+00:18:55,202 --> 00:18:58,212
+you publish an advisory is a one time thing that's
+
+432
+00:18:58,222 --> 00:19:01,781
+gonna make the quote draft advisory public on your repository.
+
+433
+00:19:01,791 --> 00:19:05,442
+Only once you've published, you can still request the CBE if you have not yet.
+
+434
+00:19:05,531 --> 00:19:06,401
+Ok, good, good.
+
+435
+00:19:06,751 --> 00:19:08,241
+So that's how it works today.
+
+436
+00:19:08,251 --> 00:19:11,482
+You have to basically hit the request CBE button from an advisory,
+
+437
+00:19:11,491 --> 00:19:13,881
+whether it's draft or published and then we get the CBE
+
+438
+00:19:13,891 --> 00:19:16,322
+request and we get back to you within 72 hours.
+
+439
+00:19:16,332 --> 00:19:19,362
+Got you in the future. We do feel like
+
+440
+00:19:19,650 --> 00:19:23,349
+it's our duty as AC N A to assign CBES to
+
+441
+00:19:23,479 --> 00:19:26,989
+any repository advisory. Oh man, it gets published
+
+442
+00:19:27,800 --> 00:19:30,060
+that meets the requirements for A CV E ID.
+
+443
+00:19:30,209 --> 00:19:31,160
+That is
+
+444
+00:19:31,319 --> 00:19:32,000
+that, that,
+
+445
+00:19:32,189 --> 00:19:37,189
+that's the question I was waiting to ask and that's awesome. Now,
+
+446
+00:19:37,290 --> 00:19:41,734
+there's a lot of asterisks, I'd put next to that. That's awesome.
+
+447
+00:19:41,744 --> 00:19:44,494
+But I think that is what the world needs.
+
+448
+00:19:44,505 --> 00:19:49,165
+I think for CV E to become truly useful across the entire industry.
+
+449
+00:19:49,175 --> 00:19:53,484
+And so that is amazing. Well done on that lofty goal. I love it.
+
+450
+00:19:53,494 --> 00:19:55,555
+Really glad to hear that you like it.
+
+451
+00:19:55,939 --> 00:19:55,959
+Uh
+
+452
+00:19:56,089 --> 00:19:59,000
+I'm not sure some maintainers will like it.
+
+453
+00:19:59,010 --> 00:20:00,520
+I'm sure some maintainers will like it,
+
+454
+00:20:00,530 --> 00:20:03,209
+it may be controversial on some level fundamentally.
+
+455
+00:20:03,219 --> 00:20:04,400
+I mean, it's a spectrum, right?
+
+456
+00:20:04,410 --> 00:20:08,109
+I've literally had projects argue with me that they want more CV S and I'm like, dude,
+
+457
+00:20:08,119 --> 00:20:09,020
+that's not a security issue.
+
+458
+00:20:09,030 --> 00:20:09,400
+I'm like
+
+459
+00:20:09,640 --> 00:20:12,229
+you to split and merge like I have to combine these, I'm sorry,
+
+460
+00:20:12,239 --> 00:20:13,810
+you can't have all these TV S you want.
+
+461
+00:20:13,819 --> 00:20:18,160
+And conversely, I've dealt with projects, you know, that are incredibly hostile
+
+462
+00:20:18,262 --> 00:20:18,772
+CV. S.
+
+463
+00:20:19,012 --> 00:20:21,152
+And I was going to ask about that because I've also on the,
+
+464
+00:20:21,162 --> 00:20:25,402
+we've only been thinking about the sort of supply side here on the consumption side.
+
+465
+00:20:25,412 --> 00:20:27,822
+I've met a lot of people where to put it bluntly,
+
+466
+00:20:27,853 --> 00:20:30,422
+it's not a security vulnerability until it has a CV.
+
+467
+00:20:30,432 --> 00:20:31,603
+And then for a lot of these people,
+
+468
+00:20:31,613 --> 00:20:34,762
+a clock starts ticking and have you heard from them?
+
+469
+00:20:34,822 --> 00:20:36,402
+So, on the consumer side,
+
+470
+00:20:36,412 --> 00:20:40,532
+github has for about two years offered what we call security alerts based on CV S
+
+471
+00:20:40,836 --> 00:20:45,026
+and those are cool too. Yes. And they have not been without some controversy.
+
+472
+00:20:45,036 --> 00:20:46,446
+So just really quick,
+
+473
+00:20:46,456 --> 00:20:50,536
+there has been some cases where we've issued security alerts based on
+
+474
+00:20:50,546 --> 00:20:53,245
+a CV E and the maintainers has then gotten a lot of
+
+475
+00:20:53,385 --> 00:20:56,166
+requests from their users, the users come to them and say, hey,
+
+476
+00:20:56,176 --> 00:20:57,326
+we got this security alert.
+
+477
+00:20:57,336 --> 00:20:58,526
+What are we gonna do about it?
+
+478
+00:20:58,536 --> 00:21:02,786
+Um It might be unpatched and that has ruined a maintainer day more than once.
+
+479
+00:21:03,270 --> 00:21:05,839
+Yeah, but I would argue
+
+480
+00:21:06,119 --> 00:21:06,910
+that
+
+481
+00:21:07,130 --> 00:21:10,719
+having an unpatched vulnerability that can be exploited
+
+482
+00:21:10,729 --> 00:21:12,839
+is going to ruin your day way worse than
+
+483
+00:21:12,849 --> 00:21:16,219
+just having people complain that you may or may not be vulnerable to a CV ID.
+
+484
+00:21:16,229 --> 00:21:16,839
+That's right.
+
+485
+00:21:16,849 --> 00:21:20,290
+So I think in some of the past cases the maintainers have
+
+486
+00:21:20,300 --> 00:21:23,160
+had a legitimate case that the CBE should not have existed.
+
+487
+00:21:23,170 --> 00:21:24,839
+Now, this was, of course not a CV E github
+
+488
+00:21:25,020 --> 00:21:25,359
+made,
+
+489
+00:21:26,250 --> 00:21:27,189
+of course not.
+
+490
+00:21:27,319 --> 00:21:30,140
+And they were not looped in when the CBE was made.
+
+491
+00:21:30,150 --> 00:21:33,670
+So we're working really hard to walk that line between,
+
+492
+00:21:33,680 --> 00:21:36,660
+if it's a legit security issue, we're gonna put a CV E on it.
+
+493
+00:21:36,670 --> 00:21:38,810
+We're gonna tell people about it through security alerts
+
+494
+00:21:38,819 --> 00:21:40,369
+and if it's not a legit security issue,
+
+495
+00:21:40,380 --> 00:21:42,310
+we're not gonna do that because we want to
+
+496
+00:21:42,319 --> 00:21:45,000
+protect maintainers sanity and keep them in the open
+
+497
+00:21:45,109 --> 00:21:45,250
+source
+
+498
+00:21:45,589 --> 00:21:45,829
+system.
+
+499
+00:21:46,609 --> 00:21:46,709
+It
+
+500
+00:21:47,000 --> 00:21:47,160
+occurs.
+
+501
+00:21:47,432 --> 00:21:47,532
+I mean,
+
+502
+00:21:47,542 --> 00:21:50,542
+you fundamentally have one advantage that and I've done this where I've assigned
+
+503
+00:21:50,552 --> 00:21:52,093
+CV S and then the project came to me and they're like,
+
+504
+00:21:52,103 --> 00:21:52,922
+why didn't you talk to us?
+
+505
+00:21:52,932 --> 00:21:53,373
+I'm like,
+
+506
+00:21:53,623 --> 00:21:57,292
+I didn't know you exist really? Like I'm, you know, I'm not gonna chase you down
+
+507
+00:21:57,603 --> 00:21:57,993
+you.
+
+508
+00:21:58,282 --> 00:21:59,022
+Whereas github
+
+509
+00:21:59,243 --> 00:22:00,333
+inherently,
+
+510
+00:22:00,593 --> 00:22:03,593
+yeah, you can contact the, the, I want to say owners of the code.
+
+511
+00:22:03,603 --> 00:22:05,312
+I don't mean owners, owners, but you know, the,
+
+512
+00:22:05,322 --> 00:22:07,422
+the core maintainers or whatever you want to call it.
+
+513
+00:22:07,503 --> 00:22:09,015
+And, and another thing you can do on
+
+514
+00:22:09,336 --> 00:22:13,995
+github is if you run a package, you can create a security dot MD file in your github
+
+515
+00:22:14,135 --> 00:22:14,625
+repo.
+
+516
+00:22:15,196 --> 00:22:17,436
+And that's a way to tell the public.
+
+517
+00:22:17,446 --> 00:22:20,556
+Hey, here's how I want you to report security vulnerabilities to me.
+
+518
+00:22:20,566 --> 00:22:21,676
+If you're a maintainer,
+
+519
+00:22:21,875 --> 00:22:24,546
+please go create a security MD file today
+
+520
+00:22:24,816 --> 00:22:27,505
+for real do that. Absolutely. That's,
+
+521
+00:22:27,676 --> 00:22:29,715
+that is fantastic. I love that.
+
+522
+00:22:30,260 --> 00:22:32,479
+And so we were talking about the consumption side.
+
+523
+00:22:33,709 --> 00:22:37,079
+Well, just, is there been much pushback or is it just, it hasn't happened yet?
+
+524
+00:22:37,089 --> 00:22:38,319
+So people haven't freaked out because,
+
+525
+00:22:38,449 --> 00:22:39,000
+like,
+
+526
+00:22:39,010 --> 00:22:40,829
+I've done back in the envelope calculations
+
+527
+00:22:40,839 --> 00:22:42,599
+and for the English speaking software world,
+
+528
+00:22:42,609 --> 00:22:42,939
+I'm
+
+529
+00:22:43,170 --> 00:22:45,709
+estimating we need between one and 10 million CV
+
+530
+00:22:45,719 --> 00:22:47,839
+S per year to have reasonably full coverage.
+
+531
+00:22:48,369 --> 00:22:50,619
+And when I tell people that they look at me, they go what?
+
+532
+00:22:50,630 --> 00:22:52,489
+And I'm like, well, yeah, because the CV database right now,
+
+533
+00:22:52,500 --> 00:22:55,479
+you're looking about what, 1015, 18,000 CV S a year.
+
+534
+00:22:55,489 --> 00:22:56,280
+And it's, it's
+
+535
+00:22:56,760 --> 00:22:59,920
+a, there's just a hair over 100 CV number of authorities globally.
+
+536
+00:22:59,969 --> 00:23:02,459
+There's a lot more software vendors than 100 I think.
+
+537
+00:23:02,469 --> 00:23:02,939
+So,
+
+538
+00:23:02,949 --> 00:23:06,420
+our CV assignment program has been around for about two weeks
+
+539
+00:23:06,430 --> 00:23:09,599
+and we have assigned 10 CV E I DS so far.
+
+540
+00:23:09,969 --> 00:23:12,400
+Um So we have not seen a huge impact yet.
+
+541
+00:23:12,410 --> 00:23:16,000
+We're seeing the amount of requests coming in going up and we are
+
+542
+00:23:16,010 --> 00:23:19,030
+expecting some big packages to be requesting CV ES from us soon.
+
+543
+00:23:19,040 --> 00:23:23,219
+-- So I think your question is gonna be answered very soon.
+-- I feel like
+
+544
+00:23:23,569 --> 00:23:27,569
+you are dead on there and I would expect the uptake of this particular
+
+545
+00:23:27,579 --> 00:23:31,459
+project to be very slow because I think unless you're in a very,
+
+546
+00:23:31,469 --> 00:23:35,550
+very small group of people, you don't even know what this means yet.
+
+547
+00:23:35,599 --> 00:23:37,140
+But it's going to be awesome.
+
+548
+00:23:37,280 --> 00:23:37,790
+That's right.
+
+549
+00:23:38,099 --> 00:23:40,949
+It's a really powerful feature and it is intended for
+
+550
+00:23:40,959 --> 00:23:43,439
+a small percentage of github users as it is.
+
+551
+00:23:43,449 --> 00:23:43,640
+Yeah.
+
+552
+00:23:43,810 --> 00:23:45,339
+-- Yeah.
+-- Yeah. Now I wanna
+
+553
+00:23:45,550 --> 00:23:49,140
+let you finish your previous thought that I rudely interrupted you earlier.
+
+554
+00:23:49,150 --> 00:23:51,380
+Were you discussing kind of uh how researchers can
+
+555
+00:23:51,390 --> 00:23:53,800
+benefit from some of the tooling at play here?
+
+556
+00:23:53,810 --> 00:23:57,400
+-- Yeah.
+-- So we should talk about just the greater ecosystem a little bit.
+
+557
+00:23:57,780 --> 00:23:59,319
+So I want to talk about github
+
+558
+00:23:59,530 --> 00:24:02,199
+security lab, which is a new project
+
+559
+00:24:02,310 --> 00:24:02,339
+at
+
+560
+00:24:02,459 --> 00:24:02,729
+github.
+
+561
+00:24:03,589 --> 00:24:06,619
+-- I was gonna say I've never heard of this. It
+-- looks cool.
+
+562
+00:24:06,900 --> 00:24:09,699
+OK? So github.com/security dash
+
+563
+00:24:09,890 --> 00:24:12,780
+-- lab and, and
+-- I'll make sure I put links to all this stuff in the show notes.
+
+564
+00:24:12,790 --> 00:24:17,050
+-- So if, if you're scribbling feverishly right now, you can stop
+-- and
+
+565
+00:24:17,219 --> 00:24:21,969
+-- I apologize. It's uh github.com security.
+-- We just say go to the show notes.
+
+566
+00:24:22,459 --> 00:24:22,719
+Right.
+
+567
+00:24:23,359 --> 00:24:24,280
+Exactly.
+
+568
+00:24:24,589 --> 00:24:27,589
+So this comes from our acquisition of a company called
+
+569
+00:24:27,819 --> 00:24:28,969
+Semel a couple months ago,
+
+570
+00:24:29,079 --> 00:24:31,579
+which is another topic we should discuss but
+
+571
+00:24:31,589 --> 00:24:33,369
+not today because we're running out of time.
+
+572
+00:24:34,479 --> 00:24:36,770
+So I really only want to touch on this briefly,
+
+573
+00:24:36,780 --> 00:24:39,140
+but I'd love for your listeners who are security
+
+574
+00:24:39,150 --> 00:24:41,739
+research to go check out our code QL offering.
+
+575
+00:24:41,750 --> 00:24:44,260
+This is a way we're trying to give researchers
+
+576
+00:24:44,270 --> 00:24:46,770
+more leverage and more ways to get bounties.
+
+577
+00:24:46,780 --> 00:24:48,300
+And what code QL is.
+
+578
+00:24:48,310 --> 00:24:51,180
+If you think about a traditional software vulnerability,
+
+579
+00:24:51,189 --> 00:24:54,459
+you identify a specific sort of piece of code that's bad.
+
+580
+00:24:54,810 --> 00:24:57,189
+And you say here's how it's bad. Here's the bad thing that can happen.
+
+581
+00:24:57,199 --> 00:24:59,630
+What code QL does is it lets you write
+
+582
+00:24:59,640 --> 00:25:03,829
+a query that searches code repositories for bad code.
+
+583
+00:25:03,839 --> 00:25:04,859
+Yep. Yep. And
+
+584
+00:25:05,209 --> 00:25:05,469
+github.
+
+585
+00:25:05,479 --> 00:25:05,859
+If,
+
+586
+00:25:05,869 --> 00:25:08,010
+if you are a researcher who learns to use the
+
+587
+00:25:08,020 --> 00:25:12,500
+code QL product and you create a code QL query
+
+588
+00:25:12,739 --> 00:25:13,359
+that can find
+
+589
+00:25:13,650 --> 00:25:17,060
+security vulnerabilities. Get hub will pay you a bounty for that. Oh, cool.
+
+590
+00:25:17,069 --> 00:25:17,670
+-- I
+-- didn't know that.
+
+591
+00:25:17,680 --> 00:25:18,180
+That's awesome.
+
+592
+00:25:18,189 --> 00:25:19,939
+So this is basically automation of the,
+
+593
+00:25:19,949 --> 00:25:21,959
+because there's a couple of projects where they don't when they
+
+594
+00:25:21,969 --> 00:25:24,439
+are reported to security vulnerability instead of just fixing it,
+
+595
+00:25:24,449 --> 00:25:26,040
+they also audit their code for all
+
+596
+00:25:26,050 --> 00:25:28,949
+other possible instances of that class of vulnerability
+
+597
+00:25:29,079 --> 00:25:30,160
+and try and stomp it.
+
+598
+00:25:30,410 --> 00:25:32,449
+And so you're saying basically you, you're automated
+
+599
+00:25:32,609 --> 00:25:35,589
+-- the discovery of those flaws.
+-- Yep, that's completely right.
+
+600
+00:25:35,599 --> 00:25:37,760
+So now researchers have two ways to get bounties.
+
+601
+00:25:37,770 --> 00:25:40,400
+Each instance of an uh vulnerability they
+
+602
+00:25:40,410 --> 00:25:43,020
+find can potentially be eligible for a bounty
+
+603
+00:25:43,030 --> 00:25:46,750
+and the query they've used to find them can itself be eligible for a bounty.
+
+604
+00:25:47,329 --> 00:25:48,589
+That is so cool.
+
+605
+00:25:48,930 --> 00:25:50,239
+OK. Just like that.
+
+606
+00:25:50,479 --> 00:25:52,160
+That is literally blowing my mind.
+
+607
+00:25:53,030 --> 00:25:57,589
+No, because this is the kind of automation tooling. I wish I'd had other jobs.
+
+608
+00:25:57,869 --> 00:26:00,640
+We're not the only ones offering bounties on Co QL
+
+609
+00:26:00,650 --> 00:26:04,800
+uh Mozilla is also doing the same basic bounty program.
+
+610
+00:26:04,810 --> 00:26:05,920
+Nice. Nice.
+
+611
+00:26:06,199 --> 00:26:06,959
+I love that.
+
+612
+00:26:07,140 --> 00:26:07,520
+Yeah.
+
+613
+00:26:07,530 --> 00:26:10,160
+So the way this all sort of ties into my work
+
+614
+00:26:10,170 --> 00:26:14,479
+is my researcher could use CO QL to find some vulnerabilities.
+
+615
+00:26:14,489 --> 00:26:16,199
+They tell the maintainer about them.
+
+616
+00:26:16,209 --> 00:26:18,359
+Maintainer is gonna create a repository advisory.
+
+617
+00:26:18,369 --> 00:26:21,069
+And then from that repository advisory request, the CV E,
+
+618
+00:26:21,189 --> 00:26:24,810
+we'll sign them A CV E and there's going to be an advisory in the github
+
+619
+00:26:24,949 --> 00:26:27,530
+Advisory Database and there's going to be a CV for it.
+
+620
+00:26:27,750 --> 00:26:29,530
+-- That
+-- is
+-- awesome. That is like
+
+621
+00:26:29,699 --> 00:26:33,739
+the, the, this is, this is the circle we've always needed
+
+622
+00:26:33,849 --> 00:26:34,219
+that.
+
+623
+00:26:34,229 --> 00:26:35,319
+I, we've never had,
+
+624
+00:26:35,329 --> 00:26:38,969
+it's always been like pieces of something you tape together and hope it works.
+
+625
+00:26:38,979 --> 00:26:39,530
+So
+
+626
+00:26:39,770 --> 00:26:43,430
+-- I'm, this is so cool. Well, and
+-- everybody has a slightly different, I mean, oh,
+
+627
+00:26:43,640 --> 00:26:47,319
+-- you know, it doesn't even be worth talking about. It's so terrible.
+-- Right. Right.
+
+628
+00:26:47,380 --> 00:26:49,250
+No, I, I agree. I agree completely. So
+
+629
+00:26:49,359 --> 00:26:52,300
+I guess some of my like research I've done into this,
+
+630
+00:26:52,310 --> 00:26:54,260
+it sounds like right now you guys have
+
+631
+00:26:54,459 --> 00:26:59,780
+like a capture the flag going on for code QL, which I think ends at the end of the year,
+
+632
+00:26:59,790 --> 00:27:03,060
+the year 2019 because obviously that's one of the disadvantages
+
+633
+00:27:03,069 --> 00:27:05,160
+to podcasts is who knows when people will listen.
+
+634
+00:27:05,170 --> 00:27:08,170
+But that looks super cool. You've got what I, I saw,
+
+635
+00:27:08,500 --> 00:27:13,099
+you've got a Twitter handle for your security lab that it tweets various things out.
+
+636
+00:27:13,109 --> 00:27:16,640
+Actually, I saw you have a, a slack instance that I just signed up for,
+
+637
+00:27:16,650 --> 00:27:17,420
+which is awesome.
+
+638
+00:27:17,939 --> 00:27:21,410
+OK, cool. So we are, we are nearly out of time.
+
+639
+00:27:21,420 --> 00:27:23,750
+And I feel I have so many more questions for you, Rob, but I,
+
+640
+00:27:23,760 --> 00:27:26,349
+I wanna respect your time as well as the listeners,
+
+641
+00:27:26,359 --> 00:27:31,930
+but I guess I will give you the last word on all of this and I'll let you take us out.
+
+642
+00:27:31,939 --> 00:27:32,390
+But
+
+643
+00:27:32,500 --> 00:27:34,790
+man, this is all so freaking cool. I love it.
+
+644
+00:27:34,800 --> 00:27:38,130
+Uh Yeah, I'd like to say thank you, Kurt and Josh for
+
+645
+00:27:38,750 --> 00:27:43,239
+having us on the uh open source security podcast to talk about all these github
+
+646
+00:27:43,390 --> 00:27:47,420
+features and the work we're doing to support security and open source.
+
+647
+00:27:47,430 --> 00:27:51,369
+The main takeaway, I'd love for your listeners to take away
+
+648
+00:27:51,729 --> 00:27:54,650
+is that these tools are there for them to get involved.
+
+649
+00:27:54,660 --> 00:27:57,670
+So if you're a maintainer of an open source package,
+
+650
+00:27:57,680 --> 00:28:01,140
+go ahead and give out the security advisory feature.
+
+651
+00:28:01,150 --> 00:28:05,770
+A try. It's under the security tab of your repo. It's nice to just know it's there.
+
+652
+00:28:05,780 --> 00:28:09,839
+So when the day comes along, when someone does shout you on Twitter and say, hey,
+
+653
+00:28:09,849 --> 00:28:11,589
+I found a big security problem.
+
+654
+00:28:11,599 --> 00:28:12,709
+Can I have your email?
+
+655
+00:28:13,229 --> 00:28:13,839
+Right?
+
+656
+00:28:13,869 --> 00:28:16,280
+You'll know that this feature is there and that we can help you,
+
+657
+00:28:16,290 --> 00:28:20,119
+get your CV E and get your users alerted once you have your patch ready.
+
+658
+00:28:20,130 --> 00:28:24,640
+And another thing is if you have ideas about how github can
+
+659
+00:28:24,770 --> 00:28:27,130
+help researchers, we do offer an email address.
+
+660
+00:28:27,140 --> 00:28:30,630
+It's security dash advisories at github.com.
+
+661
+00:28:31,569 --> 00:28:35,000
+That's our public CN A email. You can find that on the miter website.
+
+662
+00:28:35,010 --> 00:28:38,229
+So if you ever want to give us feedback about AC be we issued
+
+663
+00:28:38,239 --> 00:28:41,036
+or give us feedback about how we could make our CV E program better.
+
+664
+00:28:41,046 --> 00:28:42,786
+That's a place you can reach out. Awesome.
+
+665
+00:28:42,806 --> 00:28:45,836
+And lastly, like we talked about, I think the github
+
+666
+00:28:46,005 --> 00:28:46,826
+security lab,
+
+667
+00:28:46,836 --> 00:28:50,786
+if you're a security researcher is something you should definitely check out.
+
+668
+00:28:51,385 --> 00:28:54,715
+I'm planning to dig into the code QL product myself.
+
+669
+00:28:54,725 --> 00:28:57,666
+It looks really powerful and like it could be a
+
+670
+00:28:57,676 --> 00:29:00,715
+game changer for how we do security and open source.
+
+671
+00:29:00,725 --> 00:29:05,076
+I, I have no doubt it will be awesome. Wonderful. Thank you so much, Rob.
+
+672
+00:29:05,086 --> 00:29:08,391
+It has been an absolute pleasure and we shall definitely have to have you back soon.
+
+673
+00:29:08,401 --> 00:29:11,991
+Likewise, we'd love to come back and I can get you some more uh people from github
+
+674
+00:29:12,192 --> 00:29:16,952
+-- to uh talk about some other security features.
+-- I will totally take you up on that.
+
+675
+00:29:16,962 --> 00:29:19,271
+All right, cool. So, thank you, Rob. Thank you, Kurt.
+
+676
+00:29:19,281 --> 00:29:20,482
+Thank you everyone for listening.
+
+677
+00:29:20,491 --> 00:29:23,141
+You can go to open source security podcast.com, hit up the show notes,
+
+678
+00:29:23,151 --> 00:29:26,271
+UZ pound Os S podcast hashtag to hit us up on social
+
+679
+00:29:26,281 --> 00:29:29,442
+media and Rob and Kurt have fantastic rest of your days.
+
+680
+00:29:29,452 --> 00:29:32,401
+-- You too. Thanks everybody. Thank
+-- you. Thanks everyone. Bye bye
+
+681
+00:29:36,849 --> 00:29:36,910
+the

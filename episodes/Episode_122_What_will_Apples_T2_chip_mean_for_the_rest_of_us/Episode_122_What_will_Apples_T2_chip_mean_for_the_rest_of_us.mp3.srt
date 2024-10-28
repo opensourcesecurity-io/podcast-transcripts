@@ -1,0 +1,3138 @@
+0
+00:00:05,289 --> 00:00:09,949
+Hello and welcome to episode 122 of the open source security podcast with myself,
+
+1
+00:00:09,960 --> 00:00:12,609
+-- Kurt Siefried and my partner in Thought Crime, Josh
+-- Pressers.
+
+2
+00:00:12,850 --> 00:00:13,710
+What's new man?
+
+3
+00:00:14,619 --> 00:00:17,180
+Uh Apple has some nice shiny new products.
+
+4
+00:00:17,559 --> 00:00:18,120
+They, they do.
+
+5
+00:00:18,129 --> 00:00:18,870
+Actually, there was,
+
+6
+00:00:18,879 --> 00:00:21,989
+there was an announcement about some of their new stuff and we decided we
+
+7
+00:00:22,000 --> 00:00:26,270
+should talk about their T two security chip which while not open source is security
+
+8
+00:00:26,909 --> 00:00:26,940
+and
+
+9
+00:00:28,590 --> 00:00:28,739
+not even
+
+10
+00:00:28,850 --> 00:00:29,690
+close to open.
+
+11
+00:00:30,084 --> 00:00:31,245
+However, however,
+
+12
+00:00:31,454 --> 00:00:35,134
+the one thing that, that I'm telling myself uh potentially is a lie,
+
+13
+00:00:35,145 --> 00:00:38,575
+but I don't think so is that this is technology we're going to be
+
+14
+00:00:38,584 --> 00:00:42,235
+seeing all over the place in a couple of years because I think what,
+
+15
+00:00:42,244 --> 00:00:45,154
+what Apple's doing here will change the game enough
+
+16
+00:00:45,395 --> 00:00:46,645
+that it's going to make a difference.
+
+17
+00:00:46,654 --> 00:00:46,784
+Now,
+
+18
+00:00:46,794 --> 00:00:51,634
+all of you people screaming T PM at your phone or whatever you're listening to us on.
+
+19
+00:00:51,965 --> 00:00:56,645
+No, no A T PM sucks. And this actually looks like it might work. So all
+
+20
+00:00:56,924 --> 00:00:56,955
+X
+
+21
+00:00:57,509 --> 00:00:57,810
+why,
+
+22
+00:00:57,819 --> 00:01:00,450
+why don't you start us off by just kind of
+
+23
+00:01:00,459 --> 00:01:03,490
+running through a brief overview of what this thing is.
+
+24
+00:01:04,180 --> 00:01:07,360
+So the T two security chip is an actual, like,
+
+25
+00:01:07,370 --> 00:01:12,750
+separate physical chip that is on the motherboard of your, um, new Apple air.
+
+26
+00:01:13,919 --> 00:01:18,050
+-- And I believe we
+-- should also specify. It's, it's a custom chip.
+
+27
+00:01:18,550 --> 00:01:20,779
+-- It's
+-- only Apple has this. Like, they, they,
+
+28
+00:01:20,790 --> 00:01:21,889
+they built it
+
+29
+00:01:22,459 --> 00:01:26,110
+-- and, and yes, it's the airs and the,
+-- well, they didn't build it.
+
+30
+00:01:26,120 --> 00:01:28,250
+They, they designed it and they had it built for them.
+
+31
+00:01:29,139 --> 00:01:30,379
+Well. Right. Yes,
+
+32
+00:01:30,809 --> 00:01:33,589
+nobody builds anything anymore. Right. You design things.
+
+33
+00:01:35,199 --> 00:01:35,769
+Right. Right.
+
+34
+00:01:35,779 --> 00:01:36,430
+And, and yes,
+
+35
+00:01:36,440 --> 00:01:39,550
+you are correct that this is on the Airs and the pros
+
+36
+00:01:39,559 --> 00:01:43,040
+and for what it's worth some of this functionality already exists today
+
+37
+00:01:43,209 --> 00:01:47,199
+in iphones and even things like the surface tablets from Microsoft but not,
+
+38
+00:01:47,209 --> 00:01:48,239
+not on this level.
+
+39
+00:01:48,410 --> 00:01:52,544
+Well, and part of it is because those things slightly different attack vectors.
+
+40
+00:01:52,555 --> 00:01:54,735
+But regardless, so the T two security chip
+
+41
+00:01:54,955 --> 00:01:56,894
+I think is pretty nifty.
+
+42
+00:01:57,235 --> 00:02:01,614
+The old style was, oh, physical attacks came over. Right. That was always the man
+
+43
+00:02:01,885 --> 00:02:05,214
+if somebody physically controls your device game over. Well, you know what?
+
+44
+00:02:05,224 --> 00:02:08,934
+That's not good enough anymore because I have a computer in my pocket, my phone
+
+45
+00:02:09,085 --> 00:02:12,255
+that has my entire life on there. My last pass, my Google everything
+
+46
+00:02:12,434 --> 00:02:15,975
+and, you know, at some point I probably will lose physical control of it.
+
+47
+00:02:15,985 --> 00:02:16,654
+I'll get mugged.
+
+48
+00:02:16,664 --> 00:02:18,804
+You know, if somebody points a gun at me and says, give me your phone,
+
+49
+00:02:18,815 --> 00:02:19,654
+my answer will be yes.
+
+50
+00:02:20,309 --> 00:02:21,419
+-- Like here it is. Take
+-- it from,
+
+51
+00:02:22,389 --> 00:02:22,850
+you know,
+
+52
+00:02:23,259 --> 00:02:25,520
+um And I still want that damn thing to be secure.
+
+53
+00:02:26,800 --> 00:02:27,970
+I think that's fair.
+
+54
+00:02:28,330 --> 00:02:32,550
+So the T two security chip essentially covers
+
+55
+00:02:33,410 --> 00:02:34,380
+sort of, well,
+
+56
+00:02:34,389 --> 00:02:39,750
+two really important things which is encryption of the local data storage.
+
+57
+00:02:39,759 --> 00:02:43,860
+So the uh well, whatever the SSD or whatever it's called now on a, on a Mac
+
+58
+00:02:45,190 --> 00:02:50,240
+and the secure boot. So essentially, uh if you have the secure boot enabled,
+
+59
+00:02:50,869 --> 00:02:52,960
+even with physical access to your device,
+
+60
+00:02:53,690 --> 00:02:56,149
+I can't monkey with it. Right.
+
+61
+00:02:56,160 --> 00:02:59,940
+I, I must have your biometrics or I must have your password
+
+62
+00:03:00,139 --> 00:03:03,589
+to get this machine turned on and, and decrypted and running.
+
+63
+00:03:05,080 --> 00:03:06,380
+It's even more than that.
+
+64
+00:03:06,389 --> 00:03:10,619
+You can, you can make it so you can't even boot off of external media
+
+65
+00:03:11,449 --> 00:03:13,300
+because I mean, so like today,
+
+66
+00:03:13,309 --> 00:03:18,539
+the evil maid style attacks that are talked about is basically someone shows up,
+
+67
+00:03:18,550 --> 00:03:21,539
+they boot your computer with a special flash drive.
+
+68
+00:03:21,970 --> 00:03:24,070
+And let's say you have an encrypted hard drive.
+
+69
+00:03:24,080 --> 00:03:27,960
+Well, they could monkey with your bios still and maybe have a bad bios
+
+70
+00:03:28,210 --> 00:03:31,789
+that could, you know, steal your passwords or even some data later.
+
+71
+00:03:31,800 --> 00:03:35,160
+And, and there are things like T PM modules and secure boot
+
+72
+00:03:35,539 --> 00:03:37,869
+that can do this to a degree,
+
+73
+00:03:38,035 --> 00:03:41,134
+but making them work correctly is a freaking nightmare.
+
+74
+00:03:41,365 --> 00:03:41,654
+Yeah.
+
+75
+00:03:41,824 --> 00:03:44,854
+And, and for those of you saying the evil maid attack is theoretical.
+
+76
+00:03:44,875 --> 00:03:49,494
+So back in, yeah, here we go 2003 Poker sharks laptop owned by evil maid attack.
+
+77
+00:03:49,505 --> 00:03:51,184
+Professional poker player, Jens K,
+
+78
+00:03:52,574 --> 00:03:54,095
+I'm sorry, I butchered that
+
+79
+00:03:54,264 --> 00:03:55,104
+learned a lesson about
+
+80
+00:03:55,345 --> 00:03:56,335
+security earlier this year.
+
+81
+00:03:56,345 --> 00:03:58,425
+Don't leave your computer unattended without securing it first.
+
+82
+00:03:58,434 --> 00:03:59,455
+Not even in your hotel room.
+
+83
+00:03:59,464 --> 00:04:01,755
+Now, realistically, I, when I travel,
+
+84
+00:04:01,764 --> 00:04:04,324
+I leave my laptop in my hotel room all the time because like,
+
+85
+00:04:04,335 --> 00:04:05,774
+I don't want to carry it when I'm going to,
+
+86
+00:04:06,029 --> 00:04:10,169
+-- you know, an evening function where there's, I
+-- almost never leave it behind.
+
+87
+00:04:10,179 --> 00:04:12,960
+In fact, I have a chromebook I travel with for this purpose.
+
+88
+00:04:12,970 --> 00:04:15,220
+If I know the laptop will leave my site,
+
+89
+00:04:15,470 --> 00:04:16,730
+I bring the chromebook.
+
+90
+00:04:16,738 --> 00:04:19,320
+Whereas if I know I will have it on me at all times,
+
+91
+00:04:19,329 --> 00:04:21,290
+I might consider bringing my Macbook.
+
+92
+00:04:21,670 --> 00:04:21,839
+Yeah.
+
+93
+00:04:22,190 --> 00:04:27,000
+But so this basically the T two in theory, assuming it works as advertised,
+
+94
+00:04:27,140 --> 00:04:29,170
+basically solves this
+
+95
+00:04:30,500 --> 00:04:31,200
+to a degree,
+
+96
+00:04:32,040 --> 00:04:34,670
+it makes the attack significantly more difficult.
+
+97
+00:04:35,000 --> 00:04:37,070
+Um like nation state level difficult.
+
+98
+00:04:38,079 --> 00:04:41,510
+So, well, why don't we start? So the first thing the T two chip does
+
+99
+00:04:41,769 --> 00:04:43,510
+is it has what's called the secure enclave.
+
+100
+00:04:43,519 --> 00:04:45,709
+Now, we've heard about this in the iphone and elsewhere.
+
+101
+00:04:46,040 --> 00:04:50,070
+And the secure enclave very simply put is the computer chip has
+
+102
+00:04:50,779 --> 00:04:52,579
+uh a small
+
+103
+00:04:52,700 --> 00:04:55,000
+area that is, well, it's a secure enclave,
+
+104
+00:04:55,010 --> 00:04:57,519
+like that's where the encryption keys live,
+
+105
+00:04:57,700 --> 00:04:59,230
+they're generated securely.
+
+106
+00:04:59,239 --> 00:05:01,829
+So this thing has a really, apparently a really good, you know,
+
+107
+00:05:01,839 --> 00:05:04,160
+cryptographically secure random number generator which, you know,
+
+108
+00:05:04,170 --> 00:05:05,239
+we've talked about in the past.
+
+109
+00:05:05,459 --> 00:05:05,619
+It
+
+110
+00:05:05,760 --> 00:05:06,070
+is.
+
+111
+00:05:06,209 --> 00:05:06,720
+Um
+
+112
+00:05:07,559 --> 00:05:09,429
+And so it'll generate the keys
+
+113
+00:05:09,750 --> 00:05:10,679
+and more importantly,
+
+114
+00:05:10,690 --> 00:05:14,799
+it stores the keys in a way that also makes it very easy for it to delete those keys.
+
+115
+00:05:14,809 --> 00:05:15,119
+So,
+
+116
+00:05:15,230 --> 00:05:19,299
+you know, if you do lose physical access or physical control of your laptop,
+
+117
+00:05:19,450 --> 00:05:20,089
+you know, you can do the,
+
+118
+00:05:20,100 --> 00:05:25,579
+find my iphone or find my uh my apple air and tell it to a remote wipe, right?
+
+119
+00:05:25,589 --> 00:05:28,140
+And all that device has to do is not churn through all the data on the hard drive,
+
+120
+00:05:28,149 --> 00:05:32,010
+but simply delete a couple of very small A es encryption keys.
+
+121
+00:05:32,019 --> 00:05:34,179
+You know, in the secure chip, this chip
+
+122
+00:05:35,010 --> 00:05:37,779
+makes it very like essentially extracting those keys from the
+
+123
+00:05:37,790 --> 00:05:41,910
+chip would require a physical attack against the chip itself,
+
+124
+00:05:43,440 --> 00:05:43,839
+you know,
+
+125
+00:05:44,190 --> 00:05:44,700
+which
+
+126
+00:05:44,850 --> 00:05:48,019
+possible. But we're talking nation state
+
+127
+00:05:48,200 --> 00:05:49,720
+level attacks, not a mugger.
+
+128
+00:05:50,429 --> 00:05:54,809
+It's, it's even man, even if you're a nation state, it also means you have to,
+
+129
+00:05:54,820 --> 00:05:58,440
+it's the sort of attack that's going to take a significant amount of time.
+
+130
+00:05:58,450 --> 00:05:59,510
+So you can not
+
+131
+00:05:59,980 --> 00:06:02,850
+during trying to do one of these sort of operations,
+
+132
+00:06:02,859 --> 00:06:03,700
+you also have a very high
+
+133
+00:06:03,709 --> 00:06:06,510
+probability of just like accidentally breaking everything
+
+134
+00:06:06,940 --> 00:06:07,390
+and
+
+135
+00:06:07,700 --> 00:06:10,850
+it takes days to weeks to mount.
+
+136
+00:06:10,859 --> 00:06:13,954
+This isn't one of those sneak into the hotel room quick through this attack and then
+
+137
+00:06:14,434 --> 00:06:14,575
+like
+
+138
+00:06:14,695 --> 00:06:14,725
+your
+
+139
+00:06:15,304 --> 00:06:15,915
+computer
+
+140
+00:06:16,165 --> 00:06:16,575
+at this point,
+
+141
+00:06:16,584 --> 00:06:18,934
+it's probably easier just to kidnap the guy with his laptop and
+
+142
+00:06:18,945 --> 00:06:20,785
+beat him with a stick until he puts his thumb on it.
+
+143
+00:06:21,424 --> 00:06:22,105
+Exactly.
+
+144
+00:06:22,394 --> 00:06:24,424
+Not that we're advocating for that.
+
+145
+00:06:24,434 --> 00:06:29,135
+But uh yeah, so, so the T two has a secure enclave with the encryption keys,
+
+146
+00:06:29,144 --> 00:06:32,674
+the encryption keys, theoretically speaking, just cannot be removed.
+
+147
+00:06:32,855 --> 00:06:36,054
+So that essentially means now that if you encrypt your
+
+148
+00:06:36,174 --> 00:06:36,864
+data,
+
+149
+00:06:37,234 --> 00:06:38,825
+uh you know, at the volume level
+
+150
+00:06:39,225 --> 00:06:39,855
+on your ma
+
+151
+00:06:39,975 --> 00:06:40,334
+air,
+
+152
+00:06:41,119 --> 00:06:44,959
+it's tied to those keys in that T two chip. So even if somebody, you know,
+
+153
+00:06:45,119 --> 00:06:47,739
+steals the media out of your laptop,
+
+154
+00:06:47,750 --> 00:06:49,920
+they can't access it because they don't have those encryption keys.
+
+155
+00:06:49,989 --> 00:06:51,160
+And that means also that, that,
+
+156
+00:06:51,170 --> 00:06:55,000
+that data that's encrypted is now tied tightly to that T two chip.
+
+157
+00:06:55,010 --> 00:06:55,660
+Like you can't,
+
+158
+00:06:56,179 --> 00:06:59,290
+you can't get access to that data without that T two chip.
+
+159
+00:06:59,700 --> 00:07:01,920
+And the T two chip itself has protections.
+
+160
+00:07:01,929 --> 00:07:04,700
+It's worth pointing out that the flash storage
+
+161
+00:07:04,709 --> 00:07:07,320
+on the macbooks is soldered onto the board.
+
+162
+00:07:07,410 --> 00:07:07,869
+So
+
+163
+00:07:08,029 --> 00:07:09,869
+you can't steal the hard drive
+
+164
+00:07:10,820 --> 00:07:11,149
+it out,
+
+165
+00:07:11,839 --> 00:07:13,010
+right? It's,
+
+166
+00:07:13,309 --> 00:07:16,019
+-- it's pretty much, this stuff is all connected.
+-- Yeah.
+
+167
+00:07:16,029 --> 00:07:19,660
+Well, and, and so this is important to keep in mind, you know, if your T two chip fails,
+
+168
+00:07:19,670 --> 00:07:21,940
+then you're, well, I hope you had a backup of your data.
+
+169
+00:07:22,609 --> 00:07:23,420
+That's right.
+
+170
+00:07:23,589 --> 00:07:26,500
+But it's OK. It's on an unencrypted hard drive in my desk, right?
+
+171
+00:07:26,859 --> 00:07:27,859
+Don't tell anyone.
+
+172
+00:07:28,670 --> 00:07:28,910
+Yeah.
+
+173
+00:07:28,920 --> 00:07:29,619
+So,
+
+174
+00:07:29,630 --> 00:07:32,779
+so basically that secure enclave is what allows the chip
+
+175
+00:07:32,790 --> 00:07:34,660
+to do a bunch of magic with encryption keys.
+
+176
+00:07:34,670 --> 00:07:36,239
+Very, very, very securely.
+
+177
+00:07:36,880 --> 00:07:37,809
+One of those things being
+
+178
+00:07:38,019 --> 00:07:38,730
+storage, encryption,
+
+179
+00:07:39,230 --> 00:07:43,779
+something that isn't clear to me on this secure enclave is like the
+
+180
+00:07:44,130 --> 00:07:46,200
+Intel chips have a
+
+181
+00:07:46,500 --> 00:07:48,619
+similar function. The SGX
+
+182
+00:07:49,000 --> 00:07:49,170
+which is
+
+183
+00:07:49,290 --> 00:07:49,450
+meant to
+
+184
+00:07:50,750 --> 00:07:54,880
+SGX is not, well, SGX is a form of secure enclave, but it's actually for
+
+185
+00:07:54,989 --> 00:07:56,489
+processing not for
+
+186
+00:07:56,700 --> 00:07:57,619
+pure key storage.
+
+187
+00:07:57,839 --> 00:07:58,079
+And
+
+188
+00:07:58,429 --> 00:07:58,470
+that's
+
+189
+00:07:58,600 --> 00:07:58,640
+very
+
+190
+00:07:58,829 --> 00:07:58,980
+much what
+
+191
+00:07:59,989 --> 00:08:05,220
+I I have a suspicion that T two chip doesn't allow arbitrary code execution.
+
+192
+00:08:05,730 --> 00:08:05,920
+It
+
+193
+00:08:06,720 --> 00:08:07,899
+-- is important.
+-- Well,
+
+194
+00:08:08,010 --> 00:08:11,899
+so the, the way APPLE uses the secure enclave is they're referring simply to
+
+195
+00:08:12,239 --> 00:08:14,959
+key generation storage and management.
+
+196
+00:08:14,970 --> 00:08:17,440
+As far as I know, that's all their secure enclave does.
+
+197
+00:08:17,679 --> 00:08:19,279
+The Intel SGX
+
+198
+00:08:19,540 --> 00:08:20,239
+is
+
+199
+00:08:20,649 --> 00:08:24,640
+allowing code and data to be executed
+
+200
+00:08:24,890 --> 00:08:28,529
+um free from disclosure or modification. So a great example of this
+
+201
+00:08:28,709 --> 00:08:31,480
+is uh there's a, there's a Blockchain from the Hyper
+
+202
+00:08:31,670 --> 00:08:36,190
+Ledger uh consortium or whatever it's called called uh poet proof of a lapse time.
+
+203
+00:08:36,530 --> 00:08:38,580
+And it's very efficient because essentially
+
+204
+00:08:38,760 --> 00:08:40,929
+the way it works is all the nodes in the Blockchain
+
+205
+00:08:41,150 --> 00:08:43,070
+run this little bit of code in the SGX that
+
+206
+00:08:43,080 --> 00:08:44,989
+waits a random amount of time and whoever waits,
+
+207
+00:08:45,000 --> 00:08:46,659
+waits the shortest amount of time,
+
+208
+00:08:46,830 --> 00:08:50,190
+wins the election and gets to generate a block.
+
+209
+00:08:50,200 --> 00:08:52,169
+And you know, there's protections against people
+
+210
+00:08:52,270 --> 00:08:54,809
+having like a fake SGX and always winning and cheating.
+
+211
+00:08:54,909 --> 00:08:58,289
+But fundamentally, this means that you now have a Blockchain technology that's
+
+212
+00:08:58,400 --> 00:09:00,900
+like really efficient because
+
+213
+00:09:01,049 --> 00:09:02,710
+it's the shortest waiting time.
+
+214
+00:09:02,719 --> 00:09:04,989
+And it's, you know, you're typically measuring that in milliseconds,
+
+215
+00:09:05,229 --> 00:09:06,539
+you know, whereas with Blockchain, you're like,
+
+216
+00:09:06,650 --> 00:09:09,020
+you're what is it the, the Denmark?
+
+217
+00:09:09,210 --> 00:09:11,429
+Now, the the electrical version of Denmark
+
+218
+00:09:11,559 --> 00:09:14,200
+is churning away on, you know, shot signatures.
+
+219
+00:09:14,770 --> 00:09:14,880
+Um So
+
+220
+00:09:15,210 --> 00:09:18,309
+-- with this electricity turned it into pretend money.
+-- Yeah.
+
+221
+00:09:18,320 --> 00:09:22,080
+So, so Apple's secure enclave is a very
+
+222
+00:09:22,320 --> 00:09:25,320
+specific limited use case, which I
+
+223
+00:09:25,849 --> 00:09:26,530
+think is
+
+224
+00:09:26,869 --> 00:09:28,210
+it's not that Intel is doing it wrong,
+
+225
+00:09:28,219 --> 00:09:31,090
+it's that Intel is solving a completely different problem and just
+
+226
+00:09:31,729 --> 00:09:32,049
+right,
+
+227
+00:09:32,659 --> 00:09:37,770
+and there's a more important aspect of this is by by making it very specific,
+
+228
+00:09:38,030 --> 00:09:42,729
+you've reduced your attack surface by several magnitudes.
+
+229
+00:09:42,739 --> 00:09:46,909
+Whereas Intel's attack surface and SGX is infinity, right
+
+230
+00:09:47,109 --> 00:09:47,929
+versus
+
+231
+00:09:48,229 --> 00:09:50,890
+apple, which has a finite attack surface now.
+
+232
+00:09:51,260 --> 00:09:52,280
+And so having these,
+
+233
+00:09:52,289 --> 00:09:57,599
+these keys that allow you to be very sure that these keys are unique to this chip and
+
+234
+00:09:58,020 --> 00:10:00,530
+secure allows you to do obviously data encryption,
+
+235
+00:10:00,760 --> 00:10:04,570
+but it also allows you to do secure, boot very securely.
+
+236
+00:10:04,919 --> 00:10:08,460
+Um And the T two chip also apparently has some magic to,
+
+237
+00:10:08,760 --> 00:10:11,239
+you know, enforce the boot process.
+
+238
+00:10:11,250 --> 00:10:14,059
+So yeah, even if you boot off of some external thing,
+
+239
+00:10:14,070 --> 00:10:16,599
+you know the T two chips like Nope, that's not allowed, sorry, you,
+
+240
+00:10:16,609 --> 00:10:19,150
+you're not allowed to do that because I control access to
+
+241
+00:10:19,619 --> 00:10:21,799
+the USB or to the whatever, right.
+
+242
+00:10:22,299 --> 00:10:24,640
+And so looking at this, sorry.
+
+243
+00:10:24,690 --> 00:10:27,919
+So basically you got your boot ROM evaluates the ibot signature.
+
+244
+00:10:28,020 --> 00:10:30,070
+The ibot evaluates the T two kernel cache
+
+245
+00:10:30,179 --> 00:10:30,880
+signatures,
+
+246
+00:10:31,169 --> 00:10:32,359
+the T two kernel cache
+
+247
+00:10:33,369 --> 00:10:36,940
+uh evaluates the UEF I firmware signature and then the UF,
+
+248
+00:10:37,530 --> 00:10:39,760
+the UEF I firmware
+
+249
+00:10:40,739 --> 00:10:44,479
+uh happens and those four steps happen in the T two chip,
+
+250
+00:10:45,700 --> 00:10:48,380
+like they physically occur in the T two chip,
+
+251
+00:10:48,390 --> 00:10:51,940
+then it hands it over essentially to the, the CPU
+
+252
+00:10:52,179 --> 00:10:53,729
+and hands it the UEF I firmware,
+
+253
+00:10:53,890 --> 00:10:54,469
+you know,
+
+254
+00:10:54,830 --> 00:10:55,330
+um
+
+255
+00:10:55,729 --> 00:10:56,789
+and it, it boots,
+
+256
+00:10:56,979 --> 00:10:58,150
+right? So essentially
+
+257
+00:10:58,320 --> 00:11:01,200
+the T two chip is evaluating and
+
+258
+00:11:02,409 --> 00:11:07,150
+uh validating the security of what you're asking it to boot off of,
+
+259
+00:11:07,900 --> 00:11:08,489
+you know, if you've,
+
+260
+00:11:10,530 --> 00:11:14,859
+here's one of the interesting things about the way this all works is they
+
+261
+00:11:14,869 --> 00:11:18,719
+say here in their document which we of course link to in the show notes
+
+262
+00:11:19,330 --> 00:11:23,989
+that the T two chip has an immutable boot rom embedded in it.
+
+263
+00:11:24,469 --> 00:11:30,109
+And that means that it obviously starts up and executes this ROM and it can,
+
+264
+00:11:30,119 --> 00:11:32,169
+it can never be changed because obviously having
+
+265
+00:11:32,179 --> 00:11:33,859
+the ability to change it would be and it
+
+266
+00:11:34,190 --> 00:11:35,099
+an attack.
+
+267
+00:11:35,349 --> 00:11:36,010
+And right.
+
+268
+00:11:36,020 --> 00:11:40,229
+And so that's the trick is if anyone, if any researchers ever find a,
+
+269
+00:11:40,239 --> 00:11:43,590
+a problem with this boot ram and let's face it, I think they will someday.
+
+270
+00:11:43,950 --> 00:11:46,770
+Now most of these T two chips depending
+
+271
+00:11:46,780 --> 00:11:49,650
+upon the attack could be rendered completely useless,
+
+272
+00:11:50,119 --> 00:11:50,289
+-- which
+-- is
+
+273
+00:11:50,789 --> 00:11:50,869
+hilarious,
+
+274
+00:11:51,159 --> 00:11:54,590
+is super simplistic and all it does is check
+
+275
+00:11:54,849 --> 00:11:58,090
+the signature of a larger blob that can be updated.
+
+276
+00:11:59,039 --> 00:12:02,820
+I'm not going to claim anything is perfect and
+
+277
+00:12:03,229 --> 00:12:03,840
+even that can be
+
+278
+00:12:04,200 --> 00:12:04,940
+-- smart.
+-- Yeah,
+
+279
+00:12:04,960 --> 00:12:06,210
+even that can be screwed up. But,
+
+280
+00:12:06,619 --> 00:12:07,950
+but the beauty is
+
+281
+00:12:08,159 --> 00:12:09,260
+to remind everybody,
+
+282
+00:12:09,580 --> 00:12:12,049
+your T two chip has the encryption keys.
+
+283
+00:12:12,409 --> 00:12:16,340
+If you encrypt your hard drive, so that T two chip is tied to that laptop.
+
+284
+00:12:16,349 --> 00:12:18,229
+So if you take that T two chip out
+
+285
+00:12:18,729 --> 00:12:20,419
+and monkey with it and break it,
+
+286
+00:12:20,619 --> 00:12:22,289
+that laptop is dead
+
+287
+00:12:22,409 --> 00:12:25,599
+and it's not like you can take a T two chip out of one laptop monkey with it,
+
+288
+00:12:25,609 --> 00:12:26,570
+put it into your,
+
+289
+00:12:26,880 --> 00:12:28,900
+you know, victim's laptop boot
+
+290
+00:12:29,020 --> 00:12:30,140
+and access the data. Right.
+
+291
+00:12:30,150 --> 00:12:33,219
+That's the beauty is the T two chip and the data are, if you do the,
+
+292
+00:12:33,229 --> 00:12:34,789
+the drive level encryption,
+
+293
+00:12:35,179 --> 00:12:39,299
+-- that T two chip and that data are now tied together, you don't
+-- have a choice.
+
+294
+00:12:39,359 --> 00:12:42,530
+So the way they've done this, that's really cool
+
+295
+00:12:42,739 --> 00:12:47,979
+is the T two chip sits between the, the regular processor and
+
+296
+00:12:48,229 --> 00:12:50,250
+your, your flash memory.
+
+297
+00:12:50,869 --> 00:12:55,989
+And what happens is even if you don't set a password for encrypting your disk,
+
+298
+00:12:56,000 --> 00:13:00,469
+your disk is still encrypted with a random key inside of that T two chip.
+
+299
+00:13:00,479 --> 00:13:01,010
+Meaning
+
+300
+00:13:01,169 --> 00:13:04,710
+like literally if you pull the T two chip out, put a new one in which I don't, I,
+
+301
+00:13:04,719 --> 00:13:06,900
+-- I suspect that's not possible, but let's just pretend
+-- to
+
+302
+00:13:09,369 --> 00:13:10,229
+sure.
+
+303
+00:13:10,580 --> 00:13:11,909
+But anyway, like your,
+
+304
+00:13:11,919 --> 00:13:14,500
+your computer doesn't work anymore because the new T
+
+305
+00:13:14,510 --> 00:13:16,789
+two chip would have a different key in it,
+
+306
+00:13:16,809 --> 00:13:18,239
+which is freaking awesome.
+
+307
+00:13:18,289 --> 00:13:19,969
+You just have to reinstall the US and everything.
+
+308
+00:13:20,070 --> 00:13:20,719
+-- Right.
+-- Right. But
+
+309
+00:13:21,349 --> 00:13:22,270
+here's the thing and this,
+
+310
+00:13:22,400 --> 00:13:24,859
+this is the thing that has me most excited.
+
+311
+00:13:25,030 --> 00:13:27,510
+So today, the way disc encryption works
+
+312
+00:13:27,830 --> 00:13:28,450
+is
+
+313
+00:13:28,609 --> 00:13:30,590
+on the first bit of the hard drive,
+
+314
+00:13:30,599 --> 00:13:34,789
+you'll have a special key and then your password unlocks that key.
+
+315
+00:13:35,750 --> 00:13:39,880
+But all of these operations are happening in CPU and in regular memory.
+
+316
+00:13:39,890 --> 00:13:41,940
+And so there's always like the cold boot attacks
+
+317
+00:13:41,950 --> 00:13:44,489
+and all these other things where you can easily acquire
+
+318
+00:13:44,969 --> 00:13:48,299
+the key that's being used. And likewise,
+
+319
+00:13:48,599 --> 00:13:50,880
+if you have the hard drive, like the key is there,
+
+320
+00:13:50,890 --> 00:13:52,590
+you just need the password to unlock it.
+
+321
+00:13:52,859 --> 00:13:53,859
+And in this instance,
+
+322
+00:13:53,869 --> 00:13:56,859
+now this is kind of like the equivalent of two factor authentication.
+
+323
+00:13:56,929 --> 00:13:59,239
+Well, and that's the thing that allows brute force attacks.
+
+324
+00:13:59,609 --> 00:13:59,859
+Right.
+
+325
+00:14:00,340 --> 00:14:02,210
+-- Right. Exactly.
+-- Exactly.
+
+326
+00:14:02,590 --> 00:14:02,960
+Defeat
+
+327
+00:14:04,039 --> 00:14:07,640
+it does because you can try what 90 times essentially and then it just cooks itself.
+
+328
+00:14:07,650 --> 00:14:12,020
+-- It's a
+-- little, there's so my understanding was uh blah, blah, blah. Here we go.
+
+329
+00:14:12,320 --> 00:14:13,500
+You get 10
+
+330
+00:14:14,190 --> 00:14:15,320
+attempts to log in
+
+331
+00:14:15,650 --> 00:14:17,770
+to prevent malware from causing permanent data loss
+
+332
+00:14:17,780 --> 00:14:19,049
+by trying to attack the user password.
+
+333
+00:14:19,059 --> 00:14:22,119
+These limits are not enforced after the user has successfully logged into the Mac.
+
+334
+00:14:22,130 --> 00:14:22,479
+So,
+
+335
+00:14:22,859 --> 00:14:25,690
+um but will be reimposed after a reboot. So, but basically,
+
+336
+00:14:26,070 --> 00:14:29,700
+uh then you get, you get 10 attempts, then you get like 30 more attempts
+
+337
+00:14:29,820 --> 00:14:33,489
+and then you get 10 more attempts through Mac Os recovery.
+
+338
+00:14:33,820 --> 00:14:35,840
+Uh And then you get 30 more attempts
+
+339
+00:14:36,159 --> 00:14:38,219
+for each uh thing.
+
+340
+00:14:38,229 --> 00:14:40,429
+So if you have file vault recovery enabled, you get 30 more attempts.
+
+341
+00:14:40,440 --> 00:14:41,700
+So if you have icloud recovery enabled,
+
+342
+00:14:41,710 --> 00:14:43,690
+you get 30 more attempts and 30 more attempts.
+
+343
+00:14:43,700 --> 00:14:45,700
+And if you have file vault recovery key enabled
+
+344
+00:14:45,880 --> 00:14:47,219
+and institutional key,
+
+345
+00:14:47,460 --> 00:14:50,349
+you get 30 more attempts for a maximum of 90 possible attempts.
+
+346
+00:14:50,359 --> 00:14:51,440
+And it's also important to note
+
+347
+00:14:51,719 --> 00:14:54,559
+that there's a delay between the password attempts.
+
+348
+00:14:54,570 --> 00:14:56,969
+So attempts one through 14, there's no delay
+
+349
+00:14:57,210 --> 00:14:57,700
+attempts.
+
+350
+00:14:57,710 --> 00:15:03,419
+15 through 17, 1 minute, 18 through 25 minutes, 21 to 26 15 minutes, 27 to 31 hour.
+
+351
+00:15:04,309 --> 00:15:05,099
+So,
+
+352
+00:15:05,229 --> 00:15:09,969
+and I assume past 30 it's an hour. I don't know. But regardless it's, it's that,
+
+353
+00:15:10,500 --> 00:15:13,719
+yeah, you have a, a finite number of tries
+
+354
+00:15:14,590 --> 00:15:15,330
+to get it right.
+
+355
+00:15:15,760 --> 00:15:17,969
+And then the device is like, sorry, no.
+
+356
+00:15:18,679 --> 00:15:19,169
+And,
+
+357
+00:15:21,390 --> 00:15:21,809
+and
+
+358
+00:15:22,289 --> 00:15:22,940
+again,
+
+359
+00:15:23,200 --> 00:15:27,090
+you know, short of like, somehow pulling the T two chip out of the system
+
+360
+00:15:27,549 --> 00:15:30,900
+and doing some sort of physical attack on it to reset that counter.
+
+361
+00:15:32,489 --> 00:15:33,190
+You can't,
+
+362
+00:15:34,080 --> 00:15:37,179
+if you can, if you can reset the counter, you can probably just read the.
+
+363
+00:15:37,809 --> 00:15:39,190
+Exactly. Exactly. So,
+
+364
+00:15:39,340 --> 00:15:42,039
+you know, at this point now we're back to the whole, well, yeah,
+
+365
+00:15:42,049 --> 00:15:45,070
+just pull the T two chip out of there and, like, get the data out of it.
+
+366
+00:15:45,979 --> 00:15:47,099
+This is a,
+
+367
+00:15:48,000 --> 00:15:50,140
+you know, this is a nontrivial task.
+
+368
+00:15:51,239 --> 00:15:53,659
+It is theoretically. It is definitely possible.
+
+369
+00:15:53,940 --> 00:15:54,500
+But,
+
+370
+00:15:54,979 --> 00:16:00,450
+-- you know, if I had to bet money, I wouldn't bet for it.
+-- The bar gets raised so high
+
+371
+00:16:00,960 --> 00:16:01,659
+that
+
+372
+00:16:01,830 --> 00:16:02,669
+it is an
+
+373
+00:16:03,010 --> 00:16:05,469
+impossible attack for,
+
+374
+00:16:05,479 --> 00:16:09,489
+for most Attackers and here's the thing that I always keep thinking of.
+
+375
+00:16:09,890 --> 00:16:14,549
+The purpose of all this technology isn't necessarily to 100% stop Attackers.
+
+376
+00:16:14,739 --> 00:16:18,270
+The real purpose is this technology is just to know you're being messed with,
+
+377
+00:16:18,559 --> 00:16:21,489
+right? If your laptop's gone, you know, you've been messed with.
+
+378
+00:16:21,500 --> 00:16:23,630
+If there's someone like literally trying to force
+
+379
+00:16:23,640 --> 00:16:25,590
+you to touch something to unlock it,
+
+380
+00:16:25,599 --> 00:16:27,510
+like, you know, you're being messed with, right?
+
+381
+00:16:27,849 --> 00:16:30,929
+The danger is the unknown of leaving something say
+
+382
+00:16:30,940 --> 00:16:33,150
+in a hotel room and coming back and saying
+
+383
+00:16:33,390 --> 00:16:35,229
+I didn't leave it there. What just happened?
+
+384
+00:16:35,739 --> 00:16:40,020
+Well, fundamentally this raises the bar to it's less effort to just kidnap the guy
+
+385
+00:16:40,169 --> 00:16:42,099
+or girl with their laptop.
+
+386
+00:16:44,179 --> 00:16:47,890
+-- Stop telling people to do that. But
+-- that's the thing, right? Is at that point,
+
+387
+00:16:48,150 --> 00:16:48,960
+the open
+
+388
+00:16:49,159 --> 00:16:51,270
+-- source security podcast does not condone
+-- kidnapping.
+
+389
+00:16:51,539 --> 00:16:54,400
+But basically at that point, Apple can say they've done a reasonable job.
+
+390
+00:16:55,260 --> 00:16:56,739
+I, you know, I, I would,
+
+391
+00:16:57,000 --> 00:16:58,960
+-- I, I,
+-- I agree. I agree completely.
+
+392
+00:16:59,359 --> 00:16:59,549
+Yeah.
+
+393
+00:16:59,929 --> 00:17:02,679
+So the other thing they've done that I really like and well, I,
+
+394
+00:17:02,690 --> 00:17:04,060
+I don't want to argue about this because you
+
+395
+00:17:04,069 --> 00:17:06,098
+have a differing opinion of how this works.
+
+396
+00:17:06,108 --> 00:17:10,079
+But fundamentally when you close the lid on your Mac Air, now,
+
+397
+00:17:10,939 --> 00:17:14,040
+the T two chip or something associated with it
+
+398
+00:17:14,150 --> 00:17:17,680
+because it's apparently not 100% clear in the document disables the microphone.
+
+399
+00:17:18,680 --> 00:17:22,209
+I'm going to say they don't use a T two chip and, and this is why
+
+400
+00:17:22,420 --> 00:17:25,900
+because first of all, if the microphone is connected to the chip,
+
+401
+00:17:25,910 --> 00:17:29,520
+that seems like a stupid over engineering and more importantly
+
+402
+00:17:29,530 --> 00:17:31,239
+is the way this is written and here it is,
+
+403
+00:17:31,250 --> 00:17:34,949
+it says all Mac portables with the Apple T two security chip feature,
+
+404
+00:17:34,959 --> 00:17:36,130
+a hardware disconnect.
+
+405
+00:17:36,699 --> 00:17:37,819
+They don't say
+
+406
+00:17:38,079 --> 00:17:40,719
+that the T two T two chip is a disconnect.
+
+407
+00:17:40,729 --> 00:17:42,979
+And I would also argue that if, if it say,
+
+408
+00:17:42,989 --> 00:17:46,599
+say you do have a wire going to the T two chip and that's expected to do something,
+
+409
+00:17:46,609 --> 00:17:49,239
+I would not say turning it off via using
+
+410
+00:17:49,250 --> 00:17:51,760
+switches in the chip counts as a hardware disconnect.
+
+411
+00:17:52,180 --> 00:17:54,239
+Whereas a literal switch
+
+412
+00:17:54,430 --> 00:17:57,359
+in the lid that when you close it, a magnet opens a switch
+
+413
+00:17:57,589 --> 00:18:01,000
+-- that is a hardware disconnect
+-- regardless the point is that
+
+414
+00:18:01,089 --> 00:18:02,719
+is no argue this with me.
+
+415
+00:18:02,729 --> 00:18:02,920
+Come on,
+
+416
+00:18:03,109 --> 00:18:05,319
+I'm just more impressed that they've finally done this because,
+
+417
+00:18:05,540 --> 00:18:05,979
+you know,
+
+418
+00:18:07,180 --> 00:18:08,520
+I've seen also reports that,
+
+419
+00:18:08,780 --> 00:18:11,699
+you know, the accelerometers in some of these phones now are sensitive
+
+420
+00:18:12,130 --> 00:18:14,849
+sensitive enough that they can put the vibrations of your voice.
+
+421
+00:18:14,979 --> 00:18:18,329
+Definitely. Or, or the I read one about our keyboards
+
+422
+00:18:18,780 --> 00:18:21,349
+where using the accelerate because let's face it like my phone
+
+423
+00:18:21,359 --> 00:18:25,050
+is literally sitting what two inches from my keyboard maybe.
+
+424
+00:18:25,300 --> 00:18:27,030
+And, and using the accelerometer,
+
+425
+00:18:27,040 --> 00:18:30,369
+you can measure how I'm tapping the keyboard to
+
+426
+00:18:30,380 --> 00:18:32,430
+guess what the keys I'm going to type are,
+
+427
+00:18:32,439 --> 00:18:33,250
+which is very cool.
+
+428
+00:18:34,109 --> 00:18:36,959
+Yeah, and I'm wondering do the Apple Airs have
+
+429
+00:18:37,060 --> 00:18:39,329
+accelerometers and motion sensors. I know like
+
+430
+00:18:39,890 --> 00:18:44,380
+the stuff with physical spinning hard drives used to have those like drop sensors.
+
+431
+00:18:44,939 --> 00:18:45,579
+But
+
+432
+00:18:45,680 --> 00:18:46,329
+-- right,
+-- II,
+
+433
+00:18:46,339 --> 00:18:48,839
+I did try to research this actually before the
+
+434
+00:18:48,849 --> 00:18:51,770
+show and I couldn't find any references to it,
+
+435
+00:18:51,780 --> 00:18:55,829
+-- which leads me to believe they
+-- do not, they definitely have a sudden motion sensor.
+
+436
+00:18:55,839 --> 00:18:58,890
+That's like the drop sensor. But again, how sensitive that is?
+
+437
+00:18:59,339 --> 00:18:59,359
+Oh,
+
+438
+00:18:59,479 --> 00:19:00,109
+it is a tri
+
+439
+00:19:00,270 --> 00:19:04,599
+-- axle accelerometer. So. hm. Yeah. Well, which
+-- is not sensitive enough.
+
+440
+00:19:04,609 --> 00:19:07,300
+You need a gyroscope to be that sensitive. Do you?
+
+441
+00:19:07,310 --> 00:19:09,819
+I don't know, man, some of these things are pretty crazy sensitive. Now,
+
+442
+00:19:10,170 --> 00:19:12,310
+all the research I've seen relies on
+
+443
+00:19:12,410 --> 00:19:16,040
+gyroscopes. So I'm going to stand by all the research I've seen
+
+444
+00:19:16,530 --> 00:19:17,760
+and I imagine
+
+445
+00:19:18,209 --> 00:19:22,829
+it I'm wrong and if I'm not wrong, someone will find a way to do this soon.
+
+446
+00:19:23,849 --> 00:19:27,349
+So actually you can just apparently type in PM set hyphen G
+
+447
+00:19:27,660 --> 00:19:28,109
+as root
+
+448
+00:19:29,290 --> 00:19:31,030
+and it will tell you
+
+449
+00:19:32,160 --> 00:19:35,290
+if you have a sudden motion uh S MS
+
+450
+00:19:35,959 --> 00:19:38,949
+and my IMAC does not, which would make sense.
+
+451
+00:19:38,959 --> 00:19:41,510
+Hopefully you're not dropping your um or sorry, my Mac mini
+
+452
+00:19:41,800 --> 00:19:47,540
+does not have one but my Macbook or my Mac Air doesn't
+
+453
+00:19:47,900 --> 00:19:49,349
+-- no weird.
+-- I
+
+454
+00:19:49,650 --> 00:19:52,750
+I wouldn't expect them to anymore just because
+
+455
+00:19:53,415 --> 00:19:55,625
+new systems don't have spinning disk,
+
+456
+00:19:56,165 --> 00:19:56,535
+right?
+
+457
+00:19:56,545 --> 00:19:56,714
+And,
+
+458
+00:19:56,724 --> 00:19:59,474
+and really the drop sensor was so you could park
+
+459
+00:19:59,484 --> 00:20:01,885
+the hard drive heads is all it was really for
+
+460
+00:20:02,214 --> 00:20:04,905
+and, and it doesn't matter anymore. Because it's all solid state now.
+
+461
+00:20:04,915 --> 00:20:06,114
+Like, drop away.
+
+462
+00:20:06,415 --> 00:20:08,204
+-- In fact, that's funny
+-- because, and again,
+
+463
+00:20:08,214 --> 00:20:10,694
+we're not advocating people drop their computers.
+
+464
+00:20:11,719 --> 00:20:11,969
+No,
+
+465
+00:20:12,180 --> 00:20:13,969
+no, no. You know what the problem is though?
+
+466
+00:20:13,979 --> 00:20:17,630
+So, like, my wife had a spinning disk in her old Mac
+
+467
+00:20:17,869 --> 00:20:21,430
+and at least once a year I was replacing it because she was notorious for dropping it.
+
+468
+00:20:21,439 --> 00:20:25,290
+Never far enough to break it, but always far enough to ruin the hard drive.
+
+469
+00:20:25,300 --> 00:20:29,329
+And yeah, like even with the drop sensor, it clearly didn't, wasn't doing its job.
+
+470
+00:20:29,339 --> 00:20:33,760
+And now she has a solid state drive, uh, everything is fine and the case is dented.
+
+471
+00:20:33,770 --> 00:20:36,410
+So I think it's been dropped from even higher,
+
+472
+00:20:36,689 --> 00:20:38,750
+but at least the drive is fine.
+
+473
+00:20:39,020 --> 00:20:41,040
+Oh, yeah. No, my, my Mac here actually
+
+474
+00:20:41,280 --> 00:20:44,239
+has like a really solid crease dent in the edge of it.
+
+475
+00:20:44,469 --> 00:20:47,050
+I, I don't know what I did to it, but I must have been
+
+476
+00:20:47,150 --> 00:20:47,699
+like,
+
+477
+00:20:48,050 --> 00:20:49,010
+yeah, it's, uh,
+
+478
+00:20:49,020 --> 00:20:51,410
+anyways and here's the beautiful part too for all the
+
+479
+00:20:51,420 --> 00:20:53,829
+people like yelling about T PM and like secure boot,
+
+480
+00:20:53,839 --> 00:20:55,439
+you know, they're locking and in fairness.
+
+481
+00:20:55,449 --> 00:20:59,319
+So you can only use the secure, the secure boot with Mac Os and with windows.
+
+482
+00:21:00,099 --> 00:21:02,770
+So if you want to run Linux with secure boot, you're, you're out of luck,
+
+483
+00:21:02,780 --> 00:21:06,180
+but you can disable the secure boot if you want to run Linux, for example, on your Mac,
+
+484
+00:21:06,189 --> 00:21:09,619
+I want to clarify something about secure boot though before we go on is,
+
+485
+00:21:09,760 --> 00:21:09,780
+is.
+
+486
+00:21:09,790 --> 00:21:11,160
+So in the Windows world,
+
+487
+00:21:11,170 --> 00:21:15,920
+there are two C A keys they use because you could like Fedora and Ubuntu are signed.
+
+488
+00:21:15,930 --> 00:21:18,790
+You can, you can boot them with secure boot enabled hardware.
+
+489
+00:21:19,290 --> 00:21:21,630
+There are two Cas Microsoft has,
+
+490
+00:21:21,640 --> 00:21:24,589
+there's the C A Microsoft uses for Windows and
+
+491
+00:21:24,599 --> 00:21:26,550
+there's ac A they use for everyone else.
+
+492
+00:21:27,000 --> 00:21:30,420
+And apple is explicit in this document that they
+
+493
+00:21:30,430 --> 00:21:32,959
+only support the C A used for Windows.
+
+494
+00:21:32,969 --> 00:21:35,000
+They don't support the partner C A.
+
+495
+00:21:35,400 --> 00:21:36,079
+So,
+
+496
+00:21:36,380 --> 00:21:36,900
+yeah. Yeah.
+
+497
+00:21:36,910 --> 00:21:40,849
+All you people thinking but, but Fedora's got, it's signed for secure boot.
+
+498
+00:21:40,859 --> 00:21:43,300
+It is, but it won't work out
+
+499
+00:21:43,569 --> 00:21:46,469
+well. And realistically, the number of people that's going to affect is
+
+500
+00:21:46,579 --> 00:21:47,989
+not a lot. And
+
+501
+00:21:48,780 --> 00:21:48,790
+I
+
+502
+00:21:49,270 --> 00:21:52,180
+talking about a company that made a phone and told people they're holding it wrong.
+
+503
+00:21:52,369 --> 00:21:55,839
+So, quite frankly, you know, the entire Fedora community could try and
+
+504
+00:21:56,250 --> 00:21:59,329
+-- pitchfork mob them and I don't think I will care.
+-- Right.
+
+505
+00:21:59,699 --> 00:22:03,300
+No, I don't think they will. And, and my, my suspicion is you can't even run Linux
+
+506
+00:22:03,400 --> 00:22:04,939
+on the brand new macbooks
+
+507
+00:22:05,250 --> 00:22:07,219
+because goodness knows they probably have
+
+508
+00:22:07,229 --> 00:22:09,689
+some incredibly wonky hardware inside that,
+
+509
+00:22:09,699 --> 00:22:11,219
+that just not enough people care.
+
+510
+00:22:12,380 --> 00:22:16,839
+But uh no, overall I'm happy with what this T two chips is doing because also,
+
+511
+00:22:17,400 --> 00:22:19,119
+uh they've made it easy,
+
+512
+00:22:19,640 --> 00:22:20,119
+right?
+
+513
+00:22:20,130 --> 00:22:20,550
+I mean,
+
+514
+00:22:20,560 --> 00:22:23,750
+I remember diddling around with secure boot and UEF I
+
+515
+00:22:23,760 --> 00:22:25,459
+and whatever when it first came out and like,
+
+516
+00:22:25,469 --> 00:22:26,640
+oh my goodness,
+
+517
+00:22:27,109 --> 00:22:27,670
+it's terrible.
+
+518
+00:22:28,069 --> 00:22:28,500
+I turned it
+
+519
+00:22:28,790 --> 00:22:28,810
+off.
+
+520
+00:22:29,729 --> 00:22:30,099
+That's
+
+521
+00:22:30,569 --> 00:22:34,329
+what I ended up doing when I had PC si just ended up disabling it because
+
+522
+00:22:34,670 --> 00:22:37,280
+stuff would just randomly break or not work.
+
+523
+00:22:37,469 --> 00:22:37,839
+Um,
+
+524
+00:22:37,969 --> 00:22:39,829
+oh, and there is one more thing the, um,
+
+525
+00:22:40,010 --> 00:22:41,989
+the, the T two chip does,
+
+526
+00:22:42,119 --> 00:22:44,949
+uh some of the stuff now with the touch ID sensor.
+
+527
+00:22:46,000 --> 00:22:49,829
+And again, so this is nice because it means for example, that, you know, you're,
+
+528
+00:22:50,109 --> 00:22:51,969
+the problem with biometric data is you generally
+
+529
+00:22:51,979 --> 00:22:53,540
+can't change it that easily unless you're like
+
+530
+00:22:53,550 --> 00:22:55,780
+really hardcore committed to like burning your fingertips
+
+531
+00:22:55,790 --> 00:22:57,650
+-- with a soldering iron and changing
+-- your fingerprints,
+
+532
+00:22:57,660 --> 00:22:58,579
+you can't change it.
+
+533
+00:22:58,589 --> 00:23:00,849
+Just say you can't change it. Actually, you know what's funny?
+
+534
+00:23:00,859 --> 00:23:03,500
+I burnt my finger really bad on my 3d printer the other day
+
+535
+00:23:03,949 --> 00:23:07,819
+and, and II, I wonder, I actually, it's one of the wrong fingers.
+
+536
+00:23:07,829 --> 00:23:12,119
+What I, what I need to do is add all my fingers to my fingerprint reader on my phone.
+
+537
+00:23:12,859 --> 00:23:16,089
+And next time I, I like horribly burn myself,
+
+538
+00:23:16,209 --> 00:23:16,750
+I can see
+
+539
+00:23:17,579 --> 00:23:20,489
+badly burn your finger. It'll be fine because, you know, it's looking up
+
+540
+00:23:21,189 --> 00:23:23,239
+like you can because you can get like little cuts and
+
+541
+00:23:23,250 --> 00:23:25,250
+stuff on your finger and your fingerprint reader don't care.
+
+542
+00:23:25,260 --> 00:23:25,930
+Like because I,
+
+543
+00:23:26,219 --> 00:23:28,359
+I'm not gonna say which fingers I've registered but, you know,
+
+544
+00:23:28,369 --> 00:23:30,599
+I don't have all my fingers fingers registered
+
+545
+00:23:31,000 --> 00:23:33,219
+and yeah, you know, like my hands get beat up and
+
+546
+00:23:33,550 --> 00:23:35,040
+my phone seems happy with it.
+
+547
+00:23:35,479 --> 00:23:36,099
+But, um,
+
+548
+00:23:36,280 --> 00:23:38,130
+the nice thing is, you know, this is
+
+549
+00:23:38,609 --> 00:23:41,060
+again, the T two chip is
+
+550
+00:23:41,459 --> 00:23:43,810
+storing and processing this data.
+
+551
+00:23:43,959 --> 00:23:45,489
+So it's not hitting
+
+552
+00:23:46,109 --> 00:23:48,630
+the main CPU or the main memory
+
+553
+00:23:48,819 --> 00:23:49,670
+unencrypted,
+
+554
+00:23:51,910 --> 00:23:52,270
+you know.
+
+555
+00:23:52,489 --> 00:23:53,069
+Uh Right.
+
+556
+00:23:53,079 --> 00:23:53,430
+And it,
+
+557
+00:23:53,439 --> 00:23:56,780
+it sounds like from reading it and I must also interject at this point
+
+558
+00:23:56,790 --> 00:23:59,709
+that I feel like we've said the word T two chip a lot.
+
+559
+00:24:00,050 --> 00:24:04,189
+But anyway, uh right, it sounds like what happens is you scan your fingerprint
+
+560
+00:24:04,290 --> 00:24:08,540
+and then it kind of uses that data to decrypt a different key
+
+561
+00:24:08,550 --> 00:24:11,790
+in chip and then that is used to do stuff in that way.
+
+562
+00:24:11,800 --> 00:24:14,329
+Your fingerprint isn't like you said, going into ra M where
+
+563
+00:24:14,869 --> 00:24:16,619
+potentially be sniffed or stolen.
+
+564
+00:24:17,170 --> 00:24:20,530
+And well, and more of the point, you know, it can't be replayed, right?
+
+565
+00:24:20,540 --> 00:24:23,229
+Because talking to the T two chip only, well,
+
+566
+00:24:23,239 --> 00:24:25,250
+I'm going to assume the T two chip is smart enough to go.
+
+567
+00:24:25,260 --> 00:24:28,109
+I only take fingerprint data from the fingerprint sensor, right?
+
+568
+00:24:28,369 --> 00:24:34,180
+-- I would hope so,
+-- you know, whereas if it's coming into the CPU, the CPU is kind of like,
+
+569
+00:24:34,189 --> 00:24:35,270
+yeah, whatever data is data.
+
+570
+00:24:35,300 --> 00:24:37,709
+I, I would, I would hope that is true.
+
+571
+00:24:38,819 --> 00:24:39,660
+I,
+
+572
+00:24:40,579 --> 00:24:40,599
+I,
+
+573
+00:24:40,880 --> 00:24:44,260
+I don't like to assume anything just because we've seen it all.
+
+574
+00:24:44,349 --> 00:24:46,530
+But that, that does sound like it makes sense. Yes.
+
+575
+00:24:46,540 --> 00:24:51,079
+Well, more to the point Apple is not a stupid company and
+
+576
+00:24:51,339 --> 00:24:53,900
+I think they fully understand that, you know, if they make,
+
+577
+00:24:53,910 --> 00:24:57,800
+if they screw this T two chip up, that's going to be expensive
+
+578
+00:24:58,020 --> 00:24:59,089
+for them to fix
+
+579
+00:24:59,290 --> 00:25:00,510
+probably, you know,
+
+580
+00:25:00,540 --> 00:25:03,829
+because it'll be a case of bring your laptop and swap it for a new one.
+
+581
+00:25:04,599 --> 00:25:04,819
+Uh,
+
+582
+00:25:04,829 --> 00:25:06,569
+and then all the old ones go back to China to
+
+583
+00:25:06,579 --> 00:25:08,609
+be de soldered and a new T two chip put on them
+
+584
+00:25:10,380 --> 00:25:14,869
+because that's the failure mode for a T two chip. Right, as well. It failed.
+
+585
+00:25:15,189 --> 00:25:19,000
+Sorry about your data. Say goodbye. Have a good cry. Here's your new laptop.
+
+586
+00:25:20,989 --> 00:25:23,189
+Right. Right. And, and actually that's,
+
+587
+00:25:23,459 --> 00:25:24,569
+that's going to happen, right.
+
+588
+00:25:24,579 --> 00:25:24,849
+Some,
+
+589
+00:25:24,859 --> 00:25:27,469
+some number of these will fail and you're going to
+
+590
+00:25:27,479 --> 00:25:29,680
+be left with a brick if it does because they,
+
+591
+00:25:29,689 --> 00:25:33,680
+they've integrated this so deeply into the hardware, which is,
+
+592
+00:25:33,930 --> 00:25:34,709
+that is interesting.
+
+593
+00:25:34,719 --> 00:25:37,900
+And that's one of the things I know, like with TP MS, you can replace T PM
+
+594
+00:25:38,319 --> 00:25:39,040
+and fundamentally,
+
+595
+00:25:39,209 --> 00:25:40,250
+although you're kind of in the same,
+
+596
+00:25:41,160 --> 00:25:44,969
+for example icloud backup is so easy. Like you, you log in,
+
+597
+00:25:46,050 --> 00:25:47,810
+that's it, there's no step to it.
+
+598
+00:25:48,630 --> 00:25:50,209
+Uh like unless you're like me,
+
+599
+00:25:50,219 --> 00:25:53,609
+you maybe need to go buy more storage because you have more than five gigs of stuff.
+
+600
+00:25:53,619 --> 00:25:55,619
+But fundamentally, you know, for people's core data,
+
+601
+00:25:55,630 --> 00:25:58,530
+like their address book and you know, their favorite photos and stuff
+
+602
+00:25:58,739 --> 00:26:01,369
+by default, all that stuff is safe and you know,
+
+603
+00:26:01,380 --> 00:26:04,030
+the extra storage is not that expensive or you just get
+
+604
+00:26:04,040 --> 00:26:06,770
+an external hard drive and do your time machine backup.
+
+605
+00:26:08,119 --> 00:26:08,609
+Right.
+
+606
+00:26:08,920 --> 00:26:09,420
+Right. Right.
+
+607
+00:26:09,430 --> 00:26:13,939
+I wonder if this will let you do external drive backups or, I mean,
+
+608
+00:26:13,949 --> 00:26:15,339
+external drive encryption,
+
+609
+00:26:15,640 --> 00:26:19,239
+but still rely on the functionality of this chip because if it does,
+
+610
+00:26:19,250 --> 00:26:20,770
+that would be really freaking cool.
+
+611
+00:26:21,390 --> 00:26:23,260
+Uh That's a good question. I
+
+612
+00:26:23,449 --> 00:26:23,550
+don't know.
+
+613
+00:26:23,959 --> 00:26:26,859
+-- I
+-- bet it doesn't because from the thing is I've read,
+
+614
+00:26:26,869 --> 00:26:30,040
+it sounds like it's not in a position to be doing that.
+
+615
+00:26:30,050 --> 00:26:34,380
+And additionally, that means you'd have to basically feed USB through the chip,
+
+616
+00:26:34,390 --> 00:26:34,579
+which
+
+617
+00:26:35,500 --> 00:26:36,750
+the key storage on the chip.
+
+618
+00:26:37,939 --> 00:26:40,800
+Uh And that might happen, right? You could do something like that.
+
+619
+00:26:40,810 --> 00:26:42,790
+Although then the key is still going to be in memory
+
+620
+00:26:42,800 --> 00:26:45,650
+at which point you're not really gaining anything for yourself.
+
+621
+00:26:47,880 --> 00:26:47,939
+This
+
+622
+00:26:48,140 --> 00:26:48,239
+is a
+
+623
+00:26:48,430 --> 00:26:49,380
+S encryption and
+
+624
+00:26:49,630 --> 00:26:51,560
+it might actually, it does do a
+
+625
+00:26:52,089 --> 00:26:52,319
+because
+
+626
+00:26:52,589 --> 00:26:54,699
+each chip has a 256 bit AES key
+
+627
+00:26:54,709 --> 00:26:57,339
+that's burned into each process for manufacturing time.
+
+628
+00:26:57,349 --> 00:26:59,310
+It can't be read by firmware software and used
+
+629
+00:26:59,319 --> 00:27:01,689
+only by the T two chips hardware AES engine.
+
+630
+00:27:02,020 --> 00:27:03,930
+So yeah, it has an AES engine. So
+
+631
+00:27:04,189 --> 00:27:08,500
+you, you just shove your AES data through that T two chip up. What is it like?
+
+632
+00:27:08,510 --> 00:27:11,250
+Usually there are 10 gigs per second now for an AES chip.
+
+633
+00:27:11,359 --> 00:27:13,630
+I'm, I'm sure it's pretty fast,
+
+634
+00:27:13,800 --> 00:27:14,209
+right?
+
+635
+00:27:15,380 --> 00:27:15,949
+So,
+
+636
+00:27:16,439 --> 00:27:18,869
+no, that's cool. That's cool. And, and that's,
+
+637
+00:27:19,010 --> 00:27:22,839
+again, I'm, I'll be excited when this comes to all of the hardware,
+
+638
+00:27:22,849 --> 00:27:26,239
+which I think it certainly will and you don't think it will
+
+639
+00:27:26,380 --> 00:27:28,479
+I think it'll come to Apple,
+
+640
+00:27:28,719 --> 00:27:31,439
+obviously. I think it will come to chromebooks
+
+641
+00:27:32,660 --> 00:27:36,599
+and it might come to more business laptops.
+
+642
+00:27:37,089 --> 00:27:39,630
+-- I bet the surface season. Yeah.
+-- And I was going to say that the
+
+643
+00:27:40,219 --> 00:27:41,140
+surface are pretty good.
+
+644
+00:27:42,510 --> 00:27:43,119
+Um,
+
+645
+00:27:43,349 --> 00:27:43,739
+the, the
+
+646
+00:27:43,959 --> 00:27:44,339
+Microsoft Mobile,
+
+647
+00:27:44,520 --> 00:27:46,050
+it is conceivable
+
+648
+00:27:46,420 --> 00:27:49,900
+and you might not be wrong because I know if you look at
+
+649
+00:27:50,069 --> 00:27:53,810
+a lot of the consumer hardware, it's, it's pretty bad
+
+650
+00:27:53,989 --> 00:27:56,829
+and their goal is actually to not have to help you.
+
+651
+00:27:56,839 --> 00:27:58,839
+They don't want you to call them and ask for
+
+652
+00:27:58,849 --> 00:28:01,599
+help and putting in a security chip would certainly,
+
+653
+00:28:02,030 --> 00:28:05,010
+we'll say, create a situation where you probably need help
+
+654
+00:28:05,239 --> 00:28:07,030
+where something like a chromebook or even a
+
+655
+00:28:07,040 --> 00:28:09,890
+surface book and special Apple's products are in
+
+656
+00:28:10,199 --> 00:28:12,050
+insanely walled garden.
+
+657
+00:28:12,339 --> 00:28:12,810
+Right?
+
+658
+00:28:12,979 --> 00:28:17,250
+And that, that makes it a little different with respect to
+
+659
+00:28:17,459 --> 00:28:18,969
+kind of how things work.
+
+660
+00:28:18,979 --> 00:28:22,489
+You don't, you don't have options, you do it their way or you shut up and leave,
+
+661
+00:28:22,500 --> 00:28:23,569
+which is
+
+662
+00:28:24,099 --> 00:28:25,880
+not very open source friendly, but
+
+663
+00:28:26,459 --> 00:28:28,439
+on the other hand, my fonts display correctly.
+
+664
+00:28:29,140 --> 00:28:29,229
+Yeah,
+
+665
+00:28:29,359 --> 00:28:29,739
+we talk
+
+666
+00:28:29,869 --> 00:28:30,400
+about that.
+
+667
+00:28:30,410 --> 00:28:30,920
+We were,
+
+668
+00:28:31,010 --> 00:28:35,430
+I was complaining to Kurt the other day about trying to use a high DP I screen in Linux.
+
+669
+00:28:35,609 --> 00:28:38,150
+And let's just say he laughed at me a lot
+
+670
+00:28:38,540 --> 00:28:42,040
+and, and my solution was to just turn my resolution way down.
+
+671
+00:28:42,459 --> 00:28:43,089
+So
+
+672
+00:28:43,359 --> 00:28:46,790
+I, I'll let I'll let the listener figure out what that all means.
+
+673
+00:28:46,920 --> 00:28:46,969
+Ah,
+
+674
+00:28:48,229 --> 00:28:51,170
+I think it also shows it's possible to do this at scale. Right.
+
+675
+00:28:51,180 --> 00:28:52,369
+Because I've seen a lot of,
+
+676
+00:28:52,380 --> 00:28:54,709
+there's oftentimes a lot of security hardware stuff where people are,
+
+677
+00:28:54,719 --> 00:28:56,260
+like they poo poo it because, oh, that's nice.
+
+678
+00:28:56,270 --> 00:28:56,979
+And it's too expensive.
+
+679
+00:28:56,989 --> 00:29:00,849
+We can't do it widespread or we could do it widespread but it's too hard to use or blah,
+
+680
+00:29:00,859 --> 00:29:01,280
+blah, blah.
+
+681
+00:29:01,489 --> 00:29:03,140
+And this clearly shows,
+
+682
+00:29:03,300 --> 00:29:04,650
+no, you, you can do it
+
+683
+00:29:06,010 --> 00:29:06,469
+right.
+
+684
+00:29:07,410 --> 00:29:08,689
+-- It's possible.
+-- Yeah.
+
+685
+00:29:08,829 --> 00:29:09,270
+Yeah.
+
+686
+00:29:10,969 --> 00:29:14,500
+It, it, it is. It, well, I guess we're going to find out if it is.
+
+687
+00:29:15,199 --> 00:29:15,760
+I,
+
+688
+00:29:16,040 --> 00:29:18,030
+I have a feeling it's gonna work out. Ok.
+
+689
+00:29:18,040 --> 00:29:20,900
+So anyway, I guess in summary, well done Apple,
+
+690
+00:29:20,910 --> 00:29:22,670
+I can't wait to see this everywhere else
+
+691
+00:29:22,819 --> 00:29:25,319
+because I think these are awesome features and they
+
+692
+00:29:25,329 --> 00:29:27,869
+will definitely make a computer far more secure.
+
+693
+00:29:28,229 --> 00:29:29,589
+And I'm also glad
+
+694
+00:29:29,709 --> 00:29:32,640
+that I've not bought a new laptop recently because
+
+695
+00:29:32,650 --> 00:29:35,410
+this definitely makes me rethink buying a Mac.
+
+696
+00:29:35,420 --> 00:29:35,849
+Like II,
+
+697
+00:29:35,859 --> 00:29:40,030
+I hate Os X for the most part because I find it annoying for a variety of reasons.
+
+698
+00:29:40,270 --> 00:29:44,609
+-- But this might make me ignore my hate
+-- that, say what you will about.
+
+699
+00:29:44,619 --> 00:29:48,250
+Like I'm, I'm, I use Mac Os daily, whatever it's an operating system.
+
+700
+00:29:48,609 --> 00:29:49,689
+But the hardware man,
+
+701
+00:29:50,439 --> 00:29:54,579
+like my hardware now is all six years old and it just still keeps chugging along fine.
+
+702
+00:29:54,910 --> 00:29:58,630
+You know, it's like it's fast enough, especially now with the cloud, right?
+
+703
+00:29:58,640 --> 00:30:00,260
+Because I can move all the heavy lifting into the cloud.
+
+704
+00:30:00,270 --> 00:30:01,619
+That's, that's not because of
+
+705
+00:30:02,369 --> 00:30:05,130
+that just because Moore's law has failed us.
+
+706
+00:30:05,310 --> 00:30:05,939
+Right?
+
+707
+00:30:06,310 --> 00:30:09,709
+No, but I mean, the apple build quality, I mean, a great example is Nintendo, right?
+
+708
+00:30:09,719 --> 00:30:11,660
+I pulled my Nintendo wii
+
+709
+00:30:12,329 --> 00:30:14,920
+it was sitting in a box in the garage for like 10 years,
+
+710
+00:30:15,089 --> 00:30:17,630
+like in a plastic box bin, whatever you call it.
+
+711
+00:30:17,839 --> 00:30:21,719
+And I basically just pulled it out, kind of blew the dust off of it, plugged it all in,
+
+712
+00:30:21,910 --> 00:30:26,420
+uh, realized I needed to buy that HDM. I adapter thing because like
+
+713
+00:30:27,150 --> 00:30:29,569
+TV, S in the last 10 years no longer have the um
+
+714
+00:30:30,589 --> 00:30:32,219
+is that the stupid thing with four cables,
+
+715
+00:30:32,709 --> 00:30:33,420
+the,
+
+716
+00:30:33,599 --> 00:30:37,579
+the, the four cables that's R GB with four cables and most TV s have those.
+
+717
+00:30:37,589 --> 00:30:39,579
+But the, the Wii doesn't do HDM.
+
+718
+00:30:39,589 --> 00:30:44,540
+-- I, the wii U does HDM
+-- I for 23 bucks, you get an adapter that makes it do HDM. I,
+
+719
+00:30:46,079 --> 00:30:48,030
+-- but
+-- does that give you too much lag?
+
+720
+00:30:50,229 --> 00:30:52,819
+So, so here's the problem. Actually, I can, I, I have,
+
+721
+00:30:53,229 --> 00:30:55,319
+I know more about this than I want to.
+
+722
+00:30:55,579 --> 00:30:59,479
+So I bought my first flat screen TV. I plugged my wii into it
+
+723
+00:30:59,680 --> 00:31:01,260
+and I went to play guitar hero
+
+724
+00:31:01,530 --> 00:31:03,219
+and like I failed
+
+725
+00:31:03,329 --> 00:31:04,800
+and I'm like, what's going on here?
+
+726
+00:31:04,810 --> 00:31:08,380
+And it turned out that uh L CDT vs have a certain amount of lag
+
+727
+00:31:08,689 --> 00:31:09,920
+to them and you can obviously
+
+728
+00:31:10,030 --> 00:31:11,969
+on game mode then and everything would be fine.
+
+729
+00:31:12,260 --> 00:31:15,709
+But my concern with trying to convert from the Wii to HDMIS,
+
+730
+00:31:15,719 --> 00:31:18,290
+you're going to have some on a leg doing the conversion
+
+731
+00:31:18,300 --> 00:31:21,260
+from what's essentially an analog signal into a digital signal.
+
+732
+00:31:21,270 --> 00:31:22,329
+I, I literally
+
+733
+00:31:22,479 --> 00:31:24,609
+spent like 23 bucks on this thing. And
+
+734
+00:31:24,709 --> 00:31:25,890
+-- now,
+-- ok. Yes.
+
+735
+00:31:26,040 --> 00:31:29,800
+But now I want you to spend several $100 buying guitar hero.
+
+736
+00:31:30,050 --> 00:31:31,739
+-- And then tell me if it works,
+-- I
+
+737
+00:31:31,989 --> 00:31:32,260
+mostly
+
+738
+00:31:32,709 --> 00:31:32,760
+play
+
+739
+00:31:33,369 --> 00:31:33,479
+that.
+
+740
+00:31:33,890 --> 00:31:33,900
+I
+
+741
+00:31:34,250 --> 00:31:37,869
+play Wii sports with the sword fighting and yeah, any leg there and you're hooped.
+
+742
+00:31:37,969 --> 00:31:40,750
+That's fair. And I do love wii sports. But
+
+743
+00:31:42,250 --> 00:31:44,109
+no, I do agree with you that,
+
+744
+00:31:44,119 --> 00:31:48,060
+that the Nintendo build quality is very good and being an enormous Nintendo fan.
+
+745
+00:31:48,069 --> 00:31:49,109
+Boy, that I am.
+
+746
+00:31:49,439 --> 00:31:49,939
+It, it,
+
+747
+00:31:49,949 --> 00:31:52,489
+I still own every Nintendo system I've ever bought and
+
+748
+00:31:52,500 --> 00:31:55,780
+I still use them ironically and they all work.
+
+749
+00:31:55,880 --> 00:31:56,420
+And in fact,
+
+750
+00:31:56,430 --> 00:31:59,739
+I've never even replaced any of the batteries in the stuff that has rechargeable.
+
+751
+00:31:59,750 --> 00:32:01,579
+I have like one of the old Nintendo
+
+752
+00:32:01,750 --> 00:32:05,380
+gameboy Advance SPS. It looks like an Nes. It's very nice
+
+753
+00:32:05,770 --> 00:32:07,959
+and like the battery still holds a charge for it.
+
+754
+00:32:07,969 --> 00:32:10,680
+Slightly less than it did, but still a respectable amount of time.
+
+755
+00:32:10,689 --> 00:32:12,280
+And that thing's well over 10 years old.
+
+756
+00:32:12,569 --> 00:32:15,339
+-- And
+-- that's another thing. My Apple Air, I still get eight hours out of it.
+
+757
+00:32:15,349 --> 00:32:17,180
+I don't get the full 10 hours I used to get, but
+
+758
+00:32:17,729 --> 00:32:19,130
+eight hours, six years later, that's
+
+759
+00:32:19,239 --> 00:32:19,839
+like
+
+760
+00:32:21,930 --> 00:32:23,319
+six years ago. I wasn't,
+
+761
+00:32:23,489 --> 00:32:24,579
+I wasn't getting eight hours out of.
+
+762
+00:32:25,709 --> 00:32:27,270
+So. So anyway, anyway,
+
+763
+00:32:27,400 --> 00:32:28,479
+in summary.
+
+764
+00:32:28,660 --> 00:32:29,920
+Uh well done. Apple.
+
+765
+00:32:29,930 --> 00:32:33,479
+Everyone else copied these guys because they're onto something cool
+
+766
+00:32:33,780 --> 00:32:37,040
+and, and that's, I guess where we'll leave it. So I guess thank you, Kurt.
+
+767
+00:32:37,050 --> 00:32:38,180
+Thank you everyone for listening.
+
+768
+00:32:38,410 --> 00:32:40,829
+You can go to open source security podcast.com.
+
+769
+00:32:41,089 --> 00:32:42,560
+You can find the show notes there.
+
+770
+00:32:42,569 --> 00:32:45,719
+Hit us up on social media with the Pound Os S podcast. Hashtag
+
+771
+00:32:45,969 --> 00:32:48,989
+And, and yeah, if there are any fellow Nintendo fan boys out there, like,
+
+772
+00:32:49,000 --> 00:32:51,439
+like hit me up, we can maybe play some Mario Kart or something someday.
+
+773
+00:32:51,459 --> 00:32:54,790
+-- So, yeah, Kurt have a great day.
+-- You too. Thanks everybody. Thank you.
+
+774
+00:32:54,800 --> 00:32:55,349
+Bye bye.

@@ -1,0 +1,3373 @@
+0
+00:00:05,300 --> 00:00:08,810
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,819 --> 00:00:10,550
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:10,560 --> 00:00:11,390
+Josh Bresser.
+
+3
+00:00:11,770 --> 00:00:12,560
+How you doing? Uh,
+
+4
+00:00:12,779 --> 00:00:14,680
+better my thumbs mostly.
+
+5
+00:00:14,689 --> 00:00:18,430
+Well, it's not healed but it's healing and it's not in pain, which is pretty awesome.
+
+6
+00:00:18,440 --> 00:00:22,700
+And, and now that you're old it'll take seven years.
+
+7
+00:00:23,489 --> 00:00:27,030
+There's still a mark on my knee from, like, two years ago.
+
+8
+00:00:27,370 --> 00:00:29,030
+Yeah. Nothing ever heals anymore.
+
+9
+00:00:29,040 --> 00:00:32,569
+Like I just, I accept that when I get hurt, I'm hurt forever now.
+
+10
+00:00:32,689 --> 00:00:34,509
+Yeah. Well, kind of like my computer.
+
+11
+00:00:34,520 --> 00:00:36,869
+I upgraded the boss of my kids' gaming machine last year
+
+12
+00:00:37,430 --> 00:00:38,819
+and it was a whole process because, like,
+
+13
+00:00:38,830 --> 00:00:41,869
+to get from version F 12 to F 50 there's like a very specific
+
+14
+00:00:41,880 --> 00:00:44,310
+set of steps you have to do otherwise you're going to break it.
+
+15
+00:00:45,069 --> 00:00:46,490
+And so I got to F 50
+
+16
+00:00:46,830 --> 00:00:48,700
+which is great because that means in theory I can run
+
+17
+00:00:48,709 --> 00:00:52,770
+like a Ryzen nine something CPU on like the $70 motherboard.
+
+18
+00:00:52,779 --> 00:00:53,630
+Right. Right.
+
+19
+00:00:53,669 --> 00:00:57,250
+The fun part was, you know, how you hit delete to get into the bio settings.
+
+20
+00:00:57,400 --> 00:00:59,009
+I mean, it depends what the computer,
+
+21
+00:00:59,020 --> 00:01:01,610
+but in general you hit delete or F two or F whatever.
+
+22
+00:01:01,619 --> 00:01:02,020
+Anyway,
+
+23
+00:01:02,380 --> 00:01:03,700
+that stopped working.
+
+24
+00:01:04,160 --> 00:01:05,660
+Which, you know, whatever. Right.
+
+25
+00:01:05,669 --> 00:01:09,169
+Like, ok, I can get into the bios, whatever the machine still boosts it works. Right.
+
+26
+00:01:09,180 --> 00:01:11,419
+I can run games. Did they change the key?
+
+27
+00:01:11,629 --> 00:01:13,500
+No. So, anyways, I'm like,
+
+28
+00:01:13,709 --> 00:01:15,860
+who cares? Right. Machine boots is fine.
+
+29
+00:01:16,069 --> 00:01:21,220
+But I wanted to run Docker and can't run darker without hyper or whatever.
+
+30
+00:01:21,230 --> 00:01:24,290
+Uh, the, the, what is it? Secure virtual machine? SVM.
+
+31
+00:01:25,069 --> 00:01:28,709
+Last I checked if you want to turn SVM on. You do that? Where the bio?
+
+32
+00:01:29,264 --> 00:01:31,544
+So I'm kind of like, huh? Well,
+
+33
+00:01:32,055 --> 00:01:34,525
+luckily there's like a new bios from like a month ago.
+
+34
+00:01:34,535 --> 00:01:36,035
+So it's been like eight months with no bio
+
+35
+00:01:36,154 --> 00:01:36,235
+up
+
+36
+00:01:36,635 --> 00:01:38,724
+and then a new one comes out a month ago.
+
+37
+00:01:38,845 --> 00:01:42,644
+Upgrade that and boom, it starts the delete key works again. I can
+
+38
+00:01:43,324 --> 00:01:43,805
+upgrade it
+
+39
+00:01:43,985 --> 00:01:44,334
+without
+
+40
+00:01:44,565 --> 00:01:44,635
+being
+
+41
+00:01:44,875 --> 00:01:44,944
+within
+
+42
+00:01:45,114 --> 00:01:49,154
+-- windows. So you ran their little tool, right?
+-- Yeah, I ran their scary little tool.
+
+43
+00:01:49,165 --> 00:01:52,775
+That's like, and now I'm upgrading your bios. Don't turn the computer off.
+
+44
+00:01:52,785 --> 00:01:54,004
+I'm like, nope, not gonna.
+
+45
+00:01:55,089 --> 00:01:56,480
+So, anyways. Yeah. And it works
+
+46
+00:01:56,750 --> 00:01:57,900
+-- nice
+-- well, and
+
+47
+00:01:58,519 --> 00:01:59,000
+EFI Bios
+
+48
+00:01:59,190 --> 00:02:02,029
+is a little more forgiving
+
+49
+00:02:02,220 --> 00:02:03,470
+than the old,
+
+50
+00:02:03,669 --> 00:02:06,110
+old, I don't even know what the old bios was called, but
+
+51
+00:02:06,569 --> 00:02:07,150
+it's
+
+52
+00:02:07,569 --> 00:02:08,550
+EFI is definitely
+
+53
+00:02:08,660 --> 00:02:11,649
+-- harder to break.
+-- One thing I noticed that was interesting.
+
+54
+00:02:11,660 --> 00:02:16,380
+I, I just, I literally got a new machine yesterday and in the boot screen it's like
+
+55
+00:02:16,710 --> 00:02:17,440
+USB Dis
+
+56
+00:02:18,300 --> 00:02:18,500
+you
+
+57
+00:02:18,720 --> 00:02:18,800
+boo
+
+58
+00:02:19,169 --> 00:02:19,399
+disk
+
+59
+00:02:19,919 --> 00:02:20,630
+drive,
+
+60
+00:02:20,789 --> 00:02:20,910
+you
+
+61
+00:02:21,119 --> 00:02:21,779
+drive.
+
+62
+00:02:21,919 --> 00:02:22,660
+Like,
+
+63
+00:02:23,270 --> 00:02:28,009
+I, I'll be honest, I've been a Mac user for about 67 years now.
+
+64
+00:02:28,020 --> 00:02:29,889
+With the exception of one gaming PC
+
+65
+00:02:30,300 --> 00:02:32,309
+never really paid attention. Apparently this u
+
+66
+00:02:32,520 --> 00:02:33,029
+is
+
+67
+00:02:33,190 --> 00:02:34,259
+all over the place now.
+
+68
+00:02:35,029 --> 00:02:35,929
+Yes.
+
+69
+00:02:36,330 --> 00:02:37,000
+And
+
+70
+00:02:37,339 --> 00:02:41,839
+it works a lot different than we're used to, which is kind of cool.
+
+71
+00:02:41,850 --> 00:02:46,190
+And, and I would view it as more of a, an operating system than a bio.
+
+72
+00:02:46,729 --> 00:02:48,479
+It's got a graphical user interface.
+
+73
+00:02:48,729 --> 00:02:51,789
+-- Yeah, I, I have a mouse, like
+-- my new motherboard
+
+74
+00:02:52,029 --> 00:02:52,949
+has a bios
+
+75
+00:02:53,089 --> 00:02:54,160
+where you go in
+
+76
+00:02:54,330 --> 00:02:57,259
+and it's got a motherboard explorer and I'm like, what's that?
+
+77
+00:02:57,330 --> 00:02:58,800
+And you click on it and it shows you a
+
+78
+00:02:58,809 --> 00:03:02,220
+graphical image of your motherboard and it tells you which slots
+
+79
+00:03:02,720 --> 00:03:07,949
+-- and connectors are in use.
+-- Mine has little spinning fans
+
+80
+00:03:08,080 --> 00:03:11,550
+with like for the fans that spin, it's, it's completely used
+
+81
+00:03:11,656 --> 00:03:14,246
+this but I chuckle every time I look at it.
+
+82
+00:03:14,255 --> 00:03:15,376
+-- Well, like
+-- I was like, wait,
+
+83
+00:03:15,386 --> 00:03:18,886
+you know what's in this fan is plugged into this fan header.
+
+84
+00:03:18,895 --> 00:03:20,055
+Why wouldn't it?
+
+85
+00:03:20,065 --> 00:03:21,746
+Well, but, or like, for example,
+
+86
+00:03:21,755 --> 00:03:25,675
+it knows that the USB ports on the front are hooked up again.
+
+87
+00:03:25,865 --> 00:03:28,455
+-- Why wouldn't it know that?
+-- Well, I know.
+
+88
+00:03:28,466 --> 00:03:31,576
+But dude, like I'm old and like, I'm used to computers where it's like you plug,
+
+89
+00:03:31,585 --> 00:03:32,996
+you put it together and it's like it
+
+90
+00:03:33,005 --> 00:03:35,022
+doesn't work and then you start shuffling stuff around
+
+91
+00:03:35,031 --> 00:03:36,542
+and like by the seventh or eighth attempt you
+
+92
+00:03:36,552 --> 00:03:37,861
+get some good boots and then you're just,
+
+93
+00:03:37,871 --> 00:03:39,082
+like, never touch it again.
+
+94
+00:03:39,222 --> 00:03:41,401
+-- Yeah,
+-- it's a little different than it used to be for
+
+95
+00:03:41,412 --> 00:03:42,001
+sure.
+
+96
+00:03:42,052 --> 00:03:45,082
+I mean, clearly there's an operating system in there because it also,
+
+97
+00:03:45,442 --> 00:03:47,171
+this new computer has a, a
+
+98
+00:03:47,302 --> 00:03:51,962
+USB port on the back labeled flash update and so apparent, like I,
+
+99
+00:03:51,972 --> 00:03:56,992
+I stuck a USB drive in there with the flash, uh, the image of the bios update on there
+
+100
+00:03:57,660 --> 00:03:59,860
+and from within the bios it's like, oh, look,
+
+101
+00:03:59,869 --> 00:04:02,610
+there's a USB drive with the new thing on.
+
+102
+00:04:02,619 --> 00:04:03,360
+That's neat.
+
+103
+00:04:04,119 --> 00:04:06,779
+Well, but there's also a switch on the back that says bios
+
+104
+00:04:06,889 --> 00:04:10,360
+update. And I'm like, do I just plug this thing in and hold that switch down?
+
+105
+00:04:10,630 --> 00:04:12,520
+Like that scares me because I'm like,
+
+106
+00:04:12,639 --> 00:04:17,358
+bios updates. Scary computer. Brick computer go away. No, no work anymore. Yeah.
+
+107
+00:04:17,369 --> 00:04:19,790
+It's, it's nothing like it used to be, man. Yeah,
+
+108
+00:04:19,903 --> 00:04:22,264
+I paid for the product replacement plan on the
+
+109
+00:04:22,273 --> 00:04:24,093
+monitor in case I drop it or something stupid.
+
+110
+00:04:24,104 --> 00:04:26,644
+But I didn't on the computer because I'm like, ah, computers, whatever. Right.
+
+111
+00:04:26,653 --> 00:04:28,813
+-- They never break.
+-- Are they going to cover the bio
+
+112
+00:04:28,973 --> 00:04:31,834
+-- if you, if you
+-- break it, if I break it? I don't know.
+
+113
+00:04:32,014 --> 00:04:36,003
+I don't want to find out the main thing. I get the IP P on the monitors.
+
+114
+00:04:36,014 --> 00:04:39,164
+Like, if there's a dead pixel, otherwise it's the manufacturer's warranty,
+
+115
+00:04:39,174 --> 00:04:41,273
+which is like, unless it's on fire
+
+116
+00:04:41,433 --> 00:04:42,044
+too bad.
+
+117
+00:04:42,454 --> 00:04:44,243
+Well, and this has become my
+
+118
+00:04:44,799 --> 00:04:48,380
+kind of strategy. I have for televisions in my house is
+
+119
+00:04:48,670 --> 00:04:53,760
+-- Costco has a warranty program.
+-- Remember when you refuse to shop at Costco?
+
+120
+00:04:53,769 --> 00:04:55,820
+And I was like, you should shop there because they're awesome.
+
+121
+00:04:56,059 --> 00:05:00,510
+Yeah. But you're still a bit more zealous about it than I prefer.
+
+122
+00:05:00,640 --> 00:05:02,209
+But the point is
+
+123
+00:05:02,410 --> 00:05:07,619
+they have a five year warranty program and I realized that all of the TV si bought,
+
+124
+00:05:07,630 --> 00:05:11,915
+I'm on probably my third or flat screen now and they all last three years.
+
+125
+00:05:11,984 --> 00:05:14,755
+So Costco has a five year warranty where for like,
+
+126
+00:05:14,765 --> 00:05:18,545
+I think 30 bucks because I always buy the cheap tvs for like, 30 bucks.
+
+127
+00:05:18,554 --> 00:05:19,614
+I get a five year warranty.
+
+128
+00:05:19,625 --> 00:05:22,454
+And I'm like, well, this is a no freaking brainer right here. Right.
+
+129
+00:05:22,464 --> 00:05:24,765
+Like, I'm going to get a free TV in three years.
+
+130
+00:05:24,774 --> 00:05:26,325
+Well, when you, when you think about a TV,
+
+131
+00:05:26,334 --> 00:05:29,954
+if you pay a dollar a day advertised over three years, that's $1000 TV.
+
+132
+00:05:29,964 --> 00:05:31,714
+They're basically disposable at this point.
+
+133
+00:05:31,885 --> 00:05:33,195
+-- Yeah,
+-- I pay way less than that.
+
+134
+00:05:33,570 --> 00:05:35,100
+I'm a cheap skate and I don't care.
+
+135
+00:05:35,440 --> 00:05:37,149
+-- And
+-- so even 50 cents a day.
+
+136
+00:05:37,279 --> 00:05:40,290
+But the point is like, when I was a kid, my parents bought some Sony TV.
+
+137
+00:05:40,299 --> 00:05:44,739
+-- And it was a big deal.
+-- I remember the TV repair man coming to our house,
+
+138
+00:05:45,040 --> 00:05:46,829
+like a person
+
+139
+00:05:47,299 --> 00:05:48,769
+opened the TV
+
+140
+00:05:48,920 --> 00:05:51,799
+-- and worked on it with tools. Like,
+-- at
+
+141
+00:05:51,980 --> 00:05:55,290
+this point I'm like, uh, monitors, acting, sketchy.
+
+142
+00:05:56,040 --> 00:06:01,170
+-- Yeah. Buy a new one.
+-- Well, let's face it I have a warranty on this TV. If it breaks.
+
+143
+00:06:01,179 --> 00:06:03,049
+Do you think anyone's going to ask for anything?
+
+144
+00:06:03,059 --> 00:06:05,760
+-- No, they're just going to give me a new TV.
+-- Well, and that's what I love.
+
+145
+00:06:05,769 --> 00:06:08,720
+Like, the place I buy from has a product replacement plan where they're like,
+
+146
+00:06:09,089 --> 00:06:13,019
+essentially, it also guarantees if your thing breaks and they can't replace, like,
+
+147
+00:06:13,029 --> 00:06:15,190
+say the motherboard with the comparable thing.
+
+148
+00:06:15,290 --> 00:06:16,290
+They're just like, ah, whatever,
+
+149
+00:06:16,299 --> 00:06:18,910
+we'll give you a newer motherboard with a newer CPU and like
+
+150
+00:06:18,920 --> 00:06:21,709
+newer RA M and like all that stuff because quite frankly,
+
+151
+00:06:21,720 --> 00:06:23,239
+I mean, you know, you do the math on these things.
+
+152
+00:06:23,250 --> 00:06:24,119
+Like, how often do computers
+
+153
+00:06:24,315 --> 00:06:26,855
+actually physically feel short of pouring pop in there?
+
+154
+00:06:27,204 --> 00:06:28,595
+Right. It's pretty rare. Anyway,
+
+155
+00:06:28,915 --> 00:06:32,445
+we're at Holy, we're going to talk about boot hole today.
+
+156
+00:06:32,614 --> 00:06:33,285
+What's that?
+
+157
+00:06:33,415 --> 00:06:35,964
+It's a hole in my boot actually. See, you know what's funny?
+
+158
+00:06:36,345 --> 00:06:38,475
+Yeah, it's like five CV S or something.
+
+159
+00:06:39,890 --> 00:06:40,970
+So, I,
+
+160
+00:06:41,200 --> 00:06:44,390
+I did some Google searching on the term boot hole
+
+161
+00:06:44,579 --> 00:06:45,130
+and,
+
+162
+00:06:45,649 --> 00:06:45,660
+uh,
+
+163
+00:06:46,230 --> 00:06:48,190
+-- did you use Google Safe Search?
+-- I
+
+164
+00:06:48,390 --> 00:06:51,519
+do not ever have that turned on, but I did not get any non
+
+165
+00:06:51,739 --> 00:06:55,290
+safeer work results, at least in what I looked at, but like, in all seriousness,
+
+166
+00:06:55,299 --> 00:06:57,089
+fixing actual footwear,
+
+167
+00:06:57,299 --> 00:07:00,440
+what made up a surprising number of the search results.
+
+168
+00:07:00,739 --> 00:07:01,730
+So, I would say
+
+169
+00:07:03,089 --> 00:07:03,119
+in
+
+170
+00:07:03,239 --> 00:07:05,859
+terms of what were you thinking of? I don't want to know,
+
+171
+00:07:06,040 --> 00:07:06,410
+but
+
+172
+00:07:06,609 --> 00:07:07,070
+in terms of,
+
+173
+00:07:07,679 --> 00:07:09,709
+in terms of naming things,
+
+174
+00:07:09,809 --> 00:07:11,809
+this is, I think an exceptionally
+
+175
+00:07:12,089 --> 00:07:13,519
+poorly chosen name
+
+176
+00:07:13,640 --> 00:07:16,790
+because if I'm getting footwear, when I search for your security flaw,
+
+177
+00:07:16,890 --> 00:07:18,420
+I'm getting downtown shoe repair.
+
+178
+00:07:18,429 --> 00:07:20,910
+Sherwood Park, shoe repair master. Sorry.
+
+179
+00:07:20,920 --> 00:07:24,899
+Oh, Mr Safety Shoes, which is honestly a great place to buy safety shoes.
+
+180
+00:07:24,910 --> 00:07:26,519
+You can't go wrong with safety shoes.
+
+181
+00:07:26,529 --> 00:07:27,679
+II,
+
+182
+00:07:27,690 --> 00:07:30,230
+I have owned several extremely high quality pairs of
+
+183
+00:07:30,239 --> 00:07:32,369
+them in my life and they are worth every penny
+
+184
+00:07:32,735 --> 00:07:35,966
+gumb boots are CS A approved blah, blah, not cloud security lines,
+
+185
+00:07:35,976 --> 00:07:39,355
+but actually Canadian Standard Association approved and they are like,
+
+186
+00:07:39,365 --> 00:07:40,735
+they're felt lined.
+
+187
+00:07:40,746 --> 00:07:44,605
+They're acid proof like they are the nicest gumb boots I've ever owned.
+
+188
+00:07:44,756 --> 00:07:45,665
+But anyway, anyway,
+
+189
+00:07:45,776 --> 00:07:48,455
+so I thought it would be worth talking about
+
+190
+00:07:48,466 --> 00:07:51,876
+boot hole for two important reasons is number one,
+
+191
+00:07:52,115 --> 00:07:55,855
+I have an enormous amount of knowledge about secure boot
+
+192
+00:07:56,006 --> 00:07:57,085
+because when secure
+
+193
+00:07:57,235 --> 00:07:59,552
+boot was making its way into Linux,
+
+194
+00:07:59,971 --> 00:08:03,842
+I was more involved than I wanted to be in a lot of ways.
+
+195
+00:08:03,881 --> 00:08:07,372
+And that was, uh, Matthew Garrett did a ton of the work way back in the day
+
+196
+00:08:07,511 --> 00:08:11,391
+and now what Peter Jones does most of it for like fedora and friends.
+
+197
+00:08:11,402 --> 00:08:14,231
+So it's, it's definitely a wild ride. But then also
+
+198
+00:08:14,541 --> 00:08:16,071
+this security flaw
+
+199
+00:08:16,291 --> 00:08:17,832
+is dumb
+
+200
+00:08:17,981 --> 00:08:19,601
+and I want to talk about why that is,
+
+201
+00:08:19,731 --> 00:08:23,261
+I'll be honest. Have we seen many security flaws that are not dumb?
+
+202
+00:08:24,390 --> 00:08:25,420
+No, like really
+
+203
+00:08:26,720 --> 00:08:29,299
+like this whole Twitter thing. Everyone was like Twitter Nation State. No.
+
+204
+00:08:29,309 --> 00:08:31,440
+Turns out a bored 17 year old in Florida.
+
+205
+00:08:31,649 --> 00:08:32,380
+Good for him.
+
+206
+00:08:32,390 --> 00:08:34,760
+Let me, ok, let me kind of rephrase this because I think there,
+
+207
+00:08:34,770 --> 00:08:36,539
+there have been security flaws that
+
+208
+00:08:36,750 --> 00:08:38,739
+are interesting and could matter.
+
+209
+00:08:38,840 --> 00:08:40,929
+But this particular security flaw,
+
+210
+00:08:40,940 --> 00:08:44,260
+I would argue is probably not really a security flaw
+
+211
+00:08:44,659 --> 00:08:46,059
+in most sense of the word.
+
+212
+00:08:46,270 --> 00:08:48,679
+And there's some important reasons for that because of how
+
+213
+00:08:48,690 --> 00:08:51,390
+secure boot has to work and it's hilarious and sad.
+
+214
+00:08:51,789 --> 00:08:55,159
+So, ok, first, so here's the thing. So like my understanding of bios
+
+215
+00:08:55,330 --> 00:08:56,469
+in general is
+
+216
+00:08:56,640 --> 00:09:00,250
+I need to go talk to the hard drive just enough to get some operating system.
+
+217
+00:09:00,260 --> 00:09:03,979
+Because for example, like I was showing my son, I took a USB drive installed free
+
+218
+00:09:04,119 --> 00:09:07,190
+Os on it and then put the, the bios flashing utility and bios
+
+219
+00:09:07,320 --> 00:09:08,049
+image on it.
+
+220
+00:09:08,289 --> 00:09:11,000
+And I was showing my son this like last year when I was going through
+
+221
+00:09:11,010 --> 00:09:14,710
+that whole update process on his gaming PC and like it blew his mind because,
+
+222
+00:09:14,719 --> 00:09:18,510
+well, in fairness, he's nine years old, he's never seen a non gooey computer.
+
+223
+00:09:18,640 --> 00:09:21,809
+So, you know, it's funny you say that I've been running Linux for so long.
+
+224
+00:09:21,820 --> 00:09:23,590
+Like my kids think that's normal.
+
+225
+00:09:25,419 --> 00:09:30,469
+They, they, those poor kids, they have no idea what, what like normal people do.
+
+226
+00:09:30,960 --> 00:09:31,070
+Oh,
+
+227
+00:09:31,210 --> 00:09:32,849
+to be normal again
+
+228
+00:09:33,159 --> 00:09:34,200
+again.
+
+229
+00:09:35,200 --> 00:09:35,840
+-- Well,
+-- when
+
+230
+00:09:35,849 --> 00:09:35,859
+I
+
+231
+00:09:35,979 --> 00:09:38,229
+-- was seven, whatever,
+-- I refuse to believe that
+
+232
+00:09:38,340 --> 00:09:41,280
+anyway. Ok, so, so please explain. So first of all, is boot
+
+233
+00:09:41,460 --> 00:09:43,559
+hole a vulnerability or multiple vulnerable.
+
+234
+00:09:44,039 --> 00:09:45,380
+So, well, there's
+
+235
+00:09:48,190 --> 00:09:48,320
+all right.
+
+236
+00:09:49,400 --> 00:09:50,429
+Let's do this.
+
+237
+00:09:50,559 --> 00:09:55,710
+-- I want to start with secure boot and how it works.
+-- Secure boots. Simple. Right.
+
+238
+00:09:55,719 --> 00:09:57,909
+Because if I boot the computer securely,
+
+239
+00:09:57,919 --> 00:10:00,890
+I will never be in an insecure state and I will be always secure
+
+240
+00:10:01,270 --> 00:10:02,419
+nonsense. All right.
+
+241
+00:10:02,429 --> 00:10:02,539
+So,
+
+242
+00:10:02,549 --> 00:10:05,169
+what we'll do is let's explain secure boot
+
+243
+00:10:05,179 --> 00:10:07,539
+and then we'll steer ourselves into oncoming traffic.
+
+244
+00:10:07,549 --> 00:10:09,210
+Ok? Because that's, that's what we should do.
+
+245
+00:10:09,219 --> 00:10:11,679
+So I'm going to start with the disclaimer
+
+246
+00:10:11,890 --> 00:10:12,630
+of that.
+
+247
+00:10:13,049 --> 00:10:16,200
+I'm like 90% sure of everything I'm going to talk about,
+
+248
+00:10:16,210 --> 00:10:17,400
+but I might get some things wrong.
+
+249
+00:10:17,409 --> 00:10:20,559
+And if I do, you're welcome to shame me publicly and please do
+
+250
+00:10:20,869 --> 00:10:22,059
+well, in fairness,
+
+251
+00:10:22,070 --> 00:10:25,219
+the people who apparently wrote all these boot loaders were also wrong.
+
+252
+00:10:25,539 --> 00:10:28,039
+They're, they're not wrong. They actually so, ok,
+
+253
+00:10:28,190 --> 00:10:30,260
+this is where I want to start
+
+254
+00:10:30,450 --> 00:10:35,119
+is secure boot isn't about security is the first thing we have to set down.
+
+255
+00:10:35,429 --> 00:10:40,140
+So here's how this works. You have obviously your, your UV Bios
+
+256
+00:10:40,359 --> 00:10:47,570
+has keys embedded in it by the manufacturer. So the idea is we will only boot
+
+257
+00:10:47,859 --> 00:10:51,510
+things that have been signed by someone we trust, right?
+
+258
+00:10:52,059 --> 00:10:52,809
+Because I mean, that's,
+
+259
+00:10:53,369 --> 00:10:54,609
+that's standard. Ok.
+
+260
+00:10:55,140 --> 00:10:57,659
+So the way this was done though is basically,
+
+261
+00:10:57,669 --> 00:11:01,760
+it was decided that Microsoft was going to be the keeper of the keys.
+
+262
+00:11:02,239 --> 00:11:03,640
+And this was the
+
+263
+00:11:03,799 --> 00:11:08,190
+sort of not nice Microsoft, I would say they were on their,
+
+264
+00:11:08,200 --> 00:11:10,500
+their recovery plan at this point.
+
+265
+00:11:10,510 --> 00:11:13,219
+So most of us were like, I don't know about that.
+
+266
+00:11:13,229 --> 00:11:16,099
+No, I remember those days where it's like, oh, they're gonna kill Linux. Great.
+
+267
+00:11:16,640 --> 00:11:17,690
+Well, but, and, yeah,
+
+268
+00:11:18,150 --> 00:11:19,070
+so here's what
+
+269
+00:11:19,289 --> 00:11:19,320
+I,
+
+270
+00:11:19,469 --> 00:11:21,409
+I think they did it just so people couldn't say that.
+
+271
+00:11:21,690 --> 00:11:26,330
+But, and, and here's the thing running AC A is really hard, like, really, really,
+
+272
+00:11:26,340 --> 00:11:27,049
+really hard.
+
+273
+00:11:27,090 --> 00:11:28,630
+-- No,
+-- no, no. Running AC, a
+
+274
+00:11:28,780 --> 00:11:29,609
+properly
+
+275
+00:11:30,890 --> 00:11:31,619
+running AC A is
+
+276
+00:11:31,840 --> 00:11:31,969
+easy.
+
+277
+00:11:32,320 --> 00:11:32,390
+And
+
+278
+00:11:33,119 --> 00:11:35,770
+yes, that's true. I could start AC A tonight
+
+279
+00:11:36,039 --> 00:11:36,690
+and
+
+280
+00:11:37,119 --> 00:11:37,840
+it would make us all.
+
+281
+00:11:40,000 --> 00:11:45,609
+So Microsoft is kind of in charge of this. And so the way it works is there's two
+
+282
+00:11:45,799 --> 00:11:46,630
+keys,
+
+283
+00:11:46,859 --> 00:11:49,150
+there's the key for windows
+
+284
+00:11:49,349 --> 00:11:51,200
+and then there's the key for everything else.
+
+285
+00:11:51,549 --> 00:11:52,169
+And
+
+286
+00:11:52,340 --> 00:11:53,489
+you can imagine
+
+287
+00:11:53,700 --> 00:11:57,809
+why they did this, right? Because obviously, let's say you have a,
+
+288
+00:11:58,309 --> 00:12:02,380
+a surface pro maybe or I don't even know if surface does this, but
+
+289
+00:12:02,500 --> 00:12:06,159
+you could have a device that you could only put one key on if you wanted and
+
+290
+00:12:06,169 --> 00:12:09,630
+then say you could only boot windows and there's no way to boot the other stuff.
+
+291
+00:12:09,640 --> 00:12:13,690
+My current motherboard basically will only boot windows 10
+
+292
+00:12:14,200 --> 00:12:19,159
+in theory it can boot other things. But from my quick look at the
+
+293
+00:12:19,369 --> 00:12:20,380
+docks on that
+
+294
+00:12:21,979 --> 00:12:24,900
+you can, you can probably just turn it off too where you can shut off.
+
+295
+00:12:25,330 --> 00:12:26,169
+But anyway, ok.
+
+296
+00:12:26,289 --> 00:12:28,479
+No, I'm not gonna let you do this to us. You're not, we're not doing it.
+
+297
+00:12:28,489 --> 00:12:29,549
+We're not doing it. I'm keeping us on
+
+298
+00:12:29,719 --> 00:12:29,820
+track,
+
+299
+00:12:30,159 --> 00:12:30,330
+keep
+
+300
+00:12:31,419 --> 00:12:32,049
+us on track
+
+301
+00:12:32,229 --> 00:12:32,250
+it.
+
+302
+00:12:32,690 --> 00:12:33,460
+So, so
+
+303
+00:12:34,090 --> 00:12:37,330
+what we're going to do now is you've got the second key
+
+304
+00:12:37,460 --> 00:12:39,270
+and the way it works is you have to submit code to
+
+305
+00:12:39,280 --> 00:12:43,109
+Microsoft and basically say here is the code I want to boot.
+
+306
+00:12:43,119 --> 00:12:44,190
+Will you please sign it?
+
+307
+00:12:44,200 --> 00:12:45,590
+So when you say the code to boot,
+
+308
+00:12:45,599 --> 00:12:48,109
+-- you mean like the bootloader or the whole
+-- thing or the binary?
+
+309
+00:12:48,119 --> 00:12:49,150
+Basically this is the,
+
+310
+00:12:49,765 --> 00:12:50,184
+the UV
+
+311
+00:12:50,585 --> 00:12:54,815
+-- bio starts.
+-- OK. So this is like the low level bootloader. Yeah. Right. OK.
+
+312
+00:12:54,825 --> 00:12:57,614
+-- It's not like the whole Os or anything.
+-- No, it's not the Os.
+
+313
+00:12:57,625 --> 00:12:59,984
+It would be, it'd be like Grub but,
+
+314
+00:13:00,265 --> 00:13:01,265
+but, but,
+
+315
+00:13:01,604 --> 00:13:02,015
+but
+
+316
+00:13:02,205 --> 00:13:04,034
+Microsoft won't sign GP L code
+
+317
+00:13:04,965 --> 00:13:09,075
+-- and guess what license grub has?
+-- That seems like a bit of a challenge.
+
+318
+00:13:09,114 --> 00:13:13,885
+No, no, because GP L three specifically accounts for this instance
+
+319
+00:13:14,349 --> 00:13:16,169
+where you have to release the keys.
+
+320
+00:13:16,400 --> 00:13:18,219
+Yeah. What was that called? The Netflix or something?
+
+321
+00:13:19,000 --> 00:13:19,070
+Uh
+
+322
+00:13:19,179 --> 00:13:21,070
+No, the, the tivo
+
+323
+00:13:23,619 --> 00:13:24,979
+is tivo still a thing.
+
+324
+00:13:25,309 --> 00:13:25,929
+I don't know.
+
+325
+00:13:26,710 --> 00:13:27,570
+We'll look it up later.
+
+326
+00:13:27,739 --> 00:13:29,729
+So anyway, so what are we going to do?
+
+327
+00:13:29,830 --> 00:13:35,109
+So what we did in the Linux world is we created this, this boot utility called Shim.
+
+328
+00:13:35,419 --> 00:13:37,650
+And all Shim is designed to do
+
+329
+00:13:37,890 --> 00:13:41,369
+is get a signature from Microsoft and then load Grub,
+
+330
+00:13:41,979 --> 00:13:42,400
+right.
+
+331
+00:13:42,719 --> 00:13:43,489
+-- That's literally,
+-- it's
+
+332
+00:13:43,619 --> 00:13:43,700
+like
+
+333
+00:13:44,210 --> 00:13:44,219
+a
+
+334
+00:13:45,469 --> 00:13:46,219
+Exactly.
+
+335
+00:13:46,320 --> 00:13:47,159
+Exactly.
+
+336
+00:13:47,440 --> 00:13:47,710
+So,
+
+337
+00:13:48,239 --> 00:13:50,940
+but it's a little more complicated than that because obviously
+
+338
+00:13:51,280 --> 00:13:52,940
+you can't just have shim
+
+339
+00:13:53,419 --> 00:13:55,159
+loading, unsigned, whatever.
+
+340
+00:13:55,460 --> 00:13:57,349
+I'm guessing Microsoft would be onto that
+
+341
+00:13:57,450 --> 00:14:00,599
+-- if that was the case.
+-- They, they probably wouldn't sign your stuff.
+
+342
+00:14:00,609 --> 00:14:02,609
+They'd say don't, don't do this. We don't like it.
+
+343
+00:14:02,619 --> 00:14:03,039
+So, anyway,
+
+344
+00:14:03,049 --> 00:14:08,229
+so what happens is basically shim is signed by Microsoft and then inside of shim
+
+345
+00:14:08,349 --> 00:14:09,609
+is another key
+
+346
+00:14:09,890 --> 00:14:10,710
+that
+
+347
+00:14:10,929 --> 00:14:13,479
+is everything else is signed with things like the
+
+348
+00:14:13,489 --> 00:14:16,909
+kernel and grub and even kernel device drivers.
+
+349
+00:14:17,530 --> 00:14:19,969
+And so what happens is basically
+
+350
+00:14:20,190 --> 00:14:20,219
+EFI
+
+351
+00:14:20,479 --> 00:14:21,090
+boots, shim
+
+352
+00:14:21,309 --> 00:14:23,309
+shim loads the new key
+
+353
+00:14:23,719 --> 00:14:25,820
+and then it checks Grub.
+
+354
+00:14:26,250 --> 00:14:29,219
+-- So it's transitive trust.
+-- Right. Yeah, basically. Right. Right.
+
+355
+00:14:29,349 --> 00:14:31,119
+Loads. Grub. Grub
+
+356
+00:14:31,309 --> 00:14:34,609
+does its magic. Grub makes sure the kernel is correct.
+
+357
+00:14:34,729 --> 00:14:38,710
+-- Grub boots the kernel and then we're off to the races. Ok?
+-- And stupid question.
+
+358
+00:14:38,719 --> 00:14:43,099
+But just to be clear, this really only matters on actual hardware like
+
+359
+00:14:43,440 --> 00:14:48,020
+-- or whatever, like who cares?
+-- I think they have like fake secure boot on the limbs now.
+
+360
+00:14:48,630 --> 00:14:53,059
+But it, it, yeah, whatever. I mean, the idea here is the intent was
+
+361
+00:14:53,729 --> 00:14:54,549
+you couldn't
+
+362
+00:14:54,710 --> 00:14:56,669
+-- run unsigned
+-- code,
+
+363
+00:14:56,919 --> 00:14:58,630
+you couldn't subvert the boot process
+
+364
+00:14:58,900 --> 00:15:02,289
+and, and like for example, the bios is signed. So the bios
+
+365
+00:15:02,479 --> 00:15:06,109
+can't be backdoor in theory, which
+
+366
+00:15:06,760 --> 00:15:07,510
+there's some stories
+
+367
+00:15:07,969 --> 00:15:11,489
+don't Google Intel management engine CV,
+
+368
+00:15:11,919 --> 00:15:12,239
+whatever,
+
+369
+00:15:13,690 --> 00:15:14,150
+everything's fine.
+
+370
+00:15:14,409 --> 00:15:16,599
+So, but here's the thing, right? So here's the thing.
+
+371
+00:15:16,880 --> 00:15:19,070
+So you have this
+
+372
+00:15:19,460 --> 00:15:22,419
+chain of trust in your boot kind of system, right?
+
+373
+00:15:22,630 --> 00:15:23,929
+So you end up
+
+374
+00:15:24,390 --> 00:15:27,390
+going from the kernel to running the Init RD,
+
+375
+00:15:27,489 --> 00:15:32,419
+which is basically where like a kit lives and all the things that you need to, like,
+
+376
+00:15:32,679 --> 00:15:34,950
+you know, pull the system up by its bootstraps.
+
+377
+00:15:34,960 --> 00:15:39,989
+-- As we used to say,
+-- this is the one where you went in, it equals B A bash. And then, like, I
+
+378
+00:15:40,159 --> 00:15:42,929
+remember somebody was like, this computer is secure and I'm like,
+
+379
+00:15:42,940 --> 00:15:44,030
+in it equals B bash.
+
+380
+00:15:45,150 --> 00:15:48,359
+That's right. That's right. But make sure you sink before you reboot.
+
+381
+00:15:48,940 --> 00:15:49,809
+Right. Anyway,
+
+382
+00:15:50,020 --> 00:15:50,719
+so,
+
+383
+00:15:51,619 --> 00:15:52,549
+anyway, anyway,
+
+384
+00:15:52,690 --> 00:15:57,539
+so the thing is though, so you can have a trusted boot chain.
+
+385
+00:15:58,299 --> 00:15:58,309
+A
+
+386
+00:15:58,539 --> 00:15:59,280
+IRD
+
+387
+00:15:59,530 --> 00:16:01,710
+is generally unsigned because the
+
+388
+00:16:01,859 --> 00:16:03,909
+IRD is generated on the fly.
+
+389
+00:16:04,969 --> 00:16:08,000
+Like, like it depends on what your system is because the,
+
+390
+00:16:08,239 --> 00:16:08,679
+the
+
+391
+00:16:08,909 --> 00:16:12,320
+I don't even, is it when you update grub, I guess, or the kernel or whatever,
+
+392
+00:16:12,599 --> 00:16:14,880
+whenever you update these things on a lyric system,
+
+393
+00:16:14,890 --> 00:16:16,880
+what happens is it'll look at your system and be like, all right,
+
+394
+00:16:16,890 --> 00:16:17,650
+here's the hardware.
+
+395
+00:16:17,659 --> 00:16:18,320
+I see.
+
+396
+00:16:18,330 --> 00:16:20,530
+Let's throw some device drivers in here, like, you know,
+
+397
+00:16:20,539 --> 00:16:23,270
+let's shake it up and then we're gonna turn it into
+
+398
+00:16:23,280 --> 00:16:25,979
+an RD and that's how we're going to boot the system.
+
+399
+00:16:25,989 --> 00:16:28,929
+And so that can't be signed because obviously,
+
+400
+00:16:28,940 --> 00:16:33,780
+if you have the key to sign things on your local system, you basically invalidate
+
+401
+00:16:33,969 --> 00:16:35,960
+the entire concept of all this.
+
+402
+00:16:36,179 --> 00:16:37,520
+Here's where
+
+403
+00:16:37,630 --> 00:16:40,690
+it gets kind of funny, right? Because if I'm an attacker,
+
+404
+00:16:40,859 --> 00:16:45,020
+all I have to do is mess with in NRD and I'm basically home free. Right.
+
+405
+00:16:45,549 --> 00:16:48,460
+And IRD is rarely encrypted because a
+
+406
+00:16:48,590 --> 00:16:49,309
+IRD
+
+407
+00:16:49,650 --> 00:16:53,130
+is where you would give a password, for example, to decrypt your disk.
+
+408
+00:16:53,719 --> 00:16:53,760
+And
+
+409
+00:16:53,869 --> 00:16:55,340
+Ird by definition
+
+410
+00:16:55,489 --> 00:16:58,409
+has an enormous amount of control. And if I'm an attacker,
+
+411
+00:16:58,950 --> 00:17:00,580
+that's what I'm going to go after. Right.
+
+412
+00:17:01,299 --> 00:17:02,650
+Like I get that init
+
+413
+00:17:02,770 --> 00:17:05,250
+RD is sort of Diam Aly created.
+
+414
+00:17:05,400 --> 00:17:08,979
+But wouldn't it generally be the same across similar, say,
+
+415
+00:17:08,989 --> 00:17:10,810
+laptops or servers or systems?
+
+416
+00:17:11,000 --> 00:17:14,569
+-- I mean, it, it kind of, it could be or is it
+-- just that there's enough
+
+417
+00:17:14,729 --> 00:17:16,969
+weird stuff out there that who cares? Right.
+
+418
+00:17:16,979 --> 00:17:20,108
+-- Like, well,
+-- to keep it small, they only put what they need in it.
+
+419
+00:17:20,118 --> 00:17:22,400
+So like if you're running an intel CPU,
+
+420
+00:17:22,410 --> 00:17:25,150
+it's going to look a lot different than if you're running an AMD CPU.
+
+421
+00:17:25,219 --> 00:17:30,469
+-- The
+-- flash storage on my current motherboard for the Bios is 256 megabytes.
+
+422
+00:17:30,810 --> 00:17:33,550
+And I'm like, that's bigger than my first six computers,
+
+423
+00:17:34,390 --> 00:17:35,900
+right? No, like really?
+
+424
+00:17:36,099 --> 00:17:36,569
+That's,
+
+425
+00:17:36,739 --> 00:17:39,329
+-- I was trying to explain to my son why this blew my mind.
+-- Go
+
+426
+00:17:39,449 --> 00:17:40,420
+take up a lot of space.
+
+427
+00:17:40,430 --> 00:17:43,910
+So anyway, anyway, OK, here's where we're going to turn ourselves into traffic now.
+
+428
+00:17:43,920 --> 00:17:44,300
+OK.
+
+429
+00:17:44,430 --> 00:17:45,060
+So
+
+430
+00:17:45,300 --> 00:17:46,380
+Moot hole
+
+431
+00:17:46,530 --> 00:17:48,540
+is fundamentally
+
+432
+00:17:49,010 --> 00:17:51,020
+a security flaw
+
+433
+00:17:51,239 --> 00:17:54,290
+in Grub where you can cause a buffer overflow
+
+434
+00:17:54,560 --> 00:17:56,900
+and then make Grub execute arbitrary code.
+
+435
+00:17:57,209 --> 00:18:00,369
+You mean Grub or Grub two because everything says Grub, whatever,
+
+436
+00:18:00,380 --> 00:18:01,790
+they're all the same Grub two
+
+437
+00:18:01,979 --> 00:18:07,469
+when I say Grub, I mean Grub two. OK. That's true. Of from now until I'm dead.
+
+438
+00:18:07,479 --> 00:18:10,880
+-- No one says Grub
+-- two. That's like me and IP config or if
+
+439
+00:18:11,119 --> 00:18:12,150
+config on Linux.
+
+440
+00:18:12,699 --> 00:18:14,380
+That's right. That's right. So anyway,
+
+441
+00:18:14,520 --> 00:18:15,630
+the idea is
+
+442
+00:18:15,775 --> 00:18:18,925
+if you have the ability to access a system
+
+443
+00:18:19,084 --> 00:18:22,114
+and you can modify the grub configuration file,
+
+444
+00:18:22,364 --> 00:18:25,744
+you could basically introduce a buffer overflow flaw
+
+445
+00:18:26,005 --> 00:18:28,275
+and then make grub execute whatever code you want.
+
+446
+00:18:28,285 --> 00:18:34,234
+Oh, so basically it turns from I have roots and I can edit this file to.
+
+447
+00:18:34,760 --> 00:18:35,119
+Well,
+
+448
+00:18:35,130 --> 00:18:39,410
+now I've subverted the boot process and I control the vertical and the horizontal.
+
+449
+00:18:39,420 --> 00:18:41,560
+-- But
+-- you already have that with a KRD,
+
+450
+00:18:41,810 --> 00:18:42,800
+-- right?
+-- But,
+
+451
+00:18:42,810 --> 00:18:43,189
+but it
+
+452
+00:18:43,439 --> 00:18:44,709
+-- doesn't
+-- give you anything
+
+453
+00:18:44,719 --> 00:18:45,380
+new
+
+454
+00:18:45,599 --> 00:18:48,930
+-- but you have it on reboot.
+-- Yeah, you'll have it on reboot.
+
+455
+00:18:48,939 --> 00:18:53,310
+If you monkey with a KRD, as soon as you reboot, you're home free again.
+
+456
+00:18:54,109 --> 00:18:56,910
+And so here's the thing, right? Like this is cool research
+
+457
+00:18:57,160 --> 00:18:58,859
+and I think there's value in it.
+
+458
+00:18:58,869 --> 00:19:00,079
+I'm not going to say there isn't,
+
+459
+00:19:00,170 --> 00:19:03,290
+but I'm saying from the practicality standpoint of an attack,
+
+460
+00:19:03,469 --> 00:19:06,829
+this has no practical impact that doesn't already exist
+
+461
+00:19:06,839 --> 00:19:09,319
+to an attacker with local access to the system.
+
+462
+00:19:09,599 --> 00:19:14,930
+Well, local privileged access like because to be clear, like I'm just reading this,
+
+463
+00:19:14,939 --> 00:19:17,780
+if you can edit Grub config, that's bad.
+
+464
+00:19:17,880 --> 00:19:18,079
+If you
+
+465
+00:19:18,185 --> 00:19:19,385
+edit Grub config
+
+466
+00:19:19,515 --> 00:19:21,964
+you can, you can insert a new init RD.
+
+467
+00:19:21,974 --> 00:19:26,084
+-- That's
+-- like saying you have access to the bathroom
+
+468
+00:19:26,364 --> 00:19:31,314
+off of my bedroom. Yeah. No, that's bad. Like yeah, like
+
+469
+00:19:31,704 --> 00:19:33,324
+you know, here's the thing, right.
+
+470
+00:19:33,535 --> 00:19:37,765
+You already have access to that because of an nrd my complaint here
+
+471
+00:19:37,775 --> 00:19:42,165
+is that just given the way the current Linux boot systems are architected,
+
+472
+00:19:42,439 --> 00:19:44,979
+this doesn't give you anything you didn't already have.
+
+473
+00:19:45,150 --> 00:19:46,260
+-- Yeah.
+-- As I understand it.
+
+474
+00:19:46,270 --> 00:19:50,479
+That sounds, I mean, it would be one more place you'd have to look and hunt,
+
+475
+00:19:50,489 --> 00:19:51,780
+but in general.
+
+476
+00:19:51,790 --> 00:19:53,140
+Yeah. No. Yeah. Like
+
+477
+00:19:53,390 --> 00:19:56,739
+you've got root level access to the system
+
+478
+00:19:56,949 --> 00:19:58,619
+-- reproducibly after boot.
+-- Yeah.
+
+479
+00:19:58,739 --> 00:19:59,640
+Right. Right. Right.
+
+480
+00:19:59,650 --> 00:19:59,819
+And,
+
+481
+00:19:59,829 --> 00:20:02,650
+and then now the researchers also found like
+
+482
+00:20:02,660 --> 00:20:05,719
+a crap load of other plausible security flaws
+
+483
+00:20:06,130 --> 00:20:08,280
+in, in various stages of the boot.
+
+484
+00:20:08,719 --> 00:20:12,010
+-- And so, like I get that, that's cool. That, that's a great thing.
+-- Well, again,
+
+485
+00:20:12,709 --> 00:20:18,119
+we should have good quality code, not one to a whole pile of energy overflows
+
+486
+00:20:18,250 --> 00:20:18,380
+because,
+
+487
+00:20:20,040 --> 00:20:23,380
+and, and, but here's the thing too is the grub
+
+488
+00:20:23,880 --> 00:20:27,979
+configuration file has historically been treated as a trusted resource.
+
+489
+00:20:27,989 --> 00:20:29,400
+And so it doesn't get the level of
+
+490
+00:20:30,069 --> 00:20:30,670
+exactly,
+
+491
+00:20:30,949 --> 00:20:31,900
+it's your crow
+
+492
+00:20:32,010 --> 00:20:33,300
+config file. Like,
+
+493
+00:20:34,060 --> 00:20:35,699
+yeah, I mean, I would agree with that.
+
+494
+00:20:35,709 --> 00:20:39,530
+-- I feel like this is one of those situations
+-- it's owned by route.
+
+495
+00:20:39,540 --> 00:20:42,619
+Like if your personal file owned only by route
+
+496
+00:20:42,729 --> 00:20:45,180
+that if you muck up your system stops booting.
+
+497
+00:20:45,390 --> 00:20:47,619
+-- Yeah,
+-- if you're going to attack it,
+
+498
+00:20:48,469 --> 00:20:53,400
+you've got local access to the system and if someone has local access to your system,
+
+499
+00:20:53,410 --> 00:20:58,109
+there's so much wrong that can happen at that point that it's, it's not even funny.
+
+500
+00:20:58,119 --> 00:21:01,599
+And like this is a place actually where things like chromebooks, for example,
+
+501
+00:21:01,650 --> 00:21:04,209
+do some clever things because chromebooks are,
+
+502
+00:21:04,219 --> 00:21:07,150
+are heavily protected basically from start to finish
+
+503
+00:21:07,510 --> 00:21:09,479
+in terms of what they boot and how they work.
+
+504
+00:21:09,609 --> 00:21:10,260
+So,
+
+505
+00:21:10,439 --> 00:21:10,969
+and, and like,
+
+506
+00:21:10,979 --> 00:21:14,359
+look that was always kind of the intent of secure boot
+
+507
+00:21:14,369 --> 00:21:17,000
+is that you would have a way to go from the fi
+
+508
+00:21:17,180 --> 00:21:17,290
+buy
+
+509
+00:21:17,729 --> 00:21:18,660
+all the way
+
+510
+00:21:18,829 --> 00:21:21,380
+to running, let's say a web browser
+
+511
+00:21:21,520 --> 00:21:25,270
+and you can, you can trace back the signatures all the way
+
+512
+00:21:25,380 --> 00:21:27,290
+to the bios, right? And obviously,
+
+513
+00:21:27,459 --> 00:21:29,180
+that's not how it worked out and,
+
+514
+00:21:29,189 --> 00:21:32,380
+and this isn't exactly the right kind of technology to do this.
+
+515
+00:21:32,390 --> 00:21:33,910
+So, so now here's,
+
+516
+00:21:34,060 --> 00:21:35,780
+here's the rest of the story. OK?
+
+517
+00:21:35,989 --> 00:21:39,750
+So Microsoft has obviously acknowledged this is a problem.
+
+518
+00:21:39,760 --> 00:21:42,099
+It's only a problem for the secondary key.
+
+519
+00:21:42,479 --> 00:21:44,459
+And so what they have to do now
+
+520
+00:21:44,670 --> 00:21:45,780
+is they have a choice.
+
+521
+00:21:46,089 --> 00:21:46,939
+They can
+
+522
+00:21:47,229 --> 00:21:51,310
+basically push out like an update that there's a black list
+
+523
+00:21:51,630 --> 00:21:52,000
+in the
+
+524
+00:21:52,729 --> 00:21:52,989
+bios
+
+525
+00:21:53,150 --> 00:21:57,010
+that says do not boot these things,
+
+526
+00:21:57,260 --> 00:22:00,689
+right? Is that why I have 256 megabytes of storage on my motherboard?
+
+527
+00:22:00,819 --> 00:22:01,729
+Well, here's that.
+
+528
+00:22:02,119 --> 00:22:04,209
+No, no, here's where it gets good.
+
+529
+00:22:04,219 --> 00:22:05,390
+I don't remember the number,
+
+530
+00:22:05,400 --> 00:22:09,540
+but it's something like it can hold a couple 100 entries max,
+
+531
+00:22:10,020 --> 00:22:11,569
+right? And you can imagine
+
+532
+00:22:11,709 --> 00:22:15,010
+how many versions of Shim and Grub two
+
+533
+00:22:15,150 --> 00:22:17,905
+have signatures out there in the wild.
+
+534
+00:22:18,685 --> 00:22:21,425
+I bet the number is in the thousands
+
+535
+00:22:21,594 --> 00:22:24,055
+so they literally can't blacklist.
+
+536
+00:22:24,064 --> 00:22:30,864
+-- Everything that actually needs to be blacklisted.
+-- Grub two was released in 1995.
+
+537
+00:22:31,135 --> 00:22:35,005
+Yeah, but it, it just started getting signed maybe five years ago, maybe.
+
+538
+00:22:35,484 --> 00:22:37,645
+OK. True. But still that's a
+
+539
+00:22:37,905 --> 00:22:38,655
+lot.
+
+540
+00:22:38,665 --> 00:22:41,515
+You don't have to invalidate like every single grub you basically
+
+541
+00:22:41,525 --> 00:22:43,834
+it's only shim remember Shim is all that gets signed.
+
+542
+00:22:44,079 --> 00:22:47,449
+So you'd have to invalidate every version of sh I ever released
+
+543
+00:22:48,069 --> 00:22:50,400
+and well every signed version because you have to remember too,
+
+544
+00:22:50,410 --> 00:22:52,579
+like Red Hat builds and signs, Shim,
+
+545
+00:22:53,189 --> 00:22:54,890
+the Dora builds and sign Shim
+
+546
+00:22:55,599 --> 00:22:58,339
+Tu builds and signed Shim, right? So like literally every Linux
+
+547
+00:22:58,439 --> 00:23:01,260
+distribution has their own variant of Shim
+
+548
+00:23:01,770 --> 00:23:03,469
+that is different even though it could be the
+
+549
+00:23:03,479 --> 00:23:05,579
+same version when you run two things through.
+
+550
+00:23:05,589 --> 00:23:06,280
+You know what I mean?
+
+551
+00:23:06,410 --> 00:23:08,000
+-- Debian
+-- and ubuntu, right? Like
+
+552
+00:23:08,180 --> 00:23:10,880
+-- they're totally different except they're totally kind
+-- of,
+
+553
+00:23:10,900 --> 00:23:15,709
+-- but it doesn't matter because if you build,
+-- oh yeah, you'll be off by one bite, at
+
+554
+00:23:15,839 --> 00:23:18,260
+-- least with
+-- dates and stuff, right? Like it.
+
+555
+00:23:18,390 --> 00:23:18,869
+Yes,
+
+556
+00:23:18,989 --> 00:23:20,109
+it will never be the same.
+
+557
+00:23:20,229 --> 00:23:24,880
+And so so there are my guess Microsoft actually knows because they've signed
+
+558
+00:23:24,890 --> 00:23:27,719
+all of these and I'm sure they have a very impressive audit trail.
+
+559
+00:23:27,729 --> 00:23:31,469
+But my suspicion is there are more signed versions of Shim
+
+560
+00:23:31,750 --> 00:23:35,469
+in the wild. Then there is space in the blacklist table
+
+561
+00:23:35,750 --> 00:23:36,979
+-- for the
+-- bias.
+
+562
+00:23:36,989 --> 00:23:39,589
+Well, I mean, you know, like with web browsers,
+
+563
+00:23:39,599 --> 00:23:43,989
+all those revocation protocols worked so well that whenever there's a major
+
+564
+00:23:44,239 --> 00:23:46,750
+incident, we push out a browser update.
+
+565
+00:23:48,300 --> 00:23:48,599
+Right.
+
+566
+00:23:49,670 --> 00:23:53,140
+-- Well, and, and here is my suspicion, totally
+-- valid technology.
+
+567
+00:23:54,000 --> 00:23:56,589
+Is anyone who looks at this, who knows what's going on?
+
+568
+00:23:56,640 --> 00:23:59,089
+They're going to come to the same conclusion we just discussed where
+
+569
+00:23:59,099 --> 00:24:03,109
+this functionally doesn't really change the threat profile of a system.
+
+570
+00:24:03,319 --> 00:24:06,150
+So if I was Microsoft, I wouldn't do squat here.
+
+571
+00:24:06,160 --> 00:24:08,109
+If, if people really whine and complain,
+
+572
+00:24:08,420 --> 00:24:11,660
+I would maybe like, symbolically blacklist a couple shin versions.
+
+573
+00:24:11,670 --> 00:24:13,030
+-- But
+-- you could quasi
+
+574
+00:24:13,300 --> 00:24:13,599
+argue
+
+575
+00:24:13,729 --> 00:24:18,319
+that like a super sophisticated attacker might use this. But like,
+
+576
+00:24:19,349 --> 00:24:19,839
+so what?
+
+577
+00:24:20,040 --> 00:24:20,219
+Don't.
+
+578
+00:24:20,849 --> 00:24:23,270
+Exactly. Exactly. So who cares? Don't
+
+579
+00:24:23,770 --> 00:24:23,869
+an
+
+580
+00:24:24,119 --> 00:24:27,479
+RD? Yeah, exactly. So like it just doesn't matter.
+
+581
+00:24:27,699 --> 00:24:28,239
+So
+
+582
+00:24:29,010 --> 00:24:30,310
+I like to be blunt. Like
+
+583
+00:24:30,500 --> 00:24:33,189
+I remember when I got my first mac and I learned
+
+584
+00:24:33,199 --> 00:24:35,979
+about the whole open boot firmware thing and it was like,
+
+585
+00:24:35,989 --> 00:24:36,369
+what was it?
+
+586
+00:24:36,380 --> 00:24:40,739
+Windows or it's command key R when you boot it and it, like
+
+587
+00:24:41,400 --> 00:24:42,739
+there's no way to secure it.
+
+588
+00:24:42,750 --> 00:24:47,300
+But I'm used to like PC Bios where in theory you can attach an A MIN password.
+
+589
+00:24:47,780 --> 00:24:48,930
+Oh, I see what you're saying.
+
+590
+00:24:49,089 --> 00:24:49,680
+You h command.
+
+591
+00:24:49,790 --> 00:24:50,479
+Are you
+
+592
+00:24:51,060 --> 00:24:52,449
+game over?
+
+593
+00:24:52,660 --> 00:24:55,199
+Well, OK. So actually funny you say that
+
+594
+00:24:55,410 --> 00:24:57,969
+we have a bunch of corporate macs
+
+595
+00:24:58,160 --> 00:24:58,670
+in at
+
+596
+00:24:58,790 --> 00:24:59,599
+elastic
+
+597
+00:24:59,819 --> 00:25:02,069
+and there's this management software called Jam
+
+598
+00:25:02,270 --> 00:25:03,569
+J AM F
+
+599
+00:25:03,729 --> 00:25:06,729
+that we use and that apples like Apple and Jam
+
+600
+00:25:06,959 --> 00:25:09,010
+do stuff together. So it's kind of magic.
+
+601
+00:25:09,170 --> 00:25:10,930
+But basically what happens is So, II,
+
+602
+00:25:11,140 --> 00:25:13,369
+I have a Mac I use for testing.
+
+603
+00:25:13,739 --> 00:25:14,439
+And
+
+604
+00:25:14,689 --> 00:25:15,319
+II,
+
+605
+00:25:15,560 --> 00:25:18,520
+I had to, I forget what I did. I broke something, I break things all the time. Right.
+
+606
+00:25:18,530 --> 00:25:19,189
+Like, it's just,
+
+607
+00:25:19,329 --> 00:25:21,349
+this is what I do. I break computers.
+
+608
+00:25:21,500 --> 00:25:25,750
+-- So I did the command our thing and
+-- we've, they somehow locked it down.
+
+609
+00:25:26,209 --> 00:25:28,030
+Well, well, ok, so, like, I don't know,
+
+610
+00:25:28,040 --> 00:25:29,500
+every couple of months I have to wipe this thing.
+
+611
+00:25:29,510 --> 00:25:31,369
+I do the control arm magic to wipe it
+
+612
+00:25:31,569 --> 00:25:32,709
+and it basically
+
+613
+00:25:33,030 --> 00:25:37,989
+auto puts on, like, all the elastic stuff automatically. Like, I can't not do it.
+
+614
+00:25:38,000 --> 00:25:40,520
+I, I even, I was like, ah, this might get in my way. Can I turn this off?
+
+615
+00:25:40,530 --> 00:25:43,020
+Like, nope, it's there and there's nothing I can do about it.
+
+616
+00:25:44,040 --> 00:25:46,619
+Yeah. Yeah. And, like, whatever, I'll live with it. But, yeah. Yeah.
+
+617
+00:25:46,630 --> 00:25:49,790
+So there's like some magic going on there between Apple and Jam
+
+618
+00:25:50,079 --> 00:25:50,880
+and, and Alaska
+
+619
+00:25:50,989 --> 00:25:52,079
+obviously that
+
+620
+00:25:52,209 --> 00:25:52,989
+well, but that's the thing.
+
+621
+00:25:53,000 --> 00:25:58,170
+I mean, Apple's Apple, there's all kinds of magic and whatever. Right?
+
+622
+00:25:58,180 --> 00:26:01,530
+Like, it's not the windows in Linux world. Linux world, you know, it's the wild west.
+
+623
+00:26:01,540 --> 00:26:03,859
+It's like you walk into the saloon. It's like,
+
+624
+00:26:04,160 --> 00:26:04,890
+you know, I want
+
+625
+00:26:05,069 --> 00:26:05,079
+a
+
+626
+00:26:05,510 --> 00:26:10,920
+-- Sasa a camel and 17 tacos
+-- and you might not even get there because
+
+627
+00:26:10,930 --> 00:26:13,040
+you might open the door and just someone shoots you and you're like,
+
+628
+00:26:13,050 --> 00:26:14,089
+oh, well, I'm dead now.
+
+629
+00:26:14,099 --> 00:26:18,869
+-- So that was neat.
+-- Or open the door and it's like, it's magic. Oh, man.
+
+630
+00:26:18,880 --> 00:26:19,910
+I love it so much.
+
+631
+00:26:19,920 --> 00:26:20,229
+Yeah,
+
+632
+00:26:20,560 --> 00:26:22,430
+I do enjoy Linux. Like, you know what?
+
+633
+00:26:22,439 --> 00:26:25,390
+I especially enjoy, I enjoy Linux on the Raspberry Pi stuff
+
+634
+00:26:25,589 --> 00:26:26,910
+because it's just
+
+635
+00:26:27,369 --> 00:26:31,500
+physically, it's such a wonderfully small but full featured computer,
+
+636
+00:26:31,810 --> 00:26:33,550
+you know, and actually the new P
+
+637
+00:26:33,719 --> 00:26:38,719
+-- fours you can now boot directly off of USB, which is very cool,
+-- even better. The new P
+
+638
+00:26:38,829 --> 00:26:40,430
+fours you can get with eight gigs of ra M.
+
+639
+00:26:40,780 --> 00:26:41,020
+Yeah,
+
+640
+00:26:41,189 --> 00:26:44,859
+it blows my mind because you can buy like proper machines that started aching
+
+641
+00:26:45,099 --> 00:26:45,310
+around.
+
+642
+00:26:45,439 --> 00:26:50,069
+Right? Actually, I have a pie four in my basement is my file server now
+
+643
+00:26:50,619 --> 00:26:54,180
+because my old file server was dying. And I'm like, well, this is 100 bucks.
+
+644
+00:26:54,189 --> 00:26:55,349
+I might as well just get this
+
+645
+00:26:55,469 --> 00:26:55,800
+well.
+
+646
+00:26:55,810 --> 00:27:00,349
+And you know what I was like, oh, sometimes I have to interact with my pie four and
+
+647
+00:27:00,619 --> 00:27:02,359
+I should get a screen for it. You know what?
+
+648
+00:27:02,369 --> 00:27:06,959
+The cheapest option was a $45 Canadian touch screen that like bolts onto it.
+
+649
+00:27:06,989 --> 00:27:08,439
+Yeah, I've got some of that. I have
+
+650
+00:27:08,660 --> 00:27:08,670
+a
+
+651
+00:27:08,900 --> 00:27:12,119
+couple of those actually in the house and I love it. They're awesome.
+
+652
+00:27:12,250 --> 00:27:13,430
+Yeah. Yeah. Yeah. No, it's cool.
+
+653
+00:27:13,969 --> 00:27:14,160
+Yeah.
+
+654
+00:27:14,170 --> 00:27:16,760
+So secure boot, like, well, to me,
+
+655
+00:27:16,770 --> 00:27:20,099
+the whole secure boot thing keeps coming back to like if I control
+
+656
+00:27:20,109 --> 00:27:23,430
+this like chain of events from like the start of the universe,
+
+657
+00:27:23,439 --> 00:27:24,189
+the big bang
+
+658
+00:27:24,430 --> 00:27:25,209
+to now
+
+659
+00:27:25,390 --> 00:27:26,449
+I will be secure.
+
+660
+00:27:27,030 --> 00:27:27,939
+Really? That's what secure
+
+661
+00:27:28,050 --> 00:27:30,619
+boot was kind of, if you want to listen to the security side of it,
+
+662
+00:27:30,630 --> 00:27:31,400
+that's what it was about.
+
+663
+00:27:31,410 --> 00:27:35,510
+-- Right. I mean, that's the idea but the reality is,
+-- who cares?
+
+664
+00:27:36,010 --> 00:27:36,390
+Well,
+
+665
+00:27:36,530 --> 00:27:38,189
+I mean, somebody's gonna pop your PHP out.
+
+666
+00:27:38,290 --> 00:27:40,609
+Let's reframe this correctly because
+
+667
+00:27:41,000 --> 00:27:42,569
+that was never the intent.
+
+668
+00:27:42,579 --> 00:27:46,170
+I think the intent of this was always about like the tablet ecosystem.
+
+669
+00:27:46,609 --> 00:27:50,910
+-- I thought it was more dod back in the day.
+-- No, no, no, no dod uses TP MS.
+
+670
+00:27:50,920 --> 00:27:51,869
+Dod doesn't use it.
+
+671
+00:27:52,260 --> 00:27:54,349
+Secure boot is stupid. It doesn't work in that way.
+
+672
+00:27:54,780 --> 00:27:58,280
+So the thing because and also TPM have clocks built into them.
+
+673
+00:27:58,609 --> 00:28:00,099
+There's no way to have a clock.
+
+674
+00:28:00,109 --> 00:28:02,040
+So like one of the challenges could be, let's say you,
+
+675
+00:28:02,050 --> 00:28:04,709
+let's say you have a binary that's signed and it has a
+
+676
+00:28:04,719 --> 00:28:08,479
+date that like the key dies just set the system clock back.
+
+677
+00:28:08,489 --> 00:28:13,130
+The keyboard doesn't know right TPM have clocks. This is why they have clocks.
+
+678
+00:28:13,160 --> 00:28:17,359
+But anyway, anyway, so the thing was, I don't, it was never really about security.
+
+679
+00:28:17,369 --> 00:28:20,920
+It was about controlling hardware for things like tablet
+
+680
+00:28:21,025 --> 00:28:22,005
+and laptops.
+
+681
+00:28:22,135 --> 00:28:24,925
+That's what this technology has always been about.
+
+682
+00:28:25,055 --> 00:28:30,474
+And I mean, this was, this is why the open source universe found it so distasteful.
+
+683
+00:28:30,484 --> 00:28:35,194
+Well, I remember also trying to get it working was like, oh God, I just,
+
+684
+00:28:35,415 --> 00:28:38,444
+I ended up literally disabling uafl on every computer
+
+685
+00:28:38,454 --> 00:28:41,234
+I ever had up until these last two windows,
+
+686
+00:28:41,244 --> 00:28:42,064
+10 gaming machines.
+
+687
+00:28:42,074 --> 00:28:45,125
+No it did. I turned mine on everything broke.
+
+688
+00:28:45,285 --> 00:28:45,505
+Yeah.
+
+689
+00:28:45,685 --> 00:28:45,864
+Yeah. Yeah.
+
+690
+00:28:46,104 --> 00:28:47,165
+Oh yeah, I remember.
+
+691
+00:28:47,430 --> 00:28:48,130
+But ok,
+
+692
+00:28:48,140 --> 00:28:50,209
+so here's the other half of this now and this
+
+693
+00:28:50,219 --> 00:28:52,089
+is where we're going to give a little history lesson.
+
+694
+00:28:52,099 --> 00:28:53,589
+It's kind of the wrap up is
+
+695
+00:28:54,050 --> 00:28:58,729
+when secure boot came out was also around the Windows eight timeframe.
+
+696
+00:28:59,089 --> 00:29:00,260
+And this was also when,
+
+697
+00:29:00,270 --> 00:29:02,589
+if you remember like remember when Steam was
+
+698
+00:29:02,599 --> 00:29:05,910
+basically creating their own Linux operating system,
+
+699
+00:29:06,640 --> 00:29:08,510
+this is all together at the same,
+
+700
+00:29:08,520 --> 00:29:14,219
+same big pot is the fear was Microsoft was gonna finally say, give me my ball,
+
+701
+00:29:14,229 --> 00:29:16,750
+I'm going home and they were gonna lock everyone
+
+702
+00:29:16,760 --> 00:29:19,589
+out of everything and everything was going to be signed
+
+703
+00:29:19,800 --> 00:29:22,040
+and things like Steam were gonna be doomed and
+
+704
+00:29:22,050 --> 00:29:24,430
+you work to build a boot Linux on your computer
+
+705
+00:29:24,689 --> 00:29:25,630
+and like, it was,
+
+706
+00:29:26,510 --> 00:29:28,119
+it's funny to talk about this now,
+
+707
+00:29:28,130 --> 00:29:32,300
+but like this was a legitimate and serious concern back in that time.
+
+708
+00:29:32,689 --> 00:29:36,660
+-- But
+-- I mean, dude, the Halloween memos from Microsoft 20 years ago were like,
+
+709
+00:29:37,030 --> 00:29:39,839
+you know, Linux is a cancer blah, blah, blah. And now they're like,
+
+710
+00:29:39,989 --> 00:29:44,699
+they're like, like literally, I open up the Microsoft store and I type in ssh
+
+711
+00:29:44,810 --> 00:29:45,640
+and it's like
+
+712
+00:29:46,130 --> 00:29:49,430
+you should install ubuntu right on your Windows machine.
+
+713
+00:29:50,060 --> 00:29:52,339
+And, and yeah, they own, they bought github
+
+714
+00:29:52,550 --> 00:29:52,800
+and,
+
+715
+00:29:52,810 --> 00:29:54,829
+and the best part is you go to Microsoft
+
+716
+00:29:54,839 --> 00:29:57,119
+maker code to like write your little arcade game
+
+717
+00:29:57,130 --> 00:30:00,339
+which my son was doing for part of a summer camp and it's got to push the github
+
+718
+00:30:00,479 --> 00:30:00,989
+button.
+
+719
+00:30:01,449 --> 00:30:04,670
+Oh, that's neat. That, that must be new. I didn't see that last time. I ran it.
+
+720
+00:30:04,680 --> 00:30:06,780
+Yeah, it's got to push this to github button.
+
+721
+00:30:06,790 --> 00:30:09,030
+So I'm, of course, I clicked it and it's like you don't have a github
+
+722
+00:30:09,199 --> 00:30:09,869
+account. And I'm like,
+
+723
+00:30:10,069 --> 00:30:10,199
+so
+
+724
+00:30:10,479 --> 00:30:11,589
+you're 13 now,
+
+725
+00:30:11,760 --> 00:30:12,229
+click,
+
+726
+00:30:12,719 --> 00:30:13,560
+get in on that,
+
+727
+00:30:14,219 --> 00:30:14,619
+man.
+
+728
+00:30:14,959 --> 00:30:15,750
+My son has a github
+
+729
+00:30:15,910 --> 00:30:16,520
+account. So,
+
+730
+00:30:19,079 --> 00:30:19,170
+how
+
+731
+00:30:19,339 --> 00:30:19,569
+old are you? Oh,
+
+732
+00:30:19,680 --> 00:30:20,380
+I got you. I
+
+733
+00:30:20,650 --> 00:30:20,890
+got you.
+
+734
+00:30:22,589 --> 00:30:26,204
+It's like steam today. I'm like setting up steam. I'm like Felix. You're 13. Just
+
+735
+00:30:26,574 --> 00:30:26,604
+go
+
+736
+00:30:26,714 --> 00:30:26,935
+with it.
+
+737
+00:30:27,135 --> 00:30:28,324
+That's right. That's right.
+
+738
+00:30:28,464 --> 00:30:31,084
+-- Anyway, anyway, but yeah,
+-- I mean, yeah, no,
+
+739
+00:30:31,094 --> 00:30:34,045
+like Microsoft clearly understands now that like
+
+740
+00:30:34,435 --> 00:30:38,755
+there's these infinitely large pies. If we play with open source,
+
+741
+00:30:39,265 --> 00:30:42,344
+I just bought a New Windows 10 machine yesterday. Like,
+
+742
+00:30:42,505 --> 00:30:44,814
+and I like it because I've got, I've got a
+
+743
+00:30:44,974 --> 00:30:49,525
+better Linux experience on this thing so far than I've ever had with Linux.
+
+744
+00:30:50,380 --> 00:30:53,839
+Oh, whatever. That's a lie. It's, it's better than your Mac. I'll give you that.
+
+745
+00:30:53,849 --> 00:30:54,640
+But it's
+
+746
+00:30:55,709 --> 00:30:57,359
+the sound works. It's not better than Linux
+
+747
+00:30:57,900 --> 00:30:58,880
+and it's better than Linux.
+
+748
+00:30:59,000 --> 00:30:59,640
+And the like,
+
+749
+00:31:00,079 --> 00:31:00,170
+no
+
+750
+00:31:00,439 --> 00:31:00,479
+sound
+
+751
+00:31:00,680 --> 00:31:01,219
+works better
+
+752
+00:31:01,349 --> 00:31:01,420
+than
+
+753
+00:31:01,709 --> 00:31:02,680
+-- the
+-- video drivers.
+
+754
+00:31:02,739 --> 00:31:03,680
+That too. No.
+
+755
+00:31:03,800 --> 00:31:05,479
+So actually in all seriousness,
+
+756
+00:31:05,750 --> 00:31:08,439
+I had this discussion with my son the other day she was talking about, oh,
+
+757
+00:31:08,449 --> 00:31:11,550
+like if I bought a, build a computer, I want to put an nvidia card in.
+
+758
+00:31:11,560 --> 00:31:12,640
+What would you put in and I said
+
+759
+00:31:13,000 --> 00:31:16,530
+I'd buy a D's hardware and the reason isn't even
+
+760
+00:31:16,540 --> 00:31:18,920
+because it's better or cheaper or anything like that,
+
+761
+00:31:18,930 --> 00:31:19,790
+you get drivers.
+
+762
+00:31:20,050 --> 00:31:21,020
+Right. It works on Linux
+
+763
+00:31:21,270 --> 00:31:24,520
+and even if I wasn't going to use Linux with it, like I want to support that.
+
+764
+00:31:24,530 --> 00:31:25,979
+So I would still give them my money.
+
+765
+00:31:26,170 --> 00:31:30,579
+Ok. So, anyway, anyway, it is time to end this and I guess
+
+766
+00:31:30,750 --> 00:31:34,260
+here is what I will say about boot hole and I think
+
+767
+00:31:34,270 --> 00:31:37,099
+this is what I say about a lot of security issues is,
+
+768
+00:31:37,619 --> 00:31:40,119
+-- yeah, who cares
+-- pretty much? Yeah, that's all.
+
+769
+00:31:40,130 --> 00:31:40,420
+Well,
+
+770
+00:31:40,430 --> 00:31:42,920
+more to the point who's actually booting an operating
+
+771
+00:31:42,930 --> 00:31:45,839
+system on hardware that they then use natively?
+
+772
+00:31:45,849 --> 00:31:47,900
+I do every day on my laptop.
+
+773
+00:31:48,219 --> 00:31:48,719
+Ok.
+
+774
+00:31:48,939 --> 00:31:51,680
+But I'm talking about people who, like, care about boot hole
+
+775
+00:31:52,229 --> 00:31:55,199
+probably. Right. Like, aren't you using VMWARE or something?
+
+776
+00:31:55,609 --> 00:31:57,400
+Well, in that, I mean, that's a funny thing. Right.
+
+777
+00:31:57,410 --> 00:32:00,170
+Because if you actually care about security you're going to run t,
+
+778
+00:32:00,426 --> 00:32:03,076
+if you don't really care about security, you're stuck with secure boot.
+
+779
+00:32:03,086 --> 00:32:03,855
+Well, like,
+
+780
+00:32:03,865 --> 00:32:06,755
+literally the only server I have and have had for
+
+781
+00:32:06,765 --> 00:32:09,406
+the last five or six years is a Raspberry pi,
+
+782
+00:32:09,546 --> 00:32:11,005
+everything else is in the cloud.
+
+783
+00:32:11,215 --> 00:32:13,706
+-- It's not my problem.
+-- Right. Yeah. No, I agree.
+
+784
+00:32:13,715 --> 00:32:16,855
+I think it's a changing environment, but now at the same time, at the same time,
+
+785
+00:32:16,865 --> 00:32:17,975
+I don't want to bash
+
+786
+00:32:18,255 --> 00:32:22,255
+the researchers who did this work because this is cool work it's a great find
+
+787
+00:32:22,456 --> 00:32:27,472
+and I think from a, a purely scientific perspective, this was awesome.
+
+788
+00:32:27,482 --> 00:32:31,791
+Well done guys. But I think from a practicality standpoint, did it deserve a name?
+
+789
+00:32:31,842 --> 00:32:36,511
+-- Probably not. I think that's true
+-- of pretty much 95% of security flaws now.
+
+790
+00:32:36,671 --> 00:32:36,991
+Yeah.
+
+791
+00:32:37,151 --> 00:32:37,911
+Yeah, a lot of them.
+
+792
+00:32:38,261 --> 00:32:38,911
+Right. So, anyway,
+
+793
+00:32:39,072 --> 00:32:40,472
+anyway, that's, that's my story.
+
+794
+00:32:40,482 --> 00:32:43,312
+We're at a time and I guess, uh, yeah, whatever I got wrong.
+
+795
+00:32:43,322 --> 00:32:45,391
+Let me know because I'm sure I got plenty wrong.
+
+796
+00:32:45,810 --> 00:32:47,359
+I bet you nobody actually cares.
+
+797
+00:32:48,150 --> 00:32:51,030
+No, there's a couple of people I have in mind that I'm like terrified.
+
+798
+00:32:51,040 --> 00:32:51,729
+They're going to listen to this
+
+799
+00:32:51,839 --> 00:32:52,030
+episode
+
+800
+00:32:52,160 --> 00:32:52,319
+and,
+
+801
+00:32:52,709 --> 00:32:55,699
+and they're going to send me an email and be like, dude, you're an idiot.
+
+802
+00:32:55,709 --> 00:32:59,900
+-- I'm going to reply with, yeah, I know.
+-- Please reply on Twitter publicly use hashtag
+
+803
+00:33:00,079 --> 00:33:00,219
+Os S
+
+804
+00:33:00,469 --> 00:33:01,589
+-- pod. Yeah.
+-- Right.
+
+805
+00:33:02,010 --> 00:33:06,140
+That's right. That's right. Reply publicly shame me for all to see.
+
+806
+00:33:07,760 --> 00:33:10,510
+I'm ok with that in all seriousness, I can totally take it.
+
+807
+00:33:10,520 --> 00:33:12,180
+So don't feel bad if you make fun of me on Twitter.
+
+808
+00:33:12,189 --> 00:33:13,160
+Well, but in fairness,
+
+809
+00:33:13,170 --> 00:33:15,550
+like the my understanding of secure boot is the number
+
+810
+00:33:15,560 --> 00:33:18,939
+of people that actually understand secure boot is like seven.
+
+811
+00:33:19,079 --> 00:33:20,760
+It's less than 100 I bet.
+
+812
+00:33:20,770 --> 00:33:22,680
+And like three of them work at Microsoft,
+
+813
+00:33:22,689 --> 00:33:24,829
+a lot of them are at Microsoft and I think Matthew
+
+814
+00:33:24,839 --> 00:33:26,900
+Garrett and Peter Jones are probably the only other two.
+
+815
+00:33:28,060 --> 00:33:28,479
+Like
+
+816
+00:33:29,540 --> 00:33:30,680
+so anyway. Anyway.
+
+817
+00:33:30,819 --> 00:33:34,089
+Right. Ok. I'm calling it. Thank you, Kurt. Thank you everyone for listening.
+
+818
+00:33:34,099 --> 00:33:36,170
+Go to Overs Source Security podcast.com. Head up the show,
+
+819
+00:33:36,280 --> 00:33:36,459
+not Su
+
+820
+00:33:36,859 --> 00:33:38,560
+Pound Os Podcast. Hashtag to
+
+821
+00:33:38,729 --> 00:33:39,099
+shame me
+
+822
+00:33:39,239 --> 00:33:42,640
+on social media and Kurt have a fantastic rest of your day.
+
+823
+00:33:42,689 --> 00:33:43,989
+You too, thanks everybody.
+
+824
+00:33:44,130 --> 00:33:45,430
+Thanks everyone. Bye bye
+
+825
+00:33:50,010 --> 00:33:50,069
+the.

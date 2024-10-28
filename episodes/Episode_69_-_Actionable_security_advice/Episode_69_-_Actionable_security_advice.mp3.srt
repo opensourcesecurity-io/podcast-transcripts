@@ -1,0 +1,4538 @@
+0
+00:00:05,280 --> 00:00:09,420
+Hello and welcome to episode 69 of the open source security podcast with myself,
+
+1
+00:00:09,430 --> 00:00:11,199
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:11,210 --> 00:00:12,039
+Josh Pressers.
+
+3
+00:00:12,470 --> 00:00:15,010
+If I was a less mature person,
+
+4
+00:00:15,359 --> 00:00:20,020
+I would make up some silly jokes right now. But, but I will hesitate from doing that.
+
+5
+00:00:20,120 --> 00:00:20,739
+Right.
+
+6
+00:00:21,129 --> 00:00:25,059
+So I guess the, the big question for you, Kurt
+
+7
+00:00:25,209 --> 00:00:25,879
+is,
+
+8
+00:00:26,909 --> 00:00:31,329
+do you want to let Amazon break into your house to deliver packages someday?
+
+9
+00:00:31,790 --> 00:00:33,409
+-- Uh
+-- Probably. Yeah,
+
+10
+00:00:33,979 --> 00:00:37,889
+which blows my mind. Like, why would you let them do that?
+
+11
+00:00:38,799 --> 00:00:41,790
+Um, well, it's the thing to remember and here's the best part.
+
+12
+00:00:41,799 --> 00:00:44,299
+It's not just Amazon having the ability to
+
+13
+00:00:44,310 --> 00:00:46,330
+come in and deliver packages inside your house,
+
+14
+00:00:46,439 --> 00:00:49,540
+but you can then use that to give other people access to your house, like,
+
+15
+00:00:49,549 --> 00:00:50,950
+say your cleaning service
+
+16
+00:00:51,639 --> 00:00:54,659
+or, you know, a repairman or whatever.
+
+17
+00:00:54,909 --> 00:00:58,229
+And honestly, for some people with certain lifestyles, that would make sense.
+
+18
+00:00:58,240 --> 00:01:00,459
+I mean, I work from home so it makes less sense for me
+
+19
+00:01:00,560 --> 00:01:02,380
+because I'm here and I can just let them in.
+
+20
+00:01:02,909 --> 00:01:04,989
+But for a lot of people, you know,
+
+21
+00:01:05,000 --> 00:01:06,860
+especially if you have like a one or two hour commute.
+
+22
+00:01:07,000 --> 00:01:09,470
+I mean, can you imagine? I mean, there's services.
+
+23
+00:01:09,550 --> 00:01:11,919
+What was that service in the US where you basically hire somebody to, like,
+
+24
+00:01:11,930 --> 00:01:14,019
+sit at your house and wait for packages to be delivered.
+
+25
+00:01:14,819 --> 00:01:16,019
+Is that a thing?
+
+26
+00:01:16,739 --> 00:01:16,819
+Yeah,
+
+27
+00:01:17,300 --> 00:01:18,519
+it's crazy.
+
+28
+00:01:19,129 --> 00:01:22,599
+Um, or they could, like, check your, on your pets or Task Rabbit.
+
+29
+00:01:22,610 --> 00:01:26,160
+That's the one and Task Rabbit got bought by IKEA. Not too long ago. Interesting.
+
+30
+00:01:26,769 --> 00:01:30,010
+But, uh, anyways, you know, Task Rabbit would literally be something like
+
+31
+00:01:30,239 --> 00:01:31,300
+you'd pay somebody to like,
+
+32
+00:01:31,309 --> 00:01:34,559
+sit at your house and wait for a package delivery or wait for a repairman or whatever.
+
+33
+00:01:34,569 --> 00:01:34,879
+I mean,
+
+34
+00:01:35,319 --> 00:01:37,099
+because how many times have you had, like,
+
+35
+00:01:37,110 --> 00:01:38,790
+how many people have had to take half a
+
+36
+00:01:38,800 --> 00:01:41,569
+working day off so they can get their cable installed
+
+37
+00:01:42,239 --> 00:01:43,660
+or get their phone fixed.
+
+38
+00:01:43,669 --> 00:01:45,620
+Those are the worst too where they, you know,
+
+39
+00:01:45,629 --> 00:01:49,500
+we'll be there between the hours of 8 a.m. and midnight and, and, you know,
+
+40
+00:01:49,510 --> 00:01:53,500
+the only time they come is for the five minutes you step away into the restroom.
+
+41
+00:01:54,180 --> 00:01:55,339
+It's, it's great.
+
+42
+00:01:55,599 --> 00:01:58,900
+I mean, the meme is those ups, you know, messages where it's like,
+
+43
+00:01:58,910 --> 00:01:59,800
+please knock loudly.
+
+44
+00:01:59,809 --> 00:02:00,419
+We're home,
+
+45
+00:02:00,709 --> 00:02:02,019
+-- dude.
+-- They never do.
+
+46
+00:02:02,459 --> 00:02:03,500
+You know, I had
+
+47
+00:02:04,180 --> 00:02:07,690
+so many instances where a package was to be delivered and
+
+48
+00:02:07,699 --> 00:02:09,580
+I go look outside and there's a note on the door
+
+49
+00:02:09,729 --> 00:02:13,190
+and I have a doorbell. I'm at home. There's no noise, I can
+
+50
+00:02:13,300 --> 00:02:16,100
+hear them. I can even hear them knock on the door. And like,
+
+51
+00:02:16,350 --> 00:02:21,339
+you clearly did not knock or anything. You just stuck that sticker up and left.
+
+52
+00:02:21,410 --> 00:02:22,869
+I remember at my old house,
+
+53
+00:02:23,020 --> 00:02:26,600
+I was actually sitting on the couch and the couch backed onto a large window
+
+54
+00:02:26,850 --> 00:02:30,669
+and outside that window was the front steps and porch to the house.
+
+55
+00:02:30,960 --> 00:02:34,479
+And like, literally, I was watching TV, heard a strange noise,
+
+56
+00:02:34,490 --> 00:02:36,550
+didn't think much of it, then went outside and checked and yeah,
+
+57
+00:02:36,559 --> 00:02:37,880
+ups delivery notice.
+
+58
+00:02:38,740 --> 00:02:40,389
+You gotta love it, man. You know.
+
+59
+00:02:40,820 --> 00:02:43,309
+So, yeah, from this perspective,
+
+60
+00:02:43,320 --> 00:02:47,009
+I can totally see people wanting this because I've also had packages that say like,
+
+61
+00:02:47,410 --> 00:02:50,570
+uh, signature required and it's like it's been delivered and I'm like,
+
+62
+00:02:50,940 --> 00:02:53,050
+I don't remember receiving it or signing for it
+
+63
+00:02:53,270 --> 00:02:56,820
+and then, you know, I'm hunting around my porch and then the back porch for like
+
+64
+00:02:56,970 --> 00:02:57,949
+the box.
+
+65
+00:02:58,199 --> 00:02:59,690
+So no, I can totally see this.
+
+66
+00:02:59,699 --> 00:03:01,770
+I mean, the Amazon video shows essentially those,
+
+67
+00:03:01,779 --> 00:03:04,669
+those two main use cases of like somebody dropping off a package and,
+
+68
+00:03:04,889 --> 00:03:08,369
+you know, having a cleaning service come by to, to clean the apartment, you know,
+
+69
+00:03:08,880 --> 00:03:11,860
+and, and honestly, I mean, if somebody has a one or two hour commute,
+
+70
+00:03:12,940 --> 00:03:16,270
+-- this is going to save them half a day at a time every time they use
+-- it,
+
+71
+00:03:16,460 --> 00:03:20,199
+I suppose it can depend where you live also because
+
+72
+00:03:20,789 --> 00:03:21,320
+-- we,
+-- we
+
+73
+00:03:21,570 --> 00:03:24,339
+-- supported in some major urban centers in the US right now.
+-- Right. Right.
+
+74
+00:03:24,350 --> 00:03:26,210
+But even ignoring that, I mean,
+
+75
+00:03:26,220 --> 00:03:29,070
+let's say major urban centers are a great example where there
+
+76
+00:03:29,080 --> 00:03:33,029
+are very nice places and there are much less nice places.
+
+77
+00:03:33,070 --> 00:03:33,440
+Right.
+
+78
+00:03:33,449 --> 00:03:37,880
+Where, where there are certain places you could live that you would never ever
+
+79
+00:03:38,399 --> 00:03:42,979
+want to, like, leave your door open, for example, or, or anything like that,
+
+80
+00:03:42,990 --> 00:03:47,100
+or trust the package laying on your stoop because it's going to get stolen.
+
+81
+00:03:47,699 --> 00:03:48,139
+Right.
+
+82
+00:03:48,460 --> 00:03:48,699
+And,
+
+83
+00:03:48,710 --> 00:03:51,429
+and I guess I'm slightly less sensitive to that because
+
+84
+00:03:51,440 --> 00:03:54,100
+I've had packages on my front porch for a week
+
+85
+00:03:54,440 --> 00:03:56,429
+and nobody took them
+
+86
+00:03:56,550 --> 00:03:58,339
+and I don't think anybody ever will.
+
+87
+00:03:59,309 --> 00:04:01,449
+Well, part of it too is, it's, it's, I mean,
+
+88
+00:04:01,820 --> 00:04:02,250
+I just,
+
+89
+00:04:02,259 --> 00:04:05,729
+over the weekend I was using Amazon to buy stuff with next day delivery because I just
+
+90
+00:04:05,910 --> 00:04:06,690
+literally,
+
+91
+00:04:06,699 --> 00:04:08,630
+it was cold outside and I didn't want to spend
+
+92
+00:04:08,639 --> 00:04:10,630
+the 10 minutes driving to a store to get the,
+
+93
+00:04:11,610 --> 00:04:15,919
+you know, a 3.5 millimeter male female audio cable that was 6 ft long, right.
+
+94
+00:04:15,929 --> 00:04:18,970
+Bought one on Amazon for 10 bucks and it shows up the next day, free shipping
+
+95
+00:04:20,149 --> 00:04:22,048
+versus spending, you know, going,
+
+96
+00:04:22,059 --> 00:04:26,859
+it was like minus 10 °C and blowing kind of miserable for the one day on the weekend.
+
+97
+00:04:26,869 --> 00:04:28,089
+And yeah, like literally
+
+98
+00:04:28,809 --> 00:04:32,029
+it's just, it's getting easier to buy stuff on Amazon than it is to
+
+99
+00:04:32,239 --> 00:04:36,390
+-- go to a nearby store.
+-- It's not getting easier. It's significantly easier, man.
+
+100
+00:04:36,649 --> 00:04:40,880
+-- I
+-- mean, well, I mean, more and more stuff has the free next day shipping and you know,
+
+101
+00:04:40,970 --> 00:04:45,950
+like, it's more and more products that I want are literally, if I buy it online,
+
+102
+00:04:45,959 --> 00:04:46,869
+it will be there
+
+103
+00:04:47,440 --> 00:04:48,940
+in, like, one business day or less.
+
+104
+00:04:48,950 --> 00:04:52,019
+It's almost like they have data on people's buying habits.
+
+105
+00:04:52,380 --> 00:04:55,309
+It's weird using that to their advantage. Right.
+
+106
+00:04:55,940 --> 00:04:56,279
+Yeah.
+
+107
+00:04:56,290 --> 00:04:56,519
+Well,
+
+108
+00:04:56,529 --> 00:04:58,630
+and I assume most of their logistics keep getting better
+
+109
+00:04:58,640 --> 00:05:00,760
+and better because Amazon just recently bought some planes.
+
+110
+00:05:00,769 --> 00:05:01,239
+Remember?
+
+111
+00:05:01,540 --> 00:05:02,200
+Yes.
+
+112
+00:05:02,309 --> 00:05:03,359
+Yes. That's,
+
+113
+00:05:03,559 --> 00:05:04,320
+that's awesome.
+
+114
+00:05:05,040 --> 00:05:05,070
+Good
+
+115
+00:05:05,190 --> 00:05:05,369
+for them.
+
+116
+00:05:06,130 --> 00:05:06,369
+Yeah.
+
+117
+00:05:06,380 --> 00:05:09,079
+And I mean, and when you think about the efficiency from an economic point of view,
+
+118
+00:05:09,089 --> 00:05:09,269
+right?
+
+119
+00:05:09,279 --> 00:05:13,760
+Like, ok, you know, 100 guys with shovels versus one guy with a bulldozer,
+
+120
+00:05:14,279 --> 00:05:14,640
+right?
+
+121
+00:05:14,809 --> 00:05:16,339
+And this is a great example of
+
+122
+00:05:16,519 --> 00:05:18,760
+the, the economic cost of like,
+
+123
+00:05:18,850 --> 00:05:20,769
+somebody having to take a half a day off to
+
+124
+00:05:20,779 --> 00:05:23,309
+wait at home for the phone installer or whatever or
+
+125
+00:05:23,940 --> 00:05:27,679
+slightly better. They, they hire Task Rabbit who hires somebody, you know, who
+
+126
+00:05:28,470 --> 00:05:30,170
+obviously has.
+
+127
+00:05:30,399 --> 00:05:30,410
+I,
+
+128
+00:05:30,420 --> 00:05:32,510
+I assume they don't have a lot of other
+
+129
+00:05:32,519 --> 00:05:34,760
+options for work if they're working for Task rabbit,
+
+130
+00:05:35,690 --> 00:05:37,450
+you know, doing this sort of, um,
+
+131
+00:05:37,880 --> 00:05:39,829
+sort of piece work. And
+
+132
+00:05:40,049 --> 00:05:42,100
+so that's, you know, a bit less inefficient, right?
+
+133
+00:05:42,109 --> 00:05:45,029
+You have somebody who's maybe not a phd waiting at home for half a day.
+
+134
+00:05:45,200 --> 00:05:48,380
+But fundamentally, you know, you replace all that with a smart lock,
+
+135
+00:05:48,390 --> 00:05:50,630
+a camera and a little bit of software magic
+
+136
+00:05:51,019 --> 00:05:54,100
+and all of a sudden, you know, the, the repairman can let himself in
+
+137
+00:05:54,739 --> 00:05:57,420
+do the thing that needs to be done whenever and, and leave.
+
+138
+00:05:57,579 --> 00:05:58,059
+Right.
+
+139
+00:05:58,440 --> 00:05:58,910
+Right.
+
+140
+00:06:00,019 --> 00:06:00,029
+I
+
+141
+00:06:00,209 --> 00:06:01,390
+mean, yeah, it's,
+
+142
+00:06:02,290 --> 00:06:05,390
+I imagine if every single package being delivered had to be signed for.
+
+143
+00:06:05,799 --> 00:06:07,299
+It used to be like that
+
+144
+00:06:07,679 --> 00:06:09,279
+and it was horrendously expensive and
+
+145
+00:06:09,510 --> 00:06:09,679
+inefficient.
+
+146
+00:06:09,940 --> 00:06:14,739
+And it also reminds me of the, the days of checking baggage
+
+147
+00:06:14,880 --> 00:06:17,750
+where people would, like, make sure it was actually your bag
+
+148
+00:06:18,260 --> 00:06:18,619
+and,
+
+149
+00:06:18,959 --> 00:06:22,829
+you know, there's, there's a good security lesson there as well where
+
+150
+00:06:23,200 --> 00:06:28,049
+yes, people are going to steal bags. But the number is like so insignificantly low
+
+151
+00:06:28,220 --> 00:06:32,769
+-- that it's, it's just easier and better to replace stolen bags.
+-- Well, the
+
+152
+00:06:33,029 --> 00:06:34,290
+overall cost is lower. Yeah.
+
+153
+00:06:34,540 --> 00:06:35,769
+Well, same thing with packages. Right.
+
+154
+00:06:35,779 --> 00:06:39,890
+How many packages actually get stolen versus how many more packages get delivered
+
+155
+00:06:39,899 --> 00:06:43,000
+because we just don't really care about the security of these packages.
+
+156
+00:06:43,149 --> 00:06:43,369
+And
+
+157
+00:06:43,510 --> 00:06:47,339
+there's, there's a lot, a lot of that which, which this reminds me of
+
+158
+00:06:47,540 --> 00:06:51,679
+you sent me the video of that guy who had packages stolen off of his,
+
+159
+00:06:51,690 --> 00:06:54,359
+his front porch and he, like, put a shotgun shell in it.
+
+160
+00:06:54,369 --> 00:06:57,959
+So when somebody grabbed the package, like it exploded, it didn't hurt them.
+
+161
+00:06:58,230 --> 00:06:59,440
+It just made a lot of noise.
+
+162
+00:06:59,549 --> 00:07:02,480
+-- I took the shot out. So it was just like a giant fire
+-- crack
+
+163
+00:07:02,489 --> 00:07:02,519
+that
+
+164
+00:07:02,670 --> 00:07:02,700
+was
+
+165
+00:07:03,660 --> 00:07:04,079
+illegal
+
+166
+00:07:04,399 --> 00:07:05,200
+in most places
+
+167
+00:07:06,179 --> 00:07:09,359
+and it's got to be illegal everywhere for the most part. Right.
+
+168
+00:07:10,369 --> 00:07:14,170
+Well, I mean, the potential for shrapnel hit somebody is there and just that alone.
+
+169
+00:07:14,179 --> 00:07:15,140
+I mean, anyways.
+
+170
+00:07:15,410 --> 00:07:19,609
+But uh yeah, and I mean, I get that because if, if you live in a bad area and like,
+
+171
+00:07:19,619 --> 00:07:20,279
+you know,
+
+172
+00:07:20,519 --> 00:07:21,880
+like literally you,
+
+173
+00:07:22,489 --> 00:07:23,320
+you can't
+
+174
+00:07:24,040 --> 00:07:26,140
+get people to ship you stuff with like signature
+
+175
+00:07:26,149 --> 00:07:28,440
+required or like face to face delivery required,
+
+176
+00:07:28,450 --> 00:07:29,299
+even if you wanted to.
+
+177
+00:07:29,309 --> 00:07:30,459
+Because most of these places are like,
+
+178
+00:07:30,570 --> 00:07:31,660
+we're just not set up for that.
+
+179
+00:07:31,670 --> 00:07:34,059
+Like we, we do the lowest common denominator, which is like
+
+180
+00:07:34,410 --> 00:07:37,700
+some Rando basically throws the package at your front door.
+
+181
+00:07:38,989 --> 00:07:39,559
+You know,
+
+182
+00:07:39,799 --> 00:07:41,279
+like I've seen, that's one of my favorite.
+
+183
+00:07:41,290 --> 00:07:43,690
+I see those videos where like you see the UPS driver,
+
+184
+00:07:44,130 --> 00:07:44,450
+you know,
+
+185
+00:07:44,459 --> 00:07:47,369
+like literally pull up and like a package comes flying out the side
+
+186
+00:07:47,380 --> 00:07:50,119
+of the truck and like bounces a few times and you know,
+
+187
+00:07:50,130 --> 00:07:50,690
+honestly
+
+188
+00:07:51,329 --> 00:07:54,709
+I'm ok with that because again, you know, packages get delivered faster.
+
+189
+00:07:54,720 --> 00:07:56,630
+And have you ever seen the videos of
+
+190
+00:07:56,640 --> 00:07:58,950
+the sorting facilities where these packages get processed?
+
+191
+00:07:58,959 --> 00:08:01,959
+I've never seen a video but I've known people
+
+192
+00:08:01,970 --> 00:08:04,630
+who worked in them and I've heard stories.
+
+193
+00:08:04,640 --> 00:08:05,029
+Well,
+
+194
+00:08:05,040 --> 00:08:07,529
+you have these giant bumpers like whacking the package
+
+195
+00:08:07,540 --> 00:08:09,309
+onto the right conveyor belt or you know,
+
+196
+00:08:09,320 --> 00:08:11,089
+it falls like two or 3 ft onto another
+
+197
+00:08:11,100 --> 00:08:14,630
+-- conveyor belt
+-- that like the people who handle them,
+
+198
+00:08:14,640 --> 00:08:17,630
+I guess often we say entertain themselves
+
+199
+00:08:18,130 --> 00:08:21,750
+by seeing like who can throw the package the farthest.
+
+200
+00:08:22,839 --> 00:08:24,079
+Oh, that's fragile. Let me
+
+201
+00:08:24,619 --> 00:08:25,589
+that on the ground.
+
+202
+00:08:26,059 --> 00:08:26,779
+I went to Home Depot,
+
+203
+00:08:26,790 --> 00:08:30,320
+the other day and they have a whole pile of fridges and freezers out in the front,
+
+204
+00:08:30,329 --> 00:08:31,869
+you know, for clearance or whatever.
+
+205
+00:08:32,210 --> 00:08:34,989
+And half of them are labeled do not drop.
+
+206
+00:08:37,640 --> 00:08:41,020
+Are we supposed to be dropping certain models of fridge and freezer?
+
+207
+00:08:41,280 --> 00:08:45,500
+I, I imagine like a lawyer made them put that on the side or something.
+
+208
+00:08:46,010 --> 00:08:49,150
+Well, did you ever see when they ship certain high
+
+209
+00:08:49,530 --> 00:08:51,460
+sensitive scientific equipment?
+
+210
+00:08:51,900 --> 00:08:53,619
+They have those, those little
+
+211
+00:08:54,719 --> 00:08:54,960
+G
+
+212
+00:08:55,109 --> 00:08:57,349
+shock and the tip sensors, basically,
+
+213
+00:08:57,359 --> 00:09:00,409
+it'll tell you how much it's tipped and how many G's it's encountered.
+
+214
+00:09:00,419 --> 00:09:01,489
+Which, which obviously,
+
+215
+00:09:01,500 --> 00:09:04,289
+like if you're shipping an electron microscope across the country,
+
+216
+00:09:04,450 --> 00:09:05,200
+that's
+
+217
+00:09:05,479 --> 00:09:08,710
+a huge deal. Right? Like your refrigerator. Probably less so.
+
+218
+00:09:08,719 --> 00:09:12,059
+But still, I'm sure you don't want it, like, dropped off the back of a truck, right.
+
+219
+00:09:12,679 --> 00:09:14,909
+Yeah, I remember looking into those and they're not cheap.
+
+220
+00:09:14,919 --> 00:09:16,289
+They're like a few bucks each and again,
+
+221
+00:09:16,299 --> 00:09:19,109
+just for the majority of packages that do arrive.
+
+222
+00:09:19,119 --> 00:09:19,599
+Ok.
+
+223
+00:09:20,530 --> 00:09:20,900
+You know,
+
+224
+00:09:20,909 --> 00:09:22,619
+I don't want the whole industry spending like
+
+225
+00:09:22,630 --> 00:09:25,109
+an extra five bucks on every single package
+
+226
+00:09:25,450 --> 00:09:26,969
+to save like 1% of them.
+
+227
+00:09:27,750 --> 00:09:31,450
+-- Unless it is like high value in your, you're gonna be insuring it.
+-- Right.
+
+228
+00:09:31,460 --> 00:09:34,409
+I mean, I'm sure an electron microscope is what, a couple million dollars?
+
+229
+00:09:34,909 --> 00:09:35,969
+Probably not anymore.
+
+230
+00:09:36,250 --> 00:09:38,450
+I, I'm guessing you could probably, I mean,
+
+231
+00:09:38,539 --> 00:09:40,570
+that's what gets me about some of the scientific equipment, right?
+
+232
+00:09:40,580 --> 00:09:42,719
+Is like, or like CNC milling machines, right?
+
+233
+00:09:42,729 --> 00:09:44,380
+I was looking at them a while back and it's like,
+
+234
+00:09:44,429 --> 00:09:46,169
+they used to be a half a million bucks and now they're like,
+
+235
+00:09:46,179 --> 00:09:47,880
+five grand for a really nice one.
+
+236
+00:09:49,760 --> 00:09:53,890
+Not like an industrial one that'll run 24 7 for like, 10 years. But, you know,
+
+237
+00:09:54,080 --> 00:09:57,159
+something with like five access computer control. The whole shenanigan.
+
+238
+00:09:57,409 --> 00:09:59,869
+Just get, just get a 3D printer now right there.
+
+239
+00:10:00,909 --> 00:10:02,739
+I was looking at getting a 3D printer and a
+
+240
+00:10:02,750 --> 00:10:06,039
+milling machine so I could do additive and subtractive manufacturer.
+
+241
+00:10:06,090 --> 00:10:07,940
+There's nothing you couldn't build then.
+
+242
+00:10:08,330 --> 00:10:09,059
+Pretty much. No,
+
+243
+00:10:09,169 --> 00:10:11,799
+I just don't have the time to actually learn how to use this stuff properly.
+
+244
+00:10:11,809 --> 00:10:13,159
+I know the feeling.
+
+245
+00:10:13,309 --> 00:10:13,989
+I know exactly.
+
+246
+00:10:14,000 --> 00:10:17,859
+Although the beauty of 3D printing is there's the thing burse so you can go
+
+247
+00:10:17,869 --> 00:10:22,039
+to thing Burt and download plans for nearly anything you can imagine at this point,
+
+248
+00:10:22,929 --> 00:10:23,909
+which is awesome.
+
+249
+00:10:24,200 --> 00:10:26,289
+-- So, so,
+-- yeah, just got to get feed stock.
+
+250
+00:10:26,299 --> 00:10:27,030
+Right. Right.
+
+251
+00:10:27,219 --> 00:10:29,219
+And, well, that's cheap. Right. Let's face it.
+
+252
+00:10:31,099 --> 00:10:31,369
+Yeah.
+
+253
+00:10:31,500 --> 00:10:32,929
+But back to the Amazon key.
+
+254
+00:10:32,940 --> 00:10:36,489
+I mean, the fundamental thing is they're not forcing this on people.
+
+255
+00:10:36,989 --> 00:10:37,609
+Um,
+
+256
+00:10:38,659 --> 00:10:42,280
+and yeah, for a certain group of people, this will make their life a lot easier.
+
+257
+00:10:42,289 --> 00:10:44,679
+And just from an efficiency point of view, I,
+
+258
+00:10:44,960 --> 00:10:49,179
+I mean, the reality is whoever is coming into your house is going to have to be like,
+
+259
+00:10:49,190 --> 00:10:50,159
+registered.
+
+260
+00:10:50,919 --> 00:10:55,159
+They have to like, you have to, ok, opening the door for them
+
+261
+00:10:55,890 --> 00:10:57,669
+and there's gonna be that video record of them.
+
+262
+00:10:57,679 --> 00:11:00,469
+Like you get a camera from Amazon that uploads straight to the cloud.
+
+263
+00:11:00,710 --> 00:11:02,950
+So there's like that entry and exit record.
+
+264
+00:11:04,309 --> 00:11:05,650
+And I mean,
+
+265
+00:11:06,369 --> 00:11:08,520
+the reality is if somebody wants to break into your house,
+
+266
+00:11:08,530 --> 00:11:11,150
+they're just going to boot your front door or use a pry bar
+
+267
+00:11:11,659 --> 00:11:14,590
+or a door jack to spread the frame and just open the door.
+
+268
+00:11:14,599 --> 00:11:17,799
+The thing I always think of in situations like this is,
+
+269
+00:11:17,809 --> 00:11:19,510
+it's kind of like the lock in general
+
+270
+00:11:19,640 --> 00:11:20,309
+of
+
+271
+00:11:20,640 --> 00:11:25,099
+it. It exists to keep the honest people honest and, and I think that's going to be
+
+272
+00:11:25,380 --> 00:11:27,669
+kind of the next great challenge is
+
+273
+00:11:28,049 --> 00:11:29,929
+and, and here's, here's my example, right?
+
+274
+00:11:29,940 --> 00:11:33,619
+Is because I, I've dealt with some of this kind of stuff before in the past is
+
+275
+00:11:33,969 --> 00:11:37,059
+so let's say you have a delivery person come to your house
+
+276
+00:11:37,729 --> 00:11:38,409
+and
+
+277
+00:11:38,969 --> 00:11:40,349
+you come home from work at night
+
+278
+00:11:40,700 --> 00:11:46,429
+and you notice that, you know, the some, some antique is missing from the captain or,
+
+279
+00:11:46,440 --> 00:11:48,030
+or whatever, pick something, right?
+
+280
+00:11:48,039 --> 00:11:48,710
+I, I have no idea.
+
+281
+00:11:49,479 --> 00:11:52,030
+Then you think the delivery person took my stuff,
+
+282
+00:11:52,359 --> 00:11:52,630
+right?
+
+283
+00:11:52,739 --> 00:11:56,429
+And, and the reality is no, the, uh, you know, your cleaning lady moved it,
+
+284
+00:11:56,690 --> 00:11:59,190
+you know, two days before and you didn't notice until this.
+
+285
+00:11:59,549 --> 00:12:00,010
+And so like,
+
+286
+00:12:00,020 --> 00:12:02,000
+that's one of the tricks and that's one of the things that
+
+287
+00:12:02,010 --> 00:12:04,299
+makes it really difficult when you have situations like this is,
+
+288
+00:12:04,309 --> 00:12:05,280
+is now what do you do?
+
+289
+00:12:05,289 --> 00:12:08,460
+Do you accuse the delivery person of taking it and they're of course going to be like,
+
+290
+00:12:08,469 --> 00:12:09,260
+nope, not me.
+
+291
+00:12:09,710 --> 00:12:10,380
+And then it,
+
+292
+00:12:10,799 --> 00:12:13,419
+it messes with your head. Right.
+
+293
+00:12:14,099 --> 00:12:15,669
+And this is like, uh,
+
+294
+00:12:15,840 --> 00:12:18,469
+I forget, I forget what it is. I, I, I've dealt with this,
+
+295
+00:12:18,590 --> 00:12:19,729
+I'm just going to point out at this point
+
+296
+00:12:19,739 --> 00:12:21,599
+this is first world person problems because like,
+
+297
+00:12:21,609 --> 00:12:23,590
+my cleaning service, like, uh,
+
+298
+00:12:24,020 --> 00:12:24,679
+must be nice.
+
+299
+00:12:24,890 --> 00:12:25,479
+Right.
+
+300
+00:12:25,940 --> 00:12:29,359
+And, and, well, that, that part of it and I'm not even saying this is bad.
+
+301
+00:12:29,369 --> 00:12:32,919
+This is just, this is the kind of stuff we need to always think about is the fact that
+
+302
+00:12:33,130 --> 00:12:35,239
+when you let someone into your house and then
+
+303
+00:12:35,390 --> 00:12:38,280
+you can notice something missing or whatnot and it becomes difficult to enter,
+
+304
+00:12:38,289 --> 00:12:39,500
+you know, how do I,
+
+305
+00:12:39,919 --> 00:12:42,809
+how do I put this together? Do I accuse this person of stealing?
+
+306
+00:12:42,820 --> 00:12:45,380
+Which they, let's say they didn't do,
+
+307
+00:12:45,590 --> 00:12:49,679
+you've probably now made them lose their job and they're gonna have a rough time,
+
+308
+00:12:49,690 --> 00:12:49,950
+right?
+
+309
+00:12:49,960 --> 00:12:51,859
+Because of something they maybe didn't do.
+
+310
+00:12:52,479 --> 00:12:54,169
+And, and how's Amazon gonna deal with this?
+
+311
+00:12:54,179 --> 00:12:56,909
+Are they going to say, ok, if someone reports a theft, just
+
+312
+00:12:57,030 --> 00:12:58,219
+screw this guy.
+
+313
+00:12:58,390 --> 00:12:59,960
+If you read the fine print on their thing,
+
+314
+00:12:59,969 --> 00:13:02,340
+they have a package delivery happy guarantee.
+
+315
+00:13:02,349 --> 00:13:05,500
+Like it's literally called the happy package guarantee or some stupid thing.
+
+316
+00:13:05,929 --> 00:13:08,979
+And it guarantees that if you're not satisfied with how the package is delivered,
+
+317
+00:13:08,989 --> 00:13:09,659
+blah, blah, blah.
+
+318
+00:13:10,010 --> 00:13:12,989
+But they, I, I looked through and you know,
+
+319
+00:13:13,000 --> 00:13:15,469
+hit control fa couple of times looking for.
+
+320
+00:13:15,859 --> 00:13:18,710
+Kind of, yeah, what happens if stuff gets stolen or broken?
+
+321
+00:13:18,890 --> 00:13:19,190
+Right?
+
+322
+00:13:19,200 --> 00:13:22,559
+Like what happens if the guy delivering your package kind of pops
+
+323
+00:13:22,570 --> 00:13:24,630
+it in the front door and knocks the vase off the table?
+
+324
+00:13:25,280 --> 00:13:26,119
+I'm sure
+
+325
+00:13:26,659 --> 00:13:27,820
+-- that will happen.
+-- I mean,
+
+326
+00:13:28,359 --> 00:13:32,070
+and worse yet, what happens when something happens? That's off camera
+
+327
+00:13:32,479 --> 00:13:33,299
+and you don't have that
+
+328
+00:13:33,429 --> 00:13:35,659
+use of proof, right? Like if you have the proof of, like the guy,
+
+329
+00:13:35,799 --> 00:13:38,820
+you know, you see a hand reach a packing bumps, the table. Vaz
+
+330
+00:13:38,960 --> 00:13:40,440
+falls off, door closes.
+
+331
+00:13:40,450 --> 00:13:43,539
+It's like, ok, that was the Amazon delivery guy knocking that off the table,
+
+332
+00:13:44,169 --> 00:13:48,580
+right? And I imagine, you know, Amazon would pay you off just to make it go away. But
+
+333
+00:13:48,840 --> 00:13:52,890
+when it happens off camera or, you know, there's, there's like no solid proof,
+
+334
+00:13:53,659 --> 00:13:55,239
+you know, how do you know the cat didn't do it?
+
+335
+00:13:55,440 --> 00:13:55,880
+Right.
+
+336
+00:13:56,010 --> 00:13:56,409
+Yes.
+
+337
+00:13:56,830 --> 00:13:57,320
+Yes. That's,
+
+338
+00:13:57,840 --> 00:14:00,780
+there's lots of youtube videos of cats being jerks and shoving stuff off shells.
+
+339
+00:14:00,789 --> 00:14:02,030
+It's great. They are jerks.
+
+340
+00:14:03,119 --> 00:14:03,900
+Yes.
+
+341
+00:14:04,429 --> 00:14:05,150
+Although,
+
+342
+00:14:06,020 --> 00:14:07,619
+so I have a puppy now
+
+343
+00:14:07,719 --> 00:14:11,619
+and, and it is funny because like, cats are jerks but like, dogs are just dumb
+
+344
+00:14:11,960 --> 00:14:12,619
+and so
+
+345
+00:14:13,489 --> 00:14:15,719
+it's, it's two sides of the same coin, right?
+
+346
+00:14:15,729 --> 00:14:18,299
+They, they ruin everything just for very different reasons.
+
+347
+00:14:21,820 --> 00:14:24,859
+Yeah. No, I mean, it is a major change in
+
+348
+00:14:25,510 --> 00:14:29,049
+sort of houses used to be really private spaces
+
+349
+00:14:29,460 --> 00:14:32,070
+unless you specifically invited people over and like,
+
+350
+00:14:32,080 --> 00:14:33,280
+unlock the door and let them in.
+
+351
+00:14:33,809 --> 00:14:37,130
+You know, like you really had control over who kind of came and went from your house.
+
+352
+00:14:37,299 --> 00:14:39,770
+-- You still do today. I
+-- mean,
+
+353
+00:14:40,030 --> 00:14:42,739
+it's not like, for example, I have repairman coming by and it's like, yeah,
+
+354
+00:14:42,750 --> 00:14:44,409
+he looks like,
+
+355
+00:14:45,020 --> 00:14:48,929
+I mean, because for example, like the local cable, you uh, shop, you know, they,
+
+356
+00:14:48,940 --> 00:14:50,250
+most of the guys don't have work fans,
+
+357
+00:14:50,260 --> 00:14:52,289
+they were a private vehicle with like a sticker on the side,
+
+358
+00:14:53,559 --> 00:14:56,169
+you know, they got rid of the big Shaw vans a long time ago.
+
+359
+00:14:56,179 --> 00:14:59,179
+And so these guys are wearing like a shaw ID, like,
+
+360
+00:14:59,190 --> 00:15:01,340
+I don't know what a Shaw ID is supposed to look like,
+
+361
+00:15:02,429 --> 00:15:03,090
+you know, like
+
+362
+00:15:03,210 --> 00:15:05,400
+the gas guy like, yeah, he's got an Atco
+
+363
+00:15:05,500 --> 00:15:07,719
+Gas ID lanyard. I'm like,
+
+364
+00:15:08,099 --> 00:15:09,080
+that's great. Like,
+
+365
+00:15:10,099 --> 00:15:12,239
+did you print that yourself? Like, I don't know.
+
+366
+00:15:12,809 --> 00:15:13,340
+Right.
+
+367
+00:15:14,169 --> 00:15:16,559
+And I'm just letting this complete stranger into my house
+
+368
+00:15:16,570 --> 00:15:18,719
+and he's poking around my furnace and it's like I,
+
+369
+00:15:18,880 --> 00:15:19,460
+did you
+
+370
+00:15:19,789 --> 00:15:22,429
+call, you know what you're doing? Did you call and ask them? See,
+
+371
+00:15:22,580 --> 00:15:26,299
+-- and that's different, right? If you ask someone to come and a guy shows
+-- you
+
+372
+00:15:26,809 --> 00:15:27,400
+-- meter
+-- readers
+
+373
+00:15:27,619 --> 00:15:29,880
+that is different and those
+
+374
+00:15:30,020 --> 00:15:32,559
+I don't think exist pretty much anywhere anymore.
+
+375
+00:15:32,570 --> 00:15:35,159
+They're phasing them out like they pretty much locally.
+
+376
+00:15:35,169 --> 00:15:38,719
+I know all the meters now have been replaced by the electronically readable ones.
+
+377
+00:15:39,169 --> 00:15:39,289
+Yes.
+
+378
+00:15:39,770 --> 00:15:40,840
+And you know, and that was a huge
+
+379
+00:15:41,159 --> 00:15:41,780
+because for example,
+
+380
+00:15:41,789 --> 00:15:44,869
+the electric commuters were being replaced by people who were not electricians.
+
+381
+00:15:44,940 --> 00:15:47,590
+It was actually outsourced to a company in North Carolina.
+
+382
+00:15:48,099 --> 00:15:50,789
+I actually, I just had my water meter replaced
+
+383
+00:15:51,150 --> 00:15:54,989
+and I was talking to the person who did it and she was not a plumber.
+
+384
+00:15:55,309 --> 00:15:59,049
+She was just a, a person who took some training courses, I guess.
+
+385
+00:15:59,059 --> 00:16:01,239
+And in fairness if everything goes, ok,
+
+386
+00:16:01,409 --> 00:16:03,219
+99% of the replacements are going to be
+
+387
+00:16:03,229 --> 00:16:05,359
+literally like unscrew this bolt unscrew that bolt,
+
+388
+00:16:05,369 --> 00:16:07,419
+pop the old one off, pop the new one on, tighten the bolts.
+
+389
+00:16:07,849 --> 00:16:08,429
+And like,
+
+390
+00:16:09,469 --> 00:16:12,270
+actually I was talking to her about this is because so,
+
+391
+00:16:12,280 --> 00:16:16,429
+so all of my water hookups are brand new because I had some work done down there.
+
+392
+00:16:16,440 --> 00:16:20,619
+And so like, it's funny because they gave me a water meter and no lie like a year later,
+
+393
+00:16:20,630 --> 00:16:21,349
+they replaced it,
+
+394
+00:16:22,020 --> 00:16:24,750
+which I was like, this is crazy. Why don't you just
+
+395
+00:16:24,960 --> 00:16:27,510
+like, and that's the first thing I said, I, like I said,
+
+396
+00:16:27,520 --> 00:16:29,489
+how long have you been installing these meters?
+
+397
+00:16:29,500 --> 00:16:31,830
+And she said, oh, for the last two years. So I'm thinking
+
+398
+00:16:32,609 --> 00:16:34,469
+they knew this would happen.
+
+399
+00:16:34,760 --> 00:16:36,400
+But instead, well, my,
+
+400
+00:16:36,409 --> 00:16:38,799
+my guess is they probably are replacing the whole neighborhood at
+
+401
+00:16:38,809 --> 00:16:40,969
+the same time and it just wasn't my turn yet.
+
+402
+00:16:40,979 --> 00:16:43,030
+So they were, you know, dealing anyway. Anyway,
+
+403
+00:16:43,289 --> 00:16:45,190
+I, I asked her, I'm like, ok,
+
+404
+00:16:45,200 --> 00:16:48,200
+so you come into someone's house and obviously I live in an old neighborhood.
+
+405
+00:16:48,210 --> 00:16:48,789
+And I said,
+
+406
+00:16:49,510 --> 00:16:53,210
+what happens if, if like, you know, everything's corroded and nothing works.
+
+407
+00:16:53,219 --> 00:16:56,450
+And she basically said, like I give it one twist with the wrench.
+
+408
+00:16:56,460 --> 00:16:58,260
+If it doesn't work, I tell people
+
+409
+00:16:58,469 --> 00:17:01,440
+you have to bring in a plumber, get this fixed, call me in a month.
+
+410
+00:17:02,070 --> 00:17:02,900
+And like that,
+
+411
+00:17:03,489 --> 00:17:04,089
+honestly,
+
+412
+00:17:04,260 --> 00:17:04,380
+they
+
+413
+00:17:04,550 --> 00:17:05,900
+just outsource the cost onto the
+
+414
+00:17:06,020 --> 00:17:07,780
+right. It's not their problem.
+
+415
+00:17:07,920 --> 00:17:12,260
+Like if it needs to be fixed, it's my problem. I would have to call the
+
+416
+00:17:12,368 --> 00:17:16,280
+in and the plumber would basically have to tear my internal plumbing apart to,
+
+417
+00:17:16,290 --> 00:17:17,219
+to take care of it
+
+418
+00:17:17,430 --> 00:17:19,020
+anyway. We, we're in the weeds.
+
+419
+00:17:19,189 --> 00:17:20,160
+-- We're talking about
+-- water
+
+420
+00:17:21,733 --> 00:17:22,405
+fundamentally.
+
+421
+00:17:22,685 --> 00:17:27,354
+Well, I think the real concern that kind of is nagging in the back of our heads. Right?
+
+422
+00:17:27,364 --> 00:17:30,714
+Is like, what if this thing just fails catastrophically for everybody using it?
+
+423
+00:17:30,895 --> 00:17:32,795
+It isn't going to fail catastrophically.
+
+424
+00:17:32,805 --> 00:17:34,875
+Well, there was those bricked door locks, you know,
+
+425
+00:17:34,885 --> 00:17:36,314
+those smart locks that got bricked by an
+
+426
+00:17:36,324 --> 00:17:38,074
+update and nobody could get into their house,
+
+427
+00:17:38,084 --> 00:17:41,354
+but these, these locks appear to have keys on them.
+
+428
+00:17:41,959 --> 00:17:42,609
+Well, no, no, no.
+
+429
+00:17:42,619 --> 00:17:43,069
+The, the,
+
+430
+00:17:43,079 --> 00:17:45,540
+the deal is you can buy one of a several
+
+431
+00:17:45,550 --> 00:17:48,400
+set of approved smart locks or there's this one like
+
+432
+00:17:48,410 --> 00:17:52,000
+lock that kind of goes on to the back of your lock and uses the knob to turn it.
+
+433
+00:17:52,589 --> 00:17:53,989
+Um, so essentially you're,
+
+434
+00:17:54,000 --> 00:17:57,260
+you're given a choice of which smart lock you can buy and use with this system
+
+435
+00:17:58,540 --> 00:18:00,739
+and I don't know if you can, like, mechanically,
+
+436
+00:18:00,750 --> 00:18:03,050
+like if the lock decides to go bonkers or whatever,
+
+437
+00:18:03,060 --> 00:18:05,260
+if you can mechanically override it with a key.
+
+438
+00:18:05,270 --> 00:18:05,479
+Like
+
+439
+00:18:05,589 --> 00:18:06,459
+if there's like a
+
+440
+00:18:06,689 --> 00:18:11,849
+look though, man, at the same time, if you have a, a purely electric door lock
+
+441
+00:18:12,030 --> 00:18:16,119
+and you have no like backup means of entering your, your property,
+
+442
+00:18:16,329 --> 00:18:19,900
+-- you're an idiot.
+-- Right? But if you're a condo or whatever, you wouldn't have that
+
+443
+00:18:20,199 --> 00:18:22,599
+you have a door to the hallway and what are you going to do?
+
+444
+00:18:22,609 --> 00:18:24,239
+Climb the building and go on your balcony?
+
+445
+00:18:24,510 --> 00:18:27,410
+You, you make sure it has a key hole on it
+
+446
+00:18:27,550 --> 00:18:30,069
+and you have a key somewhere,
+
+447
+00:18:30,479 --> 00:18:31,010
+right?
+
+448
+00:18:31,930 --> 00:18:34,060
+I, I don't know, I, I've not,
+
+449
+00:18:34,069 --> 00:18:36,060
+I've been avoiding electronic locks mostly because
+
+450
+00:18:36,069 --> 00:18:37,319
+they just don't solve a problem.
+
+451
+00:18:37,329 --> 00:18:37,869
+I have.
+
+452
+00:18:38,380 --> 00:18:39,069
+Um,
+
+453
+00:18:39,250 --> 00:18:42,400
+but I know looking at a lot of safes, like looking at all the electronic safes.
+
+454
+00:18:42,959 --> 00:18:44,410
+Uh, I was kind of wondering about that.
+
+455
+00:18:44,420 --> 00:18:45,910
+I'm like, what if the batteries in this thing die?
+
+456
+00:18:45,920 --> 00:18:48,510
+Like you pay a locksmith to cut it open? Like how does that work?
+
+457
+00:18:48,520 --> 00:18:49,609
+No, the answer is most of them.
+
+458
+00:18:49,619 --> 00:18:49,770
+You,
+
+459
+00:18:49,780 --> 00:18:53,579
+you like the keypad physically prize off and then you're presented with a keyhole.
+
+460
+00:18:53,589 --> 00:18:56,530
+-- Yes,
+-- I've, I've seen those before and, and like,
+
+461
+00:18:56,540 --> 00:18:59,660
+that's the only right way to do this is you need,
+
+462
+00:19:00,339 --> 00:19:02,630
+you need an alternative means of entry,
+
+463
+00:19:02,819 --> 00:19:03,339
+right?
+
+464
+00:19:03,449 --> 00:19:06,890
+It just has to be that way because someday the battery is going to die,
+
+465
+00:19:06,900 --> 00:19:09,349
+the electronic lock is going to fail.
+
+466
+00:19:09,800 --> 00:19:11,430
+And we're just not at the point today
+
+467
+00:19:11,439 --> 00:19:14,300
+where we have enough resiliency built into the circuitry
+
+468
+00:19:14,689 --> 00:19:16,819
+that we can, we can call them
+
+469
+00:19:17,400 --> 00:19:18,089
+batteries die.
+
+470
+00:19:18,099 --> 00:19:20,949
+It doesn't matter how much resilience you build the thing of the batteries. I
+
+471
+00:19:21,239 --> 00:19:26,060
+mean, look, if, if the battery is replaceable or you have a way to like
+
+472
+00:19:26,290 --> 00:19:26,670
+something
+
+473
+00:19:27,209 --> 00:19:28,750
+from the outside of the door.
+
+474
+00:19:29,390 --> 00:19:31,660
+Right. And, and that's part of the trick. Right.
+
+475
+00:19:31,670 --> 00:19:35,119
+And, and it, it is conceivable that electronic locks
+
+476
+00:19:35,530 --> 00:19:40,530
+will just never be a thing on a residential scale that's reliable enough. Right?
+
+477
+00:19:40,540 --> 00:19:42,709
+To be, to exist without like a keyhole.
+
+478
+00:19:44,239 --> 00:19:44,609
+Yeah.
+
+479
+00:19:44,790 --> 00:19:49,069
+Well, you'd also have to have them feel safe in like a fire event or something as well.
+
+480
+00:19:49,079 --> 00:19:49,750
+Right. Like,
+
+481
+00:19:50,689 --> 00:19:52,780
+they are purely electronic and like,
+
+482
+00:19:53,020 --> 00:19:55,660
+the purely electronics tend to be centrally controlled.
+
+483
+00:19:55,869 --> 00:19:58,770
+I would hope they have at least like a knob on the inside.
+
+484
+00:19:58,780 --> 00:20:02,180
+So, if the battery does die, you can at least exit the building
+
+485
+00:20:03,140 --> 00:20:06,130
+code. You're required to have a tool as way of getting that door open
+
+486
+00:20:06,770 --> 00:20:07,229
+and, and
+
+487
+00:20:07,630 --> 00:20:09,099
+push bar or whatever.
+
+488
+00:20:10,319 --> 00:20:11,369
+Yeah. Yeah. I don't know.
+
+489
+00:20:11,380 --> 00:20:11,530
+I,
+
+490
+00:20:11,540 --> 00:20:13,880
+I honestly think the Amazon key thing is awesome because it
+
+491
+00:20:13,890 --> 00:20:16,869
+will save everybody involved a ton of time and pain.
+
+492
+00:20:17,390 --> 00:20:20,910
+And, I mean, it's, it reminds me of the self driving car thing in that
+
+493
+00:20:21,229 --> 00:20:24,060
+self driving cars are cool, but at the same time it's suddenly, you know,
+
+494
+00:20:24,069 --> 00:20:25,790
+things like self driving school buses.
+
+495
+00:20:25,800 --> 00:20:27,530
+Just your kid goes on the school bus
+
+496
+00:20:28,349 --> 00:20:30,680
+and you can have like micro buses that hold six kids.
+
+497
+00:20:30,689 --> 00:20:36,060
+So kids that are like in a small town can now go to AAA larger regional school,
+
+498
+00:20:36,069 --> 00:20:36,729
+for example,
+
+499
+00:20:36,920 --> 00:20:37,849
+with less hassle,
+
+500
+00:20:38,660 --> 00:20:40,050
+things like that. You know, it's, it,
+
+501
+00:20:40,510 --> 00:20:42,959
+it gives people options that just
+
+502
+00:20:43,069 --> 00:20:43,579
+like,
+
+503
+00:20:44,329 --> 00:20:46,739
+I think of all the blind and disabled people, right?
+
+504
+00:20:46,750 --> 00:20:48,270
+And just all of a sudden, boom, they're,
+
+505
+00:20:48,280 --> 00:20:51,920
+they're on the same equal playing field as the rest of us for transport.
+
+506
+00:20:51,930 --> 00:20:52,319
+You know.
+
+507
+00:20:52,329 --> 00:20:54,560
+Um, because my, like, I know people that, you know,
+
+508
+00:20:54,569 --> 00:20:57,199
+they volunteer and they basically want some of the things they do is like,
+
+509
+00:20:57,300 --> 00:21:00,270
+just go with a blind person to help them with their errands.
+
+510
+00:21:00,920 --> 00:21:01,089
+That's,
+
+511
+00:21:01,400 --> 00:21:01,500
+and,
+
+512
+00:21:01,939 --> 00:21:03,680
+you know, going to the bank. Right.
+
+513
+00:21:04,979 --> 00:21:09,099
+And so I, I think this is part of that inevitable march forwards of,
+
+514
+00:21:09,510 --> 00:21:10,079
+you know,
+
+515
+00:21:10,339 --> 00:21:15,150
+-- ease of use and convenience.
+-- Yeah. Well, and I guess part of it too is
+
+516
+00:21:15,479 --> 00:21:19,439
+we love to complain about all the ways things can fail.
+
+517
+00:21:19,449 --> 00:21:20,599
+I mean, that's kind of what we do,
+
+518
+00:21:21,640 --> 00:21:22,199
+you know,
+
+519
+00:21:22,339 --> 00:21:24,569
+it's, but anyway, the point is it,
+
+520
+00:21:24,579 --> 00:21:27,500
+it's going to be good enough often enough that it won't matter.
+
+521
+00:21:27,510 --> 00:21:27,689
+Right.
+
+522
+00:21:27,699 --> 00:21:30,449
+Like, yeah, the, the locks will fail occasionally, but big deal,
+
+523
+00:21:30,459 --> 00:21:31,329
+it'll be good enough
+
+524
+00:21:31,599 --> 00:21:33,650
+and, and that's just kind of the right way to look at it.
+
+525
+00:21:33,660 --> 00:21:34,969
+It, it's never going to be perfect
+
+526
+00:21:35,449 --> 00:21:36,890
+but it will be good enough, I'm sure.
+
+527
+00:21:37,229 --> 00:21:37,530
+Yeah.
+
+528
+00:21:37,540 --> 00:21:40,640
+Well, and my other thought too was though the concerns for privacy because,
+
+529
+00:21:40,650 --> 00:21:42,739
+you know, have a company with, you know,
+
+530
+00:21:42,750 --> 00:21:45,739
+interior footage of your front door who's coming and going facial rec
+
+531
+00:21:46,160 --> 00:21:47,050
+can they,
+
+532
+00:21:47,060 --> 00:21:50,449
+are they allowed to use facial recognition to profile you and see what you're doing?
+
+533
+00:21:50,750 --> 00:21:53,839
+You know, what happens if the cops, uh, ask for that data under warrant?
+
+534
+00:21:53,849 --> 00:21:56,369
+Because that's already happened with, uh, what was it with the, um,
+
+535
+00:21:57,449 --> 00:21:57,760
+with the
+
+536
+00:21:57,939 --> 00:21:58,290
+Amazon?
+
+537
+00:21:58,400 --> 00:21:58,630
+The
+
+538
+00:21:58,900 --> 00:21:59,000
+Alexis
+
+539
+00:21:59,790 --> 00:21:59,839
+did?
+
+540
+00:22:00,390 --> 00:22:04,280
+Yeah. And I don't, I think they got it but they, well, no, I, I remember what it was.
+
+541
+00:22:04,609 --> 00:22:08,530
+The police wanted the recordings without a warrant and Amazon basically said no,
+
+542
+00:22:08,540 --> 00:22:10,510
+go away, you know, go get a warrant.
+
+543
+00:22:10,599 --> 00:22:14,829
+And I, I don't know if they did get the warrant or not. My suspicion is they did.
+
+544
+00:22:15,199 --> 00:22:18,189
+But I mean, I think that's pretty common is law enforcement is gonna, you know,
+
+545
+00:22:18,199 --> 00:22:19,750
+they're going to pick the easy way first
+
+546
+00:22:19,939 --> 00:22:20,319
+and,
+
+547
+00:22:20,489 --> 00:22:21,719
+well, I mean, it doesn't hurt to ask.
+
+548
+00:22:22,239 --> 00:22:23,670
+Certainly not. They might say yes.
+
+549
+00:22:24,290 --> 00:22:24,770
+Right.
+
+550
+00:22:25,400 --> 00:22:27,270
+Right. II, I kind of get it and,
+
+551
+00:22:27,839 --> 00:22:32,709
+yeah, and I don't know, man, I, I wonder the privacy is tricky. Uh, no GDPR
+
+552
+00:22:32,859 --> 00:22:34,819
+in the US to keep us safe.
+
+553
+00:22:35,270 --> 00:22:36,670
+Yeah. Interesting. In the Alexa
+
+554
+00:22:36,790 --> 00:22:40,660
+case, apparently the suspect okayed handing over of the logs.
+
+555
+00:22:40,979 --> 00:22:41,780
+Interesting.
+
+556
+00:22:42,189 --> 00:22:43,459
+Um, so anyways, yeah, but I mean,
+
+557
+00:22:43,469 --> 00:22:46,449
+the reality is eventually they will start getting warrants for the stuff because,
+
+558
+00:22:46,619 --> 00:22:49,380
+like, from a crime point of view, oh, somebody got murdered.
+
+559
+00:22:49,390 --> 00:22:53,410
+Oh, a company has video of their front door people coming in and out. Yeah.
+
+560
+00:22:53,420 --> 00:22:56,339
+No, I'm sorry. That's, we're definitely gonna want to see that.
+
+561
+00:22:57,189 --> 00:22:57,550
+Right.
+
+562
+00:22:57,560 --> 00:23:02,770
+And, and I would imagine in an instance like that you could easily justify a warrant.
+
+563
+00:23:03,069 --> 00:23:06,630
+But at the same time if, if, you know, some cop decided, like,
+
+564
+00:23:06,640 --> 00:23:08,140
+I don't like this curt guy.
+
+565
+00:23:08,150 --> 00:23:12,380
+He, he looked at me funny yesterday, I'm gonna see if I can't find something on him.
+
+566
+00:23:12,819 --> 00:23:13,219
+Right.
+
+567
+00:23:13,229 --> 00:23:14,930
+And, and that's an instance where, no,
+
+568
+00:23:14,939 --> 00:23:17,569
+you do not want that person to have access to your footage
+
+569
+00:23:17,750 --> 00:23:20,180
+and recordings and entry, exit data. And,
+
+570
+00:23:20,449 --> 00:23:21,599
+well, well, that, that's true too.
+
+571
+00:23:21,609 --> 00:23:22,819
+If you have an electronic lock,
+
+572
+00:23:22,829 --> 00:23:26,180
+they're gonna probably know whenever you go in and out of your house.
+
+573
+00:23:26,189 --> 00:23:26,599
+Right.
+
+574
+00:23:27,089 --> 00:23:29,910
+I don't know that most of those locks are smart enough to keep a log.
+
+575
+00:23:31,439 --> 00:23:34,510
+Like if we're talking to just the simple home ones that are like 100 200 bucks.
+
+576
+00:23:34,520 --> 00:23:35,719
+I doubt that they keep a long,
+
+577
+00:23:36,660 --> 00:23:39,260
+although they have the recording so the video will do.
+
+578
+00:23:40,260 --> 00:23:40,579
+Yeah.
+
+579
+00:23:41,650 --> 00:23:45,229
+But, uh, no, I mean, it's, it's part of this March forwards because, uh,
+
+580
+00:23:45,339 --> 00:23:46,050
+you know,
+
+581
+00:23:46,920 --> 00:23:52,489
+I, I just, I can see for a lot of people this being a very huge time saver. Right.
+
+582
+00:23:52,500 --> 00:23:55,660
+Every time you've ever had to wait at home for something that's suddenly gone.
+
+583
+00:23:56,489 --> 00:23:56,900
+Yeah.
+
+584
+00:23:57,839 --> 00:24:00,630
+No, I get it, man. I get it. All right. All right,
+
+585
+00:24:01,670 --> 00:24:05,170
+-- cool. So,
+-- and just, and just to, maybe we'll put show notes.
+
+586
+00:24:05,180 --> 00:24:09,079
+But I, there's this guy called the lock picking lawyer and he shows how easy these,
+
+587
+00:24:09,089 --> 00:24:11,369
+like, high security locks are to defeat if you know what you're doing.
+
+588
+00:24:11,790 --> 00:24:14,464
+Like, he's picking things in under 30 seconds. It's crazy.
+
+589
+00:24:14,555 --> 00:24:18,425
+Every lock is terrible locks, locks don't keep people out. I mean, that's just
+
+590
+00:24:18,704 --> 00:24:18,714
+a
+
+591
+00:24:18,814 --> 00:24:19,675
+couple of decent ones.
+
+592
+00:24:19,905 --> 00:24:24,314
+There's, that are like, pretty crazy. Hard to pick. But now we're talking like 2 $300
+
+593
+00:24:24,584 --> 00:24:24,645
+you know,
+
+594
+00:24:24,964 --> 00:24:25,015
+locks
+
+595
+00:24:25,265 --> 00:24:26,015
+and here's the thing.
+
+596
+00:24:26,214 --> 00:24:28,324
+All right. So you have a lock that can't be picked.
+
+597
+00:24:28,744 --> 00:24:31,444
+My guess is, is a good swift kick to that door
+
+598
+00:24:31,574 --> 00:24:31,834
+is
+
+599
+00:24:32,574 --> 00:24:33,805
+gonna get you in.
+
+600
+00:24:34,290 --> 00:24:34,729
+Well,
+
+601
+00:24:34,739 --> 00:24:36,300
+unless you have like a security door with
+
+602
+00:24:36,310 --> 00:24:37,859
+a security door frame because that's the thing.
+
+603
+00:24:37,869 --> 00:24:39,189
+You can have a high security door.
+
+604
+00:24:39,449 --> 00:24:42,010
+And the classic thing is you just put a carjack
+
+605
+00:24:42,290 --> 00:24:45,939
+-- and push the frame open and, oh, pops the lash.
+-- Yes.
+
+606
+00:24:46,520 --> 00:24:47,030
+Or,
+
+607
+00:24:47,239 --> 00:24:49,469
+or the other favorite I've seen is
+
+608
+00:24:49,790 --> 00:24:50,969
+most people don't know this,
+
+609
+00:24:50,979 --> 00:24:55,229
+but the vast majority of houses built in like the last probably 3040 years,
+
+610
+00:24:55,760 --> 00:24:59,910
+the walls, you can basically, like, just stab through them with a crow bar
+
+611
+00:25:00,469 --> 00:25:03,760
+-- and then stick your arm around and unlock the door.
+-- Right.
+
+612
+00:25:03,910 --> 00:25:04,400
+Yeah.
+
+613
+00:25:04,660 --> 00:25:06,979
+Yeah, I actually saw the De Walt had a new,
+
+614
+00:25:07,130 --> 00:25:08,930
+it was a really cool blade for a
+
+615
+00:25:09,069 --> 00:25:12,229
+Sawzall that could cut through plywood without needing a pilot hole.
+
+616
+00:25:12,609 --> 00:25:15,780
+And the way they accomplished this is they just cut out one or two of the front teeth.
+
+617
+00:25:15,790 --> 00:25:19,119
+So there was like a little hook at the front and then a little blank space in the teeth.
+
+618
+00:25:19,260 --> 00:25:21,390
+And you could literally kind of basically you could stab a
+
+619
+00:25:21,400 --> 00:25:23,170
+hole into the plywood and then cut a hole through it.
+
+620
+00:25:23,180 --> 00:25:23,359
+And
+
+621
+00:25:23,750 --> 00:25:25,329
+yeah, like you said, most
+
+622
+00:25:25,500 --> 00:25:28,920
+North American construction is like half inch or what is it?
+
+623
+00:25:28,930 --> 00:25:30,969
+3/8 plywood on two by fours and
+
+624
+00:25:31,650 --> 00:25:31,660
+a
+
+625
+00:25:31,859 --> 00:25:33,790
+battery powered saws all with the right blade.
+
+626
+00:25:33,800 --> 00:25:35,579
+And you can just cut a man sized hole inside of the house
+
+627
+00:25:36,050 --> 00:25:40,439
+-- in five minutes.
+-- I've seen houses built without plywood on the outside.
+
+628
+00:25:40,859 --> 00:25:41,650
+How, what,
+
+629
+00:25:43,390 --> 00:25:43,530
+how
+
+630
+00:25:43,630 --> 00:25:47,250
+-- does it not fall down because
+-- they put a metal cross brace
+
+631
+00:25:47,390 --> 00:25:48,290
+on the frame?
+
+632
+00:25:49,069 --> 00:25:53,199
+Ok. So what, how? Ok. So by definition, a wall has to be
+
+633
+00:25:53,329 --> 00:25:56,739
+like not air. So you've got your two by four framing and some cross,
+
+634
+00:25:57,359 --> 00:26:00,839
+we've got like a foam insulation board on it,
+
+635
+00:26:00,849 --> 00:26:04,839
+which is not like you could kick through it with a foot and then you put the, the,
+
+636
+00:26:04,849 --> 00:26:06,800
+the siding on the outside of that
+
+637
+00:26:07,030 --> 00:26:07,469
+and the drive
+
+638
+00:26:07,770 --> 00:26:08,020
+drive
+
+639
+00:26:08,170 --> 00:26:09,760
+on the other side, insulation in the middle.
+
+640
+00:26:10,500 --> 00:26:11,420
+Yeah, for real, man.
+
+641
+00:26:11,650 --> 00:26:12,319
+It's crazy.
+
+642
+00:26:13,819 --> 00:26:14,040
+I I
+
+643
+00:26:14,140 --> 00:26:16,939
+I'm literally speechless because I'm just thinking
+
+644
+00:26:16,949 --> 00:26:18,420
+if your neighbor's house ever catches fire,
+
+645
+00:26:18,430 --> 00:26:20,030
+your house is going to go up in like seconds.
+
+646
+00:26:20,050 --> 00:26:25,849
+Most of these buildings I've seen are in the, we'll say, not high end neighborhoods
+
+647
+00:26:26,670 --> 00:26:28,050
+-- and, and my suspicion
+-- is
+
+648
+00:26:28,170 --> 00:26:29,699
+it's like Grenfell Tower then it's ok to
+
+649
+00:26:30,109 --> 00:26:31,630
+poor people's buildings on fire.
+
+650
+00:26:32,310 --> 00:26:33,430
+Ok. Awesome.
+
+651
+00:26:34,689 --> 00:26:36,689
+Again, I mean, it's, it, that's incredibly efficient.
+
+652
+00:26:36,699 --> 00:26:38,359
+That saves a ton of wooden trees
+
+653
+00:26:38,880 --> 00:26:41,959
+as a traditional person who lives in a house that has walls that are
+
+654
+00:26:42,380 --> 00:26:44,180
+made out of thin plywood. Still. That
+
+655
+00:26:44,630 --> 00:26:45,750
+I, it would.
+
+656
+00:26:46,510 --> 00:26:50,140
+-- Oh, man. Yeah, that, I just, I don't know that I could get my head around that.
+-- I would,
+
+657
+00:26:50,569 --> 00:26:53,060
+I would not live in one of those houses. We'll just say that.
+
+658
+00:26:53,339 --> 00:26:53,780
+Right.
+
+659
+00:26:54,219 --> 00:26:55,780
+Just, no, I mean, you think you could,
+
+660
+00:26:55,790 --> 00:26:58,119
+you could break into that house with a baseball bat, right?
+
+661
+00:26:58,130 --> 00:26:59,930
+Just like, hit, hit the wall.
+
+662
+00:27:00,680 --> 00:27:01,869
+Yeah, pretty much.
+
+663
+00:27:02,239 --> 00:27:04,880
+But I doubt that happens because most people, you know,
+
+664
+00:27:05,469 --> 00:27:08,589
+-- it
+-- doesn't happen. That's just it. Right. It has nothing to do with security.
+
+665
+00:27:09,329 --> 00:27:13,270
+Let's face it. It, it's, we, we love talking about Doom and Gloom,
+
+666
+00:27:13,400 --> 00:27:13,790
+but
+
+667
+00:27:14,020 --> 00:27:15,930
+none of this stuff really happens very often.
+
+668
+00:27:15,939 --> 00:27:19,920
+-- I think
+-- that's part of the problem is, you know, online to even just sort of do like a,
+
+669
+00:27:19,930 --> 00:27:20,430
+sort of
+
+670
+00:27:20,630 --> 00:27:24,989
+just a simple attack without really targeting somebody. You still have to
+
+671
+00:27:25,260 --> 00:27:27,680
+target them in the sense of it's not like you're walking by a house,
+
+672
+00:27:27,689 --> 00:27:30,750
+you see the door ajar, you pop in and swipe whatever you can grab,
+
+673
+00:27:31,369 --> 00:27:32,359
+you know, which just happened to me.
+
+674
+00:27:32,369 --> 00:27:36,260
+I left my garage door open and then we were moving and it's like, where's, you know,
+
+675
+00:27:36,270 --> 00:27:38,270
+where's one of the bicycles is missing?
+
+676
+00:27:38,910 --> 00:27:43,020
+And then we realized, like, ok, like, we used the bike last week and now it's gone so
+
+677
+00:27:43,130 --> 00:27:44,250
+great, it got stolen,
+
+678
+00:27:44,709 --> 00:27:44,910
+got
+
+679
+00:27:45,099 --> 00:27:45,319
+you,
+
+680
+00:27:45,800 --> 00:27:46,339
+you know,
+
+681
+00:27:47,250 --> 00:27:50,099
+and they just took whatever was, you know, easy to grab and,
+
+682
+00:27:50,329 --> 00:27:55,300
+-- and sell for 20 bucks. Right.
+-- Well, you know, that's actually a really good point
+
+683
+00:27:55,770 --> 00:27:56,569
+is
+
+684
+00:27:56,750 --> 00:27:58,979
+if somebody wants to target you,
+
+685
+00:27:59,709 --> 00:28:01,670
+you're going to lose. Right.
+
+686
+00:28:01,680 --> 00:28:01,890
+If,
+
+687
+00:28:01,900 --> 00:28:06,069
+if somebody says I'm going to break into Kurt's house and I'm going to steal his TV.
+
+688
+00:28:06,079 --> 00:28:07,410
+And like, that's their goal,
+
+689
+00:28:07,729 --> 00:28:09,170
+they will find a way to do that.
+
+690
+00:28:09,859 --> 00:28:13,380
+But as opposed to people, you know, walking down the street being like,
+
+691
+00:28:13,390 --> 00:28:15,479
+that's a nice bike I see in that garage.
+
+692
+00:28:15,540 --> 00:28:15,920
+Right.
+
+693
+00:28:16,010 --> 00:28:18,780
+Like, like there's, there's, and this is true in cybersecurity,
+
+694
+00:28:18,790 --> 00:28:21,030
+there's kind of the targets and there's opportunistic
+
+695
+00:28:21,689 --> 00:28:23,680
+and you will never stop the targeted people,
+
+696
+00:28:23,729 --> 00:28:28,010
+but you can stop the opportunistic people by obviously doing certain clever
+
+697
+00:28:28,020 --> 00:28:30,869
+things like shutting your garage door and locking your front door.
+
+698
+00:28:30,880 --> 00:28:31,439
+Right.
+
+699
+00:28:32,189 --> 00:28:34,729
+Yeah. My new security system has a garage door sensor
+
+700
+00:28:35,650 --> 00:28:37,530
+and it's not to prevent people from breaking in.
+
+701
+00:28:37,540 --> 00:28:39,310
+It's to prevent me from forgetting to close it.
+
+702
+00:28:39,770 --> 00:28:42,329
+Right. You know, I don't have that and
+
+703
+00:28:42,810 --> 00:28:43,420
+I
+
+704
+00:28:43,800 --> 00:28:48,699
+II, I bought all this stuff and I keep meaning to, like, hook something up so,
+
+705
+00:28:48,979 --> 00:28:51,339
+so I can, I can figure something out because,
+
+706
+00:28:51,550 --> 00:28:54,819
+well, the real reason is I have a heated garage
+
+707
+00:28:55,140 --> 00:28:59,189
+and at least at least once a year, at least once a year,
+
+708
+00:28:59,199 --> 00:29:01,699
+we forget to shut the door for a couple of hours and
+
+709
+00:29:02,520 --> 00:29:05,719
+you know, when it happens, because all the snow on the roof has melted
+
+710
+00:29:05,949 --> 00:29:07,479
+in the front of the garage door.
+
+711
+00:29:09,359 --> 00:29:10,410
+So, yes,
+
+712
+00:29:10,680 --> 00:29:11,569
+and that's what gets me is,
+
+713
+00:29:11,579 --> 00:29:14,589
+is honestly the main reason I'm buying a security system is
+
+714
+00:29:14,800 --> 00:29:17,420
+for things like to prevent me from leaving my garage
+
+715
+00:29:17,430 --> 00:29:21,109
+door open and also to have like a log of,
+
+716
+00:29:21,630 --> 00:29:25,109
+or being able to see my front door so I can see if a package got delivered or not.
+
+717
+00:29:25,910 --> 00:29:30,510
+You're right. It's, I'm, it's like 20% for security, 80% for convenience.
+
+718
+00:29:30,900 --> 00:29:34,510
+Yeah, that's probably fair. Well, let's face it, man. I mean, again,
+
+719
+00:29:34,910 --> 00:29:35,609
+the,
+
+720
+00:29:35,800 --> 00:29:39,719
+something like that can help prevent opportunistic crime but targeted crime,
+
+721
+00:29:39,770 --> 00:29:42,920
+it doesn't matter how good your security system is, they're, they're gonna get in
+
+722
+00:29:43,160 --> 00:29:46,329
+like, you know, none of these security systems are that good
+
+723
+00:29:47,040 --> 00:29:50,739
+that they're going to stop even a, a mildly competent thief.
+
+724
+00:29:51,030 --> 00:29:54,089
+-- And granted, I'm sure eventually they'll get caught by the police. But it
+-- doesn't
+
+725
+00:29:54,209 --> 00:29:54,250
+matter.
+
+726
+00:29:54,430 --> 00:29:57,290
+The problem with a lot of the online stuff too is that, you know,
+
+727
+00:29:57,300 --> 00:29:59,369
+these alarm systems won't stop somebody.
+
+728
+00:29:59,380 --> 00:30:00,819
+What they'll do is alert somebody who will
+
+729
+00:30:00,829 --> 00:30:03,400
+hopefully eventually alert somebody who comes by and,
+
+730
+00:30:03,410 --> 00:30:05,930
+you know, ultimately the cops come by and can enforce,
+
+731
+00:30:06,750 --> 00:30:08,050
+you know, the law,
+
+732
+00:30:08,449 --> 00:30:11,020
+uh, through physical force. And that's ii, I
+
+733
+00:30:11,180 --> 00:30:14,520
+see a lot of companies where it's like, oh, yeah, we, our, our,
+
+734
+00:30:14,739 --> 00:30:18,150
+our security system notified us that we were broken into, but we never, like,
+
+735
+00:30:18,160 --> 00:30:19,270
+dealt with it properly,
+
+736
+00:30:20,199 --> 00:30:23,859
+you know, and, and that's like the Equifax breach, the Home Depot breach,
+
+737
+00:30:23,869 --> 00:30:25,660
+like all these breaches where it turns out they
+
+738
+00:30:25,670 --> 00:30:27,540
+knew about this stuff for weeks or months and,
+
+739
+00:30:28,410 --> 00:30:30,130
+and just didn't properly deal with it.
+
+740
+00:30:31,050 --> 00:30:31,060
+Uh,
+
+741
+00:30:31,839 --> 00:30:32,229
+yeah. Yeah,
+
+742
+00:30:32,420 --> 00:30:34,260
+-- that, that is true.
+-- I mean,
+
+743
+00:30:34,369 --> 00:30:35,050
+and that's the thing, right?
+
+744
+00:30:35,060 --> 00:30:37,920
+If you, if you have, you can have the world's best alarm system. But,
+
+745
+00:30:38,250 --> 00:30:41,609
+uh, well, like that giant diamond heist in, what was it? Amsterdam or something?
+
+746
+00:30:41,619 --> 00:30:42,540
+And they literally,
+
+747
+00:30:43,420 --> 00:30:47,890
+the guards apparently were like, yeah, stupid alarms going off. And literally
+
+748
+00:30:48,000 --> 00:30:50,000
+the one guy basically said that,
+
+749
+00:30:50,329 --> 00:30:52,050
+ok, so the vault alarm went off.
+
+750
+00:30:52,060 --> 00:30:55,359
+That means somebody is in the vault and I'm not paid enough to die.
+
+751
+00:30:55,369 --> 00:30:57,239
+So I'm not going to go deal with that.
+
+752
+00:30:59,869 --> 00:31:00,449
+That's
+
+753
+00:31:00,810 --> 00:31:02,949
+great. Like, you know, I'll have to find that.
+
+754
+00:31:02,959 --> 00:31:05,660
+Uh, but as I remember reading the interview with this guy,
+
+755
+00:31:05,670 --> 00:31:07,439
+that's basically what he said.
+
+756
+00:31:07,949 --> 00:31:09,369
+And it was like, honestly, you know,
+
+757
+00:31:09,890 --> 00:31:11,930
+yeah, you can't ask a human being making, like,
+
+758
+00:31:11,939 --> 00:31:15,479
+near minimum wage to put their life on the line for some random company.
+
+759
+00:31:16,239 --> 00:31:18,500
+Yeah, I would agree with that. I,
+
+760
+00:31:19,800 --> 00:31:23,739
+yeah, I, I totally wouldn't go into and, and my guess is because it's Europe,
+
+761
+00:31:23,750 --> 00:31:25,439
+they probably didn't have guns.
+
+762
+00:31:25,500 --> 00:31:25,900
+Right.
+
+763
+00:31:26,030 --> 00:31:27,260
+-- Like, just,
+-- no,
+
+764
+00:31:27,619 --> 00:31:30,589
+they, it was like the, oh, here we go. The Antwerp Diamond. He,
+
+765
+00:31:31,329 --> 00:31:31,939
+that's the one.
+
+766
+00:31:33,270 --> 00:31:36,609
+And, yeah, apparently they screwed up because the classic thing, like the guy,
+
+767
+00:31:37,329 --> 00:31:40,310
+they left garbage or something somewhere, whatever, you know.
+
+768
+00:31:40,660 --> 00:31:40,819
+Well,
+
+769
+00:31:40,829 --> 00:31:44,489
+but I guess at the same time my assumption is the security guard called the police.
+
+770
+00:31:44,500 --> 00:31:44,869
+Right.
+
+771
+00:31:45,290 --> 00:31:45,430
+I
+
+772
+00:31:45,819 --> 00:31:50,099
+would hope so. And let's face it. Like that's kind of the point is
+
+773
+00:31:50,250 --> 00:31:53,650
+you're really not there, you're there to stop the opportunistic crime
+
+774
+00:31:53,890 --> 00:31:57,469
+or call the police if there's like a legitimate crime taking place. Right?
+
+775
+00:31:57,479 --> 00:31:59,520
+Like that's the job of a security guard job.
+
+776
+00:31:59,530 --> 00:32:02,680
+The security guard isn't to go into the vault and start a gunfight with,
+
+777
+00:32:02,689 --> 00:32:03,750
+with the thieves.
+
+778
+00:32:05,609 --> 00:32:08,030
+You know, contrary to what the movies tell us
+
+779
+00:32:08,180 --> 00:32:09,609
+that is not the way it works.
+
+780
+00:32:10,469 --> 00:32:12,839
+Not unless you have exceptionally well paid security guards
+
+781
+00:32:13,500 --> 00:32:15,040
+and those people exist
+
+782
+00:32:15,699 --> 00:32:15,819
+like
+
+783
+00:32:16,599 --> 00:32:19,099
+they're, they're real and, and they do stuff,
+
+784
+00:32:19,209 --> 00:32:23,729
+but, but in this case that probably wasn't them. And again, opportunistic, right?
+
+785
+00:32:23,739 --> 00:32:26,239
+Which actually let's use that to bring up.
+
+786
+00:32:26,250 --> 00:32:29,979
+The next thing I wanted to talk about, which is actionable advice,
+
+787
+00:32:30,349 --> 00:32:32,209
+which is something that came up for me.
+
+788
+00:32:32,219 --> 00:32:35,359
+Actually, last week I was at, uh, De Ops Day Madison last week
+
+789
+00:32:35,709 --> 00:32:39,050
+and I gave a talk to nonsecurity people about why
+
+790
+00:32:39,300 --> 00:32:42,239
+basically, like, let's treat security like a minimum viable product.
+
+791
+00:32:42,250 --> 00:32:43,930
+And I gave them three things to do.
+
+792
+00:32:45,000 --> 00:32:45,479
+And
+
+793
+00:32:46,199 --> 00:32:50,500
+uh I took the oas top 10 list and I broke it down into basically saying uh number one,
+
+794
+00:32:50,510 --> 00:32:51,800
+use a framework,
+
+795
+00:32:51,969 --> 00:32:56,619
+right? Because like that will take away a significant amount of the oas top 10.
+
+796
+00:32:57,569 --> 00:33:00,859
+Number two was, don't roll your own off just like let Google do it right.
+
+797
+00:33:00,869 --> 00:33:02,030
+You're gonna screw it up.
+
+798
+00:33:02,040 --> 00:33:04,869
+It's, you know, don't roll your own crypto people get that now, like,
+
+799
+00:33:04,880 --> 00:33:06,859
+don't roll your own off is the next one.
+
+800
+00:33:07,050 --> 00:33:08,500
+And then number three was
+
+801
+00:33:08,699 --> 00:33:09,989
+when you do your deployments, you know,
+
+802
+00:33:10,000 --> 00:33:13,189
+you don't use like answerable or containers or, or chef or,
+
+803
+00:33:13,459 --> 00:33:17,349
+or whatever, right? Like, don't, don't do artisan deployment.
+
+804
+00:33:17,359 --> 00:33:19,790
+That, that is just a bad idea.
+
+805
+00:33:20,800 --> 00:33:21,359
+And,
+
+806
+00:33:21,770 --> 00:33:23,619
+and so anyway, this really kind of,
+
+807
+00:33:23,790 --> 00:33:25,959
+it was funny because I showed this to some security people.
+
+808
+00:33:25,969 --> 00:33:29,380
+They're like, dude, you can't turn the Os top 10 into three and I said I just did,
+
+809
+00:33:29,430 --> 00:33:29,760
+right.
+
+810
+00:33:29,770 --> 00:33:31,229
+And they're like, no, it doesn't work like that.
+
+811
+00:33:31,239 --> 00:33:33,790
+And I said, well, what would you suggest? Right. And there,
+
+812
+00:33:34,089 --> 00:33:37,040
+of course they said, blah, blah, blah, blah, blah, whatever, whatever, whatever.
+
+813
+00:33:37,050 --> 00:33:40,469
+And of course, I recognize this podcast is targeted towards security people.
+
+814
+00:33:40,479 --> 00:33:41,540
+So, you know,
+
+815
+00:33:41,869 --> 00:33:45,329
+-- but,
+-- well, I, I think it's, it's hard because it's part of it is admitting
+
+816
+00:33:45,819 --> 00:33:49,520
+it's not that we're wrong so much as that we've been looking at this wrong because
+
+817
+00:33:49,689 --> 00:33:50,739
+I'm beginning. Ok?
+
+818
+00:33:50,859 --> 00:33:52,459
+No, man, I'm gonna stop you right there.
+
+819
+00:33:52,630 --> 00:33:53,000
+The oas
+
+820
+00:33:53,369 --> 00:33:53,449
+do
+
+821
+00:33:53,609 --> 00:33:56,819
+10, basically hasn't changed in the last 10 years.
+
+822
+00:33:56,849 --> 00:34:01,319
+Like we clearly are doing something wrong because if we were giving advice,
+
+823
+00:34:01,329 --> 00:34:03,839
+it would be a different list every couple of years.
+
+824
+00:34:04,369 --> 00:34:04,670
+Well,
+
+825
+00:34:04,680 --> 00:34:07,010
+the thing is you can give good advice but people
+
+826
+00:34:07,020 --> 00:34:09,080
+ignore it or people keep building their own stuff.
+
+827
+00:34:09,090 --> 00:34:11,770
+And I think this is one of the strengths of open sources. Ideally,
+
+828
+00:34:11,938 --> 00:34:14,739
+you can get a good framework, you can get good crypto libraries,
+
+829
+00:34:14,750 --> 00:34:16,168
+you can get good off libraries
+
+830
+00:34:16,438 --> 00:34:18,949
+and if you use them correctly, and that's the other challenge, right?
+
+831
+00:34:18,958 --> 00:34:22,000
+You can still use frameworks and use them wrong,
+
+832
+00:34:22,889 --> 00:34:23,300
+right?
+
+833
+00:34:23,310 --> 00:34:25,659
+I mean, it's getting some of them are making it harder and harder,
+
+834
+00:34:25,668 --> 00:34:26,899
+which I think is really good.
+
+835
+00:34:27,280 --> 00:34:30,969
+But a lot of frameworks unfortunately take the the idea of like, well,
+
+836
+00:34:30,978 --> 00:34:33,770
+we're just a framework, we're not going to enforce policy or security,
+
+837
+00:34:33,780 --> 00:34:35,560
+that's kind of up to the end user, right?
+
+838
+00:34:36,168 --> 00:34:37,280
+And so, for example,
+
+839
+00:34:37,429 --> 00:34:39,458
+they might, you know, make it a lot easier to say,
+
+840
+00:34:39,469 --> 00:34:41,840
+turn off session tokens than it should be,
+
+841
+00:34:42,040 --> 00:34:42,520
+right?
+
+842
+00:34:43,239 --> 00:34:43,820
+Um
+
+843
+00:34:44,030 --> 00:34:46,978
+But I think that's one of the benefits of this open source, you know,
+
+844
+00:34:46,989 --> 00:34:50,370
+world we live in is that we have access to these frameworks like say Ruby on rails,
+
+845
+00:34:50,379 --> 00:34:50,478
+right?
+
+846
+00:34:50,489 --> 00:34:51,929
+If you use Ruby on rails
+
+847
+00:34:52,110 --> 00:34:53,250
+even remotely correct,
+
+848
+00:34:53,260 --> 00:34:56,159
+it's like all of a sudden most of your like cross site
+
+849
+00:34:56,168 --> 00:34:58,280
+request forgery and like cross site
+
+850
+00:34:58,290 --> 00:35:00,659
+scripting vulnerabilities just magically go away
+
+851
+00:35:02,489 --> 00:35:05,770
+you know, things like authentication and session handling,
+
+852
+00:35:06,350 --> 00:35:09,669
+just magic, it happens, right? You, you can still mess it up
+
+853
+00:35:09,949 --> 00:35:11,510
+but it, it becomes,
+
+854
+00:35:11,879 --> 00:35:15,870
+you, you have to definitely make more of a mistake than like, oops, we made a typo,
+
+855
+00:35:16,060 --> 00:35:16,629
+you know,
+
+856
+00:35:17,820 --> 00:35:19,669
+and I think that's what I kind of find most frustrating about.
+
+857
+00:35:19,679 --> 00:35:22,360
+A lot of security flaws is a lot of them are not
+
+858
+00:35:22,659 --> 00:35:25,250
+like some giant chain of complicated events and, you know,
+
+859
+00:35:25,260 --> 00:35:26,669
+everything aligned just right.
+
+860
+00:35:26,679 --> 00:35:29,750
+Typically it's like a bunch of really simplistic mistakes,
+
+861
+00:35:30,780 --> 00:35:33,629
+you know, any one of which really probably should not have been made.
+
+862
+00:35:34,159 --> 00:35:35,510
+Yeah, but look man, I mean,
+
+863
+00:35:36,010 --> 00:35:37,919
+what you described is not wrong.
+
+864
+00:35:38,479 --> 00:35:41,100
+What kind of advice are we giving people that they can use?
+
+865
+00:35:41,590 --> 00:35:43,550
+Like my favorite example is
+
+866
+00:35:43,810 --> 00:35:47,290
+people will say, you know, don't, don't click on links, pay attention to links,
+
+867
+00:35:47,300 --> 00:35:47,820
+you click on it.
+
+868
+00:35:48,110 --> 00:35:49,290
+That's the dumbest
+
+869
+00:35:49,669 --> 00:35:50,510
+advice in
+
+870
+00:35:50,620 --> 00:35:52,510
+-- the world. And
+-- how do you implement it?
+
+871
+00:35:52,550 --> 00:35:56,540
+Because for example, every single link on Twitter is t.co or whatever,
+
+872
+00:35:56,550 --> 00:35:58,010
+some some URL shortener.
+
+873
+00:35:58,879 --> 00:35:59,939
+So I don't know where it goes.
+
+874
+00:36:00,399 --> 00:36:01,540
+I can't until I,
+
+875
+00:36:02,929 --> 00:36:03,669
+-- you
+-- know what
+
+876
+00:36:04,320 --> 00:36:07,739
+this is, this is just pushing responsibility onto someone else.
+
+877
+00:36:07,750 --> 00:36:11,739
+So you can say, oh no, I'm the security guy. I told them pay attention to the
+
+878
+00:36:11,840 --> 00:36:13,370
+link you click on, right? Not my fault.
+
+879
+00:36:13,830 --> 00:36:14,429
+And it's like
+
+880
+00:36:14,949 --> 00:36:18,030
+no like you failed in countless other ways.
+
+881
+00:36:18,040 --> 00:36:21,810
+And now you're blaming the user for, for not listening to your terrible advice.
+
+882
+00:36:21,939 --> 00:36:25,610
+Well, I mean, this goes back to the classic, you know, usability versus security
+
+883
+00:36:26,060 --> 00:36:29,010
+and I think where security got it wrong is that we sort of made
+
+884
+00:36:29,520 --> 00:36:33,620
+security is so hard in most cases that you had to give up usability and
+
+885
+00:36:33,790 --> 00:36:35,780
+the reality is you can have
+
+886
+00:36:35,899 --> 00:36:40,179
+-- no good security without having to give up usability.
+-- We, we thought
+
+887
+00:36:40,699 --> 00:36:41,889
+that was an option
+
+888
+00:36:42,060 --> 00:36:43,540
+and the reality is
+
+889
+00:36:44,060 --> 00:36:48,760
+usability wins every time it's not security or usability, it's usability.
+
+890
+00:36:49,250 --> 00:36:50,510
+And that's what I mean is you have to
+
+891
+00:36:50,520 --> 00:36:52,760
+have security that does not impact the usability.
+
+892
+00:36:52,770 --> 00:36:55,830
+And as it turns out there is actually a lot of good
+
+893
+00:36:55,840 --> 00:36:59,479
+security stuff you can do that really doesn't impact usability that much.
+
+894
+00:37:00,250 --> 00:37:03,229
+You know, the problem is most of those things take
+
+895
+00:37:03,409 --> 00:37:06,350
+a lot more effort on the back end and a lot more cleverness,
+
+896
+00:37:06,820 --> 00:37:10,060
+you know, things like like a great example is Apple's Face ID, right?
+
+897
+00:37:10,100 --> 00:37:12,739
+That is not at all a simple thing to do,
+
+898
+00:37:12,979 --> 00:37:15,949
+right? That is a horrendously complex thing to build.
+
+899
+00:37:16,040 --> 00:37:17,590
+But once you've built it and it works,
+
+900
+00:37:17,739 --> 00:37:19,709
+all your users are like, yeah, I just,
+
+901
+00:37:20,469 --> 00:37:24,209
+well, basically I just hold my phone and then it magically says, yeah, that's you,
+
+902
+00:37:24,219 --> 00:37:25,090
+you can use me
+
+903
+00:37:25,419 --> 00:37:26,030
+and you know,
+
+904
+00:37:26,040 --> 00:37:27,989
+and there's been all these articles about people wearing hats and
+
+905
+00:37:28,000 --> 00:37:30,080
+scarves and makeup and trying to fool it and blah,
+
+906
+00:37:30,090 --> 00:37:30,610
+blah, blah,
+
+907
+00:37:31,290 --> 00:37:33,489
+you know, and it apparently works quite well.
+
+908
+00:37:34,550 --> 00:37:35,590
+And so I
+
+909
+00:37:36,050 --> 00:37:38,409
+think that's maybe part of the problem is traditionally, you know,
+
+910
+00:37:38,500 --> 00:37:40,969
+to build these like two factor authentication systems
+
+911
+00:37:40,979 --> 00:37:43,370
+used to be horrendously complicated to build,
+
+912
+00:37:44,100 --> 00:37:46,870
+right? So most people are like, well, you have user name and password. Good luck.
+
+913
+00:37:47,540 --> 00:37:48,810
+Yes. You know.
+
+914
+00:37:49,469 --> 00:37:53,610
+Um and, but now we have, you know, these frameworks, these, you know,
+
+915
+00:37:53,620 --> 00:37:57,750
+you can or you should be able to easily enable most things for single sign on
+
+916
+00:37:58,290 --> 00:38:01,229
+with whatever, you know, back end it is that you prefer active directory,
+
+917
+00:38:01,600 --> 00:38:03,580
+Kos LDA whatever, right?
+
+918
+00:38:04,719 --> 00:38:06,489
+But that basically means that your,
+
+919
+00:38:06,639 --> 00:38:10,040
+your ops team and your admin team and your security team are
+
+920
+00:38:10,050 --> 00:38:12,800
+gonna have to do some extra work to benefit the users,
+
+921
+00:38:13,639 --> 00:38:15,129
+right? And a lot of these people
+
+922
+00:38:15,600 --> 00:38:20,229
+uh well, I mean, I've, you know, not all it shops are good and caring about their use.
+
+923
+00:38:20,250 --> 00:38:22,229
+-- But again,
+-- we're gonna, I mean, we, we,
+
+924
+00:38:22,239 --> 00:38:25,679
+so II I think we're proving the point here is we've already
+
+925
+00:38:25,689 --> 00:38:30,370
+devolved into talking about solutions when we started on actionable advice.
+
+926
+00:38:30,709 --> 00:38:31,330
+But like
+
+927
+00:38:31,889 --> 00:38:36,449
+talking about a is a great example where look at, look at password advice.
+
+928
+00:38:36,719 --> 00:38:39,989
+Oh, use it, use a strong password, change your password all the time.
+
+929
+00:38:40,000 --> 00:38:40,189
+And,
+
+930
+00:38:40,199 --> 00:38:42,429
+and we think we have all this stuff and the reality is
+
+931
+00:38:42,439 --> 00:38:45,510
+it didn't work and we weren't telling people anything useful and,
+
+932
+00:38:46,250 --> 00:38:47,909
+and there's people still telling this to him,
+
+933
+00:38:48,070 --> 00:38:48,429
+right?
+
+934
+00:38:48,560 --> 00:38:51,489
+-- It's,
+-- well, I, one of the biggest problems I have is
+
+935
+00:38:51,669 --> 00:38:56,580
+all the people that want autocomplete equals off on password fields in web apps.
+
+936
+00:38:56,590 --> 00:38:58,459
+And I'm like, no, that's wrong now because
+
+937
+00:38:59,129 --> 00:39:01,840
+you need to let people use password managers
+
+938
+00:39:02,379 --> 00:39:04,320
+and they're like, oh, what about brute force attacks? And I'm like, yeah.
+
+939
+00:39:04,330 --> 00:39:09,709
+-- No, that doesn't.
+-- What? Right. It's, no, I, yes, I agree completely. And again,
+
+940
+00:39:10,810 --> 00:39:15,149
+this is one of those places we're not giving out good advice. Right.
+
+941
+00:39:15,300 --> 00:39:18,800
+It's, it's very difficult for people to grasp what's going on. And I mean, like,
+
+942
+00:39:19,010 --> 00:39:20,840
+or, or I'm gonna pick on training.
+
+943
+00:39:21,120 --> 00:39:21,699
+I, I
+
+944
+00:39:21,969 --> 00:39:24,280
+hear people keep saying, oh, you know, train your staff.
+
+945
+00:39:24,290 --> 00:39:28,000
+Just, just if, if, if you have, if you have security training it'll,
+
+946
+00:39:28,010 --> 00:39:30,020
+-- it'll reduce your number of incidents and I
+-- keep
+
+947
+00:39:30,399 --> 00:39:30,419
+the
+
+948
+00:39:31,159 --> 00:39:31,590
+training.
+
+949
+00:39:31,840 --> 00:39:33,120
+Yeah, like, like,
+
+950
+00:39:33,459 --> 00:39:34,620
+right. And I keep thinking,
+
+951
+00:39:35,610 --> 00:39:36,790
+where is the data
+
+952
+00:39:36,899 --> 00:39:37,939
+that shows this work?
+
+953
+00:39:37,949 --> 00:39:41,110
+And of course, people never show me data when I ask them for it because I,
+
+954
+00:39:41,120 --> 00:39:44,169
+I suspect it doesn't exist and I'm pretty sure this training doesn't work
+
+955
+00:39:44,659 --> 00:39:47,899
+-- and, and,
+-- well, you'd have to do, like, a double blind study. You'd have to properly,
+
+956
+00:39:48,189 --> 00:39:50,010
+you know, you'd have to spend some good money on this and,
+
+957
+00:39:50,360 --> 00:39:51,310
+and more to the point, like,
+
+958
+00:39:51,320 --> 00:39:52,739
+you've always read those things where people send
+
+959
+00:39:52,750 --> 00:39:54,669
+out fishing links in emails and it's like
+
+960
+00:39:55,489 --> 00:39:58,110
+it, well, from every single article I've ever read about it,
+
+961
+00:39:58,120 --> 00:40:00,699
+it seems like the vast majority end up clicking on it.
+
+962
+00:40:01,060 --> 00:40:03,209
+Yeah. Even the security people do Right.
+
+963
+00:40:03,429 --> 00:40:05,270
+Well, not only that I remember
+
+964
+00:40:05,399 --> 00:40:08,260
+taking, like, the, the corporate ethics training every year
+
+965
+00:40:08,689 --> 00:40:09,270
+and,
+
+966
+00:40:09,439 --> 00:40:10,379
+and there were,
+
+967
+00:40:10,389 --> 00:40:13,989
+there were a bunch of people like the game was who could get through it the fastest.
+
+968
+00:40:14,000 --> 00:40:14,399
+Right.
+
+969
+00:40:14,409 --> 00:40:14,830
+Like,
+
+970
+00:40:14,840 --> 00:40:17,340
+we're not learning anything from that training and if
+
+971
+00:40:17,350 --> 00:40:19,750
+you have security training that's what's going to happen.
+
+972
+00:40:20,489 --> 00:40:23,360
+No one's actually going to learn anything from it and in some cases
+
+973
+00:40:23,370 --> 00:40:26,510
+it might make it worse because today they're probably giving out advice like,
+
+974
+00:40:26,520 --> 00:40:28,590
+oh, use a strong password, you know,
+
+975
+00:40:28,719 --> 00:40:33,000
+and change it every seven days and no, just don't, don't do any of that stuff.
+
+976
+00:40:33,330 --> 00:40:33,909
+Yeah, I mean,
+
+977
+00:40:33,919 --> 00:40:37,639
+a part of the problem is it's to design experiments to properly test this and
+
+978
+00:40:37,649 --> 00:40:40,770
+then execute those experiments would be extremely costly
+
+979
+00:40:40,780 --> 00:40:41,810
+and who's going to pay for that?
+
+980
+00:40:42,060 --> 00:40:43,989
+Uh Well, let's turn it on its head
+
+981
+00:40:44,199 --> 00:40:44,989
+and say,
+
+982
+00:40:45,479 --> 00:40:47,260
+prove the training works
+
+983
+00:40:47,959 --> 00:40:50,659
+versus proving it doesn't because proving a negative is,
+
+984
+00:40:50,669 --> 00:40:52,250
+is obviously like impossible.
+
+985
+00:40:52,370 --> 00:40:52,840
+True.
+
+986
+00:40:53,310 --> 00:40:54,659
+Part of the challenge there though is you,
+
+987
+00:40:54,669 --> 00:40:57,860
+you're going against what is considered the established.
+
+988
+00:40:58,300 --> 00:41:01,919
+Like, of course it works. We know this, these rocks keep tigers away
+
+989
+00:41:02,120 --> 00:41:04,540
+-- because there's no tigers around here.
+-- That's exactly right.
+
+990
+00:41:04,550 --> 00:41:07,610
+And, and this is where we come back to our advice. Then of
+
+991
+00:41:08,389 --> 00:41:12,090
+we, you know, we'll just tell people, oh, don't click on links, you know, good job.
+
+992
+00:41:12,100 --> 00:41:13,649
+I, I did my work today
+
+993
+00:41:13,820 --> 00:41:15,629
+and it's, it's madness, man.
+
+994
+00:41:15,979 --> 00:41:17,080
+Well, like, you know,
+
+995
+00:41:17,090 --> 00:41:18,689
+the biggest thing I see is I want my web
+
+996
+00:41:18,699 --> 00:41:21,090
+browser just to be able to handle like there's no
+
+997
+00:41:21,860 --> 00:41:25,090
+content I loaded my web browser in a normal way.
+
+998
+00:41:25,100 --> 00:41:28,389
+That is to say clicking a link that should result in my computer being on,
+
+999
+00:41:28,989 --> 00:41:29,610
+I think
+
+1000
+00:41:29,830 --> 00:41:32,449
+just flat out and same with email that should just not happen.
+
+1001
+00:41:32,459 --> 00:41:34,040
+Those are reasonable requirements.
+
+1002
+00:41:34,290 --> 00:41:34,750
+Yeah.
+
+1003
+00:41:34,969 --> 00:41:35,520
+You know,
+
+1004
+00:41:36,000 --> 00:41:36,639
+um
+
+1005
+00:41:37,149 --> 00:41:39,550
+because there's no way I can control my web browser
+
+1006
+00:41:39,560 --> 00:41:41,860
+encounters online because I have to go to websites,
+
+1007
+00:41:41,870 --> 00:41:42,719
+I don't control,
+
+1008
+00:41:42,860 --> 00:41:46,790
+you know, I go to cnn.com now and I'm noticing they have those sponsored content,
+
+1009
+00:41:47,129 --> 00:41:49,120
+weird stuff at the bottom for like
+
+1010
+00:41:49,860 --> 00:41:53,250
+really dodgy looking, fraudulent type stuff,
+
+1011
+00:41:53,530 --> 00:41:55,370
+you know, like diet, like literally
+
+1012
+00:41:55,540 --> 00:41:59,189
+like this diet you'll never believe. Right? And it's like this is cnn.com.
+
+1013
+00:41:59,199 --> 00:42:00,820
+This is supposed to be a reputable news site.
+
+1014
+00:42:01,540 --> 00:42:04,439
+I hear it's not fake news now, Kurt. Right? Like, yeah,
+
+1015
+00:42:05,139 --> 00:42:08,120
+yeah, sad, fake news, very dying media.
+
+1016
+00:42:08,330 --> 00:42:09,489
+But I mean, that's the thing, right? Is
+
+1017
+00:42:09,629 --> 00:42:11,929
+all these websites that I'm, you know, are
+
+1018
+00:42:12,080 --> 00:42:14,790
+supposed to be relatively trustworthy organizations.
+
+1019
+00:42:14,800 --> 00:42:17,000
+They're like loading content from. Lord knows where.
+
+1020
+00:42:17,770 --> 00:42:20,159
+Uh Yeah, because they want to sell their ads
+
+1021
+00:42:20,340 --> 00:42:21,179
+and, and you know,
+
+1022
+00:42:21,189 --> 00:42:25,110
+this is actually one of the places that I think the the sites that are now like Mining
+
+1023
+00:42:25,330 --> 00:42:25,800
+Monaro
+
+1024
+00:42:26,010 --> 00:42:27,989
+with my, with my web browser.
+
+1025
+00:42:28,510 --> 00:42:31,639
+I would rather every website on the planet Mine
+
+1026
+00:42:31,949 --> 00:42:36,719
+Monaro with, with my browser than showing me an ad like any day.
+
+1027
+00:42:36,729 --> 00:42:40,389
+In fact, if you told me you were doing it, I would even hang out on your site for, like,
+
+1028
+00:42:40,399 --> 00:42:41,479
+five minutes.
+
+1029
+00:42:43,750 --> 00:42:46,189
+Well, we'll talk about that. We're going to be doing a Bitcoin episode.
+
+1030
+00:42:46,199 --> 00:42:47,989
+But, and we'll talk about that. But, yeah, it's,
+
+1031
+00:42:48,169 --> 00:42:49,500
+I, I don't know, it's,
+
+1032
+00:42:49,699 --> 00:42:54,070
+I, I do know a lot of the traditional business models are definitely not working.
+
+1033
+00:42:54,080 --> 00:42:56,649
+We know they're not working. We just don't have any idea what to replace.
+
+1034
+00:42:56,699 --> 00:42:58,919
+It sounds like security, right? Like it's,
+
+1035
+00:42:59,110 --> 00:43:01,550
+it's, it's not working. We don't know what to do and, and
+
+1036
+00:43:01,820 --> 00:43:02,139
+yeah,
+
+1037
+00:43:03,090 --> 00:43:06,629
+well, I think, you know, I, I see a lot of stuff where we could, we could and do,
+
+1038
+00:43:06,639 --> 00:43:07,070
+do better.
+
+1039
+00:43:07,080 --> 00:43:07,659
+So, for example,
+
+1040
+00:43:07,669 --> 00:43:10,239
+making the assumption that people have smartphones all of a sudden, you know,
+
+1041
+00:43:10,399 --> 00:43:11,219
+you can push
+
+1042
+00:43:11,780 --> 00:43:15,729
+two factor authentication via applications or S MS or,
+
+1043
+00:43:16,030 --> 00:43:18,419
+you know, like the, the new Google one where it, it, well,
+
+1044
+00:43:18,429 --> 00:43:20,219
+same like the Apple one where it basically sends
+
+1045
+00:43:20,229 --> 00:43:21,629
+you a message and the little app says,
+
+1046
+00:43:21,639 --> 00:43:23,659
+you know, hey, somebody's trying to access your account from like
+
+1047
+00:43:23,820 --> 00:43:25,580
+Uzbekistan. Is that cool?
+
+1048
+00:43:26,000 --> 00:43:26,919
+Like, is it you,
+
+1049
+00:43:27,120 --> 00:43:28,860
+and if you're ok with this, then, you know,
+
+1050
+00:43:28,870 --> 00:43:31,719
+we're going to display a six digit number that we're going to force you to poke in,
+
+1051
+00:43:32,370 --> 00:43:34,229
+um, to make sure that you really, you know,
+
+1052
+00:43:34,239 --> 00:43:38,360
+hopefully don't hose this up and like Google, you know, I, they just opened that, uh,
+
+1053
+00:43:38,370 --> 00:43:40,979
+program now for high security for, you know,
+
+1054
+00:43:40,989 --> 00:43:43,479
+at risk accounts of like human rights organizers and whatnot,
+
+1055
+00:43:43,489 --> 00:43:47,669
+where literally they do have state level actors trying to attack them.
+
+1056
+00:43:48,219 --> 00:43:50,469
+And Google's like, yeah, you know, we're, we're gonna protect you.
+
+1057
+00:43:50,479 --> 00:43:52,570
+It's gonna be kind of annoying because for example,
+
+1058
+00:43:52,620 --> 00:43:56,110
+we will not let non Google apps access your Google account.
+
+1059
+00:43:56,120 --> 00:43:57,820
+You're just gonna have to live without that. Right.
+
+1060
+00:43:57,830 --> 00:43:59,469
+And I mean, I'm assuming that right there
+
+1061
+00:43:59,629 --> 00:44:01,870
+cuts out so many attacks.
+
+1062
+00:44:02,219 --> 00:44:02,600
+Yeah.
+
+1063
+00:44:03,129 --> 00:44:06,790
+Yeah. No, I get it. I get it and, and I guess this is
+
+1064
+00:44:08,260 --> 00:44:10,409
+going back to the beginning. We
+
+1065
+00:44:10,600 --> 00:44:12,360
+we'll tie it all up with this
+
+1066
+00:44:12,489 --> 00:44:16,080
+is there are certain people in certain situations
+
+1067
+00:44:16,500 --> 00:44:18,399
+that necessitate added security,
+
+1068
+00:44:18,620 --> 00:44:21,139
+but for the vast majority of people they don't need it,
+
+1069
+00:44:21,360 --> 00:44:23,620
+right? Like, like let's face it, you and I
+
+1070
+00:44:24,260 --> 00:44:27,679
+don't really worry about assassins breaking into our homes, right.
+
+1071
+00:44:27,870 --> 00:44:31,110
+That's, that's not really on my list of things that keep me up at night
+
+1072
+00:44:31,429 --> 00:44:34,800
+and, but there are people that it is on their list, right?
+
+1073
+00:44:35,149 --> 00:44:35,909
+And, and
+
+1074
+00:44:36,510 --> 00:44:39,360
+it's the same deal with like Google and Apt
+
+1075
+00:44:39,860 --> 00:44:44,969
+style attacks is there are users that could necessitate the added protections
+
+1076
+00:44:45,899 --> 00:44:48,780
+and it's awesome that they're doing that because again, this is like,
+
+1077
+00:44:49,000 --> 00:44:52,300
+oh, you know, hey, Mr President, don't click on links on Twitter, you know.
+
+1078
+00:44:52,310 --> 00:44:56,040
+No, that's, that's bad advice. Just don't, don't give that to them.
+
+1079
+00:44:56,050 --> 00:44:58,850
+That's someone you just protect in an extra special way
+
+1080
+00:44:59,790 --> 00:45:00,659
+and So,
+
+1081
+00:45:01,169 --> 00:45:03,739
+yeah. II, I think it's all tied together is
+
+1082
+00:45:04,090 --> 00:45:06,530
+there, there's always varying levels of security
+
+1083
+00:45:06,669 --> 00:45:08,340
+and there's varying levels of advice.
+
+1084
+00:45:08,350 --> 00:45:10,590
+And I think part of the trick is understanding, you know,
+
+1085
+00:45:10,600 --> 00:45:13,889
+what is my actual threat model and where do I fit in?
+
+1086
+00:45:13,899 --> 00:45:17,649
+Because especially security people, we love to put our tinfoil hats on and,
+
+1087
+00:45:17,659 --> 00:45:19,489
+and make up things that are never going to happen,
+
+1088
+00:45:19,919 --> 00:45:22,850
+which means we're not focusing on the things that could happen,
+
+1089
+00:45:22,860 --> 00:45:24,649
+which is where we should be paying attention.
+
+1090
+00:45:24,899 --> 00:45:25,310
+Right.
+
+1091
+00:45:26,500 --> 00:45:27,050
+Sweet.
+
+1092
+00:45:28,290 --> 00:45:29,969
+Yeah. No, I think, I think the
+
+1093
+00:45:30,500 --> 00:45:32,899
+security industry is starting to mature a bit in that.
+
+1094
+00:45:32,909 --> 00:45:33,899
+Like, I know my,
+
+1095
+00:45:33,909 --> 00:45:37,340
+my sort of view of security now is more wrapped around
+
+1096
+00:45:37,350 --> 00:45:40,790
+sort of quality of life rather than this sort of arbitrary,
+
+1097
+00:45:40,800 --> 00:45:43,409
+you know, like the, the traditional risk slash
+
+1098
+00:45:43,620 --> 00:45:47,149
+impact slash, you know, monetary value of such,
+
+1099
+00:45:47,550 --> 00:45:48,770
+you know, there's, there's,
+
+1100
+00:45:48,780 --> 00:45:51,520
+we need to start thinking about quality of life because for example,
+
+1101
+00:45:51,530 --> 00:45:53,419
+if somebody breaks a whole pile of door locks,
+
+1102
+00:45:53,610 --> 00:45:55,320
+you know, I'm less concerned about denial of service,
+
+1103
+00:45:55,330 --> 00:45:56,409
+I'm more concerned about a whole bunch of
+
+1104
+00:45:56,419 --> 00:45:58,659
+people standing outside in the cold in winter
+
+1105
+00:45:58,850 --> 00:46:00,810
+and, and from the security perspective,
+
+1106
+00:46:01,110 --> 00:46:03,610
+uh that's not how he would look at it traditionally.
+
+1107
+00:46:04,090 --> 00:46:04,370
+So,
+
+1108
+00:46:04,719 --> 00:46:07,729
+no, I agree. I agree, man. I, I think that might be the,
+
+1109
+00:46:08,209 --> 00:46:11,570
+the happy thought to, to end this one is,
+
+1110
+00:46:11,939 --> 00:46:14,919
+you know, making sure we keep things in context.
+
+1111
+00:46:15,090 --> 00:46:16,719
+I, I think you go a long, long way
+
+1112
+00:46:16,850 --> 00:46:18,760
+and, and we fail at that a lot. So
+
+1113
+00:46:19,479 --> 00:46:21,040
+thank you folks for listening.
+
+1114
+00:46:21,050 --> 00:46:24,179
+If you want the show notes, you can go to open source security podcast.com.
+
+1115
+00:46:24,189 --> 00:46:27,300
+Hit us up on Twitter with the Pound Os S podcast. Hashtag
+
+1116
+00:46:27,729 --> 00:46:31,080
+We have a Facebook group. You're welcome to join and, and chat along
+
+1117
+00:46:31,270 --> 00:46:33,219
+and yeah, I guess if nothing else, Kurt,
+
+1118
+00:46:33,229 --> 00:46:35,030
+you have a great rest of the day and
+
+1119
+00:46:35,040 --> 00:46:37,739
+I guess any parting actionable advice for the audience,
+
+1120
+00:46:37,919 --> 00:46:38,929
+uh, don't stare at the side.
+
+1121
+00:46:39,270 --> 00:46:39,860
+That is,
+
+1122
+00:46:40,550 --> 00:46:43,229
+that is very, very good advice.
+
+1123
+00:46:47,850 --> 00:46:47,909
+The.

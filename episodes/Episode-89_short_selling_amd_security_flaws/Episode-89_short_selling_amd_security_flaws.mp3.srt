@@ -1,0 +1,3279 @@
+0
+00:00:05,269 --> 00:00:09,430
+Hello and welcome to episode 89 of the open source security podcast with myself,
+
+1
+00:00:09,439 --> 00:00:12,890
+Kurt Siefried and my partner in Thought Crime and definitely not financial crime.
+
+2
+00:00:12,899 --> 00:00:13,729
+Josh Bresser,
+
+3
+00:00:14,100 --> 00:00:16,629
+you say that like we're in some sort of collusion
+
+4
+00:00:17,100 --> 00:00:17,459
+def
+
+5
+00:00:17,620 --> 00:00:22,350
+definitely not financial crime. My financial crime is the best, right? Like
+
+6
+00:00:22,489 --> 00:00:23,010
+so,
+
+7
+00:00:23,270 --> 00:00:26,569
+although these days, it's probably not as funny to joke about
+
+8
+00:00:26,739 --> 00:00:27,559
+just because
+
+9
+00:00:28,620 --> 00:00:31,649
+man, this whole A MD debacle has been.
+
+10
+00:00:32,229 --> 00:00:34,290
+It is a story to say the least.
+
+11
+00:00:34,549 --> 00:00:35,409
+-- I like
+-- it.
+
+12
+00:00:35,869 --> 00:00:36,939
+I'm amused.
+
+13
+00:00:37,060 --> 00:00:39,200
+I like it because like most stories, there's
+
+14
+00:00:39,459 --> 00:00:41,619
+all these kernels of truth that
+
+15
+00:00:41,819 --> 00:00:45,290
+you can look at and it either is a giant mess or you can look at it.
+
+16
+00:00:45,299 --> 00:00:47,049
+And personally I'm going to take devil's advocate.
+
+17
+00:00:47,060 --> 00:00:48,610
+I think this is actually a really good thing.
+
+18
+00:00:48,880 --> 00:00:50,450
+I think the good guys won.
+
+19
+00:00:50,709 --> 00:00:52,849
+That's the way I'm looking at this, right?
+
+20
+00:00:53,090 --> 00:00:55,130
+The bad guys lost the good guys won.
+
+21
+00:00:55,830 --> 00:00:57,000
+I'm not sure I would agree.
+
+22
+00:00:57,279 --> 00:01:00,380
+Uh No, I, well, so let me, let me
+
+23
+00:01:00,500 --> 00:01:01,959
+may maybe, you know, something I don't.
+
+24
+00:01:01,970 --> 00:01:05,620
+And so fundamentally what happened was there was a research group
+
+25
+00:01:06,160 --> 00:01:10,620
+-- that published some flaws in a MD processors and and there can I
+-- interrupt you?
+
+26
+00:01:10,769 --> 00:01:13,449
+I'm not sure I would call them a research group because number one,
+
+27
+00:01:13,459 --> 00:01:14,830
+they only existed for a few months.
+
+28
+00:01:14,839 --> 00:01:16,180
+And number two, they,
+
+29
+00:01:16,849 --> 00:01:20,730
+they really do look and smell and quack like a, a financial, like
+
+30
+00:01:22,370 --> 00:01:22,830
+we'll get
+
+31
+00:01:23,459 --> 00:01:23,500
+to,
+
+32
+00:01:23,889 --> 00:01:26,540
+let's call them a research group for the moment.
+
+33
+00:01:27,389 --> 00:01:31,620
+They published some, a MD flaws that we say are bad but not terrible.
+
+34
+00:01:31,959 --> 00:01:32,669
+And at
+
+35
+00:01:32,809 --> 00:01:33,269
+the,
+
+36
+00:01:34,370 --> 00:01:37,050
+and at the same time, coincidentally,
+
+37
+00:01:37,110 --> 00:01:40,220
+someone had done some major shorting of a MD stock.
+
+38
+00:01:40,959 --> 00:01:45,379
+And the beautiful part is the flaws that were released
+
+39
+00:01:45,389 --> 00:01:49,309
+did nothing to the share price of a MD stock.
+
+40
+00:01:49,849 --> 00:01:54,699
+So the, the attempt to short this was we'll say an abject failure
+
+41
+00:01:55,050 --> 00:01:55,370
+and,
+
+42
+00:01:55,379 --> 00:01:57,029
+and I guess it's also worth noting that this
+
+43
+00:01:57,040 --> 00:02:00,190
+was done to what Saint Jude maybe a year ago
+
+44
+00:02:00,319 --> 00:02:04,169
+and, but it was successful then because it was medical device shorting
+
+45
+00:02:04,500 --> 00:02:05,970
+and, and that one did work
+
+46
+00:02:06,110 --> 00:02:06,309
+and
+
+47
+00:02:06,510 --> 00:02:06,849
+the flaw
+
+48
+00:02:07,750 --> 00:02:08,589
+-- it could
+-- kill people
+
+49
+00:02:09,258 --> 00:02:10,710
+well and more to the point though,
+
+50
+00:02:10,720 --> 00:02:13,669
+not so much that the flaws are more serious than they could kill people.
+
+51
+00:02:13,679 --> 00:02:16,660
+And heaven forbid that that actually happens.
+
+52
+00:02:16,669 --> 00:02:17,949
+And please forgive me for saying this,
+
+53
+00:02:18,080 --> 00:02:20,520
+but more to the point that those flaws would have a
+
+54
+00:02:20,529 --> 00:02:22,949
+financial impact on Saint Jude in the form of lawsuits.
+
+55
+00:02:24,119 --> 00:02:27,440
+That's really what mattered there. That's why their stock price tanked.
+
+56
+00:02:27,720 --> 00:02:28,100
+Right.
+
+57
+00:02:28,309 --> 00:02:29,020
+Let's face it.
+
+58
+00:02:30,279 --> 00:02:33,220
+The majority of these hardware flaws that we're dealing with in the computer world,
+
+59
+00:02:33,229 --> 00:02:35,169
+you have a very hard time suing these large
+
+60
+00:02:35,179 --> 00:02:37,009
+companies and proving damages and actually getting in the
+
+61
+00:02:37,229 --> 00:02:37,580
+car with them,
+
+62
+00:02:38,929 --> 00:02:40,419
+right? With medical devices,
+
+63
+00:02:40,570 --> 00:02:44,690
+those lawsuits become very expensive, very rapidly. So even if you don't lose them,
+
+64
+00:02:45,089 --> 00:02:48,960
+you just still lose because trying to get FDA approval on devices when they're,
+
+65
+00:02:48,970 --> 00:02:51,750
+you know, involved in a lawsuit and stuff that, that can basically kill a company.
+
+66
+00:02:51,759 --> 00:02:52,449
+-- Right.
+-- So, so
+
+67
+00:02:52,559 --> 00:02:52,779
+anyway,
+
+68
+00:02:53,210 --> 00:02:54,520
+do you think the good guys lost?
+
+69
+00:02:54,529 --> 00:02:58,149
+I view this as the, the bad guys tried to short the stock, it failed
+
+70
+00:02:58,389 --> 00:03:00,479
+and I have a suspicion they just lost a bunch of money.
+
+71
+00:03:02,240 --> 00:03:03,940
+That, that, that makes me happy.
+
+72
+00:03:04,169 --> 00:03:05,419
+That would be the case. Um
+
+73
+00:03:05,710 --> 00:03:06,630
+So I
+
+74
+00:03:07,220 --> 00:03:10,539
+was doing some research because at first I thought these guys were bad guys too.
+
+75
+00:03:10,850 --> 00:03:11,779
+But you know what,
+
+76
+00:03:12,949 --> 00:03:12,970
+I
+
+77
+00:03:13,160 --> 00:03:17,520
+think they're not great guys. But if you put it in the lens of activist investors,
+
+78
+00:03:18,250 --> 00:03:20,589
+which is a well known, well established thing,
+
+79
+00:03:20,600 --> 00:03:23,270
+so much so that there's a nice link on the SEC page.
+
+80
+00:03:23,710 --> 00:03:24,389
+Um
+
+81
+00:03:26,270 --> 00:03:27,000
+uh
+
+82
+00:03:27,470 --> 00:03:29,639
+So essentially the concept is here is how
+
+83
+00:03:29,649 --> 00:03:31,789
+do we hold large companies accountable nowadays?
+
+84
+00:03:33,639 --> 00:03:36,960
+-- I'm asking you, how do we hold large companies accountable now
+-- in my PC,
+
+85
+00:03:37,369 --> 00:03:38,130
+like,
+
+86
+00:03:38,380 --> 00:03:40,130
+fundamentally we don't,
+
+87
+00:03:40,389 --> 00:03:41,929
+I mean, that's just the reality of it.
+
+88
+00:03:43,179 --> 00:03:45,509
+Yeah. And, and in past we had
+
+89
+00:03:45,610 --> 00:03:47,750
+journalism and investigative reporting,
+
+90
+00:03:48,509 --> 00:03:50,529
+which is very expensive.
+
+91
+00:03:50,539 --> 00:03:53,740
+I mean, you know, the cost to do one article can be hundreds of thousands of dollars,
+
+92
+00:03:53,750 --> 00:03:56,610
+if you're paying a staff of a few people to work on it for six months, you know,
+
+93
+00:03:56,619 --> 00:03:59,289
+and all you get out of it is like 5000 words of dense
+
+94
+00:03:59,509 --> 00:04:00,649
+text that, you know,
+
+95
+00:04:00,820 --> 00:04:01,929
+10 people care about.
+
+96
+00:04:02,190 --> 00:04:02,690
+Right?
+
+97
+00:04:02,850 --> 00:04:03,210
+And,
+
+98
+00:04:03,220 --> 00:04:05,850
+and then someone's gonna point out and scream fake
+
+99
+00:04:05,860 --> 00:04:08,199
+news and then your story was for nothing.
+
+100
+00:04:08,949 --> 00:04:09,429
+Yeah.
+
+101
+00:04:09,740 --> 00:04:10,229
+Yeah.
+
+102
+00:04:10,630 --> 00:04:12,130
+So one thing that's happened
+
+103
+00:04:12,350 --> 00:04:14,690
+and, and this has been going on for decades is that
+
+104
+00:04:15,520 --> 00:04:18,019
+it seems that the e takes the position, but
+
+105
+00:04:18,880 --> 00:04:20,459
+we want to keep the market honest,
+
+106
+00:04:20,869 --> 00:04:23,459
+right? Because if the market's not honest, if the market's not fair,
+
+107
+00:04:23,779 --> 00:04:25,190
+uh the market won't work,
+
+108
+00:04:25,799 --> 00:04:28,220
+right? And that, that would be a significant problem.
+
+109
+00:04:28,839 --> 00:04:30,859
+So how do we keep the market honest and well, you know,
+
+110
+00:04:30,869 --> 00:04:33,690
+we could have investigative journalism and whistleblower laws
+
+111
+00:04:33,700 --> 00:04:34,959
+and things like that and that's good.
+
+112
+00:04:35,549 --> 00:04:36,739
+But more fundamentally
+
+113
+00:04:37,059 --> 00:04:39,049
+how do we economically
+
+114
+00:04:39,600 --> 00:04:42,809
+compensate or reward people for doing all this work?
+
+115
+00:04:43,160 --> 00:04:48,640
+And sort of one, an one answer is, is to essentially have activist investors,
+
+116
+00:04:49,000 --> 00:04:51,100
+which, you know, they invest in a company
+
+117
+00:04:51,470 --> 00:04:52,380
+and then they,
+
+118
+00:04:52,660 --> 00:04:53,660
+they take activity.
+
+119
+00:04:53,790 --> 00:04:56,959
+So in some cases, um activist investors have taken, you know,
+
+120
+00:04:56,970 --> 00:04:58,220
+large positions in a company
+
+121
+00:04:58,440 --> 00:05:02,540
+and then, you know, encouraged or even forced the company to go green, for example,
+
+122
+00:05:02,549 --> 00:05:03,730
+or to, you know, pull out of
+
+123
+00:05:03,850 --> 00:05:07,089
+really uh unsavory labor markets in like Southeast Asia, you know,
+
+124
+00:05:07,100 --> 00:05:09,220
+where you have like little Children making clothes or whatever.
+
+125
+00:05:09,750 --> 00:05:10,260
+Um,
+
+126
+00:05:11,070 --> 00:05:14,570
+and the flip side of this is too. Well, for example, if you
+
+127
+00:05:15,130 --> 00:05:17,329
+have caught a company doing something naughty,
+
+128
+00:05:18,450 --> 00:05:22,410
+how essentially do you make money from that knowledge legally?
+
+129
+00:05:22,640 --> 00:05:24,829
+Right. So not insider trading, let's be clear.
+
+130
+00:05:25,440 --> 00:05:27,510
+And one of the things you can do and that has
+
+131
+00:05:27,519 --> 00:05:30,440
+been done in the past is this short selling of a company
+
+132
+00:05:30,570 --> 00:05:32,630
+and then releasing the news. That is
+
+133
+00:05:33,070 --> 00:05:34,100
+hopefully true.
+
+134
+00:05:34,109 --> 00:05:37,869
+I mean, if it's not true, then we're into a whole other legal pile of worms.
+
+135
+00:05:38,040 --> 00:05:40,579
+-- And actually,
+-- if it's not true, it's illegal.
+
+136
+00:05:40,589 --> 00:05:43,619
+And I, I did some research because when, when this happened, I was like,
+
+137
+00:05:43,630 --> 00:05:44,649
+this can't be legal.
+
+138
+00:05:44,660 --> 00:05:47,339
+This has got to count as insider trading and it doesn't,
+
+139
+00:05:47,950 --> 00:05:51,630
+right. It's totally legal what these guys did with a MD. And
+
+140
+00:05:51,730 --> 00:05:53,910
+I understand what you're saying.
+
+141
+00:05:54,089 --> 00:05:55,269
+And I think,
+
+142
+00:05:55,459 --> 00:05:58,859
+-- well, and
+-- here's what I would say, I would say the market reacted correctly
+
+143
+00:05:58,980 --> 00:05:59,510
+because
+
+144
+00:05:59,709 --> 00:06:02,309
+although let me put it this way, if they had come to me,
+
+145
+00:06:02,320 --> 00:06:04,000
+if these guys had come to me in advance.
+
+146
+00:06:04,260 --> 00:06:09,040
+Uh And this is assuming my, my scope of CV coverage were to include a MD,
+
+147
+00:06:09,049 --> 00:06:10,760
+which it does not, I would send them to Miter.
+
+148
+00:06:10,769 --> 00:06:12,160
+But for the sake of argument,
+
+149
+00:06:12,170 --> 00:06:15,519
+let's say I was able to assign them or I was in the position to assign CV S yes or no.
+
+150
+00:06:15,529 --> 00:06:15,920
+For this,
+
+151
+00:06:16,549 --> 00:06:17,850
+my response would be,
+
+152
+00:06:18,149 --> 00:06:19,910
+these are kind of stupid flaws,
+
+153
+00:06:20,209 --> 00:06:22,809
+but they are technically security vulnerabilities, right?
+
+154
+00:06:22,820 --> 00:06:25,329
+These are trust boundary issues. Now, granted, you
+
+155
+00:06:25,450 --> 00:06:28,230
+already have to have a high level of trust and access to the system.
+
+156
+00:06:28,390 --> 00:06:31,730
+But fundamentally what they described are actually
+
+157
+00:06:31,739 --> 00:06:34,579
+valid security vulnerabilities with the proviso,
+
+158
+00:06:34,720 --> 00:06:37,970
+you need a really high level of access you need like, you know,
+
+159
+00:06:37,980 --> 00:06:41,380
+there's a whole bunch of, of pre existing conditions to exploit this
+
+160
+00:06:41,670 --> 00:06:42,730
+and essentially,
+
+161
+00:06:43,170 --> 00:06:47,790
+um it's not something that allows you to like gain access and to, you know, like
+
+162
+00:06:48,089 --> 00:06:49,609
+remotely take over a system.
+
+163
+00:06:49,619 --> 00:06:53,290
+It's more something that once you're in, you can then hide very effectively,
+
+164
+00:06:53,559 --> 00:06:55,220
+you know, which we don't want, right.
+
+165
+00:06:55,529 --> 00:06:55,950
+So
+
+166
+00:06:56,119 --> 00:06:57,929
+I would have basically what I'm
+
+167
+00:06:57,940 --> 00:07:00,559
+saying is these were legitimate security vulnerabilities
+
+168
+00:07:00,690 --> 00:07:02,750
+for the purposes of CV E counting.
+
+169
+00:07:02,940 --> 00:07:06,609
+They should get CV S unless there's some details missing where, you know,
+
+170
+00:07:06,619 --> 00:07:08,029
+this is just not exploitable.
+
+171
+00:07:08,630 --> 00:07:11,450
+And in that respect, I would say the market reacted correctly and that yes,
+
+172
+00:07:11,459 --> 00:07:12,880
+these are vulnerabilities and
+
+173
+00:07:13,089 --> 00:07:15,890
+no, they're really not going to impact am D's bottom line,
+
+174
+00:07:16,029 --> 00:07:18,290
+right? Nobody's going to really be able to sue
+
+175
+00:07:18,489 --> 00:07:19,470
+nobody.
+
+176
+00:07:20,029 --> 00:07:23,980
+I mean, will, will people be affected by this flaw potentially? Yes,
+
+177
+00:07:24,179 --> 00:07:27,970
+but it would only be part of a really specific targeted attack.
+
+178
+00:07:28,369 --> 00:07:28,570
+You know,
+
+179
+00:07:28,579 --> 00:07:32,010
+this is not some widespread like flash zero day drive
+
+180
+00:07:32,019 --> 00:07:34,670
+-- by web attack that takes over 10 million
+-- PC.
+
+181
+00:07:34,890 --> 00:07:38,769
+And the thing is you need to be route essentially to exploit these and
+
+182
+00:07:38,779 --> 00:07:42,329
+let's face it if your system has an attacker running around his route.
+
+183
+00:07:42,619 --> 00:07:42,959
+You've
+
+184
+00:07:43,100 --> 00:07:43,230
+got,
+
+185
+00:07:43,489 --> 00:07:44,640
+you've got some other problem.
+
+186
+00:07:44,679 --> 00:07:47,549
+The challenge is how do you get that hardware back to a known good state?
+
+187
+00:07:47,559 --> 00:07:49,589
+And with these attacks you may not be able to
+
+188
+00:07:50,010 --> 00:07:52,130
+see that. That's where these become a problem.
+
+189
+00:07:52,989 --> 00:07:54,190
+I agree. I agree.
+
+190
+00:07:54,519 --> 00:07:56,279
+Like, every time somebody gets rude on the system,
+
+191
+00:07:56,290 --> 00:07:57,660
+I don't have to throw the hardware away.
+
+192
+00:07:57,670 --> 00:07:58,489
+That would get
+
+193
+00:07:58,640 --> 00:07:59,459
+expensive
+
+194
+00:07:59,679 --> 00:08:00,579
+and troublesome.
+
+195
+00:08:00,750 --> 00:08:02,660
+That's why you just use the cloud.
+
+196
+00:08:02,859 --> 00:08:03,790
+Not my problem.
+
+197
+00:08:04,399 --> 00:08:05,339
+Yeah. Well, yeah, and
+
+198
+00:08:05,600 --> 00:08:09,170
+that's one of the reasons I do is it's someone else's problem. Right. You know.
+
+199
+00:08:09,230 --> 00:08:12,529
+But, uh, so in this case, I wouldn't say that the good guys won or lost.
+
+200
+00:08:12,540 --> 00:08:13,299
+I would say that,
+
+201
+00:08:14,269 --> 00:08:14,929
+um,
+
+202
+00:08:15,130 --> 00:08:18,410
+I, I would definitely say to some degree this is sort of, how do I put it?
+
+203
+00:08:18,420 --> 00:08:21,049
+I don't want to say unsavory because that's sort of a moral judgment almost.
+
+204
+00:08:21,089 --> 00:08:24,720
+This is not something I'm a huge fan of because I wish we had better ways
+
+205
+00:08:25,230 --> 00:08:29,609
+to express this information and to, you know, reward people for this information,
+
+206
+00:08:29,619 --> 00:08:30,850
+but the reality is we don't.
+
+207
+00:08:31,369 --> 00:08:33,489
+Right. I mean, let's face it. Journalism is dying.
+
+208
+00:08:33,739 --> 00:08:37,090
+I'm, I'm comfortable calling this unsavory.
+
+209
+00:08:37,330 --> 00:08:38,520
+I, I think
+
+210
+00:08:39,258 --> 00:08:41,888
+trying to short someone's stock
+
+211
+00:08:42,489 --> 00:08:42,828
+-- for
+-- stupid
+
+212
+00:08:43,207 --> 00:08:46,848
+question. Why didn't A MD document these flaws somewhere?
+
+213
+00:08:46,939 --> 00:08:48,448
+-- Saying, oh, by the way,
+-- if,
+
+214
+00:08:48,559 --> 00:08:50,448
+what do you mean, why didn't they document them
+
+215
+00:08:50,838 --> 00:08:51,749
+-- in their
+-- documentation?
+
+216
+00:08:51,758 --> 00:08:54,039
+They could have said, oh, by the way, if somebody gets rude, they can, like,
+
+217
+00:08:54,049 --> 00:08:54,848
+go monkey with the bio
+
+218
+00:08:54,979 --> 00:08:56,278
+-- in this way that makes it very hard
+-- to
+
+219
+00:08:57,109 --> 00:08:57,218
+know
+
+220
+00:08:57,328 --> 00:08:57,718
+about
+
+221
+00:08:58,179 --> 00:08:58,419
+prior
+
+222
+00:08:58,729 --> 00:08:59,729
+to this report.
+
+223
+00:09:01,809 --> 00:09:03,039
+-- I would say they should,
+-- I mean,
+
+224
+00:09:03,270 --> 00:09:03,309
+the
+
+225
+00:09:04,159 --> 00:09:09,020
+argument that yes, if, if an attacker breaks in, they can potentially
+
+226
+00:09:09,820 --> 00:09:11,580
+modify the bios or something like that.
+
+227
+00:09:11,590 --> 00:09:14,979
+I mean, in theory they shouldn't be able to, I, I have a suspicion.
+
+228
+00:09:14,989 --> 00:09:18,000
+A MD didn't know this was a plausible attack.
+
+229
+00:09:18,780 --> 00:09:21,950
+I mean, outside of the realm of crazy research. Right.
+
+230
+00:09:22,169 --> 00:09:23,229
+Um, I, you know,
+
+231
+00:09:23,239 --> 00:09:27,000
+part of me would say that's kind of as we're learning from specter and meltdown.
+
+232
+00:09:27,010 --> 00:09:27,020
+I,
+
+233
+00:09:27,030 --> 00:09:29,809
+I think it is maybe time for hardware vendors to do a
+
+234
+00:09:29,820 --> 00:09:32,640
+little bit more security than they have been doing in the past.
+
+235
+00:09:33,799 --> 00:09:34,929
+Um, I don't know if you saw,
+
+236
+00:09:34,940 --> 00:09:40,580
+but Microsoft has just offered a rather significant set of bounties for meltdown
+
+237
+00:09:40,840 --> 00:09:44,619
+or was it specter or both type related flaws in their, in their products?
+
+238
+00:09:44,909 --> 00:09:45,989
+Uh, like if you,
+
+239
+00:09:46,820 --> 00:09:49,200
+yeah, if you can show valid side channel attacks, I think the,
+
+240
+00:09:49,210 --> 00:09:51,500
+the maximum reward was like a quarter million or something.
+
+241
+00:09:51,510 --> 00:09:51,960
+Like it's,
+
+242
+00:09:52,429 --> 00:09:53,640
+it's a decent amount of money.
+
+243
+00:09:53,969 --> 00:09:54,960
+Well, I mean, they're,
+
+244
+00:09:54,969 --> 00:09:57,719
+they're already there for hyper V flaws also where
+
+245
+00:09:57,729 --> 00:10:00,150
+if you can break out of hyper V guests,
+
+246
+00:10:00,530 --> 00:10:03,200
+you can make a ton of cash.
+
+247
+00:10:03,380 --> 00:10:07,080
+But at the same time, like, let's face it, these are the kind of bugs
+
+248
+00:10:07,510 --> 00:10:08,750
+that are,
+
+249
+00:10:09,409 --> 00:10:13,090
+they're very, I mean, I I think even calling them very difficult is,
+
+250
+00:10:13,099 --> 00:10:16,570
+is drastically downplaying what's going on here.
+
+251
+00:10:16,580 --> 00:10:19,270
+I mean, the work that has to be done and the knowledge required
+
+252
+00:10:19,489 --> 00:10:21,630
+to figure this stuff out is crazy.
+
+253
+00:10:22,049 --> 00:10:24,510
+Well, it's not just that they're hard to exploit.
+
+254
+00:10:24,750 --> 00:10:25,440
+It's that
+
+255
+00:10:25,799 --> 00:10:28,859
+the, even if you do achieve exploitation,
+
+256
+00:10:29,559 --> 00:10:29,580
+the,
+
+257
+00:10:29,770 --> 00:10:33,289
+the information you're getting may or may not be terribly useful,
+
+258
+00:10:33,390 --> 00:10:33,619
+you know,
+
+259
+00:10:33,630 --> 00:10:35,640
+it's one thing to get remote code execution in a remote
+
+260
+00:10:35,650 --> 00:10:39,219
+server that's clearly easy to then leverage for something else.
+
+261
+00:10:39,229 --> 00:10:39,530
+But
+
+262
+00:10:39,859 --> 00:10:42,739
+yeah, some of these side channel attacks, you know, you have to,
+
+263
+00:10:43,150 --> 00:10:45,090
+you have to be on a system that's also processing
+
+264
+00:10:45,099 --> 00:10:47,140
+someone else's sensitive data and you have to know,
+
+265
+00:10:47,190 --> 00:10:48,549
+have some context for that data.
+
+266
+00:10:48,559 --> 00:10:48,919
+Like,
+
+267
+00:10:49,320 --> 00:10:51,340
+you know, if somebody gave me a pile of patient records,
+
+268
+00:10:51,349 --> 00:10:53,700
+it's not like I'm a bad guy and I don't know how to monetize that,
+
+269
+00:10:55,109 --> 00:10:59,289
+you know, I don't know what to do with somebody's uh cancer report or whatever,
+
+270
+00:10:59,299 --> 00:11:00,530
+like how to make money off that.
+
+271
+00:11:01,450 --> 00:11:01,960
+Um
+
+272
+00:11:02,719 --> 00:11:04,260
+So, yeah, no, I would say in this case,
+
+273
+00:11:04,270 --> 00:11:07,369
+I'm not sure the bad guys won or lost necessarily.
+
+274
+00:11:07,380 --> 00:11:09,140
+I think this was a valid
+
+275
+00:11:09,820 --> 00:11:12,710
+uh sort of investor activist activity.
+
+276
+00:11:12,840 --> 00:11:15,739
+Uh Again, not super awesome.
+
+277
+00:11:16,010 --> 00:11:18,219
+No, man. No, I'm gonna call no.
+
+278
+00:11:18,570 --> 00:11:24,500
+And here's my reasoning behind it is in the security world, there's kind of a, a set of
+
+279
+00:11:24,840 --> 00:11:26,880
+acceptable behavior we'll say,
+
+280
+00:11:26,960 --> 00:11:28,659
+can we qualify that as the information
+
+281
+00:11:28,669 --> 00:11:30,510
+security world because there's that overlap here.
+
+282
+00:11:30,750 --> 00:11:31,380
+Right.
+
+283
+00:11:31,669 --> 00:11:36,280
+Yes. Yes. We'll say kind of in the world of CV S. How does that sound?
+
+284
+00:11:37,169 --> 00:11:38,479
+There are certain,
+
+285
+00:11:38,789 --> 00:11:43,169
+I guess, expectations and behaviors that have become the norm
+
+286
+00:11:43,590 --> 00:11:49,750
+and telling a company giving them 24 hours to respond and then shorting their stock
+
+287
+00:11:50,039 --> 00:11:52,140
+that is in no way
+
+288
+00:11:52,469 --> 00:11:54,219
+or they shorted the stock in advance.
+
+289
+00:11:54,409 --> 00:11:56,479
+Well, ok. Right. But you, you, you get the point.
+
+290
+00:11:56,489 --> 00:11:59,299
+Well, ok, They were probably hoping to sell quickly, right. Like
+
+291
+00:11:59,530 --> 00:12:05,880
+that is not acceptable behavior. If someone did that to us, we would be livid
+
+292
+00:12:05,989 --> 00:12:08,210
+and we would probably go on our podcast
+
+293
+00:12:08,219 --> 00:12:11,369
+and complain incessantly about what they did.
+
+294
+00:12:11,630 --> 00:12:13,219
+Let me play devil's advocate.
+
+295
+00:12:13,869 --> 00:12:15,929
+Why is this behavior unacceptable?
+
+296
+00:12:16,890 --> 00:12:19,789
+Because let me just further playing devil's advocate.
+
+297
+00:12:20,369 --> 00:12:22,989
+If you'd given a MD 90 days to deal with it.
+
+298
+00:12:23,000 --> 00:12:25,469
+-- Could they have,
+-- I don't know the answer to that.
+
+299
+00:12:25,760 --> 00:12:26,619
+-- What
+-- about a year?
+
+300
+00:12:27,099 --> 00:12:28,020
+What about a week?
+
+301
+00:12:28,210 --> 00:12:28,880
+Look? Look?
+
+302
+00:12:28,890 --> 00:12:31,929
+I mean, we, well, we can agree that being that it's CPU hardware,
+
+303
+00:12:31,940 --> 00:12:34,190
+-- it's not like they can pivot on a diamond and release a patch
+-- to.
+
+304
+00:12:34,229 --> 00:12:35,469
+No, it's not about the patch.
+
+305
+00:12:35,479 --> 00:12:38,919
+Even though it's about just understanding what the heck is going on.
+
+306
+00:12:39,130 --> 00:12:40,070
+As a MD.
+
+307
+00:12:40,080 --> 00:12:42,919
+I would have simply replied that, yeah, these are technically true,
+
+308
+00:12:42,929 --> 00:12:44,659
+but here's why you don't need to worry about it.
+
+309
+00:12:44,669 --> 00:12:45,440
+But no,
+
+310
+00:12:45,609 --> 00:12:46,840
+-- you and
+-- we may or may not
+
+311
+00:12:48,049 --> 00:12:50,840
+make that determination in 24 hours though.
+
+312
+00:12:51,150 --> 00:12:54,520
+This is incredibly complicated stuff going on here
+
+313
+00:12:54,929 --> 00:12:58,090
+and, and I think it took even some of the smartest people,
+
+314
+00:12:58,099 --> 00:13:01,510
+I've paid attention to more than 24 hours to come up with
+
+315
+00:13:01,690 --> 00:13:04,700
+their stances on this, of not a huge deal.
+
+316
+00:13:05,260 --> 00:13:06,989
+And so I look, I,
+
+317
+00:13:07,760 --> 00:13:09,460
+if, if they would have told a MD
+
+318
+00:13:09,690 --> 00:13:12,219
+and said, we'll give you say 30 days even
+
+319
+00:13:12,460 --> 00:13:14,130
+and if a MD had done nothing
+
+320
+00:13:14,429 --> 00:13:16,849
+then great, right. Make a big deal
+
+321
+00:13:16,950 --> 00:13:18,159
+and, and do your thing.
+
+322
+00:13:18,469 --> 00:13:23,250
+But if you report something to an organization, I think there's a certain amount of
+
+323
+00:13:23,719 --> 00:13:26,890
+just reasonable time you need to give them
+
+324
+00:13:27,299 --> 00:13:31,080
+and if they're co-operative and they're interested in working with you,
+
+325
+00:13:31,239 --> 00:13:32,840
+that's the right way to do it.
+
+326
+00:13:32,989 --> 00:13:35,679
+What, what these people did I don't think is ok.
+
+327
+00:13:35,890 --> 00:13:37,500
+Well, see, part of the problem is
+
+328
+00:13:37,849 --> 00:13:40,559
+we're looking at this from the lens of information security.
+
+329
+00:13:41,179 --> 00:13:44,520
+But if you look at this from the lens of, you know, investment,
+
+330
+00:13:44,739 --> 00:13:45,039
+right?
+
+331
+00:13:45,049 --> 00:13:47,479
+I, I, I'm sorry, but as I understand the rules of investing,
+
+332
+00:13:47,489 --> 00:13:51,140
+if it's not blatantly illegal, you and you can make money doing it, you do it.
+
+333
+00:13:52,320 --> 00:13:54,210
+And that's the accepted norm over there.
+
+334
+00:13:54,750 --> 00:13:56,750
+And realistically, if you look at the, um,
+
+335
+00:13:57,109 --> 00:14:01,080
+what was interesting to me over the CTS? Was it, is there called CTS Labs?
+
+336
+00:14:02,090 --> 00:14:04,289
+Right. I think that was the name of the, uh,
+
+337
+00:14:04,510 --> 00:14:05,760
+of the company that did this,
+
+338
+00:14:06,039 --> 00:14:10,169
+the, um, the CFO is, uh, this guy who, you know,
+
+339
+00:14:10,179 --> 00:14:14,159
+clearly has a background in finance and apparently, you know,
+
+340
+00:14:14,169 --> 00:14:15,690
+related to this kind of activity.
+
+341
+00:14:15,700 --> 00:14:15,960
+I mean,
+
+342
+00:14:16,090 --> 00:14:20,309
+so he's coming from, I'm, I'm assuming he's coming from a finance background where,
+
+343
+00:14:20,549 --> 00:14:23,419
+yeah, like if it's not blatantly illegal then cool. You know, and
+
+344
+00:14:24,119 --> 00:14:28,309
+from his perspective he's saying, ok, so we have some legitimate flaw. Ok.
+
+345
+00:14:28,320 --> 00:14:31,570
+Granted, it's very hard to exploit and not super impactful but,
+
+346
+00:14:32,059 --> 00:14:34,580
+you know, maybe the market decides it is a problem. Maybe they don't.
+
+347
+00:14:34,590 --> 00:14:37,469
+In this case, the market decided. Yeah, it's not really a problem. And,
+
+348
+00:14:37,900 --> 00:14:39,729
+well, so it didn't work out for them this time.
+
+349
+00:14:39,909 --> 00:14:42,250
+My question is, do you think they're going to do this again?
+
+350
+00:14:42,419 --> 00:14:46,409
+These guys might not just because they probably got burnt pretty good here.
+
+351
+00:14:46,419 --> 00:14:48,809
+My guess is they had investors and they were,
+
+352
+00:14:48,820 --> 00:14:50,380
+they were playing up how much money they were
+
+353
+00:14:50,390 --> 00:14:53,340
+going to make and they probably made zero dollars.
+
+354
+00:14:53,349 --> 00:14:55,349
+Well, they lost money because it costs money to short
+
+355
+00:14:55,609 --> 00:14:58,429
+stocks. Right. You, you have to pay to borrow the stock from somebody.
+
+356
+00:14:58,539 --> 00:14:59,929
+The longer you borrow it, the more you pay
+
+357
+00:15:00,349 --> 00:15:04,039
+-- it's complicated. I know we'll say, ok, we'll say they lost money
+-- probably
+
+358
+00:15:04,299 --> 00:15:06,000
+when you consider also their time and effort.
+
+359
+00:15:06,530 --> 00:15:09,070
+Yeah. All right. Right. They, they paid people no doubt.
+
+360
+00:15:09,099 --> 00:15:12,210
+But here's the thing I keep coming up with is
+
+361
+00:15:12,619 --> 00:15:13,919
+it is not illegal,
+
+362
+00:15:14,070 --> 00:15:16,099
+but just because something isn't illegal
+
+363
+00:15:16,349 --> 00:15:17,859
+doesn't mean it's ok to do.
+
+364
+00:15:17,869 --> 00:15:18,039
+I mean,
+
+365
+00:15:18,049 --> 00:15:20,580
+could you imagine what the security world would look like if
+
+366
+00:15:20,590 --> 00:15:24,099
+everybody was just like popping zero days and shorting stock,
+
+367
+00:15:24,169 --> 00:15:26,229
+it would be insane.
+
+368
+00:15:26,469 --> 00:15:27,119
+I'm in the open
+
+369
+00:15:27,270 --> 00:15:29,280
+source world where that's not really a problem
+
+370
+00:15:29,469 --> 00:15:30,049
+because
+
+371
+00:15:30,250 --> 00:15:32,429
+the majority of the open source code we have,
+
+372
+00:15:32,869 --> 00:15:37,140
+you know what I mean? Like, yeah, so to be brutally honest,
+
+373
+00:15:37,780 --> 00:15:39,580
+I'm not so sure this would be a terrible thing,
+
+374
+00:15:39,590 --> 00:15:41,229
+especially for some of those commercial vendors
+
+375
+00:15:41,239 --> 00:15:42,979
+that are very hard to hold accountable.
+
+376
+00:15:43,070 --> 00:15:45,340
+But more to the point like a Nintendo is a
+
+377
+00:15:45,349 --> 00:15:48,049
+great example because remember Nintendo had their forums and their whole
+
+378
+00:15:48,059 --> 00:15:50,250
+systems hacked like what was it like four or five times
+
+379
+00:15:50,260 --> 00:15:52,369
+in a row over a period of like 23 years,
+
+380
+00:15:52,489 --> 00:15:56,140
+they got denial of service. They, you remember that whole saga a few years ago?
+
+381
+00:15:57,049 --> 00:16:01,789
+And like as far as I remember, it did nothing to their stock price of meaning,
+
+382
+00:16:03,159 --> 00:16:03,619
+you know.
+
+383
+00:16:03,719 --> 00:16:07,140
+-- No,
+-- no, because it, it didn't affect their what they do.
+
+384
+00:16:08,109 --> 00:16:09,460
+And so I suspect
+
+385
+00:16:10,159 --> 00:16:13,820
+like this one is interesting because this is kind of to the best of my knowledge.
+
+386
+00:16:13,830 --> 00:16:15,260
+This is the first time this has happened
+
+387
+00:16:16,190 --> 00:16:17,830
+now. It happened a year ago.
+
+388
+00:16:18,500 --> 00:16:21,210
+Well, no, no, no, I'm talking about a pure where it was.
+
+389
+00:16:21,219 --> 00:16:23,989
+It's um ST Jude is a medical company and I would say again,
+
+390
+00:16:24,000 --> 00:16:25,539
+the rules for medical devices
+
+391
+00:16:25,669 --> 00:16:29,020
+are different, but especially the legal landscape for medical devices
+
+392
+00:16:29,409 --> 00:16:30,950
+because here's the thing as a medical company.
+
+393
+00:16:30,960 --> 00:16:33,890
+Like if you get tied up in lawsuits and you can get your products approved,
+
+394
+00:16:33,900 --> 00:16:34,679
+then you're, you're
+
+395
+00:16:35,080 --> 00:16:38,200
+like, you're basically being held hostage in a very effective way.
+
+396
+00:16:38,820 --> 00:16:39,320
+Right.
+
+397
+00:16:39,539 --> 00:16:39,969
+-- I
+-- mean,
+
+398
+00:16:40,200 --> 00:16:40,989
+but that doesn't apply to
+
+399
+00:16:41,190 --> 00:16:41,280
+argument
+
+400
+00:16:41,659 --> 00:16:42,539
+with any, I
+
+401
+00:16:42,659 --> 00:16:43,010
+mean,
+
+402
+00:16:44,380 --> 00:16:44,789
+a MD.
+
+403
+00:16:45,080 --> 00:16:47,010
+Well, ok, let me put it this way.
+
+404
+00:16:47,020 --> 00:16:51,289
+There's like, what, 30 some odd lawsuits up against Intel. Currently,
+
+405
+00:16:51,479 --> 00:16:53,489
+Intel is still shipping fresh silicon.
+
+406
+00:16:54,030 --> 00:16:55,090
+Right. There's no,
+
+407
+00:16:55,479 --> 00:16:57,770
+-- there's no like FDA approval. They have to go through
+-- to see
+
+408
+00:16:58,080 --> 00:16:58,109
+what
+
+409
+00:16:58,919 --> 00:17:02,890
+I see what you're saying. They can still sell even if they have a lawsuit.
+
+410
+00:17:03,239 --> 00:17:03,640
+Yeah.
+
+411
+00:17:04,089 --> 00:17:05,310
+Or many lawsuits.
+
+412
+00:17:05,319 --> 00:17:09,180
+See, and, and with a medical company that becomes much more of a problem. So
+
+413
+00:17:09,329 --> 00:17:10,219
+I would say,
+
+414
+00:17:10,368 --> 00:17:13,910
+uh I'm going to ignore the medical industry and devices for now because a,
+
+415
+00:17:13,920 --> 00:17:15,660
+they're a flaming train wreck and b
+
+416
+00:17:16,098 --> 00:17:18,739
+there's that whole other set of considerations legally, right?
+
+417
+00:17:18,750 --> 00:17:20,489
+So I'm just going to go with like the pure, like the,
+
+418
+00:17:20,598 --> 00:17:23,770
+you know, the AM DS Intels, the, the traditional software,
+
+419
+00:17:24,958 --> 00:17:26,749
+I think what's interesting to me is this is as
+
+420
+00:17:26,759 --> 00:17:28,538
+far as I know the first time that this has happened
+
+421
+00:17:29,048 --> 00:17:31,938
+in sort of the normal software world, hardware world.
+
+422
+00:17:32,458 --> 00:17:33,729
+And apparently the market,
+
+423
+00:17:34,058 --> 00:17:35,899
+I don't know if the market necessarily reacted
+
+424
+00:17:35,909 --> 00:17:37,818
+correctly or simply didn't react at all.
+
+425
+00:17:38,300 --> 00:17:39,729
+Right, because that's the other option, right?
+
+426
+00:17:39,739 --> 00:17:42,219
+Most people read this like, I don't get it, whatever, who cares?
+
+427
+00:17:42,550 --> 00:17:44,310
+A and BS fundamentals are great, you know,
+
+428
+00:17:44,319 --> 00:17:47,290
+Bitcoin is making their GP us fly off the shelf.
+
+429
+00:17:47,300 --> 00:17:49,650
+So like like straight up, right? Who cares?
+
+430
+00:17:49,660 --> 00:17:51,060
+So, my thinking is,
+
+431
+00:17:51,069 --> 00:17:54,050
+are we going to see more of this and how are the markets going to react?
+
+432
+00:17:54,060 --> 00:17:54,930
+And I suspect
+
+433
+00:17:55,270 --> 00:17:55,280
+uh
+
+434
+00:17:55,430 --> 00:17:58,130
+if you can make money doing this, people will definitely try
+
+435
+00:17:58,479 --> 00:18:00,119
+that. That's just a fundamental thing, right?
+
+436
+00:18:00,130 --> 00:18:02,530
+If people see a new scam, somebody will try.
+
+437
+00:18:02,939 --> 00:18:04,959
+That is probably true.
+
+438
+00:18:05,089 --> 00:18:07,150
+-- Now,
+-- the question is, will that actually work? And
+
+439
+00:18:07,359 --> 00:18:08,489
+I'm guessing
+
+440
+00:18:08,890 --> 00:18:11,400
+probably not because we have this huge history of
+
+441
+00:18:11,859 --> 00:18:13,630
+just for a whole pile of reasons.
+
+442
+00:18:13,640 --> 00:18:18,010
+It's basically impossible to actually sue a software company for damages.
+
+443
+00:18:18,239 --> 00:18:22,199
+It, it is. And, and I also want to clarify one thing at this point is
+
+444
+00:18:23,189 --> 00:18:27,410
+I don't think either of us believe this behavior should be illegal.
+
+445
+00:18:27,709 --> 00:18:32,689
+I do think it is unethical, but I think it needs to be legal and before we die, I,
+
+446
+00:18:32,699 --> 00:18:36,530
+I think that that's a really important point we should, we should discuss as well is
+
+447
+00:18:37,410 --> 00:18:38,420
+here's the thing.
+
+448
+00:18:38,430 --> 00:18:38,849
+If, if,
+
+449
+00:18:38,859 --> 00:18:41,170
+if behavior like this was considered insider
+
+450
+00:18:41,180 --> 00:18:43,290
+trading and you couldn't trade in securities
+
+451
+00:18:43,560 --> 00:18:46,310
+that would put people like security researchers at a
+
+452
+00:18:46,319 --> 00:18:49,670
+major disadvantage just in terms of living their life
+
+453
+00:18:49,819 --> 00:18:50,949
+because all of a sudden,
+
+454
+00:18:50,959 --> 00:18:53,150
+you would have tons of insider knowledge
+
+455
+00:18:53,160 --> 00:18:55,790
+about any product or company you were investigating
+
+456
+00:18:56,119 --> 00:18:59,020
+-- and that would be awful.
+-- Well, and this is the whole point, right?
+
+457
+00:18:59,030 --> 00:19:03,310
+People are supposed to be allowed to use expert knowledge and expert,
+
+458
+00:19:03,979 --> 00:19:08,969
+you know, methodology to divine the future performance and price of a company.
+
+459
+00:19:08,979 --> 00:19:10,349
+That's the whole point of the stock market.
+
+460
+00:19:11,410 --> 00:19:11,880
+Right.
+
+461
+00:19:12,430 --> 00:19:14,589
+You know, is we have all these different actors
+
+462
+00:19:14,800 --> 00:19:17,439
+pricing the market and, you know, coming to a consensus
+
+463
+00:19:17,550 --> 00:19:18,260
+and, and
+
+464
+00:19:18,660 --> 00:19:20,849
+to be clear, it doesn't always work.
+
+465
+00:19:21,290 --> 00:19:23,229
+Uh, there's been some epic failures
+
+466
+00:19:23,380 --> 00:19:27,339
+but by and large, I mean, it's the least worst system we've found so far.
+
+467
+00:19:28,380 --> 00:19:29,859
+Right. Kind of like democracy.
+
+468
+00:19:30,849 --> 00:19:33,839
+Um, well, it's certainly better than a command and control economy,
+
+469
+00:19:33,849 --> 00:19:36,579
+like a variety of, sort of communist states tried,
+
+470
+00:19:37,160 --> 00:19:38,069
+you know, the, the,
+
+471
+00:19:38,189 --> 00:19:40,829
+the quality of life index over in those places wasn't so awesome.
+
+472
+00:19:41,349 --> 00:19:41,810
+Um,
+
+473
+00:19:42,069 --> 00:19:44,750
+what's so, and see what's interesting to me is
+
+474
+00:19:44,920 --> 00:19:47,140
+because I was also poking on the SEC website.
+
+475
+00:19:47,150 --> 00:19:50,329
+So there's definitely ways to file complaints and report fraud.
+
+476
+00:19:50,949 --> 00:19:53,420
+Well, security flaws don't fall under that.
+
+477
+00:19:54,619 --> 00:19:57,010
+Right. This isn't fraud. This isn't, you know,
+
+478
+00:19:57,390 --> 00:20:00,719
+so the question becomes, like I said, how do we,
+
+479
+00:20:01,119 --> 00:20:04,030
+if a vendor doesn't behave in a way, like, say Microsoft where they, like,
+
+480
+00:20:04,040 --> 00:20:08,390
+run a big bug bounty with like real cash, like real cash amounts.
+
+481
+00:20:08,400 --> 00:20:11,449
+I'm not talking like five grand because let's face it. Right. For a skilled hacker
+
+482
+00:20:12,069 --> 00:20:14,439
+to spend a month working on something or two months,
+
+483
+00:20:14,449 --> 00:20:17,660
+working on something and have a possibility, not the guarantee,
+
+484
+00:20:17,670 --> 00:20:19,780
+but the possibility of maybe only earning upwards of
+
+485
+00:20:19,790 --> 00:20:21,290
+like one or two grand or five grand.
+
+486
+00:20:21,420 --> 00:20:22,339
+It's just not worth it.
+
+487
+00:20:22,880 --> 00:20:23,680
+Right.
+
+488
+00:20:24,119 --> 00:20:24,920
+You know,
+
+489
+00:20:25,099 --> 00:20:28,650
+uh, to put it bluntly, you can sell something like that to the bad guys for more money.
+
+490
+00:20:29,050 --> 00:20:29,650
+Right. And
+
+491
+00:20:29,900 --> 00:20:32,250
+that's what I really am impressed with a lot of these, you know,
+
+492
+00:20:32,260 --> 00:20:35,550
+new bug boundaries is the amount of money involved is enough
+
+493
+00:20:35,560 --> 00:20:37,849
+that you can actually make a living doing this and,
+
+494
+00:20:38,349 --> 00:20:38,810
+you know,
+
+495
+00:20:38,979 --> 00:20:42,020
+do the right thing but not all vendors
+
+496
+00:20:42,199 --> 00:20:45,810
+do these bug bounties and we, and I don't think we can or should expect them to
+
+497
+00:20:45,949 --> 00:20:49,089
+because I would say there's also that, like you said, that ethical component of,
+
+498
+00:20:49,390 --> 00:20:50,140
+you know, like
+
+499
+00:20:50,329 --> 00:20:51,939
+if I spot a flaw
+
+500
+00:20:52,270 --> 00:20:53,130
+in a crane,
+
+501
+00:20:53,439 --> 00:20:55,550
+you know, I'm going to report it because I don't want the crane to fall down.
+
+502
+00:20:55,560 --> 00:20:57,369
+I'm not going to report it because I want to make some money
+
+503
+00:20:57,579 --> 00:21:00,170
+on the flip side. If I'm a crane inspector, you know,
+
+504
+00:21:00,359 --> 00:21:01,729
+then I'm incentivized
+
+505
+00:21:02,439 --> 00:21:03,560
+to make a living at this.
+
+506
+00:21:03,849 --> 00:21:06,699
+So I, I think really what it boils down to is, yeah, this is,
+
+507
+00:21:06,890 --> 00:21:09,060
+I don't know that I would call this behavior unethical.
+
+508
+00:21:09,069 --> 00:21:12,459
+-- It would, I would, like I said, it's
+-- no, II, I think it's unethical.
+
+509
+00:21:12,469 --> 00:21:14,060
+It's distasteful in a way.
+
+510
+00:21:14,300 --> 00:21:17,780
+But I don't know that there's a better way. I don't know that there's a better way.
+
+511
+00:21:18,069 --> 00:21:19,959
+There is a better way. Look.
+
+512
+00:21:19,969 --> 00:21:23,540
+So here's the thing, if you're a security research company,
+
+513
+00:21:23,550 --> 00:21:26,000
+which they're clearly not because they spun themselves
+
+514
+00:21:26,010 --> 00:21:28,079
+up just for the sake of doing this.
+
+515
+00:21:28,119 --> 00:21:28,619
+Ok?
+
+516
+00:21:29,390 --> 00:21:31,089
+When you create yourself
+
+517
+00:21:31,260 --> 00:21:34,410
+just for the purpose of shorting someone else's stock
+
+518
+00:21:34,969 --> 00:21:36,250
+that is unethical,
+
+519
+00:21:36,670 --> 00:21:37,569
+right? Because
+
+520
+00:21:37,739 --> 00:21:41,569
+their goal was to make a mess for a MD, right?
+
+521
+00:21:41,579 --> 00:21:43,530
+Their goal wasn't to make the world a better place.
+
+522
+00:21:43,540 --> 00:21:46,280
+Their goal was to make a mess for a MD and profit off of it.
+
+523
+00:21:46,400 --> 00:21:49,209
+Arguing devil's advocate from an investor perception.
+
+524
+00:21:49,510 --> 00:21:51,890
+Their goal was to get the market to price the
+
+525
+00:21:51,900 --> 00:21:54,410
+stock correctly and in doing so make money from it.
+
+526
+00:21:54,560 --> 00:21:55,849
+Look, I'm, if,
+
+527
+00:21:55,979 --> 00:21:59,930
+if, if I have to argue that investors are ethical,
+
+528
+00:22:00,180 --> 00:22:01,089
+we're in trouble.
+
+529
+00:22:01,760 --> 00:22:03,689
+Ok? Because they're not.
+
+530
+00:22:05,349 --> 00:22:06,170
+So I just,
+
+531
+00:22:06,449 --> 00:22:09,630
+I, I definitely don't like it because it's very messy. But here's the problem.
+
+532
+00:22:09,640 --> 00:22:10,489
+Fundamentally,
+
+533
+00:22:10,839 --> 00:22:12,530
+people need
+
+534
+00:22:12,770 --> 00:22:14,500
+to pay the rent and their bills.
+
+535
+00:22:14,760 --> 00:22:15,959
+How do we
+
+536
+00:22:16,099 --> 00:22:18,770
+allow them to monetize this information?
+
+537
+00:22:19,280 --> 00:22:19,550
+Right?
+
+538
+00:22:19,560 --> 00:22:23,170
+So a great example is we've got companies that make like network appliances that
+
+539
+00:22:23,180 --> 00:22:26,579
+block attacks and they buy zero days so they can block those attacks.
+
+540
+00:22:26,949 --> 00:22:30,750
+And then at some point, another vendor can, you know, maybe actually fix the flaw,
+
+541
+00:22:31,099 --> 00:22:33,609
+-- you know,
+-- let, let's, let's pick on specter and meltdown.
+
+542
+00:22:33,949 --> 00:22:35,839
+Where did they come from? Right.
+
+543
+00:22:35,869 --> 00:22:36,829
+Was it, did,
+
+544
+00:22:36,839 --> 00:22:38,540
+did someone attempt to shorten heck you could
+
+545
+00:22:38,550 --> 00:22:40,189
+have shorted intel stock after that one,
+
+546
+00:22:40,199 --> 00:22:40,729
+couldn't you?
+
+547
+00:22:41,030 --> 00:22:41,510
+But,
+
+548
+00:22:41,920 --> 00:22:43,170
+but here's the thing like
+
+549
+00:22:43,400 --> 00:22:45,010
+how, how are those paid for?
+
+550
+00:22:45,180 --> 00:22:45,849
+And, and
+
+551
+00:22:46,119 --> 00:22:46,949
+I'm asking you,
+
+552
+00:22:47,310 --> 00:22:49,459
+I don't know who uh I don't know if
+
+553
+00:22:49,469 --> 00:22:52,449
+the original researchers were recompensed in any meaningful way.
+
+554
+00:22:52,670 --> 00:22:55,530
+Well, they, they were because they, they had jobs. Right.
+
+555
+00:22:55,540 --> 00:22:59,270
+It was essentially Google Project Zero. And then there were some, some other,
+
+556
+00:22:59,459 --> 00:23:01,770
+well, there was a university involved, I think if I remember.
+
+557
+00:23:02,020 --> 00:23:04,479
+But anyway, the point is these people had jobs.
+
+558
+00:23:04,489 --> 00:23:06,560
+So, what's the incentive for project zero?
+
+559
+00:23:06,989 --> 00:23:10,319
+Well, they're essentially trying to reduce their costs, I assume, by, you know,
+
+560
+00:23:10,800 --> 00:23:13,760
+having less incidents and less problems to deal with,
+
+561
+00:23:13,770 --> 00:23:15,459
+by proactively dealing with it.
+
+562
+00:23:15,469 --> 00:23:16,119
+Well, and, and
+
+563
+00:23:16,219 --> 00:23:18,310
+they have a name for themselves. Right.
+
+564
+00:23:18,319 --> 00:23:22,400
+There's a certain amount of credibility they've gained by being good,
+
+565
+00:23:22,410 --> 00:23:25,790
+honest researchers that act in an ethical manner.
+
+566
+00:23:26,199 --> 00:23:26,760
+Right.
+
+567
+00:23:27,270 --> 00:23:29,800
+And now this company, this is what CTS, you said
+
+568
+00:23:30,239 --> 00:23:33,140
+they will never be able to interact with anyone
+
+569
+00:23:33,310 --> 00:23:35,660
+in the context of information security again,
+
+570
+00:23:35,750 --> 00:23:39,359
+because their reputation is now completely worthless.
+
+571
+00:23:39,469 --> 00:23:42,579
+It's worth what their shorted stock is. Right. I mean,
+
+572
+00:23:42,930 --> 00:23:44,260
+in all seriousness
+
+573
+00:23:44,430 --> 00:23:47,300
+and, and I think that's the thing is there are what, what Kac
+
+574
+00:23:47,599 --> 00:23:50,300
+has done? A bunch of cool work, didn't they do? Uh,
+
+575
+00:23:50,969 --> 00:23:51,250
+well,
+
+576
+00:23:51,589 --> 00:23:52,359
+Kac has, they did
+
+577
+00:23:52,819 --> 00:23:53,040
+stack
+
+578
+00:23:53,630 --> 00:23:55,130
+-- was last year.
+-- Right. Right.
+
+579
+00:23:55,719 --> 00:23:58,530
+Right. And, and again, why did they do that?
+
+580
+00:23:58,540 --> 00:24:00,510
+Did they do it so they could short a bunch of stock?
+
+581
+00:24:00,520 --> 00:24:05,510
+No, they did it because it gave them brand recognition that is worth far more than
+
+582
+00:24:05,660 --> 00:24:07,449
+anything else they could have done.
+
+583
+00:24:07,520 --> 00:24:11,219
+They have a business model that allows them to leverage this information
+
+584
+00:24:11,410 --> 00:24:13,619
+and that's part of the problem is you have to have a
+
+585
+00:24:13,630 --> 00:24:16,500
+business model that allows you to leverage this information and monetize it.
+
+586
+00:24:16,709 --> 00:24:20,540
+And that takes a lot of time and effort short selling a stock is, you know,
+
+587
+00:24:20,550 --> 00:24:23,010
+if you're in the financial world and know how to do it, it's quick,
+
+588
+00:24:23,380 --> 00:24:25,239
+you know, you need a brokerage account and some cash
+
+589
+00:24:25,489 --> 00:24:30,800
+-- and you're ready to go
+-- except when your plan backfires and you lose all your money.
+
+590
+00:24:31,560 --> 00:24:31,900
+Yeah.
+
+591
+00:24:32,079 --> 00:24:32,699
+Well,
+
+592
+00:24:32,989 --> 00:24:35,400
+and how many security firms have, you know, cratered out?
+
+593
+00:24:36,609 --> 00:24:38,380
+Right. I mean, nothing is risk free.
+
+594
+00:24:39,319 --> 00:24:41,449
+You know, I, I just, like I said, I'm not,
+
+595
+00:24:41,849 --> 00:24:43,300
+I cannot,
+
+596
+00:24:43,670 --> 00:24:46,040
+I, you know, 20 year old me would be horrified by this.
+
+597
+00:24:46,069 --> 00:24:48,680
+I cannot bring myself to condemn this.
+
+598
+00:24:48,839 --> 00:24:53,109
+I do not like it. Let me be clear. I am not a big fan of this because I wish we had
+
+599
+00:24:53,239 --> 00:24:55,910
+more efficient and effective ways
+
+600
+00:24:56,290 --> 00:24:58,859
+of incentivizing people
+
+601
+00:24:59,280 --> 00:25:03,439
+to do things that I think are ultimately good. Like reporting security flaws,
+
+602
+00:25:03,839 --> 00:25:06,260
+at least somewhat responsibility, giving the company, you know,
+
+603
+00:25:06,270 --> 00:25:09,020
+some amount of time to digest it or deal with it
+
+604
+00:25:09,790 --> 00:25:11,849
+more than 24 hours.
+
+605
+00:25:12,310 --> 00:25:15,530
+Yeah. But at the flip side, I'm not sure I have
+
+606
+00:25:15,969 --> 00:25:17,400
+any be good answers.
+
+607
+00:25:17,910 --> 00:25:21,489
+You know, like what I've done in the CV world is, I've, I've tried to reduce the cost.
+
+608
+00:25:21,500 --> 00:25:21,930
+So,
+
+609
+00:25:22,219 --> 00:25:23,130
+you know, we still,
+
+610
+00:25:23,140 --> 00:25:26,650
+it's still a cost to get a CV E but hopefully
+
+611
+00:25:26,660 --> 00:25:29,510
+now it's only a few minutes versus like hours of effort,
+
+612
+00:25:29,520 --> 00:25:29,880
+you know,
+
+613
+00:25:30,660 --> 00:25:32,079
+so I can at least bring the cost down.
+
+614
+00:25:32,089 --> 00:25:34,829
+And, and ideally also improve the benefit by making, you know,
+
+615
+00:25:34,839 --> 00:25:36,150
+the data is now machine readable.
+
+616
+00:25:36,160 --> 00:25:37,589
+So more people can consume it and
+
+617
+00:25:37,689 --> 00:25:38,880
+you know, leverage it.
+
+618
+00:25:39,359 --> 00:25:39,839
+But
+
+619
+00:25:39,949 --> 00:25:41,359
+fundamentally, as I said,
+
+620
+00:25:41,790 --> 00:25:42,170
+OK,
+
+621
+00:25:42,180 --> 00:25:44,250
+we've got people who do the right thing for the sake
+
+622
+00:25:44,260 --> 00:25:46,400
+of doing the right thing because they're good people and that,
+
+623
+00:25:46,410 --> 00:25:48,089
+you know, that will always be some percentage.
+
+624
+00:25:48,369 --> 00:25:49,550
+We've got people who do the right thing
+
+625
+00:25:49,560 --> 00:25:52,020
+because it aligns with their company's interest.
+
+626
+00:25:52,030 --> 00:25:54,969
+A great example being, you know, project zero, right? They want,
+
+627
+00:25:55,170 --> 00:25:56,479
+for example, Tavis, Tavis
+
+628
+00:25:56,729 --> 00:25:57,579
+Rindy is looking at
+
+629
+00:25:57,800 --> 00:26:01,030
+um update or software for stuff that's used on hundreds of millions of computers,
+
+630
+00:26:01,040 --> 00:26:02,760
+like, you know, uh what is it, um uh
+
+631
+00:26:03,000 --> 00:26:05,780
+Starcraft with the Starcraft updater, right?
+
+632
+00:26:06,229 --> 00:26:06,520
+You know,
+
+633
+00:26:06,530 --> 00:26:10,390
+somebody pops that thing that's like 100 million gaming computers taken all,
+
+634
+00:26:10,400 --> 00:26:11,449
+you know, taken over.
+
+635
+00:26:12,430 --> 00:26:15,300
+Then we've got companies with a direct business model of, you know, we,
+
+636
+00:26:15,310 --> 00:26:17,609
+we use the security vulnerability information
+
+637
+00:26:17,869 --> 00:26:19,239
+to, for example,
+
+638
+00:26:19,349 --> 00:26:20,290
+uh create
+
+639
+00:26:20,500 --> 00:26:22,849
+filtering rules for our product that you then
+
+640
+00:26:22,859 --> 00:26:24,829
+subscribe to so that this attack is blocked
+
+641
+00:26:25,180 --> 00:26:25,849
+and it's blocked.
+
+642
+00:26:25,859 --> 00:26:26,069
+Well,
+
+643
+00:26:26,079 --> 00:26:28,089
+in advance of the vendor being able to actually update
+
+644
+00:26:28,099 --> 00:26:29,640
+it and ship an update and more to the point,
+
+645
+00:26:29,650 --> 00:26:32,670
+maybe you don't have to spend money applying that update as much, right?
+
+646
+00:26:32,680 --> 00:26:33,290
+So that's cool.
+
+647
+00:26:34,010 --> 00:26:34,630
+Um
+
+648
+00:26:34,829 --> 00:26:39,219
+So we've got those sort of three models with the bug bounties.
+
+649
+00:26:39,229 --> 00:26:40,760
+I wouldn't say the bug bounties are
+
+650
+00:26:41,569 --> 00:26:41,790
+they,
+
+651
+00:26:41,800 --> 00:26:43,719
+they essentially the bug bounties are an expression of
+
+652
+00:26:43,729 --> 00:26:45,109
+companies that want to do the right thing.
+
+653
+00:26:45,119 --> 00:26:45,619
+Or
+
+654
+00:26:46,609 --> 00:26:48,189
+the bug bounty is cheaper than, like,
+
+655
+00:26:48,199 --> 00:26:50,780
+dealing with these catastrophes going public all the time.
+
+656
+00:26:50,790 --> 00:26:51,150
+Right.
+
+657
+00:26:51,750 --> 00:26:51,989
+Like,
+
+658
+00:26:52,000 --> 00:26:53,420
+if a MD offered a bug bounty of half a
+
+659
+00:26:53,430 --> 00:26:55,689
+million dollars and they'd gone to a MD privately,
+
+660
+00:26:55,839 --> 00:26:57,910
+I'm guessing that that would have been even just
+
+661
+00:26:57,920 --> 00:26:59,689
+for all the amount of stress and hair pulling.
+
+662
+00:26:59,699 --> 00:27:01,369
+A MD went through would probably be cheaper.
+
+663
+00:27:01,599 --> 00:27:04,229
+This would not have gotten half a million dollars.
+
+664
+00:27:04,760 --> 00:27:07,510
+No, but I, that's, that's my point too with this. Right, is that,
+
+665
+00:27:07,829 --> 00:27:08,729
+you know, again,
+
+666
+00:27:08,739 --> 00:27:12,609
+the good flaws aren't even guaranteed to be monetized through a bug bounty.
+
+667
+00:27:12,619 --> 00:27:13,829
+So bug bounties are very,
+
+668
+00:27:14,160 --> 00:27:17,250
+they're, they're good and I think they should exist, but I don't think they're the,
+
+669
+00:27:17,260 --> 00:27:19,140
+the, the be all end, all answer.
+
+670
+00:27:19,260 --> 00:27:22,489
+And so then the question becomes apart from those kind of four models I've gone over.
+
+671
+00:27:22,699 --> 00:27:26,010
+Well, how else do we get people to incentivize these flaws?
+
+672
+00:27:26,020 --> 00:27:26,569
+And I mean,
+
+673
+00:27:26,579 --> 00:27:29,839
+one thing I'm running into a lot right now with CV and CV numbering
+
+674
+00:27:29,849 --> 00:27:33,170
+authorities is a lot of researchers who want to become a CV numbering authority.
+
+675
+00:27:33,640 --> 00:27:36,989
+I'm assuming either A to put that directly on their resume or B to
+
+676
+00:27:37,000 --> 00:27:40,589
+just pad their resume out with a pile of BS CV ES because,
+
+677
+00:27:40,729 --> 00:27:43,939
+you know, I've had some people who, their rejection rate for CV request is like,
+
+678
+00:27:43,949 --> 00:27:45,319
+basically 90 some percent, like,
+
+679
+00:27:45,329 --> 00:27:47,900
+they've had like one or two good ones and the rest are garbage.
+
+680
+00:27:48,209 --> 00:27:48,800
+Right.
+
+681
+00:27:48,900 --> 00:27:52,260
+Right. And this is actually where some of the bug bounty
+
+682
+00:27:52,770 --> 00:27:57,859
+companies get it. Right. Because they, they give you a score and if you have too many,
+
+683
+00:27:58,160 --> 00:28:01,520
+uh, false, false negatives or false positives, I guess it would be
+
+684
+00:28:02,119 --> 00:28:02,160
+you,
+
+685
+00:28:02,310 --> 00:28:03,660
+you get docked.
+
+686
+00:28:04,060 --> 00:28:06,689
+And so obviously researchers have an incentive.
+
+687
+00:28:06,699 --> 00:28:07,260
+Of course, there's,
+
+688
+00:28:07,270 --> 00:28:10,099
+there's some hilarious Gamification that happens around that and
+
+689
+00:28:10,109 --> 00:28:11,520
+we should talk about that some other day.
+
+690
+00:28:11,530 --> 00:28:12,060
+But
+
+691
+00:28:12,189 --> 00:28:13,250
+fundamentally,
+
+692
+00:28:13,329 --> 00:28:17,739
+it does make researchers more careful to not just like send garbage,
+
+693
+00:28:17,949 --> 00:28:18,459
+which
+
+694
+00:28:18,750 --> 00:28:23,130
+I appreciate as being someone on the other end to that fire hose.
+
+695
+00:28:24,579 --> 00:28:25,770
+Yes. Oh, I know.
+
+696
+00:28:26,050 --> 00:28:29,079
+Yeah, I mean, I'll be blunt, that's why I went to the, the, the web form,
+
+697
+00:28:29,089 --> 00:28:30,520
+but I want to see you that asked a whole bunch of
+
+698
+00:28:30,530 --> 00:28:33,349
+questions and you better fill all of it out correctly or I'm
+
+699
+00:28:33,359 --> 00:28:35,079
+going to send you an email saying I need more details and
+
+700
+00:28:35,089 --> 00:28:37,619
+then I'm going to it until you reply with more details because
+
+701
+00:28:37,790 --> 00:28:39,650
+I don't have time to track all this crap down.
+
+702
+00:28:40,040 --> 00:28:41,969
+And even when they fill out all the details correctly,
+
+703
+00:28:41,979 --> 00:28:47,250
+I'm still finding like about a 25% to 40% rejection rate overall.
+
+704
+00:28:48,439 --> 00:28:50,790
+-- That's a lot.
+-- Right. Right. But again,
+
+705
+00:28:51,140 --> 00:28:52,900
+why are people doing this
+
+706
+00:28:53,290 --> 00:28:56,500
+in, in the case if I want a CV E for free
+
+707
+00:28:56,709 --> 00:29:00,339
+because the way, the way you're talking about everything needs an incentive.
+
+708
+00:29:00,709 --> 00:29:03,229
+Uh, the resume padding is a clear incentive for a lot of them,
+
+709
+00:29:03,420 --> 00:29:06,609
+for the vendors requesting CV S, they want the CV because, you know, it just,
+
+710
+00:29:06,619 --> 00:29:08,319
+it actually does make their life a bit simpler.
+
+711
+00:29:08,359 --> 00:29:12,199
+Well, and not only that, I mean, one of the things I tell people all the time is look,
+
+712
+00:29:12,209 --> 00:29:16,550
+if, if you're working with a vendor who has zero CV E I DS in their product like that,
+
+713
+00:29:16,560 --> 00:29:20,000
+someone who doesn't care or isn't paying attention, right?
+
+714
+00:29:20,010 --> 00:29:21,839
+That, that you need to be careful with them.
+
+715
+00:29:22,099 --> 00:29:24,449
+CV E is one of those things that's like
+
+716
+00:29:24,849 --> 00:29:28,790
+-- I wash my hands after I use the toilet,
+-- right? What's an indicator?
+
+717
+00:29:28,800 --> 00:29:29,550
+How do I know that?
+
+718
+00:29:29,560 --> 00:29:34,180
+-- Because I publish CV.
+-- Si mean, yeah, somebody with or sorry, a vendor
+
+719
+00:29:34,609 --> 00:29:36,729
+or a project with no CV. Si would wonder. Yeah.
+
+720
+00:29:36,739 --> 00:29:38,780
+Do they have any security response going on?
+
+721
+00:29:39,109 --> 00:29:42,050
+So, yeah. No, like I said, overall, I'm not
+
+722
+00:29:42,199 --> 00:29:45,119
+a big fan of what happened, but at the same time, I think
+
+723
+00:29:45,229 --> 00:29:45,770
+this,
+
+724
+00:29:46,589 --> 00:29:47,469
+I don't know, II
+
+725
+00:29:47,739 --> 00:29:49,829
+I am curious to see if this happens again.
+
+726
+00:29:49,839 --> 00:29:51,930
+I assume it will happen again because it does
+
+727
+00:29:51,939 --> 00:29:53,469
+have the potential to make a ton of money.
+
+728
+00:29:53,479 --> 00:29:55,969
+I mean, if you can move a share price one or 2%
+
+729
+00:29:56,329 --> 00:29:58,790
+you can potentially make a lot of money if you know what you're doing.
+
+730
+00:29:58,800 --> 00:30:00,390
+With short selling or put, uh,
+
+731
+00:30:00,500 --> 00:30:01,569
+you know, with options.
+
+732
+00:30:01,579 --> 00:30:05,449
+And here's, here's my point is I still don't like this because if,
+
+733
+00:30:05,459 --> 00:30:08,709
+if someone did this to me, I would be livid with them
+
+734
+00:30:08,859 --> 00:30:11,989
+24 hours is not an acceptable amount of time.
+
+735
+00:30:12,130 --> 00:30:13,489
+Now, now, I will say
+
+736
+00:30:13,780 --> 00:30:15,810
+if you report a flaw to a vendor
+
+737
+00:30:16,010 --> 00:30:19,239
+and the vendor ignores you for some predetermined amount of time
+
+738
+00:30:19,550 --> 00:30:20,640
+game on.
+
+739
+00:30:20,770 --> 00:30:21,359
+Right.
+
+740
+00:30:21,550 --> 00:30:24,670
+That's when full disclosure is totally reasonable.
+
+741
+00:30:24,680 --> 00:30:25,479
+In my opinion,
+
+742
+00:30:25,489 --> 00:30:27,550
+if the vendor isn't playing nice and they're
+
+743
+00:30:27,560 --> 00:30:29,719
+trying to strong arm you or they're ignoring you
+
+744
+00:30:30,060 --> 00:30:35,000
+go public because that is the easiest way to just make it all happen.
+
+745
+00:30:35,449 --> 00:30:36,770
+And in fact, funny enough, I mean,
+
+746
+00:30:36,780 --> 00:30:40,920
+that's how people used to have to deal with some of the large vendors back in the day.
+
+747
+00:30:40,930 --> 00:30:42,630
+I mean, it was very common.
+
+748
+00:30:43,410 --> 00:30:43,739
+Yeah. Oh,
+
+749
+00:30:44,020 --> 00:30:47,569
+I remember those, those bugs being released with timelines in the years.
+
+750
+00:30:47,910 --> 00:30:49,780
+Yeah. Right. It was, it was terrible.
+
+751
+00:30:49,790 --> 00:30:53,849
+And this is where, like, some people harp on project zero for 90 days. I get it
+
+752
+00:30:54,189 --> 00:30:58,540
+90 days for some, some people is not a long time, but at the end of the day
+
+753
+00:30:59,089 --> 00:31:02,619
+it, it matters and you don't want this stuff dragging on forever.
+
+754
+00:31:03,109 --> 00:31:06,930
+And so I'm, I'm ok with 90 days, I'm not ok with 24 hours
+
+755
+00:31:07,050 --> 00:31:09,729
+whether you want to short the stock or not,
+
+756
+00:31:10,030 --> 00:31:11,660
+I guess let's put it that way.
+
+757
+00:31:12,369 --> 00:31:14,739
+I can ignore the shorting aspect of this.
+
+758
+00:31:15,540 --> 00:31:18,630
+I don't like the 24 hour aspect of this. Right.
+
+759
+00:31:18,739 --> 00:31:23,079
+If you give a vendor 90 days and then short their stock. Great. I'm on board.
+
+760
+00:31:23,089 --> 00:31:24,000
+Good for you.
+
+761
+00:31:24,170 --> 00:31:27,170
+But if you give them 24 hours, whether you short the stock or not,
+
+762
+00:31:27,180 --> 00:31:29,079
+-- I'm going to say not
+-- cool.
+
+763
+00:31:29,140 --> 00:31:31,589
+What's most interesting to me is I suspect they picked
+
+764
+00:31:31,599 --> 00:31:33,880
+the wrong target because when you think about the security,
+
+765
+00:31:33,890 --> 00:31:35,079
+the information security world,
+
+766
+00:31:35,260 --> 00:31:39,910
+there's sort of three kind of large groups. There's like the hardware vendors,
+
+767
+00:31:40,170 --> 00:31:43,880
+you know, which is actually a relatively small group, like there's Intel,
+
+768
+00:31:43,890 --> 00:31:44,520
+there's a MD
+
+769
+00:31:45,369 --> 00:31:46,030
+and arm,
+
+770
+00:31:46,040 --> 00:31:47,770
+then there's the software vendors which is a
+
+771
+00:31:47,780 --> 00:31:50,780
+larger group and then there's the service providers.
+
+772
+00:31:51,520 --> 00:31:53,560
+And I suspect actually
+
+773
+00:31:53,900 --> 00:31:55,780
+the kind of company that would be most
+
+774
+00:31:55,790 --> 00:31:58,449
+impacted by this would be the service providers,
+
+775
+00:31:59,099 --> 00:32:01,780
+especially with things like GDPR coming in.
+
+776
+00:32:01,790 --> 00:32:04,510
+I mean, imagine if you found a major something as a service
+
+777
+00:32:04,780 --> 00:32:09,500
+and you found a way to disclose like people's names and email addresses,
+
+778
+00:32:09,689 --> 00:32:10,989
+well, under GDPR,
+
+779
+00:32:11,199 --> 00:32:14,150
+that has the potential for some really huge fines
+
+780
+00:32:15,410 --> 00:32:18,859
+and that is a clear and immediate consequence that the market does understand,
+
+781
+00:32:20,089 --> 00:32:20,589
+you know.
+
+782
+00:32:20,790 --> 00:32:21,359
+So
+
+783
+00:32:21,630 --> 00:32:25,780
+I'm curious, I, if I had to guess I would say that the next target,
+
+784
+00:32:26,589 --> 00:32:27,250
+um
+
+785
+00:32:27,949 --> 00:32:32,550
+because let's face it intel and a MD of whether the, you know, quite a bit and clearly,
+
+786
+00:32:32,560 --> 00:32:34,069
+you know, investors aren't going to panic.
+
+787
+00:32:34,500 --> 00:32:37,380
+I suspect the next target is either going to be software vendors, which again,
+
+788
+00:32:37,390 --> 00:32:39,660
+I suspect won't really work because
+
+789
+00:32:40,130 --> 00:32:45,800
+-- like, how many CV S a year does Microsoft Fix or like Red Hat or you guys like a lot?
+-- Oh,
+
+790
+00:32:45,920 --> 00:32:50,150
+yeah, it's, it's quite a bit and, and I know that actually this is something that
+
+791
+00:32:50,800 --> 00:32:52,209
+more than one person
+
+792
+00:32:52,430 --> 00:32:54,209
+I've assisted
+
+793
+00:32:54,869 --> 00:32:58,390
+in doing some research to do CV ES affect share price.
+
+794
+00:32:58,579 --> 00:33:03,530
+And we have never been able to correlate that ever even for terrible things.
+
+795
+00:33:04,209 --> 00:33:07,520
+So I suspect it'll be the services will be the next target for
+
+796
+00:33:07,530 --> 00:33:10,829
+this because also the services don't really have a good track record of like
+
+797
+00:33:10,979 --> 00:33:13,319
+saying, oh, we have this flaw that we fixed, right?
+
+798
+00:33:13,329 --> 00:33:15,420
+Most of that stuff just happens behind closed doors.
+
+799
+00:33:15,630 --> 00:33:17,709
+No, it, it does. I know. Uh
+
+800
+00:33:17,949 --> 00:33:18,630
+I don't know, man.
+
+801
+00:33:18,640 --> 00:33:21,709
+May maybe, maybe, why don't we, why don't we end it there and just say
+
+802
+00:33:22,030 --> 00:33:23,609
+when, when it happens,
+
+803
+00:33:23,770 --> 00:33:25,510
+we'll be here, right?
+
+804
+00:33:25,810 --> 00:33:28,819
+And we'll be happy to talk about it and, and maybe
+
+805
+00:33:29,119 --> 00:33:33,869
+we, we, that we will of all the things in the world that that is more true than any.
+
+806
+00:33:35,189 --> 00:33:38,260
+All right, sweet. So, thanks, Kurt. Thank you everyone for listening.
+
+807
+00:33:38,270 --> 00:33:41,250
+If you want links to any of the things we talked about today,
+
+808
+00:33:41,260 --> 00:33:43,930
+hit up the show notes at open source security podcast.com,
+
+809
+00:33:44,229 --> 00:33:46,579
+use the Pound Os S podcast. Hashtag
+
+810
+00:33:46,709 --> 00:33:49,739
+and yeah, Kurt have a fantastic rest of your day.
+
+811
+00:33:50,130 --> 00:33:51,180
+You too. Thanks Josh

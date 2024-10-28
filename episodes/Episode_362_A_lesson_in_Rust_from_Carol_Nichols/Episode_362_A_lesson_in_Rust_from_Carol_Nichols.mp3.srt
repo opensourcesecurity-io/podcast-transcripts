@@ -1,0 +1,3680 @@
+0
+00:00:05,460 --> 00:00:08,850
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,859 --> 00:00:11,520
+Kurt Siefried and my partner in Thought Crime, Josh Bresser.
+
+2
+00:00:11,539 --> 00:00:14,590
+So we did the memory safety episode was like two episodes ago,
+
+3
+00:00:14,600 --> 00:00:17,209
+maybe from the time of recording and we got
+
+4
+00:00:17,219 --> 00:00:18,840
+a generous amount of feedback we'll say on it.
+
+5
+00:00:18,850 --> 00:00:22,590
+But one of the people who got in touch was Carol Nichols,
+
+6
+00:00:22,600 --> 00:00:25,360
+the author of the Rust programming language book.
+
+7
+00:00:25,370 --> 00:00:29,520
+And I am so excited that she agreed to come on the show, Carol. Welcome to the show.
+
+8
+00:00:29,530 --> 00:00:30,680
+-- Thank you so much.
+-- Hi.
+
+9
+00:00:30,690 --> 00:00:33,439
+Thank you for having me and thank you for letting me invite myself on.
+
+10
+00:00:33,740 --> 00:00:36,860
+I've actually been trying to get on this thinking about how I could get
+
+11
+00:00:36,869 --> 00:00:39,799
+on the show for a while because you two talk about Russ a lot.
+
+12
+00:00:39,810 --> 00:00:40,919
+I feel like um
+
+13
+00:00:41,290 --> 00:00:45,080
+you've actually talked about me back a little while ago
+
+14
+00:00:45,090 --> 00:00:48,299
+when there was the uh Russ decimal typo squatting attack.
+
+15
+00:00:49,330 --> 00:00:50,330
+Kurt was like,
+
+16
+00:00:50,529 --> 00:00:53,330
+yeah, yeah, the crates io admins took care of it, you know,
+
+17
+00:00:53,340 --> 00:00:55,069
+they deleted it right away and
+
+18
+00:00:55,849 --> 00:00:57,240
+I was the one who deleted that.
+
+19
+00:00:58,529 --> 00:01:00,669
+I was like, that's me. That's me. You're talking about me.
+
+20
+00:01:01,060 --> 00:01:01,400
+Yeah.
+
+21
+00:01:01,569 --> 00:01:04,739
+So, so just for your future reference and anyone else listening,
+
+22
+00:01:04,750 --> 00:01:09,080
+the easiest way to invite yourself on the show is to just say I want to come on your show
+
+23
+00:01:09,470 --> 00:01:10,400
+and be interesting.
+
+24
+00:01:10,559 --> 00:01:13,110
+And if you're interesting and we like what you're doing,
+
+25
+00:01:13,120 --> 00:01:14,559
+you'll totally get an invite.
+
+26
+00:01:14,569 --> 00:01:16,750
+It was very easy. Yes. Yes.
+
+27
+00:01:16,790 --> 00:01:19,540
+-- It's,
+-- it's always amusing to me that every now and then someone will be like, oh,
+
+28
+00:01:19,550 --> 00:01:20,169
+how much is it?
+
+29
+00:01:20,180 --> 00:01:22,279
+Does it cost to be on the show? And I'm like,
+
+30
+00:01:22,480 --> 00:01:26,269
+you just have to be doing something interesting and then they never email me back.
+
+31
+00:01:26,489 --> 00:01:27,000
+So I like
+
+32
+00:01:27,589 --> 00:01:29,680
+that. I feel like is very telling.
+
+33
+00:01:29,980 --> 00:01:30,480
+Yes.
+
+34
+00:01:30,750 --> 00:01:31,750
+Anyway. Ok.
+
+35
+00:01:31,760 --> 00:01:35,449
+So we have Carol and we, we're going to try to talk about Rust as much as we can.
+
+36
+00:01:35,459 --> 00:01:37,220
+But I guess let's just start at the very beginning,
+
+37
+00:01:37,230 --> 00:01:39,760
+Carol because you obviously have written a book
+
+38
+00:01:39,910 --> 00:01:41,860
+and we'll get to the book in a little while, but just
+
+39
+00:01:41,989 --> 00:01:44,339
+like explain Rust to us, right?
+
+40
+00:01:44,349 --> 00:01:45,790
+Because you're, you're in a unique,
+
+41
+00:01:45,809 --> 00:01:50,069
+authoritative position to do this versus Kurt and I who are not.
+
+42
+00:01:50,339 --> 00:01:56,400
+Yeah. So Rust is a statically typed compiled
+
+43
+00:01:56,599 --> 00:02:01,120
+language that is aiming to be an alternative to C and C++ mainly one of
+
+44
+00:02:01,129 --> 00:02:06,099
+its main ideas is ownership and borrowing and lifetimes that kind of all related.
+
+45
+00:02:06,330 --> 00:02:07,019
+And that
+
+46
+00:02:07,239 --> 00:02:10,710
+is a big part of how Rust manages memory safely,
+
+47
+00:02:11,119 --> 00:02:13,880
+which eliminates at compile time.
+
+48
+00:02:14,100 --> 00:02:17,979
+A lot of the memory safety problems that other languages run into
+
+49
+00:02:18,240 --> 00:02:20,539
+and because this is happening at compile time,
+
+50
+00:02:20,750 --> 00:02:24,100
+you don't get the performance penalty of a garbage collector
+
+51
+00:02:24,110 --> 00:02:28,220
+or other uh reference counting that happens at run time.
+
+52
+00:02:28,229 --> 00:02:32,940
+So we think that rust is a great step forward.
+
+53
+00:02:32,949 --> 00:02:36,740
+Like I got involved because I was, I was doing Ruby
+
+54
+00:02:37,169 --> 00:02:40,570
+and doing a lot of performance treating of Ruby. And at some point
+
+55
+00:02:41,860 --> 00:02:42,940
+that's, that's a tough road.
+
+56
+00:02:42,949 --> 00:02:45,350
+Like I remember Aaron Patterson, some of the stuff he was working on.
+
+57
+00:02:45,360 --> 00:02:46,089
+It was just bonkers.
+
+58
+00:02:47,009 --> 00:02:47,830
+It's,
+
+59
+00:02:48,050 --> 00:02:48,949
+it's a lot.
+
+60
+00:02:48,960 --> 00:02:52,320
+And at some point if you want to get more performance out of Ruby,
+
+61
+00:02:52,330 --> 00:02:53,440
+you have to drop into C,
+
+62
+00:02:53,449 --> 00:02:59,399
+I'm terrified of C I should be nowhere near production C and that was about the
+
+63
+00:02:59,505 --> 00:03:00,725
+time that
+
+64
+00:03:00,906 --> 00:03:01,805
+Russ started
+
+65
+00:03:02,035 --> 00:03:03,876
+being like a viable thing.
+
+66
+00:03:03,886 --> 00:03:07,436
+It was before 10, but I was like, oh, hey, this looks pretty interesting.
+
+67
+00:03:07,445 --> 00:03:08,606
+And then Steve Clad
+
+68
+00:03:08,716 --> 00:03:10,776
+Nick wrote a book, an ebook called Russ for
+
+69
+00:03:10,996 --> 00:03:13,395
+Rubeus. I was like, oh, I can do this
+
+70
+00:03:13,845 --> 00:03:17,126
+and, and it's really great and I got
+
+71
+00:03:17,315 --> 00:03:21,755
+clearly super involved trying to help other people get into Rus.
+
+72
+00:03:22,311 --> 00:03:27,852
+And I just feel like it's the compiler keeping track of the tedium of,
+
+73
+00:03:27,861 --> 00:03:31,921
+of managing the memory for me so that I can, I can think about other things.
+
+74
+00:03:31,932 --> 00:03:34,501
+I don't have to become a master of, of
+
+75
+00:03:34,651 --> 00:03:37,852
+all the rules and, and pitfalls and foot guns.
+
+76
+00:03:37,861 --> 00:03:41,761
+Like computers are really great at keeping track of TDM. And people are not.
+
+77
+00:03:41,871 --> 00:03:43,451
+So let's let the computer
+
+78
+00:03:43,552 --> 00:03:44,332
+do that
+
+79
+00:03:44,671 --> 00:03:48,212
+and I get to write fast systems code
+
+80
+00:03:48,729 --> 00:03:52,550
+and think about my actual problem and not think about these memory safety problems.
+
+81
+00:03:52,559 --> 00:03:56,309
+So, so I think this is, is a big leap forward for the industry.
+
+82
+00:03:56,320 --> 00:04:02,669
+Of course, there's always more to do. There's there might be a next better language.
+
+83
+00:04:02,679 --> 00:04:03,089
+But
+
+84
+00:04:03,309 --> 00:04:06,750
+right now I feel really good about the state of us and
+
+85
+00:04:07,250 --> 00:04:11,970
+uh the industry does too. It's taking off and being used in more and more places.
+
+86
+00:04:11,979 --> 00:04:16,670
+And I think it's really going to help the industry overall become
+
+87
+00:04:17,029 --> 00:04:19,559
+safer and faster and
+
+88
+00:04:19,750 --> 00:04:22,489
+use for your resources, which is good for the environment,
+
+89
+00:04:22,619 --> 00:04:24,239
+improved security.
+
+90
+00:04:24,339 --> 00:04:26,570
+Holy cow. There's a lot to unpack in that,
+
+91
+00:04:27,130 --> 00:04:28,000
+that description.
+
+92
+00:04:28,690 --> 00:04:29,630
+Let's
+
+93
+00:04:29,959 --> 00:04:32,369
+let's start with the concept of borrowing because I
+
+94
+00:04:32,380 --> 00:04:35,410
+think that's the most unique and maybe different idea.
+
+95
+00:04:35,420 --> 00:04:38,019
+Rust has over other languages.
+
+96
+00:04:38,320 --> 00:04:41,209
+Explain to us what that means
+
+97
+00:04:41,320 --> 00:04:42,630
+because I don't think
+
+98
+00:04:42,959 --> 00:04:47,230
+it's something that we'll say traditional programmers will expect or understand.
+
+99
+00:04:48,149 --> 00:04:48,609
+Yes.
+
+100
+00:04:48,899 --> 00:04:51,670
+So this is actually the main reason I wanted to
+
+101
+00:04:51,679 --> 00:04:54,529
+come on the show because on the memory safety show,
+
+102
+00:04:54,829 --> 00:04:57,429
+Kurt was like, oh, Russ doesn't have a garbage collector
+
+103
+00:04:57,540 --> 00:04:59,109
+and it doesn't have a garbage collector.
+
+104
+00:04:59,299 --> 00:05:01,760
+Yeah, I honestly just assumed it did because like,
+
+105
+00:05:02,170 --> 00:05:03,399
+how else do you do it?
+
+106
+00:05:04,290 --> 00:05:05,559
+Well, let me tell you how.
+
+107
+00:05:06,630 --> 00:05:07,769
+So you also,
+
+108
+00:05:07,929 --> 00:05:10,869
+you also don't have to type alec and free all
+
+109
+00:05:10,880 --> 00:05:13,730
+over your code what the compiler does is when you,
+
+110
+00:05:13,739 --> 00:05:16,489
+when you create a variable and put some data in it.
+
+111
+00:05:16,739 --> 00:05:20,290
+And then at some point later that variable goes out of scope,
+
+112
+00:05:20,549 --> 00:05:25,829
+the compiler can analyze that and see. OK, it's that variables out of scope.
+
+113
+00:05:25,839 --> 00:05:28,989
+Now, at that point, I'm going to insert
+
+114
+00:05:29,170 --> 00:05:32,679
+it's called a drop called to the drop function.
+
+115
+00:05:32,690 --> 00:05:35,769
+And that's the cleanup code that will do the delo
+
+116
+00:05:36,880 --> 00:05:40,920
+and then you have the borrow checker which is
+
+117
+00:05:41,149 --> 00:05:45,179
+looking at where the variable is created and where it goes out of scope.
+
+118
+00:05:45,250 --> 00:05:47,690
+And the references you take to it, the borrowing
+
+119
+00:05:47,880 --> 00:05:52,899
+and make sure that you're not holding on to that borrow or trying to
+
+120
+00:05:52,910 --> 00:05:58,380
+use a borrow outside of where that value is going to be valid.
+
+121
+00:05:58,390 --> 00:06:00,380
+And there are additional rules on there.
+
+122
+00:06:00,470 --> 00:06:05,130
+You can have immutable borrows which means you just can read the data
+
+123
+00:06:05,470 --> 00:06:06,140
+and then,
+
+124
+00:06:06,149 --> 00:06:08,890
+and you can have as many of those as you want or you can have
+
+125
+00:06:08,899 --> 00:06:15,600
+one mutable reference mutable borrow to the value at a in a scope at a
+
+126
+00:06:15,880 --> 00:06:19,359
+time. And that is all checked at compile time.
+
+127
+00:06:19,369 --> 00:06:22,049
+So you don't get race conditions that way.
+
+128
+00:06:22,299 --> 00:06:28,170
+And the other neat thing is that this analysis works across threads as well.
+
+129
+00:06:28,179 --> 00:06:29,269
+There are additional
+
+130
+00:06:29,904 --> 00:06:35,265
+called send N sync and these are send, it means a type is
+
+131
+00:06:35,614 --> 00:06:40,975
+safe to send to another thread and that moves ownership to the other thread. So
+
+132
+00:06:41,265 --> 00:06:44,434
+the other, the next thread is responsible for cleaning it up.
+
+133
+00:06:44,445 --> 00:06:46,734
+And the first thread doesn't have access to it anymore.
+
+134
+00:06:46,834 --> 00:06:50,535
+Then sync is for types that are safe to share between threads.
+
+135
+00:06:50,545 --> 00:06:53,834
+So that's those are types like your mutex or um
+
+136
+00:06:54,190 --> 00:06:58,489
+an atomically reference counted variable where it only cleans up once
+
+137
+00:06:58,720 --> 00:07:02,489
+nothing is referring to it anymore. And that does happen at run time,
+
+138
+00:07:02,640 --> 00:07:03,079
+but
+
+139
+00:07:03,440 --> 00:07:05,850
+you'll get a compile error if you try to
+
+140
+00:07:05,859 --> 00:07:09,170
+share something across threads that you're not allowed to.
+
+141
+00:07:09,350 --> 00:07:15,070
+Again, like humans and especially me should not be writing multi threaded C and C++.
+
+142
+00:07:15,079 --> 00:07:18,529
+It has been proven to be impossible to get right.
+
+143
+00:07:19,100 --> 00:07:23,119
+Uh And it's really hard to debug like even if you can get it right.
+
+144
+00:07:23,130 --> 00:07:26,019
+Most of the time someone's going to mess up something somewhere and
+
+145
+00:07:26,029 --> 00:07:28,790
+you're gonna have to debug it at some point and it's terrible.
+
+146
+00:07:29,230 --> 00:07:32,329
+But in Rust, you get compiler errors,
+
+147
+00:07:32,339 --> 00:07:34,480
+which means you don't ever get it into production.
+
+148
+00:07:34,489 --> 00:07:36,940
+You don't ever have to get to the debugging part,
+
+149
+00:07:37,369 --> 00:07:39,750
+you have to deal with the compiler errors.
+
+150
+00:07:39,950 --> 00:07:44,049
+So this is this is kind of a mind mindset shift for a lot of programmers.
+
+151
+00:07:44,320 --> 00:07:47,730
+And another thing that I love about Russ is that
+
+152
+00:07:47,890 --> 00:07:50,250
+a lot of people have put a lot of work into making
+
+153
+00:07:50,260 --> 00:07:55,350
+the compiler errors useful and friendly and like specific to your code.
+
+154
+00:07:55,359 --> 00:07:57,519
+It points out exactly what your problem is.
+
+155
+00:07:57,890 --> 00:07:58,670
+So
+
+156
+00:07:58,880 --> 00:08:01,640
+one thing that a lot of programmers have to have
+
+157
+00:08:01,649 --> 00:08:03,929
+to learn and unlearn when they switch to rust.
+
+158
+00:08:03,940 --> 00:08:04,630
+Is that
+
+159
+00:08:05,140 --> 00:08:07,890
+the compiler error messages? You want, you want to
+
+160
+00:08:08,029 --> 00:08:09,799
+spend a minute and read those?
+
+161
+00:08:10,019 --> 00:08:12,739
+Like, I've seen programmers be like, oh, error. OK.
+
+162
+00:08:12,750 --> 00:08:15,989
+Let me go change some random thing and try it again and say, oh, it's still an error.
+
+163
+00:08:16,000 --> 00:08:16,989
+It's like, no, no, no,
+
+164
+00:08:17,119 --> 00:08:22,130
+no, seriously. Stop, go read. It'll tell you exactly what you need to change.
+
+165
+00:08:22,350 --> 00:08:25,589
+But in, you know, c you get, you get core dump,
+
+166
+00:08:25,709 --> 00:08:26,940
+it's like, what is this?
+
+167
+00:08:27,720 --> 00:08:31,489
+-- I don't know. Good luck.
+-- Like even Python, I end up like reading. OK.
+
+168
+00:08:31,500 --> 00:08:34,650
+No, it's this module. No, it's not that it was called from here. OK. No, no, no,
+
+169
+00:08:34,849 --> 00:08:39,539
+no, no. OK. Oh, I forgot this on line 32. You know, eventually I get there.
+
+170
+00:08:39,890 --> 00:08:40,500
+Sometimes
+
+171
+00:08:41,599 --> 00:08:43,710
+a lot of, a lot of really smart people,
+
+172
+00:08:43,719 --> 00:08:48,979
+a lot of really great ideas are kind of coalescing in the Russ that just make it
+
+173
+00:08:49,469 --> 00:08:51,190
+a real pleasure to work with
+
+174
+00:08:51,440 --> 00:08:54,599
+it once you kind of get into the right mindset,
+
+175
+00:08:54,719 --> 00:08:57,429
+that's actually one thing I realize I've now never really given thought to.
+
+176
+00:08:57,440 --> 00:09:00,250
+So Rust is essentially sort of front loading the
+
+177
+00:09:00,260 --> 00:09:03,280
+errors by catching them in the compiler versus like,
+
+178
+00:09:03,380 --> 00:09:07,260
+well, my favorite recent thing is this Netflix Tech blog where they talked about it,
+
+179
+00:09:07,270 --> 00:09:08,349
+a Java function that
+
+180
+00:09:08,469 --> 00:09:11,940
+was supposed to be three times faster and it wasn't, and it turns out it was like a,
+
+181
+00:09:12,179 --> 00:09:13,950
+a cash miss hit thing.
+
+182
+00:09:13,960 --> 00:09:15,580
+And they literally just added a 64 byte
+
+183
+00:09:15,590 --> 00:09:17,750
+pad and then boom performance increased threefold,
+
+184
+00:09:17,760 --> 00:09:17,880
+right?
+
+185
+00:09:17,890 --> 00:09:20,750
+And it's this horrendously technical, you know, where they were doing like
+
+186
+00:09:21,479 --> 00:09:25,869
+the severely technical levels of investigation, you know, for
+
+187
+00:09:26,580 --> 00:09:28,239
+a simple fix as it were. And
+
+188
+00:09:28,799 --> 00:09:32,239
+so yeah, if Rust is catching these on the front end in the compiler and
+
+189
+00:09:33,200 --> 00:09:36,190
+not just catching them, but then essentially it forces you to fix them, right?
+
+190
+00:09:36,200 --> 00:09:37,580
+Because otherwise it won't compile.
+
+191
+00:09:38,080 --> 00:09:41,460
+Exactly. And there's no, just to confirm there's no way to override this.
+
+192
+00:09:42,200 --> 00:09:42,229
+Ah
+
+193
+00:09:43,229 --> 00:09:44,489
+There is OK.
+
+194
+00:09:44,890 --> 00:09:47,270
+Tiny catch. There is unsafe,
+
+195
+00:09:47,380 --> 00:09:49,070
+which is a key word in Rust.
+
+196
+00:09:49,359 --> 00:09:51,340
+And that lets you
+
+197
+00:09:51,440 --> 00:09:54,750
+opt out of a limited set of the checks.
+
+198
+00:09:54,856 --> 00:09:56,135
+The Rust does not all of them.
+
+199
+00:09:56,145 --> 00:09:57,995
+You can't just like turn off all the checks,
+
+200
+00:09:58,005 --> 00:10:01,346
+but it lets you do things like de reference a raw pointer.
+
+201
+00:10:01,645 --> 00:10:02,366
+And
+
+202
+00:10:02,705 --> 00:10:05,885
+because sometimes, especially when you're doing foreign function interface,
+
+203
+00:10:05,895 --> 00:10:06,306
+when you're,
+
+204
+00:10:06,315 --> 00:10:10,585
+when you're uh interfacing with an unsafe language like Sears C++ or something,
+
+205
+00:10:10,596 --> 00:10:12,366
+the Rust compiler can't check
+
+206
+00:10:12,606 --> 00:10:14,195
+or if you're doing hardware,
+
+207
+00:10:14,536 --> 00:10:16,505
+which is inherently unsafe, you
+
+208
+00:10:16,622 --> 00:10:19,721
+use the unsafe keyword, get direct access to it.
+
+209
+00:10:19,892 --> 00:10:22,802
+And the unsafe keyword is saying I as a human
+
+210
+00:10:22,971 --> 00:10:25,601
+have checked this and I promise you,
+
+211
+00:10:25,812 --> 00:10:28,192
+I've sat there and thought about it a long time and I promise
+
+212
+00:10:28,202 --> 00:10:31,992
+you it's valid because the compiler can't check it for some reason.
+
+213
+00:10:32,851 --> 00:10:38,202
+And the way that this is helpful is that when you do get a seg fault of some sort,
+
+214
+00:10:38,679 --> 00:10:45,940
+then if you've been limited in the amount of unsafe usages you've used, you know,
+
+215
+00:10:45,950 --> 00:10:48,260
+that the problem has to come from one of those
+
+216
+00:10:48,400 --> 00:10:49,919
+limited usages.
+
+217
+00:10:49,929 --> 00:10:51,989
+So it really cuts down the scope of what
+
+218
+00:10:52,000 --> 00:10:54,619
+you have to investigate when something goes wrong.
+
+219
+00:10:54,750 --> 00:10:55,539
+So,
+
+220
+00:10:55,859 --> 00:10:57,900
+yes, there is this escape hatch.
+
+221
+00:10:58,349 --> 00:11:02,210
+But as long as you're not putting your entire code base in an unsafe block,
+
+222
+00:11:02,929 --> 00:11:05,659
+it's, it's going to help. It's still going to help.
+
+223
+00:11:06,520 --> 00:11:10,390
+Well, and I think that's uh see, and this is, I think what I like about rust is rust is
+
+224
+00:11:11,130 --> 00:11:15,469
+there's the ideal and then there's, we actually have to talk to existing C code.
+
+225
+00:11:15,960 --> 00:11:19,510
+And the reality is every time I've seen this is the ideal this will replace.
+
+226
+00:11:19,520 --> 00:11:19,710
+Like,
+
+227
+00:11:19,719 --> 00:11:21,799
+remember when Java was going to replace CI I
+
+228
+00:11:21,809 --> 00:11:23,909
+literally remember that it was a long time ago.
+
+229
+00:11:23,919 --> 00:11:24,229
+But
+
+230
+00:11:24,510 --> 00:11:25,270
+yeah, it didn't
+
+231
+00:11:25,489 --> 00:11:26,659
+too much sunk cost.
+
+232
+00:11:26,890 --> 00:11:27,450
+And
+
+233
+00:11:27,669 --> 00:11:30,140
+that's what like the fact that the Linux kernel is like, hey,
+
+234
+00:11:30,150 --> 00:11:32,619
+we shoved rust in there and now like you can start
+
+235
+00:11:32,849 --> 00:11:36,909
+making parts of your driver in rust that are just a whole lot safer and simpler.
+
+236
+00:11:37,309 --> 00:11:37,669
+It's like, oh,
+
+237
+00:11:37,679 --> 00:11:40,820
+this might actually take off because we don't have to rebuild the world and,
+
+238
+00:11:40,830 --> 00:11:41,530
+and that's, I think
+
+239
+00:11:42,200 --> 00:11:43,359
+I just, it's not going to happen.
+
+240
+00:11:43,369 --> 00:11:46,090
+-- We're not going to rebuild every single piece of sea on the planet.
+-- Yeah.
+
+241
+00:11:46,179 --> 00:11:48,239
+So I actually did a talk which
+
+242
+00:11:48,359 --> 00:11:53,729
+I know, I know this podcast kind of gets off on unrelated tangents a lot. And, uh,
+
+243
+00:11:55,099 --> 00:11:55,109
+a
+
+244
+00:11:55,289 --> 00:11:57,900
+little bit, I, I don't have room to talk because I,
+
+245
+00:11:57,909 --> 00:12:02,559
+I did a talk once that the first half of it was about railroad air air brakes.
+
+246
+00:12:03,099 --> 00:12:03,599
+Uh,
+
+247
+00:12:03,969 --> 00:12:07,559
+and it's actually related because, uh
+
+248
+00:12:07,789 --> 00:12:10,239
+George Westinghouse discovered that there,
+
+249
+00:12:10,250 --> 00:12:13,380
+there was a way to do automatic braking of the
+
+250
+00:12:13,390 --> 00:12:15,900
+entire train all at once with these air brakes.
+
+251
+00:12:16,169 --> 00:12:16,679
+And
+
+252
+00:12:16,890 --> 00:12:21,239
+before then they had to have guys up on each train, turning this wheel to,
+
+253
+00:12:21,250 --> 00:12:23,984
+to stop the train and just, people couldn't
+
+254
+00:12:24,114 --> 00:12:29,955
+stop the train fast enough. And so it was, it was wildly unsafe, but within 80 years,
+
+255
+00:12:30,354 --> 00:12:33,645
+they transitioned all the trains in the United States
+
+256
+00:12:33,744 --> 00:12:36,674
+from using the hand brakes to the air brakes.
+
+257
+00:12:37,065 --> 00:12:39,775
+And I'm looking at and looking at sea
+
+258
+00:12:40,034 --> 00:12:43,135
+and seeing the sea has been around for like 4050 years. Now.
+
+259
+00:12:44,094 --> 00:12:46,974
+Are we going to make it? Are we gonna, we know c is unsafe?
+
+260
+00:12:46,984 --> 00:12:50,044
+Now, we know this, we've had empirical evidence
+
+261
+00:12:50,489 --> 00:12:54,539
+across many code bases across many companies. We can't do this.
+
+262
+00:12:54,729 --> 00:12:56,580
+We have better tools available.
+
+263
+00:12:57,330 --> 00:13:02,210
+Are we going to as an industry as a country as a world?
+
+264
+00:13:02,390 --> 00:13:08,090
+Are we going to choose to not do the thing we know is not safe anymore?
+
+265
+00:13:08,099 --> 00:13:12,969
+And I don't know if we're going to beat the railroads in the 18 hundreds.
+
+266
+00:13:12,979 --> 00:13:15,809
+It's, there's just so much code out there,
+
+267
+00:13:16,049 --> 00:13:17,770
+but that doesn't mean, we shouldn't try.
+
+268
+00:13:17,820 --> 00:13:21,150
+-- I mean,
+-- as far as I know, Canada is still mining and exporting asbestos.
+
+269
+00:13:23,505 --> 00:13:24,065
+Yeah, there's that
+
+270
+00:13:24,484 --> 00:13:24,655
+like,
+
+271
+00:13:24,775 --> 00:13:26,604
+it's not, you can't do it here. But
+
+272
+00:13:27,174 --> 00:13:30,205
+-- I
+-- want to put this into context because I actually think that's a
+
+273
+00:13:30,215 --> 00:13:32,744
+very good analogy and I'm probably going to steal it at some point,
+
+274
+00:13:32,755 --> 00:13:33,044
+but
+
+275
+00:13:33,434 --> 00:13:34,875
+80 years
+
+276
+00:13:35,104 --> 00:13:37,385
+feels like a long time to us.
+
+277
+00:13:37,565 --> 00:13:38,005
+But
+
+278
+00:13:38,244 --> 00:13:41,635
+when you think about how much existing hardware
+
+279
+00:13:41,645 --> 00:13:43,804
+and infrastructure and everything is in place in,
+
+280
+00:13:43,815 --> 00:13:45,244
+in a large industry,
+
+281
+00:13:45,695 --> 00:13:49,955
+80 years is probably pretty fast. And I have a suspicion if we're going to measure
+
+282
+00:13:50,340 --> 00:13:53,159
+how long we're still gonna see, see development happening.
+
+283
+00:13:53,169 --> 00:13:56,520
+80 years is probably not an unrealistic timeline,
+
+284
+00:13:57,419 --> 00:14:01,929
+which also I, I felt I was uh Keys Cook wrote a
+
+285
+00:14:02,049 --> 00:14:03,760
+blog article, I'll try, I'll try to dig it up,
+
+286
+00:14:03,770 --> 00:14:06,359
+but I was talking about some of the security enhancements they put in Linux.
+
+287
+00:14:06,989 --> 00:14:08,719
+And when he said, you know, it's been
+
+288
+00:14:08,849 --> 00:14:14,099
+half a century of C use. I'm like, holy cow. I feel old like this is,
+
+289
+00:14:14,250 --> 00:14:17,429
+this is an old language now. But yeah,
+
+290
+00:14:17,530 --> 00:14:19,450
+I mean, that's where we're at, that's where we're at.
+
+291
+00:14:19,710 --> 00:14:21,650
+All right. All right. I want to,
+
+292
+00:14:21,780 --> 00:14:24,770
+I want to back us up one more time because I want to
+
+293
+00:14:24,780 --> 00:14:29,369
+tease out the borrow concept from Rust because I think it is if,
+
+294
+00:14:29,380 --> 00:14:30,619
+if let's
+
+295
+00:14:30,820 --> 00:14:33,580
+put ourselves in the shoes of ac programmer because
+
+296
+00:14:33,590 --> 00:14:36,515
+if you're programming in C you're passing pointers around,
+
+297
+00:14:36,525 --> 00:14:37,945
+like it's nobody's business
+
+298
+00:14:38,135 --> 00:14:42,375
+and anything can read or write to that pointer anytime it wants and nobody, you know,
+
+299
+00:14:42,385 --> 00:14:43,424
+the compiler doesn't care.
+
+300
+00:14:43,434 --> 00:14:44,974
+It does exactly what it's told.
+
+301
+00:14:45,174 --> 00:14:50,724
+Rust does not work this way. And as a I IC was one of the first languages I learned
+
+302
+00:14:50,945 --> 00:14:52,484
+and the brow concept
+
+303
+00:14:52,625 --> 00:14:53,664
+I think was the
+
+304
+00:14:54,250 --> 00:14:58,549
+single hardest thing for me to get. But once I understood it it was like, holy crap.
+
+305
+00:14:58,559 --> 00:14:59,630
+This is the way.
+
+306
+00:14:59,859 --> 00:15:00,229
+Yes.
+
+307
+00:15:00,239 --> 00:15:01,270
+And like,
+
+308
+00:15:01,280 --> 00:15:05,580
+so I took one c course in college and I
+
+309
+00:15:05,679 --> 00:15:09,270
+didn't like I could recite to you the academic definition,
+
+310
+00:15:09,280 --> 00:15:13,309
+you know, a pointer is an address that points to data on the heap.
+
+311
+00:15:13,700 --> 00:15:17,500
+But like as far as how to use that in my code and how to think about it,
+
+312
+00:15:17,510 --> 00:15:19,010
+like it just never clicked for me.
+
+313
+00:15:19,169 --> 00:15:21,500
+Well, or the stack, it can point at literally anything,
+
+314
+00:15:22,349 --> 00:15:24,200
+the best part and the worst part.
+
+315
+00:15:24,619 --> 00:15:27,440
+And I don't, I don't remember talking about any of that,
+
+316
+00:15:27,450 --> 00:15:32,159
+like safety and thinking about making sure that your pointers are val.
+
+317
+00:15:32,169 --> 00:15:34,150
+I don't remember that. I mean, granted,
+
+318
+00:15:34,250 --> 00:15:36,159
+you know, I was very confused at the time.
+
+319
+00:15:36,570 --> 00:15:37,159
+Um
+
+320
+00:15:37,260 --> 00:15:40,280
+So I would just, you know, throw amper sands and ask her so
+
+321
+00:15:40,429 --> 00:15:44,609
+on my coat and pray for it to work and be in the office hours all the time.
+
+322
+00:15:44,619 --> 00:15:48,140
+But yeah, something about rust calling it borrowing
+
+323
+00:15:48,539 --> 00:15:54,179
+and the compiler helping you really made it click that and it is very similar.
+
+324
+00:15:54,190 --> 00:15:55,479
+So you have a value
+
+325
+00:15:56,190 --> 00:16:02,679
+and then you can do AMP or sand value and that is borrowing that value
+
+326
+00:16:02,809 --> 00:16:03,750
+and then you can
+
+327
+00:16:04,469 --> 00:16:08,530
+use that borrow places, but it's still, it's still typed.
+
+328
+00:16:08,539 --> 00:16:11,640
+It's a borrow to a particular a value of a particular type.
+
+329
+00:16:11,869 --> 00:16:14,659
+So you don't have the problem of, of like
+
+330
+00:16:14,830 --> 00:16:17,140
+misinterpreting what you're pointing at
+
+331
+00:16:17,510 --> 00:16:17,869
+that.
+
+332
+00:16:17,880 --> 00:16:22,000
+You mightn't see another side effect of Rust's compile
+
+333
+00:16:22,010 --> 00:16:23,570
+time checks in the borrow checker is that,
+
+334
+00:16:23,580 --> 00:16:24,929
+you know, when you have a borrow,
+
+335
+00:16:25,043 --> 00:16:26,653
+when you have a reference in Rust,
+
+336
+00:16:26,913 --> 00:16:28,593
+you know, it's always valid,
+
+337
+00:16:28,802 --> 00:16:30,482
+there are no no pointers.
+
+338
+00:16:30,583 --> 00:16:36,353
+So there is a separate concept called an option that can be some or none.
+
+339
+00:16:36,362 --> 00:16:41,362
+And that is where the concept of having something or nothing can come in.
+
+340
+00:16:41,413 --> 00:16:44,083
+But again, because that's a type, it's an enum
+
+341
+00:16:44,252 --> 00:16:46,286
+that can have two possible values.
+
+342
+00:16:46,445 --> 00:16:49,145
+But whenever you try to use that value,
+
+343
+00:16:49,445 --> 00:16:50,856
+the compiler says,
+
+344
+00:16:51,125 --> 00:16:54,445
+uh can you make sure you handle the case of,
+
+345
+00:16:54,455 --> 00:16:57,825
+of when this is nothing as opposed to something and
+
+346
+00:16:58,046 --> 00:16:58,875
+do,
+
+347
+00:16:59,185 --> 00:17:03,125
+tell me exactly what you want me to do if in the case of this is nothing, it,
+
+348
+00:17:03,135 --> 00:17:06,286
+it has uh exhaustive case checking.
+
+349
+00:17:06,630 --> 00:17:09,449
+So it's impossible to use
+
+350
+00:17:09,680 --> 00:17:11,969
+nothing as if it were something in R
+
+351
+00:17:12,189 --> 00:17:13,770
+which is another huge,
+
+352
+00:17:13,880 --> 00:17:18,250
+I was so tired and ruby of getting undefined method on nil
+
+353
+00:17:18,680 --> 00:17:21,729
+in production all the time and it was just normal
+
+354
+00:17:21,910 --> 00:17:22,209
+and
+
+355
+00:17:22,319 --> 00:17:25,290
+it's just that problem is gone. And rust.
+
+356
+00:17:25,469 --> 00:17:29,420
+It's like a weight lifted. I don't have to worry about that problem anymore.
+
+357
+00:17:29,430 --> 00:17:34,329
+-- I can think about my other problems.
+-- A lot of my javascript and Python code is.
+
+358
+00:17:34,349 --> 00:17:37,979
+Does this exist? Oh, it does? Ok. Ok. Let's do something.
+
+359
+00:17:38,349 --> 00:17:39,630
+Oh, it doesn't exist. Uh,
+
+360
+00:17:39,760 --> 00:17:40,219
+uh,
+
+361
+00:17:40,469 --> 00:17:40,949
+oh,
+
+362
+00:17:41,410 --> 00:17:41,890
+yeah,
+
+363
+00:17:42,000 --> 00:17:43,739
+undefined is not a function.
+
+364
+00:17:44,000 --> 00:17:45,300
+Uh, fun times.
+
+365
+00:17:45,640 --> 00:17:46,579
+I love that.
+
+366
+00:17:46,780 --> 00:17:52,339
+But, yeah, just thinking about, ok, something, something else is going to
+
+367
+00:17:52,869 --> 00:17:54,619
+be taking care of
+
+368
+00:17:55,020 --> 00:17:57,160
+whether this is valid or not.
+
+369
+00:17:57,170 --> 00:18:01,069
+And I, I just know that I have something here and I can read from it
+
+370
+00:18:01,189 --> 00:18:03,819
+or I'm allowed to write from it in this case.
+
+371
+00:18:04,010 --> 00:18:08,290
+And like knowing, knowing where mutability can happen or not, can uh
+
+372
+00:18:08,729 --> 00:18:11,420
+really help how you reason about your code.
+
+373
+00:18:11,790 --> 00:18:12,979
+Um And
+
+374
+00:18:13,459 --> 00:18:16,689
+oh like in the function signature, it'll say, am I,
+
+375
+00:18:16,699 --> 00:18:19,839
+am I getting a mutable reference or am I getting an immutable reference?
+
+376
+00:18:19,849 --> 00:18:20,719
+So you know,
+
+377
+00:18:20,729 --> 00:18:26,180
+is this function possibly going to change the value of what I'm passing to it or not?
+
+378
+00:18:26,420 --> 00:18:27,000
+And
+
+379
+00:18:27,209 --> 00:18:29,819
+that reasoning both on a human level and on a compiler
+
+380
+00:18:29,829 --> 00:18:34,880
+level can help you think about what your code is doing easier
+
+381
+00:18:35,060 --> 00:18:35,800
+and
+
+382
+00:18:36,099 --> 00:18:40,119
+also enable some optimizations on the in the compiler side.
+
+383
+00:18:40,500 --> 00:18:44,939
+So quick question, for example, if you pass an immutable value and then try to
+
+384
+00:18:45,650 --> 00:18:48,719
+like try to modify it, the compiler will catch that and
+
+385
+00:18:49,479 --> 00:18:49,739
+tell you
+
+386
+00:18:50,160 --> 00:18:51,130
+will borrow. Yeah.
+
+387
+00:18:52,339 --> 00:18:53,760
+And actually the
+
+388
+00:18:54,040 --> 00:18:56,000
+the variables when you declare them
+
+389
+00:18:56,239 --> 00:19:00,000
+you, you have to say let variable or let mute variable.
+
+390
+00:19:00,010 --> 00:19:02,040
+So you can just declare the value
+
+391
+00:19:02,290 --> 00:19:05,839
+to be. It's actually the binding is what it's variable binding
+
+392
+00:19:06,050 --> 00:19:07,319
+is the technical term for it.
+
+393
+00:19:07,390 --> 00:19:10,760
+But basically, if you pass it as immutable, then you never have to worry.
+
+394
+00:19:11,050 --> 00:19:11,560
+Yes.
+
+395
+00:19:12,099 --> 00:19:12,260
+Yeah.
+
+396
+00:19:12,270 --> 00:19:13,670
+If you pass it as immutable,
+
+397
+00:19:13,680 --> 00:19:18,079
+that function is not allowed to mutate it and you'll get a compiler error if you try
+
+398
+00:19:18,869 --> 00:19:19,800
+because this, I mean,
+
+399
+00:19:19,810 --> 00:19:23,680
+because my experience of programming has been consistently that we build tools
+
+400
+00:19:23,869 --> 00:19:27,119
+so that like, yeah, we use the programmer have kind of less
+
+401
+00:19:27,560 --> 00:19:30,209
+minutia to think about, you know, things like, well,
+
+402
+00:19:30,219 --> 00:19:32,859
+like you typed out a function name, does that function exist?
+
+403
+00:19:32,869 --> 00:19:36,109
+If it does exist, make it bold if it doesn't exist, make it like grayed out.
+
+404
+00:19:36,119 --> 00:19:38,760
+So that do I have to create it? Did I misspell it, you know,
+
+405
+00:19:38,890 --> 00:19:42,790
+vs code does this for example, like simple example but like I can't type
+
+406
+00:19:42,979 --> 00:19:44,400
+so I do this all the time
+
+407
+00:19:45,060 --> 00:19:47,410
+and I'm just thinking like especially with
+
+408
+00:19:48,060 --> 00:19:52,050
+the number of variables and the types of variables like,
+
+409
+00:19:52,479 --> 00:19:54,729
+yeah, I, I just can't hold that in my head anymore.
+
+410
+00:19:54,739 --> 00:19:55,339
+Like when I was like,
+
+411
+00:19:55,349 --> 00:19:58,239
+I read the C book once upon a time and tried to learn to program C and
+
+412
+00:19:58,369 --> 00:19:58,900
+you know, yeah,
+
+413
+00:19:58,910 --> 00:20:02,660
+I can make a toy program that like takes a name and plays Tic Tac toe with you
+
+414
+00:20:03,109 --> 00:20:04,680
+with like three variables. But
+
+415
+00:20:04,930 --> 00:20:07,359
+then I go look at like the bind code base and I'm like,
+
+416
+00:20:08,160 --> 00:20:09,849
+OK, there's a lot of variables here.
+
+417
+00:20:09,890 --> 00:20:13,579
+Like I, and where the hell are they coming from or going? And, you know,
+
+418
+00:20:14,339 --> 00:20:15,219
+and so
+
+419
+00:20:15,719 --> 00:20:19,189
+I'd never, again, I'd never really thought explicitly about something like Rust,
+
+420
+00:20:19,500 --> 00:20:20,489
+helping me
+
+421
+00:20:21,199 --> 00:20:24,089
+sort of manage my variables in the sense of
+
+422
+00:20:24,239 --> 00:20:27,579
+like, no, Kurt, you, you shouldn't do that, like, that's not safe.
+
+423
+00:20:27,589 --> 00:20:31,109
+Like, or if you do want to do that, you have to explicitly do it.
+
+424
+00:20:31,439 --> 00:20:31,819
+Yeah.
+
+425
+00:20:32,099 --> 00:20:36,069
+Like with Python, I mostly just, you know. Yeah, just kind of YOLO it
+
+426
+00:20:36,390 --> 00:20:37,219
+to be honest.
+
+427
+00:20:38,719 --> 00:20:39,209
+Yeah.
+
+428
+00:20:39,430 --> 00:20:44,160
+And this, this helps with reading code that you or other people have written before.
+
+429
+00:20:44,239 --> 00:20:46,589
+Like there are assumptions you can make
+
+430
+00:20:47,000 --> 00:20:47,479
+that
+
+431
+00:20:47,650 --> 00:20:50,089
+as long as it's compiling, you know,
+
+432
+00:20:50,099 --> 00:20:53,750
+the Rust compilers checked those things and you don't have to check them manually.
+
+433
+00:20:54,020 --> 00:20:56,189
+Yeah, because I literally like will grit my code to see.
+
+434
+00:20:56,199 --> 00:20:59,150
+Like, did I change this variable somewhere later on? Yes.
+
+435
+00:20:59,160 --> 00:21:00,670
+Yeah, especially in Python.
+
+436
+00:21:00,680 --> 00:21:04,430
+-- And I'm like,
+-- oh, this is reminding me of for anyone who listens to the show.
+
+437
+00:21:04,540 --> 00:21:06,939
+I'm helping out a high school robotics team and I'm helping
+
+438
+00:21:06,949 --> 00:21:10,050
+out the programmers and they decided to use C++ which I
+
+439
+00:21:10,229 --> 00:21:11,410
+tried to
+
+440
+00:21:11,589 --> 00:21:12,930
+steer them to Java.
+
+441
+00:21:12,939 --> 00:21:15,469
+But they were dead set on C++ and the joke I
+
+442
+00:21:15,479 --> 00:21:17,520
+keep using with them is if it builds its ships,
+
+443
+00:21:18,410 --> 00:21:20,989
+if it builds, it's probably fine, it's OK.
+
+444
+00:21:21,000 --> 00:21:23,729
+And then of course, you run the code and it explodes, but
+
+445
+00:21:23,959 --> 00:21:25,420
+that's an entirely different story.
+
+446
+00:21:25,430 --> 00:21:27,829
+But with rust, I mean, literally, if it builds it,
+
+447
+00:21:28,040 --> 00:21:30,229
+it probably isn't going to explode when you run it.
+
+448
+00:21:30,380 --> 00:21:31,739
+Well, ok. So it's a little cave
+
+449
+00:21:31,989 --> 00:21:36,219
+out there, you know that it's not going to explode in specific ways.
+
+450
+00:21:36,359 --> 00:21:38,579
+You know, you know what the compiler has checked for you.
+
+451
+00:21:38,650 --> 00:21:43,540
+It is absolutely possible to write logic bugs and rust.
+
+452
+00:21:43,550 --> 00:21:45,300
+you still need to write tests for your log.
+
+453
+00:21:46,420 --> 00:21:48,430
+You can still like you can write a caching
+
+454
+00:21:48,439 --> 00:21:51,650
+structure and you have cash and validation problems and,
+
+455
+00:21:51,660 --> 00:21:53,239
+you know, you're,
+
+456
+00:21:53,250 --> 00:21:56,209
+you can write inefficient code because you're holding a new
+
+457
+00:21:56,250 --> 00:21:58,589
+text in a place that you really shouldn't be.
+
+458
+00:21:58,599 --> 00:21:58,800
+And
+
+459
+00:21:58,900 --> 00:22:02,719
+there's still plenty of mistakes you can make and rust, it's just,
+
+460
+00:22:02,729 --> 00:22:06,839
+there's a couple of classes of problems that don't exist anymore.
+
+461
+00:22:07,319 --> 00:22:08,030
+So
+
+462
+00:22:08,890 --> 00:22:09,189
+yeah,
+
+463
+00:22:09,319 --> 00:22:11,430
+it's not, it's not a silver bullet,
+
+464
+00:22:11,439 --> 00:22:15,750
+it's not the solution to all the world's problems, but it is a solution to some.
+
+465
+00:22:16,160 --> 00:22:16,640
+-- But
+-- would it
+
+466
+00:22:16,859 --> 00:22:21,819
+be fair to say that Rust is actually making progress in adding more and new
+
+467
+00:22:22,369 --> 00:22:24,709
+capabilities and safeties? Right?
+
+468
+00:22:24,719 --> 00:22:25,170
+Because that's,
+
+469
+00:22:25,189 --> 00:22:28,010
+that's kind of the biggest thing I've seen with C is people keep trying to
+
+470
+00:22:28,630 --> 00:22:31,819
+like, yeah, we've made a lot of progress on compilers. They're better
+
+471
+00:22:32,020 --> 00:22:32,420
+but
+
+472
+00:22:32,640 --> 00:22:35,719
+C fundamentally is C like,
+
+473
+00:22:36,010 --> 00:22:36,359
+you know,
+
+474
+00:22:36,579 --> 00:22:36,780
+yeah,
+
+475
+00:22:36,790 --> 00:22:39,660
+there's lots of tools you can kind of bolt on after the fact
+
+476
+00:22:39,670 --> 00:22:43,339
+there are subsets of C you can use that are supposedly safer,
+
+477
+00:22:43,349 --> 00:22:47,819
+can spend 10 hours reviewing each line of code that I guess NASA does.
+
+478
+00:22:48,204 --> 00:22:52,314
+But at the end of the day, it's still c
+
+479
+00:22:52,515 --> 00:22:56,275
+and if you can just start from a different place, you're,
+
+480
+00:22:56,285 --> 00:22:58,604
+you're already leaps and bounds ahead of that
+
+481
+00:22:58,765 --> 00:23:00,915
+and you don't have to enforce everything
+
+482
+00:23:01,194 --> 00:23:04,285
+because that's just the way all the R code is.
+
+483
+00:23:04,415 --> 00:23:07,135
+Well, we should also be clear, this is the way
+
+484
+00:23:07,484 --> 00:23:13,425
+most languages except C and C++ are because like Java and Go and Python and
+
+485
+00:23:13,435 --> 00:23:17,275
+Ruby and all those like memory management is not an issue in those languages,
+
+486
+00:23:18,020 --> 00:23:18,500
+right?
+
+487
+00:23:18,780 --> 00:23:20,420
+But they solve it in different ways.
+
+488
+00:23:20,599 --> 00:23:20,709
+That's
+
+489
+00:23:20,890 --> 00:23:25,810
+right. And, and Rust is, is doing it as part of the compile time analysis.
+
+490
+00:23:26,060 --> 00:23:27,469
+And, and so OK, we're,
+
+491
+00:23:27,479 --> 00:23:29,920
+we're running ourselves out of time and we haven't even gotten to your book yet.
+
+492
+00:23:29,930 --> 00:23:31,790
+But I, I promise we're going to get to that in just a moment.
+
+493
+00:23:31,800 --> 00:23:35,729
+But before that, I want to touch on one other thing you brought up that I think is the,
+
+494
+00:23:35,969 --> 00:23:38,609
+the silver bullet Rust does have going for it,
+
+495
+00:23:38,760 --> 00:23:42,839
+which is Rust's ability to interface with C is
+
+496
+00:23:43,550 --> 00:23:45,729
+it, it is remarkably good.
+
+497
+00:23:45,739 --> 00:23:49,939
+And I think that is part of why we're seeing Rust catch on is there are many projects
+
+498
+00:23:50,420 --> 00:23:51,219
+that are,
+
+499
+00:23:51,380 --> 00:23:53,670
+instead of saying, oh, we have to rewrite the whole project.
+
+500
+00:23:53,890 --> 00:23:58,239
+They say we can rewrite this part of the project with Rust where you pick out,
+
+501
+00:23:58,250 --> 00:24:02,430
+say the most dangerous or most exposed code.
+
+502
+00:24:02,439 --> 00:24:02,949
+Right.
+
+503
+00:24:03,689 --> 00:24:07,869
+Yes, absolutely. Incremental rewrites are possible and you never have to finish.
+
+504
+00:24:07,880 --> 00:24:08,609
+You can just
+
+505
+00:24:09,130 --> 00:24:14,380
+rewrite parts of it and there's, there's stuff happening with us all the time
+
+506
+00:24:14,500 --> 00:24:16,550
+and, and that is definitely very exciting.
+
+507
+00:24:16,560 --> 00:24:21,290
+It gives us a path forward out of the legacy code that is not just
+
+508
+00:24:21,760 --> 00:24:23,109
+rewrite everything.
+
+509
+00:24:23,319 --> 00:24:23,699
+Yeah,
+
+510
+00:24:24,880 --> 00:24:25,869
+there's actually,
+
+511
+00:24:26,329 --> 00:24:26,829
+I, I
+
+512
+00:24:27,079 --> 00:24:29,670
+don't think you, you all have talked about this yet.
+
+513
+00:24:29,680 --> 00:24:34,770
+Consumer reports just put out a report on memory safety, which is actually yes,
+
+514
+00:24:34,780 --> 00:24:37,020
+it's, it's super interesting y'all Grau
+
+515
+00:24:37,400 --> 00:24:40,550
+wrote this great report and I, I love it.
+
+516
+00:24:40,560 --> 00:24:44,109
+I heartily endorse everything and it talks about how,
+
+517
+00:24:44,119 --> 00:24:49,900
+how can we as an industry be more transparent to consumers and to governments about
+
+518
+00:24:50,150 --> 00:24:51,890
+uh the memory safety
+
+519
+00:24:52,349 --> 00:24:54,810
+in the programs that they can choose to use
+
+520
+00:24:55,099 --> 00:24:55,849
+and
+
+521
+00:24:55,949 --> 00:25:03,229
+how can we uh she makes an analogy to um Ralph Nader's unsafe at any speed. How that did
+
+522
+00:25:03,410 --> 00:25:07,050
+a lot of uh advocacy to make,
+
+523
+00:25:07,395 --> 00:25:10,564
+make these problems more visible and more understandable to more people.
+
+524
+00:25:10,574 --> 00:25:12,214
+And I, I agree like
+
+525
+00:25:12,344 --> 00:25:14,564
+memory safety is not
+
+526
+00:25:14,704 --> 00:25:18,415
+something that your average, you know, politician or
+
+527
+00:25:18,584 --> 00:25:20,694
+consumer knows about
+
+528
+00:25:20,864 --> 00:25:24,574
+and maybe they shouldn't have to, but maybe we should help them
+
+529
+00:25:25,010 --> 00:25:27,219
+to make more informed choices
+
+530
+00:25:27,770 --> 00:25:30,400
+and to put pressure on the industry
+
+531
+00:25:30,540 --> 00:25:34,160
+to make better choices. And part of part of the report is
+
+532
+00:25:34,410 --> 00:25:36,189
+acknowledging that it's not
+
+533
+00:25:36,439 --> 00:25:37,959
+going to be
+
+534
+00:25:38,130 --> 00:25:41,969
+able, you're not going to be able to switch over overnight to a memory safe thing.
+
+535
+00:25:41,979 --> 00:25:43,920
+It's going to be instrumental, it's going to be
+
+536
+00:25:44,050 --> 00:25:44,670
+um
+
+537
+00:25:44,849 --> 00:25:46,969
+showing that you have a plan to address
+
+538
+00:25:46,979 --> 00:25:49,709
+memory safety and improve memory safety over time
+
+539
+00:25:49,810 --> 00:25:51,560
+that even just having that
+
+540
+00:25:51,900 --> 00:25:56,500
+actually having companies do that and not just saying they've done, it can make,
+
+541
+00:25:56,510 --> 00:25:58,000
+can make a difference
+
+542
+00:25:58,430 --> 00:25:59,060
+and,
+
+543
+00:25:59,689 --> 00:26:05,550
+and yeah, I, I fully believe um regulation is coming in regards to this,
+
+544
+00:26:05,709 --> 00:26:09,589
+whether it's gonna be good regulation and useful regulation is up to,
+
+545
+00:26:10,109 --> 00:26:11,640
+I don't know, I don't know that yet.
+
+546
+00:26:11,650 --> 00:26:13,900
+And actually that was one of my questions for, for you too.
+
+547
+00:26:13,910 --> 00:26:16,280
+If, if a government committee came to you
+
+548
+00:26:16,530 --> 00:26:17,400
+and said,
+
+549
+00:26:17,520 --> 00:26:22,430
+we're, we're writing regulations to improve security of software,
+
+550
+00:26:22,939 --> 00:26:23,750
+what's,
+
+551
+00:26:23,869 --> 00:26:26,020
+what's something you would want them to put it at?
+
+552
+00:26:26,270 --> 00:26:27,569
+I think for me, I,
+
+553
+00:26:27,579 --> 00:26:31,609
+I would be more worried about sort of the high level medicals than the, the,
+
+554
+00:26:31,800 --> 00:26:32,219
+like,
+
+555
+00:26:32,229 --> 00:26:36,239
+I'd be more worried about economic incentives than specific technical things.
+
+556
+00:26:36,510 --> 00:26:40,050
+My other concern would be, for example, we saw that right to repair bill in New York,
+
+557
+00:26:40,359 --> 00:26:43,550
+which looked amazing, like so good. And then, you know, it got
+
+558
+00:26:43,699 --> 00:26:46,650
+one that one minor tweak of like a sentence
+
+559
+00:26:47,160 --> 00:26:48,449
+and uh crap,
+
+560
+00:26:48,750 --> 00:26:49,300
+it's basically
+
+561
+00:26:49,479 --> 00:26:50,209
+useless now.
+
+562
+00:26:50,439 --> 00:26:53,739
+And that is my other fear is again, you know, because we had like,
+
+563
+00:26:53,750 --> 00:26:57,000
+that's one thing I learned is, you know, writing good regulation is hard
+
+564
+00:26:57,260 --> 00:26:58,670
+and it never occurred to me
+
+565
+00:26:58,939 --> 00:27:00,660
+because I mean, it happens all the time,
+
+566
+00:27:00,670 --> 00:27:04,119
+but they changed the bill or they add an addendum at the last moment
+
+567
+00:27:04,380 --> 00:27:08,099
+that, you know, 100% changes the meaning of whatever it was
+
+568
+00:27:08,280 --> 00:27:10,400
+was built into that legislation.
+
+569
+00:27:10,410 --> 00:27:11,319
+So I think for me,
+
+570
+00:27:11,329 --> 00:27:12,920
+I would kind of worry more about maybe
+
+571
+00:27:12,930 --> 00:27:15,640
+some sort of economic incentives slash insurance.
+
+572
+00:27:15,650 --> 00:27:16,020
+Like
+
+573
+00:27:16,510 --> 00:27:17,109
+if
+
+574
+00:27:17,689 --> 00:27:19,670
+simply put like in Europe, you have the,
+
+575
+00:27:19,680 --> 00:27:23,880
+it has to be fit for purpose so the consumer can return it in two years and get a refund
+
+576
+00:27:24,010 --> 00:27:25,229
+to the point of purchase.
+
+577
+00:27:25,239 --> 00:27:27,829
+Not through the manufacturer, not through, you know, oh,
+
+578
+00:27:27,839 --> 00:27:30,069
+you got to go to Sony for that, like good luck.
+
+579
+00:27:30,199 --> 00:27:31,069
+But I, you know,
+
+580
+00:27:31,280 --> 00:27:34,520
+like this is why I buy my electronics at Costco because one year money back.
+
+581
+00:27:34,530 --> 00:27:36,790
+So Costco generally doesn't sell terrible electronics.
+
+582
+00:27:37,079 --> 00:27:40,670
+So I suspect something along the lines of like uh a
+
+583
+00:27:40,989 --> 00:27:43,869
+con like fit for purpose with consumer rights
+
+584
+00:27:43,969 --> 00:27:48,060
+and making it really easy for the consumer to return the device and get a full refund.
+
+585
+00:27:48,939 --> 00:27:50,329
+That would be a good start.
+
+586
+00:27:50,339 --> 00:27:51,790
+But the flip side is, it's kind of like, you know,
+
+587
+00:27:51,800 --> 00:27:54,569
+I'm always reminded of roofing shingle warranties where they're like, oh, these sh
+
+588
+00:27:54,780 --> 00:27:56,810
+you know, shingles are warranted for 25 years.
+
+589
+00:27:56,939 --> 00:28:00,089
+Well, like the, the shingles, not the installation, not the removal,
+
+590
+00:28:00,099 --> 00:28:02,339
+like not the 90% of the cost,
+
+591
+00:28:02,500 --> 00:28:03,680
+just the darn shingles.
+
+592
+00:28:03,689 --> 00:28:06,910
+And it's like everybody, you know, that finds out the hard way is like, well,
+
+593
+00:28:06,920 --> 00:28:07,969
+this warranty sucks.
+
+594
+00:28:07,979 --> 00:28:11,020
+And I'm like, what do you think they're gonna, like, spend 10 grand fixing your roof?
+
+595
+00:28:11,670 --> 00:28:12,329
+Like, no.
+
+596
+00:28:12,800 --> 00:28:13,410
+So
+
+597
+00:28:13,660 --> 00:28:15,810
+I, I think I would go with sort of
+
+598
+00:28:16,020 --> 00:28:20,750
+honestly, like, making it possible for people to have two years to return devices.
+
+599
+00:28:20,869 --> 00:28:21,869
+And I think that
+
+600
+00:28:22,430 --> 00:28:22,709
+espe,
+
+601
+00:28:22,819 --> 00:28:26,920
+and especially accounting for like software problems or perfect example,
+
+602
+00:28:26,930 --> 00:28:29,689
+I've paid for ipad games that no longer work
+
+603
+00:28:30,219 --> 00:28:31,910
+or the sound doesn't work. Like
+
+604
+00:28:32,069 --> 00:28:33,229
+one of my son's favorite games.
+
+605
+00:28:33,239 --> 00:28:35,930
+The sound just doesn't work in modern versions of I OS and he's
+
+606
+00:28:35,939 --> 00:28:38,469
+not happy about this and neither am I because I paid for it
+
+607
+00:28:38,939 --> 00:28:41,459
+or they abandoned the game and went to a website
+
+608
+00:28:41,469 --> 00:28:43,250
+model because they didn't want to pay Apple 30%.
+
+609
+00:28:43,260 --> 00:28:43,589
+So
+
+610
+00:28:43,880 --> 00:28:44,599
+honestly,
+
+611
+00:28:44,609 --> 00:28:46,300
+I would go with some sort of version of like
+
+612
+00:28:46,310 --> 00:28:48,339
+if this thing stops working or doesn't work right,
+
+613
+00:28:48,349 --> 00:28:49,760
+for two years or three years,
+
+614
+00:28:49,890 --> 00:28:52,449
+you get a full refund from whoever you paid
+
+615
+00:28:53,150 --> 00:28:57,180
+and I think that would then force them. I think they would start asking a lot,
+
+616
+00:28:57,300 --> 00:28:57,849
+you know,
+
+617
+00:28:58,000 --> 00:29:00,660
+harder questions and having contracts that actually specify these
+
+618
+00:29:00,670 --> 00:29:02,650
+things have to work and be supported properly.
+
+619
+00:29:05,099 --> 00:29:07,359
+That's a very consumer focused answer.
+
+620
+00:29:07,479 --> 00:29:10,949
+And I'm not sure consumers know or care or ever will because how many
+
+621
+00:29:10,959 --> 00:29:15,719
+people have TV S that are like flaming piles of garbage and they don't care
+
+622
+00:29:16,219 --> 00:29:17,040
+and if they don't care,
+
+623
+00:29:17,150 --> 00:29:18,319
+then they don't,
+
+624
+00:29:18,500 --> 00:29:19,900
+I mean, this is this is
+
+625
+00:29:20,150 --> 00:29:23,760
+this, I think is related to the story of what Ralph Nader did, right?
+
+626
+00:29:23,770 --> 00:29:25,589
+When he did unsafe at any speed, it was,
+
+627
+00:29:25,660 --> 00:29:28,050
+I've told people many times in the past that
+
+628
+00:29:28,060 --> 00:29:31,213
+Ralph Nader was doing stunt hacking when he did that
+
+629
+00:29:31,402 --> 00:29:34,572
+right where he was purposely creating spectacle
+
+630
+00:29:34,772 --> 00:29:37,963
+that made the problem seem significantly worse than it was,
+
+631
+00:29:37,973 --> 00:29:41,703
+but that had to be done in order to raise the level of awareness needed.
+
+632
+00:29:41,713 --> 00:29:45,493
+And I think we have kind of similar situations sometimes.
+
+633
+00:29:45,503 --> 00:29:45,652
+I mean,
+
+634
+00:29:45,662 --> 00:29:48,103
+we've seen some stunt hacking against various products and every
+
+635
+00:29:48,113 --> 00:29:49,703
+now and then it gets attention and then the,
+
+636
+00:29:49,713 --> 00:29:52,692
+it inevitably dies down, which is just how it works.
+
+637
+00:29:52,826 --> 00:29:56,625
+You heard it here listeners, Josh wants you to do more stunt hacking.
+
+638
+00:29:56,776 --> 00:30:00,505
+-- I'm all for stunt hacking. It totally works the
+-- car thing,
+
+639
+00:30:00,656 --> 00:30:00,855
+you know,
+
+640
+00:30:00,865 --> 00:30:04,115
+until they put a journalist in a car and made it go forwards and backwards with the
+
+641
+00:30:04,395 --> 00:30:04,926
+foot off the gas.
+
+642
+00:30:05,196 --> 00:30:08,365
+Everybody in tech, of course is like, well, yeah, of course,
+
+643
+00:30:08,375 --> 00:30:10,355
+you can hack a car and remotely control it like that,
+
+644
+00:30:10,465 --> 00:30:10,985
+like, duh.
+
+645
+00:30:11,316 --> 00:30:13,865
+But, you know, until you actually, I think, see it and feel it,
+
+646
+00:30:13,875 --> 00:30:16,526
+you're not gonna feel that pit of fear in your stomach.
+
+647
+00:30:16,969 --> 00:30:18,300
+Yeah. Yeah. Yeah.
+
+648
+00:30:18,489 --> 00:30:19,290
+And, and look,
+
+649
+00:30:19,300 --> 00:30:23,170
+I think this is one of the challenges we have is when we try to talk about regulating
+
+650
+00:30:23,439 --> 00:30:24,579
+a lot of it
+
+651
+00:30:24,790 --> 00:30:25,660
+because
+
+652
+00:30:25,989 --> 00:30:26,219
+like,
+
+653
+00:30:26,229 --> 00:30:28,569
+what's the stunt that's actually going to move
+
+654
+00:30:28,579 --> 00:30:31,729
+the needle and you also need like repetitive,
+
+655
+00:30:31,739 --> 00:30:36,020
+a concerted effort towards the stunt and the message and we just,
+
+656
+00:30:36,030 --> 00:30:37,339
+we struggle with that, right?
+
+657
+00:30:37,680 --> 00:30:40,300
+And so my suspicion is what we're going to see
+
+658
+00:30:40,400 --> 00:30:41,920
+is we're going to see
+
+659
+00:30:42,069 --> 00:30:44,800
+places like, like the, the US government, you know, the,
+
+660
+00:30:44,810 --> 00:30:48,819
+the NSA released that report basically saying stop using C that's,
+
+661
+00:30:48,829 --> 00:30:51,180
+that's the TLDR of the whole report.
+
+662
+00:30:51,449 --> 00:30:55,780
+-- They don't say you should use rust, but it's, it's
+-- highly uh inferred, right?
+
+663
+00:30:55,790 --> 00:30:58,290
+They don't say you should use rust, but that's basically what it says.
+
+664
+00:30:58,520 --> 00:30:59,300
+And so
+
+665
+00:30:59,540 --> 00:31:01,699
+I have a suspicion, we're going to see
+
+666
+00:31:01,989 --> 00:31:02,770
+the kind of the,
+
+667
+00:31:02,780 --> 00:31:04,959
+the power of the purse at work there where
+
+668
+00:31:04,969 --> 00:31:08,540
+they're going to tell organizations you shouldn't use C
+
+669
+00:31:08,699 --> 00:31:10,270
+but they won't mandate it,
+
+670
+00:31:10,280 --> 00:31:14,829
+but they aren't going to necessarily give you the money you want if you're doing it.
+
+671
+00:31:14,839 --> 00:31:15,550
+And that's
+
+672
+00:31:15,750 --> 00:31:17,890
+my guess of how we're going to see it because I don't,
+
+673
+00:31:18,140 --> 00:31:21,550
+I don't know if we can regulate something like the programming
+
+674
+00:31:21,560 --> 00:31:25,150
+languages people use because it's just such an esoteric and hard
+
+675
+00:31:25,160 --> 00:31:28,489
+to understand concept who would write that regulation and how would
+
+676
+00:31:28,500 --> 00:31:30,540
+you write it in a way that doesn't have loopholes,
+
+677
+00:31:30,550 --> 00:31:33,479
+the size of, you know, giant tunnels you can drive a truck through.
+
+678
+00:31:33,489 --> 00:31:33,849
+I don't know.
+
+679
+00:31:34,349 --> 00:31:34,650
+Yeah,
+
+680
+00:31:34,660 --> 00:31:37,910
+I feel like the consumer awareness kind of needs to
+
+681
+00:31:37,920 --> 00:31:40,719
+happen at a higher level than the end user.
+
+682
+00:31:40,979 --> 00:31:42,189
+Consumer like
+
+683
+00:31:42,589 --> 00:31:43,819
+enterprises
+
+684
+00:31:44,099 --> 00:31:48,449
+buying software from each other need to be need to say, ok, how much c do you have
+
+685
+00:31:49,060 --> 00:31:49,140
+that?
+
+686
+00:31:49,719 --> 00:31:53,680
+I want to compare, what's your, what's your plan for dealing with memory safety?
+
+687
+00:31:54,060 --> 00:31:58,969
+Like where are, where are your global security database filed issues?
+
+688
+00:31:59,699 --> 00:32:00,859
+That's right. That's right.
+
+689
+00:32:00,989 --> 00:32:02,839
+We're running ourselves out of time and I want
+
+690
+00:32:02,849 --> 00:32:05,819
+to talk about your book because the second edition
+
+691
+00:32:05,949 --> 00:32:08,380
+-- just came out. It's
+-- available from No
+
+692
+00:32:09,199 --> 00:32:09,300
+Starch Press
+
+693
+00:32:09,410 --> 00:32:10,939
+noar.com right now
+
+694
+00:32:11,069 --> 00:32:15,339
+and it will be available on Amazon and Barnes and Noble February 28th,
+
+695
+00:32:15,630 --> 00:32:18,569
+which is funny because I had pre-ordered it from Amazon.
+
+696
+00:32:18,619 --> 00:32:21,209
+And then in the, in the presh show, Carol told me, oh,
+
+697
+00:32:21,219 --> 00:32:22,979
+you can buy it right now and no start.
+
+698
+00:32:22,989 --> 00:32:23,989
+So I'm like what?
+
+699
+00:32:24,140 --> 00:32:26,239
+And then I went and canceled my Amazon order and bought
+
+700
+00:32:26,250 --> 00:32:27,589
+it while we were waiting for Kurt to show up.
+
+701
+00:32:27,599 --> 00:32:27,900
+So
+
+702
+00:32:28,050 --> 00:32:29,530
+mine's in the mail.
+
+703
+00:32:29,640 --> 00:32:30,790
+Yes. Yes,
+
+704
+00:32:30,910 --> 00:32:35,739
+you can. You get it for free online at Doc dot Russ l.org/book.
+
+705
+00:32:35,750 --> 00:32:39,219
+But it's, you know, nice formatting paper version from No
+
+706
+00:32:39,410 --> 00:32:40,810
+Starch with a,
+
+707
+00:32:40,969 --> 00:32:44,430
+a nicely formatted ebook if that's how you like to read your books.
+
+708
+00:32:44,439 --> 00:32:46,069
+So I highly recommend ordering from nos
+
+709
+00:32:46,170 --> 00:32:47,030
+Starch if you can.
+
+710
+00:32:47,310 --> 00:32:49,530
+I know sometimes international shipping from nos
+
+711
+00:32:49,630 --> 00:32:50,209
+arch
+
+712
+00:32:50,349 --> 00:32:52,170
+is expensive. So
+
+713
+00:32:52,660 --> 00:32:56,670
+-- sorry about that if that's your situation
+-- from a practical perspective.
+
+714
+00:32:56,680 --> 00:32:58,660
+So I know enough rust to be dangerous.
+
+715
+00:32:58,670 --> 00:33:01,780
+I'm certainly not an expert at it and I've only ever had the ebook.
+
+716
+00:33:01,790 --> 00:33:05,770
+I have your last edition ebook and I have struggled to learn rust
+
+717
+00:33:05,780 --> 00:33:09,050
+out of an ebook and I can't explain why that is necessarily,
+
+718
+00:33:09,060 --> 00:33:09,849
+but I am.
+
+719
+00:33:09,969 --> 00:33:12,280
+So now I have the paper copy coming and I,
+
+720
+00:33:12,520 --> 00:33:14,739
+I feel like I need to, it, it's,
+
+721
+00:33:14,859 --> 00:33:17,510
+it's different enough from anything I've done in the
+
+722
+00:33:17,520 --> 00:33:19,819
+past that I feel like I need to like
+
+723
+00:33:19,829 --> 00:33:22,040
+put the sticky note things on the pages and
+
+724
+00:33:22,050 --> 00:33:25,430
+I need to circle things and underline things to actually
+
+725
+00:33:25,540 --> 00:33:26,939
+learn rust properly.
+
+726
+00:33:27,439 --> 00:33:30,689
+Yes and like type in the code yourself, not copy,
+
+727
+00:33:31,000 --> 00:33:31,739
+paste it. Yeah,
+
+728
+00:33:33,040 --> 00:33:35,099
+anyone looking to travel down this path.
+
+729
+00:33:35,109 --> 00:33:38,130
+I just as a warning, I have failed with the ebook, but I'm
+
+730
+00:33:38,250 --> 00:33:41,640
+-- I'm optimistic that paper will, will save me
+-- here.
+
+731
+00:33:41,650 --> 00:33:44,699
+One thing I've learned is you can't actively read electronic files,
+
+732
+00:33:44,709 --> 00:33:45,920
+you can't underline
+
+733
+00:33:46,199 --> 00:33:47,420
+put notes in the margin,
+
+734
+00:33:47,430 --> 00:33:51,229
+highlight stuff like and I I've gone through a couple of programs
+
+735
+00:33:51,239 --> 00:33:54,060
+that kind of let you do that but not like paper,
+
+736
+00:33:54,270 --> 00:33:55,300
+paper is different
+
+737
+00:33:55,979 --> 00:33:56,839
+highly recommend.
+
+738
+00:33:57,189 --> 00:34:01,469
+So say we work at the same company, you're in security. I'm a developer.
+
+739
+00:34:01,479 --> 00:34:04,770
+I come to you and say, hey, we're, we're working on this new application.
+
+740
+00:34:04,780 --> 00:34:06,189
+We decided to write it and rest
+
+741
+00:34:06,500 --> 00:34:10,040
+like, what, what is your reaction to that? What do you do differently?
+
+742
+00:34:10,050 --> 00:34:11,239
+What do you think about that?
+
+743
+00:34:11,458 --> 00:34:15,570
+Does it change what your plan is for securing that application?
+
+744
+00:34:15,659 --> 00:34:18,719
+-- Is it scary because it's new
+-- Josh and I have generally
+
+745
+00:34:18,728 --> 00:34:22,310
+worked at more mature companies that already use multiple languages anyways.
+
+746
+00:34:22,708 --> 00:34:24,290
+So we're, we're kind of biased. Like
+
+747
+00:34:24,850 --> 00:34:27,909
+I recently built a project in a combination of javascript with, you know,
+
+748
+00:34:27,918 --> 00:34:32,260
+one file and uh PHP because it just worked so much better in PHP.
+
+749
+00:34:33,010 --> 00:34:37,110
+So I'm like, fine, like you want to use whatever, like I'm ok with that, but
+
+750
+00:34:37,370 --> 00:34:39,530
+I suspect for a lot of companies they would,
+
+751
+00:34:39,978 --> 00:34:40,969
+it would just be the, oh
+
+752
+00:34:41,159 --> 00:34:43,429
+the CC. Ok. What is this?
+
+753
+00:34:43,659 --> 00:34:44,149
+Right?
+
+754
+00:34:44,590 --> 00:34:48,000
+And I think fundamentally if you have mature process, like you have code reviews,
+
+755
+00:34:48,010 --> 00:34:48,870
+you have
+
+756
+00:34:49,159 --> 00:34:50,790
+like does it compile cleanly?
+
+757
+00:34:51,120 --> 00:34:53,250
+It has to compile cleanly before we ship it.
+
+758
+00:34:53,260 --> 00:34:54,290
+You can't just, like you said,
+
+759
+00:34:54,300 --> 00:34:57,750
+wrap like I wrapped it in a safe block and I fixed the compiler error,
+
+760
+00:34:58,120 --> 00:35:00,649
+right? Because that's happened like we had that openness C thing where,
+
+761
+00:35:00,840 --> 00:35:03,300
+oh, it's using an unitized thing. OK?
+
+762
+00:35:03,310 --> 00:35:04,750
+I made the air go away and it turns
+
+763
+00:35:04,760 --> 00:35:07,389
+out now it's only generating 64,000 different keys.
+
+764
+00:35:07,399 --> 00:35:07,919
+That's it.
+
+765
+00:35:08,330 --> 00:35:08,800
+You know.
+
+766
+00:35:08,939 --> 00:35:12,270
+So I think that would be as a security person, I'd be worried about those gas
+
+767
+00:35:12,679 --> 00:35:13,040
+that
+
+768
+00:35:13,750 --> 00:35:15,199
+might hit us,
+
+769
+00:35:15,320 --> 00:35:16,370
+you know, versus
+
+770
+00:35:17,239 --> 00:35:20,909
+the more kind of high level things like, yeah, we do code reviews. Yeah, we do.
+
+771
+00:35:20,919 --> 00:35:22,469
+But like what are the sort of,
+
+772
+00:35:22,729 --> 00:35:23,479
+what are those little gas
+
+773
+00:35:23,800 --> 00:35:24,899
+that might grab us?
+
+774
+00:35:25,000 --> 00:35:27,429
+I think that would probably be my biggest concern. But
+
+775
+00:35:27,689 --> 00:35:29,770
+I think for more normal uh
+
+776
+00:35:30,649 --> 00:35:33,639
+organizations, there would be a lot of that fear of the unknown,
+
+777
+00:35:34,350 --> 00:35:35,820
+I suspect would be the biggest thing.
+
+778
+00:35:36,080 --> 00:35:39,219
+-- Yeah,
+-- I mean, I think one of the challenges would be
+
+779
+00:35:39,600 --> 00:35:40,219
+the
+
+780
+00:35:40,350 --> 00:35:43,340
+getting the people to use rust the way it's meant to be used. Right?
+
+781
+00:35:43,350 --> 00:35:47,689
+I mean, that's always a challenge where you have your, your culture,
+
+782
+00:35:47,709 --> 00:35:50,260
+you have the language you're using internally.
+
+783
+00:35:50,479 --> 00:35:53,459
+And like an example is like at work,
+
+784
+00:35:53,469 --> 00:35:56,669
+we have a lot of Python and so we obviously hire people who are good at Python.
+
+785
+00:35:56,679 --> 00:35:59,020
+And if we told them one day, hey, you have to start using rust,
+
+786
+00:35:59,370 --> 00:36:00,959
+there would definitely be a revolt.
+
+787
+00:36:01,300 --> 00:36:05,149
+Now, if someone came to me and said, we're going to build a new program in C,
+
+788
+00:36:05,159 --> 00:36:06,870
+I'd be like, no effing way.
+
+789
+00:36:06,879 --> 00:36:10,340
+Like I will die on this hill. It is not gonna be C
+
+790
+00:36:10,560 --> 00:36:15,360
+but if I was looking to build, say like an embedded device, you know, where I,
+
+791
+00:36:15,370 --> 00:36:19,820
+I need that compiled language and, and C is what I'm trying to do.
+
+792
+00:36:20,070 --> 00:36:21,169
+I think you could
+
+793
+00:36:21,270 --> 00:36:24,969
+definitely shepherd some of those people in the direction of rust for sure.
+
+794
+00:36:24,979 --> 00:36:26,169
+And of course, even then,
+
+795
+00:36:26,270 --> 00:36:28,409
+even then the security people can say
+
+796
+00:36:28,570 --> 00:36:31,760
+using C is a terrible idea and we're going
+
+797
+00:36:31,770 --> 00:36:34,939
+to have memory safety problems and all these issues.
+
+798
+00:36:34,949 --> 00:36:38,709
+And if you have a team of 100 people that only know c you're gonna lose that battle,
+
+799
+00:36:38,729 --> 00:36:39,159
+right?
+
+800
+00:36:39,169 --> 00:36:40,850
+I mean, that's just the sad reality of it.
+
+801
+00:36:40,860 --> 00:36:43,350
+But I think, yeah, if, if someone came to me and said,
+
+802
+00:36:43,360 --> 00:36:44,790
+what language like should we use?
+
+803
+00:36:44,800 --> 00:36:46,929
+Rust? My answer would obviously be yes.
+
+804
+00:36:47,110 --> 00:36:49,600
+Like I think it's great in, in many cases and,
+
+805
+00:36:49,860 --> 00:36:50,979
+and part of it too,
+
+806
+00:36:51,199 --> 00:36:58,330
+the beauty of modern languages is things like rust crates or you've got Ruby gems,
+
+807
+00:36:58,340 --> 00:36:59,030
+you've got PP,
+
+808
+00:36:59,209 --> 00:37:03,560
+you've got no J SNP M. Right. Like that ecosystem is
+
+809
+00:37:03,739 --> 00:37:07,000
+the power you get, I think and rust obviously has,
+
+810
+00:37:07,010 --> 00:37:09,120
+has crates which we haven't even talked about because
+
+811
+00:37:09,129 --> 00:37:10,560
+there's so much other stuff to talk about.
+
+812
+00:37:10,570 --> 00:37:12,340
+We have to have you come back and we can cover crates.
+
+813
+00:37:12,350 --> 00:37:16,449
+But I mean, we're, we're dragging out but thi this has been a treat, Carol,
+
+814
+00:37:16,459 --> 00:37:18,719
+I'll give you the last word and then we'll wrap this one up.
+
+815
+00:37:18,939 --> 00:37:20,949
+-- All
+-- my, my other question,
+
+816
+00:37:20,959 --> 00:37:23,909
+maybe you can have this as you can have someone else on the show.
+
+817
+00:37:23,919 --> 00:37:24,590
+But because I,
+
+818
+00:37:24,760 --> 00:37:28,429
+you, you two are kind of blue team and this is more of a red team question.
+
+819
+00:37:29,060 --> 00:37:33,750
+My question would be if you're trying to pest a rost application and, you know,
+
+820
+00:37:33,760 --> 00:37:34,949
+you don't have
+
+821
+00:37:35,120 --> 00:37:37,719
+the memory safety problems to try and look for and
+
+822
+00:37:37,729 --> 00:37:40,510
+take advantage of is how would you approach that differently?
+
+823
+00:37:40,939 --> 00:37:42,169
+And I don't know if that's,
+
+824
+00:37:42,300 --> 00:37:45,520
+if there are many people doing that yet and, and what they would think about that.
+
+825
+00:37:45,530 --> 00:37:46,699
+And I don't know if you two have any,
+
+826
+00:37:46,850 --> 00:37:50,879
+-- any thoughts on that
+-- from the pen testers. I know they
+
+827
+00:37:51,409 --> 00:37:52,669
+90. Well,
+
+828
+00:37:52,810 --> 00:37:53,830
+let's be real,
+
+829
+00:37:54,199 --> 00:37:56,939
+99% of applications have a known security flaw.
+
+830
+00:37:57,290 --> 00:38:00,080
+So that's what they typically start with is just
+
+831
+00:38:00,629 --> 00:38:03,820
+like I have a list of exploits, let's, you know, see, kind of what works.
+
+832
+00:38:04,020 --> 00:38:05,800
+The other thing obviously is
+
+833
+00:38:06,399 --> 00:38:07,860
+logic bugs,
+
+834
+00:38:08,050 --> 00:38:10,909
+but especially where systems interface.
+
+835
+00:38:11,290 --> 00:38:15,669
+Mhm. Mhm. So, I, I think for a lot of pent testers it would look about the same.
+
+836
+00:38:15,679 --> 00:38:19,909
+Maybe, I don't know. This is a great question and we'll assign it as homework
+
+837
+00:38:20,149 --> 00:38:21,070
+because
+
+838
+00:38:21,229 --> 00:38:25,235
+there is a project called Os S Fuzz that Google funds
+
+839
+00:38:25,435 --> 00:38:27,735
+and Os S Fuzz fuzzes all kinds of stuff.
+
+840
+00:38:27,745 --> 00:38:32,165
+They Fuzz Java, they Fuzz go, they Fuzz C and obviously if you fuzzing Java or go,
+
+841
+00:38:32,175 --> 00:38:34,205
+you're not going to see memory safety issues.
+
+842
+00:38:34,375 --> 00:38:35,364
+I am certain
+
+843
+00:38:35,475 --> 00:38:38,504
+they are fuzzing something written in rust somewhere in there.
+
+844
+00:38:38,794 --> 00:38:41,945
+And so we could go and look at those findings and see what kind of
+
+845
+00:38:41,955 --> 00:38:43,304
+bugs are turning up and they're obviously
+
+846
+00:38:43,314 --> 00:38:45,344
+going to be logic bugs because memory safety
+
+847
+00:38:45,600 --> 00:38:46,860
+is a non-issue.
+
+848
+00:38:46,870 --> 00:38:47,219
+Well,
+
+849
+00:38:47,229 --> 00:38:52,649
+that's not true because I bet you there is a nontrivial amount of rust
+
+850
+00:38:52,659 --> 00:38:57,649
+code that ends up in unsafe land calling into sea libraries or other things.
+
+851
+00:38:57,659 --> 00:38:58,739
+So I, I don't know.
+
+852
+00:38:58,750 --> 00:39:01,600
+Now, now I'm going to go and try to figure this out, I suspect,
+
+853
+00:39:01,610 --> 00:39:04,479
+but I'm interested to hear what the show you have on this.
+
+854
+00:39:04,520 --> 00:39:04,610
+And
+
+855
+00:39:04,969 --> 00:39:08,000
+yeah, this is, this is, this will be good. This is fun. It'll
+
+856
+00:39:08,419 --> 00:39:09,860
+-- I have too much work to do
+-- already.
+
+857
+00:39:09,909 --> 00:39:14,855
+There is direct cargo support for Os S Fuzz and rust. Like there's a Google bucket.
+
+858
+00:39:15,135 --> 00:39:16,615
+-- There's
+-- definitely people fuzzing.
+
+859
+00:39:16,926 --> 00:39:16,986
+There
+
+860
+00:39:17,095 --> 00:39:18,736
+-- we go.
+-- It looks really simple to do
+
+861
+00:39:19,746 --> 00:39:22,976
+-- Os S Fuzz is fantastic.
+-- OK. Last, last question,
+
+862
+00:39:23,325 --> 00:39:23,486
+last
+
+863
+00:39:23,795 --> 00:39:24,006
+question.
+
+864
+00:39:24,186 --> 00:39:26,236
+What's your favorite shop? Vac attachment?
+
+865
+00:39:26,345 --> 00:39:29,426
+The one that lets me get the water off my garage floor. It's kind of like um
+
+866
+00:39:29,666 --> 00:39:31,946
+it's like the scoop thing but with a bit of curve to
+
+867
+00:39:31,956 --> 00:39:34,486
+it so that you can get just like that one or two millimeters
+
+868
+00:39:34,645 --> 00:39:37,176
+to get all the water off the floor. Because that's like a six month problem here.
+
+869
+00:39:37,625 --> 00:39:40,166
+I like that little pointy one that can get in all the crevices.
+
+870
+00:39:40,951 --> 00:39:42,491
+Mine's brush.
+
+871
+00:39:45,132 --> 00:39:47,971
+That's true. The brush is nice because the brush lets you sweep away.
+
+872
+00:39:48,181 --> 00:39:48,322
+Do you have
+
+873
+00:39:48,461 --> 00:39:48,781
+pets?
+
+874
+00:39:48,981 --> 00:39:50,491
+I used to have a cat. Yeah.
+
+875
+00:39:51,711 --> 00:39:52,082
+Dust
+
+876
+00:39:52,271 --> 00:39:52,902
+and stuff. Yeah,
+
+877
+00:39:53,552 --> 00:39:53,862
+that's
+
+878
+00:39:54,802 --> 00:39:54,832
+true.
+
+879
+00:39:55,392 --> 00:39:58,102
+-- That's true. Without the brush you can't remove the dust, can
+-- you?
+
+880
+00:39:58,681 --> 00:39:58,832
+That's
+
+881
+00:39:58,951 --> 00:39:58,981
+fair.
+
+882
+00:39:59,441 --> 00:40:01,731
+I knew I knew you would have opinions on this.
+
+883
+00:40:02,112 --> 00:40:03,531
+Of course. Who doesn't? Right.
+
+884
+00:40:03,751 --> 00:40:04,162
+Like,
+
+885
+00:40:04,382 --> 00:40:08,521
+it's funny too. Actually I own two shot backs because I have a really big heavy one.
+
+886
+00:40:08,770 --> 00:40:11,620
+And then up in my, like, workshop in the top of my garage,
+
+887
+00:40:11,629 --> 00:40:13,370
+I have a light one that I can carry around.
+
+888
+00:40:13,750 --> 00:40:13,870
+Yeah.
+
+889
+00:40:14,050 --> 00:40:14,149
+So,
+
+890
+00:40:15,030 --> 00:40:15,280
+anyway,
+
+891
+00:40:15,510 --> 00:40:17,570
+-- anyway,
+-- I bought a small one for cleaning the car because I,
+
+892
+00:40:17,770 --> 00:40:18,149
+like,
+
+893
+00:40:18,290 --> 00:40:18,830
+wear it. Like,
+
+894
+00:40:20,000 --> 00:40:23,989
+no, I need the big one for the car because I need like the super ultra suction power.
+
+895
+00:40:24,649 --> 00:40:25,010
+But
+
+896
+00:40:26,719 --> 00:40:28,149
+they're better. They're much better now.
+
+897
+00:40:29,080 --> 00:40:31,489
+My small one is actually more powerful than my bigger one
+
+898
+00:40:31,500 --> 00:40:33,830
+because my smaller one is new and my old one is
+
+899
+00:40:35,260 --> 00:40:35,290
+mine.
+
+900
+00:40:36,090 --> 00:40:38,770
+Anyway, I'm calling. No, we're done. We're done now. Thank you, Carol.
+
+901
+00:40:38,780 --> 00:40:40,149
+This has been an absolute treat.
+
+902
+00:40:40,159 --> 00:40:43,179
+Thank you for bringing us into the weeds before the end. I appreciate that.
+
+903
+00:40:43,199 --> 00:40:44,350
+-- Thank
+-- you so much for having
+
+904
+00:40:44,360 --> 00:40:44,709
+me.
+
+905
+00:40:44,820 --> 00:40:45,939
+It's been awesome.
+
+906
+00:40:45,949 --> 00:40:49,750
+I will put links to Carol and her book and all the other stuff from the show notes.
+
+907
+00:40:50,010 --> 00:40:53,439
+So. All right. Thank you, Carol. Thank you, Kurt. Thank you, everyone.
+
+908
+00:40:53,449 --> 00:40:55,449
+Go to open source security podcast.com. Hit up the show,
+
+909
+00:40:55,629 --> 00:40:56,070
+not, it's easy. Podos
+
+910
+00:40:56,310 --> 00:40:58,790
+says podcast hashtag hit us up on social media.
+
+911
+00:40:59,229 --> 00:41:01,179
+Have a great rest of your day. Everybody.
+
+912
+00:41:01,879 --> 00:41:02,889
+You beat me to it.
+
+913
+00:41:03,040 --> 00:41:06,939
+All right. All right. Awesome. Thanks, everyone. Bye bye. Thanks.

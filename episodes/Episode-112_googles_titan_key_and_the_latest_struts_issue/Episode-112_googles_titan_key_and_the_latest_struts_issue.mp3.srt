@@ -1,0 +1,2817 @@
+0
+00:00:05,289 --> 00:00:07,099
+Hello and welcome to the open source Security
+
+1
+00:00:07,110 --> 00:00:10,149
+podcast episode 100 and 12 with myself,
+
+2
+00:00:10,159 --> 00:00:11,869
+Kurt Siefried and my partner in Thought Crime.
+
+3
+00:00:11,880 --> 00:00:12,680
+Josh Bresser.
+
+4
+00:00:13,029 --> 00:00:14,109
+-- How you
+-- doing, man?
+
+5
+00:00:14,350 --> 00:00:16,819
+I am doing quite excellent. Actually,
+
+6
+00:00:17,020 --> 00:00:18,709
+my kids start school next week.
+
+7
+00:00:18,850 --> 00:00:21,309
+-- That's awesome. Good deal.
+-- We survived summer.
+
+8
+00:00:21,319 --> 00:00:21,690
+I know.
+
+9
+00:00:21,700 --> 00:00:26,989
+Oh, my goodness, teachers are so teachers are so underpaid. That's all I have to say.
+
+10
+00:00:27,000 --> 00:00:27,290
+I,
+
+11
+00:00:27,909 --> 00:00:29,229
+yes. Anyway, I,
+
+12
+00:00:29,510 --> 00:00:31,540
+you know what it feels like sometimes is
+
+13
+00:00:32,179 --> 00:00:32,598
+it, it,
+
+14
+00:00:32,609 --> 00:00:35,118
+it's like when you're the security guy trying to
+
+15
+00:00:35,129 --> 00:00:37,319
+wrangle like all the developers who are like,
+
+16
+00:00:37,328 --> 00:00:39,069
+security is dumb and we don't like you.
+
+17
+00:00:39,078 --> 00:00:42,298
+That's what I imagine being a teacher must be like, except
+
+18
+00:00:42,569 --> 00:00:45,798
+all the time, not just for like, two hours every now and then.
+
+19
+00:00:46,129 --> 00:00:46,418
+Well,
+
+20
+00:00:46,429 --> 00:00:47,999
+plus you have their parents yelling at you
+
+21
+00:00:48,008 --> 00:00:49,719
+every time you do something that annoys them.
+
+22
+00:00:49,969 --> 00:00:52,929
+-- Right.
+-- Which actually, no, that's exactly like the security people. Right.
+
+23
+00:00:53,058 --> 00:00:56,679
+The managers of the devs yell at us. Like, why are you going to mess with my schedule?
+
+24
+00:00:56,688 --> 00:00:58,458
+Why do we have to fix this CV E?
+
+25
+00:00:59,098 --> 00:00:59,839
+That's right.
+
+26
+00:01:01,049 --> 00:01:05,660
+Oh, it's nice to know every industry is exactly the same,
+
+27
+00:01:06,019 --> 00:01:07,730
+including teaching
+
+28
+00:01:08,510 --> 00:01:10,050
+Oh, man. All right, cool.
+
+29
+00:01:10,059 --> 00:01:12,349
+So, I, I think this time let's lead off with,
+
+30
+00:01:12,360 --> 00:01:15,489
+uh Google has made a hardware security key.
+
+31
+00:01:15,500 --> 00:01:16,550
+I found out kind of like a UI
+
+32
+00:01:16,680 --> 00:01:17,639
+key competitor.
+
+33
+00:01:17,900 --> 00:01:20,169
+Well, it's, it does the U two F. Right.
+
+34
+00:01:20,459 --> 00:01:23,470
+So, yeah, I mean, it basically implements the U two F standard,
+
+35
+00:01:23,599 --> 00:01:27,139
+but my understanding was is that it had like an internal,
+
+36
+00:01:27,389 --> 00:01:28,110
+sort of like,
+
+37
+00:01:28,760 --> 00:01:30,930
+I don't know what to call it, not a secure boot process,
+
+38
+00:01:30,940 --> 00:01:33,339
+but it essentially it had like some internal magic to make
+
+39
+00:01:33,349 --> 00:01:36,279
+sure it wasn't being like fiddled with or tampered with.
+
+40
+00:01:36,559 --> 00:01:39,639
+Ok. II, I don't know a ton about what's going on inside of it.
+
+41
+00:01:39,900 --> 00:01:40,110
+-- Here
+-- we
+-- go.
+
+42
+00:01:40,449 --> 00:01:42,949
+They are built with a hardware chip that includes firmware
+
+43
+00:01:42,959 --> 00:01:45,959
+engineered by Google to verify the integrity of the key.
+
+44
+00:01:46,040 --> 00:01:50,040
+My understanding of that and from what little reading I did is that the key is,
+
+45
+00:01:50,419 --> 00:01:52,889
+I guess we would go with tamper resistant,
+
+46
+00:01:53,150 --> 00:01:54,360
+which I mean, that's, that's,
+
+47
+00:01:54,970 --> 00:01:57,209
+you know, well, we always say in security, right?
+
+48
+00:01:57,220 --> 00:01:59,730
+Oh, well, if the attacker has physical access, it's game over.
+
+49
+00:01:59,739 --> 00:02:04,040
+Well, no, no, that, that is not always allowed like, well, great example,
+
+50
+00:02:04,050 --> 00:02:05,059
+being nuclear weapons, right?
+
+51
+00:02:05,069 --> 00:02:06,629
+It can't be like, oh, well, he stole the nuke,
+
+52
+00:02:06,750 --> 00:02:09,929
+I guess he gets to do whatever he wants with it, right? Uh What can we do?
+
+53
+00:02:10,210 --> 00:02:15,009
+-- Well, I mean, if you have a nuclear weapon,
+-- so the good news is
+
+54
+00:02:15,610 --> 00:02:18,190
+you can probably do what you want.
+
+55
+00:02:18,520 --> 00:02:21,429
+No, they're, they're surprisingly difficult to set off.
+
+56
+00:02:21,440 --> 00:02:23,669
+And so my understanding is the US ones, you know,
+
+57
+00:02:23,679 --> 00:02:26,589
+they have the permissive active link code, which was set to of course,
+
+58
+00:02:26,600 --> 00:02:28,309
+six zeros back in the day.
+
+59
+00:02:28,320 --> 00:02:31,820
+But they basically, if you enter the pal incorrectly several times,
+
+60
+00:02:31,830 --> 00:02:36,029
+it basically like locks itself and won't fire, you know, because
+
+61
+00:02:36,279 --> 00:02:38,250
+yeah, just because the nuke falls into the wrong hands,
+
+62
+00:02:38,259 --> 00:02:39,979
+you don't want them using it on.
+
+63
+00:02:40,100 --> 00:02:42,360
+Well, whatever, right? But uh no.
+
+64
+00:02:42,369 --> 00:02:46,059
+So that's because my understanding of the U two F key is essentially that
+
+65
+00:02:46,320 --> 00:02:49,460
+basically if somebody hits me in the head with a brick and please don't do this.
+
+66
+00:02:49,470 --> 00:02:52,845
+I I would not like that and takes my UB key, they can just use it
+
+67
+00:02:53,104 --> 00:02:55,414
+-- because all they got to do is plug it into a computer and touch
+-- it
+
+68
+00:02:55,524 --> 00:02:57,145
+pretty much right?
+
+69
+00:02:57,395 --> 00:02:59,505
+From what I know of the Google
+
+70
+00:02:59,634 --> 00:03:01,824
+Titan key. That would still be the case, right?
+
+71
+00:03:01,835 --> 00:03:03,164
+It's, it's literally, you touch it,
+
+72
+00:03:03,175 --> 00:03:04,654
+it doesn't have a fingerprint reader or anything.
+
+73
+00:03:04,664 --> 00:03:06,304
+It's just like something touched me.
+
+74
+00:03:06,619 --> 00:03:07,460
+So it works.
+
+75
+00:03:07,589 --> 00:03:10,279
+But I guess what this internal firmware thing
+
+76
+00:03:10,429 --> 00:03:13,660
+would help or would accomplish is I guess theoretically
+
+77
+00:03:13,669 --> 00:03:16,029
+if you have like a really high stakes situation,
+
+78
+00:03:16,039 --> 00:03:20,259
+like, oh, I don't know, maybe you have working for Google and you,
+
+79
+00:03:20,270 --> 00:03:24,380
+you have access to their internal C A by internal, I mean, their public one.
+
+80
+00:03:24,410 --> 00:03:27,320
+Like you have access to the internal systems that control it or,
+
+81
+00:03:27,529 --> 00:03:30,600
+you know, you have access to the DNS controlling google.com.
+
+82
+00:03:32,089 --> 00:03:32,339
+You know,
+
+83
+00:03:32,350 --> 00:03:36,320
+they don't want somebody messing with that token and giving it back to the admin,
+
+84
+00:03:36,330 --> 00:03:36,570
+right?
+
+85
+00:03:36,580 --> 00:03:39,759
+So they like, steal it from the admin's key ring while he's sleeping and, you know,
+
+86
+00:03:40,009 --> 00:03:43,490
+modified in some way to like, you know, allow them to,
+
+87
+00:03:43,500 --> 00:03:45,330
+to siphon the key or whatever off.
+
+88
+00:03:45,339 --> 00:03:47,270
+Right. Because let's face it. Right. Google.
+
+89
+00:03:47,399 --> 00:03:51,039
+Google has access to some, well,
+
+90
+00:03:51,050 --> 00:03:53,029
+stuff that basically runs the internet at this point.
+
+91
+00:03:53,279 --> 00:03:56,809
+-- Well, imagine if you got access to the chrome update stuff, I,
+-- I guess so.
+
+92
+00:03:56,820 --> 00:03:59,149
+Here's my, my thought on this is
+
+93
+00:03:59,539 --> 00:04:01,440
+I, I think there's value
+
+94
+00:04:01,660 --> 00:04:05,979
+in having any piece of hardware do some sort of verification on itself.
+
+95
+00:04:06,220 --> 00:04:10,509
+Well, even just preventing like silly weirdness, right? Like ECCRM like, oh a cos
+
+96
+00:04:10,630 --> 00:04:11,850
+and gray hit me. So I'm not going to,
+
+97
+00:04:12,350 --> 00:04:15,039
+-- yeah,
+-- that's probably more important.
+
+98
+00:04:15,479 --> 00:04:16,640
+And that's fair.
+
+99
+00:04:16,649 --> 00:04:18,720
+I guess the golden goose of,
+
+100
+00:04:18,730 --> 00:04:25,359
+-- of U two F keys is the private key stored internally
+-- or doing proxy attacks, right?
+
+101
+00:04:25,369 --> 00:04:25,630
+Uh
+
+102
+00:04:26,660 --> 00:04:28,920
+No, no, no. But if you fiddle with the key, they would
+
+103
+00:04:29,619 --> 00:04:30,690
+in the sense of if I can
+
+104
+00:04:31,390 --> 00:04:32,619
+for the sake of argument,
+
+105
+00:04:32,989 --> 00:04:34,940
+I steal your Titan key and I am
+
+106
+00:04:35,529 --> 00:04:39,679
+somehow embed like another chip that's wi fi controlled
+
+107
+00:04:39,720 --> 00:04:42,140
+that I can remotely trigger the the button press.
+
+108
+00:04:42,440 --> 00:04:47,220
+OK? No, look, if, if you're at that level of infiltration of this key
+
+109
+00:04:47,510 --> 00:04:47,899
+like,
+
+110
+00:04:48,040 --> 00:04:49,200
+yeah. No, you're, you're a state
+
+111
+00:04:49,500 --> 00:04:49,549
+level,
+
+112
+00:04:49,709 --> 00:04:51,950
+you already have so much control over it.
+
+113
+00:04:52,010 --> 00:04:53,420
+But theoretically we can,
+
+114
+00:04:53,429 --> 00:04:56,149
+we're getting to the point where we can build hardware devices that are
+
+115
+00:04:56,339 --> 00:04:59,100
+very resistant to that form of attack.
+
+116
+00:05:01,100 --> 00:05:04,410
+Yeah, it's, it's getting there and, but here's so, so here's,
+
+117
+00:05:04,420 --> 00:05:08,440
+here's the point is that the primary competitor here is probably ubico,
+
+118
+00:05:08,600 --> 00:05:10,540
+-- right? With UBI keys. Which,
+-- well,
+
+119
+00:05:10,779 --> 00:05:13,220
+honestly, is there anybody else making U two of keys?
+
+120
+00:05:13,230 --> 00:05:15,410
+Because like, I, I looked a long time ago and there wasn't,
+
+121
+00:05:15,529 --> 00:05:19,209
+there are a couple I've seen they were all really bad and I
+
+122
+00:05:19,220 --> 00:05:21,709
+don't even know if the Google Titan Key is going to be good.
+
+123
+00:05:21,720 --> 00:05:23,329
+Like, the reason I love the UI
+
+124
+00:05:23,519 --> 00:05:26,989
+key stuff is because I can run it over with my car and it still works.
+
+125
+00:05:27,809 --> 00:05:32,309
+And I've owned, I've owned a handful of other things in the past that were,
+
+126
+00:05:32,549 --> 00:05:35,880
+they were not well built. I, I bought it was called a crypto key.
+
+127
+00:05:35,890 --> 00:05:39,450
+-- Maybe I forget what it was.
+-- Oh, yeah. The, the crypto nitro key guys.
+
+128
+00:05:39,690 --> 00:05:40,670
+The GP G key.
+
+129
+00:05:40,890 --> 00:05:42,869
+Yeah, the German GP G key guys.
+
+130
+00:05:43,089 --> 00:05:45,179
+Yes. It was like their very first
+
+131
+00:05:46,154 --> 00:05:48,375
+and I ended up like wrapping the whole
+
+132
+00:05:48,385 --> 00:05:50,265
+thing in electrical tape because it kept falling
+
+133
+00:05:50,385 --> 00:05:50,665
+apart.
+
+134
+00:05:52,584 --> 00:05:52,614
+Not
+
+135
+00:05:53,195 --> 00:05:53,225
+at
+
+136
+00:05:53,535 --> 00:05:57,475
+-- scale to be reliable is, is tricky.
+-- It's more than that though.
+
+137
+00:05:57,484 --> 00:06:00,135
+There's, there's building at scale, right. Which let's face it.
+
+138
+00:06:00,144 --> 00:06:02,975
+Like you can find factories in China that do that. No problem.
+
+139
+00:06:03,244 --> 00:06:05,135
+But the bigger problem becomes
+
+140
+00:06:05,649 --> 00:06:07,959
+where is the key provisioned?
+
+141
+00:06:08,079 --> 00:06:10,890
+Because there's essentially a private key on these things. And now, yo
+
+142
+00:06:11,369 --> 00:06:15,220
+is really, they're very transparent about the fact that yes,
+
+143
+00:06:15,230 --> 00:06:17,829
+the UBI keys are built in the United States and Sweden
+
+144
+00:06:18,529 --> 00:06:21,750
+and then they're provisioned only after
+
+145
+00:06:22,130 --> 00:06:22,540
+Uki
+
+146
+00:06:23,010 --> 00:06:25,350
+Yo receives them and before they send them out.
+
+147
+00:06:25,440 --> 00:06:27,450
+So there's still a possibility that Yo
+
+148
+00:06:27,959 --> 00:06:30,739
+is, is storing the private keys because in fact,
+
+149
+00:06:30,750 --> 00:06:34,540
+I think Gemalto got caught like storing private keys once.
+
+150
+00:06:34,640 --> 00:06:36,920
+Uh wasn't that also? RS A?
+
+151
+00:06:37,489 --> 00:06:41,350
+It's probably everybody, right? It's probably everybody.
+
+152
+00:06:41,359 --> 00:06:42,670
+-- Well,
+-- it's like diesel emissions.
+
+153
+00:06:42,679 --> 00:06:46,589
+-- Oh my God, they were caught cheating on their diesel emissions.
+-- Who knew?
+
+154
+00:06:46,730 --> 00:06:51,519
+I had no idea. Right? Like where you're slowly shuffling the paper under the desk,
+
+155
+00:06:51,859 --> 00:06:55,160
+you know, the whole industry all of a sudden managed to fix diesel emissions.
+
+156
+00:06:55,170 --> 00:06:56,869
+And I'm like, ok, that's,
+
+157
+00:06:57,079 --> 00:06:58,359
+you know, they don't all have the same
+
+158
+00:06:58,470 --> 00:06:59,320
+technology but I
+
+159
+00:07:00,170 --> 00:07:00,779
+guess
+
+160
+00:07:01,040 --> 00:07:02,670
+good job everybody.
+
+161
+00:07:02,690 --> 00:07:06,850
+Uh Well, anyway, and so the issue, I guess with Google right now is Google is saying
+
+162
+00:07:06,970 --> 00:07:08,850
+they're not talking about this very much.
+
+163
+00:07:08,859 --> 00:07:11,829
+So, the assumption is they're probably coming from the factory provisioned.
+
+164
+00:07:11,839 --> 00:07:14,829
+-- Does Google ever talk about anything?
+-- No, they never do.
+
+165
+00:07:15,329 --> 00:07:16,359
+Uh So here's the thing though,
+
+166
+00:07:16,369 --> 00:07:20,989
+people are concerned that maybe like if the factory is nefarious,
+
+167
+00:07:21,190 --> 00:07:23,850
+the factory could like, save the keys,
+
+168
+00:07:23,859 --> 00:07:25,820
+they're dumping into them and then Google might
+
+169
+00:07:25,829 --> 00:07:27,989
+not know if they did or didn't do something
+
+170
+00:07:28,149 --> 00:07:31,690
+well, see and that would be part of the firmware self check if the firmware,
+
+171
+00:07:31,700 --> 00:07:32,230
+for example,
+
+172
+00:07:32,239 --> 00:07:36,730
+validates that the chip can only create the key and it can't be imported.
+
+173
+00:07:36,760 --> 00:07:37,769
+You know, because that's one thing, right?
+
+174
+00:07:37,779 --> 00:07:39,880
+There's, there's a lot of hardware security tokens
+
+175
+00:07:40,059 --> 00:07:43,790
+where the key is generated somewhere and then imported to the token.
+
+176
+00:07:44,399 --> 00:07:47,619
+So for example, like a a lot of hardware security modules for, you know,
+
+177
+00:07:47,630 --> 00:07:50,149
+certificate authorities support that mode of operation because
+
+178
+00:07:50,410 --> 00:07:52,809
+you want that because you actually want to generate a key somewhere
+
+179
+00:07:52,820 --> 00:07:55,209
+and back it up and then put it on a hardware security module
+
+180
+00:07:55,359 --> 00:07:56,899
+and the hardware security modules is like,
+
+181
+00:07:57,119 --> 00:07:58,950
+you can't copy that off me. Ha ha ha.
+
+182
+00:07:59,230 --> 00:08:01,660
+You know, and that's a very valid thing to have.
+
+183
+00:08:02,040 --> 00:08:04,739
+And for something like, you know, like a UB key though
+
+184
+00:08:05,040 --> 00:08:06,059
+there is
+
+185
+00:08:06,200 --> 00:08:08,260
+probably a lot of value
+
+186
+00:08:08,410 --> 00:08:12,049
+in the UB key, basically being able to essentially attest that
+
+187
+00:08:12,450 --> 00:08:14,709
+there's a key on me. But I generated,
+
+188
+00:08:14,950 --> 00:08:16,339
+it was not imported
+
+189
+00:08:16,730 --> 00:08:19,390
+in any way, shape or form. Right? It was generated on me.
+
+190
+00:08:21,070 --> 00:08:21,679
+You,
+
+191
+00:08:21,809 --> 00:08:25,130
+oh, no, it's, that's an incredibly difficult magical thing to do,
+
+192
+00:08:25,640 --> 00:08:26,049
+right?
+
+193
+00:08:26,239 --> 00:08:26,549
+No, no.
+
+194
+00:08:27,250 --> 00:08:27,640
+Yeah.
+
+195
+00:08:27,750 --> 00:08:28,239
+Oh, I get it.
+
+196
+00:08:28,540 --> 00:08:29,070
+I get it.
+
+197
+00:08:29,079 --> 00:08:30,869
+And that's part of the problem, right too is, yeah,
+
+198
+00:08:30,880 --> 00:08:34,010
+like I generated a key using what is the source of randomness, ah, you know,
+
+199
+00:08:34,020 --> 00:08:36,369
+stuff like your dice roll three,
+
+200
+00:08:38,429 --> 00:08:40,619
+the number three. Exactly.
+
+201
+00:08:42,129 --> 00:08:42,508
+Yeah,
+
+202
+00:08:42,789 --> 00:08:43,499
+I was on the side.
+
+203
+00:08:43,508 --> 00:08:45,718
+I always love when you're like, with a kid, you're like,
+
+204
+00:08:45,729 --> 00:08:48,348
+guess a random number between one and 10 and then you're like
+
+205
+00:08:48,848 --> 00:08:52,169
+seven and the kids, like, how do you know? And I'm like, everybody picks seven.
+
+206
+00:08:52,408 --> 00:08:57,408
+-- so
+-- actually it's funny you say that we were, we were watching a show on TV.
+
+207
+00:08:57,419 --> 00:08:59,729
+I was watching with my kids where a mentalist
+
+208
+00:08:59,879 --> 00:09:02,059
+was doing his thing and they're like, how does he do this?
+
+209
+00:09:02,068 --> 00:09:04,765
+And I said he made them pick that and they, he said how
+
+210
+00:09:05,114 --> 00:09:09,265
+he knows things like he knows how to make you do things you don't want to do. You're,
+
+211
+00:09:09,565 --> 00:09:12,145
+you're an irrational bag of meat. You don't get to beg.
+
+212
+00:09:12,484 --> 00:09:15,025
+But anyway, anyway, so I guess here's,
+
+213
+00:09:15,034 --> 00:09:19,234
+here's my overall take on this Google hardware key thing is
+
+214
+00:09:19,734 --> 00:09:21,304
+maybe the factory
+
+215
+00:09:21,614 --> 00:09:23,304
+has been compromised,
+
+216
+00:09:23,645 --> 00:09:24,905
+it's conceivable,
+
+217
+00:09:25,114 --> 00:09:25,614
+but
+
+218
+00:09:26,239 --> 00:09:30,590
+there's so many hardware devices around now that could all be compromised.
+
+219
+00:09:30,599 --> 00:09:32,619
+-- I feel like complaining about this
+-- one blunt,
+
+220
+00:09:34,890 --> 00:09:35,039
+I'm
+
+221
+00:09:35,210 --> 00:09:35,289
+trying
+
+222
+00:09:35,409 --> 00:09:39,299
+to think of anything electronic that I own that doesn't have a made in China on it.
+
+223
+00:09:39,429 --> 00:09:42,010
+There's nothing seriously
+
+224
+00:09:42,440 --> 00:09:44,989
+and, and not just not just that Kurt, not even like,
+
+225
+00:09:45,000 --> 00:09:47,489
+like ignoring the potential political
+
+226
+00:09:47,619 --> 00:09:48,200
+implications
+
+227
+00:09:48,700 --> 00:09:49,070
+or not something
+
+228
+00:09:50,130 --> 00:09:50,159
+in
+
+229
+00:09:50,489 --> 00:09:51,919
+it are probably made in China.
+
+230
+00:09:53,750 --> 00:09:57,609
+But, but even more than that, the company you bought it from,
+
+231
+00:09:57,700 --> 00:10:01,770
+almost certainly contracted with, with a third party supplier, right?
+
+232
+00:10:02,059 --> 00:10:02,489
+Like
+
+233
+00:10:02,789 --> 00:10:04,840
+nobody builds anything.
+
+234
+00:10:05,270 --> 00:10:08,650
+Well, the NSA was doing those interceptions and hardware modifications,
+
+235
+00:10:08,659 --> 00:10:09,169
+remember?
+
+236
+00:10:10,270 --> 00:10:12,369
+Right. It's just,
+
+237
+00:10:12,669 --> 00:10:14,760
+it doesn't even matter where it's built anymore.
+
+238
+00:10:14,770 --> 00:10:17,599
+Nobody actually builds their own stuff because they just can't.
+
+239
+00:10:19,469 --> 00:10:20,700
+And so I think.
+
+240
+00:10:21,450 --> 00:10:22,239
+Right. Right.
+
+241
+00:10:22,250 --> 00:10:25,630
+And there's, there's certainly value in being concerned over your supply chain.
+
+242
+00:10:25,640 --> 00:10:27,349
+But I have a feeling that picking on
+
+243
+00:10:27,359 --> 00:10:31,200
+Google in this particular instance is probably not
+
+244
+00:10:31,539 --> 00:10:33,359
+helpful or wise.
+
+245
+00:10:33,390 --> 00:10:33,859
+Well,
+
+246
+00:10:33,869 --> 00:10:38,289
+I think this is a perfect example of security people basically doing that classic.
+
+247
+00:10:38,299 --> 00:10:40,289
+Oh, it's not perfect. It's trash, right?
+
+248
+00:10:40,299 --> 00:10:42,320
+Because how often do security people do that? Where?
+
+249
+00:10:42,429 --> 00:10:44,609
+Oh well, there is this hypothetical attack.
+
+250
+00:10:44,619 --> 00:10:48,880
+Like if the owner of the company is compromised and
+
+251
+00:10:49,179 --> 00:10:53,049
+somebody holds his family hostage, you could subvert them and
+
+252
+00:10:53,460 --> 00:10:55,479
+you know, like, well, what do you want?
+
+253
+00:10:55,489 --> 00:10:59,349
+You want like a bunch of like people with no families to run this company
+
+254
+00:10:59,489 --> 00:11:00,809
+and you want this company to be like
+
+255
+00:11:00,950 --> 00:11:03,799
+living in a plexiglass building in the middle of like Manhattan
+
+256
+00:11:03,809 --> 00:11:05,809
+where everybody can see what they're doing or something like,
+
+257
+00:11:06,239 --> 00:11:06,780
+-- you know,
+-- no,
+
+258
+00:11:07,010 --> 00:11:07,599
+no.
+
+259
+00:11:07,609 --> 00:11:07,919
+What,
+
+260
+00:11:07,929 --> 00:11:13,200
+-- what we do is we complain incessantly about unrealistic scenarios and
+-- to be fair,
+
+261
+00:11:13,250 --> 00:11:14,320
+Google is
+
+262
+00:11:14,919 --> 00:11:16,599
+trying to do things better,
+
+263
+00:11:17,210 --> 00:11:19,270
+right? Like as far as I know my UBQ is just like her
+
+264
+00:11:19,479 --> 00:11:20,349
+dip whatever. Yo.
+
+265
+00:11:20,849 --> 00:11:22,559
+And that's honestly pretty fine.
+
+266
+00:11:22,809 --> 00:11:24,750
+Like I it would suck if my UB key was
+
+267
+00:11:24,760 --> 00:11:28,059
+somehow compromised and could be remotely used or finagled because
+
+268
+00:11:28,559 --> 00:11:30,900
+well, that would definitely mess me up and you know,
+
+269
+00:11:30,909 --> 00:11:32,609
+the C class care lines who I work for
+
+270
+00:11:32,940 --> 00:11:36,710
+but fundamentally is that likely to happen? No, not really.
+
+271
+00:11:37,400 --> 00:11:40,929
+Now Google as a victim, you know, is a bit of a juicier target.
+
+272
+00:11:40,940 --> 00:11:43,979
+You know, you, you subvert the chrome updater and Voila,
+
+273
+00:11:43,989 --> 00:11:45,340
+you got everybody's computer.
+
+274
+00:11:45,559 --> 00:11:48,440
+But there, the thing also that gets me is like,
+
+275
+00:11:48,549 --> 00:11:50,299
+like you said, you know what I said about, you know,
+
+276
+00:11:50,309 --> 00:11:53,739
+having a device that's like I generated the key securely and it only lives on me.
+
+277
+00:11:54,469 --> 00:11:55,109
+Yes,
+
+278
+00:11:55,530 --> 00:11:57,799
+we're not there yet.
+
+279
+00:11:57,809 --> 00:12:01,580
+We're getting there and there's some implementations of that that are pretty good.
+
+280
+00:12:01,630 --> 00:12:03,659
+They're also pretty expensive.
+
+281
+00:12:03,960 --> 00:12:05,859
+And that's the other thing to keep in mind. Right. These UBI
+
+282
+00:12:06,109 --> 00:12:06,239
+cos
+
+283
+00:12:07,250 --> 00:12:09,840
+well, like they retail, they're not cheap like the UB keys.
+
+284
+00:12:09,849 --> 00:12:12,659
+I know the ones I buy are like they, I think they retail for about 50 bucks us.
+
+285
+00:12:12,669 --> 00:12:14,380
+Which, yeah, it's kind of pricey but
+
+286
+00:12:15,619 --> 00:12:16,609
+which is the same price.
+
+287
+00:12:18,059 --> 00:12:20,409
+And when you consider what a hardware security module costs,
+
+288
+00:12:20,419 --> 00:12:22,960
+those things are like tens of thousands of dollars.
+
+289
+00:12:22,969 --> 00:12:24,369
+And here's the best part.
+
+290
+00:12:24,380 --> 00:12:28,669
+They're typically like basically a Raspberry Pi running Linux sitting in epoxy,
+
+291
+00:12:30,489 --> 00:12:31,000
+you know,
+
+292
+00:12:31,010 --> 00:12:32,659
+like straight up like you and I could be
+
+293
+00:12:32,669 --> 00:12:35,210
+building them and all we'd literally have to do is
+
+294
+00:12:35,659 --> 00:12:39,130
+yeah, literally go to Home Depot, buy some like non conductive epoxy
+
+295
+00:12:39,969 --> 00:12:40,520
+voila,
+
+296
+00:12:41,359 --> 00:12:43,349
+you know J and Khs MS.
+
+297
+00:12:44,190 --> 00:12:44,940
+Right.
+
+298
+00:12:45,799 --> 00:12:46,750
+Yeah. Well, ok.
+
+299
+00:12:46,760 --> 00:12:48,950
+Yes and no, I mean, technically, yes,
+
+300
+00:12:48,960 --> 00:12:52,270
+but these things are also certified by various agencies.
+
+301
+00:12:52,280 --> 00:12:54,840
+So they have like, some, some standard,
+
+302
+00:12:55,000 --> 00:12:56,960
+some of them are, some of them are not,
+
+303
+00:12:57,020 --> 00:13:01,000
+I've actually found HS MS that are not certified and I'm kind of like, wait, what?
+
+304
+00:13:01,760 --> 00:13:03,119
+Yeah. Don't buy that.
+
+305
+00:13:03,270 --> 00:13:06,559
+-- Don't buy that. That's going to be a huge turn.
+-- You know what the sad thing is?
+
+306
+00:13:06,570 --> 00:13:08,570
+It's probably about as good as the certified one.
+
+307
+00:13:08,750 --> 00:13:12,349
+But, yeah, the certified one at least, you know, is this tall to get on the ride?
+
+308
+00:13:12,539 --> 00:13:14,539
+Right. And, and they have certain internal
+
+309
+00:13:15,179 --> 00:13:15,969
+as well
+
+310
+00:13:16,140 --> 00:13:18,090
+is, is what's very important.
+
+311
+00:13:18,380 --> 00:13:21,429
+Yeah, like IO 9000, they, they, it may not be good processes,
+
+312
+00:13:21,440 --> 00:13:22,729
+but at least they're documented.
+
+313
+00:13:23,070 --> 00:13:24,500
+Right. Exactly.
+
+314
+00:13:25,090 --> 00:13:25,609
+So.
+
+315
+00:13:25,739 --> 00:13:29,520
+Right. I, I guess the next one on my list is struts.
+
+316
+00:13:30,299 --> 00:13:30,729
+-- Well,
+-- and
+
+317
+00:13:30,960 --> 00:13:31,010
+the
+
+318
+00:13:31,419 --> 00:13:31,690
+news.
+
+319
+00:13:31,909 --> 00:13:32,739
+-- Yeah,
+-- it's,
+
+320
+00:13:32,960 --> 00:13:33,210
+so,
+
+321
+00:13:33,219 --> 00:13:34,340
+here's the thing I love about struts
+
+322
+00:13:34,349 --> 00:13:36,840
+is fundamentally struts is the kind of technology
+
+323
+00:13:37,020 --> 00:13:37,450
+that
+
+324
+00:13:37,650 --> 00:13:41,130
+number one, it's, it's a broken piece of poop because it's
+
+325
+00:13:41,320 --> 00:13:44,369
+just the way it was built and the time it was built
+
+326
+00:13:44,650 --> 00:13:45,969
+it's a broken piece of poop.
+
+327
+00:13:46,010 --> 00:13:46,919
+And number two,
+
+328
+00:13:46,929 --> 00:13:48,780
+the kind of people that build stuff using struts
+
+329
+00:13:48,789 --> 00:13:51,650
+are just inherently up the creek without a paddle because
+
+330
+00:13:51,880 --> 00:13:54,979
+we should tell people what struts is because I bet there's a
+
+331
+00:13:54,989 --> 00:13:57,729
+lot of people who actually don't know because let's face it.
+
+332
+00:13:57,739 --> 00:13:59,500
+Struts is freaking old man.
+
+333
+00:13:59,960 --> 00:14:00,260
+I was gonna
+
+334
+00:14:00,409 --> 00:14:04,219
+say, if they're lucky enough to have never programmed in Java, then God bless you.
+
+335
+00:14:04,229 --> 00:14:06,349
+You're in a better place than some of us
+
+336
+00:14:07,280 --> 00:14:09,580
+and we just lost half the audience.
+
+337
+00:14:10,080 --> 00:14:10,780
+But basically, yeah,
+
+338
+00:14:10,789 --> 00:14:14,030
+struts is what happens when you take a Java app and you need to put it on the web.
+
+339
+00:14:14,039 --> 00:14:16,570
+Plus somebody designed this 20 years ago
+
+340
+00:14:17,080 --> 00:14:19,549
+-- and built it 20 years.
+-- It was like brand new.
+
+341
+00:14:19,559 --> 00:14:22,659
+I mean, so OK, so for people who don't know like we should let,
+
+342
+00:14:22,669 --> 00:14:25,859
+let's give history lesson right old man, old man story time.
+
+343
+00:14:26,429 --> 00:14:27,260
+So
+
+344
+00:14:27,549 --> 00:14:29,690
+way, way back in the day
+
+345
+00:14:30,039 --> 00:14:31,849
+you had a web server
+
+346
+00:14:31,950 --> 00:14:35,299
+and you needed to do stuff and it was called CG I,
+
+347
+00:14:35,309 --> 00:14:37,200
+which I don't even remember what CG I something
+
+348
+00:14:38,229 --> 00:14:38,510
+Tommy
+
+349
+00:14:38,659 --> 00:14:39,299
+gateway interface.
+
+350
+00:14:39,309 --> 00:14:45,679
+And like I remember writing, I had a job like I was actually paid to write CG I in CC.
+
+351
+00:14:46,979 --> 00:14:49,559
+It was the job security was phenomenal.
+
+352
+00:14:50,080 --> 00:14:50,679
+Yeah. When I saw what
+
+353
+00:14:50,880 --> 00:14:51,059
+people were
+
+354
+00:14:51,250 --> 00:14:51,359
+doing,
+
+355
+00:14:52,780 --> 00:14:57,409
+-- I actually preferred Pearl.
+-- It's, it's quite bad. Uh Pearl is well funny enough.
+
+356
+00:14:57,419 --> 00:15:01,280
+So we started in C and then kind of pearl came along and Pearl suck too,
+
+357
+00:15:01,289 --> 00:15:02,440
+but it was better than C
+
+358
+00:15:03,460 --> 00:15:04,130
+and then
+
+359
+00:15:04,469 --> 00:15:04,890
+it did.
+
+360
+00:15:04,950 --> 00:15:08,669
+And then John was kind of a thing and Java was fairly new and people were like,
+
+361
+00:15:08,679 --> 00:15:10,549
+I want to do this web stuff with Java
+
+362
+00:15:11,169 --> 00:15:15,119
+and so kind of struts and Tom can and that whole ecosystem came of it.
+
+363
+00:15:15,130 --> 00:15:19,030
+And struts gave you the ability to basically build like web applications in Java,
+
+364
+00:15:19,039 --> 00:15:22,609
+which was essentially impossible before that because there was just like,
+
+365
+00:15:22,619 --> 00:15:24,309
+no way to connect Java
+
+366
+00:15:24,690 --> 00:15:26,849
+-- to a web server because,
+-- oh,
+
+367
+00:15:27,000 --> 00:15:30,669
+there were ways I saw some of them. It was, it was pretty horrific.
+
+368
+00:15:30,690 --> 00:15:33,070
+Well, you couldn't do like CG I though, right?
+
+369
+00:15:33,080 --> 00:15:37,260
+Because like Java took too long to start up. And the reason CG I worked
+
+370
+00:15:37,510 --> 00:15:41,270
+is CG, I would essentially like, it would start a process,
+
+371
+00:15:41,280 --> 00:15:43,929
+handed a bunch of stuff and then just dump whatever
+
+372
+00:15:43,940 --> 00:15:46,280
+came from the CG I script back to the user,
+
+373
+00:15:46,289 --> 00:15:46,549
+right?
+
+374
+00:15:46,559 --> 00:15:50,780
+And Java took, you know, 10 to 20 seconds to start, which was totally unreasonable.
+
+375
+00:15:51,140 --> 00:15:53,919
+And now Java takes 30 seconds to a minute to start.
+
+376
+00:15:54,719 --> 00:15:56,929
+Well, that's how we ended up with the three layer cake.
+
+377
+00:15:56,960 --> 00:16:00,609
+Remember when we had the web layer, the application layer and the database layer
+
+378
+00:16:01,080 --> 00:16:04,219
+with Java in the middle, I mean, and that was kind of the result of that is, yeah,
+
+379
+00:16:04,229 --> 00:16:06,140
+because you had to have these Java things
+
+380
+00:16:06,440 --> 00:16:08,989
+running all the time because yeah, otherwise it would literally take
+
+381
+00:16:09,599 --> 00:16:12,130
+20 to 30 seconds to service a web request
+
+382
+00:16:12,140 --> 00:16:14,830
+which even back in the nineties was unreasonable.
+
+383
+00:16:15,159 --> 00:16:16,789
+Yeah. In fact, I remember, I mean,
+
+384
+00:16:17,090 --> 00:16:21,590
+I had another gig. I did some, some contracting work one time where it was a website
+
+385
+00:16:22,109 --> 00:16:26,229
+that took three minutes to load and they wanted it under one minute.
+
+386
+00:16:26,239 --> 00:16:27,809
+I was like, well, at least they're not a
+
+387
+00:16:27,919 --> 00:16:28,659
+real high here
+
+388
+00:16:29,020 --> 00:16:31,809
+under like 60 seconds for, wow,
+
+389
+00:16:32,539 --> 00:16:33,400
+it was terrible.
+
+390
+00:16:33,409 --> 00:16:36,210
+And this was back when web browsers would, would load,
+
+391
+00:16:36,219 --> 00:16:39,489
+is that something like we want a list of everybody in the US who has a cat
+
+392
+00:16:40,179 --> 00:16:41,320
+because that would be a reasonable,
+
+393
+00:16:42,570 --> 00:16:43,590
+that would be reasonable.
+
+394
+00:16:43,770 --> 00:16:48,200
+Uh The issue was they were loading lots of things off of remote servers
+
+395
+00:16:48,330 --> 00:16:50,479
+and like ads, it was mostly ads.
+
+396
+00:16:51,119 --> 00:16:55,750
+And the issue being that back then web browsers would basically load
+
+397
+00:16:55,760 --> 00:16:58,869
+in all of the html and display the page at the end.
+
+398
+00:16:59,000 --> 00:17:00,890
+So there was no like lazy loading.
+
+399
+00:17:00,900 --> 00:17:04,618
+Like I love now how I go to click a link and then an ad takes its place and
+
+400
+00:17:04,630 --> 00:17:09,689
+I click the ad and then I see ads for some ridiculous product for the next six months.
+
+401
+00:17:10,260 --> 00:17:14,319
+But anyway, anyway, right. So struts, that is what struts does. OK?
+
+402
+00:17:14,329 --> 00:17:16,689
+So, so struts is very old
+
+403
+00:17:16,858 --> 00:17:17,939
+and let's face it, it comes
+
+404
+00:17:18,050 --> 00:17:20,930
+from a time when moving fast wasn't a thing.
+
+405
+00:17:20,939 --> 00:17:24,280
+Well, part of the problem is it's not just very old in the sense of its old code,
+
+406
+00:17:24,439 --> 00:17:27,189
+it's old culture and old ideas.
+
+407
+00:17:27,848 --> 00:17:32,270
+And I think that's the, that is the crux of the problem with struts.
+
+408
+00:17:32,569 --> 00:17:35,989
+Well, that's the crux of two problems with struts. It's the same root cause.
+
+409
+00:17:36,000 --> 00:17:39,290
+But so you have a lot of security flaws in struts because for example,
+
+410
+00:17:39,300 --> 00:17:42,510
+it does its own serializing and deserializing of data
+
+411
+00:17:42,660 --> 00:17:45,030
+and very poorly. Quite often there's flaws in it.
+
+412
+00:17:45,260 --> 00:17:47,329
+And the second problem is by definition,
+
+413
+00:17:47,339 --> 00:17:49,469
+if you've built something that uses struts,
+
+414
+00:17:50,280 --> 00:17:52,260
+you can't fix or rebuild it
+
+415
+00:17:52,469 --> 00:17:54,469
+because it's all technology and it's got
+
+416
+00:17:54,479 --> 00:17:56,739
+20 years of business knowledge embedded in it
+
+417
+00:17:56,880 --> 00:17:59,609
+for you to do a rewrite in a new clean language
+
+418
+00:17:59,949 --> 00:18:01,140
+is going to be failure
+
+419
+00:18:01,310 --> 00:18:01,949
+expensive.
+
+420
+00:18:02,780 --> 00:18:05,180
+Well, but, but, so here's the bigger issue though.
+
+421
+00:18:05,369 --> 00:18:07,250
+There's a security issue in struts.
+
+422
+00:18:07,780 --> 00:18:10,160
+You're not gonna fix it in five minutes.
+
+423
+00:18:10,310 --> 00:18:10,579
+Right.
+
+424
+00:18:10,589 --> 00:18:12,099
+Because you're not struts isn't the sort
+
+425
+00:18:12,109 --> 00:18:14,510
+of technology you're doing continuous deployment with.
+
+426
+00:18:14,530 --> 00:18:15,579
+If you're running struts,
+
+427
+00:18:15,589 --> 00:18:18,119
+it probably takes you somewhere between 30 minutes
+
+428
+00:18:18,130 --> 00:18:20,390
+and a week to deploy a new version.
+
+429
+00:18:21,339 --> 00:18:24,760
+So the Struts app that I most dealt with, I'm not going to name names
+
+430
+00:18:25,555 --> 00:18:26,625
+to do a new version.
+
+431
+00:18:26,704 --> 00:18:29,015
+Well, not technically six months to do a new version,
+
+432
+00:18:29,025 --> 00:18:31,755
+but a minimum of 1 to 2 months to do a version,
+
+433
+00:18:31,984 --> 00:18:36,925
+but six months from like we need to do X to shipping X.
+
+434
+00:18:37,135 --> 00:18:38,425
+But, and, and that's just the problem,
+
+435
+00:18:38,435 --> 00:18:40,555
+right is that it literally was something that was
+
+436
+00:18:40,564 --> 00:18:42,834
+picked a long time ago and it works kind
+
+437
+00:18:43,175 --> 00:18:46,704
+and they're sort of, you know, like I said, if you pick struts,
+
+438
+00:18:47,130 --> 00:18:48,020
+it's one of those things.
+
+439
+00:18:48,030 --> 00:18:48,630
+It's like I,
+
+440
+00:18:48,640 --> 00:18:52,109
+oh I decided to build with concrete while you're kind of stuck with concrete.
+
+441
+00:18:52,160 --> 00:18:56,030
+That's just how that is, you know, such a fundamental design decision.
+
+442
+00:18:56,310 --> 00:18:58,869
+That's a good analogy for this actually.
+
+443
+00:18:59,010 --> 00:19:04,390
+Yeah, like you picked Java. Well, what else are you going to use?
+
+444
+00:19:04,400 --> 00:19:09,030
+-- No, like, seriously? What if it's not struts, what else would it be?
+-- Right. Exactly.
+
+445
+00:19:09,040 --> 00:19:10,739
+You don't have a choice. For the most part.
+
+446
+00:19:10,930 --> 00:19:14,550
+I saw some Frankenstein Monsters back in the day to get Java Apps online
+
+447
+00:19:15,010 --> 00:19:19,130
+where they, they had like the three layer cake design and the, like the front end,
+
+448
+00:19:19,359 --> 00:19:22,109
+you know, this is before, like glass fish and Tom cat and,
+
+449
+00:19:22,619 --> 00:19:22,949
+yeah, I'm
+
+450
+00:19:23,119 --> 00:19:27,420
+ok. So for the glass fish was something that sun.com made.
+
+451
+00:19:27,660 --> 00:19:30,829
+Sun.com no longer exists. So it's ok if you don't know what I'm talking about,
+
+452
+00:19:31,079 --> 00:19:32,790
+they ceased to exist
+
+453
+00:19:33,189 --> 00:19:33,589
+the,
+
+454
+00:19:33,839 --> 00:19:35,040
+probably about 10 years ago
+
+455
+00:19:35,500 --> 00:19:36,339
+they were the dot
+
+456
+00:19:36,489 --> 00:19:37,160
+dot com
+
+457
+00:19:37,280 --> 00:19:38,050
+until, you know,
+
+458
+00:19:39,010 --> 00:19:39,520
+were,
+
+459
+00:19:39,739 --> 00:19:40,530
+yeah, they were
+
+460
+00:19:41,579 --> 00:19:45,729
+-- killed them. Right. Yeah.
+-- Well, a lot of things killed them. Yeah, that's true.
+
+461
+00:19:46,140 --> 00:19:48,979
+You know, and then, uh, but yeah, so,
+
+462
+00:19:49,300 --> 00:19:51,800
+yeah, I mean, literally if you're going to build something in Java and,
+
+463
+00:19:51,810 --> 00:19:57,650
+and quite frankly, back in the day, if you had a large system that you needed to build,
+
+464
+00:19:58,260 --> 00:20:01,550
+especially when it involved more than one sort of
+
+465
+00:20:01,699 --> 00:20:04,439
+organization. So, you know, like a large company with,
+
+466
+00:20:04,599 --> 00:20:06,349
+say, marketing and sales and
+
+467
+00:20:06,550 --> 00:20:07,199
+whatever
+
+468
+00:20:07,540 --> 00:20:08,150
+Javis
+
+469
+00:20:08,560 --> 00:20:10,400
+was kind of your only option.
+
+470
+00:20:10,729 --> 00:20:11,199
+You know,
+
+471
+00:20:11,770 --> 00:20:11,800
+I,
+
+472
+00:20:12,030 --> 00:20:12,579
+I,
+
+473
+00:20:12,689 --> 00:20:15,219
+it's like, it's like, it's like we want to put something in orbit.
+
+474
+00:20:15,229 --> 00:20:18,819
+Well, you kind of have to learn how to build rockets and build complicated things.
+
+475
+00:20:18,829 --> 00:20:20,880
+That's just, there's no option. B
+
+476
+00:20:22,329 --> 00:20:23,650
+Right. Exactly.
+
+477
+00:20:24,150 --> 00:20:24,640
+You know,
+
+478
+00:20:24,869 --> 00:20:27,729
+and so, like, quite frankly, if you picked a Java
+
+479
+00:20:28,880 --> 00:20:33,400
+Yeah, really. The only way to get that thing online, realistically speaking
+
+480
+00:20:33,660 --> 00:20:37,910
+was once it existed and still is, is struts and I, I
+
+481
+00:20:38,199 --> 00:20:39,489
+don't know
+
+482
+00:20:40,260 --> 00:20:42,920
+of any other sort of framework or any
+
+483
+00:20:43,150 --> 00:20:44,119
+package that
+
+484
+00:20:44,500 --> 00:20:46,319
+basically gives you what struts gives you.
+
+485
+00:20:46,709 --> 00:20:47,400
+So,
+
+486
+00:20:47,800 --> 00:20:48,719
+yeah, like,
+
+487
+00:20:49,030 --> 00:20:50,099
+you know, we, we,
+
+488
+00:20:50,270 --> 00:20:52,640
+you know, we decided to build with concrete because, well,
+
+489
+00:20:52,650 --> 00:20:54,079
+we need to build a 50 story building.
+
+490
+00:20:54,089 --> 00:20:55,760
+Like, what else are we going to do?
+
+491
+00:20:56,989 --> 00:21:02,050
+Uh Right. And now, now here's, here's where we should build on. This analogy
+
+492
+00:21:02,189 --> 00:21:02,819
+is
+
+493
+00:21:03,849 --> 00:21:08,550
+when you build, say a bridge out of concrete and steel,
+
+494
+00:21:08,910 --> 00:21:09,469
+right?
+
+495
+00:21:09,599 --> 00:21:13,790
+It's going to need maintenance eventually and it's going to be difficult to,
+
+496
+00:21:13,800 --> 00:21:15,060
+to do anything with.
+
+497
+00:21:15,069 --> 00:21:16,199
+And the problem is
+
+498
+00:21:16,410 --> 00:21:17,829
+you can ignore it,
+
+499
+00:21:18,260 --> 00:21:21,270
+but eventually, like it becomes so bad,
+
+500
+00:21:21,689 --> 00:21:23,579
+you can't ignore it any longer.
+
+501
+00:21:23,589 --> 00:21:24,189
+And basically,
+
+502
+00:21:24,199 --> 00:21:26,270
+I think struts has reached the point where like
+
+503
+00:21:26,280 --> 00:21:28,750
+the technical debt and the issues it comes with like
+
+504
+00:21:29,099 --> 00:21:32,079
+the bridge is falling down. What are you going to do
+
+505
+00:21:32,839 --> 00:21:35,670
+-- is no plan
+-- B, you basically gotta,
+
+506
+00:21:35,680 --> 00:21:38,540
+you gotta build a new bridge and quite frankly that a
+
+507
+00:21:38,829 --> 00:21:40,520
+lot of people don't have the budget for that
+
+508
+00:21:41,910 --> 00:21:43,260
+and, and nobody ever does.
+
+509
+00:21:43,270 --> 00:21:48,640
+However, if the bridge completely falls down, you don't have a choice. Right?
+
+510
+00:21:49,130 --> 00:21:52,170
+Well, the thing is, it's not like the bridge falls down and stays down, right?
+
+511
+00:21:52,180 --> 00:21:53,750
+Like, oh, you have a full on struts.
+
+512
+00:21:53,760 --> 00:21:55,760
+Uh you can maybe put in some compensating
+
+513
+00:21:55,770 --> 00:21:57,829
+control like a mod security thing to filter it
+
+514
+00:21:58,109 --> 00:22:01,079
+or you can try and work around it. Like, I've seen people
+
+515
+00:22:01,750 --> 00:22:02,689
+do some, you know,
+
+516
+00:22:02,699 --> 00:22:05,449
+pretty horrendous stuff to work around struts because they have to,
+
+517
+00:22:05,619 --> 00:22:08,130
+because if they upgrade struts, the whole thing breaks for sure.
+
+518
+00:22:09,739 --> 00:22:10,609
+At that point
+
+519
+00:22:10,930 --> 00:22:13,869
+it's, the bridge isn't going to fall over with the struts flaw.
+
+520
+00:22:14,020 --> 00:22:17,880
+No, it's just every, like, six minutes a truck's gonna drive off the side of it.
+
+521
+00:22:19,099 --> 00:22:21,530
+And eventually people might get annoyed
+
+522
+00:22:21,699 --> 00:22:24,250
+that, that their truck fell off the bridge,
+
+523
+00:22:26,280 --> 00:22:27,270
+but no fundamental.
+
+524
+00:22:27,280 --> 00:22:29,410
+That's something I've come to terms with in the security industry is
+
+525
+00:22:29,420 --> 00:22:31,689
+there's a lot of stuff that just is not worth fixing.
+
+526
+00:22:31,920 --> 00:22:33,020
+Oh, totally, man.
+
+527
+00:22:33,170 --> 00:22:37,709
+Because quite frankly, you know, it's gonna, we're gonna lose like 20 grand a year.
+
+528
+00:22:37,839 --> 00:22:39,829
+No offense, but 20 grand is like
+
+529
+00:22:39,930 --> 00:22:43,939
+a month of a developer's time plus overhead plus opportunity cost.
+
+530
+00:22:44,640 --> 00:22:47,795
+And you are suggesting not fixing it is a better option.
+
+531
+00:22:48,175 --> 00:22:52,035
+I'm not suggesting not fixing it is a better option. I'm simply saying not fixing.
+
+532
+00:22:52,045 --> 00:22:53,895
+It might be a pretty rational option.
+
+533
+00:22:54,035 --> 00:22:56,324
+-- Uh
+-- It, it very well could be, in fact, so I,
+
+534
+00:22:56,334 --> 00:22:59,444
+I was talking to someone the other day who was
+
+535
+00:22:59,724 --> 00:23:00,094
+there,
+
+536
+00:23:00,104 --> 00:23:03,935
+they had a small business that was basically compromised and they got whacked good
+
+537
+00:23:04,459 --> 00:23:05,829
+and they basically said, what do we do?
+
+538
+00:23:05,839 --> 00:23:08,550
+And I said, you either replace all your gear or you just say
+
+539
+00:23:08,650 --> 00:23:09,680
+I'll live with it,
+
+540
+00:23:09,810 --> 00:23:10,790
+you know, and you're probably,
+
+541
+00:23:11,310 --> 00:23:12,439
+or something more subtle.
+
+542
+00:23:12,780 --> 00:23:13,949
+Uh, it was,
+
+543
+00:23:14,170 --> 00:23:15,599
+it was all of the above
+
+544
+00:23:17,270 --> 00:23:19,329
+-- and my response would be not so much
+-- tax,
+
+545
+00:23:19,339 --> 00:23:20,530
+replace all the gear, but
+
+546
+00:23:21,530 --> 00:23:23,949
+move it into the cloud, get somebody else to.
+
+547
+00:23:24,609 --> 00:23:25,020
+Right.
+
+548
+00:23:25,030 --> 00:23:28,319
+That's, that's also, that was one of my suggestions was like, honestly,
+
+549
+00:23:28,329 --> 00:23:31,040
+your best bet is to get in the cloud as much as you can.
+
+550
+00:23:31,050 --> 00:23:31,530
+And
+
+551
+00:23:31,729 --> 00:23:34,069
+because obviously they're like, oh, what can we do today?
+
+552
+00:23:34,079 --> 00:23:36,160
+I said, well, you can buy on your computer and they said, I don't,
+
+553
+00:23:36,170 --> 00:23:36,969
+we don't want to do that.
+
+554
+00:23:36,979 --> 00:23:40,160
+I said, well, then you don't really have another choice.
+
+555
+00:23:40,589 --> 00:23:43,640
+But I mean, totally, man, that's, that's exactly right. Is
+
+556
+00:23:44,260 --> 00:23:45,520
+sometimes
+
+557
+00:23:45,699 --> 00:23:47,560
+the, the risk is worth it
+
+558
+00:23:47,699 --> 00:23:49,900
+depending upon what the environment is.
+
+559
+00:23:49,910 --> 00:23:52,569
+And I think that's another thing, security is really bad at
+
+560
+00:23:52,939 --> 00:23:55,119
+how many times have companies screwed up and
+
+561
+00:23:55,130 --> 00:23:57,040
+lost our personal data and it's turned out,
+
+562
+00:23:57,050 --> 00:24:00,800
+ok, like Air Canada just lost 20,000
+
+563
+00:24:01,130 --> 00:24:02,790
+people's data bad.
+
+564
+00:24:02,890 --> 00:24:05,750
+Oh, wait, it's passport data. Oh, it's really bad.
+
+565
+00:24:05,880 --> 00:24:07,359
+But what am I going to do? Not fly?
+
+566
+00:24:07,630 --> 00:24:10,979
+-- You're not going
+-- to do anything and, and not only that, it's too late,
+
+567
+00:24:10,989 --> 00:24:12,089
+the data is gone.
+
+568
+00:24:12,599 --> 00:24:16,780
+I mean, this is where some of the goals of GDPR I think are maybe laudable.
+
+569
+00:24:16,790 --> 00:24:19,819
+But, I mean, in all seriousness, like today in North America,
+
+570
+00:24:19,829 --> 00:24:21,229
+if a company loses your data.
+
+571
+00:24:21,439 --> 00:24:22,300
+Oh, well,
+
+572
+00:24:23,050 --> 00:24:23,069
+uh,
+
+573
+00:24:24,150 --> 00:24:24,880
+-- you,
+-- you can't do
+
+574
+00:24:25,050 --> 00:24:25,109
+anything
+
+575
+00:24:25,420 --> 00:24:25,449
+with
+
+576
+00:24:25,709 --> 00:24:25,780
+consumer.
+
+577
+00:24:26,729 --> 00:24:29,459
+Right. Exactly. Like they don't care.
+
+578
+00:24:29,619 --> 00:24:31,810
+And as a consumer you can do very little.
+
+579
+00:24:31,819 --> 00:24:32,339
+And in fact,
+
+580
+00:24:32,349 --> 00:24:36,069
+as history has shown it basically doesn't affect the company negatively in
+
+581
+00:24:36,079 --> 00:24:39,339
+any way outside of maybe a stock dip for three months.
+
+582
+00:24:39,390 --> 00:24:40,189
+Right? Like,
+
+583
+00:24:40,359 --> 00:24:41,829
+that's just the way it is.
+
+584
+00:24:42,369 --> 00:24:46,189
+So if, if you're a company, like that's something to think about.
+
+585
+00:24:46,199 --> 00:24:50,670
+If we secure this, it's going to cost X, if we don't secure it, it's going to cost Y
+
+586
+00:24:52,930 --> 00:24:55,510
+the thing is no, no, no, it's even worse than that. If we don't secure it,
+
+587
+00:24:55,760 --> 00:24:58,030
+there's a chance it will cost zero
+
+588
+00:24:58,609 --> 00:24:59,959
+and there is a chance
+
+589
+00:25:00,530 --> 00:25:02,589
+that it will cost more than zero.
+
+590
+00:25:02,760 --> 00:25:04,369
+And that number is variable.
+
+591
+00:25:05,260 --> 00:25:08,150
+So if you do security it has a set cost.
+
+592
+00:25:09,170 --> 00:25:09,579
+Yep.
+
+593
+00:25:09,719 --> 00:25:09,979
+Yep.
+
+594
+00:25:10,119 --> 00:25:11,839
+Well, not and, and actually it's worse than that.
+
+595
+00:25:11,849 --> 00:25:16,150
+If you do security, not only does it have a set cost, but there's an opportunity cost.
+
+596
+00:25:16,430 --> 00:25:19,140
+So for example, like I just, uh, so disclaimer, I,
+
+597
+00:25:19,150 --> 00:25:22,680
+I've been the director of it at the cloud security lines for over eight years now
+
+598
+00:25:22,819 --> 00:25:26,459
+and uh I'm going full time now and so I'm cleaning up a lot of our it
+
+599
+00:25:26,719 --> 00:25:29,739
+and I love it because I'm, I'm looking at stuff like, oh damn it, why,
+
+600
+00:25:29,750 --> 00:25:31,300
+why is this all messed up and like who?
+
+601
+00:25:31,310 --> 00:25:33,479
+Right. That was me. Right. Because we made this,
+
+602
+00:25:33,709 --> 00:25:36,099
+you know, like just whatever, whatever. Like,
+
+603
+00:25:36,310 --> 00:25:40,010
+you know, I, I've done things like run Fedora 14 in production for three years
+
+604
+00:25:40,439 --> 00:25:43,099
+and if you know anything about Fedora's life cycle, then
+
+605
+00:25:43,239 --> 00:25:45,020
+-- two
+-- years too long.
+
+606
+00:25:45,880 --> 00:25:48,959
+Well, but we have cloud flare and mod security and some other stuff.
+
+607
+00:25:48,969 --> 00:25:50,119
+Filtering and, you know,
+
+608
+00:25:50,849 --> 00:25:53,140
+nothing bad at, like, literally nothing bad
+
+609
+00:25:53,319 --> 00:25:55,130
+-- happened.
+-- Right. Exactly. Exactly.
+
+610
+00:25:55,770 --> 00:25:59,310
+And, you know, it's a public facing web server with no data, no sensitive data on it.
+
+611
+00:25:59,869 --> 00:26:00,280
+Right.
+
+612
+00:26:00,520 --> 00:26:03,560
+So, yeah, I'm, I'm willing to live with that and if it gets hacked fine,
+
+613
+00:26:03,569 --> 00:26:05,290
+I'll rebuild it on a fresh server.
+
+614
+00:26:05,500 --> 00:26:08,369
+You know, now we're up to date and everything's been updated within the last week.
+
+615
+00:26:08,380 --> 00:26:09,000
+And that's awesome.
+
+616
+00:26:09,680 --> 00:26:10,780
+But fundamentally,
+
+617
+00:26:11,069 --> 00:26:16,569
+you know, we've gotten lucky partly and part of it is I've done other things to,
+
+618
+00:26:17,030 --> 00:26:18,329
+you know, prevent these things,
+
+619
+00:26:18,689 --> 00:26:20,540
+right? There's other ways, you know, than just
+
+620
+00:26:20,729 --> 00:26:25,040
+because the reality is if you rely on having up to date software to be secure,
+
+621
+00:26:25,109 --> 00:26:25,819
+you're doomed
+
+622
+00:26:26,800 --> 00:26:27,260
+because
+
+623
+00:26:27,900 --> 00:26:32,119
+even if you play the patches within 10 seconds of the vendor releasing them,
+
+624
+00:26:32,420 --> 00:26:35,089
+there are still, I mean, for example, what was it?
+
+625
+00:26:35,099 --> 00:26:37,880
+Uh Wednesday, I want to say there was that thing on Twitter, the,
+
+626
+00:26:37,890 --> 00:26:40,310
+the zero day privilege escalation in windows
+
+627
+00:26:40,760 --> 00:26:42,010
+that somebody posted on Twitter
+
+628
+00:26:42,170 --> 00:26:42,329
+on github
+
+629
+00:26:42,750 --> 00:26:43,000
+link,
+
+630
+00:26:44,329 --> 00:26:44,739
+you know.
+
+631
+00:26:44,750 --> 00:26:47,550
+So if somebody also has a zero day that
+
+632
+00:26:47,560 --> 00:26:50,439
+lets them get into a less privileged Windows process,
+
+633
+00:26:50,449 --> 00:26:51,479
+well, now they're like, oh sweet.
+
+634
+00:26:51,489 --> 00:26:53,520
+Now I can escalate to, you know, the systems,
+
+635
+00:26:53,979 --> 00:26:54,839
+right? So
+
+636
+00:26:55,069 --> 00:26:55,959
+to be blunt,
+
+637
+00:26:56,099 --> 00:26:59,400
+relying on your software to be up to date to be completely secure.
+
+638
+00:27:00,449 --> 00:27:01,489
+It won't work,
+
+639
+00:27:01,709 --> 00:27:05,650
+but updating your software is, it's kind of like filling potholes. It's not
+
+640
+00:27:05,770 --> 00:27:06,719
+a lot of fun.
+
+641
+00:27:07,119 --> 00:27:08,250
+It's not very glamorous.
+
+642
+00:27:08,579 --> 00:27:10,369
+It does make the road nicer though.
+
+643
+00:27:10,589 --> 00:27:10,709
+Yeah.
+
+644
+00:27:10,829 --> 00:27:12,329
+II, I do agree.
+
+645
+00:27:12,500 --> 00:27:14,290
+You know, like it, it does make things
+
+646
+00:27:14,430 --> 00:27:15,359
+less worse.
+
+647
+00:27:15,369 --> 00:27:19,000
+I won't say it makes things better but it definitely makes things less worse.
+
+648
+00:27:19,500 --> 00:27:21,849
+Um, and a big part of updating software too is, you know,
+
+649
+00:27:21,859 --> 00:27:23,800
+can you update your software without,
+
+650
+00:27:24,060 --> 00:27:26,050
+without breaking the other software?
+
+651
+00:27:26,199 --> 00:27:27,939
+And that implies that you have some control and
+
+652
+00:27:27,949 --> 00:27:29,530
+visibility into what you're doing and you know,
+
+653
+00:27:29,540 --> 00:27:30,130
+what you're doing.
+
+654
+00:27:32,089 --> 00:27:35,199
+If you can't do that, then you're doomed. And that's the problem with struts.
+
+655
+00:27:35,640 --> 00:27:38,599
+You know, these people have struts and they're stuck with it and,
+
+656
+00:27:38,810 --> 00:27:42,280
+you know, they don't know that updating it is gonna break the app in some weird way
+
+657
+00:27:43,410 --> 00:27:44,060
+and it might,
+
+658
+00:27:44,680 --> 00:27:45,430
+it totally,
+
+659
+00:27:46,050 --> 00:27:46,459
+I remember.
+
+660
+00:27:47,420 --> 00:27:47,949
+Oh, yeah. Oh,
+
+661
+00:27:48,160 --> 00:27:49,160
+some of the, just,
+
+662
+00:27:49,369 --> 00:27:49,660
+well,
+
+663
+00:27:49,670 --> 00:27:51,170
+and part of the problem too is some of the changes
+
+664
+00:27:51,180 --> 00:27:54,079
+that need to happen to struts to fix these security issues properly
+
+665
+00:27:54,599 --> 00:27:56,650
+will so fundamentally break it.
+
+666
+00:27:56,910 --> 00:27:57,989
+They just, no,
+
+667
+00:27:58,760 --> 00:28:02,339
+yeah, it, it's got to go, I guess, I guess the advice becomes
+
+668
+00:28:02,699 --> 00:28:04,219
+if you're starting a new project,
+
+669
+00:28:04,329 --> 00:28:05,170
+don't use struts
+
+670
+00:28:05,609 --> 00:28:05,890
+if you,
+
+671
+00:28:07,770 --> 00:28:08,530
+yeah, that's fair.
+
+672
+00:28:08,670 --> 00:28:08,969
+That's fair.
+
+673
+00:28:09,770 --> 00:28:13,010
+-- We can't wait for the hay
+-- mail. Like, use rails. Rails is at least,
+
+674
+00:28:13,189 --> 00:28:16,619
+-- you know,
+-- dude, Ruby is like old and lame now too. Right.
+
+675
+00:28:16,869 --> 00:28:19,560
+But it's only old and lame this year.
+
+676
+00:28:20,040 --> 00:28:21,020
+-- That's true.
+-- A decade
+
+677
+00:28:21,300 --> 00:28:21,689
+ago.
+
+678
+00:28:22,109 --> 00:28:23,430
+So, I, I guess
+
+679
+00:28:23,739 --> 00:28:25,050
+if you're running it,
+
+680
+00:28:25,339 --> 00:28:26,060
+good luck
+
+681
+00:28:26,550 --> 00:28:29,329
+and may the force be with you or, or something,
+
+682
+00:28:29,640 --> 00:28:31,459
+I think fundamentally if you're, if you're running it,
+
+683
+00:28:31,469 --> 00:28:32,770
+you're probably making money off of it.
+
+684
+00:28:32,780 --> 00:28:33,449
+So, you know
+
+685
+00:28:33,680 --> 00:28:33,819
+how
+
+686
+00:28:34,000 --> 00:28:34,420
+all
+
+687
+00:28:36,010 --> 00:28:36,969
+hopefully.
+
+688
+00:28:37,969 --> 00:28:40,829
+Oh, all right, cool, man. I, I, I'm calling it.
+
+689
+00:28:40,959 --> 00:28:43,189
+So. Thank you, Kurt. Thank you, everyone for listening.
+
+690
+00:28:43,199 --> 00:28:46,790
+You can go to open source security podcast.com to hit up the show notes,
+
+691
+00:28:47,020 --> 00:28:49,910
+UZ pound Os S podcast hashtag
+
+692
+00:28:50,209 --> 00:28:51,579
+to hit us up on social media
+
+693
+00:28:51,709 --> 00:28:56,290
+and if nothing else, Kurt have a fantastic rest of your day. You too. Thanks.
+
+694
+00:28:56,300 --> 00:28:57,500
+Thanks everyone. Bye bye.

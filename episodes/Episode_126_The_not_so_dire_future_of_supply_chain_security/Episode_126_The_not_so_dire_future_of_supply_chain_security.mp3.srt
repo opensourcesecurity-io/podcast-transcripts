@@ -1,0 +1,3087 @@
+0
+00:00:05,300 --> 00:00:10,039
+Hello and welcome to the open source security podcast episode 126 with myself,
+
+1
+00:00:10,050 --> 00:00:12,579
+Kurt Siefried and my partner in Thought Crime, Josh Pressers,
+
+2
+00:00:12,590 --> 00:00:15,399
+or we could call it like 100 and 25.5.
+
+3
+00:00:15,409 --> 00:00:17,129
+Sort of, I don't know. Yeah,
+
+4
+00:00:17,329 --> 00:00:17,809
+that's fair.
+
+5
+00:00:17,819 --> 00:00:22,850
+So anyway, anyone who picked up here, uh this is, this is kind of part two of episode,
+
+6
+00:00:22,879 --> 00:00:23,790
+100 and 25.
+
+7
+00:00:23,799 --> 00:00:25,450
+So if this is the first episode you're ever
+
+8
+00:00:25,459 --> 00:00:27,819
+listening to uh go back and listen to 125 1st
+
+9
+00:00:28,117 --> 00:00:29,816
+because it'll make a lot more sense.
+
+10
+00:00:29,966 --> 00:00:32,016
+All everything we talked about there is going
+
+11
+00:00:32,027 --> 00:00:33,817
+to be really important for this conversation.
+
+12
+00:00:33,826 --> 00:00:36,766
+So, so anyway, anyway, picking up where we left off
+
+13
+00:00:36,867 --> 00:00:41,716
+is we kind of covered a lot of the open source security dependency, just,
+
+14
+00:00:41,727 --> 00:00:42,937
+just nature of the world.
+
+15
+00:00:42,946 --> 00:00:45,337
+And, and we kind of said at this point in time, like there's,
+
+16
+00:00:45,347 --> 00:00:47,477
+there's nothing we can do to fix a problem of like
+
+17
+00:00:47,486 --> 00:00:50,027
+a nefarious actor inserting a back door into open source.
+
+18
+00:00:50,036 --> 00:00:50,837
+And so that
+
+19
+00:00:51,153 --> 00:00:52,054
+may not be fixable,
+
+20
+00:00:52,063 --> 00:00:53,683
+but there are some things going on and I think
+
+21
+00:00:53,694 --> 00:00:55,223
+there's some things we could do in the future.
+
+22
+00:00:55,234 --> 00:00:57,813
+And so kind of well and to be clear though open source
+
+23
+00:00:57,824 --> 00:01:01,214
+does have a reasonable reactive model for getting these things fixed quickly.
+
+24
+00:01:01,374 --> 00:01:04,664
+Right. We have a community panic and it's the immune system, right.
+
+25
+00:01:04,674 --> 00:01:06,594
+We should call it the open source immune system, right.
+
+26
+00:01:06,603 --> 00:01:07,033
+Where, where,
+
+27
+00:01:07,043 --> 00:01:10,194
+like your immune system generally doesn't do anything before
+
+28
+00:01:10,204 --> 00:01:11,793
+you get sick and then it kicks in and,
+
+29
+00:01:11,804 --> 00:01:13,153
+and everything magic happens.
+
+30
+00:01:13,164 --> 00:01:13,674
+But anyway,
+
+31
+00:01:13,950 --> 00:01:16,611
+yeah, and I'm sure doctors can send us hate mail.
+
+32
+00:01:16,621 --> 00:01:19,380
+Well, and actually I love this because this is a great example because this one,
+
+33
+00:01:19,500 --> 00:01:21,691
+so this thing happened and, and somebody on github
+
+34
+00:01:21,861 --> 00:01:26,291
+did a ton of really good in depth analysis and posted it to the issue.
+
+35
+00:01:26,441 --> 00:01:28,291
+It's great for like free, right?
+
+36
+00:01:28,301 --> 00:01:31,420
+And this is like, this is the kind of level of analysis where I look at this.
+
+37
+00:01:31,430 --> 00:01:33,411
+And I'm like, yeah, I'd hire this guy, right?
+
+38
+00:01:33,971 --> 00:01:36,450
+Like, literally looking at this one analysis. He did.
+
+39
+00:01:36,720 --> 00:01:37,410
+No, this dude's
+
+40
+00:01:37,589 --> 00:01:41,730
+like he is really quite competent and cares and good enough. Well,
+
+41
+00:01:41,889 --> 00:01:44,470
+we don't know if it's a he just for the record. But
+
+42
+00:01:44,720 --> 00:01:44,739
+yeah,
+
+43
+00:01:45,209 --> 00:01:46,540
+well, his, his github
+
+44
+00:01:46,750 --> 00:01:47,339
+account
+
+45
+00:01:47,739 --> 00:01:48,860
+says his name and it's
+
+46
+00:01:49,099 --> 00:01:51,069
+anyways, that's anyway, whatever, whatever it does, right?
+
+47
+00:01:51,470 --> 00:01:55,129
+But, you know, and that's what I love. There's a, there's a ton of smart people who,
+
+48
+00:01:55,410 --> 00:01:58,180
+you know, they don't have the time to do this every single day, all the time.
+
+49
+00:01:58,190 --> 00:02:01,330
+But, you know, once in a while when we need to panic, we can do that and it works. Yeah.
+
+50
+00:02:01,339 --> 00:02:04,110
+Yeah. Yeah. Ok. Ok. So, so let's,
+
+51
+00:02:04,239 --> 00:02:05,730
+let's talk about the future.
+
+52
+00:02:05,739 --> 00:02:09,059
+Here's where some of this is going to be real and some of it's going to be made up crap.
+
+53
+00:02:09,199 --> 00:02:12,350
+And so here's, here's the stage I want to set.
+
+54
+00:02:12,960 --> 00:02:13,710
+So
+
+55
+00:02:14,139 --> 00:02:17,820
+we know where we are today. We know most of the scanners don't work all that.
+
+56
+00:02:17,830 --> 00:02:20,720
+Well, there's some solutions, some are getting better, some are worse.
+
+57
+00:02:20,729 --> 00:02:24,750
+There's, there's not enough people to do the kind of work we need to do. And so
+
+58
+00:02:25,149 --> 00:02:27,929
+I think we can, can I interrupt for a moment, please?
+
+59
+00:02:27,940 --> 00:02:31,720
+I would say it's, it's not so much about the scanners, not working or working well.
+
+60
+00:02:31,729 --> 00:02:31,990
+It's
+
+61
+00:02:32,190 --> 00:02:36,759
+the fundamental technologies that we currently have available
+
+62
+00:02:36,940 --> 00:02:39,570
+that is fair. A lot of them don't
+
+63
+00:02:39,800 --> 00:02:42,089
+scale. A lot of them
+
+64
+00:02:42,259 --> 00:02:44,649
+aren't smart like they're, they're really,
+
+65
+00:02:44,820 --> 00:02:47,289
+if you look, if you scratch the surface,
+
+66
+00:02:47,720 --> 00:02:50,080
+you know, it's basically people doing the work,
+
+67
+00:02:50,529 --> 00:02:51,970
+putting it into a system and then the
+
+68
+00:02:52,309 --> 00:02:53,369
+kind of replicates that,
+
+69
+00:02:53,949 --> 00:02:55,660
+you know what I would compare it to
+
+70
+00:02:55,910 --> 00:02:59,779
+is, is the space race in the sixties is where
+
+71
+00:03:00,009 --> 00:03:01,979
+we went to the like humanity.
+
+72
+00:03:01,990 --> 00:03:04,720
+And I'm, I'm not going to say the United States did this because that annoys me.
+
+73
+00:03:04,729 --> 00:03:07,059
+But we'll say humanity went to the moon and
+
+74
+00:03:07,070 --> 00:03:09,660
+we didn't really have the technology to get there.
+
+75
+00:03:09,770 --> 00:03:12,059
+We had the ability to get there where I would say
+
+76
+00:03:12,070 --> 00:03:14,330
+we still aren't even to the point where we really have
+
+77
+00:03:14,440 --> 00:03:17,740
+the technology to actually go to the moon correctly. Right.
+
+78
+00:03:17,750 --> 00:03:20,419
+And, and it's the same thing with this, like the whole, you have,
+
+79
+00:03:20,429 --> 00:03:21,869
+we solved the three body problem.
+
+80
+00:03:21,880 --> 00:03:24,809
+My understanding is it's still a tough one. I have no idea.
+
+81
+00:03:24,970 --> 00:03:24,990
+I
+
+82
+00:03:25,199 --> 00:03:25,860
+don't,
+
+83
+00:03:26,139 --> 00:03:29,660
+it doesn't matter either because the point is that
+
+84
+00:03:29,940 --> 00:03:33,149
+the technology we actually need doesn't exist yet.
+
+85
+00:03:33,289 --> 00:03:34,169
+And that's,
+
+86
+00:03:34,440 --> 00:03:37,710
+I think where we should start with before the technology even exists.
+
+87
+00:03:37,720 --> 00:03:41,059
+We need to imagine crazy things. Half of which will turn out to be garbage,
+
+88
+00:03:41,160 --> 00:03:44,580
+the other half of which will five years later. Well, of course, it was self evident.
+
+89
+00:03:44,589 --> 00:03:47,179
+Everybody would carry smartphones with them, right.
+
+90
+00:03:47,589 --> 00:03:49,729
+You know, now in 2018 it's like, of course,
+
+91
+00:03:49,740 --> 00:03:51,259
+everybody has a smartphone in their pocket.
+
+92
+00:03:51,270 --> 00:03:54,300
+You're not going to walk around with a calculator in your pocket all the time.
+
+93
+00:03:54,860 --> 00:03:55,970
+Yes, I am. Ha
+
+94
+00:03:56,389 --> 00:03:57,160
+take that math
+
+95
+00:03:57,410 --> 00:03:57,449
+teacher.
+
+96
+00:03:58,149 --> 00:03:58,610
+Well, you know,
+
+97
+00:03:58,619 --> 00:04:01,949
+I keep telling my parents and everybody it's like we no longer have an excuse
+
+98
+00:04:01,960 --> 00:04:05,080
+not to know something because we have all of the world's information in our pocket.
+
+99
+00:04:05,169 --> 00:04:07,610
+Yeah. But bar conversations are way less fun. Right?
+
+100
+00:04:07,880 --> 00:04:10,169
+It would be way more exciting. Like, like discussing
+
+101
+00:04:10,320 --> 00:04:12,250
+what, what something may or may not be.
+
+102
+00:04:12,440 --> 00:04:12,699
+Right.
+
+103
+00:04:12,710 --> 00:04:14,860
+But anyway, anyway, so, so here is,
+
+104
+00:04:14,869 --> 00:04:17,630
+here's kind of let's set some ground rules for ourselves.
+
+105
+00:04:17,640 --> 00:04:18,540
+Uh Number one,
+
+106
+00:04:18,548 --> 00:04:21,070
+I think whatever we see in the future is going
+
+107
+00:04:21,079 --> 00:04:24,470
+to have to be 100% automated humans need not apply.
+
+108
+00:04:24,480 --> 00:04:25,339
+Can we agree on that?
+
+109
+00:04:25,500 --> 00:04:30,059
+Yeah, because even if it's, you know, a millionth of a percent of effort by the human
+
+110
+00:04:30,230 --> 00:04:34,000
+times a billion lines of code, you're going to run out of parking and washroom space.
+
+111
+00:04:34,010 --> 00:04:34,489
+Exactly.
+
+112
+00:04:34,600 --> 00:04:37,540
+We have the law of large numbers is against us.
+
+113
+00:04:37,549 --> 00:04:37,790
+Well,
+
+114
+00:04:37,799 --> 00:04:40,880
+I think where you can have people involved is people can
+
+115
+00:04:40,890 --> 00:04:43,970
+be meta involved in the sense of setting policy or setting.
+
+116
+00:04:43,980 --> 00:04:45,519
+You know, here's our risk appetite,
+
+117
+00:04:45,549 --> 00:04:48,809
+here's what we're willing to deal with or here's what we're not willing to deal with.
+
+118
+00:04:48,940 --> 00:04:53,459
+So very high level decision making, that's fair. But actual like actual,
+
+119
+00:04:53,679 --> 00:04:57,649
+like basically people can be involved in the strategic component of this,
+
+120
+00:04:58,010 --> 00:05:01,290
+but they absolutely cannot be involved in the tactical component of this.
+
+121
+00:05:01,570 --> 00:05:04,339
+Yes, exactly. 100% agree.
+
+122
+00:05:04,700 --> 00:05:06,839
+And, and I think the second point
+
+123
+00:05:07,100 --> 00:05:10,200
+that I think will be important is we need to
+
+124
+00:05:10,209 --> 00:05:13,470
+be in a place where you can do your updates in
+
+125
+00:05:13,839 --> 00:05:14,839
+minutes
+
+126
+00:05:15,720 --> 00:05:21,200
+because today a lot of organizations and systems can take hours to days, two weeks,
+
+127
+00:05:21,209 --> 00:05:21,920
+two months.
+
+128
+00:05:21,929 --> 00:05:26,570
+I want to make sure I understand what you mean by updates because for example,
+
+129
+00:05:26,579 --> 00:05:29,299
+are we talking strictly pushing the update out and getting it deployed
+
+130
+00:05:29,309 --> 00:05:31,839
+and making sure that it's been deployed or are we actually talking about
+
+131
+00:05:32,029 --> 00:05:33,399
+building an update,
+
+132
+00:05:33,619 --> 00:05:36,320
+testing the update to make sure the update solves the problem
+
+133
+00:05:36,329 --> 00:05:39,820
+and doesn't break other stuff and pushing it out as well.
+
+134
+00:05:39,829 --> 00:05:40,980
+Both of those things.
+
+135
+00:05:41,380 --> 00:05:44,279
+Ok. So now we're talking about essentially from
+
+136
+00:05:44,380 --> 00:05:46,079
+a problem has been identified.
+
+137
+00:05:46,399 --> 00:05:51,750
+We go from a problem identified to having a software or whatever workaround patch
+
+138
+00:05:51,760 --> 00:05:55,709
+or change is needed to the system or to the software or to the service
+
+139
+00:05:56,609 --> 00:06:01,339
+and that change is implemented tested so that we don't like break everything
+
+140
+00:06:01,730 --> 00:06:03,670
+and deployed and,
+
+141
+00:06:03,679 --> 00:06:07,070
+and this is the thing that really gets me tested that it was deployed.
+
+142
+00:06:07,640 --> 00:06:07,869
+Right.
+
+143
+00:06:07,880 --> 00:06:11,350
+Because how many people, like, for example, well, no, for example, my,
+
+144
+00:06:11,359 --> 00:06:12,470
+my partner works for the government.
+
+145
+00:06:12,480 --> 00:06:13,970
+A lot of people don't shut their computers off
+
+146
+00:06:13,980 --> 00:06:15,670
+at night so they don't get the updates overnight.
+
+147
+00:06:17,010 --> 00:06:19,000
+And I, I guess they're like, and I was like,
+
+148
+00:06:19,010 --> 00:06:21,049
+why can't they just forcibly reboot the systems?
+
+149
+00:06:21,220 --> 00:06:21,760
+Oh, yeah. Right.
+
+150
+00:06:21,769 --> 00:06:23,440
+Because these people leave documents open and they would lose
+
+151
+00:06:23,450 --> 00:06:24,970
+work and they would complain and it would be under,
+
+152
+00:06:25,019 --> 00:06:27,119
+you know, it would be like anytime there's a computer problem,
+
+153
+00:06:27,130 --> 00:06:28,089
+they would blame that for it.
+
+154
+00:06:28,100 --> 00:06:28,429
+So
+
+155
+00:06:28,619 --> 00:06:30,390
+don't do, like, they're not going to do that. So,
+
+156
+00:06:30,600 --> 00:06:35,739
+you know, she has coworkers who are weeks out of date for updates,
+
+157
+00:06:35,899 --> 00:06:36,200
+you know,
+
+158
+00:06:36,570 --> 00:06:39,760
+95 machine don't ever touch that. Yeah, exactly.
+
+159
+00:06:40,130 --> 00:06:40,720
+So,
+
+160
+00:06:40,989 --> 00:06:44,600
+I, I would agree that on the continuum of when we say an update,
+
+161
+00:06:45,059 --> 00:06:47,299
+I would say in the ideal continuum,
+
+162
+00:06:47,309 --> 00:06:50,890
+it's from the point of a problem being identified to the point of the problem,
+
+163
+00:06:50,970 --> 00:06:52,200
+not only being solved
+
+164
+00:06:52,459 --> 00:06:53,000
+but
+
+165
+00:06:53,250 --> 00:06:54,519
+confirmed solve.
+
+166
+00:06:54,529 --> 00:06:57,019
+Like we updated all the servers and rebooted them as
+
+167
+00:06:57,029 --> 00:06:59,160
+necessary or whatever it is that needed to happen,
+
+168
+00:06:59,170 --> 00:06:59,920
+you know, and that's fine.
+
+169
+00:06:59,929 --> 00:07:02,929
+It's a minor data point in a much less,
+
+170
+00:07:03,429 --> 00:07:06,839
+it's a massive data point because for example, this one cloud vendor, it's a
+
+171
+00:07:07,079 --> 00:07:09,720
+data point in our story today.
+
+172
+00:07:10,109 --> 00:07:12,869
+I understand big picture, hugely important.
+
+173
+00:07:13,339 --> 00:07:15,589
+Yeah. All right. So anyway, anyway, anyway,
+
+174
+00:07:15,769 --> 00:07:19,980
+so, OK, so here's, here's what, what I, I guess I see
+
+175
+00:07:20,190 --> 00:07:24,450
+is we're talking about massive automation, also safe automation.
+
+176
+00:07:24,459 --> 00:07:26,609
+I think that's the biggest thing, right? Is we can automate this.
+
+177
+00:07:26,619 --> 00:07:29,899
+But then we're, you know, I've seen a lot of people automate things like
+
+178
+00:07:30,079 --> 00:07:31,529
+I have automated server updates
+
+179
+00:07:31,859 --> 00:07:35,190
+and they may or may not work. I have no freaking clue. I just hope that they do
+
+180
+00:07:35,630 --> 00:07:37,489
+now. Could I automate it in a way that's
+
+181
+00:07:37,730 --> 00:07:42,250
+provably very safe. Yes. Am I going to? No, because it almost never fails
+
+182
+00:07:42,779 --> 00:07:44,859
+again. That's part going back to that risk thing.
+
+183
+00:07:44,869 --> 00:07:46,739
+And I think that's part of it is that this,
+
+184
+00:07:46,929 --> 00:07:49,519
+we need to also sort of acknowledge that
+
+185
+00:07:49,970 --> 00:07:51,720
+different people will have different
+
+186
+00:07:52,040 --> 00:07:53,100
+abilities
+
+187
+00:07:54,010 --> 00:07:58,049
+or, or capabilities or risk profiles where you know what? Oh, yeah.
+
+188
+00:07:58,059 --> 00:08:00,309
+If we, if we update that system and it breaks, that's cool.
+
+189
+00:08:00,320 --> 00:08:03,000
+We can, we can have a human poke it and fix it versus,
+
+190
+00:08:03,279 --> 00:08:06,220
+you know, this system runs the national debt. We can't have it break.
+
+191
+00:08:06,359 --> 00:08:08,350
+Yeah, I mean that, that's fair. OK. That's fair.
+
+192
+00:08:08,359 --> 00:08:10,609
+So, so anyway, anyway, here's, here's what I,
+
+193
+00:08:10,619 --> 00:08:13,700
+I think we're going to see and there are people working on this today
+
+194
+00:08:13,859 --> 00:08:14,540
+where
+
+195
+00:08:15,059 --> 00:08:16,260
+you can include uh a
+
+196
+00:08:16,519 --> 00:08:18,549
+dependency in your,
+
+197
+00:08:18,799 --> 00:08:20,959
+your product or service or whatever.
+
+198
+00:08:21,230 --> 00:08:23,640
+And like there are scanners today that will say, all right,
+
+199
+00:08:23,649 --> 00:08:25,799
+you're bringing in this dependency and
+
+200
+00:08:25,809 --> 00:08:27,890
+this dependency brings in these dependencies.
+
+201
+00:08:27,899 --> 00:08:29,700
+And now like here's the license on them
+
+202
+00:08:30,010 --> 00:08:31,910
+and here are known security flaws.
+
+203
+00:08:31,920 --> 00:08:35,190
+Now, the the biggest problem today with most of those scanners is they're,
+
+204
+00:08:35,200 --> 00:08:38,690
+they're generally overly conservative and so they miss lots of things
+
+205
+00:08:38,820 --> 00:08:42,119
+and ironically, the false positive rate is typically very high as well.
+
+206
+00:08:42,130 --> 00:08:44,270
+Well, it can be right, you have one or the other,
+
+207
+00:08:44,280 --> 00:08:47,729
+you either have way too many false positives or you fail.
+
+208
+00:08:48,039 --> 00:08:51,950
+And so I, I have no doubt we're going to see systems at some point
+
+209
+00:08:52,530 --> 00:08:53,789
+that are going to be,
+
+210
+00:08:53,960 --> 00:08:58,369
+we'll say 80 plus percent correct where you include a dependency and it will say
+
+211
+00:08:58,380 --> 00:09:02,359
+this dependency has these security problems and you might be able to look at them.
+
+212
+00:09:02,369 --> 00:09:06,270
+And then you're also going to have to have the ability to say
+
+213
+00:09:06,469 --> 00:09:09,630
+I care about these kind of security flaws. I don't care about those kind.
+
+214
+00:09:09,770 --> 00:09:14,929
+And then you have a system that can basically say you're ok or nope, we can't do this.
+
+215
+00:09:15,000 --> 00:09:16,549
+Well, and here's the corrective action.
+
+216
+00:09:16,809 --> 00:09:19,789
+See, that's the other thing. Right? Is these systems can't just be gatekeepers
+
+217
+00:09:20,460 --> 00:09:23,030
+because telling somebody no or yes,
+
+218
+00:09:23,270 --> 00:09:26,599
+there's a bit of value there but there's far more value in.
+
+219
+00:09:26,609 --> 00:09:30,289
+No, but here's what we can do to make it a yes,
+
+220
+00:09:30,450 --> 00:09:32,150
+it can. It always has to be no.
+
+221
+00:09:32,159 --> 00:09:34,159
+But, and, and actually this is something I was,
+
+222
+00:09:34,169 --> 00:09:36,390
+I was arguing with someone the other day about is that, you know,
+
+223
+00:09:36,400 --> 00:09:38,750
+when security is a gatekeeper, people just come on the fence,
+
+224
+00:09:39,020 --> 00:09:39,140
+right?
+
+225
+00:09:39,260 --> 00:09:42,989
+And it's the same thing with a tool like this. If, if, if you just tell people no,
+
+226
+00:09:43,270 --> 00:09:44,369
+they will find a way,
+
+227
+00:09:44,710 --> 00:09:48,549
+they will find a way. Well, they have to, because they have to ship their product.
+
+228
+00:09:48,940 --> 00:09:49,369
+You know,
+
+229
+00:09:49,539 --> 00:09:52,950
+like every project manager I've met the sacred thing is
+
+230
+00:09:52,960 --> 00:09:55,729
+the schedule and the features that were promised to clients.
+
+231
+00:09:56,440 --> 00:09:57,890
+And if you get in the way of that,
+
+232
+00:09:58,349 --> 00:10:00,309
+they're going to run over you with a steamroller
+
+233
+00:10:00,630 --> 00:10:04,090
+and, and kind of as they should because like if you're not shipping,
+
+234
+00:10:04,309 --> 00:10:06,929
+yeah. Well, it's their job. That's literally their job,
+
+235
+00:10:07,179 --> 00:10:09,669
+right? Why are people paying you if you're not giving them what they want?
+
+236
+00:10:09,679 --> 00:10:10,539
+You know, that's
+
+237
+00:10:10,770 --> 00:10:12,210
+kind of how it works.
+
+238
+00:10:13,450 --> 00:10:13,909
+Ok.
+
+239
+00:10:14,080 --> 00:10:14,950
+So anyway,
+
+240
+00:10:15,479 --> 00:10:17,469
+you include your dependency step one,
+
+241
+00:10:17,479 --> 00:10:20,650
+we have a system that gates it and says yes or no.
+
+242
+00:10:20,690 --> 00:10:24,229
+And if it says no, it's going to give you reasonable alternatives
+
+243
+00:10:24,469 --> 00:10:27,299
+and they could be something like use this version
+
+244
+00:10:27,309 --> 00:10:29,590
+instead or they could be upgrade to this version
+
+245
+00:10:29,599 --> 00:10:32,849
+because you're trying to pull in an old version or it could even be this thing sucks.
+
+246
+00:10:32,859 --> 00:10:34,570
+Use this other thing over here because it's better
+
+247
+00:10:35,390 --> 00:10:36,570
+and, and that happens a lot.
+
+248
+00:10:36,580 --> 00:10:39,900
+I see that a lot where someone will use some sort of dependency.
+
+249
+00:10:40,200 --> 00:10:42,780
+Not because it's the best because it's what they know
+
+250
+00:10:43,059 --> 00:10:45,260
+and there might be a better alternative.
+
+251
+00:10:45,890 --> 00:10:46,659
+People
+
+252
+00:10:46,950 --> 00:10:49,830
+grossly underestimate integration cost.
+
+253
+00:10:49,840 --> 00:10:53,530
+Uh Yeah, it's, it's hugely expensive, right? When you pull in a dependency
+
+254
+00:10:54,039 --> 00:10:54,760
+at a minimum,
+
+255
+00:10:54,770 --> 00:10:58,520
+you need to add a line import law or whatever your language equivalent is.
+
+256
+00:10:58,679 --> 00:11:00,200
+And then you need to have at least,
+
+257
+00:11:00,299 --> 00:11:03,299
+I guess one line of code that somehow calls it and uses it
+
+258
+00:11:03,520 --> 00:11:03,900
+and
+
+259
+00:11:04,010 --> 00:11:06,140
+usually it's a lot more than one line of code
+
+260
+00:11:06,340 --> 00:11:07,179
+almost certainly,
+
+261
+00:11:07,450 --> 00:11:12,929
+you know. And so yeah. No, the, the the cost, I mean, the cost of building yourself is
+
+262
+00:11:13,130 --> 00:11:18,469
+quite often higher than integrating way higher. Yes. Although not always.
+
+263
+00:11:18,799 --> 00:11:19,380
+Yeah, people,
+
+264
+00:11:19,390 --> 00:11:20,599
+I think that's part of the problem is people
+
+265
+00:11:20,609 --> 00:11:23,909
+vastly underestimate the cost of pulling a dependency and
+
+266
+00:11:24,239 --> 00:11:27,510
+maintaining that dependency because that dependency may
+
+267
+00:11:28,140 --> 00:11:30,869
+change or something may go away or a new
+
+268
+00:11:30,880 --> 00:11:35,320
+features added that behaves differently ah in this narrative,
+
+269
+00:11:35,380 --> 00:11:35,390
+uh
+
+270
+00:11:35,549 --> 00:11:39,190
+maintaining it goes away because we have to automate maintaining it. Right.
+
+271
+00:11:39,200 --> 00:11:39,760
+Well, yeah.
+
+272
+00:11:39,770 --> 00:11:43,049
+Yeah, that's, that's handled by the automated system to some degree, I mean, right,
+
+273
+00:11:43,059 --> 00:11:46,200
+the automated system has to be able to deal with that and, and I think it will be,
+
+274
+00:11:46,210 --> 00:11:47,609
+I think it's coming and I think we're going to
+
+275
+00:11:47,619 --> 00:11:49,729
+see that at some point in the future because it's,
+
+276
+00:11:49,809 --> 00:11:50,619
+let's face it.
+
+277
+00:11:50,869 --> 00:11:53,760
+It's like someone is holding a giant bag of money
+
+278
+00:11:54,150 --> 00:11:56,950
+and they're saying someone come catch this giant bag of money.
+
+279
+00:11:56,960 --> 00:11:58,500
+Oh, if somebody came to me and said, look,
+
+280
+00:11:58,510 --> 00:12:01,020
+here's the thing that will help you handle your dependencies and make sure that they
+
+281
+00:12:01,030 --> 00:12:03,609
+don't break your core application because we've had that happen at the CS A,
+
+282
+00:12:03,619 --> 00:12:03,770
+right.
+
+283
+00:12:03,780 --> 00:12:04,369
+We've had
+
+284
+00:12:04,799 --> 00:12:07,809
+a library that was used
+
+285
+00:12:08,000 --> 00:12:12,309
+the uh the HTML, I think it was the uh file type or object type or whatever it's called,
+
+286
+00:12:12,320 --> 00:12:13,729
+it was returned was different.
+
+287
+00:12:14,049 --> 00:12:15,830
+And so of course, it broke
+
+288
+00:12:15,969 --> 00:12:19,109
+and, you know, once we figured out what was broken and what had changed,
+
+289
+00:12:19,119 --> 00:12:20,510
+it was really quick and easy to fix.
+
+290
+00:12:20,520 --> 00:12:22,659
+But man, I mean, if we had some sort of,
+
+291
+00:12:22,900 --> 00:12:25,349
+you know, massive dependency checker that ran, like,
+
+292
+00:12:25,359 --> 00:12:27,270
+say some sort of testing to say, hey, wow,
+
+293
+00:12:27,280 --> 00:12:31,770
+this dependency actually changed the way it's going to work with your code.
+
+294
+00:12:31,780 --> 00:12:34,309
+Ignoring the security side of that, man. I would love to buy that.
+
+295
+00:12:34,630 --> 00:12:38,789
+Yeah, seriously. It'd be huge. I think. I, I have no doubt. All right. All right. So
+
+296
+00:12:39,150 --> 00:12:40,409
+let's assume
+
+297
+00:12:40,539 --> 00:12:41,570
+for the moment
+
+298
+00:12:41,900 --> 00:12:45,219
+we have the dependency problem mostly solved. Right.
+
+299
+00:12:45,770 --> 00:12:47,010
+So now
+
+300
+00:12:47,260 --> 00:12:49,969
+we, we get to a point where we're writing our application
+
+301
+00:12:50,200 --> 00:12:51,169
+And today
+
+302
+00:12:51,280 --> 00:12:55,650
+you hear of manual code reviews and you hear of static analysis, code reviews,
+
+303
+00:12:55,659 --> 00:12:56,330
+right?
+
+304
+00:12:56,479 --> 00:12:57,150
+And
+
+305
+00:12:57,599 --> 00:13:00,039
+I'm gonna say they both have their,
+
+306
+00:13:01,159 --> 00:13:02,210
+yeah, it's funny
+
+307
+00:13:02,929 --> 00:13:05,030
+they both have their own set of problems.
+
+308
+00:13:05,039 --> 00:13:08,159
+And I think we can say manual code reviews need to go over human
+
+309
+00:13:08,989 --> 00:13:09,619
+rights,
+
+310
+00:13:09,989 --> 00:13:10,590
+go away.
+
+311
+00:13:11,239 --> 00:13:13,349
+Should be doing architectural reviews.
+
+312
+00:13:13,460 --> 00:13:13,780
+Yes,
+
+313
+00:13:15,289 --> 00:13:16,280
+that's a very good point.
+
+314
+00:13:16,289 --> 00:13:19,789
+And an architectural review would have happened long before we get to where we are.
+
+315
+00:13:22,809 --> 00:13:25,700
+Right. So we'll just ignore that for now.
+
+316
+00:13:25,719 --> 00:13:28,479
+But I, I do think humans doing architecture of these matters.
+
+317
+00:13:28,489 --> 00:13:30,900
+This is part of what I love about all these conversations
+
+318
+00:13:31,000 --> 00:13:33,570
+is we have this massive technical debt.
+
+319
+00:13:33,580 --> 00:13:36,450
+Like I once unpacked all of R seven,
+
+320
+00:13:36,460 --> 00:13:39,539
+all the base packages for redhead and Prize Linux seven,
+
+321
+00:13:39,909 --> 00:13:44,479
+you know, unpacked all the RP MS deleted all like the J PGS, images, text files,
+
+322
+00:13:44,489 --> 00:13:46,989
+like basically got rid of everything I could that
+
+323
+00:13:47,109 --> 00:13:48,330
+didn't appear to be code
+
+324
+00:13:48,919 --> 00:13:51,369
+and I was left with like 50 or 60 gigs of stuff.
+
+325
+00:13:51,809 --> 00:13:52,950
+Yeah, it's enormous
+
+326
+00:13:53,119 --> 00:13:54,090
+like we,
+
+327
+00:13:54,440 --> 00:13:58,419
+I'm not sure if like all of the programmers in humanity stopped
+
+328
+00:13:58,429 --> 00:14:00,989
+doing what they're doing for a week and spent time reviewing that,
+
+329
+00:14:01,450 --> 00:14:05,309
+that we could even effectively do that. No, no, just no. The answer is no.
+
+330
+00:14:05,320 --> 00:14:05,510
+And,
+
+331
+00:14:05,520 --> 00:14:07,729
+and actually there have been studies done that a human
+
+332
+00:14:07,739 --> 00:14:10,469
+being can actually only do a code review for two hours
+
+333
+00:14:10,820 --> 00:14:13,059
+after two hours. You're, you're wasting time.
+
+334
+00:14:13,380 --> 00:14:16,539
+Well, and even worse than that. Do they understand the software they're reviewing?
+
+335
+00:14:16,549 --> 00:14:20,530
+Right. That's the first step. What is this an image library? A web library?
+
+336
+00:14:20,539 --> 00:14:22,169
+Uh freaking A I neural net.
+
+337
+00:14:22,380 --> 00:14:25,869
+Can you or I review an A I neural net? No, no, we could
+
+338
+00:14:26,140 --> 00:14:28,030
+just won't be very useful.
+
+339
+00:14:28,250 --> 00:14:28,679
+Yeah.
+
+340
+00:14:29,049 --> 00:14:31,429
+OK. So anyway, humans go away. No humans, right?
+
+341
+00:14:31,440 --> 00:14:36,090
+So we know now we're dealt with essentially what is a static analysis tool to look at
+
+342
+00:14:36,340 --> 00:14:40,539
+your code commits to look at the code to look at the application as a whole. Because
+
+343
+00:14:40,669 --> 00:14:42,270
+one of the other complaints I always have
+
+344
+00:14:42,280 --> 00:14:44,090
+is if all you're doing is reviewing commits,
+
+345
+00:14:44,349 --> 00:14:47,270
+like sometimes you need to look at the big picture because you can't just look
+
+346
+00:14:47,280 --> 00:14:50,739
+at this one commit and what it's doing because it can affect other things.
+
+347
+00:14:50,750 --> 00:14:53,059
+And so this is where you're going to have things
+
+348
+00:14:53,070 --> 00:14:54,979
+like you need the ability to check API S.
+
+349
+00:14:54,989 --> 00:14:57,140
+You need to be able to verify that we're not breaking things.
+
+350
+00:14:57,150 --> 00:15:00,320
+We have to be able to run like static tests against
+
+351
+00:15:00,455 --> 00:15:02,315
+one file or one feature.
+
+352
+00:15:02,405 --> 00:15:05,864
+And then also like giant functional testing across the application.
+
+353
+00:15:06,344 --> 00:15:10,255
+And this has to be automated and it also has to run fast.
+
+354
+00:15:10,505 --> 00:15:12,174
+The other dirty secret is you actually now need
+
+355
+00:15:12,184 --> 00:15:15,145
+integration testing against say cloud providers because for example,
+
+356
+00:15:15,265 --> 00:15:16,515
+we ran into a thing where
+
+357
+00:15:17,270 --> 00:15:18,409
+this um
+
+358
+00:15:19,210 --> 00:15:23,900
+this library generated essentially generated magic S3 URL S.
+
+359
+00:15:23,919 --> 00:15:26,739
+So you can, you can have an S3 bucket that's sort of quasi
+
+360
+00:15:26,859 --> 00:15:28,190
+public private in that it's
+
+361
+00:15:28,460 --> 00:15:32,080
+the, the data is publicly accessible if you have a magic URL that has like a,
+
+362
+00:15:32,090 --> 00:15:33,570
+essentially it's assigned,
+
+363
+00:15:33,770 --> 00:15:37,679
+it's like a, it's a, it's a URL with a non and a crypto string in it that
+
+364
+00:15:37,969 --> 00:15:40,869
+authenticates you as being able to grab that object publicly, right?
+
+365
+00:15:41,659 --> 00:15:42,440
+And
+
+366
+00:15:42,739 --> 00:15:46,340
+the default time out that it was setting for these objects was five minutes.
+
+367
+00:15:46,349 --> 00:15:47,880
+And cloud flare sets,
+
+368
+00:15:48,080 --> 00:15:50,169
+the smallest time out you can set assuming
+
+369
+00:15:50,179 --> 00:15:51,960
+you don't go to some crazy enterprise package.
+
+370
+00:15:52,280 --> 00:15:53,119
+It's 30 minutes.
+
+371
+00:15:53,130 --> 00:15:55,719
+So essentially downloads would work for five minutes and then break for
+
+372
+00:15:55,729 --> 00:15:58,599
+25 minutes and then work again for five minutes break for.
+
+373
+00:15:58,719 --> 00:16:00,320
+So, you know, this is these are like
+
+374
+00:16:00,809 --> 00:16:03,630
+the this integration testing is becoming a bit
+
+375
+00:16:04,000 --> 00:16:05,380
+of a challenge.
+
+376
+00:16:05,650 --> 00:16:08,979
+The other thing I was just, I had the thought kind of back to the Linux kernel.
+
+377
+00:16:08,989 --> 00:16:12,719
+Why are we doing this just for security bugs? Why not all bugs? No. Right.
+
+378
+00:16:12,729 --> 00:16:14,820
+And and yes, actually, that's a really good point
+
+379
+00:16:15,200 --> 00:16:17,280
+I think because quite honestly if you're building,
+
+380
+00:16:17,520 --> 00:16:21,229
+you know, in my perfect ideal world, we have a system that essentially
+
+381
+00:16:21,710 --> 00:16:23,950
+runs these code tests and runs these function and
+
+382
+00:16:23,960 --> 00:16:26,159
+integration and all the tests possible and looks for
+
+383
+00:16:26,169 --> 00:16:29,989
+wonky or bad or like definitely bad behavior like
+
+384
+00:16:30,000 --> 00:16:32,169
+system core dumps that probably shouldn't do that,
+
+385
+00:16:32,719 --> 00:16:36,349
+right. You know, because you can have a static code analyzer.
+
+386
+00:16:36,450 --> 00:16:38,030
+And who cares if it's security.
+
+387
+00:16:38,190 --> 00:16:40,349
+Right. Right. Yes, it doesn't matter if it's security.
+
+388
+00:16:40,359 --> 00:16:44,419
+I've seen flaws that are worse than security flaws in the, for example, it's a memory
+
+389
+00:16:44,679 --> 00:16:47,099
+usage issue where it's slowly,
+
+390
+00:16:47,280 --> 00:16:48,630
+you know, memory,
+
+391
+00:16:49,549 --> 00:16:51,659
+memory usage builds up over time and then you
+
+392
+00:16:51,669 --> 00:16:53,020
+have to reboot the system and it was like,
+
+393
+00:16:53,030 --> 00:16:56,000
+the system will run for a max of like, eight hours and then you have to reboot it.
+
+394
+00:16:56,010 --> 00:16:56,369
+Well,
+
+395
+00:16:56,929 --> 00:16:59,479
+that's arguably worse than a denial of service because
+
+396
+00:16:59,489 --> 00:17:01,950
+it's going to happen every eight hours without fail.
+
+397
+00:17:01,960 --> 00:17:05,108
+No. Absolutely. And in fact, I'll, I'll argue here
+
+398
+00:17:05,280 --> 00:17:07,348
+where, let's say you're a database vendor
+
+399
+00:17:07,560 --> 00:17:10,239
+and you have a bug that corrupts all the data on disk
+
+400
+00:17:10,560 --> 00:17:12,930
+and you have another bug that's a denial of service, right?
+
+401
+00:17:12,939 --> 00:17:16,030
+Which one are you going to fix first? Not the denial of service.
+
+402
+00:17:16,118 --> 00:17:20,060
+You have a bug that randomly mangles a little bit of data once in a while.
+
+403
+00:17:20,489 --> 00:17:20,670
+Yeah,
+
+404
+00:17:20,680 --> 00:17:22,368
+those are the worst actually because then you don't
+
+405
+00:17:22,380 --> 00:17:24,189
+even know what's going on till it's too late
+
+406
+00:17:24,489 --> 00:17:26,949
+because if you mingle all the data cool, we know it broke.
+
+407
+00:17:27,589 --> 00:17:30,270
+If everything breaks cool, it broke, we saw that we fix it.
+
+408
+00:17:30,280 --> 00:17:33,069
+But if it only mangles one in a million records randomly
+
+409
+00:17:34,079 --> 00:17:36,670
+and you found it after a year and now all you back
+
+410
+00:17:36,905 --> 00:17:37,704
+are broke
+
+411
+00:17:38,084 --> 00:17:42,104
+anyway. Anyway. All right. So yes, so we can agree unquestionably
+
+412
+00:17:42,265 --> 00:17:45,064
+that there's going to be some sort of like what,
+
+413
+00:17:45,074 --> 00:17:48,464
+what we would call human code review today needs to be dumped off on a machine.
+
+414
+00:17:48,474 --> 00:17:50,015
+And part of that review is going to be
+
+415
+00:17:50,025 --> 00:17:53,025
+things like testing and making sure that the code
+
+416
+00:17:53,354 --> 00:17:57,854
+you'll have different, uh was it styles you use whatever?
+
+417
+00:17:57,864 --> 00:18:00,944
+So, so we're going to make sure that's all good. And so now we've got
+
+418
+00:18:01,204 --> 00:18:05,425
+our committed application, right. We've got our, our, everything's checked in
+
+419
+00:18:05,780 --> 00:18:08,469
+now it's time to start thinking about a release.
+
+420
+00:18:08,859 --> 00:18:09,239
+Right.
+
+421
+00:18:09,250 --> 00:18:11,250
+And now, historically, when someone does a release,
+
+422
+00:18:11,260 --> 00:18:15,050
+this is when a lot of organizations would really kick in the security work and say,
+
+423
+00:18:15,060 --> 00:18:16,660
+all right, now it's time to take a look at things.
+
+424
+00:18:16,670 --> 00:18:18,959
+And I'm telling you, if you're doing it that way,
+
+425
+00:18:19,069 --> 00:18:21,520
+that's too late. It's way too late. Yeah. Exactly.
+
+426
+00:18:21,680 --> 00:18:24,209
+Because I'm, you know, we're like, I see
+
+427
+00:18:24,390 --> 00:18:25,160
+to put it bluntly
+
+428
+00:18:25,459 --> 00:18:29,140
+the people who move towards continuous development win and it's,
+
+429
+00:18:29,150 --> 00:18:32,270
+I think it's less about continuous development and more about the fact that
+
+430
+00:18:32,439 --> 00:18:36,599
+they are so much faster and more agile than the people not doing it.
+
+431
+00:18:36,819 --> 00:18:38,660
+Right. Exactly. Exactly.
+
+432
+00:18:38,979 --> 00:18:40,959
+So, so anyway, however, I will say
+
+433
+00:18:41,250 --> 00:18:43,739
+so you're, you're getting ready for release and at this point,
+
+434
+00:18:43,750 --> 00:18:45,150
+you shouldn't be running a bunch of new
+
+435
+00:18:45,160 --> 00:18:46,989
+tests because you should have already run them.
+
+436
+00:18:47,000 --> 00:18:49,410
+Right. That's, that's the universe we need to be in.
+
+437
+00:18:49,420 --> 00:18:52,410
+You shouldn't have to worry about, am I shipping ban dependencies?
+
+438
+00:18:52,420 --> 00:18:53,579
+Because at this point
+
+439
+00:18:53,719 --> 00:18:55,670
+you almost certainly have done all your testing.
+
+440
+00:18:55,910 --> 00:18:55,969
+The
+
+441
+00:18:56,109 --> 00:18:58,060
+other problem too is when you do the testing of that
+
+442
+00:18:58,319 --> 00:18:59,369
+time frame
+
+443
+00:18:59,709 --> 00:19:02,709
+backing out is hugely costly.
+
+444
+00:19:04,010 --> 00:19:05,520
+Yes. And in a lot of cases, I
+
+445
+00:19:05,660 --> 00:19:06,060
+just don't
+
+446
+00:19:06,180 --> 00:19:06,199
+say
+
+447
+00:19:06,390 --> 00:19:06,459
+it,
+
+448
+00:19:07,500 --> 00:19:09,819
+you know. Yeah, I mean, we can't not ship this product.
+
+449
+00:19:09,829 --> 00:19:11,369
+It's been six months since the last release.
+
+450
+00:19:11,479 --> 00:19:14,680
+And I think that's the other benefit of continuous development and rapid
+
+451
+00:19:14,689 --> 00:19:19,609
+releases is making the cost of a release smaller that too.
+
+452
+00:19:19,619 --> 00:19:21,280
+Right. If you do it a lot, you're good at it.
+
+453
+00:19:21,619 --> 00:19:24,910
+Well, you have to get good at it or you go bankrupt. Yep. Yep.
+
+454
+00:19:24,920 --> 00:19:26,560
+Well, and, and you have to write you.
+
+455
+00:19:26,880 --> 00:19:27,680
+That's true.
+
+456
+00:19:27,900 --> 00:19:31,640
+You make it easy. I've seen people do it. They're not good at it. They go bankrupt. Ok.
+
+457
+00:19:31,650 --> 00:19:36,760
+Ok. So, anyway, let's keep moving on. So now we've made it to release, right?
+
+458
+00:19:37,050 --> 00:19:41,359
+And this is where I think we need to start putting some serious effort into
+
+459
+00:19:41,599 --> 00:19:46,109
+how we run a lot of these systems because the vast majority of systems out there,
+
+460
+00:19:46,479 --> 00:19:49,020
+if you can break through an application, let's say you, you know,
+
+461
+00:19:49,030 --> 00:19:50,670
+you go to a website and you,
+
+462
+00:19:50,680 --> 00:19:55,040
+you send some bad command and now you've got a root shell or not a shell,
+
+463
+00:19:55,050 --> 00:19:56,339
+we'll just say a shell in the system.
+
+464
+00:19:56,650 --> 00:19:57,890
+Yeah. Well, here's about Rooney Mar.
+
+465
+00:19:57,900 --> 00:19:59,250
+If you're running as the web application,
+
+466
+00:19:59,260 --> 00:20:01,140
+you control everything that web application does.
+
+467
+00:20:01,150 --> 00:20:04,199
+That's all I care about. Roots are relevant. I agree. Roots are relevant.
+
+468
+00:20:04,209 --> 00:20:07,000
+And, and here's the thing though, like in, in so many systems,
+
+469
+00:20:07,010 --> 00:20:09,380
+if you can get to that point, like it's done,
+
+470
+00:20:09,630 --> 00:20:11,579
+right? There are almost no protections,
+
+471
+00:20:11,790 --> 00:20:15,119
+there's you can do almost anything you want, you can probably move laterally
+
+472
+00:20:15,439 --> 00:20:15,839
+and,
+
+473
+00:20:16,290 --> 00:20:17,869
+and that's something that really needs to change.
+
+474
+00:20:17,880 --> 00:20:20,430
+And this is actually this is happening now
+
+475
+00:20:20,750 --> 00:20:21,270
+with
+
+476
+00:20:21,560 --> 00:20:22,829
+kind of kubernetes and
+
+477
+00:20:22,930 --> 00:20:25,729
+sto and some of the things I see there is where people are able
+
+478
+00:20:25,739 --> 00:20:30,469
+to run a container and say like this container can only connect to the database
+
+479
+00:20:31,119 --> 00:20:32,030
+end of story, right?
+
+480
+00:20:32,040 --> 00:20:35,160
+Like that is all it can do and that kind of stuff is hugely powerful.
+
+481
+00:20:35,170 --> 00:20:38,979
+If you can say like this application should never run bash,
+
+482
+00:20:39,119 --> 00:20:40,780
+right? That's cool.
+
+483
+00:20:40,790 --> 00:20:41,839
+Well, even more to the point,
+
+484
+00:20:41,849 --> 00:20:44,400
+I'm looking at things like state uh serverless computing
+
+485
+00:20:44,410 --> 00:20:47,390
+where a request comes in handle the request.
+
+486
+00:20:47,459 --> 00:20:51,540
+You are allowed to for example, talk to the database back end, return a reply,
+
+487
+00:20:51,569 --> 00:20:52,459
+then you die.
+
+488
+00:20:52,609 --> 00:20:53,670
+And if you don't die,
+
+489
+00:20:53,680 --> 00:20:56,640
+the system kills you because you get X 100 milliseconds
+
+490
+00:20:56,650 --> 00:20:58,859
+of compute time or whatever like those cloud flare works.
+
+491
+00:20:59,233 --> 00:21:01,282
+And then so and actually the the there was a
+
+492
+00:21:01,292 --> 00:21:04,932
+really good presentation by AC CC Chaos Computer Conference guy.
+
+493
+00:21:04,942 --> 00:21:08,003
+I want to say last year or the year before their Christmas conference
+
+494
+00:21:08,253 --> 00:21:10,463
+where he talked about how all the different ways you could, for example,
+
+495
+00:21:10,473 --> 00:21:15,003
+exfiltrate data from a serverless thing in a in Amazon, I remember that.
+
+496
+00:21:15,012 --> 00:21:20,312
+Yeah. And man, it was, it was. But you know, I hope some of those got fixed by Amazon.
+
+497
+00:21:20,322 --> 00:21:23,213
+But more of the point, it was way harder than a traditional
+
+498
+00:21:23,522 --> 00:21:25,093
+super convoluted.
+
+499
+00:21:25,142 --> 00:21:29,206
+Now, at the same time, this means a lot, a lot of systems and a lot of,
+
+500
+00:21:29,385 --> 00:21:31,156
+I guess solutions will say need to be re
+
+501
+00:21:31,196 --> 00:21:33,855
+architected because most things don't work like that.
+
+502
+00:21:33,865 --> 00:21:35,725
+And the beauty is once you get to true
+
+503
+00:21:35,735 --> 00:21:37,735
+Serverless and really understand where your state is.
+
+504
+00:21:37,745 --> 00:21:40,196
+You're sort of inherently building continuous delivery in
+
+505
+00:21:40,206 --> 00:21:42,225
+the sense of how does an upgrade work?
+
+506
+00:21:42,235 --> 00:21:45,345
+Well, I provide a newer version of the software and the next time a request comes in,
+
+507
+00:21:45,355 --> 00:21:46,666
+it uses it mic drop.
+
+508
+00:21:46,676 --> 00:21:47,806
+We're done here. Right.
+
+509
+00:21:48,245 --> 00:21:49,196
+Yeah. Right. Right.
+
+510
+00:21:49,595 --> 00:21:49,956
+You know,
+
+511
+00:21:50,125 --> 00:21:51,916
+and, and that's the kind of thing, you know,
+
+512
+00:21:51,926 --> 00:21:53,865
+I'm looking at these things in the context of, for example,
+
+513
+00:21:53,875 --> 00:21:55,365
+I'm working on some Blockchain projects
+
+514
+00:21:55,739 --> 00:21:57,489
+and obviously a lot of these watching projects
+
+515
+00:21:57,500 --> 00:21:58,849
+will probably have a web based front end.
+
+516
+00:21:59,010 --> 00:21:59,349
+OK.
+
+517
+00:21:59,359 --> 00:21:59,760
+Well,
+
+518
+00:21:59,770 --> 00:22:01,810
+I don't want you breaking into the web based front end
+
+519
+00:22:01,819 --> 00:22:03,930
+and camping out there and looking at other people's data,
+
+520
+00:22:03,939 --> 00:22:04,719
+for example.
+
+521
+00:22:04,729 --> 00:22:05,939
+Right. So how can we do that?
+
+522
+00:22:05,949 --> 00:22:09,300
+Well, like serverless is a good example of you come in,
+
+523
+00:22:09,310 --> 00:22:11,119
+you break into the serverless state machine
+
+524
+00:22:11,369 --> 00:22:15,239
+and a couple 100 milliseconds goes by and you get the boot
+
+525
+00:22:15,540 --> 00:22:18,760
+and more to the point, you can't easily look at somebody else's request
+
+526
+00:22:19,310 --> 00:22:22,349
+or their data. Right. Right. Exactly. Exactly. Right.
+
+527
+00:22:22,359 --> 00:22:24,869
+Because in theory, it's a different process for every request.
+
+528
+00:22:24,880 --> 00:22:28,550
+So you just can't get to it if you wanted to. Different server, I suppose. Yeah.
+
+529
+00:22:28,560 --> 00:22:30,040
+Different server in some cases.
+
+530
+00:22:30,140 --> 00:22:30,489
+Yeah.
+
+531
+00:22:30,500 --> 00:22:32,569
+You know, looking at like the cloud flare thing and,
+
+532
+00:22:32,579 --> 00:22:35,209
+and the point is can I architect that in a traditional system?
+
+533
+00:22:35,219 --> 00:22:37,849
+Absolutely. But it is really hard
+
+534
+00:22:38,119 --> 00:22:41,079
+now, you can't just just say no, it's no. All right.
+
+535
+00:22:41,089 --> 00:22:42,979
+So anyway, we, we're running out of time. We got to keep moving.
+
+536
+00:22:43,209 --> 00:22:45,900
+So now we've made it to a point
+
+537
+00:22:45,910 --> 00:22:48,560
+where we've essentially released our product or service.
+
+538
+00:22:48,569 --> 00:22:51,780
+And this is where things like our traditional compliance comes into play.
+
+539
+00:22:51,790 --> 00:22:55,170
+And I'm going to be very specific. Compliance and security are not the same thing.
+
+540
+00:22:55,780 --> 00:22:59,750
+Right? You can, you can have a compliant insecure application, you can have a secure
+
+541
+00:23:00,030 --> 00:23:00,739
+unlit application.
+
+542
+00:23:00,750 --> 00:23:05,099
+Every major PC I data breach has happened at a place that was PC I compliant.
+
+543
+00:23:05,229 --> 00:23:05,859
+That's correct.
+
+544
+00:23:06,199 --> 00:23:09,500
+So, so anyway, but here's, here's kind of my point on compliance is
+
+545
+00:23:10,050 --> 00:23:13,180
+uh whether you love it or hate it. I don't care because you need it
+
+546
+00:23:13,310 --> 00:23:14,869
+because it's just kind of where we are.
+
+547
+00:23:14,880 --> 00:23:17,959
+And, and I will say as well, I view compliance is washing your hands.
+
+548
+00:23:17,969 --> 00:23:20,880
+If you go to a doctor that doesn't wash their hands, the answer is no.
+
+549
+00:23:21,089 --> 00:23:21,500
+Right.
+
+550
+00:23:21,770 --> 00:23:24,540
+If my doctor doesn't wash his hands, I'm not going to that guy.
+
+551
+00:23:25,040 --> 00:23:28,510
+And and it's the same deal with compliance like it just because
+
+552
+00:23:28,520 --> 00:23:31,290
+my doctor washes his hands doesn't mean my doctor is any good.
+
+553
+00:23:31,300 --> 00:23:32,520
+It just means they wash your hands.
+
+554
+00:23:32,530 --> 00:23:35,530
+But I know if they don't wash their hands, they're probably really, really bad.
+
+555
+00:23:35,589 --> 00:23:36,069
+Right.
+
+556
+00:23:36,239 --> 00:23:39,209
+That much I can say, well, it's, it's these signals,
+
+557
+00:23:39,219 --> 00:23:41,859
+I look at places like with the star registry, you know, this, this,
+
+558
+00:23:42,140 --> 00:23:45,589
+I'm not going to say basic but these, you know, massive list of questions
+
+559
+00:23:46,449 --> 00:23:46,890
+and yeah,
+
+560
+00:23:46,900 --> 00:23:48,709
+if a provider can't answer things like we do
+
+561
+00:23:48,719 --> 00:23:50,540
+do we do background checks on our employees?
+
+562
+00:23:51,000 --> 00:23:51,910
+Ok, thanks. Bye.
+
+563
+00:23:52,459 --> 00:23:55,790
+Right. That's right. Yes, let me give you my personal data. Please
+
+564
+00:23:55,949 --> 00:23:56,040
+take it.
+
+565
+00:23:56,670 --> 00:23:59,270
+So anyway, anyway, so here's the thing with, with compliance,
+
+566
+00:24:00,119 --> 00:24:04,589
+there are ways to do like continuous compliance skin and generally speaking,
+
+567
+00:24:04,599 --> 00:24:06,189
+the way it works is you bring your auditor in,
+
+568
+00:24:06,199 --> 00:24:08,109
+you get everything done once a year and then you're like, hey,
+
+569
+00:24:08,119 --> 00:24:10,510
+we're compliant and then you stop carrying till next year.
+
+570
+00:24:11,000 --> 00:24:13,339
+And that's totally the wrong way to be doing this stuff.
+
+571
+00:24:13,349 --> 00:24:16,550
+I think we're going to see a world very soon where
+
+572
+00:24:16,560 --> 00:24:21,800
+compliance reports and scans are literally happening all the time every day
+
+573
+00:24:21,969 --> 00:24:23,469
+and there's going to be no way around it.
+
+574
+00:24:23,479 --> 00:24:27,229
+And so you're not going to be able to get away from it every day is not fast enough.
+
+575
+00:24:27,239 --> 00:24:29,390
+It has to happen when there are changes.
+
+576
+00:24:30,579 --> 00:24:33,689
+Yes, that's true. Actually, that's the ultimate thing. Is it
+
+577
+00:24:33,910 --> 00:24:37,630
+when there is a material or even not a very material change to the system,
+
+578
+00:24:38,339 --> 00:24:41,510
+the system has now changed. Is it still in compliance? Right.
+
+579
+00:24:41,520 --> 00:24:44,849
+And if you're doing continuous updating and you're updating your system
+
+580
+00:24:44,859 --> 00:24:47,050
+five times a day or 10 times a day or whatever,
+
+581
+00:24:47,060 --> 00:24:47,449
+you're right,
+
+582
+00:24:47,459 --> 00:24:52,810
+you kind of need to scan it on a regular basis or you change business process or
+
+583
+00:24:53,060 --> 00:24:55,239
+you open up an office in another country,
+
+584
+00:24:55,400 --> 00:24:59,050
+another data center in another country. Those are, those are really good points.
+
+585
+00:24:59,060 --> 00:25:02,890
+Yes. And this is where actually the world of compliance needs to catch up as well.
+
+586
+00:25:02,900 --> 00:25:05,849
+But how, how much can I advertise the cloud security lines here?
+
+587
+00:25:05,959 --> 00:25:07,579
+You can pimp it all you want.
+
+588
+00:25:07,959 --> 00:25:10,729
+Well, because, I mean, that's what we're moving to, with the star registry.
+
+589
+00:25:10,739 --> 00:25:12,339
+We're moving to the continuous
+
+590
+00:25:12,790 --> 00:25:15,339
+compliance model with the star registry. You know, it's,
+
+591
+00:25:15,510 --> 00:25:16,020
+it's,
+
+592
+00:25:16,739 --> 00:25:18,089
+it's happening because it has to,
+
+593
+00:25:18,979 --> 00:25:21,520
+you should get someone who's doing that on the show and we can,
+
+594
+00:25:21,530 --> 00:25:23,920
+we can hassle them about this because that's, that's really cool.
+
+595
+00:25:23,930 --> 00:25:26,719
+Actually, I, I think, I think it's going to be huge because like,
+
+596
+00:25:26,839 --> 00:25:28,770
+I look at the way compliance works today
+
+597
+00:25:28,949 --> 00:25:31,709
+and you sit down for like a week with the auditor and you answer like,
+
+598
+00:25:31,719 --> 00:25:34,150
+10 million questions and they're just, they're writing pro,
+
+599
+00:25:34,380 --> 00:25:37,689
+it's not like they're even like, you know, using some sort of
+
+600
+00:25:37,839 --> 00:25:41,640
+machine. Understandable. Oh, it's Excel spreadsheets all the way down. Right.
+
+601
+00:25:41,650 --> 00:25:44,300
+It's a mess. And I'm like, this is insane.
+
+602
+00:25:45,550 --> 00:25:49,380
+This is madness. Like why is it working like this? And, and so,
+
+603
+00:25:49,640 --> 00:25:52,099
+and, and not only that, the thing that really ticks me off
+
+604
+00:25:52,270 --> 00:25:55,569
+is at the end, you can have an auditor will say, oh, you need to do that
+
+605
+00:25:55,739 --> 00:25:59,099
+and then you can more often than not, you can talk your way completely out of it.
+
+606
+00:25:59,150 --> 00:26:01,400
+It's like that is not OK.
+
+607
+00:26:01,550 --> 00:26:05,449
+That's not how this is supposed to work. Well, my favorite thing was like with the,
+
+608
+00:26:05,640 --> 00:26:08,380
+you know, with the PC I and the TLS, it's like you have to get rid of this.
+
+609
+00:26:08,390 --> 00:26:12,640
+Well, except for these cases, like old point of sale systems or whatever.
+
+610
+00:26:12,750 --> 00:26:15,030
+And if you're like, promised double square
+
+611
+00:26:15,260 --> 00:26:15,709
+keeps
+
+612
+00:26:15,880 --> 00:26:18,859
+to like, deal with it at some point in the future, then you can keep doing this.
+
+613
+00:26:19,660 --> 00:26:24,589
+Right. I know. I know it's anyway, well, here's the thing. What's the alternative?
+
+614
+00:26:24,599 --> 00:26:28,239
+You can't actually like if compliance actually shut things down,
+
+615
+00:26:28,250 --> 00:26:29,550
+half the banks wouldn't be running.
+
+616
+00:26:29,560 --> 00:26:33,750
+It's very true. It's very true. Alright. So, anyway, I guess that kind of,
+
+617
+00:26:34,060 --> 00:26:37,750
+that's what I think the future is going to look like. And, and I guess,
+
+618
+00:26:38,099 --> 00:26:38,300
+well,
+
+619
+00:26:38,310 --> 00:26:40,250
+the simple reality is the people that are able to do
+
+620
+00:26:40,260 --> 00:26:43,750
+this and capable of doing this will clobber the people that
+
+621
+00:26:43,930 --> 00:26:44,380
+can't,
+
+622
+00:26:44,540 --> 00:26:45,819
+I mean, look at software releases.
+
+623
+00:26:45,829 --> 00:26:46,089
+Like,
+
+624
+00:26:46,099 --> 00:26:48,439
+I remember a world where getting a new piece of software
+
+625
+00:26:48,449 --> 00:26:51,859
+on floppy disk every couple of years was totally acceptable,
+
+626
+00:26:52,290 --> 00:26:52,739
+you know,
+
+627
+00:26:52,979 --> 00:26:57,500
+and then C DS every year and then maybe, you know, oh, windows with service pack,
+
+628
+00:26:57,510 --> 00:26:58,790
+one service pack two
+
+629
+00:26:58,939 --> 00:27:02,150
+totally acceptable. New Linux distro every six months,
+
+630
+00:27:02,650 --> 00:27:07,170
+you know, and now I expect essentially if you're not shipping the updates as
+
+631
+00:27:07,319 --> 00:27:08,229
+needed.
+
+632
+00:27:08,930 --> 00:27:09,719
+Yeah, I'm not going to use you
+
+633
+00:27:10,410 --> 00:27:13,589
+and, and I do get some constraints like Microsoft Tuesday, you know, like,
+
+634
+00:27:13,599 --> 00:27:17,410
+like I do appreciate that Microsoft made it a schedule because I remember when it
+
+635
+00:27:17,420 --> 00:27:18,969
+wasn't Microsoft Tuesday and when we would
+
+636
+00:27:18,979 --> 00:27:21,439
+literally like literally just uh you know,
+
+637
+00:27:21,599 --> 00:27:25,520
+an email would go around like everybody goes to work now to start processing this,
+
+638
+00:27:25,530 --> 00:27:28,109
+you know, like literally drop whatever it is you're doing
+
+639
+00:27:28,660 --> 00:27:29,109
+and
+
+640
+00:27:29,239 --> 00:27:32,329
+you know, Microsoft just dropped a pile of updates panic now
+
+641
+00:27:32,890 --> 00:27:33,270
+could be,
+
+642
+00:27:33,550 --> 00:27:33,630
+you know,
+
+643
+00:27:33,810 --> 00:27:35,310
+you remember those, it was terrible.
+
+644
+00:27:35,819 --> 00:27:38,229
+So I'm actually really happy they put it on a schedule.
+
+645
+00:27:38,239 --> 00:27:41,520
+So I guess here's the question for you and here's how we'll end it is
+
+646
+00:27:41,650 --> 00:27:43,520
+if you were going to guess
+
+647
+00:27:43,689 --> 00:27:48,250
+on timelines of how far away we are from kind of this, this world that works.
+
+648
+00:27:48,260 --> 00:27:49,239
+Are we talking about
+
+649
+00:27:50,030 --> 00:27:51,650
+a single digit years,
+
+650
+00:27:51,880 --> 00:27:54,209
+tens of digits or do you think it's like
+
+651
+00:27:54,380 --> 00:27:56,209
+we'll be dead before this happens?
+
+652
+00:27:56,420 --> 00:28:01,130
+Well, I, I know it's happening in, in the next single digits of months.
+
+653
+00:28:01,630 --> 00:28:02,569
+It's, it's no,
+
+654
+00:28:02,579 --> 00:28:05,989
+it's not because we're not going to have like dependency scanners that work right,
+
+655
+00:28:06,000 --> 00:28:07,800
+like some of this stuff maybe.
+
+656
+00:28:07,810 --> 00:28:09,979
+But I'm saying what I think what will happen is
+
+657
+00:28:09,989 --> 00:28:12,650
+it'll start at the higher level and then filter down
+
+658
+00:28:13,140 --> 00:28:16,479
+because the high level will drive the lower level like the high level.
+
+659
+00:28:16,500 --> 00:28:20,849
+I bet you're right people, for example, will have continuous stars,
+
+660
+00:28:20,969 --> 00:28:22,229
+you know, entries.
+
+661
+00:28:22,640 --> 00:28:26,359
+Cool. Now, what are you doing about your software? Why is that not continuous?
+
+662
+00:28:26,430 --> 00:28:31,359
+And not only that if you have stars doing continuous scanning, you can,
+
+663
+00:28:31,569 --> 00:28:36,079
+you can slowly turn the knob up, like boil the frog as they say, where once you,
+
+664
+00:28:36,089 --> 00:28:39,400
+once you get them hooked, you can really drive some real change in that.
+
+665
+00:28:40,160 --> 00:28:40,489
+Yeah.
+
+666
+00:28:40,500 --> 00:28:44,060
+And I think it has to kind of be top down because
+
+667
+00:28:44,069 --> 00:28:46,589
+I think this fundamentally has to be driven by the business.
+
+668
+00:28:46,739 --> 00:28:49,229
+I, this isn't one of those things like, oh, definitely,
+
+669
+00:28:49,239 --> 00:28:55,020
+definitely a great example is TLS SSL that can totally be in many cases driven
+
+670
+00:28:55,239 --> 00:28:56,540
+by the techies
+
+671
+00:28:56,920 --> 00:28:59,119
+because you can just sort of do it and get away with it.
+
+672
+00:28:59,250 --> 00:29:03,199
+But a great example is um I think was it the BBC or the Guardian or one of
+
+673
+00:29:03,209 --> 00:29:06,089
+those big British news organizations had a really good
+
+674
+00:29:06,099 --> 00:29:09,050
+posting about how they went to HTTP S everywhere,
+
+675
+00:29:09,060 --> 00:29:12,089
+whatever and like it took them a good year or two because, you know,
+
+676
+00:29:12,099 --> 00:29:14,760
+all the third party stuff, the ad networks that just
+
+677
+00:29:15,199 --> 00:29:15,979
+all of that
+
+678
+00:29:16,589 --> 00:29:19,500
+to do this properly without breaking their site and making life, you know,
+
+679
+00:29:19,510 --> 00:29:20,949
+miserable for users
+
+680
+00:29:21,319 --> 00:29:22,829
+was a very nontrivial matter.
+
+681
+00:29:22,839 --> 00:29:25,770
+And I think that's part of the reality too, is smaller shops
+
+682
+00:29:26,550 --> 00:29:28,329
+in some ways have an easier time of doing this.
+
+683
+00:29:28,339 --> 00:29:30,699
+I mean, for, well, one thing they just have less code to deal with,
+
+684
+00:29:30,709 --> 00:29:31,790
+they have less technical debt.
+
+685
+00:29:31,800 --> 00:29:32,189
+Right.
+
+686
+00:29:32,199 --> 00:29:35,050
+Like a start up has a lot less technical debt than say,
+
+687
+00:29:35,060 --> 00:29:39,069
+and I'm not going to pick an IBM but I'm going to say IBM because I know they have a lot of
+
+688
+00:29:39,469 --> 00:29:42,290
+is, is writing the checks for technical debt. Exactly.
+
+689
+00:29:42,300 --> 00:29:44,280
+It's the big companies that have to cash them.
+
+690
+00:29:44,530 --> 00:29:47,459
+Yeah, well, they own, they own technical debt bonds that are, you know,
+
+691
+00:29:47,469 --> 00:29:48,869
+20 years old at this point,
+
+692
+00:29:49,359 --> 00:29:50,819
+you know, they're going to be mature
+
+693
+00:29:51,310 --> 00:29:51,949
+technical debt.
+
+694
+00:29:52,250 --> 00:29:52,989
+Yeah, exactly.
+
+695
+00:29:53,239 --> 00:29:55,530
+So, you know, a company like IBM, the,
+
+696
+00:29:55,680 --> 00:29:57,949
+I can't even imagine how many lines of code they
+
+697
+00:29:57,959 --> 00:30:00,189
+have that they've written and have to maintain and I'm not
+
+698
+00:30:00,349 --> 00:30:02,930
+about just products they've released but like under contract and stuff,
+
+699
+00:30:03,219 --> 00:30:05,439
+I guarantee they have no idea
+
+700
+00:30:05,780 --> 00:30:05,810
+in
+
+701
+00:30:06,400 --> 00:30:06,579
+part
+
+702
+00:30:06,729 --> 00:30:06,810
+of the
+
+703
+00:30:06,949 --> 00:30:07,199
+problem.
+
+704
+00:30:07,359 --> 00:30:11,530
+We have no idea of what the US federal code is, you know, for the laws.
+
+705
+00:30:11,540 --> 00:30:15,920
+Yes, that's true too. Right. We have an estimate of how many like pages it is.
+
+706
+00:30:16,180 --> 00:30:19,130
+So I suspect like I said, this will come from top down,
+
+707
+00:30:19,140 --> 00:30:21,280
+especially in the larger organizations.
+
+708
+00:30:21,290 --> 00:30:23,520
+Alright. Alright. So let's take it from the top down then.
+
+709
+00:30:23,619 --> 00:30:26,449
+So something like continuous compliance.
+
+710
+00:30:26,459 --> 00:30:31,199
+You're saying that's probably we'll say in the single digit years,
+
+711
+00:30:31,209 --> 00:30:33,229
+easily within single digits years.
+
+712
+00:30:33,579 --> 00:30:36,719
+It's something that is actually reasonably achievable.
+
+713
+00:30:36,729 --> 00:30:37,959
+Alright, so let's move down now.
+
+714
+00:30:37,969 --> 00:30:43,430
+So we get to kind of the, the whole universe of lots of magic. Uh uh
+
+715
+00:30:43,739 --> 00:30:46,510
+we'll say hardened systems running like Kubernetes Isio
+
+716
+00:30:47,030 --> 00:30:49,859
+style things, which is going to be a very serverless like universe.
+
+717
+00:30:49,869 --> 00:30:51,630
+I think we were really close there.
+
+718
+00:30:51,640 --> 00:30:56,660
+I think I would say mid single digits kind of a 3 to 5 year time frame. All right.
+
+719
+00:30:56,670 --> 00:30:59,290
+So let's move down. We're kind of at, at magic
+
+720
+00:30:59,540 --> 00:31:05,560
+uh integration style testing slash C I slash coder view all that stuff.
+
+721
+00:31:05,569 --> 00:31:08,959
+So I think that will happen, you know, again, single digit,
+
+722
+00:31:08,969 --> 00:31:10,640
+mid single digit years because
+
+723
+00:31:11,209 --> 00:31:14,119
+ignoring the security side of things, if you can say, hey, look,
+
+724
+00:31:14,130 --> 00:31:17,959
+we can basically guarantee that this code and service we're writing kind of,
+
+725
+00:31:17,969 --> 00:31:19,680
+we never break it for users again.
+
+726
+00:31:19,689 --> 00:31:23,089
+I think something like automated code reviews are
+
+727
+00:31:23,369 --> 00:31:24,760
+five plus years.
+
+728
+00:31:25,000 --> 00:31:25,510
+Well,
+
+729
+00:31:25,729 --> 00:31:26,739
+we've discussed this before,
+
+730
+00:31:26,750 --> 00:31:30,410
+but I don't think necessarily you need automated code reviews because for example,
+
+731
+00:31:30,479 --> 00:31:31,609
+automated code
+
+732
+00:31:31,880 --> 00:31:31,979
+it
+
+733
+00:31:32,290 --> 00:31:32,500
+the big.
+
+734
+00:31:32,770 --> 00:31:34,040
+No, no, no, no. Let me finish.
+
+735
+00:31:34,349 --> 00:31:34,640
+I think,
+
+736
+00:31:35,415 --> 00:31:38,155
+I think automated code health would be a good enough start.
+
+737
+00:31:38,165 --> 00:31:39,515
+Hey, this project is sickly.
+
+738
+00:31:39,525 --> 00:31:42,714
+It has three committers and two commits over five years.
+
+739
+00:31:42,724 --> 00:31:44,425
+So chances are there will be a a,
+
+740
+00:31:44,545 --> 00:31:44,885
+you know,
+
+741
+00:31:44,895 --> 00:31:46,824
+a problem with it at some point that you have to panic about
+
+742
+00:31:46,834 --> 00:31:50,185
+versus this other library that is equivalent and much healthier and much newer.
+
+743
+00:31:50,194 --> 00:31:52,994
+Uh, no, you're, you're, we're a level above that conversation.
+
+744
+00:31:53,005 --> 00:31:53,814
+But anyway, all right.
+
+745
+00:31:53,824 --> 00:31:55,385
+So, so I'm saying when I,
+
+746
+00:31:55,395 --> 00:31:59,265
+when I do a check in and I think once you get that then you'll get code reviews.
+
+747
+00:32:00,010 --> 00:32:03,050
+Ok. And that's fair. That's fair. So, I guess next. Ok.
+
+748
+00:32:03,060 --> 00:32:06,069
+So, so let's, let's go one more level down and say
+
+749
+00:32:06,369 --> 00:32:08,390
+the, the question of
+
+750
+00:32:08,579 --> 00:32:10,880
+kind of managing your dependence
+
+751
+00:32:11,160 --> 00:32:14,410
+and I'm going to guess that's 5 to 10 years to do that.
+
+752
+00:32:16,280 --> 00:32:19,550
+I guess here's let's sum it up because we're, we're totally out of time.
+
+753
+00:32:20,000 --> 00:32:20,670
+Is,
+
+754
+00:32:21,050 --> 00:32:22,430
+it sounds like
+
+755
+00:32:22,959 --> 00:32:27,589
+this isn't quite as dire as, as maybe, maybe I thought it was
+
+756
+00:32:28,119 --> 00:32:32,420
+in the last episode. Here's the Dirty Secret and I the Cloud will enable a lot of this.
+
+757
+00:32:32,430 --> 00:32:35,510
+A lot of this can't really be done on premises easily, but the cloud
+
+758
+00:32:36,290 --> 00:32:36,939
+with that.
+
+759
+00:32:37,209 --> 00:32:39,189
+Ok. No, that's fair. I, I agree.
+
+760
+00:32:39,199 --> 00:32:39,790
+I, I guess I,
+
+761
+00:32:39,800 --> 00:32:43,199
+I feel more hopeful after this part of the conversation
+
+762
+00:32:43,209 --> 00:32:44,930
+than I did at the end of the last one.
+
+763
+00:32:44,939 --> 00:32:47,790
+So I guess thank you for that. If nothing else. All right, cool.
+
+764
+00:32:47,800 --> 00:32:50,949
+Well, thank you everyone for putting up with us for
+
+765
+00:32:51,540 --> 00:32:52,790
+this crazy episode.
+
+766
+00:32:52,800 --> 00:32:55,800
+If you want the show notes, you can go to open source security podcast.com,
+
+767
+00:32:55,810 --> 00:32:57,140
+you can hit us up with the Pound
+
+768
+00:32:57,310 --> 00:32:59,449
+Os podcast hashtag on social media
+
+769
+00:32:59,780 --> 00:33:01,750
+And yeah, I guess everyone. Thank you for listening.
+
+770
+00:33:01,760 --> 00:33:04,689
+Have a great day and Kurt, I'll talk to you soon. Thank you
+
+771
+00:33:09,270 --> 00:33:09,359
+the.

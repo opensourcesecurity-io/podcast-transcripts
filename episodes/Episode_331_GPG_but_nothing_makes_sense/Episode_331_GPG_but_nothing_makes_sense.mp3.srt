@@ -1,0 +1,3447 @@
+0
+00:00:05,349 --> 00:00:08,500
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,510 --> 00:00:11,029
+Kurt Siefried and my partner in doing things far more
+
+2
+00:00:11,039 --> 00:00:13,500
+complicated than they ever needed to be Josh Presser.
+
+3
+00:00:13,939 --> 00:00:17,530
+Yeah, that's an understatement for sure. I don't, I don't think you realize
+
+4
+00:00:17,870 --> 00:00:19,010
+exactly
+
+5
+00:00:19,139 --> 00:00:23,110
+the Pandora's Box. We are going to open today. Kurt. You really don't.
+
+6
+00:00:23,120 --> 00:00:25,290
+I remember how bad mine was.
+
+7
+00:00:25,299 --> 00:00:29,520
+So we're talking about PP keys and of course, us being not normal people, we,
+
+8
+00:00:29,530 --> 00:00:29,850
+we didn't,
+
+9
+00:00:29,860 --> 00:00:33,209
+we weren't just satisfied to have a P GP key because one does not simply have
+
+10
+00:00:33,465 --> 00:00:33,474
+a
+
+11
+00:00:33,674 --> 00:00:34,025
+PJ
+
+12
+00:00:34,154 --> 00:00:34,224
+PKI.
+
+13
+00:00:34,544 --> 00:00:35,645
+I had one,
+
+14
+00:00:35,654 --> 00:00:37,694
+I had three root keys that then signed it
+
+15
+00:00:37,705 --> 00:00:39,805
+like an intermediate key that then signed my key.
+
+16
+00:00:39,814 --> 00:00:42,764
+And for the life of me, I don't remember why it doesn't even make sense.
+
+17
+00:00:42,875 --> 00:00:44,805
+Well, because they're all stored on the same system
+
+18
+00:00:44,944 --> 00:00:48,645
+-- that
+-- whatever, whatever. All right. So what we're going to do today,
+
+19
+00:00:49,034 --> 00:00:50,314
+gentle listener
+
+20
+00:00:50,494 --> 00:00:53,215
+is this is something Kurt and I have talked about for a long time
+
+21
+00:00:53,455 --> 00:00:54,115
+is
+
+22
+00:00:54,990 --> 00:01:00,630
+I, we want to explain the insane setups we had for our GP G keys in the past.
+
+23
+00:01:00,639 --> 00:01:05,349
+And the reason we can do this now is we have both revoked our keys
+
+24
+00:01:05,470 --> 00:01:08,110
+and we have no intention of generating new keys.
+
+25
+00:01:08,250 --> 00:01:08,540
+We've
+
+26
+00:01:08,919 --> 00:01:11,839
+-- given up. And
+-- even if I did, I wouldn't do it anything like this anyway.
+
+27
+00:01:11,849 --> 00:01:15,690
+So I'm comfortable talking about all of the ridiculous things I did
+
+28
+00:01:15,940 --> 00:01:19,059
+to protect and I'm using air quotes when I say protect to protect my key.
+
+29
+00:01:19,605 --> 00:01:21,985
+I even have a hardware P GP key thing from,
+
+30
+00:01:21,995 --> 00:01:24,065
+I bought years ago from that German company like, oh,
+
+31
+00:01:24,074 --> 00:01:26,745
+-- I've been through
+-- several of those are, we'll get to those.
+
+32
+00:01:26,815 --> 00:01:29,324
+I just, I've straight up, I've given up on P GP.
+
+33
+00:01:29,785 --> 00:01:31,504
+I, I'm not too proud to admit it.
+
+34
+00:01:31,735 --> 00:01:32,504
+We have
+
+35
+00:01:33,355 --> 00:01:36,504
+-- many
+-- episodes where we have complained about
+
+36
+00:01:36,654 --> 00:01:38,305
+P GP in G BT.
+
+37
+00:01:38,514 --> 00:01:40,464
+So I don't think we need to rehash
+
+38
+00:01:40,675 --> 00:01:42,985
+the many, many, many
+
+39
+00:01:43,105 --> 00:01:44,105
+shortcomings
+
+40
+00:01:44,430 --> 00:01:46,040
+of, of GP G.
+
+41
+00:01:46,160 --> 00:01:47,330
+I would say it. It's
+
+42
+00:01:47,500 --> 00:01:48,919
+I, I view it like
+
+43
+00:01:49,040 --> 00:01:53,000
+Star Wars episodes 12 and three where Anakin was supposed to be the chosen one,
+
+44
+00:01:53,010 --> 00:01:54,480
+but everything was just terrible.
+
+45
+00:01:54,489 --> 00:01:56,580
+-- And that was all
+-- I think I not, you know,
+
+46
+00:01:56,589 --> 00:01:58,089
+it's funny because I'm just thinking about it and
+
+47
+00:01:58,510 --> 00:02:02,180
+I, to be clear, I think end to end encryption is important for some things,
+
+48
+00:02:02,449 --> 00:02:04,930
+but I think end to end encryption where you make the user
+
+49
+00:02:04,940 --> 00:02:07,889
+do all the key management is probably not the way to go.
+
+50
+00:02:08,679 --> 00:02:11,899
+And I think that's one of the challenges with a lot of cryptocurrencies and NFTS is if
+
+51
+00:02:12,139 --> 00:02:15,100
+the whole, you know, not your keys, not your crypto blah, blah blah. But like,
+
+52
+00:02:15,240 --> 00:02:18,240
+I don't want normal people having to do key management. That's insane.
+
+53
+00:02:19,080 --> 00:02:21,779
+And, and this is why I don't think encryption is ever caught on
+
+54
+00:02:22,020 --> 00:02:25,830
+at scale. Ok. Anyway, before we, and the topic is not
+
+55
+00:02:26,130 --> 00:02:27,770
+anything about encryption. It is
+
+56
+00:02:27,880 --> 00:02:29,899
+about the fact that we are lunatics.
+
+57
+00:02:29,910 --> 00:02:32,820
+So I will let you explain first because I have a strong
+
+58
+00:02:32,830 --> 00:02:36,729
+suspicion that your story isn't anywhere near as complicated as mine.
+
+59
+00:02:36,949 --> 00:02:39,929
+My setup was reasonably sane. Originally, I had
+
+60
+00:02:40,070 --> 00:02:43,619
+ki and then I kind of realized if I lost it or revoked it, that would be a chore.
+
+61
+00:02:44,119 --> 00:02:44,139
+So
+
+62
+00:02:44,339 --> 00:02:47,149
+I set up basically three root keys and like they,
+
+63
+00:02:47,750 --> 00:02:50,250
+I don't remember if I had like an intermediate signing key. I think I did.
+
+64
+00:02:50,259 --> 00:02:52,440
+And then I had like the key I actually kind of used on the daily.
+
+65
+00:02:52,449 --> 00:02:55,720
+The idea being if that daily key got compromised, I could very easily revoke it,
+
+66
+00:02:55,729 --> 00:02:57,089
+set up the new ones and you know,
+
+67
+00:02:57,100 --> 00:02:59,869
+my root keys were actually pretty well signed because, well,
+
+68
+00:02:59,880 --> 00:03:01,929
+I went to like there was a key signing party
+
+69
+00:03:01,940 --> 00:03:05,929
+once at CCC 999 outside Berlin where fun fact,
+
+70
+00:03:05,940 --> 00:03:08,279
+I actually helped Philip Zimmerman set up
+
+71
+00:03:08,600 --> 00:03:11,179
+the B GP VPN because it was broken on his laptop.
+
+72
+00:03:11,440 --> 00:03:12,660
+And like the guy
+
+73
+00:03:12,949 --> 00:03:15,979
+like any VPN client back in the day especially, they were garbage.
+
+74
+00:03:15,990 --> 00:03:17,779
+Like they just did not work without black magic.
+
+75
+00:03:17,789 --> 00:03:19,639
+And I'd actually caught that thing to work at some point
+
+76
+00:03:19,669 --> 00:03:21,300
+and I could not get it to work on his laptop.
+
+77
+00:03:21,309 --> 00:03:22,729
+It was just broken. And that's,
+
+78
+00:03:23,029 --> 00:03:24,089
+yeah. Anyways.
+
+79
+00:03:24,270 --> 00:03:24,490
+Yeah.
+
+80
+00:03:24,500 --> 00:03:26,139
+So I basically had three root keys,
+
+81
+00:03:26,149 --> 00:03:29,330
+maybe an intermediate key of memory serves and then, like, kind of a daily driver key
+
+82
+00:03:29,570 --> 00:03:31,669
+and I just sort of gave up on that and then I
+
+83
+00:03:31,949 --> 00:03:34,630
+just basically went to one key and I used to religiously sign
+
+84
+00:03:34,639 --> 00:03:36,639
+all my emails and I did a lot of email to like,
+
+85
+00:03:36,649 --> 00:03:37,710
+oh, is that security and stuff?
+
+86
+00:03:37,720 --> 00:03:39,139
+And like the CV assignments
+
+87
+00:03:39,479 --> 00:03:40,759
+and like straight up, nobody cared.
+
+88
+00:03:40,770 --> 00:03:43,309
+I just stopped signing it one day and nobody complained.
+
+89
+00:03:43,839 --> 00:03:44,860
+And what kind of drove it?
+
+90
+00:03:44,869 --> 00:03:45,350
+Like, what,
+
+91
+00:03:45,360 --> 00:03:47,220
+what started to crack for me is I remember
+
+92
+00:03:47,229 --> 00:03:50,830
+Sousa sent out a security advisory that was signed improperly
+
+93
+00:03:51,899 --> 00:03:52,490
+and
+
+94
+00:03:52,630 --> 00:03:55,610
+I replied to, you know, I think it was Mark or Tom
+
+95
+00:03:55,820 --> 00:03:57,729
+saying, you know, hey, I like,
+
+96
+00:03:57,740 --> 00:04:00,220
+I don't think you've been spoofed but like this is not signed properly, like,
+
+97
+00:04:00,229 --> 00:04:00,770
+what's going on?
+
+98
+00:04:00,779 --> 00:04:01,880
+He's like, oh, we,
+
+99
+00:04:02,020 --> 00:04:03,009
+we'll reissue it.
+
+100
+00:04:03,020 --> 00:04:07,169
+We made a mess, whatever, made a boo boo and they reissued it and a week later,
+
+101
+00:04:07,179 --> 00:04:07,690
+I'm like,
+
+102
+00:04:07,800 --> 00:04:09,100
+yeah, I'm really curious, like,
+
+103
+00:04:09,570 --> 00:04:12,130
+how many people complain? He's like, you and one other person,
+
+104
+00:04:12,809 --> 00:04:15,089
+I'm like, oh, I'm like, did any of the certs or anything complain?
+
+105
+00:04:15,100 --> 00:04:16,019
+He's like, nope, the
+
+106
+00:04:16,130 --> 00:04:19,339
+whole point of signing this email is that if it's not signed, it's not me blah, blah,
+
+107
+00:04:19,358 --> 00:04:19,738
+blah, blah.
+
+108
+00:04:19,790 --> 00:04:20,869
+And nobody cares.
+
+109
+00:04:22,108 --> 00:04:22,609
+That's it.
+
+110
+00:04:22,769 --> 00:04:24,410
+-- That's all you got pretty
+-- much. That's, I just, I,
+
+111
+00:04:24,700 --> 00:04:27,859
+and then I remember and you can find these emails, but I tried,
+
+112
+00:04:27,959 --> 00:04:31,309
+basically, I manually sort of generated some funky signed email where I was like,
+
+113
+00:04:31,320 --> 00:04:33,660
+cutting and pasting the footers and the headers and stuff.
+
+114
+00:04:33,880 --> 00:04:35,029
+And depending on like,
+
+115
+00:04:35,040 --> 00:04:36,750
+how you did that Thunderbird would show it as
+
+116
+00:04:36,760 --> 00:04:38,190
+a correctly signed email when it was like,
+
+117
+00:04:38,200 --> 00:04:39,119
+totally not
+
+118
+00:04:39,799 --> 00:04:40,260
+like,
+
+119
+00:04:41,070 --> 00:04:44,570
+like I'm talking like repeating blocks and like the logic to sort out what part of
+
+120
+00:04:44,579 --> 00:04:47,850
+the message is signed and is not signed is like super broken and still is.
+
+121
+00:04:48,100 --> 00:04:49,690
+And and that's another thing is just
+
+122
+00:04:51,269 --> 00:04:51,760
+this,
+
+123
+00:04:52,059 --> 00:04:53,690
+this stuff doesn't work reliably.
+
+124
+00:04:54,649 --> 00:04:58,149
+So like ignoring all the security properties of it, it just does not work reliably.
+
+125
+00:04:58,160 --> 00:04:59,070
+Like as we've seen
+
+126
+00:04:59,230 --> 00:05:01,910
+every single secure messaging gateway system now is like
+
+127
+00:05:02,350 --> 00:05:03,149
+here's a link
+
+128
+00:05:03,970 --> 00:05:05,829
+like we're not sending you the email.
+
+129
+00:05:06,019 --> 00:05:06,350
+So
+
+130
+00:05:06,929 --> 00:05:07,470
+it's just,
+
+131
+00:05:07,480 --> 00:05:10,450
+but you click this link and like log in with user name and password and read the email.
+
+132
+00:05:10,459 --> 00:05:12,220
+It's like, yeah, cool. Like,
+
+133
+00:05:12,920 --> 00:05:13,619
+yeah, like I said,
+
+134
+00:05:13,760 --> 00:05:16,239
+end to end encryption is really hard and especially in
+
+135
+00:05:16,500 --> 00:05:16,510
+a
+
+136
+00:05:16,619 --> 00:05:18,429
+Federated system like email,
+
+137
+00:05:18,630 --> 00:05:19,570
+I'm gonna go with,
+
+138
+00:05:19,790 --> 00:05:22,700
+it's impossible. And I'm going to say that confidently because
+
+139
+00:05:23,279 --> 00:05:24,489
+we still don't have it.
+
+140
+00:05:24,869 --> 00:05:27,619
+-- It's 2022 and we don't have it.
+-- We,
+
+141
+00:05:27,769 --> 00:05:30,170
+we might not need it. It's part of the part of this also.
+
+142
+00:05:30,440 --> 00:05:30,929
+I mean,
+
+143
+00:05:31,269 --> 00:05:33,850
+it's, that, that's probably a topic for another day
+
+144
+00:05:34,230 --> 00:05:37,299
+and if you do it, you lose spam filtering, which I kind of like.
+
+145
+00:05:38,809 --> 00:05:41,079
+That's true. Anyway. And, and I will put in a
+
+146
+00:05:41,230 --> 00:05:43,730
+link to the XK CD comic
+
+147
+00:05:43,899 --> 00:05:46,070
+that talks about P GP, signed
+
+148
+00:05:46,730 --> 00:05:47,350
+males.
+
+149
+00:05:47,779 --> 00:05:51,489
+It's top notch anyway. All right. All right. Buckle up, Kurt.
+
+150
+00:05:51,720 --> 00:05:52,549
+Here we go.
+
+151
+00:05:53,239 --> 00:05:55,750
+All right. I'd write this down just so everyone knows because
+
+152
+00:05:57,209 --> 00:05:59,149
+there was a lot to remember
+
+153
+00:05:59,510 --> 00:06:00,149
+and
+
+154
+00:06:00,359 --> 00:06:03,329
+I dialed this one up to an 11. All right. All right. So
+
+155
+00:06:03,660 --> 00:06:09,649
+this is not a made up story. I want to stress that this is literally real
+
+156
+00:06:09,769 --> 00:06:12,350
+and this is who the person I used to be.
+
+157
+00:06:12,670 --> 00:06:13,630
+And I'm, I'm, I
+
+158
+00:06:13,869 --> 00:06:16,739
+like to think I'm far more pragmatic and sensible now.
+
+159
+00:06:17,029 --> 00:06:20,540
+-- But like this is all real. You know what,
+-- realistically,
+
+160
+00:06:20,959 --> 00:06:20,980
+I,
+
+161
+00:06:20,989 --> 00:06:23,079
+I think if you know people in the infosec
+
+162
+00:06:23,089 --> 00:06:25,720
+community there is that niche subset that is just
+
+163
+00:06:26,220 --> 00:06:29,820
+like over engineers and over complicates things to some absurd degree.
+
+164
+00:06:30,000 --> 00:06:31,220
+That is, this
+
+165
+00:06:31,350 --> 00:06:31,489
+is
+
+166
+00:06:31,839 --> 00:06:34,910
+this? All right. All right. So here's how we start, right?
+
+167
+00:06:35,640 --> 00:06:36,910
+I have to generate a
+
+168
+00:06:37,059 --> 00:06:38,200
+P GP key.
+
+169
+00:06:38,600 --> 00:06:41,910
+And so what I would do and this is the whole,
+
+170
+00:06:41,950 --> 00:06:45,149
+how are you going to generate a key in a manner that is secure?
+
+171
+00:06:45,640 --> 00:06:47,209
+I had a laptop
+
+172
+00:06:47,329 --> 00:06:54,390
+that I literally used for P GP operations. It was an old laptop, like very old laptop
+
+173
+00:06:54,769 --> 00:06:56,700
+that I took the hard drive out of.
+
+174
+00:06:56,910 --> 00:07:02,630
+And I would only boot it from a CD, like AC, a CD R, right?
+
+175
+00:07:03,470 --> 00:07:07,100
+I would burn a Linux distribution to this. I would boot it
+
+176
+00:07:07,269 --> 00:07:09,029
+and then I would do what I needed to do.
+
+177
+00:07:09,040 --> 00:07:13,970
+So in the case of the first time I generated my, my P GP key, I used this machine.
+
+178
+00:07:13,980 --> 00:07:14,829
+No network,
+
+179
+00:07:15,070 --> 00:07:20,200
+-- no hard drive, booting off a CD R. Stupid
+-- question. What was your entropy source?
+
+180
+00:07:20,209 --> 00:07:24,170
+If there's no hard drive or network activity to see the kernel stuff back in the day,
+
+181
+00:07:24,179 --> 00:07:25,600
+the keyboard and stuff.
+
+182
+00:07:25,609 --> 00:07:26,839
+-- I was using X
+-- windows.
+
+183
+00:07:26,980 --> 00:07:28,070
+Oh So you little, I,
+
+184
+00:07:28,079 --> 00:07:31,209
+I guess this was back in the day where literally P GP would say like mash your,
+
+185
+00:07:31,220 --> 00:07:33,019
+like roll your face on your keyboard for a bit.
+
+186
+00:07:33,589 --> 00:07:34,760
+That's right. That's right.
+
+187
+00:07:34,989 --> 00:07:37,730
+Yep. Yep. Exactly. That. And so,
+
+188
+00:07:37,929 --> 00:07:38,959
+so we have entropy.
+
+189
+00:07:39,510 --> 00:07:40,869
+I had my entropy.
+
+190
+00:07:40,970 --> 00:07:44,420
+I generated my key and of course, when you generate the key,
+
+191
+00:07:44,619 --> 00:07:48,239
+the hip thing to do is you generated the, what did they call it?
+
+192
+00:07:48,250 --> 00:07:52,299
+Was it the master key and then the sub keys. I forget the exact terminology.
+
+193
+00:07:52,309 --> 00:07:53,440
+Now it's been too long,
+
+194
+00:07:53,769 --> 00:07:56,250
+but basically I generated like the master key
+
+195
+00:07:56,369 --> 00:07:58,350
+and then I always generated the three sub keys.
+
+196
+00:07:58,359 --> 00:08:00,670
+Now, mind you, I only generated things a couple of times.
+
+197
+00:08:00,679 --> 00:08:01,670
+So it's not like I did this a lot.
+
+198
+00:08:01,679 --> 00:08:05,190
+But because I was a freak, I literally kept this computer like in the closet.
+
+199
+00:08:05,200 --> 00:08:07,510
+It was a very old laptop whose only job
+
+200
+00:08:07,769 --> 00:08:11,589
+was P GP. And I'll explain why I actually needed this multiple times
+
+201
+00:08:12,200 --> 00:08:12,230
+in
+
+202
+00:08:12,390 --> 00:08:12,399
+a
+
+203
+00:08:12,529 --> 00:08:17,750
+little bit because I, I did things with this key on, on, we'll say every year or so. Ok.
+
+204
+00:08:17,869 --> 00:08:19,329
+So I generate my key right
+
+205
+00:08:19,459 --> 00:08:22,339
+now. When you generate your P GP key,
+
+206
+00:08:22,730 --> 00:08:24,790
+it asks you for a password, right?
+
+207
+00:08:25,170 --> 00:08:26,649
+How are you going to protect
+
+208
+00:08:26,850 --> 00:08:29,450
+your super secret and sensitive P GP key?
+
+209
+00:08:30,029 --> 00:08:32,450
+No password managers right back then.
+
+210
+00:08:32,460 --> 00:08:35,070
+Not that not that I would have trusted a password manager.
+
+211
+00:08:35,080 --> 00:08:40,349
+So what I had to do was find a way to create an extremely long,
+
+212
+00:08:40,359 --> 00:08:42,630
+extremely complicated password.
+
+213
+00:08:42,640 --> 00:08:45,869
+Oh God. Were you one of those people that picked a book and typed in a page of it?
+
+214
+00:08:46,229 --> 00:08:48,270
+Yes. Yes. Actually not
+
+215
+00:08:48,380 --> 00:08:50,109
+a page. Not a page. Not a page. Ok.
+
+216
+00:08:50,119 --> 00:08:53,169
+No, no, I thought about the fact that I could take a book and,
+
+217
+00:08:53,179 --> 00:08:55,409
+and type a paragraph or a sentence or whatever.
+
+218
+00:08:55,580 --> 00:08:58,969
+And I realized that there are different editions of a book
+
+219
+00:08:59,070 --> 00:09:01,489
+and so you can't necessarily trust the text
+
+220
+00:09:01,739 --> 00:09:05,489
+of the book. So in my case, Lord of the Rings was the book I picked.
+
+221
+00:09:05,520 --> 00:09:08,210
+So you're worried about like your house burning down, get a new copy of the book.
+
+222
+00:09:08,219 --> 00:09:10,849
+-- You can't access your pass phrase or
+-- like the,
+
+223
+00:09:10,859 --> 00:09:13,229
+the NSA breaking into my house and stealing my
+
+224
+00:09:13,239 --> 00:09:14,669
+copy of Lord of the Rings so they can feel
+
+225
+00:09:14,789 --> 00:09:16,880
+them, you know, like, like whatever, whatever Right.
+
+226
+00:09:17,229 --> 00:09:17,729
+So
+
+227
+00:09:18,239 --> 00:09:21,849
+I feel like we're, we're getting close to the territory where I should be like
+
+228
+00:09:22,140 --> 00:09:24,530
+advising you to seek professional help and medication.
+
+229
+00:09:24,909 --> 00:09:28,750
+I told you this is all like, like that whole XK CD like, oh no,
+
+230
+00:09:28,760 --> 00:09:30,929
+he's used like quadruple whatever encryption,
+
+231
+00:09:30,940 --> 00:09:32,580
+like take this wrench and hit him with it.
+
+232
+00:09:32,590 --> 00:09:39,530
+Like I, yeah, I was, I was the first panel in that comic 100%. And so anyway, what I did
+
+233
+00:09:39,729 --> 00:09:40,369
+was,
+
+234
+00:09:40,445 --> 00:09:43,984
+and I spent an enormous amount of time trying to figure out how to do this in the the is
+
+235
+00:09:44,155 --> 00:09:47,534
+it the index? I don't even know what it's called.
+
+236
+00:09:47,544 --> 00:09:49,125
+Like the thing at the back of the Lord of the Rings
+
+237
+00:09:49,135 --> 00:09:51,734
+where they like explain a lot of the lore and stuff.
+
+238
+00:09:52,395 --> 00:09:55,905
+The Hobbits in the Shire had their own calendar.
+
+239
+00:09:56,155 --> 00:09:59,195
+And so I used the 12 months of the Shire
+
+240
+00:09:59,315 --> 00:10:01,965
+calendar which I'll put a link in the show notes,
+
+241
+00:10:01,974 --> 00:10:05,025
+but I'm going to read them because I can because they're really weird.
+
+242
+00:10:05,375 --> 00:10:06,565
+There's uh after ye
+
+243
+00:10:06,875 --> 00:10:07,585
+soul ma
+
+244
+00:10:08,034 --> 00:10:08,395
+re
+
+245
+00:10:08,664 --> 00:10:09,885
+rethe
+
+246
+00:10:10,119 --> 00:10:11,309
+Astrin Thin
+
+247
+00:10:11,640 --> 00:10:12,299
+Ridge th
+
+248
+00:10:12,479 --> 00:10:14,140
+image. No Trim Forli
+
+249
+00:10:14,619 --> 00:10:16,080
+over life after
+
+250
+00:10:16,219 --> 00:10:17,559
+life. Wed Math
+
+251
+00:10:18,489 --> 00:10:20,739
+Heath. Winter filth, which is my favorite one.
+
+252
+00:10:20,869 --> 00:10:22,039
+Black Math and for
+
+253
+00:10:22,179 --> 00:10:22,200
+you.
+
+254
+00:10:22,919 --> 00:10:25,659
+So you use just those 12 months written out.
+
+255
+00:10:25,969 --> 00:10:28,700
+Ah ah Here, here is where it gets interesting.
+
+256
+00:10:28,929 --> 00:10:34,219
+Yes. And I can't tell you if there was punctuation or spaces
+
+257
+00:10:34,500 --> 00:10:35,659
+between any of the words.
+
+258
+00:10:35,669 --> 00:10:39,239
+-- And so every
+-- because honestly, that sounds like a classic, you know, like,
+
+259
+00:10:39,250 --> 00:10:40,340
+what are his hobbies?
+
+260
+00:10:40,349 --> 00:10:42,840
+Ok. Like use those dictionary lesson. They like, assuming.
+
+261
+00:10:42,849 --> 00:10:44,659
+Well, yeah, if you just type the words in straight up,
+
+262
+00:10:44,669 --> 00:10:46,109
+it would obviously brute force.
+
+263
+00:10:46,119 --> 00:10:47,159
+Not too, too long.
+
+264
+00:10:47,260 --> 00:10:48,080
+-- They
+-- weren't,
+
+265
+00:10:48,419 --> 00:10:49,960
+there was something wrong.
+
+266
+00:10:49,969 --> 00:10:53,880
+It wasn't just the words because every time I had to unlock this key,
+
+267
+00:10:53,890 --> 00:10:57,549
+it took no less than 20 tries because it wasn't
+
+268
+00:10:57,719 --> 00:11:00,429
+just the words. I had some spaces and some punctuate.
+
+269
+00:11:00,895 --> 00:11:01,294
+Like
+
+270
+00:11:01,424 --> 00:11:04,825
+so some of the letters were capital, I don't remember anymore what it was,
+
+271
+00:11:04,835 --> 00:11:06,945
+but I know it was very, very, very complicated.
+
+272
+00:11:07,565 --> 00:11:13,025
+And in fact, when I had to at first, Kurt suggested we, we revoke our keys like,
+
+273
+00:11:13,034 --> 00:11:14,405
+like on the podcast.
+
+274
+00:11:14,674 --> 00:11:17,265
+And I'm like, no, because I have to type this password in.
+
+275
+00:11:17,275 --> 00:11:20,645
+And it's literally going to take me an hour to type it in. You get the point, right?
+
+276
+00:11:20,655 --> 00:11:22,625
+Obviously, when I revoked this key,
+
+277
+00:11:22,635 --> 00:11:25,705
+it took me like an hour because I had to remember how to type the password in.
+
+278
+00:11:25,715 --> 00:11:26,784
+Now, I will say
+
+279
+00:11:27,059 --> 00:11:32,450
+I unlocked the key on a network attached computer which literally
+
+280
+00:11:32,619 --> 00:11:34,929
+that key had never seen a network before.
+
+281
+00:11:35,539 --> 00:11:38,929
+But anyway, ok, we're just getting started though. Lucky for us. Ok.
+
+282
+00:11:38,940 --> 00:11:40,869
+So I've got my offline computer,
+
+283
+00:11:41,099 --> 00:11:45,049
+I've got my ridiculously long password and then
+
+284
+00:11:45,309 --> 00:11:47,359
+I have to figure out what am I gonna do with this key?
+
+285
+00:11:47,700 --> 00:11:50,289
+Now, storing the key on anything
+
+286
+00:11:50,539 --> 00:11:52,369
+was unacceptable to me. Right?
+
+287
+00:11:52,739 --> 00:11:55,280
+So the key, what I did was I bought.
+
+288
+00:11:55,289 --> 00:11:58,960
+So there were you mentioned that the, the hardware, whatever key,
+
+289
+00:11:58,969 --> 00:12:00,590
+hsm I don't know what to call them.
+
+290
+00:12:00,599 --> 00:12:05,000
+I went through what, 1234 of these over the life of my key,
+
+291
+00:12:05,010 --> 00:12:07,280
+I started out with a thing called an E token.
+
+292
+00:12:07,729 --> 00:12:10,960
+And then I moved to something called the crypto stick and the crypto stick.
+
+293
+00:12:10,969 --> 00:12:13,039
+I still have the crypto stick. The funny story about that
+
+294
+00:12:13,359 --> 00:12:17,580
+is a friend sent it to me and crypto stick was like some hardware.
+
+295
+00:12:17,690 --> 00:12:19,039
+Yeah, some nitro key people.
+
+296
+00:12:19,239 --> 00:12:19,380
+Yeah.
+
+297
+00:12:19,640 --> 00:12:22,400
+-- It was that like red little thing.
+-- It was red
+
+298
+00:12:22,599 --> 00:12:27,239
+and I had like one of the early, early, early versions. It might have been in the beta
+
+299
+00:12:27,619 --> 00:12:28,700
+testing phase.
+
+300
+00:12:29,440 --> 00:12:30,380
+But anyway,
+
+301
+00:12:30,539 --> 00:12:32,789
+I still have the crypto stick in my bank vault
+
+302
+00:12:32,989 --> 00:12:33,909
+because
+
+303
+00:12:34,090 --> 00:12:38,059
+I can't erase it for whatever reason I couldn't get the key off of it.
+
+304
+00:12:38,229 --> 00:12:42,140
+-- You
+-- know what that I vaguely remember having trouble with mine as well.
+
+305
+00:12:42,150 --> 00:12:43,729
+And, and because I'm a nut,
+
+306
+00:12:44,150 --> 00:12:47,349
+I was, I, I didn't feel like just smashing it was acceptable.
+
+307
+00:12:47,359 --> 00:12:49,900
+I had to actually make sure it was in a safe place.
+
+308
+00:12:49,909 --> 00:12:52,739
+I could, I could check on it every now and then and make sure it was still there.
+
+309
+00:12:52,960 --> 00:12:54,880
+So now actually next time I go to the bank I can
+
+310
+00:12:54,890 --> 00:12:56,679
+take it and just throw it out because the keys revoked.
+
+311
+00:12:56,690 --> 00:12:58,520
+-- I don't
+-- care or just smash it with a hammer
+
+312
+00:12:58,530 --> 00:13:00,380
+because I'm pretty sure the NSA is not going to run
+
+313
+00:13:01,760 --> 00:13:02,830
+a, a hardware level
+
+314
+00:13:02,969 --> 00:13:05,580
+-- chip recovery
+-- and, and the best part is
+
+315
+00:13:05,890 --> 00:13:10,929
+nothing I ever did was particularly exciting. Like this key had no value.
+
+316
+00:13:11,549 --> 00:13:12,239
+So anyway,
+
+317
+00:13:12,450 --> 00:13:15,869
+I had a crypto stick and then I went to actually the FSFE,
+
+318
+00:13:15,880 --> 00:13:17,619
+the free software foundation, Europe.
+
+319
+00:13:17,630 --> 00:13:19,969
+Uh, the, the, what they call the GP G cards,
+
+320
+00:13:20,460 --> 00:13:23,460
+-- right where you got a little smart card.
+-- Those were awesome.
+
+321
+00:13:23,570 --> 00:13:26,159
+-- Yeah, they were very nice. And I had one of
+-- those with the
+
+322
+00:13:26,419 --> 00:13:27,289
+Gemalto card reader.
+
+323
+00:13:27,760 --> 00:13:28,219
+Yep. Yep.
+
+324
+00:13:28,229 --> 00:13:28,820
+But well,
+
+325
+00:13:28,830 --> 00:13:32,539
+so what I did is I actually found a keychain like a reader that
+
+326
+00:13:32,549 --> 00:13:36,099
+used the whatever the mini SIM size was because you could punch out the,
+
+327
+00:13:36,109 --> 00:13:36,859
+the chip
+
+328
+00:13:37,369 --> 00:13:41,099
+and I had one I put on my keychain and then I would because part of part of the,
+
+329
+00:13:41,109 --> 00:13:44,109
+the goal of this was the key also was with me at all times.
+
+330
+00:13:44,119 --> 00:13:48,099
+Like I didn't do things without my key. If I traveled, the key came with me
+
+331
+00:13:48,229 --> 00:13:49,979
+when I left the house, the key came with me.
+
+332
+00:13:50,229 --> 00:13:52,609
+So it had to be on a keychain, right? It had to be with me,
+
+333
+00:13:52,869 --> 00:13:54,869
+right? You're, it's no one can see this.
+
+334
+00:13:54,880 --> 00:13:57,520
+But Kurt's looking at me as if there's something wrong with me,
+
+335
+00:13:57,530 --> 00:14:01,479
+which we know like this bringing it with me is the least weird thing I've done so far.
+
+336
+00:14:01,489 --> 00:14:01,979
+Like, come on.
+
+337
+00:14:03,090 --> 00:14:07,840
+-- So anyway, I remember I, I had a couple of those and those.
+-- How did you back the ski up?
+
+338
+00:14:07,849 --> 00:14:08,599
+We'll get to that.
+
+339
+00:14:08,880 --> 00:14:09,390
+So,
+
+340
+00:14:10,210 --> 00:14:12,599
+so we put it on that and then I ended actually with the UI
+
+341
+00:14:12,739 --> 00:14:12,869
+key
+
+342
+00:14:13,299 --> 00:14:15,960
+because not everyone knows this, but you can use a UI
+
+343
+00:14:16,369 --> 00:14:16,669
+key.
+
+344
+00:14:16,869 --> 00:14:17,960
+It has
+
+345
+00:14:18,260 --> 00:14:20,510
+uh you can, you can upload like different
+
+346
+00:14:20,739 --> 00:14:23,979
+what they call them applications or something. I forget the exact term they use.
+
+347
+00:14:23,989 --> 00:14:25,219
+But basically, you can turn your UI
+
+348
+00:14:25,669 --> 00:14:25,869
+key
+
+349
+00:14:26,000 --> 00:14:26,679
+into a UI
+
+350
+00:14:26,880 --> 00:14:30,830
+key slash P GP smart card basically.
+
+351
+00:14:31,219 --> 00:14:34,840
+And so that's actually where, where my story ended was, that was my final one.
+
+352
+00:14:34,849 --> 00:14:36,409
+But anyway, this is why
+
+353
+00:14:36,739 --> 00:14:38,039
+I needed to
+
+354
+00:14:38,140 --> 00:14:39,460
+get the key
+
+355
+00:14:39,630 --> 00:14:40,400
+and
+
+356
+00:14:40,500 --> 00:14:44,599
+unlock it on a, on a regular basis because I went through these different tokens.
+
+357
+00:14:44,770 --> 00:14:46,299
+And so every time, like for example,
+
+358
+00:14:46,309 --> 00:14:49,539
+I needed to load my key into the next hardware module.
+
+359
+00:14:49,770 --> 00:14:51,000
+I had to take my,
+
+360
+00:14:51,130 --> 00:14:53,320
+my laptop dedicated just to this key.
+
+361
+00:14:53,909 --> 00:14:58,969
+Put my burn a new CD R because I couldn't use the same CD R twice.
+
+362
+00:14:58,979 --> 00:15:01,690
+For, for whatever reason, I, I don't know why that was like,
+
+363
+00:15:01,700 --> 00:15:03,140
+I had to burn a brand new one.
+
+364
+00:15:03,239 --> 00:15:04,969
+And as soon as I took the old one out,
+
+365
+00:15:04,979 --> 00:15:09,530
+-- I had to destroy it
+-- probably because the old CD RS like bit rot and like,
+
+366
+00:15:09,590 --> 00:15:13,109
+-- like I literally remember burning C DS
+-- and just this was in,
+
+367
+00:15:13,224 --> 00:15:18,205
+in case an attacker somehow burnt my key onto the CD R
+
+368
+00:15:18,434 --> 00:15:20,684
+but just put a read only drive in the machine.
+
+369
+00:15:20,864 --> 00:15:21,364
+-- Uh,
+-- I
+
+370
+00:15:21,575 --> 00:15:26,164
+didn't have a read only CD drive because it was an old laptop. It, it didn't,
+
+371
+00:15:27,094 --> 00:15:30,804
+actually, it might not, it might not have been able to burn CD. Si, don't remember.
+
+372
+00:15:30,815 --> 00:15:32,385
+And that laptop is long gone now
+
+373
+00:15:32,799 --> 00:15:37,500
+because that, that is actually a good reason to boot like a secure system off of a CD R
+
+374
+00:15:37,669 --> 00:15:40,320
+because if it has a read only drive, then it by definition, like,
+
+375
+00:15:40,390 --> 00:15:42,900
+I'm not going to say you can't store state on the system at all because there's
+
+376
+00:15:42,909 --> 00:15:45,580
+like network cards and stuff or bits of ra M in the bios and stuff.
+
+377
+00:15:45,590 --> 00:15:47,390
+But it's really hard.
+
+378
+00:15:47,640 --> 00:15:48,250
+Actually, I'll
+
+379
+00:15:48,409 --> 00:15:49,750
+trying to find the link to it when,
+
+380
+00:15:49,900 --> 00:15:54,570
+when Gr Glenn Greenwald destroyed the laptop, that specific
+
+381
+00:15:54,719 --> 00:15:54,849
+notice,
+
+382
+00:15:55,530 --> 00:15:59,390
+they, they told him, like, you need to drill in these places on your laptop and,
+
+383
+00:15:59,400 --> 00:16:00,690
+and the assumption is
+
+384
+00:16:00,840 --> 00:16:03,979
+those were the locations of, of memory.
+
+385
+00:16:04,299 --> 00:16:04,669
+But,
+
+386
+00:16:05,190 --> 00:16:08,890
+and like, we don't, we don't exactly know, someone might have done an analysis.
+
+387
+00:16:08,900 --> 00:16:12,919
+-- It wasn't me.
+-- Well, there's a lot of stuff that is flash ram in it for bios
+
+388
+00:16:13,340 --> 00:16:15,169
+and for firmware now. And like,
+
+389
+00:16:15,400 --> 00:16:17,969
+like your printer, your, and in your computer,
+
+390
+00:16:18,070 --> 00:16:21,409
+I mean, in a, well, as we discussed previously, like a computer now has like,
+
+391
+00:16:21,419 --> 00:16:23,109
+10 computers in it, like the
+
+392
+00:16:23,340 --> 00:16:25,969
+management engine and your network card and your sound card and your blah, blah.
+
+393
+00:16:26,434 --> 00:16:29,994
+Yep. Yep. Exactly. Exactly. Ok. Ok. So now
+
+394
+00:16:30,184 --> 00:16:35,354
+I've got my key on my laptop. I got to get it off. So, what I actually did
+
+395
+00:16:35,575 --> 00:16:39,554
+is I put the key onto a USB drive
+
+396
+00:16:39,844 --> 00:16:43,344
+that then went to the bank. So that's not too crazy for backups. Right
+
+397
+00:16:43,755 --> 00:16:45,265
+-- now. I kept,
+-- uh,
+
+398
+00:16:45,515 --> 00:16:46,875
+that's actually pretty reasonable.
+
+399
+00:16:47,135 --> 00:16:50,034
+Yeah. II, I thought so. I kept two USB keys.
+
+400
+00:16:50,270 --> 00:16:51,039
+One
+
+401
+00:16:51,250 --> 00:16:55,659
+was in the bank and the other one I kept, what did I do to this?
+
+402
+00:16:55,669 --> 00:16:59,609
+Oh, the other one was an encrypted, like, like I encrypted the file system with a,
+
+403
+00:16:59,619 --> 00:17:00,849
+another password.
+
+404
+00:17:00,859 --> 00:17:02,989
+I don't remember exactly what it was,
+
+405
+00:17:03,289 --> 00:17:05,530
+but it was basically just an encrypted flash drive.
+
+406
+00:17:05,540 --> 00:17:08,439
+I kept in the house and I assume the two layers of encryption
+
+407
+00:17:08,790 --> 00:17:10,689
+were probably acceptable
+
+408
+00:17:10,868 --> 00:17:12,469
+in terms of keeping people.
+
+409
+00:17:12,709 --> 00:17:14,140
+I don't know, whatever th this one,
+
+410
+00:17:14,150 --> 00:17:16,160
+this one's a little more dodgy now that I think of it,
+
+411
+00:17:16,170 --> 00:17:18,939
+but obviously the one in the bank will say was fine.
+
+412
+00:17:18,949 --> 00:17:22,118
+And in fact, when I revoke my key, I had to go get the freaking thing out of the bank.
+
+413
+00:17:22,130 --> 00:17:23,969
+Well, you know, one thing I've not to say away too much,
+
+414
+00:17:23,979 --> 00:17:25,250
+but one thing I've always wondered
+
+415
+00:17:25,354 --> 00:17:26,785
+is how many
+
+416
+00:17:26,944 --> 00:17:29,334
+times because it's got to happen at least once a year.
+
+417
+00:17:29,375 --> 00:17:30,135
+But, you know,
+
+418
+00:17:30,145 --> 00:17:33,635
+various law enforcement government agents get some sort of like secret warrant
+
+419
+00:17:33,744 --> 00:17:37,655
+to go into a bank safety deposit box and, you know, like
+
+420
+00:17:37,935 --> 00:17:39,604
+they pick the lock and like rifle through the
+
+421
+00:17:39,614 --> 00:17:41,805
+stuff in there because that's got to happen.
+
+422
+00:17:42,160 --> 00:17:43,750
+I mean, it has to. Right.
+
+423
+00:17:43,969 --> 00:17:49,060
+-- You'd
+-- think so. I mean, and, and you can get warrants that basically tell the people.
+
+424
+00:17:49,469 --> 00:17:53,420
+Right. Right. Right. Right. That you can't say, which is the whole canary thing,
+
+425
+00:17:53,599 --> 00:17:57,410
+which I still laugh at because I assume if you have a canary on, like,
+
+426
+00:17:57,420 --> 00:18:00,439
+-- your website they're gonna be like, you're gonna keep on using the
+-- canary,
+
+427
+00:18:00,479 --> 00:18:02,199
+you can update it, but then you go to Federal
+
+428
+00:18:02,994 --> 00:18:05,255
+well, or, or you don't update it. Right. That's the point of the,
+
+429
+00:18:05,614 --> 00:18:08,324
+you're saying, oh, I haven't received a FISA warrant
+
+430
+00:18:08,545 --> 00:18:11,145
+and then one month I don't put that up and they're like, did you receive,
+
+431
+00:18:12,084 --> 00:18:14,805
+they would put a writer in the warrant because I feel like they're on to that.
+
+432
+00:18:14,984 --> 00:18:17,114
+I, I would, I would be shocked if they aren't like,
+
+433
+00:18:17,125 --> 00:18:21,094
+you're gonna keep updating this or like we're throwing you in federal prison and,
+
+434
+00:18:21,104 --> 00:18:22,574
+and you're gonna have a bad time.
+
+435
+00:18:22,944 --> 00:18:24,214
+So, anyway,
+
+436
+00:18:24,930 --> 00:18:26,640
+anyway, anyway. Ok.
+
+437
+00:18:26,750 --> 00:18:29,910
+So now I've got my computer,
+
+438
+00:18:30,040 --> 00:18:32,199
+I've got my single use CD RS.
+
+439
+00:18:32,479 --> 00:18:37,030
+I've got my key generated. I've got my key on the HSM.
+
+440
+00:18:37,239 --> 00:18:41,219
+And now it's time to actually try to be a functional citizen
+
+441
+00:18:41,329 --> 00:18:43,189
+of the internet with my keys.
+
+442
+00:18:43,800 --> 00:18:44,109
+You
+
+443
+00:18:44,630 --> 00:18:45,280
+can laugh. It's fine.
+
+444
+00:18:45,540 --> 00:18:48,239
+-- You know what?
+-- Actually, you and I are pretty functional citizens of the internet.
+
+445
+00:18:48,250 --> 00:18:51,219
+-- We've done some, not terrible things. I do my
+-- best. I do my best. Right.
+
+446
+00:18:51,229 --> 00:18:52,829
+And so now is where
+
+447
+00:18:53,339 --> 00:18:58,589
+when you generate your, your, your sub keys, you don't have a key, right?
+
+448
+00:18:58,599 --> 00:19:03,209
+You have a signing key, you have an encrypting key and I had an SSH key.
+
+449
+00:19:04,069 --> 00:19:04,969
+And so
+
+450
+00:19:05,160 --> 00:19:08,689
+I literally couldn't anytime I ssh, I had to plug in
+
+451
+00:19:08,959 --> 00:19:10,449
+this USB device
+
+452
+00:19:10,640 --> 00:19:11,689
+which would then
+
+453
+00:19:12,020 --> 00:19:16,410
+use my SSH key on the device and let me go somewhere then.
+
+454
+00:19:16,689 --> 00:19:19,280
+So why not? Just do what I did, which was have a
+
+455
+00:19:19,500 --> 00:19:21,739
+SSH keys and just don't put a passphrase on them.
+
+456
+00:19:21,750 --> 00:19:24,500
+So when you type SSH space host name, it just works
+
+457
+00:19:24,800 --> 00:19:27,660
+because that's what I've been doing for like 20 years and it's, it's glorious.
+
+458
+00:19:27,670 --> 00:19:28,199
+All right folks.
+
+459
+00:19:28,209 --> 00:19:30,310
+So if you, if you break into any of Kurt's accounts,
+
+460
+00:19:30,319 --> 00:19:33,750
+you know that he has unprotected SSH keys all over the place.
+
+461
+00:19:33,760 --> 00:19:36,589
+-- This sounds super safe
+-- and in fairness, I have like, actually, no,
+
+462
+00:19:36,599 --> 00:19:38,290
+I just decommissioned one of the systems today.
+
+463
+00:19:38,380 --> 00:19:44,020
+There's, there's the pie in my basement and two test systems at the CS A.
+
+464
+00:19:44,569 --> 00:19:46,229
+That's all I can say to anymore.
+
+465
+00:19:46,560 --> 00:19:49,829
+Well, I guess technically the GSD digital ocean droplets. But
+
+466
+00:19:50,239 --> 00:19:50,930
+yeah, that's true.
+
+467
+00:19:51,349 --> 00:19:52,569
+That'll be gone soon. I hope.
+
+468
+00:19:52,989 --> 00:19:53,189
+Yeah.
+
+469
+00:19:53,319 --> 00:19:54,400
+-- But anyway, anyway,
+-- a
+
+470
+00:19:54,660 --> 00:19:57,410
+long time ago I gave up on security over convenience.
+
+471
+00:19:57,500 --> 00:20:01,390
+I, I don't blame you necessarily. Now, I will say the, the thing that really
+
+472
+00:20:01,530 --> 00:20:04,510
+pushed me over the edge to get rid of these keys
+
+473
+00:20:04,670 --> 00:20:07,390
+was when I could use my,
+
+474
+00:20:07,699 --> 00:20:09,170
+my uh uh
+
+475
+00:20:10,079 --> 00:20:10,489
+but the Fido
+
+476
+00:20:10,699 --> 00:20:12,750
+tokens. What is it? U two F? I forget exactly
+
+477
+00:20:13,050 --> 00:20:16,410
+what they're called. But I've got like one of the, the Google Titan keys and I have UT
+
+478
+00:20:17,410 --> 00:20:18,479
+and you can
+
+479
+00:20:18,790 --> 00:20:22,729
+use them. So what happens is like, I have an, an SSH
+
+480
+00:20:23,040 --> 00:20:26,609
+key file thing on disk that has like the key
+
+481
+00:20:26,810 --> 00:20:30,430
+but SSH sends the encrypted key into the UB key.
+
+482
+00:20:30,439 --> 00:20:33,199
+I hit the button, it decrypt it and then it lets me ssh.
+
+483
+00:20:34,089 --> 00:20:37,150
+And so I still technically have an SSH T and a hardware device.
+
+484
+00:20:37,160 --> 00:20:39,489
+It's just a far more user friendly devices
+
+485
+00:20:41,099 --> 00:20:41,180
+that
+
+486
+00:20:42,069 --> 00:20:42,160
+level
+
+487
+00:20:42,430 --> 00:20:45,640
+-- of friction
+-- now. But there's, there's two ways to do this.
+
+488
+00:20:45,650 --> 00:20:50,359
+You can have like all of the key material on device or you can separate it where like
+
+489
+00:20:50,520 --> 00:20:54,050
+the key lives on disk and it has to send stuff to the device.
+
+490
+00:20:54,060 --> 00:20:57,829
+And that's the option I picked because I feel like if it was all on device,
+
+491
+00:20:58,119 --> 00:21:00,329
+if someone has my device and they know what to look for,
+
+492
+00:21:00,339 --> 00:21:03,140
+like they could SSH around and I can, I, yeah,
+
+493
+00:21:03,150 --> 00:21:05,660
+I've got a couple of public machines I can ssh into.
+
+494
+00:21:05,670 --> 00:21:09,479
+Well, that's how I got like popped, like seared.org got popped ages ago where
+
+495
+00:21:09,650 --> 00:21:12,530
+uh there was wordpress vulnerability on a Friday and I'm like, oh, I'll fix it,
+
+496
+00:21:12,540 --> 00:21:13,180
+Monday, whatever.
+
+497
+00:21:13,189 --> 00:21:13,540
+And then
+
+498
+00:21:13,739 --> 00:21:14,380
+I didn't
+
+499
+00:21:14,560 --> 00:21:15,675
+fix it till later.
+
+500
+00:21:15,685 --> 00:21:19,275
+And there was also a local Linux kernel issue that again, I'll fix it. Monday
+
+501
+00:21:19,454 --> 00:21:20,395
+somebody got in
+
+502
+00:21:20,594 --> 00:21:21,405
+and I had, you know,
+
+503
+00:21:21,415 --> 00:21:23,094
+unrestricted trust between the host so that I
+
+504
+00:21:23,104 --> 00:21:25,234
+could like r sync stuff back and forth and
+
+505
+00:21:25,694 --> 00:21:28,155
+they, like, popped all my systems and it was like, yeah, whatever
+
+506
+00:21:28,275 --> 00:21:28,635
+it was
+
+507
+00:21:28,765 --> 00:21:30,125
+cre.org, like, yeah,
+
+508
+00:21:30,744 --> 00:21:31,285
+I'm not a bank.
+
+509
+00:21:32,510 --> 00:21:33,810
+But anyway, anyway,
+
+510
+00:21:34,060 --> 00:21:38,520
+and so obviously I had those three keys. I kept them safe. I also,
+
+511
+00:21:38,939 --> 00:21:42,050
+one of the other annoying parts is to use the,
+
+512
+00:21:42,569 --> 00:21:46,750
+the SS or to use the GP G keys for things like authentication and,
+
+513
+00:21:46,760 --> 00:21:48,260
+and signing in and other stuff.
+
+514
+00:21:48,430 --> 00:21:54,030
+You had to obviously copy around your dot G new PG folder to all my devices, right?
+
+515
+00:21:54,040 --> 00:21:54,510
+And, and
+
+516
+00:21:54,739 --> 00:21:57,430
+shockingly, it worked fine across like Linux
+
+517
+00:21:57,550 --> 00:22:00,680
+and Mac and Windows when I would put it in all the strange places which I mean,
+
+518
+00:22:00,689 --> 00:22:02,229
+that's really cool, good, good job guys.
+
+519
+00:22:02,239 --> 00:22:03,670
+That's not easy to always get right.
+
+520
+00:22:03,790 --> 00:22:04,380
+But then you,
+
+521
+00:22:04,609 --> 00:22:06,969
+I also had to set up the, the SS,
+
+522
+00:22:07,369 --> 00:22:11,030
+was it no GP G? There's a GP G agent process you had to run
+
+523
+00:22:11,520 --> 00:22:14,589
+and enable the SSH agent mode.
+
+524
+00:22:14,880 --> 00:22:17,189
+It's still completely broke uh pin entry,
+
+525
+00:22:17,280 --> 00:22:20,910
+it's still completely broken all the time on like ubuntu LTs running on Windows,
+
+526
+00:22:20,920 --> 00:22:21,729
+subsystem for Linux
+
+527
+00:22:21,959 --> 00:22:22,709
+version two.
+
+528
+00:22:22,910 --> 00:22:26,510
+That could be, I've actually never had a problem with pin entry
+
+529
+00:22:26,839 --> 00:22:29,260
+on any of the systems I used it on, but I was always,
+
+530
+00:22:29,270 --> 00:22:31,459
+I wasn't ever running in like WSL or anything.
+
+531
+00:22:31,469 --> 00:22:34,369
+I was always running like native OS X Windows or Linux
+
+532
+00:22:34,920 --> 00:22:35,439
+and,
+
+533
+00:22:35,560 --> 00:22:36,689
+and like that always worked.
+
+534
+00:22:36,890 --> 00:22:38,500
+But the, the agent
+
+535
+00:22:39,540 --> 00:22:43,550
+was always flaky for me where sometimes it would work.
+
+536
+00:22:43,560 --> 00:22:46,170
+Sometimes it wouldn't work and I have to kill it and then restart it.
+
+537
+00:22:46,180 --> 00:22:50,260
+And it was, it was unpleasant, we'll say to keep that going. But,
+
+538
+00:22:50,670 --> 00:22:51,699
+but basically, yeah,
+
+539
+00:22:51,949 --> 00:22:52,650
+and then,
+
+540
+00:22:53,030 --> 00:22:56,949
+and then what I would do, so I had all this set up every couple of years.
+
+541
+00:22:56,959 --> 00:23:01,869
+I would double check everything right. When I would load my new key into my device,
+
+542
+00:23:02,020 --> 00:23:04,790
+I still have most of my devices at the bank, I think.
+
+543
+00:23:05,089 --> 00:23:05,670
+And
+
+544
+00:23:06,010 --> 00:23:11,390
+yeah, that's pretty much my story of, of how I took care of all this stuff and it was,
+
+545
+00:23:12,319 --> 00:23:14,459
+it was pretty bananas now that I say it.
+
+546
+00:23:16,239 --> 00:23:18,050
+Well, yeah, I mean, I, I
+
+547
+00:23:18,160 --> 00:23:20,630
+this is part of why
+
+548
+00:23:20,920 --> 00:23:23,729
+I've gotten big into threat modeling and risk modeling is
+
+549
+00:23:23,739 --> 00:23:26,829
+so that I take an appropriate level of response.
+
+550
+00:23:27,280 --> 00:23:31,790
+Exactly that, you know, like a great example would be, my car has four wheels,
+
+551
+00:23:31,800 --> 00:23:32,989
+one of them may go flat.
+
+552
+00:23:33,000 --> 00:23:34,150
+So I want a spare tire
+
+553
+00:23:34,680 --> 00:23:36,109
+and so I did a quick bit of research
+
+554
+00:23:36,420 --> 00:23:38,430
+and the little turkey tire with the kit
+
+555
+00:23:38,750 --> 00:23:42,579
+is like 200 bucks. And I'm like, whoa, that's kind of the cost of a full size spare.
+
+556
+00:23:42,589 --> 00:23:44,109
+Might as well just get a full size spare.
+
+557
+00:23:44,310 --> 00:23:44,949
+So I did
+
+558
+00:23:45,589 --> 00:23:46,060
+and
+
+559
+00:23:46,719 --> 00:23:49,989
+most people don't bother buying a full size spare because a it's expensive. In
+
+560
+00:23:50,189 --> 00:23:52,959
+this case, it's the same cost as the little turkey tire in the kit.
+
+561
+00:23:53,219 --> 00:23:55,339
+And number two, because where do you keep the damn thing?
+
+562
+00:23:55,349 --> 00:23:58,969
+And in my case, my car actually has a full size spare tire well
+
+563
+00:23:59,739 --> 00:24:00,640
+in the trunk, right.
+
+564
+00:24:00,650 --> 00:24:02,900
+Which, like if I didn't have a spare tire, man, I could, like,
+
+565
+00:24:02,910 --> 00:24:04,520
+I could keep snacks in there or something.
+
+566
+00:24:04,530 --> 00:24:08,390
+I don't know, like it's a lot of snacks, so I have like a full size spare tire because I,
+
+567
+00:24:08,400 --> 00:24:11,900
+well, not so much now, but like I used to do some road trips outside the city and,
+
+568
+00:24:11,910 --> 00:24:14,500
+you know, having a real tire as a spare tire is
+
+569
+00:24:14,949 --> 00:24:17,599
+infinitely better than that little 5050 donut.
+
+570
+00:24:17,609 --> 00:24:19,349
+I feel like the car is gonna tip over whenever
+
+571
+00:24:19,359 --> 00:24:21,099
+I see somebody driving on it on the highway.
+
+572
+00:24:21,469 --> 00:24:21,650
+I mean,
+
+573
+00:24:22,119 --> 00:24:22,569
+so,
+
+574
+00:24:23,310 --> 00:24:24,420
+well, but basically,
+
+575
+00:24:24,430 --> 00:24:27,359
+but a great example of this is I don't bother having a
+
+576
+00:24:27,369 --> 00:24:29,579
+carjack in my car unless I'm going on a road trip.
+
+577
+00:24:29,599 --> 00:24:31,939
+Because if I get a flat tire in the city, I'll just call Amy
+
+578
+00:24:32,050 --> 00:24:33,420
+and they'll be there in like 20 minutes.
+
+579
+00:24:33,689 --> 00:24:35,229
+Well, and, and ok, so it,
+
+580
+00:24:35,239 --> 00:24:38,510
+it's funny you bring this up because I think you're exactly right where.
+
+581
+00:24:38,530 --> 00:24:40,380
+But if I go on a road trip, I do pack a car jack,
+
+582
+00:24:40,390 --> 00:24:42,670
+obviously because I don't want to be stuck out in the middle of nowhere.
+
+583
+00:24:42,680 --> 00:24:44,469
+-- I literally
+-- don't. Well, ok, we'll get to that.
+
+584
+00:24:44,479 --> 00:24:48,229
+I'll, I'll talk about this in a second. But you're right. Like if you looked at the,
+
+585
+00:24:48,500 --> 00:24:49,270
+I guess
+
+586
+00:24:49,609 --> 00:24:54,479
+the, the whole like realistic threat model slash attack surface of what I was doing,
+
+587
+00:24:54,489 --> 00:24:56,589
+Josh, dropping his laptop in a bathtub.
+
+588
+00:24:56,680 --> 00:24:58,189
+That's the most likely scenario.
+
+589
+00:24:58,199 --> 00:25:02,109
+-- If someone
+-- stole that key, what could they have really done virtually nothing?
+
+590
+00:25:02,359 --> 00:25:04,410
+Right. The key had minimal value.
+
+591
+00:25:04,420 --> 00:25:07,040
+And I mean, obviously in my head it was super important and,
+
+592
+00:25:07,050 --> 00:25:09,109
+and like the Russians or someone who was going to come get me.
+
+593
+00:25:09,119 --> 00:25:10,660
+But the reality is
+
+594
+00:25:10,880 --> 00:25:13,900
+it, it had minimal value. And I obviously,
+
+595
+00:25:14,369 --> 00:25:18,770
+I, I created an elaborate ridiculous process for myself that granted,
+
+596
+00:25:18,780 --> 00:25:20,900
+I only did this every other year or so.
+
+597
+00:25:20,910 --> 00:25:24,920
+-- So it's not like it ate an enormous amount of my time.
+-- Well, companies do this too.
+
+598
+00:25:24,930 --> 00:25:26,780
+Like, you know, we're gonna get attacked by XY and Z.
+
+599
+00:25:26,790 --> 00:25:27,459
+It's like, no, you're not,
+
+600
+00:25:27,469 --> 00:25:28,920
+you're gonna get ransomware by somebody who's
+
+601
+00:25:28,930 --> 00:25:31,939
+like attacking every IP address on the planet
+
+602
+00:25:32,109 --> 00:25:36,229
+-- right,
+-- right now, kind of tying that back to your, your tire model. Right?
+
+603
+00:25:36,640 --> 00:25:37,430
+So
+
+604
+00:25:37,849 --> 00:25:40,229
+in the, the little electric car I bought, right.
+
+605
+00:25:40,540 --> 00:25:42,930
+It has a range of 100 and 50 miles.
+
+606
+00:25:43,939 --> 00:25:45,449
+There's nowhere I'm going.
+
+607
+00:25:45,459 --> 00:25:48,829
+Like basically anywhere I go is in civilization with that car,
+
+608
+00:25:48,839 --> 00:25:49,729
+I drive it around town.
+
+609
+00:25:49,739 --> 00:25:50,589
+That's what it's for.
+
+610
+00:25:51,050 --> 00:25:56,040
+So I do not have a jack or a spare tire in that car. It has this like weird
+
+611
+00:25:56,469 --> 00:25:59,439
+chemical thing you can like inject in it and it'll like,
+
+612
+00:25:59,939 --> 00:26:01,560
+oh, the foam pump thing. Yeah. Yeah. Yeah.
+
+613
+00:26:01,569 --> 00:26:04,359
+It's like a one time use because it'll screw the valve stem and you have to,
+
+614
+00:26:04,550 --> 00:26:06,839
+-- I assume,
+-- I assume the tire is trashed. Like
+
+615
+00:26:07,180 --> 00:26:08,839
+the rim might even be trashed.
+
+616
+00:26:09,270 --> 00:26:10,660
+No. No, no. It's actually really clever.
+
+617
+00:26:10,670 --> 00:26:13,010
+It's basically, it's like spray foam and compressed air
+
+618
+00:26:13,270 --> 00:26:18,640
+and it air cures. So, basically it'll, like, go into the crack cure and actually,
+
+619
+00:26:18,969 --> 00:26:20,880
+like, unless you have like a blowout, it'll,
+
+620
+00:26:21,300 --> 00:26:23,890
+you'll be fine. Like you can go for a while on that.
+
+621
+00:26:24,050 --> 00:26:26,910
+The problem is that gunk gets into the valve stem and it may
+
+622
+00:26:27,050 --> 00:26:30,069
+basically re the valve stem in your tire and have you have to replace that.
+
+623
+00:26:30,260 --> 00:26:31,109
+Oh, I'm sure
+
+624
+00:26:31,229 --> 00:26:33,250
+you, you replace you, you gotta replace your
+
+625
+00:26:33,410 --> 00:26:35,719
+stems every time you get your tires anyway. Like
+
+626
+00:26:36,750 --> 00:26:37,599
+you don't do that.
+
+627
+00:26:37,699 --> 00:26:39,599
+I have no idea. Like I just, I bought,
+
+628
+00:26:39,920 --> 00:26:40,859
+I bought new tires, like
+
+629
+00:26:41,859 --> 00:26:43,810
+I bought new tires like three days ago and they
+
+630
+00:26:43,819 --> 00:26:46,119
+didn't mention anything about valve stems on my winter tires.
+
+631
+00:26:46,500 --> 00:26:46,530
+I
+
+632
+00:26:46,630 --> 00:26:47,079
+don't know.
+
+633
+00:26:47,089 --> 00:26:49,729
+Look, I, but although you change your tires a lot,
+
+634
+00:26:49,739 --> 00:26:52,150
+like I get new tires like every five years,
+
+635
+00:26:52,229 --> 00:26:54,319
+-- like
+-- every six months because we have winter and summer
+
+636
+00:26:54,329 --> 00:26:57,560
+and there are two very distinct states of being here
+
+637
+00:26:57,660 --> 00:26:58,599
+where I live.
+
+638
+00:26:58,609 --> 00:26:59,390
+I get new tires like,
+
+639
+00:26:59,400 --> 00:27:02,560
+every five years I just get the all season because I live in the city and I don't care
+
+640
+00:27:02,890 --> 00:27:03,020
+that
+
+641
+00:27:03,459 --> 00:27:03,709
+work
+
+642
+00:27:03,930 --> 00:27:08,439
+and I get, I just, they, they replace my vel stamps. It's like $40 and I don't care.
+
+643
+00:27:08,500 --> 00:27:09,119
+And it's fine
+
+644
+00:27:09,449 --> 00:27:11,069
+anyway. Anyway. Right.
+
+645
+00:27:11,180 --> 00:27:15,359
+But, but I think this is exactly the point is now when I drove
+
+646
+00:27:15,880 --> 00:27:17,150
+our minivan
+
+647
+00:27:17,410 --> 00:27:20,859
+out to Mount Rushmore, which was pretty freaking like I had,
+
+648
+00:27:20,869 --> 00:27:24,609
+there were many times I didn't have cell service on that trip and there were times
+
+649
+00:27:24,619 --> 00:27:26,849
+I didn't see another car for hours while
+
+650
+00:27:26,859 --> 00:27:28,989
+we were driving around in the middle of nowhere
+
+651
+00:27:29,560 --> 00:27:31,079
+in the, you know, western
+
+652
+00:27:31,439 --> 00:27:32,989
+part of the United States.
+
+653
+00:27:33,349 --> 00:27:34,250
+Now,
+
+654
+00:27:34,260 --> 00:27:36,729
+I wouldn't dream of driving around there without a
+
+655
+00:27:36,739 --> 00:27:38,469
+spare tire because if you got a flat,
+
+656
+00:27:38,479 --> 00:27:39,810
+you could literally spend
+
+657
+00:27:39,959 --> 00:27:41,609
+a day or more.
+
+658
+00:27:41,780 --> 00:27:45,130
+You know what I mean? Without, without seeing humans. And that would be terrible.
+
+659
+00:27:45,150 --> 00:27:45,260
+Yeah.
+
+660
+00:27:45,270 --> 00:27:48,829
+No, when I go on car trips I take up like a full sled jack because I'm like,
+
+661
+00:27:48,839 --> 00:27:49,489
+I don't want to be
+
+662
+00:27:49,719 --> 00:27:51,329
+ding around that stupid little like
+
+663
+00:27:52,079 --> 00:27:53,739
+tints, chintzy,
+
+664
+00:27:54,140 --> 00:27:57,180
+you know, looks like it's going to collapse and can barely hold up a cat,
+
+665
+00:27:57,189 --> 00:27:58,050
+let alone my entire
+
+666
+00:27:58,239 --> 00:27:58,739
+whatever.
+
+667
+00:27:59,030 --> 00:28:00,780
+It'd probably work. It'd probably be fine.
+
+668
+00:28:00,959 --> 00:28:01,079
+But
+
+669
+00:28:01,510 --> 00:28:04,160
+-- also
+-- with the sled jack though, it's just so much faster. Right? You're like chunk,
+
+670
+00:28:04,329 --> 00:28:04,560
+chunk, chunk.
+
+671
+00:28:05,119 --> 00:28:05,300
+How
+
+672
+00:28:05,420 --> 00:28:08,609
+often? Ok. How many times have you had to replace a flat tire in a road trip?
+
+673
+00:28:08,949 --> 00:28:11,900
+Uh Not on a road trip, but I have done it twice in the city.
+
+674
+00:28:12,339 --> 00:28:13,020
+In the city.
+
+675
+00:28:13,670 --> 00:28:18,359
+We got some pretty impressive potholes. Fun fact. Um, the Mercedes run flat tires.
+
+676
+00:28:18,369 --> 00:28:21,619
+My sister and brother-in-law have like a nice Mercedes, you know,
+
+677
+00:28:21,630 --> 00:28:22,780
+with the run flat tires.
+
+678
+00:28:22,839 --> 00:28:23,469
+Yeah. No,
+
+679
+00:28:24,189 --> 00:28:28,449
+there are potholes big enough here in Edmonton that they, like, killed their tire
+
+680
+00:28:29,800 --> 00:28:29,920
+that
+
+681
+00:28:30,420 --> 00:28:31,449
+anyway anyway.
+
+682
+00:28:31,550 --> 00:28:33,170
+-- No,
+-- I've been to rim once.
+
+683
+00:28:34,189 --> 00:28:37,219
+Like, no, seriously. Like, I hit a pothole in the dark and
+
+684
+00:28:37,680 --> 00:28:39,219
+impressive. I've been to rim,
+
+685
+00:28:40,060 --> 00:28:42,989
+I've never have I ever been to rim. I don't think I've ever been to rim.
+
+686
+00:28:43,380 --> 00:28:45,030
+It sucks because it's expensive.
+
+687
+00:28:45,319 --> 00:28:47,770
+Rims are tires are expensive, man.
+
+688
+00:28:47,910 --> 00:28:49,930
+Rims are meant to be sold in four packs.
+
+689
+00:28:50,114 --> 00:28:51,155
+So when you ask for one,
+
+690
+00:28:51,165 --> 00:28:52,505
+they give you a dirty look and they quote you
+
+691
+00:28:52,515 --> 00:28:54,385
+some obscene price because also what are you gonna do?
+
+692
+00:28:54,395 --> 00:28:55,064
+Not buy one?
+
+693
+00:28:56,905 --> 00:29:00,915
+That's fair. That's fair. You gotta get some gold plated spinners on that sucker.
+
+694
+00:29:00,925 --> 00:29:05,905
+Yo. Anyway. Anyway. Alright. So yeah, I I guess
+
+695
+00:29:06,390 --> 00:29:08,020
+I don't know if there's a lesson here.
+
+696
+00:29:08,030 --> 00:29:12,489
+I know there is, I think the lesson you mentioned about having like realistic risks.
+
+697
+00:29:12,599 --> 00:29:13,790
+I've got a really good parallel.
+
+698
+00:29:13,800 --> 00:29:17,329
+There's a guy on Twitter talking about Os N and about not
+
+699
+00:29:17,339 --> 00:29:19,209
+like basically scrubbing your social media
+
+700
+00:29:19,219 --> 00:29:20,969
+profiles of yourself and all your workers
+
+701
+00:29:20,979 --> 00:29:23,250
+talking about like what kind of technologies and stuff they're into so
+
+702
+00:29:23,260 --> 00:29:25,489
+that the Attackers don't know what kind of technologies use at work.
+
+703
+00:29:25,920 --> 00:29:27,060
+And my reply was
+
+704
+00:29:27,410 --> 00:29:30,089
+instead of spending time like not like literally
+
+705
+00:29:30,099 --> 00:29:31,760
+spending effort to not talk about stuff,
+
+706
+00:29:31,770 --> 00:29:34,050
+maybe just like patch it and do an inventory.
+
+707
+00:29:35,489 --> 00:29:36,910
+I look,
+
+708
+00:29:37,099 --> 00:29:38,650
+my take on that II,
+
+709
+00:29:38,660 --> 00:29:41,819
+I saw that too and I don't remember if you're the person who sent me that
+
+710
+00:29:41,829 --> 00:29:45,069
+tweet or if I sent it to you or if we found it on our own.
+
+711
+00:29:45,319 --> 00:29:47,109
+But I, I do remember that. And
+
+712
+00:29:47,339 --> 00:29:49,199
+so my first thought was
+
+713
+00:29:49,520 --> 00:29:51,989
+if, if you're a moderately sized business,
+
+714
+00:29:52,800 --> 00:29:53,819
+you have all the tools
+
+715
+00:29:55,229 --> 00:29:56,339
+they have windows,
+
+716
+00:29:56,790 --> 00:29:57,300
+right?
+
+717
+00:29:57,670 --> 00:29:58,560
+Don't tell them
+
+718
+00:29:59,250 --> 00:30:00,410
+they'll never know.
+
+719
+00:30:00,680 --> 00:30:02,300
+Yeah. And they might have an iphone.
+
+720
+00:30:03,920 --> 00:30:05,589
+But, but more importantly,
+
+721
+00:30:05,849 --> 00:30:06,869
+I feel like
+
+722
+00:30:07,180 --> 00:30:09,410
+this is one of those situations of,
+
+723
+00:30:09,910 --> 00:30:13,359
+if someone knows the tools you're running and that puts you at a disadvantage, like,
+
+724
+00:30:13,369 --> 00:30:15,229
+I think you're doing some other things wrong.
+
+725
+00:30:15,349 --> 00:30:19,420
+This is, this is like security through obscurity. We know it doesn't work.
+
+726
+00:30:19,430 --> 00:30:20,510
+I'm not saying you should, like,
+
+727
+00:30:20,520 --> 00:30:22,619
+put a list on your website of all the tools you're running.
+
+728
+00:30:23,219 --> 00:30:26,349
+There's the thing people forget. It only works if
+
+729
+00:30:26,449 --> 00:30:28,739
+you can know that it's no longer obscure.
+
+730
+00:30:29,150 --> 00:30:31,640
+And you, you can't, like, by definition,
+
+731
+00:30:31,650 --> 00:30:33,000
+you can't know if something that is
+
+732
+00:30:33,010 --> 00:30:35,000
+confidential is no longer confidential unless someone,
+
+733
+00:30:35,010 --> 00:30:37,040
+like prints it on the front page of the Times.
+
+734
+00:30:37,589 --> 00:30:38,849
+And then the second problem is
+
+735
+00:30:39,290 --> 00:30:41,239
+you have to be able to swap that
+
+736
+00:30:41,540 --> 00:30:42,550
+secret out.
+
+737
+00:30:42,869 --> 00:30:45,890
+And so that's kind of why passwords sort of work is because like, oh,
+
+738
+00:30:45,900 --> 00:30:47,719
+my password's compromised, I will change it
+
+739
+00:30:47,979 --> 00:30:49,839
+all done. But like, you can't,
+
+740
+00:30:50,099 --> 00:30:51,589
+like if using Windows
+
+741
+00:30:52,119 --> 00:30:53,420
+version X
+
+742
+00:30:53,589 --> 00:30:59,030
+is a, is a, is a problem. Like, you can't just switch it out real fast for, like, limits
+
+743
+00:30:59,869 --> 00:30:59,989
+and,
+
+744
+00:31:00,189 --> 00:31:00,660
+and that's,
+
+745
+00:31:00,709 --> 00:31:03,010
+that's what people get wrong about security through obscurity
+
+746
+00:31:03,020 --> 00:31:05,859
+is that for security through obscurity to work,
+
+747
+00:31:05,869 --> 00:31:08,489
+you have to know when it's no longer obscured and,
+
+748
+00:31:08,500 --> 00:31:11,739
+and that buy in of itself is pretty much the nail in the coffin that kills it.
+
+749
+00:31:11,969 --> 00:31:14,329
+But then that second factor of being able to swap it out
+
+750
+00:31:14,760 --> 00:31:16,920
+outside of passwords and certificates.
+
+751
+00:31:17,310 --> 00:31:18,060
+You can't
+
+752
+00:31:19,160 --> 00:31:22,459
+like, oh, we'll just use a different web parson library. No, no, you won't.
+
+753
+00:31:22,469 --> 00:31:24,680
+That will be your web does, will hate you.
+
+754
+00:31:25,060 --> 00:31:27,010
+Yeah. Yeah. That's right. That's true.
+
+755
+00:31:27,020 --> 00:31:30,000
+I, I think that makes a lot of sense and I like that and I think,
+
+756
+00:31:30,500 --> 00:31:33,750
+and I guess that's just you have to deal with that. Like, that's the reality.
+
+757
+00:31:33,760 --> 00:31:36,380
+Make sure that's not something that's gonna take you down.
+
+758
+00:31:36,420 --> 00:31:38,560
+It's, that's like even I was,
+
+759
+00:31:38,780 --> 00:31:42,250
+I read a quote, a quote from someone that was basically something like
+
+760
+00:31:42,550 --> 00:31:45,270
+if I click a link and it damages our business,
+
+761
+00:31:45,339 --> 00:31:47,140
+like the problem isn't me clicking the link.
+
+762
+00:31:47,150 --> 00:31:49,410
+It's the fact that your security team is incompetent
+
+763
+00:31:50,780 --> 00:31:51,569
+is bad
+
+764
+00:31:51,979 --> 00:31:55,910
+if one person, like that's what always gets me with these ransomware attack is
+
+765
+00:31:56,109 --> 00:31:59,859
+so one person clicked one link and now your whole system's down in ransomware,
+
+766
+00:32:00,189 --> 00:32:00,810
+right?
+
+767
+00:32:00,930 --> 00:32:01,520
+Ok. That's
+
+768
+00:32:02,459 --> 00:32:05,510
+what if you had a malicious insider? Like how much worse. Is it gonna be
+
+769
+00:32:06,780 --> 00:32:07,329
+right?
+
+770
+00:32:07,689 --> 00:32:09,729
+Or somebody gets paid a bribe or,
+
+771
+00:32:10,589 --> 00:32:12,270
+or just some random clicks a link
+
+772
+00:32:12,540 --> 00:32:15,930
+and so, well, maybe put this in the journal notes. But like I literally have a github
+
+773
+00:32:16,109 --> 00:32:20,250
+repo called CS A Dash It Dash Operations where I'm like brain dumping
+
+774
+00:32:20,260 --> 00:32:22,920
+what I do for the new people and it's a public repo,
+
+775
+00:32:23,119 --> 00:32:24,050
+I'm OK with that.
+
+776
+00:32:24,060 --> 00:32:25,890
+I love putting this kind of stuff in public
+
+777
+00:32:25,900 --> 00:32:28,050
+because I think for one thing when you know,
+
+778
+00:32:28,060 --> 00:32:30,410
+people can look at your stuff, I think you do a better job
+
+779
+00:32:30,989 --> 00:32:32,489
+and, and just the fact is
+
+780
+00:32:32,949 --> 00:32:35,640
+this is not, this shouldn't be sensitive information.
+
+781
+00:32:35,660 --> 00:32:39,619
+Like if you're relying on this, you, you, you're doing other things wrong.
+
+782
+00:32:39,819 --> 00:32:39,989
+Yeah,
+
+783
+00:32:40,000 --> 00:32:42,819
+like obviously I'm not going to put a list of who uses windows
+
+784
+00:32:42,829 --> 00:32:45,530
+at the CS A because there's like a handful of us that do.
+
+785
+00:32:45,780 --> 00:32:46,930
+But, you know, like we just,
+
+786
+00:32:46,939 --> 00:32:49,930
+I ran one of the people through like how we're gonna handle
+
+787
+00:32:50,219 --> 00:32:53,250
+finna. Like here's, you know, first you see Glossy, the dog talking about it.
+
+788
+00:32:53,260 --> 00:32:54,520
+So he's a reputable source.
+
+789
+00:32:54,530 --> 00:32:57,849
+And then you see, well, MS RC and if MS RC says it's a vulnerability,
+
+790
+00:32:57,859 --> 00:32:59,209
+it's a vulnerability because
+
+791
+00:32:59,729 --> 00:33:00,849
+they don't do this for fun,
+
+792
+00:33:01,130 --> 00:33:03,329
+you know, and Cisa says it's a V and it's a phone because again,
+
+793
+00:33:03,339 --> 00:33:05,819
+Cisa very boring people, they tend to tell the truth
+
+794
+00:33:06,369 --> 00:33:06,880
+and, you know,
+
+795
+00:33:06,890 --> 00:33:08,420
+and here's the workarounds and they're lovely because
+
+796
+00:33:08,430 --> 00:33:09,510
+it's easy and it works and blah,
+
+797
+00:33:09,520 --> 00:33:10,000
+blah, blah,
+
+798
+00:33:10,209 --> 00:33:12,800
+you know, this is like a nice little public document and he's going to walk
+
+799
+00:33:13,199 --> 00:33:13,719
+up
+
+800
+00:33:14,000 --> 00:33:18,050
+the other window user at the CS A through fixing the system,
+
+801
+00:33:18,609 --> 00:33:19,040
+you know,
+
+802
+00:33:19,140 --> 00:33:21,250
+and yeah, so like there's like three, I,
+
+803
+00:33:21,260 --> 00:33:24,939
+I want to say four but I know for sure three of us using windows at the CS A.
+
+804
+00:33:25,709 --> 00:33:27,359
+Yeah. If knowing that leads
+
+805
+00:33:27,589 --> 00:33:28,780
+to us getting hacked.
+
+806
+00:33:29,910 --> 00:33:31,989
+Yeah, it's time for me to quit and become a part.
+
+807
+00:33:32,540 --> 00:33:33,239
+You suck.
+
+808
+00:33:34,150 --> 00:33:36,099
+You'd probably be a bad plumber just for the record.
+
+809
+00:33:36,329 --> 00:33:37,790
+I'm actually a reasonably
+
+810
+00:33:38,209 --> 00:33:42,410
+ok plumber because I use shark bite fittings and I actually read the manual and like
+
+811
+00:33:42,640 --> 00:33:45,790
+if I hired a plumber and they were using shark bite fittings, I'd be like,
+
+812
+00:33:45,800 --> 00:33:47,000
+you have a good day.
+
+813
+00:33:47,130 --> 00:33:51,369
+I'm going to call someone competent who isn't using shark bite fittings in my house.
+
+814
+00:33:51,380 --> 00:33:54,880
+Dude. I am so over. It's a better technology than slaughtering.
+
+815
+00:33:54,890 --> 00:33:57,859
+No, it's not, it's not at all. No
+
+816
+00:33:58,560 --> 00:33:59,319
+inferior
+
+817
+00:33:59,449 --> 00:34:01,829
+because it's like $20 a joint.
+
+818
+00:34:02,420 --> 00:34:03,300
+Yeah. But
+
+819
+00:34:03,459 --> 00:34:07,569
+again, we had this discussion, remember with the, um, with the marts versus the, um,
+
+820
+00:34:07,579 --> 00:34:08,810
+oh, what's the one from Europe called?
+
+821
+00:34:08,820 --> 00:34:09,560
+I'm spacing out.
+
+822
+00:34:09,688 --> 00:34:12,090
+But the thing is if you're paying your plumber hourly,
+
+823
+00:34:12,100 --> 00:34:14,399
+that shark bite fitting will pay for itself.
+
+824
+00:34:14,520 --> 00:34:15,860
+I don't know. I don't know about that.
+
+825
+00:34:16,340 --> 00:34:17,379
+I guarantee it won't.
+
+826
+00:34:17,658 --> 00:34:20,958
+Pex fittings are, are definite. I'm not getting into this right now.
+
+827
+00:34:20,967 --> 00:34:23,858
+-- We have to end this show. It's dragging on too long. Shark
+-- bite.
+
+828
+00:34:23,868 --> 00:34:27,079
+-- Works on copper as well as pecs.
+-- I know it does, it works on them all.
+
+829
+00:34:27,089 --> 00:34:31,438
+I've, I've used it to join copper to pecs in the past. Like I've done this.
+
+830
+00:34:31,447 --> 00:34:34,958
+But I'm still saying if I hire a plumber,
+
+831
+00:34:35,428 --> 00:34:38,717
+I don't want them using shark bite like I can do shark bite. Right?
+
+832
+00:34:38,728 --> 00:34:41,059
+-- I'm hiring you because you're not me.
+-- We
+
+833
+00:34:41,248 --> 00:34:42,868
+were talking about, remember Marts versus
+
+834
+00:34:43,009 --> 00:34:45,478
+Wago connectors. And the thing is a Wago connector saves so much time,
+
+835
+00:34:45,760 --> 00:34:48,418
+especially commercially. It just makes sense to pay more for the
+
+836
+00:34:48,550 --> 00:34:50,580
+Wago connectors, snap the wires together
+
+837
+00:34:51,030 --> 00:34:51,300
+and,
+
+838
+00:34:52,110 --> 00:34:54,540
+and that's, that's like another topic and I do like
+
+839
+00:34:54,708 --> 00:34:58,260
+Wago connectors. But anyway, I'm ending this, we have to go this time.
+
+840
+00:34:58,500 --> 00:35:03,260
+Thank you everyone for listening to this horrifying tale of bizarre
+
+841
+00:35:03,370 --> 00:35:07,780
+-- GP G key handling.
+-- Maybe we could make GP G key revocation parties a thing.
+
+842
+00:35:09,000 --> 00:35:10,040
+No, I'm not doing that.
+
+843
+00:35:10,169 --> 00:35:11,459
+No. Like having like
+
+844
+00:35:12,020 --> 00:35:13,530
+just letting go of the past.
+
+845
+00:35:14,090 --> 00:35:17,419
+It just, just do it. You don't need a party. Just do it anyway. All right.
+
+846
+00:35:17,840 --> 00:35:19,260
+Thank you, Kurt. Thank you everyone for listening.
+
+847
+00:35:19,270 --> 00:35:21,830
+Go to open source security, podcast.com. Head up the show. Not two pound
+
+848
+00:35:21,969 --> 00:35:26,419
+says podcast. Hashtag hit us up on social media. Kurt have a lovely rest of your day.
+
+849
+00:35:26,610 --> 00:35:27,899
+You too. Thanks everybody.
+
+850
+00:35:28,270 --> 00:35:29,899
+Thanks everyone. Bye bye.

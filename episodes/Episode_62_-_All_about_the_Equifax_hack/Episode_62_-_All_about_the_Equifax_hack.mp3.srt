@@ -1,0 +1,6608 @@
+0
+00:00:05,210 --> 00:00:08,949
+Hello and welcome to Episode 62 of the open source security podcast
+
+1
+00:00:09,079 --> 00:00:12,279
+with myself, Kurt Siefried and my partner in Thought Crime. Josh Bresser.
+
+2
+00:00:12,449 --> 00:00:17,870
+Happy one year, Kurt, it has been slightly more than one year since we published.
+
+3
+00:00:17,879 --> 00:00:18,870
+Episode one,
+
+4
+00:00:19,389 --> 00:00:22,069
+which I listened to the other day.
+
+5
+00:00:22,260 --> 00:00:24,489
+Holy cow. It's bad.
+
+6
+00:00:24,659 --> 00:00:30,250
+-- It's so bad.
+-- I can't read anything. I wrote more than about five years ago
+
+7
+00:00:30,430 --> 00:00:31,370
+ever because,
+
+8
+00:00:31,959 --> 00:00:32,119
+yeah,
+
+9
+00:00:32,919 --> 00:00:35,330
+my writing from 1015 years ago is so,
+
+10
+00:00:35,685 --> 00:00:35,705
+so
+
+11
+00:00:36,764 --> 00:00:36,805
+funny.
+
+12
+00:00:37,634 --> 00:00:38,944
+-- But I think it's done in
+-- Kruger.
+
+13
+00:00:39,955 --> 00:00:43,165
+I'm sure that's part of it. And you just, you, you're not the same person.
+
+14
+00:00:43,174 --> 00:00:47,584
+You were five years ago. Yeah, I read a blog post. I wrote about a year ago and,
+
+15
+00:00:47,845 --> 00:00:47,865
+uh,
+
+16
+00:00:47,994 --> 00:00:51,845
+it was embarrassing, I thought, and it's only been a year. I feel like
+
+17
+00:00:52,270 --> 00:00:56,439
+I, I don't feel like I'm that different from a year ago, but upon reading my writing,
+
+18
+00:00:56,450 --> 00:00:59,209
+I, I was like, that could that person read?
+
+19
+00:00:59,220 --> 00:01:00,040
+Like,
+
+20
+00:01:00,669 --> 00:01:04,449
+it's surreal and, and I guess, yeah, even this podcast, although I will say that
+
+21
+00:01:04,660 --> 00:01:05,709
+when we started,
+
+22
+00:01:05,839 --> 00:01:08,690
+we had a vastly inferior equipment
+
+23
+00:01:08,900 --> 00:01:09,470
+and we,
+
+24
+00:01:09,760 --> 00:01:11,360
+we didn't know what we were doing
+
+25
+00:01:11,620 --> 00:01:13,290
+and, and we learned.
+
+26
+00:01:13,300 --> 00:01:15,430
+And that's one thing I, I forget I was,
+
+27
+00:01:15,440 --> 00:01:19,300
+I was telling someone about recording a podcast and just kind of doing all the post
+
+28
+00:01:19,730 --> 00:01:20,209
+and
+
+29
+00:01:20,849 --> 00:01:25,680
+I screw something up every time and I learn a lesson, right? Like it guaranteed
+
+30
+00:01:25,870 --> 00:01:28,349
+and, and it's been what, 62 episodes?
+
+31
+00:01:28,360 --> 00:01:32,919
+And I still make mistakes every freaking time and learn something new.
+
+32
+00:01:33,610 --> 00:01:36,790
+So, I don't know, maybe by like episode 100
+
+33
+00:01:36,900 --> 00:01:37,949
+we'll figure it out.
+
+34
+00:01:37,959 --> 00:01:38,099
+Well,
+
+35
+00:01:38,110 --> 00:01:39,860
+the thing I really love is that nobody's actually
+
+36
+00:01:39,870 --> 00:01:42,059
+written down a good like podcasting one on one,
+
+37
+00:01:42,069 --> 00:01:45,919
+like go by this, you know, microphone, go by, you know, get this software.
+
+38
+00:01:45,930 --> 00:01:48,629
+Here's the process to edit it together. Here's, here's
+
+39
+00:01:48,735 --> 00:01:51,635
+you and I still haven't figured out is how to do a really good, more than
+
+40
+00:01:51,794 --> 00:01:53,175
+two person audio
+
+41
+00:01:53,455 --> 00:01:57,514
+that's very difficult to do. Well, no, we know how to do it because we did it with Dan.
+
+42
+00:01:57,525 --> 00:02:02,014
+But Dan, you need uh your gas test to have a certain level of,
+
+43
+00:02:02,025 --> 00:02:03,754
+I guess recording savviness.
+
+44
+00:02:04,370 --> 00:02:05,660
+Yeah, that you don't know, he's fine.
+
+45
+00:02:05,669 --> 00:02:09,008
+But anyway, anyway, let's, but before we get too deep in
+
+46
+00:02:09,240 --> 00:02:13,369
+-- here, why don't we? Uh
+-- Well, I guess the big news this week would be the uh
+
+47
+00:02:13,729 --> 00:02:15,750
+-- has it been branded yet? I don't think so.
+-- No,
+
+48
+00:02:15,910 --> 00:02:19,539
+no, there's no brand. This is, see, see, this is the problem.
+
+49
+00:02:19,550 --> 00:02:21,380
+So we're going to talk about Equifax and at the
+
+50
+00:02:21,389 --> 00:02:23,839
+same time there's a bunch of hurricane crazy going on
+
+51
+00:02:24,160 --> 00:02:27,559
+and hurricanes have names. So we know it's happening, we can easily talk about
+
+52
+00:02:27,710 --> 00:02:28,660
+three of them right now.
+
+53
+00:02:28,910 --> 00:02:30,460
+I know, man. It's crazy.
+
+54
+00:02:30,869 --> 00:02:35,449
+It's, it's crazy and, and this Equifax thing is just like a total disaster
+
+55
+00:02:36,110 --> 00:02:39,100
+and it has no name other than, although in this case,
+
+56
+00:02:39,110 --> 00:02:43,330
+the Equifax thing might be what it goes down as just because it's that big.
+
+57
+00:02:43,619 --> 00:02:48,539
+But I know it's tough man. And, and I think the other thing we should keep in mind is
+
+58
+00:02:48,940 --> 00:02:53,089
+this Equifax story, while it is evolving and will continue to evolve,
+
+59
+00:02:53,100 --> 00:02:57,610
+the fundamental privacy problems around this are eternal and will never go away.
+
+60
+00:02:57,850 --> 00:02:58,250
+Right.
+
+61
+00:02:58,850 --> 00:02:58,869
+Yeah.
+
+62
+00:02:59,350 --> 00:03:00,210
+Oh yeah. No, it's,
+
+63
+00:03:00,460 --> 00:03:03,610
+it's, it's just, yeah, it's part of how we've architected society.
+
+64
+00:03:04,820 --> 00:03:05,559
+It is,
+
+65
+00:03:05,789 --> 00:03:08,320
+it is, you're so right and we did it wrong
+
+66
+00:03:08,809 --> 00:03:09,320
+this,
+
+67
+00:03:09,660 --> 00:03:11,050
+-- well,
+-- we didn't do it wrong. It's
+
+68
+00:03:11,059 --> 00:03:11,279
+just, it,
+
+69
+00:03:11,929 --> 00:03:14,270
+it reminds me of like when you look at, for example,
+
+70
+00:03:14,279 --> 00:03:17,559
+the way certain businesses and certain technologies worked and it had to
+
+71
+00:03:17,570 --> 00:03:19,839
+work that way in the past because the technology was limited,
+
+72
+00:03:20,259 --> 00:03:22,759
+you know, like the way phone numbers work,
+
+73
+00:03:23,199 --> 00:03:23,800
+right? There's
+
+74
+00:03:23,910 --> 00:03:26,080
+retarded in today's modern world.
+
+75
+00:03:26,229 --> 00:03:29,119
+But phone numbers back in the day, totally made sense because you had like a like,
+
+76
+00:03:29,130 --> 00:03:31,199
+well, you started with humans followed by electro
+
+77
+00:03:31,399 --> 00:03:32,259
+mechanical switches
+
+78
+00:03:32,690 --> 00:03:35,610
+and, and the numbers did things in the electro
+
+79
+00:03:35,740 --> 00:03:38,039
+mechanical switches as you dialed and it would,
+
+80
+00:03:38,050 --> 00:03:41,679
+it was like literally routing your call as you press buttons and,
+
+81
+00:03:41,690 --> 00:03:44,369
+and connecting wires, which is crazy to think about.
+
+82
+00:03:44,380 --> 00:03:46,119
+And, well, I guess humans did it before then.
+
+83
+00:03:47,470 --> 00:03:47,789
+Yeah.
+
+84
+00:03:48,220 --> 00:03:50,070
+So, so the Equifax thing, well,
+
+85
+00:03:50,080 --> 00:03:51,720
+I guess I'll lead off since I'm probably a
+
+86
+00:03:51,729 --> 00:03:53,460
+bit more annoyed about it than you are because it
+
+87
+00:03:53,729 --> 00:03:54,639
+might be affected
+
+88
+00:03:54,820 --> 00:03:55,470
+-- or it might not
+-- be
+
+89
+00:03:55,580 --> 00:03:55,830
+affected.
+
+90
+00:03:57,089 --> 00:03:58,720
+-- I can't
+-- even begin to find out yet.
+
+91
+00:03:59,139 --> 00:04:01,119
+That's, that, that's a shame. Although it's
+
+92
+00:04:01,240 --> 00:04:05,029
+not like I know, it's just, this is like the 10th time my identity has been stolen,
+
+93
+00:04:05,039 --> 00:04:05,949
+so I don't care.
+
+94
+00:04:06,029 --> 00:04:08,559
+Well, no, no, no, it's, no, it's easy. If you're an American,
+
+95
+00:04:08,710 --> 00:04:11,720
+if you are an adult in America, you're
+
+96
+00:04:11,860 --> 00:04:12,520
+affected.
+
+97
+00:04:12,690 --> 00:04:14,960
+Yeah, that's true. You're, you're affected, guaranteed,
+
+98
+00:04:15,070 --> 00:04:18,795
+either directly affected or you're going to be affected in secondary way,
+
+99
+00:04:18,803 --> 00:04:20,915
+probably by a friend or family or something.
+
+100
+00:04:21,994 --> 00:04:22,915
+I think it's,
+
+101
+00:04:23,095 --> 00:04:24,774
+it's a guarantee at this point.
+
+102
+00:04:24,785 --> 00:04:26,924
+I know they have some hokey website where you can sort
+
+103
+00:04:26,934 --> 00:04:29,045
+of find out if you may get your stuff stolen.
+
+104
+00:04:29,054 --> 00:04:30,964
+I will say some bad things about that later.
+
+105
+00:04:30,984 --> 00:04:34,934
+That website seems like like one of those magic eight balls.
+
+106
+00:04:35,075 --> 00:04:36,684
+No, it's even worse than that.
+
+107
+00:04:37,255 --> 00:04:38,515
+Good. I'm glad.
+
+108
+00:04:39,054 --> 00:04:39,385
+All right.
+
+109
+00:04:39,494 --> 00:04:40,315
+Well, let, let start
+
+110
+00:04:40,415 --> 00:04:42,214
+beginning and just walk through the whole,
+
+111
+00:04:42,774 --> 00:04:42,834
+please.
+
+112
+00:04:43,174 --> 00:04:43,334
+Please
+
+113
+00:04:43,684 --> 00:04:43,804
+do.
+
+114
+00:04:44,570 --> 00:04:45,040
+So.
+
+115
+00:04:45,309 --> 00:04:51,029
+Equifax is, uh, basically it's a credit rating bureau like Transunion or Experian.
+
+116
+00:04:51,040 --> 00:04:53,709
+And what they basically do is they have data on you,
+
+117
+00:04:53,950 --> 00:04:57,500
+your name, your social security number, your date of birth where you live,
+
+118
+00:04:57,709 --> 00:04:59,339
+you know, previous addresses
+
+119
+00:04:59,730 --> 00:05:01,660
+so that they can basically identify you and
+
+120
+00:05:01,670 --> 00:05:03,779
+then they also have information on you financially.
+
+121
+00:05:03,790 --> 00:05:05,019
+So for example, you know,
+
+122
+00:05:05,209 --> 00:05:08,589
+any past due bills, any outstanding debts,
+
+123
+00:05:08,890 --> 00:05:12,859
+um, you know how many, you know, which bank accounts where you have them.
+
+124
+00:05:13,109 --> 00:05:16,609
+Um, for example, lines of credit credit cards,
+
+125
+00:05:16,619 --> 00:05:19,429
+essentially anything that's like a financial or a debt instrument,
+
+126
+00:05:19,640 --> 00:05:23,010
+there's a reasonably good chance that Transunion
+
+127
+00:05:23,019 --> 00:05:25,549
+Experian and Equifax know about it.
+
+128
+00:05:26,320 --> 00:05:27,820
+And the premise of this is,
+
+129
+00:05:28,519 --> 00:05:31,880
+uh, so Josh, you, you know, you bought a house, right?
+
+130
+00:05:32,570 --> 00:05:35,350
+-- Yes.
+-- Did you have a bag full of money?
+
+131
+00:05:35,670 --> 00:05:38,500
+I did not. Unfortunately, the bank didn't.
+
+132
+00:05:39,470 --> 00:05:40,510
+Yes. Exactly.
+
+133
+00:05:41,089 --> 00:05:44,829
+And well, then, so the question becomes, how does the bank trust Josh?
+
+134
+00:05:44,839 --> 00:05:47,429
+Because, you know, this bank's never seen Josh before he just moved there.
+
+135
+00:05:47,769 --> 00:05:51,309
+Uh Actually I've been using the same bank for like 20 years.
+
+136
+00:05:51,440 --> 00:05:52,260
+So
+
+137
+00:05:52,410 --> 00:05:53,119
+try again.
+
+138
+00:05:53,399 --> 00:05:53,959
+-- But
+-- anyway,
+
+139
+00:05:54,109 --> 00:05:56,679
+but anyway, so the premise is essentially is, you know,
+
+140
+00:05:56,690 --> 00:06:01,350
+how if I lend X amount of money for some purpose to this person and you know,
+
+141
+00:06:01,359 --> 00:06:03,179
+how likely am I to be paid back?
+
+142
+00:06:03,890 --> 00:06:07,350
+Uh, and is that chance high enough that I will lend them the money?
+
+143
+00:06:08,230 --> 00:06:11,829
+And also conversely, you know, maybe I should increase that rate or not to, to
+
+144
+00:06:12,079 --> 00:06:13,690
+deal with the risk. So basically these,
+
+145
+00:06:13,820 --> 00:06:15,179
+these credit rating bureaus
+
+146
+00:06:15,609 --> 00:06:18,470
+have obscene amounts of information on us.
+
+147
+00:06:18,480 --> 00:06:22,989
+And by definition, the data they have because of how we've architected society,
+
+148
+00:06:23,339 --> 00:06:25,820
+this is the data that you use to authenticate
+
+149
+00:06:25,829 --> 00:06:27,929
+yourself to all the companies you deal with,
+
+150
+00:06:28,119 --> 00:06:30,089
+either with existing
+
+151
+00:06:30,279 --> 00:06:33,170
+relationships or ones you want to have a new relationship with,
+
+152
+00:06:34,000 --> 00:06:34,640
+right? Because
+
+153
+00:06:35,250 --> 00:06:38,570
+you know, at some point, for example, you know, when at some point,
+
+154
+00:06:38,579 --> 00:06:40,279
+everybody is a first time home buyer, right?
+
+155
+00:06:40,290 --> 00:06:41,160
+By definition,
+
+156
+00:06:41,540 --> 00:06:42,959
+and by definition,
+
+157
+00:06:42,970 --> 00:06:47,079
+-- most of us don't actually have enough money to buy a home
+-- even if you did, don't,
+
+158
+00:06:47,089 --> 00:06:47,359
+don't,
+
+159
+00:06:47,369 --> 00:06:49,059
+don't do that get a loan because it
+
+160
+00:06:49,070 --> 00:06:52,079
+has other benefits to your functioning in society.
+
+161
+00:06:52,350 --> 00:06:52,720
+So
+
+162
+00:06:53,170 --> 00:06:55,959
+and so, you know, the the question becomes, you know, how do we,
+
+163
+00:06:56,440 --> 00:06:59,100
+how do we deal with this? Especially how do we deal with this efficiently?
+
+164
+00:06:59,109 --> 00:07:02,010
+Now, the beauty is typically the system works quite well.
+
+165
+00:07:02,019 --> 00:07:04,549
+You know, you phone up your bank, you ask for a credit card and they can
+
+166
+00:07:04,809 --> 00:07:09,100
+within a few hours typically or days, make a decision about
+
+167
+00:07:09,279 --> 00:07:09,309
+how
+
+168
+00:07:09,459 --> 00:07:09,549
+much
+
+169
+00:07:09,690 --> 00:07:09,750
+credit
+
+170
+00:07:09,859 --> 00:07:09,880
+you
+
+171
+00:07:10,170 --> 00:07:10,329
+get.
+
+172
+00:07:10,480 --> 00:07:11,369
+Now, actually,
+
+173
+00:07:11,670 --> 00:07:11,880
+unless,
+
+174
+00:07:12,769 --> 00:07:13,380
+unless you're me
+
+175
+00:07:13,510 --> 00:07:15,779
+because I've locked on my credit years ago
+
+176
+00:07:16,769 --> 00:07:17,950
+-- and we'll get to that
+-- later.
+
+177
+00:07:18,619 --> 00:07:19,149
+We will.
+
+178
+00:07:19,790 --> 00:07:20,390
+So,
+
+179
+00:07:20,649 --> 00:07:26,309
+you know, it, it the reality is I, I love this system in that it makes
+
+180
+00:07:27,410 --> 00:07:29,420
+efficient capitalism possible. You know,
+
+181
+00:07:29,640 --> 00:07:32,380
+I can go get a credit card and go buy a bunch of stuff.
+
+182
+00:07:32,390 --> 00:07:34,529
+I need that I can't pay for right now,
+
+183
+00:07:34,779 --> 00:07:36,660
+but, you know, I could probably pay for it later.
+
+184
+00:07:37,339 --> 00:07:37,920
+Um
+
+185
+00:07:39,369 --> 00:07:40,899
+That I think that's the wrong story.
+
+186
+00:07:40,910 --> 00:07:43,910
+With credit cards, the value in a credit card today? I see is
+
+187
+00:07:44,290 --> 00:07:45,470
+I order crap online.
+
+188
+00:07:45,940 --> 00:07:48,600
+It gets shipped to me if it's broken or wrong
+
+189
+00:07:48,809 --> 00:07:50,980
+and the seller I'm dealing with sucks.
+
+190
+00:07:50,989 --> 00:07:54,660
+I can just call a credit card company and say don't pay that dude and they won't.
+
+191
+00:07:54,739 --> 00:07:55,959
+-- Yeah,
+-- that's definitely part of it.
+
+192
+00:07:56,140 --> 00:08:00,040
+So, and you know, fundamentally even now when you're applying for a job,
+
+193
+00:08:00,049 --> 00:08:02,160
+chances are they're checking your credit rating because
+
+194
+00:08:02,570 --> 00:08:03,609
+let's face it. Right.
+
+195
+00:08:03,790 --> 00:08:06,549
+The job market is such that when you put out a good job posting,
+
+196
+00:08:06,559 --> 00:08:09,339
+you're gonna probably get more than a few people applying for it.
+
+197
+00:08:09,980 --> 00:08:13,359
+And does a company really want to deal with somebody who has financial problems?
+
+198
+00:08:13,540 --> 00:08:15,540
+The answer is, sadly, no, you know,
+
+199
+00:08:15,549 --> 00:08:17,269
+they're going to discriminate against those people
+
+200
+00:08:17,279 --> 00:08:19,390
+because it's just one more hassle.
+
+201
+00:08:21,160 --> 00:08:25,779
+So anyway, so these, these ratings bureaus have all this information
+
+202
+00:08:26,320 --> 00:08:28,700
+-- and they sell access to it,
+-- right.
+
+203
+00:08:28,709 --> 00:08:31,420
+We, we are the product, we should also clarify that. Right.
+
+204
+00:08:31,429 --> 00:08:33,219
+We're, we're not the customers here.
+
+205
+00:08:33,229 --> 00:08:36,030
+We are literally the product like we are the cattle in, in
+
+206
+00:08:36,419 --> 00:08:38,859
+this giant farm.
+
+207
+00:08:39,380 --> 00:08:42,280
+Yeah. And, and it's surprisingly not
+
+208
+00:08:42,469 --> 00:08:43,558
+well regulated.
+
+209
+00:08:43,570 --> 00:08:43,989
+I mean, there's,
+
+210
+00:08:44,000 --> 00:08:47,229
+there's some attempts at it like the Fair Credit Reporting Act in the US where
+
+211
+00:08:47,849 --> 00:08:49,809
+like you can basically write in and get a free credit
+
+212
+00:08:49,820 --> 00:08:52,869
+report once a year and you can supposedly challenge what's on it
+
+213
+00:08:53,729 --> 00:08:55,289
+and, you know, get it sorted out.
+
+214
+00:08:55,570 --> 00:08:57,289
+It does work. Ok. And thats
+
+215
+00:08:58,859 --> 00:08:59,380
+it, it
+
+216
+00:08:59,770 --> 00:09:00,630
+because you've done it.
+
+217
+00:09:01,739 --> 00:09:04,510
+So I had the experience of I was a contractor
+
+218
+00:09:04,520 --> 00:09:06,260
+and the company I was working for was bought by
+
+219
+00:09:06,479 --> 00:09:06,960
+Verisign and
+
+220
+00:09:07,150 --> 00:09:09,200
+Verisign has a, just a policy that
+
+221
+00:09:09,559 --> 00:09:14,119
+they run a background check on all all new hires contractors. Everybody. Right.
+
+222
+00:09:14,130 --> 00:09:16,070
+Uh, through a company called choicepoint, that is
+
+223
+00:09:16,210 --> 00:09:17,929
+essentially the same thing as experience.
+
+224
+00:09:17,940 --> 00:09:21,380
+Trans union Equifax except Choice Point has even more data on you
+
+225
+00:09:21,650 --> 00:09:22,909
+because they buy
+
+226
+00:09:23,090 --> 00:09:25,099
+all sorts of data from all sorts of sources.
+
+227
+00:09:25,429 --> 00:09:27,580
+And so they basically do like a seven year background check,
+
+228
+00:09:27,590 --> 00:09:30,099
+kind of just looking for wonky stuff and
+
+229
+00:09:30,229 --> 00:09:33,219
+uh being a Canadian, I was kind of like, well, I'm not super cool with this but,
+
+230
+00:09:33,229 --> 00:09:34,659
+you know, I do like my paycheck.
+
+231
+00:09:35,400 --> 00:09:38,390
+So I'll agree to it obviously because like, what choice do I have? Right?
+
+232
+00:09:38,400 --> 00:09:39,580
+I don't have any power in this
+
+233
+00:09:39,840 --> 00:09:41,059
+uh transaction,
+
+234
+00:09:41,979 --> 00:09:44,580
+but I would ask that I get a copy of this so I can like,
+
+235
+00:09:44,590 --> 00:09:46,919
+look at it and make sure it's correct because I've, you know,
+
+236
+00:09:46,929 --> 00:09:51,169
+heard horror stories about, for example, this one town in Texas, the guy went and uh
+
+237
+00:09:51,469 --> 00:09:53,549
+accidentally got the death or sorry,
+
+238
+00:09:53,559 --> 00:09:56,770
+he accidentally got the birth registry when he meant to get the death registry.
+
+239
+00:09:57,369 --> 00:10:00,239
+And so he accidentally killed off an entire town in an afternoon.
+
+240
+00:10:00,429 --> 00:10:01,690
+Oh, man, that's exciting.
+
+241
+00:10:02,340 --> 00:10:03,140
+Yeah, it happens,
+
+242
+00:10:03,570 --> 00:10:04,000
+you know,
+
+243
+00:10:04,320 --> 00:10:04,500
+clerical
+
+244
+00:10:04,690 --> 00:10:05,830
+-- error.
+-- What did you do today?
+
+245
+00:10:08,080 --> 00:10:08,979
+Um
+
+246
+00:10:09,359 --> 00:10:12,880
+So anyways I, I got the report back from Choice point and by and large it was correct.
+
+247
+00:10:12,890 --> 00:10:14,580
+It had all my credit cards and bank
+
+248
+00:10:14,929 --> 00:10:19,880
+accounts on it which as I understand, Canadian banking privacy laws is not
+
+249
+00:10:20,070 --> 00:10:22,979
+supposed to be in somebody else's hands.
+
+250
+00:10:23,330 --> 00:10:27,140
+And, but there was this magic weird $500 credit instrument
+
+251
+00:10:27,299 --> 00:10:30,619
+and it was linked to my main bank TD. So I went to TD and I'm like, what's this?
+
+252
+00:10:30,630 --> 00:10:33,789
+And like, we don't know, you have to ask them and I went to Choice point and I'm like,
+
+253
+00:10:33,799 --> 00:10:34,130
+what's this?
+
+254
+00:10:34,140 --> 00:10:35,780
+And like, we don't know, you have to talk to your bank,
+
+255
+00:10:37,619 --> 00:10:38,599
+of course you do.
+
+256
+00:10:39,559 --> 00:10:40,059
+So,
+
+257
+00:10:40,369 --> 00:10:42,820
+was never able to figure out what the heck that was.
+
+258
+00:10:43,280 --> 00:10:46,619
+Um, but yeah, so basically in this process, even, you know,
+
+259
+00:10:46,630 --> 00:10:49,260
+assuming like the Fair Credit Reporting Act works.
+
+260
+00:10:49,640 --> 00:10:51,179
+It's a lot of work
+
+261
+00:10:51,609 --> 00:10:54,929
+-- for a consumer. It is,
+-- it's a pain in the neck and I'm familiar with that.
+
+262
+00:10:54,940 --> 00:10:56,840
+I've had to deal with some things before.
+
+263
+00:10:56,849 --> 00:10:59,940
+Actually when, when I bought my first house, like a million years ago and it,
+
+264
+00:10:59,950 --> 00:11:01,659
+it sucked getting it all cleaned up.
+
+265
+00:11:01,669 --> 00:11:02,859
+It took a long time.
+
+266
+00:11:03,820 --> 00:11:07,549
+Uh, yeah. Yeah. Anyway, anyway, this is so all we set the stage.
+
+267
+00:11:07,559 --> 00:11:10,900
+We kind of understand what the credit reporting bureau is
+
+268
+00:11:11,130 --> 00:11:13,989
+or, or these agencies. I don't, I don't even know what they're called.
+
+269
+00:11:14,000 --> 00:11:14,919
+They, I'm sure they have,
+
+270
+00:11:15,280 --> 00:11:18,440
+-- they,
+-- well, the three typically, yeah, they're like credit reporting.
+
+271
+00:11:18,450 --> 00:11:20,750
+Bureaus, but things like choice point are even more
+
+272
+00:11:21,200 --> 00:11:22,530
+kind of in a gray area in the,
+
+273
+00:11:24,419 --> 00:11:25,390
+give them time
+
+274
+00:11:25,940 --> 00:11:26,049
+to do
+
+275
+00:11:26,190 --> 00:11:26,760
+next.
+
+276
+00:11:27,010 --> 00:11:30,390
+So, anyway, let's talk about Equifax first because
+
+277
+00:11:30,640 --> 00:11:32,510
+they had that massive breach
+
+278
+00:11:32,890 --> 00:11:33,390
+and,
+
+279
+00:11:33,770 --> 00:11:34,520
+and, and the thing
+
+280
+00:11:34,729 --> 00:11:36,520
+-- and
+-- 43 million records,
+
+281
+00:11:36,900 --> 00:11:37,390
+we know,
+
+282
+00:11:38,080 --> 00:11:42,739
+I, right. And that's exactly it. I, my suspicion is as this story develops,
+
+283
+00:11:43,150 --> 00:11:47,059
+-- we're going to learn all kinds of new and terrible things because,
+-- well,
+
+284
+00:11:47,070 --> 00:11:49,549
+we've already learned that it might have affected people outside the US,
+
+285
+00:11:49,559 --> 00:11:51,820
+-- like in the UK and Canada,
+-- I'm not surprised
+
+286
+00:11:51,830 --> 00:11:52,289
+-- by
+-- that.
+
+287
+00:11:52,479 --> 00:11:55,010
+-- Or maybe it didn't, we're not sure yet. Right.
+-- Right.
+
+288
+00:11:55,020 --> 00:11:56,380
+And they're never going to tell you,
+
+289
+00:11:56,849 --> 00:11:57,809
+look, let's face it.
+
+290
+00:11:57,820 --> 00:12:01,080
+Unless your government, like, somehow sues them, they're never going to tell you.
+
+291
+00:12:01,090 --> 00:12:01,500
+Right.
+
+292
+00:12:01,950 --> 00:12:04,210
+That's the reality of it because they're going to do.
+
+293
+00:12:04,539 --> 00:12:07,049
+It's, it's kind of one of those things where
+
+294
+00:12:07,229 --> 00:12:09,750
+when you think of risk and liability
+
+295
+00:12:10,099 --> 00:12:10,750
+shut up.
+
+296
+00:12:12,090 --> 00:12:12,510
+Well,
+
+297
+00:12:12,820 --> 00:12:13,559
+not yet.
+
+298
+00:12:13,669 --> 00:12:14,669
+That, that's the thing.
+
+299
+00:12:14,840 --> 00:12:15,940
+They don't know yet.
+
+300
+00:12:16,099 --> 00:12:18,909
+They're going to get sued, they know they're going to get sued.
+
+301
+00:12:19,219 --> 00:12:22,849
+And so they're going to say as little as possible because if they
+
+302
+00:12:22,859 --> 00:12:25,760
+say too much it's just going to get used against them in court,
+
+303
+00:12:25,780 --> 00:12:27,479
+which is actually sound advice.
+
+304
+00:12:27,489 --> 00:12:29,340
+Anyone who may or may not be
+
+305
+00:12:29,489 --> 00:12:30,080
+involved in
+
+306
+00:12:30,849 --> 00:12:33,719
+-- court
+-- cases do not talk about anything.
+
+307
+00:12:33,729 --> 00:12:37,950
+It doesn't matter how funny that Joe was on Twitter. Shut up. Right.
+
+308
+00:12:37,960 --> 00:12:39,710
+And these guys know that because
+
+309
+00:12:39,900 --> 00:12:42,909
+given everything we've seen, I'm pretty sure lawyers are in charge.
+
+310
+00:12:43,520 --> 00:12:45,159
+Well, and that, well, yeah,
+
+311
+00:12:45,169 --> 00:12:48,309
+that goes to part of what they've been trying to do to handle the situation,
+
+312
+00:12:48,320 --> 00:12:49,630
+how poorly it's been handled.
+
+313
+00:12:50,570 --> 00:12:52,140
+Oh, my goodness. It's like
+
+314
+00:12:52,630 --> 00:12:56,859
+you couldn't write comedic gold like this if you wanted to.
+
+315
+00:12:57,020 --> 00:12:57,710
+I mean, that's the
+
+316
+00:12:58,530 --> 00:13:02,210
+leave you because it's obviously so horribly poorly written
+
+317
+00:13:02,390 --> 00:13:02,650
+and
+
+318
+00:13:03,070 --> 00:13:03,369
+you know,
+
+319
+00:13:03,380 --> 00:13:05,229
+what else is crazy I think about is with like
+
+320
+00:13:05,239 --> 00:13:07,289
+all these hurricanes going on at the same time.
+
+321
+00:13:07,299 --> 00:13:10,039
+Plus just like general events throughout the world,
+
+322
+00:13:10,049 --> 00:13:13,330
+it feels like everything is literally on fire and it kind of is in some places,
+
+323
+00:13:14,140 --> 00:13:18,130
+imagine what kind of news and crazy would be coming out of this.
+
+324
+00:13:18,140 --> 00:13:21,140
+If this was the only major story in the news right now,
+
+325
+00:13:21,460 --> 00:13:25,400
+it would be horrifying, I bet. So. So and that's something else to think about is
+
+326
+00:13:25,530 --> 00:13:27,849
+this news cycle is overwhelming
+
+327
+00:13:27,969 --> 00:13:32,760
+and this story is still enormous just to give you an idea of the magnitude of it.
+
+328
+00:13:32,770 --> 00:13:37,599
+Like there's going to be less cities in Florida tomorrow than there are today.
+
+329
+00:13:37,719 --> 00:13:39,299
+And we're talking about
+
+330
+00:13:39,510 --> 00:13:43,400
+Equifax stealing, you know, someone hacking them and stealing information.
+
+331
+00:13:43,659 --> 00:13:47,679
+That's crazy, man. That is crazy that this story is even on the list.
+
+332
+00:13:47,690 --> 00:13:52,119
+So basically Equifax gets hacked, they sit on it for a while.
+
+333
+00:13:52,260 --> 00:13:54,429
+Uh we'll get into the stock trading stuff later because
+
+334
+00:13:54,440 --> 00:13:55,979
+there's a whole bunch of stuff going on there.
+
+335
+00:13:55,989 --> 00:13:57,299
+That's a whole separate
+
+336
+00:13:57,469 --> 00:13:58,099
+conversation.
+
+337
+00:13:58,229 --> 00:13:58,690
+Like I said,
+
+338
+00:13:58,859 --> 00:13:59,919
+you can't write this.
+
+339
+00:14:00,150 --> 00:14:00,469
+Yeah.
+
+340
+00:14:00,729 --> 00:14:05,359
+-- So they hired APR firm, the name of which dang it, I lost the link. It
+-- doesn't matter.
+
+341
+00:14:05,369 --> 00:14:08,200
+Apr firm. Right. We don't want everyone to hate us by the time we're done.
+
+342
+00:14:08,469 --> 00:14:10,400
+And they registered a domain called
+
+343
+00:14:10,869 --> 00:14:13,690
+-- Equifax Security 2000 seventy.com.
+-- Right? And it's nice.
+
+344
+00:14:13,700 --> 00:14:17,789
+-- They thought ahead because then in 2018 they can just have a new domain,
+-- right? So
+
+345
+00:14:18,400 --> 00:14:18,429
+at
+
+346
+00:14:18,530 --> 00:14:22,880
+first the domain was registered, it wasn't uh SSL or TLS encrypted.
+
+347
+00:14:23,159 --> 00:14:24,169
+And the website,
+
+348
+00:14:24,179 --> 00:14:27,530
+the idea is that you plug in your name and part of your social security number,
+
+349
+00:14:27,539 --> 00:14:28,260
+if you're American
+
+350
+00:14:28,520 --> 00:14:31,609
+and it tells you if you, if you have been affected or not, now,
+
+351
+00:14:31,770 --> 00:14:36,150
+they forgot to disable. Uh Well, the, the, the site runs on wordpress
+
+352
+00:14:36,419 --> 00:14:39,700
+which not the greatest security record, but whatever, we'll,
+
+353
+00:14:39,710 --> 00:14:41,119
+we'll just ignore that for sure.
+
+354
+00:14:41,409 --> 00:14:44,200
+Um But the cute thing is wordpress by default has
+
+355
+00:14:44,210 --> 00:14:47,349
+a rest API so you can interact with it programmatically
+
+356
+00:14:47,650 --> 00:14:49,169
+and they didn't disable that. API
+
+357
+00:14:49,469 --> 00:14:51,919
+And so one of the calls you can make to it publicly
+
+358
+00:14:51,929 --> 00:14:55,020
+by default is get a list of valid users on the website,
+
+359
+00:14:55,030 --> 00:14:56,280
+like the accounts created
+
+360
+00:14:56,859 --> 00:15:00,570
+and there was one account created and it's the name of the pr firm that they've hired.
+
+361
+00:15:00,890 --> 00:15:02,090
+Not, not a surprise.
+
+362
+00:15:02,950 --> 00:15:04,229
+Uh So anyways,
+
+363
+00:15:04,239 --> 00:15:06,780
+the idea being that you plug your name and social security number into
+
+364
+00:15:06,789 --> 00:15:09,789
+this thing and you get like a part of your social security number rather
+
+365
+00:15:09,900 --> 00:15:11,169
+and you get whether or not you're affected,
+
+366
+00:15:11,179 --> 00:15:14,090
+turns out it doesn't matter what you plug in, you get the same result
+
+367
+00:15:14,359 --> 00:15:18,010
+and so effectively what it looks like is it's kind of a placeholder website just to,
+
+368
+00:15:18,020 --> 00:15:20,489
+you know, harvest the data so that they can later deal with it.
+
+369
+00:15:20,979 --> 00:15:21,299
+So I
+
+370
+00:15:21,880 --> 00:15:23,130
+can't actually, right now,
+
+371
+00:15:23,140 --> 00:15:25,530
+they can't right now tell you if you've been affected or not.
+
+372
+00:15:25,539 --> 00:15:30,159
+-- So,
+-- my suspicion is they don't really know. But I also had some people tell me that
+
+373
+00:15:30,659 --> 00:15:33,770
+they typed in things we say
+
+374
+00:15:34,169 --> 00:15:34,530
+and
+
+375
+00:15:35,419 --> 00:15:36,690
+not necessarily
+
+376
+00:15:36,840 --> 00:15:37,520
+some people
+
+377
+00:15:38,270 --> 00:15:41,530
+-- I think
+-- they were sending, I think they were using legitimate information
+
+378
+00:15:42,030 --> 00:15:42,570
+and
+
+379
+00:15:42,739 --> 00:15:46,159
+one guy said he was listed as not affected
+
+380
+00:15:46,169 --> 00:15:48,929
+and his wife was listed as probably affected.
+
+381
+00:15:49,400 --> 00:15:50,109
+Oh. Right.
+
+382
+00:15:50,210 --> 00:15:53,239
+-- So that's really interesting to me
+-- because I was reading on crib
+
+383
+00:15:53,250 --> 00:15:55,979
+security that they were just typing in some random verbs and getting back
+
+384
+00:15:56,700 --> 00:15:59,280
+essentially hang on and find out in a
+
+385
+00:15:59,409 --> 00:15:59,440
+few
+
+386
+00:15:59,599 --> 00:16:03,090
+-- days.
+-- The only thing I could potentially think of here
+
+387
+00:16:03,260 --> 00:16:06,130
+is if they were using some sort of very crappy hash
+
+388
+00:16:06,260 --> 00:16:09,119
+where they take like your name and your number and
+
+389
+00:16:09,130 --> 00:16:11,330
+-- they hash it and they're checking a database of
+-- just,
+
+390
+00:16:12,150 --> 00:16:14,359
+-- they just have the raw data.
+-- But I would hope that
+
+391
+00:16:14,500 --> 00:16:15,090
+the
+
+392
+00:16:15,219 --> 00:16:18,049
+pr company doesn't have all of the raw data.
+
+393
+00:16:18,359 --> 00:16:18,809
+Right.
+
+394
+00:16:19,650 --> 00:16:20,219
+Well,
+
+395
+00:16:21,630 --> 00:16:25,049
+anyway, the point is this website is a joke, right?
+
+396
+00:16:25,059 --> 00:16:29,219
+Let's just fix this website is a joke and it, did you read it?
+
+397
+00:16:29,229 --> 00:16:32,409
+Apparently the verbiage you waived your rights to a class action.
+
+398
+00:16:32,890 --> 00:16:34,210
+So they had their default terms of
+
+399
+00:16:34,390 --> 00:16:34,940
+stuff.
+
+400
+00:16:35,070 --> 00:16:39,049
+And the premise is that when you sign up for their credit monitoring, whatever
+
+401
+00:16:39,289 --> 00:16:39,929
+thing
+
+402
+00:16:40,039 --> 00:16:42,559
+you basically waive any right to sue them or do a class action lawsuit.
+
+403
+00:16:42,570 --> 00:16:44,099
+Now, they specifically made a statement
+
+404
+00:16:44,270 --> 00:16:47,510
+specifically saying that they are disclaiming that and that it doesn't apply blah,
+
+405
+00:16:47,520 --> 00:16:48,059
+blah blah
+
+406
+00:16:48,390 --> 00:16:51,969
+because, you know, part of it is the legality of that in and of itself is a whole thing.
+
+407
+00:16:51,979 --> 00:16:55,090
+Like I'm personally quite annoyed that, like, you know,
+
+408
+00:16:55,099 --> 00:16:57,450
+end user license agreements are a thing where it's like,
+
+409
+00:16:57,469 --> 00:17:01,549
+basically by opening the software package, you, you can't even sue us, right?
+
+410
+00:17:01,559 --> 00:17:02,520
+You can't even take us to court.
+
+411
+00:17:02,530 --> 00:17:05,608
+You have to go through arbitration and like a jurisdiction of our choosing.
+
+412
+00:17:06,208 --> 00:17:08,638
+Um, you know, we're not even asking you to give up rights.
+
+413
+00:17:08,648 --> 00:17:10,729
+We're just basically asking you to give up any and
+
+414
+00:17:10,739 --> 00:17:12,979
+all legal recourse ha ha sucks to be you.
+
+415
+00:17:14,030 --> 00:17:14,729
+Um,
+
+416
+00:17:15,140 --> 00:17:15,530
+so, yeah,
+
+417
+00:17:15,540 --> 00:17:17,079
+ignoring that for the moment because they
+
+418
+00:17:17,089 --> 00:17:19,530
+supposedly fixed that and they're not disclaiming it
+
+419
+00:17:19,630 --> 00:17:21,848
+or they're not making you disclaim that. Right.
+
+420
+00:17:22,069 --> 00:17:24,300
+Assuming that that's even a legal thing to do.
+
+421
+00:17:24,420 --> 00:17:27,608
+Apparently that's becoming a bit of a political hot potato.
+
+422
+00:17:29,199 --> 00:17:32,099
+Um, so we've established they were hacked. It's really bad.
+
+423
+00:17:32,109 --> 00:17:33,790
+Their response so far has been terrible.
+
+424
+00:17:33,920 --> 00:17:37,510
+They apparently hired, uh, what we call Mandiant security.
+
+425
+00:17:38,369 --> 00:17:40,189
+To do the audit. And the
+
+426
+00:17:40,369 --> 00:17:41,750
+because to put it bluntly,
+
+427
+00:17:41,760 --> 00:17:44,369
+it doesn't appear like they have the expertise to look through their own entire
+
+428
+00:17:44,469 --> 00:17:44,560
+system to
+
+429
+00:17:45,180 --> 00:17:45,250
+find
+
+430
+00:17:45,390 --> 00:17:45,500
+out.
+
+431
+00:17:45,660 --> 00:17:47,949
+I feel like I read somewhere that,
+
+432
+00:17:47,959 --> 00:17:50,500
+that Fire Eye was actually the security company
+
+433
+00:17:50,510 --> 00:17:52,510
+working with them and then Fire Eye hired.
+
+434
+00:17:52,839 --> 00:17:52,849
+Oh,
+
+435
+00:17:53,530 --> 00:17:54,550
+fire eye own man.
+
+436
+00:17:55,699 --> 00:17:56,939
+Yes, that's my understanding. Ok.
+
+437
+00:17:56,949 --> 00:17:58,380
+That could be uh well,
+
+438
+00:17:58,390 --> 00:17:59,979
+in regardless the point is for those of you who
+
+439
+00:17:59,989 --> 00:18:02,959
+don't know Mandy is the guys you bring in like
+
+440
+00:18:03,119 --> 00:18:07,630
+they are, they are the last recourse, right? Like this is the super ninja
+
+441
+00:18:07,839 --> 00:18:11,630
+you bring in when things are so bad. You don't know, like the A team, I guess, right?
+
+442
+00:18:11,770 --> 00:18:13,150
+They are the a team
+
+443
+00:18:13,260 --> 00:18:19,030
+of kind of doing intrusion detection and, and just figuring out what it went wrong,
+
+444
+00:18:19,160 --> 00:18:20,439
+um, which to put A B
+
+445
+00:18:20,780 --> 00:18:22,189
+does it really matter?
+
+446
+00:18:22,640 --> 00:18:23,229
+Like the
+
+447
+00:18:23,589 --> 00:18:25,390
+horse is gone, the barn door is wide open.
+
+448
+00:18:25,660 --> 00:18:28,989
+Their systems are probably architected in such a way that you can't really fix it.
+
+449
+00:18:29,000 --> 00:18:32,199
+You'd have to like burn it down and start fresh to really get something secure.
+
+450
+00:18:32,209 --> 00:18:32,689
+-- Well,
+-- ok,
+
+451
+00:18:32,699 --> 00:18:33,890
+it's more than that though.
+
+452
+00:18:33,900 --> 00:18:35,439
+I mean, part of it is just, I mean,
+
+453
+00:18:35,449 --> 00:18:39,119
+I've been through these kind of forensics efforts in the past and
+
+454
+00:18:39,619 --> 00:18:42,280
+a big part of it is just understanding like what happened
+
+455
+00:18:42,869 --> 00:18:45,550
+and, and not even necessarily so you don't do it again.
+
+456
+00:18:45,560 --> 00:18:49,180
+-- It's just
+-- so you, so apparently the hack was actually quite simple
+
+457
+00:18:49,300 --> 00:18:51,780
+in this case. That's, that's the really ugly part. Right.
+
+458
+00:18:51,790 --> 00:18:55,020
+Like, there's, you know, I, if you have like a mission impossible style hack,
+
+459
+00:18:55,030 --> 00:18:55,839
+I'm like, yeah, cool.
+
+460
+00:18:55,849 --> 00:18:57,910
+That's really hard to defend against.
+
+461
+00:18:58,040 --> 00:18:58,719
+It's impossible
+
+462
+00:18:58,890 --> 00:18:58,920
+to
+
+463
+00:18:59,040 --> 00:18:59,239
+defend
+
+464
+00:18:59,410 --> 00:18:59,890
+against.
+
+465
+00:19:00,150 --> 00:19:00,479
+Yeah.
+
+466
+00:19:00,540 --> 00:19:00,770
+You know,
+
+467
+00:19:00,780 --> 00:19:02,489
+if you have an adversary with like a budget
+
+468
+00:19:02,500 --> 00:19:04,650
+of $10 million who's willing to kidnap people,
+
+469
+00:19:05,060 --> 00:19:06,479
+-- you lose.
+-- Right.
+
+470
+00:19:06,900 --> 00:19:09,199
+And what was, what was this one? Supposedly?
+
+471
+00:19:09,209 --> 00:19:11,530
+Although it's not been really confirmed, but apparently
+
+472
+00:19:11,790 --> 00:19:14,890
+-- a flaw Apache straw.
+-- That's what I heard. I'm
+
+473
+00:19:15,109 --> 00:19:16,270
+skeptical, I don't know.
+
+474
+00:19:16,550 --> 00:19:17,859
+-- It's,
+-- you know, the,
+
+475
+00:19:17,869 --> 00:19:21,250
+the Apache software foundation actually released a really nice
+
+476
+00:19:21,619 --> 00:19:22,660
+uh statement.
+
+477
+00:19:23,160 --> 00:19:24,290
+That statement is ridiculous.
+
+478
+00:19:24,420 --> 00:19:24,489
+It
+
+479
+00:19:24,790 --> 00:19:28,569
+-- is,
+-- but it points out that essentially either it's a zero day in which case, like,
+
+480
+00:19:28,579 --> 00:19:29,109
+sorry.
+
+481
+00:19:29,319 --> 00:19:32,089
+Um, because there is some speculation that it's a CV.
+
+482
+00:19:32,099 --> 00:19:35,140
+E I forget the name of the CV, offhand. Uh, hang on a second.
+
+483
+00:19:35,699 --> 00:19:37,770
+-- Ok. No. Well, you're searching this, here's
+-- what I
+
+484
+00:19:38,130 --> 00:19:41,369
+had messed it up and said that the CV was like nine years old or something. It was,
+
+485
+00:19:41,839 --> 00:19:45,310
+it's been a bunch of different things. Here's the, here's what I think of with this.
+
+486
+00:19:45,319 --> 00:19:46,160
+All right. Number one,
+
+487
+00:19:46,579 --> 00:19:49,810
+I don't think struts should have had any comment on
+
+488
+00:19:49,819 --> 00:19:52,359
+this in any way because we don't really know.
+
+489
+00:19:52,719 --> 00:19:55,290
+And even if it was struts, like how many,
+
+490
+00:19:55,300 --> 00:19:57,420
+how many organizations have been hacked because of struts.
+
+491
+00:19:57,430 --> 00:19:59,979
+I mean, let's face it. Struts doesn't have a very good track record here. Right.
+
+492
+00:19:59,989 --> 00:20:01,640
+Because it's a Behemoth monster.
+
+493
+00:20:02,189 --> 00:20:03,689
+And, and more importantly,
+
+494
+00:20:03,699 --> 00:20:05,609
+I think the most important thing in that Struts
+
+495
+00:20:05,619 --> 00:20:07,750
+statement though is the fact that at the bottom,
+
+496
+00:20:07,949 --> 00:20:09,390
+the person who signed it
+
+497
+00:20:09,630 --> 00:20:11,630
+is the vice president of Struts.
+
+498
+00:20:12,430 --> 00:20:14,780
+Why does a project need a vice president?
+
+499
+00:20:14,790 --> 00:20:17,069
+Like, that's not a project anyone should be using?
+
+500
+00:20:17,079 --> 00:20:18,890
+That's something that needs to be dismantled.
+
+501
+00:20:18,900 --> 00:20:20,170
+Well, it's, it's one of those,
+
+502
+00:20:20,180 --> 00:20:23,199
+I think Apache struck is sort of the modern equivalent of Cobalt.
+
+503
+00:20:24,310 --> 00:20:24,819
+Really.
+
+504
+00:20:25,160 --> 00:20:25,209
+Think
+
+505
+00:20:25,380 --> 00:20:26,239
+about it, right. It's a giant
+
+506
+00:20:26,510 --> 00:20:27,900
+Java monstrosity.
+
+507
+00:20:28,250 --> 00:20:30,030
+Oh, man, you're, you're absolutely, you're,
+
+508
+00:20:30,040 --> 00:20:33,760
+-- you're completely correct when you say that
+-- it's, and, and the thing is though, like
+
+509
+00:20:34,040 --> 00:20:34,449
+coal, it,
+
+510
+00:20:34,770 --> 00:20:37,819
+it does let businesses build things that get stuff done,
+
+511
+00:20:38,150 --> 00:20:40,849
+I guess, you know, as ugly as it is, right?
+
+512
+00:20:41,229 --> 00:20:41,859
+Um
+
+513
+00:20:42,390 --> 00:20:43,099
+But going back to it,
+
+514
+00:20:43,109 --> 00:20:44,979
+I think they are actually kind of correct to make the statement
+
+515
+00:20:44,989 --> 00:20:48,579
+because the reality is even if struts was 100% at fault,
+
+516
+00:20:49,579 --> 00:20:51,150
+this shouldn't happen because,
+
+517
+00:20:51,160 --> 00:20:53,550
+and this is a question I have for you that I wanted to ask because
+
+518
+00:20:53,750 --> 00:20:55,209
+uh it kind of reminds me of that whole,
+
+519
+00:20:55,219 --> 00:20:57,959
+I think it was Lockheed Martin where somebody like ex filtrated like
+
+520
+00:20:57,969 --> 00:21:01,560
+10 terabytes of design data on some plane or something to China.
+
+521
+00:21:01,969 --> 00:21:03,569
+And Lockheed Martin was like, oops.
+
+522
+00:21:03,849 --> 00:21:06,359
+And here's the thing, 100 and 43 million records.
+
+523
+00:21:06,369 --> 00:21:10,390
+Like I get that high speed networking is a thing now, like 10 gigabit interconnect,
+
+524
+00:21:10,400 --> 00:21:11,800
+40 gigabit whatever,
+
+525
+00:21:12,140 --> 00:21:14,900
+but 100 and 43 million records
+
+526
+00:21:15,069 --> 00:21:19,660
+in a database. Even if they're small is still a lot of data.
+
+527
+00:21:19,959 --> 00:21:19,979
+They
+
+528
+00:21:20,150 --> 00:21:20,719
+weren't small.
+
+529
+00:21:20,890 --> 00:21:24,430
+Yeah. No, I would, I'm guessing tens of kilobytes each
+
+530
+00:21:24,770 --> 00:21:27,170
+and more to the point, the database activity.
+
+531
+00:21:27,180 --> 00:21:32,439
+It's like somebody's just like what, you know, where name equals like star
+
+532
+00:21:32,569 --> 00:21:33,400
+download.
+
+533
+00:21:33,790 --> 00:21:36,010
+Um You know, how is this
+
+534
+00:21:36,209 --> 00:21:39,280
+number one? How is the activity on the database? Not notice that? Like,
+
+535
+00:21:39,660 --> 00:21:40,880
+somebody was like,
+
+536
+00:21:41,040 --> 00:21:42,680
+accessing everything and number two,
+
+537
+00:21:43,030 --> 00:21:45,560
+they ex filtrated the data successfully
+
+538
+00:21:45,859 --> 00:21:48,430
+without like, it's not like Equifax said, like,
+
+539
+00:21:48,739 --> 00:21:51,199
+oh, they got like X million records but we cut them off.
+
+540
+00:21:51,209 --> 00:21:54,359
+Thank goodness, you know, because that, that has happened before where, you know,
+
+541
+00:21:54,369 --> 00:21:55,719
+companies have been like, oh yeah, they,
+
+542
+00:21:55,729 --> 00:21:57,439
+they started downloading stuff but we killed it.
+
+543
+00:21:57,459 --> 00:21:57,530
+It's
+
+544
+00:21:57,760 --> 00:21:58,079
+pretty
+
+545
+00:21:58,209 --> 00:21:58,420
+bad,
+
+546
+00:21:58,599 --> 00:21:58,790
+but it's
+
+547
+00:21:58,910 --> 00:21:59,290
+pretty rare.
+
+548
+00:21:59,390 --> 00:21:59,930
+Exactly.
+
+549
+00:22:00,170 --> 00:22:01,760
+And my question is, why is that rare?
+
+550
+00:22:01,770 --> 00:22:02,660
+Like, I've,
+
+551
+00:22:02,670 --> 00:22:06,750
+I've heard of strategies like putting in dummy records that trigger your I DS,
+
+552
+00:22:07,069 --> 00:22:09,430
+-- you know, records that should never be pulled.
+-- I bet they
+
+553
+00:22:09,569 --> 00:22:09,869
+don't have,
+
+554
+00:22:10,750 --> 00:22:15,089
+I mean, look, if you have an I DS at all, you should notice this kind of activity.
+
+555
+00:22:15,099 --> 00:22:16,650
+I mean, that's the reality of it. So,
+
+556
+00:22:16,790 --> 00:22:20,739
+so you can probably infer they almost certainly don't have an idea if they do.
+
+557
+00:22:20,750 --> 00:22:22,369
+It doesn't work well,
+
+558
+00:22:22,849 --> 00:22:24,270
+you know, sending out alerts that are being,
+
+559
+00:22:24,890 --> 00:22:29,040
+that could be true. I see that a lot. That's actually that's something I,
+
+560
+00:22:29,180 --> 00:22:29,199
+I,
+
+561
+00:22:29,209 --> 00:22:33,420
+I've seen more than once is people spend all this money on an expensive
+
+562
+00:22:33,430 --> 00:22:36,489
+I DS and then they don't look at what it's what it's telling them.
+
+563
+00:22:36,609 --> 00:22:37,979
+And so why did you, I mean,
+
+564
+00:22:38,229 --> 00:22:40,880
+you might as well just cash that check and go on a vacation.
+
+565
+00:22:40,949 --> 00:22:43,359
+Well, but especially with false positives and stuff, you can't,
+
+566
+00:22:44,569 --> 00:22:45,829
+you can't, well,
+
+567
+00:22:46,020 --> 00:22:48,920
+if you do it right, you can, most people don't do it right.
+
+568
+00:22:49,270 --> 00:22:52,560
+There's, there's so many levels of failure that had to happen here.
+
+569
+00:22:52,569 --> 00:22:53,689
+I mean, for example,
+
+570
+00:22:53,699 --> 00:22:55,420
+the fact that someone could do this tells me
+
+571
+00:22:55,430 --> 00:22:58,339
+that the data was probably just sitting somewhere,
+
+572
+00:22:58,670 --> 00:23:00,550
+right? For almost certainly in a database
+
+573
+00:23:00,680 --> 00:23:01,989
+with no real protections on it.
+
+574
+00:23:02,000 --> 00:23:02,369
+I mean, look,
+
+575
+00:23:02,380 --> 00:23:06,310
+let's face it the right way to do this is to have some sort of system architected
+
+576
+00:23:06,420 --> 00:23:07,949
+that you can retrieve one record,
+
+577
+00:23:08,180 --> 00:23:08,630
+right?
+
+578
+00:23:08,819 --> 00:23:11,829
+Someone types in all that personal information they need or,
+
+579
+00:23:11,839 --> 00:23:13,810
+or what whoever is gonna make a request
+
+580
+00:23:14,329 --> 00:23:16,829
+and you can get back one record and that's it.
+
+581
+00:23:16,969 --> 00:23:20,979
+There's no way to get anything else back. And if the system can be broken,
+
+582
+00:23:21,270 --> 00:23:21,290
+you,
+
+583
+00:23:21,319 --> 00:23:24,160
+you no doubt have business cases where it's like we want all
+
+584
+00:23:24,170 --> 00:23:27,189
+the John Smith in Nevada who like have a good credit rating
+
+585
+00:23:27,680 --> 00:23:28,270
+or, you know,
+
+586
+00:23:28,280 --> 00:23:29,630
+because the thing to remember is they're not
+
+587
+00:23:29,640 --> 00:23:32,069
+just selling the stuff for like credit checks.
+
+588
+00:23:32,239 --> 00:23:33,869
+It's also for like advertising,
+
+589
+00:23:33,880 --> 00:23:38,140
+like we want a list of everybody who can probably afford a Rolex watch in America.
+
+590
+00:23:38,500 --> 00:23:39,010
+And, and, and
+
+591
+00:23:39,349 --> 00:23:39,959
+this would be a data
+
+592
+00:23:40,250 --> 00:23:41,900
+-- to do that.
+-- I suspect
+
+593
+00:23:42,359 --> 00:23:44,949
+what you've just described is exactly what it is where someone
+
+594
+00:23:44,959 --> 00:23:48,540
+figured out a way to send a query that returned everybody.
+
+595
+00:23:48,550 --> 00:23:49,469
+But again, you could have it
+
+596
+00:23:49,619 --> 00:23:51,339
+obfuscate replies or
+
+597
+00:23:51,839 --> 00:23:52,589
+no, no, for example,
+
+598
+00:23:52,599 --> 00:23:54,290
+with the more data you get out sort of the
+
+599
+00:23:54,300 --> 00:23:57,189
+more coarse grained and fine or less fine it becomes,
+
+600
+00:23:57,199 --> 00:23:59,339
+-- I
+-- will bet you, I bet you a coke
+
+601
+00:23:59,760 --> 00:24:00,380
+that
+
+602
+00:24:00,599 --> 00:24:04,819
+somebody ran this query at least once a week on the database on accident
+
+603
+00:24:05,180 --> 00:24:08,300
+and returned every single human in their data set.
+
+604
+00:24:08,449 --> 00:24:08,880
+Right?
+
+605
+00:24:08,890 --> 00:24:12,420
+I guarantee it wouldn't surprise me either if this was actually
+
+606
+00:24:12,430 --> 00:24:16,359
+stolen from a third party and not directly from Equifax itself.
+
+607
+00:24:16,619 --> 00:24:17,630
+That's entirely
+
+608
+00:24:17,810 --> 00:24:19,800
+-- possible.
+-- It would not surprise me at all if that
+
+609
+00:24:20,719 --> 00:24:20,760
+data
+
+610
+00:24:21,050 --> 00:24:25,579
+and not, not only like to share data, people never get rid of their data, right?
+
+611
+00:24:25,589 --> 00:24:27,920
+People think data is magic and they,
+
+612
+00:24:28,015 --> 00:24:31,015
+you have all this super dangerous data and what do you do with it?
+
+613
+00:24:31,045 --> 00:24:32,145
+Right? Like, oh, we better
+
+614
+00:24:32,375 --> 00:24:32,454
+keep
+
+615
+00:24:32,635 --> 00:24:32,655
+it
+
+616
+00:24:32,915 --> 00:24:33,594
+-- to
+-- store.
+
+617
+00:24:34,084 --> 00:24:34,635
+It's not.
+
+618
+00:24:35,604 --> 00:24:38,714
+-- Ok.
+-- No, no, I'm stopping you right there. Look data.
+
+619
+00:24:38,724 --> 00:24:41,415
+It is, it is cheap to store crap on disk.
+
+620
+00:24:41,685 --> 00:24:42,584
+But pi
+
+621
+00:24:42,714 --> 00:24:50,714
+I is an enormous liability and having the pi I on 100 and 44 million people is crazy.
+
+622
+00:24:51,109 --> 00:24:57,010
+-- The risk there is enormous
+-- storing data correctly and securely is expensive.
+
+623
+00:24:58,119 --> 00:25:00,489
+But storing it badly and cheaply is
+
+624
+00:25:01,089 --> 00:25:01,219
+cheap.
+
+625
+00:25:02,400 --> 00:25:02,930
+I love,
+
+626
+00:25:02,939 --> 00:25:05,670
+like I just set up some new S3 buckets for a thing and I was going through the
+
+627
+00:25:05,680 --> 00:25:07,969
+deletion policy and it's like now you can delete
+
+628
+00:25:07,979 --> 00:25:09,890
+and send it to the cornfield out in Glacier.
+
+629
+00:25:10,130 --> 00:25:12,030
+Right? Glacier is Amazon's
+
+630
+00:25:12,150 --> 00:25:14,189
+long term storage thing. And
+
+631
+00:25:14,930 --> 00:25:17,930
+I seem to remember reading that they like burn stuff onto optical disc
+
+632
+00:25:17,939 --> 00:25:20,819
+or onto hard drives that they then take off line or something crazy.
+
+633
+00:25:20,930 --> 00:25:23,959
+I've heard a lot of rumors and the current rumor I've
+
+634
+00:25:23,969 --> 00:25:27,369
+heard is that they basically have enormous banks of hard drives
+
+635
+00:25:27,550 --> 00:25:28,319
+and they,
+
+636
+00:25:28,500 --> 00:25:31,869
+they, they fill them up and when a drive is full, they just turn the power off
+
+637
+00:25:32,050 --> 00:25:34,040
+and then when they need it, they'll eventually,
+
+638
+00:25:34,050 --> 00:25:37,219
+every now and then power gets restored and then stuff happens.
+
+639
+00:25:37,250 --> 00:25:38,880
+That's, that's my current understanding.
+
+640
+00:25:39,199 --> 00:25:43,739
+I mean, that's the, that's the problem though, right? Is, is until you have
+
+641
+00:25:44,550 --> 00:25:47,000
+best case scenario you have an auditor come through, who's like, oh,
+
+642
+00:25:47,010 --> 00:25:49,619
+you can't be doing that, you need to stop doing that and then you stop doing.
+
+643
+00:25:50,329 --> 00:25:51,449
+Here's the better question.
+
+644
+00:25:51,680 --> 00:25:53,550
+Were they violating any rules?
+
+645
+00:25:53,560 --> 00:25:57,359
+Let's say you were someone working with, with these guys with Equifax.
+
+646
+00:25:57,369 --> 00:26:00,280
+Let's say you accidentally downloaded everyone's record.
+
+647
+00:26:00,959 --> 00:26:03,140
+Were you violating any sort of rules
+
+648
+00:26:03,800 --> 00:26:04,150
+tribulation,
+
+649
+00:26:04,550 --> 00:26:05,650
+violation of any law?
+
+650
+00:26:05,660 --> 00:26:08,079
+-- Because if you're authorized to do so you're,
+-- I bet
+
+651
+00:26:08,089 --> 00:26:09,369
+they weren't authorized to do so.
+
+652
+00:26:10,410 --> 00:26:11,260
+And so that begs the,
+
+653
+00:26:11,380 --> 00:26:14,439
+are there even laws for that for banking data. Like I know with banking data,
+
+654
+00:26:15,099 --> 00:26:15,359
+you,
+
+655
+00:26:15,369 --> 00:26:19,520
+-- you have to kind of have a good reason for looking at it typically internally
+-- there,
+
+656
+00:26:19,530 --> 00:26:23,839
+there are certain regulations that exist but they are not.
+
+657
+00:26:24,369 --> 00:26:25,319
+Yes, it's,
+
+658
+00:26:25,650 --> 00:26:28,439
+and the problem is, here's the problem I have fundamentally,
+
+659
+00:26:28,459 --> 00:26:31,109
+this is an American company in American jurisdiction
+
+660
+00:26:31,599 --> 00:26:33,660
+with data on people outside America.
+
+661
+00:26:33,670 --> 00:26:36,390
+And so it becomes like the border crossing problem of I try to
+
+662
+00:26:36,400 --> 00:26:38,189
+go into the US and I have a problem with the border crossing.
+
+663
+00:26:38,199 --> 00:26:40,209
+What's my recourse like? Right to my Congress.
+
+664
+00:26:40,660 --> 00:26:43,640
+Actually GDPR is going to fix some of this in,
+
+665
+00:26:43,650 --> 00:26:48,910
+in the EU because GDPR applies to EU citizens regardless of jurisdiction.
+
+666
+00:26:49,939 --> 00:26:53,680
+But does the eu have the wherewithal to enforce it?
+
+667
+00:26:53,930 --> 00:26:54,760
+Well, ok,
+
+668
+00:26:55,010 --> 00:26:56,729
+that is going to be the question.
+
+669
+00:26:56,739 --> 00:26:57,439
+However,
+
+670
+00:26:57,449 --> 00:27:01,989
+most of these companies have some sort of presence in the EU which means yes, yes,
+
+671
+00:27:02,000 --> 00:27:02,560
+they do.
+
+672
+00:27:02,939 --> 00:27:03,219
+Right.
+
+673
+00:27:03,329 --> 00:27:04,530
+Well, because I know like for example,
+
+674
+00:27:04,540 --> 00:27:07,239
+there's that US banking law that says basically to, you know,
+
+675
+00:27:07,250 --> 00:27:08,959
+for dealing with tax evasion
+
+676
+00:27:09,270 --> 00:27:12,619
+that if you have even a single American customer at your bank,
+
+677
+00:27:12,810 --> 00:27:14,000
+you have to report
+
+678
+00:27:14,410 --> 00:27:16,500
+like their accounts and stuff to the US
+
+679
+00:27:16,699 --> 00:27:18,800
+authorities. And so
+
+680
+00:27:19,069 --> 00:27:22,319
+in Canada that, that is a direct violation of our banking laws
+
+681
+00:27:22,859 --> 00:27:23,719
+or was
+
+682
+00:27:24,010 --> 00:27:26,150
+and the US response was, well, that's too bad.
+
+683
+00:27:26,160 --> 00:27:30,839
+We can cut you off and of course, we, we can't, that's like 30% of our, you know,
+
+684
+00:27:30,849 --> 00:27:33,400
+fiscal interactions and trade and whatnot.
+
+685
+00:27:34,579 --> 00:27:36,040
+So we had to roll over.
+
+686
+00:27:36,550 --> 00:27:37,040
+Right.
+
+687
+00:27:37,239 --> 00:27:40,380
+And apparently a lot of banks now in a lot of parts of the world
+
+688
+00:27:40,390 --> 00:27:43,489
+where if you're an American and you go to do something with your account,
+
+689
+00:27:43,500 --> 00:27:45,319
+they're like, oh, you're American yet your account's closed.
+
+690
+00:27:45,329 --> 00:27:46,119
+Here's your cash.
+
+691
+00:27:48,609 --> 00:27:48,959
+Right.
+
+692
+00:27:48,969 --> 00:27:50,930
+Because, well, no, I mean, you know, think about it,
+
+693
+00:27:50,939 --> 00:27:52,390
+you're like some regional bank or something.
+
+694
+00:27:52,400 --> 00:27:54,280
+Do you want to have to deal with us? Authorities?
+
+695
+00:27:54,869 --> 00:27:55,640
+I would not.
+
+696
+00:27:55,979 --> 00:27:58,969
+Right. I can't even imagine what the reporting costs on this are.
+
+697
+00:28:00,270 --> 00:28:00,920
+It's,
+
+698
+00:28:01,099 --> 00:28:01,680
+you know,
+
+699
+00:28:02,089 --> 00:28:07,079
+but the thing is the US has the financial clout to like make rules that we don't like,
+
+700
+00:28:07,089 --> 00:28:07,430
+but
+
+701
+00:28:07,839 --> 00:28:12,680
+like 80% of Canada's foreign trade is with the US. So like, quite frankly,
+
+702
+00:28:13,170 --> 00:28:15,000
+we, we, we can't, you know, we can't
+
+703
+00:28:15,489 --> 00:28:17,449
+be like, oh, embargo, we just don't
+
+704
+00:28:17,550 --> 00:28:17,920
+talk to you. And
+
+705
+00:28:18,030 --> 00:28:23,670
+this is actually what's I think going to give GDPR teeth is the eu as a whole
+
+706
+00:28:24,000 --> 00:28:25,839
+is big enough to have an impact here.
+
+707
+00:28:25,849 --> 00:28:29,060
+Whereas every individual European country people could be like, yeah,
+
+708
+00:28:29,069 --> 00:28:29,969
+screw you guys.
+
+709
+00:28:29,979 --> 00:28:30,979
+-- I don't care.
+-- Right.
+
+710
+00:28:31,479 --> 00:28:33,869
+Is Luxembourg even a real country,
+
+711
+00:28:34,280 --> 00:28:35,680
+please send the hate mail.
+
+712
+00:28:37,040 --> 00:28:41,050
+Not me. I love Luxembourg. It's a very nice place actually, I've never been there.
+
+713
+00:28:41,060 --> 00:28:42,239
+-- I would like to go though. Good
+-- French
+
+714
+00:28:42,250 --> 00:28:42,619
+fries.
+
+715
+00:28:43,000 --> 00:28:43,380
+Yeah,
+
+716
+00:28:44,739 --> 00:28:45,290
+sweet.
+
+717
+00:28:45,530 --> 00:28:45,810
+Ok.
+
+718
+00:28:45,819 --> 00:28:47,000
+Well, Lichtenstein, for example,
+
+719
+00:28:47,010 --> 00:28:49,670
+a friend drove me around the country one Saturday morning.
+
+720
+00:28:50,010 --> 00:28:51,050
+-- Like all
+-- around the
+
+721
+00:28:51,060 --> 00:28:51,829
+country.
+
+722
+00:28:53,010 --> 00:28:54,380
+Well, technically not around it.
+
+723
+00:28:54,390 --> 00:28:56,810
+We drove from the northernmost point to the southernmost point and
+
+724
+00:28:56,819 --> 00:28:59,109
+I think we did the easternmost point or the westernmost point.
+
+725
+00:28:59,119 --> 00:28:59,589
+I forget what.
+
+726
+00:29:00,699 --> 00:29:01,959
+And in Europe it's tiny.
+
+727
+00:29:01,969 --> 00:29:05,420
+It's not like an enormous country like Canada or the United States,
+
+728
+00:29:05,670 --> 00:29:07,199
+which are just freakishly large.
+
+729
+00:29:08,589 --> 00:29:12,689
+-- So, anyway, so, ok,
+-- so we've gone through 100 and 43 million people,
+
+730
+00:29:13,109 --> 00:29:15,089
+possibly all American. maybe not,
+
+731
+00:29:16,050 --> 00:29:18,699
+certainly not Americans in there without question.
+
+732
+00:29:19,040 --> 00:29:20,060
+Oh, for sure. But I mean,
+
+733
+00:29:20,229 --> 00:29:22,500
+like, is it more than a percent or whatever,
+
+734
+00:29:24,114 --> 00:29:25,645
+what else is actually an interesting question?
+
+735
+00:29:25,655 --> 00:29:27,974
+I wonder how many of the people in there are Children or
+
+736
+00:29:27,984 --> 00:29:32,055
+dead where they don't really have the ability to gain credit.
+
+737
+00:29:32,185 --> 00:29:39,604
+The dead thing is still a problem because those records can sort of still work
+
+738
+00:29:39,949 --> 00:29:41,810
+and the child thing is definitely a problem because, you know,
+
+739
+00:29:41,819 --> 00:29:44,489
+parents open up lines of credit or
+
+740
+00:29:44,760 --> 00:29:45,060
+I've heard
+
+741
+00:29:46,020 --> 00:29:46,050
+in
+
+742
+00:29:46,199 --> 00:29:46,300
+their
+
+743
+00:29:47,369 --> 00:29:50,869
+names all the time, which is especially annoying because, like,
+
+744
+00:29:50,880 --> 00:29:53,130
+you think they would check the date of birth on these people and be like, oh,
+
+745
+00:29:53,140 --> 00:29:54,160
+you're like three.
+
+746
+00:29:54,180 --> 00:29:56,849
+Actually, I had something happen once where
+
+747
+00:29:57,310 --> 00:29:58,050
+I,
+
+748
+00:29:58,180 --> 00:30:03,729
+my, my kids have email addresses. Right. And I, I get them, but I sign crap up for them
+
+749
+00:30:03,930 --> 00:30:04,530
+and
+
+750
+00:30:04,849 --> 00:30:06,849
+one day I get a mail from,
+
+751
+00:30:07,339 --> 00:30:10,880
+uh, a bank that I have a savings account with, for my kids
+
+752
+00:30:11,180 --> 00:30:16,390
+and it basically, it is clearly some sort of like crazy fishy spam thing
+
+753
+00:30:16,849 --> 00:30:20,150
+and I send it to the bank and they're like, oh yeah, we,
+
+754
+00:30:20,479 --> 00:30:22,770
+you know, this is probably real so that you're so,
+
+755
+00:30:22,780 --> 00:30:25,520
+and so must have signed up for this and I'm like, this is my kid.
+
+756
+00:30:25,989 --> 00:30:28,160
+They said, oh well, well, they must have signed up for it.
+
+757
+00:30:28,170 --> 00:30:31,300
+I said he's six like, ok, we'll take care of it right away, sir.
+
+758
+00:30:32,310 --> 00:30:32,780
+Yeah,
+
+759
+00:30:33,119 --> 00:30:35,500
+I mean, come on guys get with it.
+
+760
+00:30:35,839 --> 00:30:38,989
+But well, and see that's part of this whole thing is like, even if I,
+
+761
+00:30:39,000 --> 00:30:42,979
+I don't know what the true levels of financial fraud and credit card fraud are,
+
+762
+00:30:42,989 --> 00:30:44,680
+especially with respect to their cost.
+
+763
+00:30:44,849 --> 00:30:46,099
+But the reality is
+
+764
+00:30:46,760 --> 00:30:49,060
+what systems like credit cards.
+
+765
+00:30:49,069 --> 00:30:53,109
+So like without credit cards, we wouldn't have online shopping and like Amazon,
+
+766
+00:30:53,219 --> 00:30:53,229
+I,
+
+767
+00:30:53,989 --> 00:30:57,839
+I now get about one or two Amazon packages a week because I've just,
+
+768
+00:30:57,869 --> 00:30:59,180
+I've gone to Amazon first.
+
+769
+00:30:59,189 --> 00:31:00,099
+That's it. I'm done.
+
+770
+00:31:00,319 --> 00:31:02,660
+I buy this stuff like when I'm in the car with my kids
+
+771
+00:31:02,670 --> 00:31:05,420
+on the phone and then it shows up the next like the day,
+
+772
+00:31:05,430 --> 00:31:07,300
+the next day, which is like a Sunday.
+
+773
+00:31:08,020 --> 00:31:10,729
+I'm sorry, I want to support local businesses, but like
+
+774
+00:31:11,290 --> 00:31:15,550
+this is just too easy and too cheap and then other things like a great example, right?
+
+775
+00:31:15,560 --> 00:31:16,459
+Um You know,
+
+776
+00:31:16,469 --> 00:31:18,790
+going through the house buying process and we have a one week
+
+777
+00:31:18,800 --> 00:31:22,500
+overlap where we give up possession of this house on the 25th,
+
+778
+00:31:22,510 --> 00:31:24,430
+but we take possession of the new house on the 18th.
+
+779
+00:31:24,969 --> 00:31:27,109
+I certainly don't have enough money to cover like
+
+780
+00:31:27,119 --> 00:31:29,109
+the complete cost of a house for one week.
+
+781
+00:31:29,119 --> 00:31:29,589
+You know.
+
+782
+00:31:29,849 --> 00:31:33,150
+And so with bridge financing and stuff, boof, the problem goes away.
+
+783
+00:31:33,339 --> 00:31:35,989
+You know, the bank and the lawyers do a bunch of stuff and it's like,
+
+784
+00:31:36,000 --> 00:31:40,040
+I don't know exactly what happened, but like, I have a week to move now.
+
+785
+00:31:40,050 --> 00:31:41,489
+It's pretty sweet. You know,
+
+786
+00:31:42,099 --> 00:31:43,979
+the guy that bought this house stomped through
+
+787
+00:31:43,989 --> 00:31:45,650
+this house two hours after it was listed,
+
+788
+00:31:45,660 --> 00:31:46,430
+looked grumpy.
+
+789
+00:31:46,790 --> 00:31:47,520
+And then, you know,
+
+790
+00:31:47,530 --> 00:31:50,410
+we get a phone call an hour and a half later from our reels were saying like, so yeah,
+
+791
+00:31:50,420 --> 00:31:54,319
+he's putting an offer on this place does like leaving on the 25th work for you.
+
+792
+00:31:54,329 --> 00:31:56,099
+And I'm like, I guess it does,
+
+793
+00:31:57,489 --> 00:31:57,930
+you know,
+
+794
+00:31:58,390 --> 00:32:01,670
+like my, my partner literally, I was like at lunchtime like, yeah,
+
+795
+00:32:01,680 --> 00:32:04,060
+so we're listening to the house and then when she got home from work, it's like, uh,
+
+796
+00:32:04,069 --> 00:32:05,650
+so good news and bad news,
+
+797
+00:32:06,040 --> 00:32:07,810
+you know, good news is we don't have to work,
+
+798
+00:32:07,819 --> 00:32:09,890
+we don't have to clean up the place or worry about showing it.
+
+799
+00:32:09,900 --> 00:32:12,119
+Bad news is you have to like pack all your crap up in the next
+
+800
+00:32:12,229 --> 00:32:13,520
+-- couple weeks.
+-- Go.
+
+801
+00:32:13,900 --> 00:32:14,589
+I know. I know.
+
+802
+00:32:16,229 --> 00:32:19,069
+So, I mean, to enable like when I, when I, because I've looked at like,
+
+803
+00:32:19,079 --> 00:32:20,839
+what buying a house involves in many countries
+
+804
+00:32:20,849 --> 00:32:22,849
+and it involves saving up all the money.
+
+805
+00:32:23,060 --> 00:32:26,329
+-- Yeah.
+-- There's places have to basically pay for it. It's crazy.
+
+806
+00:32:26,430 --> 00:32:26,650
+Yeah.
+
+807
+00:32:26,819 --> 00:32:27,229
+Well,
+
+808
+00:32:27,239 --> 00:32:28,939
+or there's places like the Philippines where they
+
+809
+00:32:28,949 --> 00:32:31,890
+just don't have that strong identity slash credit
+
+810
+00:32:32,660 --> 00:32:33,540
+system.
+
+811
+00:32:33,660 --> 00:32:37,079
+And so, even with, you know, a modernizing economy,
+
+812
+00:32:37,510 --> 00:32:40,979
+-- it's just, you can't take that risk.
+-- All right. So we're in the weeds
+
+813
+00:32:40,989 --> 00:32:41,479
+anyways.
+
+814
+00:32:41,489 --> 00:32:44,199
+The point is as terrible as this Equifax breaches and as
+
+815
+00:32:44,209 --> 00:32:48,040
+terrible as these companies are what they enable is amazing.
+
+816
+00:32:48,430 --> 00:32:50,170
+Yes. And that's part of the problem.
+
+817
+00:32:50,180 --> 00:32:51,780
+There's a whole bunch of people saying, oh, we need to like,
+
+818
+00:32:51,790 --> 00:32:53,410
+shut down Equifax or break them up.
+
+819
+00:32:53,500 --> 00:32:53,510
+I
+
+820
+00:32:53,660 --> 00:32:54,719
+don't know how that's going to work.
+
+821
+00:32:55,119 --> 00:32:58,170
+And the reality is a, that would actually make things much worse
+
+822
+00:32:58,300 --> 00:33:02,729
+on so many levels. And b it, it just financially can't happen.
+
+823
+00:33:02,969 --> 00:33:05,680
+-- I literally can't like Visa and Amex would be like,
+-- nope.
+
+824
+00:33:05,949 --> 00:33:08,819
+Well, here's ok. So here's the better question. Ok.
+
+825
+00:33:08,829 --> 00:33:12,780
+We're going to ignore regulation and laws and everything around what
+
+826
+00:33:12,790 --> 00:33:15,410
+they did or didn't do or should or shouldn't have done.
+
+827
+00:33:15,420 --> 00:33:15,890
+Ok.
+
+828
+00:33:16,660 --> 00:33:18,520
+I think the real question is the fact
+
+829
+00:33:18,530 --> 00:33:22,640
+that the identification universe in the United States
+
+830
+00:33:22,930 --> 00:33:23,989
+is broken
+
+831
+00:33:24,119 --> 00:33:24,150
+the
+
+832
+00:33:24,510 --> 00:33:25,280
+-- world
+-- too. And
+
+833
+00:33:26,319 --> 00:33:29,839
+-- maybe, I don't know what the rest of the world is like. I can only speak to the
+-- US.
+
+834
+00:33:29,869 --> 00:33:30,050
+It's the
+
+835
+00:33:30,170 --> 00:33:30,839
+same in Canada,
+
+836
+00:33:30,969 --> 00:33:31,839
+but fundamentally
+
+837
+00:33:32,060 --> 00:33:34,560
+-- most of western Europe.
+-- I, I, I'm sure it is.
+
+838
+00:33:34,569 --> 00:33:37,819
+I don't have a doubt but the point being like, so in the US,
+
+839
+00:33:37,829 --> 00:33:39,930
+you get a social security number when you're born and
+
+840
+00:33:39,939 --> 00:33:42,560
+that essentially just has become your national ID number,
+
+841
+00:33:42,569 --> 00:33:42,959
+right?
+
+842
+00:33:42,969 --> 00:33:45,359
+I mean, that's what it is. And anytime you do anything
+
+843
+00:33:45,839 --> 00:33:47,339
+that's what gets used
+
+844
+00:33:47,660 --> 00:33:50,540
+and we basically reached a point where if,
+
+845
+00:33:50,550 --> 00:33:53,050
+if someone's social security number leaks
+
+846
+00:33:53,189 --> 00:33:57,270
+-- you can cause immense damage to their personal.
+-- The
+
+847
+00:33:57,569 --> 00:33:57,599
+real
+
+848
+00:33:57,699 --> 00:33:58,260
+problem is
+
+849
+00:33:58,469 --> 00:34:02,739
+how do we authenticate somebody? Well, we need some sort of
+
+850
+00:34:02,859 --> 00:34:05,219
+either something that they can only
+
+851
+00:34:05,469 --> 00:34:07,280
+themselves do.
+
+852
+00:34:07,290 --> 00:34:10,739
+Like essentially like if you had a cryptographic chip implanted in
+
+853
+00:34:10,750 --> 00:34:13,409
+your brain at birth and only you had that secret key.
+
+854
+00:34:13,639 --> 00:34:14,478
+Cool.
+
+855
+00:34:14,969 --> 00:34:16,870
+Um Unfortunately, we're not there yet.
+
+856
+00:34:16,879 --> 00:34:19,458
+I, I hope one day that we are because I think that'd be awesome.
+
+857
+00:34:19,649 --> 00:34:20,478
+But here's the problem, right?
+
+858
+00:34:20,489 --> 00:34:23,280
+How do you authenticate somebody without using a secret?
+
+859
+00:34:24,790 --> 00:34:24,820
+The
+
+860
+00:34:24,949 --> 00:34:25,030
+only
+
+861
+00:34:25,188 --> 00:34:25,219
+thing
+
+862
+00:34:25,510 --> 00:34:26,290
+is secret biometrics.
+
+863
+00:34:29,090 --> 00:34:33,320
+Well, no, no, no, we, we do have biometrics. So in theory, you know, this is like crazy
+
+864
+00:34:33,458 --> 00:34:34,179
+talk but
+
+865
+00:34:34,989 --> 00:34:37,949
+no, no, no, they don't have to be because if we have a strong
+
+866
+00:34:38,149 --> 00:34:42,280
+system for actually testing your biometrics that can't be easily subverted.
+
+867
+00:34:42,290 --> 00:34:43,100
+So for example,
+
+868
+00:34:43,458 --> 00:34:44,120
+um
+
+869
+00:34:44,300 --> 00:34:48,050
+I, you come into the bank for a mortgage and I prick your thumb and make you
+
+870
+00:34:48,360 --> 00:34:51,949
+uh not only sign the contract but put a little blood sample into a thing
+
+871
+00:34:52,139 --> 00:34:53,520
+and then I, I,
+
+872
+00:34:53,719 --> 00:34:56,708
+you know, sequence that DNA in real time, which we're basically there, right?
+
+873
+00:34:56,719 --> 00:34:59,050
+You can actually sequence an entire human genome now
+
+874
+00:34:59,209 --> 00:35:00,550
+in tens of minutes.
+
+875
+00:35:00,810 --> 00:35:03,090
+Right. The technology is actually out there, it's just kind of pricey.
+
+876
+00:35:03,760 --> 00:35:06,620
+And so, you know, without like, for example,
+
+877
+00:35:06,629 --> 00:35:09,219
+if you've ever seen the movie Gattica with the fake blood in the vein thing,
+
+878
+00:35:10,179 --> 00:35:13,159
+it would be very hard to fake that out. Now people do fake urine test
+
+879
+00:35:13,260 --> 00:35:13,580
+all sorts of
+
+880
+00:35:13,719 --> 00:35:14,100
+stuff. But
+
+881
+00:35:15,370 --> 00:35:15,590
+the
+
+882
+00:35:15,790 --> 00:35:18,169
+problem is biometrics is going back to biometrics.
+
+883
+00:35:18,219 --> 00:35:20,909
+They're way too expensive right now. And
+
+884
+00:35:21,129 --> 00:35:23,989
+the biometrics that kind of are affordable and work.
+
+885
+00:35:24,020 --> 00:35:27,239
+There's like a lot of people who don't have eyes or a face or arms and stuff.
+
+886
+00:35:27,840 --> 00:35:31,080
+Like there's enough people that, that would be like that poor guy.
+
+887
+00:35:31,090 --> 00:35:32,780
+There was a guy that went into a bank and they, like,
+
+888
+00:35:32,790 --> 00:35:34,969
+we need a fingerprint and he's like, I got no arms
+
+889
+00:35:35,290 --> 00:35:37,389
+and they're like, well, you're gonna have to go somewhere else and he's like,
+
+890
+00:35:37,399 --> 00:35:39,550
+seriously, like, I'm pretty sure like
+
+891
+00:35:40,000 --> 00:35:41,760
+some legality covers
+
+892
+00:35:42,280 --> 00:35:46,429
+that to get resolved. I heard about that. But, ok, so here's the first thing
+
+893
+00:35:46,689 --> 00:35:49,800
+that, that springs into my mind when you talk about
+
+894
+00:35:50,010 --> 00:35:52,030
+sequencing your DNA on site
+
+895
+00:35:52,399 --> 00:35:53,159
+is
+
+896
+00:35:53,669 --> 00:35:59,379
+why not just check to see if I have high risk for cancer and don't give me a loan if I do.
+
+897
+00:35:59,600 --> 00:36:00,179
+Right.
+
+898
+00:36:00,590 --> 00:36:02,439
+Oh, yeah. See that's the problem. That would be the other
+
+899
+00:36:02,629 --> 00:36:04,060
+half of that problem. Right?
+
+900
+00:36:04,209 --> 00:36:04,850
+Is the private,
+
+901
+00:36:05,020 --> 00:36:09,659
+-- there's some minor privacy concerns with sequencing everybody's
+-- DNA.
+
+902
+00:36:09,820 --> 00:36:14,070
+And, and so here's, here's the real issue. Ok. Here's, here's the thing.
+
+903
+00:36:14,229 --> 00:36:14,860
+So I,
+
+904
+00:36:14,870 --> 00:36:21,060
+I think by talking about DNA or chips and brains or national ID cards or whatever,
+
+905
+00:36:21,679 --> 00:36:22,750
+you cloud the issue
+
+906
+00:36:23,159 --> 00:36:27,290
+because those are things that have their own set of problems.
+
+907
+00:36:27,500 --> 00:36:28,010
+Ok.
+
+908
+00:36:28,030 --> 00:36:31,879
+Well, fundamentally what happens is how, so assuming we have all these regimes,
+
+909
+00:36:31,889 --> 00:36:33,070
+like, let's say, for the sake of argument,
+
+910
+00:36:33,080 --> 00:36:35,620
+we have like an estonian national ID card with a crypto chip in it.
+
+911
+00:36:35,629 --> 00:36:37,100
+It's super secure, blah, blah, blah.
+
+912
+00:36:37,510 --> 00:36:40,780
+What happens when somebody loses them? Or somebody gets mugged and rolled
+
+913
+00:36:40,949 --> 00:36:43,250
+and they literally wander into a police station
+
+914
+00:36:43,260 --> 00:36:45,090
+with a concussion and like empty pockets.
+
+915
+00:36:45,100 --> 00:36:47,560
+-- Who cares,
+-- just disable the old car and give them a new one?
+
+916
+00:36:47,659 --> 00:36:47,709
+No,
+
+917
+00:36:47,860 --> 00:36:51,149
+no, no. What I'm saying is how do we prove that that person is who they say they are?
+
+918
+00:36:51,949 --> 00:36:52,530
+Uh
+
+919
+00:36:52,939 --> 00:36:57,530
+Well, I would expect if you're, you, you can acquire other pieces of documentation.
+
+920
+00:36:57,540 --> 00:36:57,979
+I mean, like,
+
+921
+00:36:58,469 --> 00:36:59,699
+-- so
+-- a
+-- good example,
+
+922
+00:37:00,040 --> 00:37:01,040
+homeless with schizophrenia
+
+923
+00:37:01,330 --> 00:37:05,689
+-- and
+-- look, I'm not gonna, I'm not saying this kind of stuff works for everybody,
+
+924
+00:37:05,699 --> 00:37:06,100
+right?
+
+925
+00:37:06,110 --> 00:37:06,620
+There's,
+
+926
+00:37:07,040 --> 00:37:09,689
+there's without doubt problems
+
+927
+00:37:10,000 --> 00:37:13,250
+and when you run into someone like say a homeless person with schizophrenia,
+
+928
+00:37:13,760 --> 00:37:19,530
+you have to have a system that is able to deal with one offs in one off manners, right?
+
+929
+00:37:19,550 --> 00:37:22,330
+So I know locally we don't have that. What we actually have.
+
+930
+00:37:22,340 --> 00:37:23,800
+For example, is the Boyle Street.
+
+931
+00:37:23,810 --> 00:37:26,340
+It's a charitable organization that runs a shelter
+
+932
+00:37:26,830 --> 00:37:31,500
+will for example, photograph you and basically sign an affidavit saying that,
+
+933
+00:37:31,750 --> 00:37:36,199
+you know, you are claiming to be this person and here's, it's not photo ID,
+
+934
+00:37:36,209 --> 00:37:37,489
+but it's like a picture of you with
+
+935
+00:37:37,500 --> 00:37:39,820
+the signed affidavit from the Boyle Street organization.
+
+936
+00:37:40,860 --> 00:37:44,850
+And people essentially that's quite often the best thing they can get.
+
+937
+00:37:44,860 --> 00:37:45,979
+They can, here's the problem.
+
+938
+00:37:45,989 --> 00:37:48,260
+You can't get a driver's license unless you take a driving test.
+
+939
+00:37:48,270 --> 00:37:51,080
+So, ok, you can get a Canadian identification card
+
+940
+00:37:51,989 --> 00:37:55,169
+but you need like your birth certificate or your passport
+
+941
+00:37:55,179 --> 00:37:57,780
+or your something else to prove it and get it.
+
+942
+00:37:57,790 --> 00:37:58,419
+Well, ok,
+
+943
+00:37:58,780 --> 00:37:59,500
+ignoring all that.
+
+944
+00:37:59,510 --> 00:38:02,419
+How do you get a birth certificate if you've like lost everything? Well,
+
+945
+00:38:02,629 --> 00:38:04,409
+ok, easy. If you have a lawyer,
+
+946
+00:38:04,860 --> 00:38:06,919
+right, there's paperwork and stuff to do that.
+
+947
+00:38:07,030 --> 00:38:07,689
+Actually,
+
+948
+00:38:08,500 --> 00:38:08,689
+if
+
+949
+00:38:08,800 --> 00:38:08,879
+you,
+
+950
+00:38:08,985 --> 00:38:10,375
+you can't afford a lawyer or something, you're
+
+951
+00:38:10,814 --> 00:38:14,324
+-- right the creek. And
+-- so you're completely correct
+
+952
+00:38:14,425 --> 00:38:15,405
+-- in everything
+-- you say.
+
+953
+00:38:15,415 --> 00:38:17,705
+He ignores all the people that sell their passports and ID cards.
+
+954
+00:38:18,074 --> 00:38:19,844
+But here's the thing is your,
+
+955
+00:38:19,854 --> 00:38:22,945
+this is where security fails on a consistent basis
+
+956
+00:38:22,955 --> 00:38:26,004
+as we obsess over the like five or 10%.
+
+957
+00:38:26,850 --> 00:38:27,209
+And
+
+958
+00:38:28,149 --> 00:38:29,530
+when in reality,
+
+959
+00:38:30,070 --> 00:38:32,620
+there are ways of dealing with those situations,
+
+960
+00:38:32,729 --> 00:38:35,699
+but the other 90% everything is going to be just
+
+961
+00:38:35,709 --> 00:38:37,969
+fine for and it's going to work just great.
+
+962
+00:38:38,179 --> 00:38:41,770
+But instead of worrying about 90% we obsess over 10%.
+
+963
+00:38:41,800 --> 00:38:43,449
+Well, but for me, here's the thing would,
+
+964
+00:38:43,459 --> 00:38:45,209
+would actually spending money to fix this
+
+965
+00:38:45,219 --> 00:38:47,570
+problem actually make this problem better.
+
+966
+00:38:47,580 --> 00:38:49,300
+Would it outweigh the cost, would there be,
+
+967
+00:38:49,560 --> 00:38:51,010
+would there be a return on investment?
+
+968
+00:38:51,020 --> 00:38:53,729
+There's, there's two parts to this and this is where we're,
+
+969
+00:38:53,739 --> 00:38:55,649
+we're down the wrong path here.
+
+970
+00:38:55,659 --> 00:38:57,649
+We're not having the right conversation, right?
+
+971
+00:38:58,159 --> 00:39:01,580
+This isn't about spending money to fix a problem necessarily.
+
+972
+00:39:01,909 --> 00:39:03,860
+What this is about is the fact that
+
+973
+00:39:04,110 --> 00:39:07,110
+we have an identification system in the United
+
+974
+00:39:07,120 --> 00:39:10,459
+States based upon a single nine digit number,
+
+975
+00:39:10,659 --> 00:39:12,110
+everyone has one
+
+976
+00:39:12,229 --> 00:39:14,290
+and they're basically not secret, right?
+
+977
+00:39:14,389 --> 00:39:18,179
+My, my social security number, Kurt has been stolen so many times.
+
+978
+00:39:18,189 --> 00:39:19,899
+I I'm sad I didn't keep them,
+
+979
+00:39:20,360 --> 00:39:24,719
+but I would have a stack of letters informing me my social security number
+
+980
+00:39:24,729 --> 00:39:29,820
+may have been stolen due to some event from a number of organizations.
+
+981
+00:39:29,830 --> 00:39:31,110
+And I've reached a point like,
+
+982
+00:39:31,439 --> 00:39:34,100
+you know what my social security number is no longer secret.
+
+983
+00:39:34,300 --> 00:39:36,139
+So what I did is I locked my credit
+
+984
+00:39:36,320 --> 00:39:38,820
+in that pin number, which is only sort of secure.
+
+985
+00:39:38,989 --> 00:39:39,300
+Uh
+
+986
+00:39:39,830 --> 00:39:43,449
+but that pin number is now essentially my secret identifier
+
+987
+00:39:43,590 --> 00:39:44,979
+and that is safe.
+
+988
+00:39:45,550 --> 00:39:47,780
+I don't fully understand the locking the credit thing.
+
+989
+00:39:47,790 --> 00:39:49,459
+But my understanding of it is is that
+
+990
+00:39:50,120 --> 00:39:53,979
+nobody can open new like debt instruments until
+
+991
+00:39:53,989 --> 00:39:56,010
+you kind of give that pin or whatever.
+
+992
+00:39:56,020 --> 00:39:59,639
+So what happens is it's, it's sort of complicated actually,
+
+993
+00:39:59,649 --> 00:40:02,969
+I just talked to my sister about this uh yesterday because she's like,
+
+994
+00:40:03,090 --> 00:40:07,090
+what do I do? You know everything's crazy. I said just lack, lack your credit.
+
+995
+00:40:07,100 --> 00:40:09,399
+There's nothing else you can't do, lack your credit and forget about it.
+
+996
+00:40:09,830 --> 00:40:13,100
+But then she also was like, uh, do I have to lock my credit with Equifax?
+
+997
+00:40:13,110 --> 00:40:15,649
+And I said hilariously, yes. Yes, you do.
+
+998
+00:40:15,969 --> 00:40:17,560
+But anyway, anyway,
+
+999
+00:40:17,669 --> 00:40:21,449
+so what happens is you, you basically apply to the credit agencies,
+
+1000
+00:40:21,610 --> 00:40:23,850
+you lock your credit and then they mail you
+
+1001
+00:40:24,120 --> 00:40:25,290
+these letters.
+
+1002
+00:40:25,300 --> 00:40:28,429
+Well, I don't know if they, I don't know, I locked it way back when you first could.
+
+1003
+00:40:28,439 --> 00:40:31,320
+I don't know if they still mail you paper copies, but they did back then
+
+1004
+00:40:31,500 --> 00:40:32,449
+on purpose
+
+1005
+00:40:32,780 --> 00:40:35,090
+and essentially the paper copy has a pin number.
+
+1006
+00:40:35,189 --> 00:40:38,120
+And what you do then is, let's say I want to
+
+1007
+00:40:38,530 --> 00:40:41,120
+uh get a loan or I forget why did I, I had,
+
+1008
+00:40:41,129 --> 00:40:43,899
+I had to unlock my credit for a really crazy reason.
+
+1009
+00:40:43,909 --> 00:40:43,949
+At,
+
+1010
+00:40:43,959 --> 00:40:45,510
+at some point I don't remember what it even
+
+1011
+00:40:45,520 --> 00:40:48,149
+was but like somebody needed to pull my credit
+
+1012
+00:40:48,850 --> 00:40:50,510
+and at first they did nothing
+
+1013
+00:40:50,760 --> 00:40:51,959
+-- and then I let them
+-- pull
+
+1014
+00:40:52,679 --> 00:40:53,830
+to pull your credit report.
+
+1015
+00:40:54,070 --> 00:40:55,419
+Yes, for a hard
+
+1016
+00:40:55,550 --> 00:40:56,939
+pull, soft pulls, I guess, are still
+
+1017
+00:40:57,129 --> 00:40:57,320
+possible.
+
+1018
+00:40:58,000 --> 00:40:58,360
+So anyway,
+
+1019
+00:40:58,469 --> 00:40:59,219
+-- anyway,
+-- so,
+
+1020
+00:40:59,429 --> 00:41:02,030
+but they could still open a credit card in your name. Whether
+
+1021
+00:41:02,290 --> 00:41:02,659
+it would,
+
+1022
+00:41:03,229 --> 00:41:04,949
+-- it would depend on
+-- whether or not they do a poll
+
+1023
+00:41:04,959 --> 00:41:05,409
+I'm getting there.
+
+1024
+00:41:05,530 --> 00:41:06,399
+So here's the deal.
+
+1025
+00:41:07,530 --> 00:41:10,469
+Let's say I want a credit card. Ok, I'll use that as my example.
+
+1026
+00:41:10,479 --> 00:41:11,580
+Go to my bank say I want a credit card.
+
+1027
+00:41:11,590 --> 00:41:13,350
+They're gonna say obviously we need to pull your credit.
+
+1028
+00:41:13,790 --> 00:41:15,699
+And so what I do is there's two things I can do.
+
+1029
+00:41:15,709 --> 00:41:20,070
+I can either tell the credit agencies I want you to lift my credit like from this,
+
+1030
+00:41:20,080 --> 00:41:21,770
+starting this day, ending this day.
+
+1031
+00:41:22,120 --> 00:41:25,719
+And that's what I usually do because I've yet to find a bank that can do the other way,
+
+1032
+00:41:25,729 --> 00:41:30,030
+which is, you can also tell the credit agencies I want you to give me a special pin
+
+1033
+00:41:30,739 --> 00:41:31,879
+for pulling my credit.
+
+1034
+00:41:33,620 --> 00:41:35,919
+And I also tell them who's going to pull it.
+
+1035
+00:41:36,229 --> 00:41:37,790
+So I could say like, you know,
+
+1036
+00:41:38,409 --> 00:41:41,320
+this blah, blah, blah bank is going to pull my credit,
+
+1037
+00:41:41,439 --> 00:41:43,439
+give me a pin for blah, blah, blah bank
+
+1038
+00:41:44,209 --> 00:41:48,149
+and then they give me a special pin which I everywhere I tried to do that.
+
+1039
+00:41:48,159 --> 00:41:48,590
+They're like,
+
+1040
+00:41:48,840 --> 00:41:52,409
+what is this? I'm like, this is the pin to pull my credit. You can unfreeze it.
+
+1041
+00:41:52,419 --> 00:41:54,270
+They're like, what now I'm like,
+
+1042
+00:41:54,439 --> 00:41:55,040
+you're a freaking
+
+1043
+00:41:55,189 --> 00:41:55,699
+bank.
+
+1044
+00:41:56,090 --> 00:41:56,110
+How
+
+1045
+00:41:56,270 --> 00:42:00,000
+-- do you not know that
+-- the whole system has these incentives to behave badly
+
+1046
+00:42:00,010 --> 00:42:02,989
+because the bank wants to do it as cheap and easily as possible.
+
+1047
+00:42:03,649 --> 00:42:03,760
+So
+
+1048
+00:42:03,870 --> 00:42:06,550
+anyway, they don't want to be secure unless they have to eat liability.
+
+1049
+00:42:07,260 --> 00:42:07,479
+And in
+
+1050
+00:42:07,620 --> 00:42:08,159
+this
+
+1051
+00:42:08,840 --> 00:42:09,590
+case, they can just
+
+1052
+00:42:10,080 --> 00:42:12,070
+either you get the credit card or you don't, if you want it,
+
+1053
+00:42:12,080 --> 00:42:13,239
+you have to play by their rules.
+
+1054
+00:42:14,000 --> 00:42:15,969
+And so what I do now is, I just like, I,
+
+1055
+00:42:15,979 --> 00:42:18,959
+I tell the agencies like lift my credit on this day and
+
+1056
+00:42:18,969 --> 00:42:21,110
+then I tell the bank pull my credit on this day.
+
+1057
+00:42:21,120 --> 00:42:24,489
+You can't pull it any other day, but this day, so pull it on this day. Ok.
+
+1058
+00:42:24,500 --> 00:42:25,889
+They're like, what are you talking about?
+
+1059
+00:42:25,899 --> 00:42:30,330
+I said, look, just trust me, you can't pull my credit until Tuesday. Ok.
+
+1060
+00:42:30,939 --> 00:42:33,649
+And you can tell they look at me like this guy's on drugs but
+
+1061
+00:42:33,830 --> 00:42:34,889
+it, it's worked.
+
+1062
+00:42:37,310 --> 00:42:39,429
+-- Ok. I actually, that seems
+-- reasonable. It's very
+
+1063
+00:42:39,850 --> 00:42:41,060
+reasonable and it works.
+
+1064
+00:42:41,729 --> 00:42:44,280
+And actually what's really cool is where I live.
+
+1065
+00:42:44,459 --> 00:42:47,010
+And I know I know people are going to throw their shoe
+
+1066
+00:42:47,270 --> 00:42:49,570
+at their, their speakers when I say this, but
+
+1067
+00:42:50,370 --> 00:42:51,510
+I have to pay
+
+1068
+00:42:51,639 --> 00:42:53,840
+$10 per agency
+
+1069
+00:42:54,010 --> 00:42:59,350
+to put a lift on my credit. So it cost me $30 to lift my credit freeze for a day.
+
+1070
+00:43:00,850 --> 00:43:03,560
+That's amazing though. No scammer is going to do that.
+
+1071
+00:43:03,820 --> 00:43:04,199
+Right.
+
+1072
+00:43:04,209 --> 00:43:05,479
+And, and additionally, I'm like,
+
+1073
+00:43:05,489 --> 00:43:09,040
+I'm only lifting this if it really matters because I know, like I keep getting the,
+
+1074
+00:43:09,260 --> 00:43:12,030
+uh, I play Delta a lot. They're like, oh, you should get the Delta credit card.
+
+1075
+00:43:12,040 --> 00:43:16,239
+And I'm like, I don't want to pay $30 to get a Delta credit card, you know. So
+
+1076
+00:43:16,560 --> 00:43:20,239
+in some ways it's kept me from making foolish decisions after having, you know,
+
+1077
+00:43:20,250 --> 00:43:22,000
+maybe one, too many beers on the airplane.
+
+1078
+00:43:22,729 --> 00:43:23,179
+Yeah,
+
+1079
+00:43:23,520 --> 00:43:23,780
+but
+
+1080
+00:43:24,129 --> 00:43:28,050
+I've always been amazed that people get credit cards at the airport.
+
+1081
+00:43:28,239 --> 00:43:30,189
+That's just one of those things where it's like,
+
+1082
+00:43:31,020 --> 00:43:31,429
+but
+
+1083
+00:43:31,639 --> 00:43:33,760
+it's like people who buy like
+
+1084
+00:43:33,889 --> 00:43:35,949
+-- those I've seen on TV products.
+-- Some
+
+1085
+00:43:35,959 --> 00:43:37,879
+-- of
+-- those are awesome, man. I'm not gonna lie.
+
+1086
+00:43:38,050 --> 00:43:38,979
+Some of them are great
+
+1087
+00:43:39,290 --> 00:43:41,389
+but the ones that cost thousands of dollars and
+
+1088
+00:43:41,399 --> 00:43:43,040
+it's like you're buying that based on an ad,
+
+1089
+00:43:43,110 --> 00:43:46,040
+I would never pay more than $20 for anything.
+
+1090
+00:43:47,649 --> 00:43:48,989
+But also the real,
+
+1091
+00:43:49,094 --> 00:43:50,985
+I mean, to me, what it boils down to is that
+
+1092
+00:43:51,304 --> 00:43:53,504
+to authenticate somebody to say who they say they are,
+
+1093
+00:43:53,514 --> 00:43:57,354
+especially in a first time interaction, uh, name, date of birth,
+
+1094
+00:43:57,534 --> 00:44:02,465
+uh, social security or whatever. What really gets me is none of these numbers
+
+1095
+00:44:02,764 --> 00:44:07,034
+or data can easily be changed if at all. Like I can legally change my name,
+
+1096
+00:44:07,679 --> 00:44:07,770
+but
+
+1097
+00:44:08,229 --> 00:44:09,929
+can you legally change your date of birth?
+
+1098
+00:44:10,429 --> 00:44:10,750
+No,
+
+1099
+00:44:11,070 --> 00:44:14,830
+that's what it makes sense. Why would you, you know, you, that, that's insane.
+
+1100
+00:44:15,020 --> 00:44:15,669
+There's no.
+
+1101
+00:44:16,750 --> 00:44:17,709
+Exactly. Exactly.
+
+1102
+00:44:17,919 --> 00:44:19,149
+And, you know, like I did,
+
+1103
+00:44:19,159 --> 00:44:23,100
+it's funny I lost my wallet once in winter in a snowbank in some parking lot.
+
+1104
+00:44:23,110 --> 00:44:23,530
+Great.
+
+1105
+00:44:23,540 --> 00:44:27,080
+And actually a year later I got a call from a restaurant, like three blocks away from
+
+1106
+00:44:27,320 --> 00:44:28,860
+where I'm pretty sure I lost it saying,
+
+1107
+00:44:29,000 --> 00:44:32,149
+yeah, we've got your wallet in our safe. Do you want it back? And I'm kind of like,
+
+1108
+00:44:32,510 --> 00:44:32,520
+uh,
+
+1109
+00:44:32,659 --> 00:44:36,189
+yes, like that's generally how wallets work, right? You want them back,
+
+1110
+00:44:36,719 --> 00:44:38,139
+like, you know, uh,
+
+1111
+00:44:38,550 --> 00:44:42,639
+and but when I, when I lost my wallet, of course I had to phone a bunch of, you know,
+
+1112
+00:44:42,649 --> 00:44:45,100
+I phoned my bank and everything and they're like, yeah, you know,
+
+1113
+00:44:45,110 --> 00:44:46,739
+we'll have new cards for you whatever
+
+1114
+00:44:47,129 --> 00:44:48,870
+you like. No problem. Right.
+
+1115
+00:44:49,169 --> 00:44:49,760
+Um,
+
+1116
+00:44:49,949 --> 00:44:53,290
+healthcare card. Oh, no, we can't change that number.
+
+1117
+00:44:53,300 --> 00:44:54,850
+And our healthcare card here is a piece
+
+1118
+00:44:54,860 --> 00:44:56,419
+of paper that you're not supposed to laminate.
+
+1119
+00:44:56,429 --> 00:44:57,649
+But I always do because
+
+1120
+00:44:57,800 --> 00:44:59,020
+it's a piece of paper
+
+1121
+00:44:59,649 --> 00:45:02,260
+with a number on it in your name. No picture. No, nothing,
+
+1122
+00:45:02,540 --> 00:45:06,219
+uh, driver's license, same deal, you know, got a new driver's license, but
+
+1123
+00:45:06,350 --> 00:45:07,949
+we can't change the number.
+
+1124
+00:45:08,949 --> 00:45:11,169
+Uh, so, like, in that case, that's,
+
+1125
+00:45:11,479 --> 00:45:14,280
+that's probably a failing. Is it a failing?
+
+1126
+00:45:14,290 --> 00:45:16,409
+Should you be able to change your driver's license number?
+
+1127
+00:45:17,350 --> 00:45:20,879
+Well, I just, here's the thing, the credit card number, the bank guys,
+
+1128
+00:45:20,889 --> 00:45:22,100
+they're all like, yeah, you're getting new
+
+1129
+00:45:22,310 --> 00:45:22,389
+credit
+
+1130
+00:45:22,610 --> 00:45:25,770
+card numbers are designed to be changed. And I guess at the same time,
+
+1131
+00:45:26,110 --> 00:45:27,209
+if I lost my wallet,
+
+1132
+00:45:27,219 --> 00:45:29,780
+the only thing I would care about is my driver's license and I
+
+1133
+00:45:29,790 --> 00:45:31,949
+don't know if they would change the number but like my credit cards,
+
+1134
+00:45:31,959 --> 00:45:32,959
+they get stolen all the time
+
+1135
+00:45:33,260 --> 00:45:35,790
+and can't, as far as I know in pretty much any
+
+1136
+00:45:36,310 --> 00:45:37,010
+North American.
+
+1137
+00:45:37,669 --> 00:45:37,969
+Yeah.
+
+1138
+00:45:38,139 --> 00:45:41,209
+And, well, and the thing is like, it's, again, it's supposed to be like that.
+
+1139
+00:45:41,750 --> 00:45:46,250
+So the good news is like, my driver's license number isn't really widely used as
+
+1140
+00:45:46,770 --> 00:45:48,090
+identification of
+
+1141
+00:45:48,979 --> 00:45:51,949
+my driver's license itself. I use all the time, right?
+
+1142
+00:45:51,959 --> 00:45:53,449
+But it's like they look at the picture,
+
+1143
+00:45:53,750 --> 00:45:56,649
+they look at me, it's the same, you know, we're looking to
+
+1144
+00:45:57,590 --> 00:45:59,949
+just made me realize is I have a passport.
+
+1145
+00:46:00,550 --> 00:46:03,129
+And so like replacing all of my ID cards would be
+
+1146
+00:46:03,139 --> 00:46:05,739
+trivial as long as I still have my passport because I can
+
+1147
+00:46:05,850 --> 00:46:06,010
+just show
+
+1148
+00:46:06,419 --> 00:46:09,649
+-- my
+-- passport separate from all my other things because
+
+1149
+00:46:09,909 --> 00:46:13,250
+yeah, I can lose my wallet or my passport if I lose both. I'm really up.
+
+1150
+00:46:13,580 --> 00:46:14,449
+Well, no, in this case,
+
+1151
+00:46:14,459 --> 00:46:17,189
+I have my safety deposit box with my birth certificate and you know,
+
+1152
+00:46:18,229 --> 00:46:18,419
+I have
+
+1153
+00:46:18,590 --> 00:46:19,239
+those as well. But
+
+1154
+00:46:19,379 --> 00:46:19,929
+again, you know,
+
+1155
+00:46:20,350 --> 00:46:20,760
+that
+
+1156
+00:46:20,875 --> 00:46:22,544
+a lawyer means not too much of a problem.
+
+1157
+00:46:23,604 --> 00:46:23,715
+Yes.
+
+1158
+00:46:23,975 --> 00:46:29,054
+But again, what you're talking about is really corner cases for the most part.
+
+1159
+00:46:29,064 --> 00:46:29,445
+Right?
+
+1160
+00:46:29,635 --> 00:46:32,185
+-- People lose their crap all the time.
+-- They do lose their crap all the time.
+
+1161
+00:46:32,195 --> 00:46:36,044
+But I bet, I bet 80% of people have the ability to
+
+1162
+00:46:36,324 --> 00:46:39,135
+get themselves bootstrapped back up to a point.
+
+1163
+00:46:39,145 --> 00:46:41,114
+They can be functional members of society
+
+1164
+00:46:41,435 --> 00:46:42,814
+and, and some of them can't.
+
+1165
+00:46:43,459 --> 00:46:44,100
+It depends.
+
+1166
+00:46:44,110 --> 00:46:45,360
+For example, like, you know, I,
+
+1167
+00:46:45,370 --> 00:46:48,669
+I deal with a bank where there's one branch I've dealt with since I was 15.
+
+1168
+00:46:48,820 --> 00:46:51,949
+And so they know me by face, right? Like they know me when I walk in
+
+1169
+00:46:52,379 --> 00:46:55,530
+and that's one of the reasons I still continue to deal with this branch in the bank.
+
+1170
+00:46:55,540 --> 00:46:57,050
+-- Because
+-- even then, like,
+
+1171
+00:46:57,060 --> 00:47:00,800
+-- they could hire new people or it would be just as easy for the bank to
+-- just,
+
+1172
+00:47:00,810 --> 00:47:03,790
+that's why I make the point of going in about once every month or not a month or two.
+
+1173
+00:47:03,800 --> 00:47:05,219
+But every couple of months, you know,
+
+1174
+00:47:05,379 --> 00:47:06,689
+is because, yeah, they do hire new
+
+1175
+00:47:06,860 --> 00:47:07,139
+people
+
+1176
+00:47:07,909 --> 00:47:10,600
+and they remember you once every couple of months, like, I,
+
+1177
+00:47:10,610 --> 00:47:14,459
+-- I see the mailman every day and
+-- the older manager type people do.
+
+1178
+00:47:15,239 --> 00:47:15,290
+Right?
+
+1179
+00:47:15,610 --> 00:47:17,820
+-- Ok.
+-- You know, and they're, they're there for a while.
+
+1180
+00:47:17,939 --> 00:47:18,909
+Um, but yeah, so,
+
+1181
+00:47:19,010 --> 00:47:20,850
+but the problem is fundamentally like,
+
+1182
+00:47:21,020 --> 00:47:21,899
+unless
+
+1183
+00:47:22,199 --> 00:47:27,199
+you know anything, I'm going to use to authenticate to a company, by definition,
+
+1184
+00:47:27,679 --> 00:47:31,939
+I have to give out to a whole bunch of people to get credit to get a utility
+
+1185
+00:47:32,159 --> 00:47:32,580
+to get.
+
+1186
+00:47:33,639 --> 00:47:34,800
+-- And this is actually where
+-- the
+
+1187
+00:47:35,270 --> 00:47:37,860
+store, this crap forever, right? They're not going to delete it, right.
+
+1188
+00:47:37,870 --> 00:47:41,290
+-- They're gonna like, type it in and be like, ok then,
+-- but here's the beauty of this,
+
+1189
+00:47:41,300 --> 00:47:41,520
+right?
+
+1190
+00:47:41,530 --> 00:47:43,419
+Is this is where I'm going to talk about
+
+1191
+00:47:43,429 --> 00:47:45,820
+credit freeze as being a brilliant solution to this.
+
+1192
+00:47:45,830 --> 00:47:46,250
+And by the way,
+
+1193
+00:47:46,260 --> 00:47:49,639
+if you're listening and you've made it this far through a storytelling, uh,
+
+1194
+00:47:49,649 --> 00:47:50,899
+freeze your credit, please.
+
+1195
+00:47:50,909 --> 00:47:53,129
+Even if you don't think you need it, you will not regret it.
+
+1196
+00:47:53,139 --> 00:47:56,300
+But anyway, the point is the numbers that identify me,
+
+1197
+00:47:56,800 --> 00:47:58,219
+I can give it to a company.
+
+1198
+00:47:58,449 --> 00:47:59,139
+But by the way,
+
+1199
+00:47:59,149 --> 00:48:02,570
+the credit freeze works is there still a second layer of authentication now.
+
+1200
+00:48:02,580 --> 00:48:05,179
+Right. And, and it's an out of band authentication
+
+1201
+00:48:05,500 --> 00:48:08,060
+because I don't give the company, I'm dealing with my PIN.
+
+1202
+00:48:08,239 --> 00:48:10,879
+I go straight to the agencies, give them my P I
+
+1203
+00:48:11,340 --> 00:48:14,100
+identify myself and then tell them what I want them to do.
+
+1204
+00:48:14,469 --> 00:48:17,530
+And that's really the way this needs to be done. I mean, let's face it.
+
+1205
+00:48:17,750 --> 00:48:21,679
+The solution to all of this exists. It is freezing your credit.
+
+1206
+00:48:21,689 --> 00:48:25,000
+Everyone should freeze their credit. And if everyone had to do that,
+
+1207
+00:48:25,330 --> 00:48:27,770
+all of these problems go away.
+
+1208
+00:48:27,909 --> 00:48:29,520
+Well, a lot of them would, but
+
+1209
+00:48:29,800 --> 00:48:31,290
+there's still a lot of
+
+1210
+00:48:32,020 --> 00:48:36,379
+-- other companies that store a lot of data on us.
+-- But who cares? Ok. Ok.
+
+1211
+00:48:36,389 --> 00:48:38,010
+That's a whole another topic.
+
+1212
+00:48:38,020 --> 00:48:41,989
+-- And we can do a whole podcast just
+-- like, for example, like to transfer my utilities
+
+1213
+00:48:42,179 --> 00:48:45,850
+and I decided to combine my natural gas bill with like every other utility I have.
+
+1214
+00:48:45,860 --> 00:48:47,290
+So I only have one provider now
+
+1215
+00:48:47,889 --> 00:48:50,159
+and they're like, you know, Mr Siefried,
+
+1216
+00:48:50,500 --> 00:48:54,060
+uh so blah, blah, blah, there might be like a deposit required. And I'm like,
+
+1217
+00:48:54,449 --> 00:48:57,989
+she's like, but you know, if we can I check your billing history to see blah, blah,
+
+1218
+00:48:58,000 --> 00:48:58,149
+blah.
+
+1219
+00:48:58,159 --> 00:48:58,830
+And I'm like,
+
+1220
+00:48:59,449 --> 00:48:59,479
+and
+
+1221
+00:48:59,840 --> 00:49:03,199
+she's like, no, no, I need like you to like say that I can check your billing history.
+
+1222
+00:49:03,209 --> 00:49:05,290
+I'm like, oh, yes, yes, you can check my billing history, right?
+
+1223
+00:49:05,300 --> 00:49:06,750
+Because obviously this call is being recorded
+
+1224
+00:49:06,959 --> 00:49:09,050
+and she's like, Ok. T tap, tap, tap, tap, tap. Right.
+
+1225
+00:49:09,060 --> 00:49:10,780
+And she pulls up my, essentially my,
+
+1226
+00:49:10,790 --> 00:49:14,149
+my billing history and credit history with that specific company and sees,
+
+1227
+00:49:14,159 --> 00:49:16,780
+you know, yeah, I paid every bill on time since like, forever.
+
+1228
+00:49:16,959 --> 00:49:18,850
+So. Ok, no deposit needs great.
+
+1229
+00:49:19,189 --> 00:49:19,879
+Um,
+
+1230
+00:49:20,229 --> 00:49:23,050
+and, you know, and conversely there's people out there I know that, like,
+
+1231
+00:49:23,060 --> 00:49:25,330
+have to put down like $500 deposits
+
+1232
+00:49:25,679 --> 00:49:31,250
+to get gas or, or, uh, you know, cable or whatever because they have like, terrible,
+
+1233
+00:49:31,260 --> 00:49:32,459
+terrible track records.
+
+1234
+00:49:32,790 --> 00:49:34,810
+And what's actually started happening in some cases
+
+1235
+00:49:34,820 --> 00:49:36,580
+is with sort of addresses that are,
+
+1236
+00:49:36,590 --> 00:49:38,290
+you know, typically rental properties,
+
+1237
+00:49:39,189 --> 00:49:42,649
+they'll basically say like, yeah, we know, well,
+
+1238
+00:49:42,659 --> 00:49:45,850
+we think you're claiming to not be this person who used to rent there.
+
+1239
+00:49:45,860 --> 00:49:47,820
+That's cool. Good story. But like,
+
+1240
+00:49:47,929 --> 00:49:50,889
+there's an outstanding bill of like 350 bucks at this address
+
+1241
+00:49:51,080 --> 00:49:52,689
+and until it's cleared, tough.
+
+1242
+00:49:52,780 --> 00:49:55,929
+-- You know,
+-- that's, that's rough if, if that's the case.
+
+1243
+00:49:56,020 --> 00:49:58,719
+But when you have like an address where consistently you have
+
+1244
+00:49:58,729 --> 00:50:01,219
+people renting for two or three or four or five months
+
+1245
+00:50:01,489 --> 00:50:03,250
+and not paying their utility bills at all.
+
+1246
+00:50:03,260 --> 00:50:05,810
+It's like as a, what do you expect these companies to do?
+
+1247
+00:50:05,979 --> 00:50:07,530
+Just eat the loss and smile.
+
+1248
+00:50:08,270 --> 00:50:09,489
+Yeah, I mean, that's
+
+1249
+00:50:10,040 --> 00:50:12,370
+-- II, I get it. I understand
+-- that.
+
+1250
+00:50:12,379 --> 00:50:15,570
+And that's part of the problem is we've gone to this model of like,
+
+1251
+00:50:15,580 --> 00:50:20,679
+huge hyper efficient companies that, you know, they have statistical models.
+
+1252
+00:50:20,689 --> 00:50:21,669
+They don't know who you are.
+
+1253
+00:50:21,679 --> 00:50:24,580
+But their statistical model has a pretty good idea of who you are
+
+1254
+00:50:25,270 --> 00:50:26,719
+and it says, yeah, we can, like,
+
+1255
+00:50:26,729 --> 00:50:29,919
+sign this guy for like a credit card with all but like no limit.
+
+1256
+00:50:29,929 --> 00:50:30,850
+Just let him go,
+
+1257
+00:50:31,080 --> 00:50:34,080
+you know, dude owns a house, we can take his house. Awesome. You can,
+
+1258
+00:50:34,959 --> 00:50:35,320
+-- you
+-- know.
+
+1259
+00:50:36,459 --> 00:50:37,209
+Yeah, apparently.
+
+1260
+00:50:37,250 --> 00:50:39,600
+But, um, and that's, that's fundamentally, it's like,
+
+1261
+00:50:39,610 --> 00:50:42,949
+even if Equifax Transunion and Experian and Choice point and
+
+1262
+00:50:42,959 --> 00:50:44,750
+God knows how many other companies all had like,
+
+1263
+00:50:44,760 --> 00:50:46,040
+perfect data security.
+
+1264
+00:50:46,540 --> 00:50:47,840
+They don't, I'd still,
+
+1265
+00:50:48,080 --> 00:50:50,459
+yeah, I'd still have to be handing out like my,
+
+1266
+00:50:51,020 --> 00:50:52,959
+you know, sensitive information to
+
+1267
+00:50:53,169 --> 00:50:58,399
+these places where if it were ever leaked or copied, then that person can now be me.
+
+1268
+00:50:58,409 --> 00:51:00,229
+No, they can't. Well, ok, they can.
+
+1269
+00:51:00,239 --> 00:51:04,639
+But this is where something like a credit freeze is super useful, right?
+
+1270
+00:51:04,780 --> 00:51:05,280
+It's
+
+1271
+00:51:06,000 --> 00:51:08,090
+there, there isn't a good answer to this today.
+
+1272
+00:51:08,300 --> 00:51:08,889
+And,
+
+1273
+00:51:09,350 --> 00:51:09,610
+well,
+
+1274
+00:51:09,620 --> 00:51:11,659
+my cable company actually just tried to get me to
+
+1275
+00:51:11,669 --> 00:51:13,010
+set a pin number on my account and I'm like,
+
+1276
+00:51:13,020 --> 00:51:13,530
+why?
+
+1277
+00:51:13,780 --> 00:51:16,270
+And he's like, so that basically nobody can like, phone us up and,
+
+1278
+00:51:16,419 --> 00:51:19,669
+and like, pretend to be you and stuff. And I'm like, does that happen a lot?
+
+1279
+00:51:19,679 --> 00:51:22,020
+And he's like, obviously can't, you know, talk about that.
+
+1280
+00:51:22,659 --> 00:51:23,419
+And I'm like,
+
+1281
+00:51:23,689 --> 00:51:25,149
+he's like, oh, if somebody were to like,
+
+1282
+00:51:25,159 --> 00:51:28,669
+call and like order premium services in your name and I'm like, I,
+
+1283
+00:51:28,679 --> 00:51:30,060
+I bet that actually happened
+
+1284
+00:51:30,679 --> 00:51:33,229
+to people with teenagers every now and then
+
+1285
+00:51:33,820 --> 00:51:36,909
+it's probably not a significant threat in all seriousness.
+
+1286
+00:51:36,979 --> 00:51:40,260
+And the thing is with teenagers, how could I possibly defend myself against my kids?
+
+1287
+00:51:40,270 --> 00:51:42,639
+Like, I'm gonna, like, lock up my ID
+
+1288
+00:51:42,790 --> 00:51:44,080
+and never let them near it.
+
+1289
+00:51:45,290 --> 00:51:47,280
+Yeah, we're not going to have that conversation either.
+
+1290
+00:51:48,350 --> 00:51:49,040
+It's just not gonna work.
+
+1291
+00:51:49,969 --> 00:51:50,429
+It's
+
+1292
+00:51:51,110 --> 00:51:54,270
+-- hilarious.
+-- It's like those kids who have their identities stolen by their parents.
+
+1293
+00:51:54,530 --> 00:51:55,149
+Uh,
+
+1294
+00:51:55,649 --> 00:51:56,850
+that's a really difficult,
+
+1295
+00:51:57,280 --> 00:51:57,310
+so
+
+1296
+00:51:57,429 --> 00:52:00,020
+that's another problem. And that's, well, it's illegal. Right.
+
+1297
+00:52:00,030 --> 00:52:01,340
+I mean, it is illegal to do.
+
+1298
+00:52:02,179 --> 00:52:05,429
+There's, there's laws against behavior such as that.
+
+1299
+00:52:06,199 --> 00:52:06,600
+Right.
+
+1300
+00:52:07,350 --> 00:52:08,780
+-- It is.
+-- But
+
+1301
+00:52:09,100 --> 00:52:09,780
+this is,
+
+1302
+00:52:10,219 --> 00:52:13,159
+this is one thing where, for example, some form of biometrics, like,
+
+1303
+00:52:13,169 --> 00:52:17,520
+even just a picture would, you know, go a long way to making a lot harder.
+
+1304
+00:52:17,820 --> 00:52:20,540
+Um, my favorite always is when you look at some of these fake I DS
+
+1305
+00:52:21,179 --> 00:52:21,979
+and, you know, they, like,
+
+1306
+00:52:21,989 --> 00:52:25,439
+just cut and paste and like totally random other person's facing or whatever,
+
+1307
+00:52:26,489 --> 00:52:27,060
+you know,
+
+1308
+00:52:27,219 --> 00:52:29,669
+or, uh, the case where it's like, you know,
+
+1309
+00:52:29,959 --> 00:52:34,639
+I, I am not like 6 ft seven, like, clearly I'm not 6 ft seven. Like, did you
+
+1310
+00:52:35,260 --> 00:52:36,020
+not notice that?
+
+1311
+00:52:37,169 --> 00:52:39,320
+I'm not 6 ft seven. I'm not even 6 ft.
+
+1312
+00:52:41,179 --> 00:52:41,229
+Yeah.
+
+1313
+00:52:41,239 --> 00:52:45,629
+-- Anyway,
+-- anyway, no, it's, I don't know that there's a simple or easy answer,
+
+1314
+00:52:45,639 --> 00:52:48,679
+I think credit freezing and, and by default, you know,
+
+1315
+00:52:48,689 --> 00:52:51,459
+having like a nice little smartphone app that allows you to unlock
+
+1316
+00:52:51,469 --> 00:52:53,250
+-- it or lock it and not have to pay 30
+-- bucks.
+
+1317
+00:52:53,870 --> 00:52:54,550
+I want to pay
+
+1318
+00:52:54,699 --> 00:52:55,830
+$30.
+
+1319
+00:52:56,840 --> 00:52:58,639
+Well, ok, it should be hard to do.
+
+1320
+00:52:59,409 --> 00:53:01,939
+You have to pay 30 bucks upfront. And if, uh,
+
+1321
+00:53:02,689 --> 00:53:05,600
+you know, and maybe the company, for example, can say, you know,
+
+1322
+00:53:05,610 --> 00:53:08,050
+here's the password for him to collect his money.
+
+1323
+00:53:08,780 --> 00:53:11,790
+Right. So essentially you put up a $30 bond and then the company,
+
+1324
+00:53:12,389 --> 00:53:15,189
+you know, can verify that you wanted this and,
+
+1325
+00:53:15,290 --> 00:53:16,879
+you know, you get your money back and that
+
+1326
+00:53:17,090 --> 00:53:20,030
+because remember this happened with DNS, right? With the DNS, the Domain
+
+1327
+00:53:20,479 --> 00:53:24,110
+-- and
+-- there's places it's free. It just depends on what state you live in.
+
+1328
+00:53:24,120 --> 00:53:27,110
+I, I happen to like that. I have to pay for it because
+
+1329
+00:53:27,360 --> 00:53:30,530
+my suspicion is what's going to happen is after this,
+
+1330
+00:53:30,830 --> 00:53:32,070
+they're just going to make it free
+
+1331
+00:53:32,550 --> 00:53:33,340
+because
+
+1332
+00:53:33,469 --> 00:53:35,500
+by making credit freezing free,
+
+1333
+00:53:35,669 --> 00:53:38,820
+these guys might be able to avoid some level of regulation.
+
+1334
+00:53:39,290 --> 00:53:41,800
+I like how we went to a point where it's like I have all this data on you.
+
+1335
+00:53:41,810 --> 00:53:43,449
+It'd be a real shame if it leaks,
+
+1336
+00:53:43,570 --> 00:53:43,669
+you
+
+1337
+00:53:43,780 --> 00:53:43,820
+know,
+
+1338
+00:53:44,560 --> 00:53:45,860
+for a few bucks
+
+1339
+00:53:46,199 --> 00:53:46,580
+anyway.
+
+1340
+00:53:48,479 --> 00:53:48,560
+Seriously.
+
+1341
+00:53:48,860 --> 00:53:51,320
+-- How is that? Not extortion? Well,
+-- whatever it
+
+1342
+00:53:51,330 --> 00:53:51,530
+is.
+
+1343
+00:53:51,540 --> 00:53:53,320
+Seriously, that sounds a lot like extortion.
+
+1344
+00:53:53,330 --> 00:53:56,639
+-- They're gonna offer me credit monitoring if I want it like one year,
+-- right?
+
+1345
+00:53:56,649 --> 00:53:57,949
+A free year of credit,
+
+1346
+00:53:58,229 --> 00:53:59,250
+such a good deal.
+
+1347
+00:53:59,419 --> 00:54:00,020
+No offense.
+
+1348
+00:54:00,030 --> 00:54:01,780
+But like as somebody pointed out on Reddit,
+
+1349
+00:54:01,790 --> 00:54:04,520
+-- you can steal an identity and still use that like
+-- 10 years
+
+1350
+00:54:05,860 --> 00:54:06,510
+-- and
+-- actually
+
+1351
+00:54:07,770 --> 00:54:09,139
+so sort of a tangent.
+
+1352
+00:54:09,149 --> 00:54:12,219
+But there was a thread on Reddit a few years ago I read where it was like, it was a,
+
+1353
+00:54:12,229 --> 00:54:13,610
+it was an ask Reddit thing where,
+
+1354
+00:54:13,790 --> 00:54:14,790
+you know, people have Reddit,
+
+1355
+00:54:14,820 --> 00:54:17,090
+has somebody stolen your identity and kind of what happened.
+
+1356
+00:54:17,790 --> 00:54:18,969
+And this one guy is like
+
+1357
+00:54:19,070 --> 00:54:22,389
+my social security number name and everything was stolen by an illegal immigrant,
+
+1358
+00:54:22,629 --> 00:54:25,250
+but they've totally improved my credit score.
+
+1359
+00:54:26,010 --> 00:54:27,270
+That's great.
+
+1360
+00:54:28,260 --> 00:54:30,550
+So he's like, I don't know who this guy is, but like,
+
+1361
+00:54:30,580 --> 00:54:33,580
+he's like my credit score is like 200 points better now because
+
+1362
+00:54:33,590 --> 00:54:36,199
+he has like a credit card and this other thing in my name
+
+1363
+00:54:36,330 --> 00:54:40,209
+-- and he like, pays his bill religiously and I'm like,
+-- that's hilarious.
+
+1364
+00:54:40,409 --> 00:54:45,429
+That is hilarious. So actually the real person is ruining the life of the
+
+1365
+00:54:45,639 --> 00:54:47,040
+uh identity thief.
+
+1366
+00:54:47,840 --> 00:54:48,739
+Yeah, that's brilliant.
+
+1367
+00:54:49,639 --> 00:54:49,929
+That's great.
+
+1368
+00:54:50,090 --> 00:54:50,649
+That's great.
+
+1369
+00:54:51,000 --> 00:54:54,300
+You know, but, and that's the thing, right? Like, how do we? Yeah, I mean
+
+1370
+00:54:54,590 --> 00:54:57,340
+this, this whole, I don't know, it just, the more I think about this,
+
+1371
+00:54:57,350 --> 00:54:59,120
+the more it really does seem like extortion.
+
+1372
+00:54:59,129 --> 00:55:00,870
+Like I'm going to keep all this data on you
+
+1373
+00:55:01,120 --> 00:55:05,419
+and like for, you know, a few bucks I can maybe like, try not to leak it so much.
+
+1374
+00:55:06,189 --> 00:55:06,570
+Yep.
+
+1375
+00:55:07,550 --> 00:55:08,469
+I, I
+
+1376
+00:55:08,780 --> 00:55:09,610
+don't know, man,
+
+1377
+00:55:09,760 --> 00:55:11,989
+-- this is
+-- ok. Well, so ignoring all this,
+
+1378
+00:55:12,340 --> 00:55:12,919
+here's the beauty of
+
+1379
+00:55:14,260 --> 00:55:17,739
+let's why don't we go to the really juicy saucy part of the story,
+
+1380
+00:55:18,060 --> 00:55:19,489
+which I think will get even worse.
+
+1381
+00:55:20,179 --> 00:55:25,159
+So, two things. Stock trading, right. We see here's one of the things, right. Like,
+
+1382
+00:55:25,310 --> 00:55:26,550
+I think part of the problem is how do
+
+1383
+00:55:26,560 --> 00:55:29,560
+you actually monetize 100 and 43 million records?
+
+1384
+00:55:30,540 --> 00:55:32,280
+That's like, so much that, like,
+
+1385
+00:55:32,860 --> 00:55:34,120
+you'd have to sell them at some.
+
+1386
+00:55:34,620 --> 00:55:34,929
+Yeah.
+
+1387
+00:55:35,409 --> 00:55:39,379
+How do you monetize that data? Right. Like, it's so bulk, it's like we are selling
+
+1388
+00:55:39,649 --> 00:55:41,919
+like a million records for like $10. I don't know.
+
+1389
+00:55:41,929 --> 00:55:45,120
+Like, I like bulk pricing on that kind of data.
+
+1390
+00:55:45,909 --> 00:55:48,679
+You know, it's half of North America at this point.
+
+1391
+00:55:49,300 --> 00:55:49,370
+It's
+
+1392
+00:55:49,479 --> 00:55:49,669
+gonna be,
+
+1393
+00:55:51,639 --> 00:55:53,409
+yeah, it's like, oh, we just,
+
+1394
+00:55:53,510 --> 00:55:56,620
+yeah, we robbed Fort Knox but ok, now what?
+
+1395
+00:55:57,030 --> 00:55:59,860
+And yes, I heard that, that the executives sold their stock, what,
+
+1396
+00:55:59,870 --> 00:56:02,270
+like four days before the story hit, which is, come
+
+1397
+00:56:02,399 --> 00:56:03,770
+on guys, it's insider trading.
+
+1398
+00:56:04,479 --> 00:56:05,229
+Well, unless it's a
+
+1399
+00:56:05,469 --> 00:56:07,340
+scheduled stock disbursement
+
+1400
+00:56:07,540 --> 00:56:10,090
+thing where, you know, they do this every six months or a year or whatever.
+
+1401
+00:56:10,110 --> 00:56:13,715
+But no, no, no, that's not the juicy part. It's not even close to the juicy part.
+
+1402
+00:56:13,774 --> 00:56:14,594
+That's boring.
+
+1403
+00:56:14,794 --> 00:56:18,274
+What's really interesting. Equifax stock trading is
+
+1404
+00:56:18,485 --> 00:56:20,784
+very minimal. It's very boring. Right. There's
+
+1405
+00:56:20,885 --> 00:56:23,554
+only, it's got, it's a very thinly traded
+
+1406
+00:56:23,705 --> 00:56:26,395
+stock in the sense of there's not like a high volume every
+
+1407
+00:56:26,604 --> 00:56:26,854
+date
+
+1408
+00:56:27,790 --> 00:56:32,709
+and there's especially not a high volume of options so quick. One on one for options.
+
+1409
+00:56:33,120 --> 00:56:36,429
+The stock market basically has sort of what most people
+
+1410
+00:56:36,439 --> 00:56:38,350
+know about is you can buy and sell shares,
+
+1411
+00:56:38,479 --> 00:56:39,050
+right?
+
+1412
+00:56:39,139 --> 00:56:43,300
+Shares are selling at some market price of say $27 and you can buy, you know,
+
+1413
+00:56:43,310 --> 00:56:45,179
+you make an offer of $27.01
+
+1414
+00:56:45,860 --> 00:56:49,129
+and of course somebody will probably be like sweet, I just made a penny, you know,
+
+1415
+00:56:49,139 --> 00:56:50,550
+and sell you a million shares
+
+1416
+00:56:51,709 --> 00:56:53,870
+and conversely, you know, same for selling, right?
+
+1417
+00:56:53,879 --> 00:56:54,969
+You're selling shares and you,
+
+1418
+00:56:54,979 --> 00:56:58,090
+you price it up market price for a penny below and everybody's like, oh, awesome,
+
+1419
+00:56:58,100 --> 00:56:58,429
+great.
+
+1420
+00:56:58,439 --> 00:56:58,770
+You know,
+
+1421
+00:56:59,770 --> 00:57:03,830
+there's also options and options are essentially a contract that either
+
+1422
+00:57:03,840 --> 00:57:06,989
+a put or a call that allows you to either have
+
+1423
+00:57:07,600 --> 00:57:11,810
+the option of selling or the option of buying shares
+
+1424
+00:57:12,010 --> 00:57:16,629
+on a certain date at a certain price. So for example, I can buy an option
+
+1425
+00:57:17,469 --> 00:57:21,870
+saying I will, I will have the option of selling, say
+
+1426
+00:57:22,050 --> 00:57:23,320
+10,000 shares of F
+
+1427
+00:57:23,469 --> 00:57:24,570
+Corp at a dollar.
+
+1428
+00:57:25,570 --> 00:57:29,510
+Uh And then when that date rolls around, I can choose to exercise it or not,
+
+1429
+00:57:29,520 --> 00:57:30,919
+I can either do it or don't do it.
+
+1430
+00:57:31,320 --> 00:57:31,830
+Um,
+
+1431
+00:57:32,000 --> 00:57:33,389
+the counter party to that,
+
+1432
+00:57:34,000 --> 00:57:34,500
+uh,
+
+1433
+00:57:34,760 --> 00:57:40,219
+has to do it. Like if I decide to sell our share, um, or, you know, uh buy, right?
+
+1434
+00:57:40,229 --> 00:57:42,379
+That's, that's what I'm paying for, right? So
+
+1435
+00:57:42,580 --> 00:57:43,719
+somebody bought,
+
+1436
+00:57:44,239 --> 00:57:47,649
+uh what was it? 100 and 60,000 options
+
+1437
+00:57:48,550 --> 00:57:49,719
+of Equifax
+
+1438
+00:57:50,459 --> 00:57:51,540
+to sell
+
+1439
+00:57:51,979 --> 00:57:54,239
+at, uh I forget the exact price, but it's
+
+1440
+00:57:54,610 --> 00:57:57,719
+um, a little bit below what the stock was currently trading
+
+1441
+00:57:57,879 --> 00:57:58,909
+before the breach.
+
+1442
+00:58:00,300 --> 00:58:04,560
+And here's the thing. So those are what are called in the money options
+
+1443
+00:58:05,429 --> 00:58:09,989
+in that essentially normally given normal behavior of the stock.
+
+1444
+00:58:10,209 --> 00:58:12,500
+It, nobody would care because basically,
+
+1445
+00:58:12,510 --> 00:58:17,100
+like the stock trades for the sake of argument between 131 $140
+
+1446
+00:58:17,780 --> 00:58:21,679
+and somebody bought a bunch of options to sell or sorry to buy the,
+
+1447
+00:58:21,689 --> 00:58:23,620
+or to sell the shares at 100 and 30
+
+1448
+00:58:24,020 --> 00:58:26,040
+like no big deal, right? Like it,
+
+1449
+00:58:26,409 --> 00:58:28,659
+chances are those options aren't going to be worth anything
+
+1450
+00:58:28,669 --> 00:58:31,159
+on that date because that's kind of the normal trading range
+
+1451
+00:58:31,270 --> 00:58:33,040
+and this person wouldn't be able to make any money.
+
+1452
+00:58:34,250 --> 00:58:36,790
+And then there's what are called out of the money options where it's like,
+
+1453
+00:58:36,840 --> 00:58:39,429
+say the stock trades between 100 and 30 100 and 40.
+
+1454
+00:58:39,850 --> 00:58:42,750
+And you know, I, I want, I want to
+
+1455
+00:58:43,300 --> 00:58:43,979
+buy the shares
+
+1456
+00:58:44,669 --> 00:58:44,760
+to the
+
+1457
+00:58:44,959 --> 00:58:45,139
+point,
+
+1458
+00:58:46,629 --> 00:58:51,639
+somebody bought 100 and 60,000 option at 60 cents a piece. Roughly
+
+1459
+00:58:51,909 --> 00:58:53,810
+that are now worth about $4 million
+
+1460
+00:58:53,969 --> 00:58:58,110
+because they basically bought the option to sell these shares at this given price.
+
+1461
+00:58:58,600 --> 00:59:01,189
+Normal trading activity on this
+
+1462
+00:59:01,969 --> 00:59:04,389
+on Equifax for these options is like
+
+1463
+00:59:04,800 --> 00:59:06,739
+tens of contracts per day
+
+1464
+00:59:06,899 --> 00:59:09,550
+and somebody bought thousands of these in a single day
+
+1465
+00:59:10,189 --> 00:59:11,909
+just around the time of the breach.
+
+1466
+00:59:12,379 --> 00:59:14,409
+Yeah, but look, you can't buy stock,
+
+1467
+00:59:14,520 --> 00:59:18,550
+this isn't Bitcoin. I mean, the sec knows who did that and they're going to go,
+
+1468
+00:59:19,439 --> 00:59:20,370
+right. Like it's quite
+
+1469
+00:59:20,479 --> 00:59:20,570
+like
+
+1470
+00:59:21,689 --> 00:59:21,770
+this.
+
+1471
+00:59:22,520 --> 00:59:24,169
+-- Right.
+-- Well, that's what confuses me about.
+
+1472
+00:59:24,179 --> 00:59:26,229
+This is, this is one of those cases where,
+
+1473
+00:59:26,969 --> 00:59:30,229
+uh, if there was enough volume you could hide in the herd.
+
+1474
+00:59:31,149 --> 00:59:31,560
+Right?
+
+1475
+00:59:31,699 --> 00:59:35,639
+Like it was a, it was a very busy stock, I'd say Microsoft or something
+
+1476
+00:59:36,449 --> 00:59:37,229
+here. Like
+
+1477
+00:59:37,510 --> 00:59:38,719
+you're proving the point,
+
+1478
+00:59:39,679 --> 00:59:42,290
+the SEC will have to investigate and somebody's going to get nail power
+
+1479
+00:59:42,860 --> 00:59:44,629
+and that's the part I don't get is
+
+1480
+00:59:44,790 --> 00:59:48,659
+somebody sophisticated enough to steal this data and do the stock trading.
+
+1481
+00:59:48,790 --> 00:59:52,520
+They showed the chart and there's basically like, every other day is flat.
+
+1482
+00:59:52,530 --> 00:59:53,929
+It's like the, it's like a one Pix
+
+1483
+00:59:54,159 --> 00:59:54,909
+high bar
+
+1484
+00:59:55,159 --> 00:59:56,459
+and then there's the day that this
+
+1485
+00:59:56,659 --> 00:59:57,879
+entity brought all these
+
+1486
+00:59:58,010 --> 00:59:58,110
+options.
+
+1487
+00:59:58,149 --> 01:00:03,550
+Reality is it's probably just some idiot who caught wind of this and they,
+
+1488
+01:00:03,560 --> 01:00:06,090
+they thought they were going to make a buck and the SEC is just
+
+1489
+01:00:06,100 --> 01:00:08,550
+going to find him and throw him in jail for like five months.
+
+1490
+01:00:08,729 --> 01:00:12,100
+And, and that's what it's going to be. I doubt this is nefarious because
+
+1491
+01:00:12,379 --> 01:00:13,520
+let's face it. Like
+
+1492
+01:00:13,629 --> 01:00:18,080
+the, the entire financial industry is designed to make this hard to do.
+
+1493
+01:00:18,090 --> 01:00:21,959
+Well, the one theory is that it's insider trading based on the Equifax information,
+
+1494
+01:00:21,969 --> 01:00:22,399
+which
+
+1495
+01:00:22,649 --> 01:00:24,989
+-- totally illegal, they're going to get nailed.
+-- Well, sure.
+
+1496
+01:00:25,000 --> 01:00:27,520
+That's exactly what it is, right. Guaranteed.
+
+1497
+01:00:27,739 --> 01:00:29,070
+Well, or it's the bad guys. But again,
+
+1498
+01:00:30,070 --> 01:00:30,729
+this is the bad guys
+
+1499
+01:00:30,889 --> 01:00:31,439
+because
+
+1500
+01:00:31,629 --> 01:00:32,389
+it's too obvious
+
+1501
+01:00:33,649 --> 01:00:34,600
+No, it's not the bad,
+
+1502
+01:00:35,590 --> 01:00:36,300
+whatever, but
+
+1503
+01:00:36,639 --> 01:00:36,739
+interesting
+
+1504
+01:00:36,929 --> 01:00:39,399
+to see this activity regardless because it's obviously
+
+1505
+01:00:39,780 --> 01:00:43,229
+like when you look at 30 days of graphs, this is the only activity of.
+
+1506
+01:00:43,300 --> 01:00:44,870
+-- No, it's,
+-- it's crazy town.
+
+1507
+01:00:44,879 --> 01:00:48,360
+All right, man, we've been, we've been dragging this one out for a long time, I guess.
+
+1508
+01:00:48,379 --> 01:00:50,760
+Here are my, my closing thoughts on this is,
+
+1509
+01:00:51,739 --> 01:00:53,399
+I'm not surprised this happened.
+
+1510
+01:00:53,850 --> 01:00:55,169
+I am pleased.
+
+1511
+01:00:56,129 --> 01:00:58,120
+Normal people are starting to pay attention
+
+1512
+01:00:58,570 --> 01:01:01,689
+and I think the reality is freezing your credit
+
+1513
+01:01:01,699 --> 01:01:03,760
+is not only the right thing to do today.
+
+1514
+01:01:04,090 --> 01:01:07,840
+It's probably the easiest long term solution that actually makes this,
+
+1515
+01:01:08,290 --> 01:01:10,340
+we'll say less important, right?
+
+1516
+01:01:10,459 --> 01:01:12,300
+I mean, now I I will say though,
+
+1517
+01:01:12,530 --> 01:01:12,780
+here's the
+
+1518
+01:01:12,919 --> 01:01:13,260
+question.
+
+1519
+01:01:13,830 --> 01:01:15,600
+No, no, here's, here's the real question.
+
+1520
+01:01:15,729 --> 01:01:19,719
+Did the attacker get my credit freeze ID number?
+
+1521
+01:01:20,929 --> 01:01:21,360
+My P
+
+1522
+01:01:22,189 --> 01:01:23,139
+if they have that,
+
+1523
+01:01:23,300 --> 01:01:24,790
+I'm screwed. Right.
+
+1524
+01:01:24,800 --> 01:01:29,870
+Well, yes and no, because you're part of such a big vulnerable herd of people,
+
+1525
+01:01:30,199 --> 01:01:30,780
+hopefully
+
+1526
+01:01:31,729 --> 01:01:33,060
+be safe. But you get the point,
+
+1527
+01:01:34,080 --> 01:01:35,830
+you get the point is uh and,
+
+1528
+01:01:35,840 --> 01:01:39,040
+and that might be that if that information comes out in the next couple of days,
+
+1529
+01:01:39,050 --> 01:01:41,310
+that would make the story huge,
+
+1530
+01:01:41,620 --> 01:01:43,110
+-- right?
+-- So here's my thinking on this.
+
+1531
+01:01:44,310 --> 01:01:46,100
+So from the supply side,
+
+1532
+01:01:46,219 --> 01:01:50,889
+obviously buying somebody's identity online is like trivial,
+
+1533
+01:01:51,320 --> 01:01:54,129
+especially now that there's 100 and 43 million more of them.
+
+1534
+01:01:54,830 --> 01:01:57,179
+So on the demand side of the people that can actually
+
+1535
+01:01:57,189 --> 01:01:59,929
+take this data and turn it into cold hard cash.
+
+1536
+01:02:00,719 --> 01:02:02,250
+Does this actually give them a
+
+1537
+01:02:02,399 --> 01:02:06,100
+-- significant benefit?
+-- Probably not outside of what they already had.
+
+1538
+01:02:06,110 --> 01:02:06,939
+I mean, let's face it
+
+1539
+01:02:07,580 --> 01:02:10,879
+because, yeah, I can't imagine like, these people are lacking for records when you,
+
+1540
+01:02:11,169 --> 01:02:13,270
+because, like, every single data breach,
+
+1541
+01:02:13,280 --> 01:02:14,979
+it seems like in the last four or five years,
+
+1542
+01:02:15,250 --> 01:02:18,989
+you know, we went from like, oh a few 1000 to a few tens of thousands to now, like,
+
+1543
+01:02:19,040 --> 01:02:22,350
+it's just millions, every single, you know, major one is,
+
+1544
+01:02:22,360 --> 01:02:24,469
+-- it's
+-- not a story if there aren't at least
+
+1545
+01:02:24,500 --> 01:02:27,350
+100 million breaches or 100 million records anyway.
+
+1546
+01:02:27,360 --> 01:02:29,560
+Anyway, uh, I guess, yeah, whatever.
+
+1547
+01:02:29,810 --> 01:02:31,649
+What, what are your, what are your closing thoughts here?
+
+1548
+01:02:32,370 --> 01:02:33,479
+My thoughts are
+
+1549
+01:02:34,600 --> 01:02:36,780
+nothing will significantly change.
+
+1550
+01:02:37,560 --> 01:02:41,080
+There will be some, uh what's the English expression?
+
+1551
+01:02:41,090 --> 01:02:43,919
+German Storm and drama, like basically Storm and drama.
+
+1552
+01:02:44,550 --> 01:02:48,020
+But will we see good new, will we see new regulation?
+
+1553
+01:02:48,219 --> 01:02:48,449
+No
+
+1554
+01:02:49,370 --> 01:02:50,330
+good regulation?
+
+1555
+01:02:50,939 --> 01:02:51,530
+-- Look,
+-- let's
+
+1556
+01:02:51,649 --> 01:02:51,719
+face
+
+1557
+01:02:51,830 --> 01:02:51,850
+it.
+
+1558
+01:02:52,040 --> 01:02:54,070
+The government is locked in
+
+1559
+01:02:54,189 --> 01:02:58,209
+a stalemate of effort proportions unless basically half of the
+
+1560
+01:02:58,219 --> 01:03:01,620
+Senate has their identity stolen and actually used an identity.
+
+1561
+01:03:02,580 --> 01:03:03,889
+Nothing will change
+
+1562
+01:03:04,060 --> 01:03:05,600
+even then I don't know if it would.
+
+1563
+01:03:07,270 --> 01:03:10,149
+Yeah. So I suspect nothing of significance will change or happen.
+
+1564
+01:03:10,159 --> 01:03:11,419
+A whole pile of people.
+
+1565
+01:03:11,570 --> 01:03:14,010
+-- Here's what I mean, a whole pile of people will freeze
+-- the
+
+1566
+01:03:14,030 --> 01:03:14,229
+credit.
+
+1567
+01:03:15,929 --> 01:03:18,489
+Well, screw the revenue. Just good job doing that.
+
+1568
+01:03:18,500 --> 01:03:21,510
+Like you should be freezing your credit if you're not freezing your credit, go do it.
+
+1569
+01:03:21,520 --> 01:03:22,959
+Go do it right now. Right.
+
+1570
+01:03:23,439 --> 01:03:24,489
+Stop the podcast.
+
+1571
+01:03:24,659 --> 01:03:25,209
+Go do it
+
+1572
+01:03:26,040 --> 01:03:28,379
+apart from the hassle of dealing with this.
+
+1573
+01:03:29,229 --> 01:03:32,770
+Has anybody really ever been out the money from identity
+
+1574
+01:03:32,780 --> 01:03:34,399
+theft in this kind of thing by and large?
+
+1575
+01:03:34,689 --> 01:03:35,729
+You mean out the money?
+
+1576
+01:03:36,010 --> 01:03:36,370
+Well, you,
+
+1577
+01:03:36,379 --> 01:03:37,639
+you talked about this in a previous
+
+1578
+01:03:37,649 --> 01:03:39,790
+episode where it's like suing somebody for identity
+
+1579
+01:03:39,800 --> 01:03:42,229
+theft is really hard because you would have to prove some sort of loss.
+
+1580
+01:03:42,500 --> 01:03:43,679
+I doubt it.
+
+1581
+01:03:44,379 --> 01:03:47,679
+And I get that it fucks to have to spend tens or hundreds of hours dealing with like,
+
+1582
+01:03:47,689 --> 01:03:48,750
+no, I'm not debt or
+
+1583
+01:03:48,879 --> 01:03:52,969
+no, I don't own like 17 houses. Like, can I please have a mortgage,
+
+1584
+01:03:53,699 --> 01:03:54,060
+you know,
+
+1585
+01:03:54,689 --> 01:03:56,000
+47 credit cards?
+
+1586
+01:03:56,449 --> 01:03:57,070
+I don't know.
+
+1587
+01:03:57,199 --> 01:03:59,469
+But actually being on the hook for that money,
+
+1588
+01:03:59,979 --> 01:04:00,110
+it
+
+1589
+01:04:00,290 --> 01:04:03,000
+-- seems like in most cases it's pretty easy to disprove.
+-- It's not
+
+1590
+01:04:03,209 --> 01:04:06,120
+easy. It's like you said at the beginning of the episode, it does take a long time.
+
+1591
+01:04:06,129 --> 01:04:07,669
+It's doable, but it's tricky.
+
+1592
+01:04:08,020 --> 01:04:11,139
+That's what I mean. It's, you don't need like an OJ Simpson style lawyer.
+
+1593
+01:04:11,250 --> 01:04:13,060
+Like you can, you just need to go file paperwork
+
+1594
+01:04:13,189 --> 01:04:13,830
+pretty much.
+
+1595
+01:04:14,090 --> 01:04:15,020
+So, it's,
+
+1596
+01:04:15,399 --> 01:04:16,110
+I think you're right.
+
+1597
+01:04:16,120 --> 01:04:18,669
+I don't think, I honestly, at the end of the day it's a crazy story,
+
+1598
+01:04:19,209 --> 01:04:21,270
+but really it's, it's not gonna matter.
+
+1599
+01:04:21,280 --> 01:04:21,290
+I,
+
+1600
+01:04:21,300 --> 01:04:23,110
+I imagine we're just going to be talking about
+
+1601
+01:04:23,120 --> 01:04:25,270
+the hurricane more than this in six months.
+
+1602
+01:04:25,280 --> 01:04:30,110
+Yeah. Well, in a financial sense, I mean, Houston being flooded and
+
+1603
+01:04:30,500 --> 01:04:34,030
+I was gonna say Miami, but at this point, I guess we'll just go with Florida.
+
+1604
+01:04:34,719 --> 01:04:36,850
+Um Florida being flooded.
+
+1605
+01:04:37,100 --> 01:04:37,989
+You know, the, the,
+
+1606
+01:04:38,000 --> 01:04:40,320
+the cost financially insurance claim wise and
+
+1607
+01:04:40,330 --> 01:04:41,899
+everything on that is going to make this
+
+1608
+01:04:42,320 --> 01:04:46,959
+-- not even be a rounding error and,
+-- and we could talk about insurance and risk
+
+1609
+01:04:47,120 --> 01:04:50,320
+and, and maybe the next episode because there's some fascinating overland
+
+1610
+01:04:50,530 --> 01:04:51,870
+flood insurance. There's
+
+1611
+01:04:52,000 --> 01:04:52,110
+a, there's
+
+1612
+01:04:53,159 --> 01:04:53,169
+a
+
+1613
+01:04:53,790 --> 01:04:53,860
+people
+
+1614
+01:04:54,020 --> 01:04:57,459
+anyway, anyway, when there's some things that have been happening around
+
+1615
+01:04:57,820 --> 01:05:01,060
+building codes that they've kind of become lax because they were like,
+
+1616
+01:05:01,070 --> 01:05:02,310
+it's not that bad.
+
+1617
+01:05:02,350 --> 01:05:03,719
+I like, well, guess what it is.
+
+1618
+01:05:04,409 --> 01:05:06,739
+But anyway, anyway. All right, cool. Thanks, Kurt.
+
+1619
+01:05:06,750 --> 01:05:09,270
+Thank you everybody for, for listening.
+
+1620
+01:05:09,280 --> 01:05:13,790
+If you want show notes or links to the Facebook group or Twitter,
+
+1621
+01:05:13,800 --> 01:05:16,070
+go to open source Security podcast.com.
+
+1622
+01:05:16,080 --> 01:05:20,590
+Be sure to hit us up on Facebook or Twitter with, with comments. We love comments.
+
+1623
+01:05:20,600 --> 01:05:22,610
+So by all means, let us know, I guess nothing else.
+
+1624
+01:05:22,620 --> 01:05:25,850
+-- Kurt, you have a fabulous rest of your day.
+-- Thanks.

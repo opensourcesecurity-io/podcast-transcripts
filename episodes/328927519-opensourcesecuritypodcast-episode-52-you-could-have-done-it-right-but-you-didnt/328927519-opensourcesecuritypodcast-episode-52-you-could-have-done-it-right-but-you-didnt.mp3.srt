@@ -1,0 +1,5161 @@
+0
+00:00:05,159 --> 00:00:09,579
+Hello and welcome to episode 52 of the open source security podcast with myself,
+
+1
+00:00:09,590 --> 00:00:11,850
+Kurt Siefried and my partner in crime, Josh Bresser.
+
+2
+00:00:12,270 --> 00:00:16,219
+You know, Kurt, when we started doing a podcast, I didn't expect
+
+3
+00:00:16,430 --> 00:00:19,459
+for the internet to be on fire for so many episodes.
+
+4
+00:00:19,639 --> 00:00:20,180
+It's,
+
+5
+00:00:20,600 --> 00:00:21,229
+it seems
+
+6
+00:00:21,399 --> 00:00:21,430
+like
+
+7
+00:00:22,040 --> 00:00:24,489
+I'm, I'm starting to suspect it is that,
+
+8
+00:00:24,500 --> 00:00:28,500
+that occasionally someone puts it out for a little while and then it flares back up.
+
+9
+00:00:29,299 --> 00:00:31,319
+Yeah. Yeah. No, I, I mean,
+
+10
+00:00:32,039 --> 00:00:36,578
+we've been doing this now for 20 years. Well, the internet's been around for about 25
+
+11
+00:00:38,528 --> 00:00:39,019
+sixties. I
+
+12
+00:00:39,278 --> 00:00:42,298
+-- mean,
+-- no, no, no. But I mean, with like normal people, not just a bunch of like time
+
+13
+00:00:42,738 --> 00:00:43,298
+frame and like,
+
+14
+00:00:44,219 --> 00:00:45,938
+probably 30 years.
+
+15
+00:00:46,289 --> 00:00:48,078
+Yeah, I would say late nineties
+
+16
+00:00:48,469 --> 00:00:50,569
+really is when you, like your mom got on it
+
+17
+00:00:51,259 --> 00:00:52,040
+-- and I don't mean that
+-- in a
+
+18
+00:00:52,279 --> 00:00:55,750
+-- derogatory sense, just normal people.
+-- Let's give credit where it's due.
+
+19
+00:00:56,090 --> 00:00:56,650
+Wallace broke
+
+20
+00:00:56,819 --> 00:00:57,590
+the internet.
+
+21
+00:00:57,880 --> 00:00:58,549
+Well done. Qac.
+
+22
+00:01:00,029 --> 00:01:00,259
+Yeah,
+
+23
+00:01:00,560 --> 00:01:02,389
+they, yeah. No, they did some, I mean,
+
+24
+00:01:02,790 --> 00:01:05,959
+that was literally one of the top 10 security
+
+25
+00:01:05,970 --> 00:01:07,699
+advisories when they said it to us initially.
+
+26
+00:01:07,709 --> 00:01:13,050
+Like it just the level of detail and the quality of the research was amazing.
+
+27
+00:01:13,250 --> 00:01:14,599
+-- I mean,
+-- this is an amazing invite.
+
+28
+00:01:14,650 --> 00:01:17,129
+So, all right, let's, let's first clarify something. Is
+
+29
+00:01:17,349 --> 00:01:20,449
+you work for Red Hat and were involved
+
+30
+00:01:20,639 --> 00:01:22,290
+in working on this
+
+31
+00:01:22,779 --> 00:01:25,080
+for, for several weeks. Is my understanding
+
+32
+00:01:25,739 --> 00:01:28,849
+so. Well, just a real dirty quick timeline. Basically Q
+
+33
+00:01:29,080 --> 00:01:30,080
+found a bunch of stuff.
+
+34
+00:01:30,089 --> 00:01:31,800
+I don't know exactly when they found it internally,
+
+35
+00:01:31,809 --> 00:01:34,769
+but they found it and they came to the distro list,
+
+36
+00:01:34,919 --> 00:01:36,750
+you know, pretty much right away. And we're like,
+
+37
+00:01:36,959 --> 00:01:39,319
+we basically found this huge problem.
+
+38
+00:01:39,849 --> 00:01:42,940
+We obviously need to coordinate with you guys to fix it, you know,
+
+39
+00:01:42,949 --> 00:01:44,180
+how do we want to handle this?
+
+40
+00:01:44,620 --> 00:01:45,339
+Um
+
+41
+00:01:45,610 --> 00:01:48,050
+And so initially, Red Hat and Sousa,
+
+42
+00:01:48,699 --> 00:01:48,720
+uh
+
+43
+00:01:48,849 --> 00:01:53,360
+the security teams got uh sort of a little bit of early access for a few days to the
+
+44
+00:01:53,559 --> 00:01:56,209
+report and essentially just to, you know, first of all, like call
+
+45
+00:01:56,370 --> 00:01:58,319
+comes to us and says, like, literally, we have this thing that like,
+
+46
+00:01:58,330 --> 00:02:00,040
+we'll burn your house down if you look at it funny
+
+47
+00:02:00,169 --> 00:02:03,120
+and we're like, uh can you be a little more specific, you know, because
+
+48
+00:02:03,569 --> 00:02:05,800
+this sadly happens a lot.
+
+49
+00:02:06,360 --> 00:02:08,000
+Um And it's kind of one of those things, you know,
+
+50
+00:02:08,008 --> 00:02:11,270
+is this a kook off the street or did they actually, like figure out who killed JFK?
+
+51
+00:02:11,389 --> 00:02:12,410
+-- Uh So anyways,
+-- in
+
+52
+00:02:12,750 --> 00:02:15,600
+fact, these guys are the ones who did it. I think.
+
+53
+00:02:17,270 --> 00:02:17,869
+So, us
+
+54
+00:02:18,050 --> 00:02:18,130
+and
+
+55
+00:02:18,429 --> 00:02:20,970
+Zzo, you know, we, we looked at the report for a few days and kind of went.
+
+56
+00:02:21,119 --> 00:02:22,789
+Yeah. No, this is all correct.
+
+57
+00:02:22,800 --> 00:02:26,059
+And, um, actually it's worse than that because the solution you've proposed,
+
+58
+00:02:26,229 --> 00:02:28,429
+uh, won't work very well.
+
+59
+00:02:29,199 --> 00:02:31,830
+So it's actually much worse than you thought it was. And calls kind of went.
+
+60
+00:02:31,839 --> 00:02:33,259
+Oh, thanks. That's great.
+
+61
+00:02:34,110 --> 00:02:35,610
+Um, what are we going to do about this?
+
+62
+00:02:35,619 --> 00:02:38,820
+And so essentially we, you know, we coordinate, um,
+
+63
+00:02:38,830 --> 00:02:40,929
+with the community via the distro list,
+
+64
+00:02:41,050 --> 00:02:43,220
+um, with initially like a two week embargo.
+
+65
+00:02:43,710 --> 00:02:47,660
+Uh and then that got extended because quite frankly, um we,
+
+66
+00:02:47,669 --> 00:02:49,660
+we just couldn't fix this in two weeks, right?
+
+67
+00:02:49,669 --> 00:02:53,779
+It's just, it's, I mean, this is memory management within the Colonel Angie Lipsey
+
+68
+00:02:54,139 --> 00:02:55,479
+on Linux and then
+
+69
+00:02:55,690 --> 00:03:00,399
+the reciprocal on all the B sds, right? So this isn't even just a bad Linux problem.
+
+70
+00:03:00,410 --> 00:03:01,320
+This is a bad Linux
+
+71
+00:03:01,679 --> 00:03:03,009
+and BS D problem.
+
+72
+00:03:03,490 --> 00:03:04,080
+Um
+
+73
+00:03:05,059 --> 00:03:07,830
+So, you know, it's pretty complicated and to quote one of the
+
+74
+00:03:08,029 --> 00:03:08,919
+Gipsy developers, you know,
+
+75
+00:03:08,929 --> 00:03:11,320
+I don't want to push out a security update that's gonna break everything,
+
+76
+00:03:12,309 --> 00:03:14,580
+right? Because when you start fiddling with memory management,
+
+77
+00:03:15,509 --> 00:03:18,169
+you know, you have the potential to break everything. Uh So
+
+78
+00:03:19,029 --> 00:03:22,389
+initially, it was thought, hey, we'll just increase the size of the stack card page,
+
+79
+00:03:22,399 --> 00:03:22,619
+right?
+
+80
+00:03:22,630 --> 00:03:24,729
+From four kilobytes to say one megabyte,
+
+81
+00:03:25,029 --> 00:03:29,779
+right? That'll work. Uh And the answer is no, no, it, it won't work on its own.
+
+82
+00:03:29,789 --> 00:03:32,429
+It, it will definitely make things safer and harder to exploit,
+
+83
+00:03:32,889 --> 00:03:34,589
+but there's enough user space
+
+84
+00:03:34,830 --> 00:03:36,630
+uh programs like say pseudo and
+
+85
+00:03:36,869 --> 00:03:37,070
+exim
+
+86
+00:03:37,649 --> 00:03:42,279
+that can be manipulated to allow you to bypass even a one meg stack guard page.
+
+87
+00:03:42,679 --> 00:03:46,119
+Um And obviously we can't go any bigger than about a one megabyte snack card page.
+
+88
+00:03:46,130 --> 00:03:49,889
+Because if you think about like a threaded application, say with 1000 threads,
+
+89
+00:03:50,699 --> 00:03:52,770
+that's now a gigabyte of allocated memory,
+
+90
+00:03:53,059 --> 00:03:57,460
+which on a 64 gigabyte uh 64 bit system is no big deal, right?
+
+91
+00:03:57,470 --> 00:03:58,419
+You got lots of address space,
+
+92
+00:03:58,649 --> 00:04:00,309
+but on a 32 bit system,
+
+93
+00:04:01,020 --> 00:04:02,520
+that's a quarter of your address space.
+
+94
+00:04:03,789 --> 00:04:04,600
+Right. Right.
+
+95
+00:04:04,809 --> 00:04:05,639
+You know,
+
+96
+00:04:05,960 --> 00:04:10,000
+so we, we just, yeah, I mean, even on 32 bit systems,
+
+97
+00:04:10,009 --> 00:04:12,649
+this one megabyte guard page is pushing it, you know.
+
+98
+00:04:13,320 --> 00:04:17,040
+Um although realistically anybody now should be able to upgrade to a 64 bit.
+
+99
+00:04:17,760 --> 00:04:21,640
+Hey, I don't know if I'd go that far, but yeah, I get what you're saying
+
+100
+00:04:22,119 --> 00:04:23,029
+one could hope.
+
+101
+00:04:23,290 --> 00:04:25,829
+But uh so anyway, so what was found?
+
+102
+00:04:25,839 --> 00:04:29,480
+Um especially once we roped in some of the smart guys like Florian uh Vimar
+
+103
+00:04:29,779 --> 00:04:31,769
+who does uh g lipsy security
+
+104
+00:04:32,049 --> 00:04:34,579
+is that we also needed to make changes to g lipsy
+
+105
+00:04:35,239 --> 00:04:37,559
+to really, you know, as he put it belt and suspenders, you know,
+
+106
+00:04:37,570 --> 00:04:39,380
+fix this for pretty much all of it.
+
+107
+00:04:40,079 --> 00:04:41,399
+And, you know, you don't
+
+108
+00:04:41,730 --> 00:04:43,279
+patch and ship a fix and
+
+109
+00:04:43,459 --> 00:04:44,519
+Gypsy in a few days,
+
+110
+00:04:44,529 --> 00:04:47,799
+like especially when you're monkeying with the core memory management
+
+111
+00:04:48,279 --> 00:04:51,100
+because if you do that you will break the internet for real,
+
+112
+00:04:52,700 --> 00:04:53,279
+you know,
+
+113
+00:04:53,440 --> 00:04:54,760
+nothing will boot anymore.
+
+114
+00:04:54,769 --> 00:04:57,519
+If you have a broken g lipsy, you're going to have a bad time. So
+
+115
+00:04:57,670 --> 00:05:01,920
+we asked for and got about a 2.5 week extension to the embargo, which, you know,
+
+116
+00:05:01,929 --> 00:05:04,559
+so we're not talking about an embargo lasting months or years.
+
+117
+00:05:04,570 --> 00:05:06,480
+We're talking about an embargo that in total
+
+118
+00:05:06,720 --> 00:05:09,950
+-- was about 4.5, 5 weeks.
+-- That's solid, man.
+
+119
+00:05:09,959 --> 00:05:12,519
+I mean, this is a lot of work for, for four weeks.
+
+120
+00:05:13,299 --> 00:05:15,730
+Well, and, and also considering that, you know, like I said, it was,
+
+121
+00:05:15,739 --> 00:05:17,190
+it's all the Linux,
+
+122
+00:05:17,350 --> 00:05:19,709
+it's all the B sds like,
+
+123
+00:05:20,339 --> 00:05:23,299
+which is kind of impressive too because I can't think of too
+
+124
+00:05:23,309 --> 00:05:27,269
+many exploits that are kind of at this fundamental level that affect Linux
+
+125
+00:05:27,429 --> 00:05:28,600
+-- and BS D
+-- at
+
+126
+00:05:28,609 --> 00:05:29,429
+-- the same
+-- time,
+
+127
+00:05:29,940 --> 00:05:32,010
+there has been some TCP stuff back in
+
+128
+00:05:32,019 --> 00:05:34,089
+the day because everybody made the same assumptions
+
+129
+00:05:35,329 --> 00:05:36,459
+and uh,
+
+130
+00:05:36,779 --> 00:05:39,790
+-- well, things like, you know, user based stuff like DNS where
+-- everybody
+
+131
+00:05:39,799 --> 00:05:39,880
+is
+
+132
+00:05:40,339 --> 00:05:40,820
+different.
+
+133
+00:05:41,089 --> 00:05:42,109
+I mean, I get that.
+
+134
+00:05:42,970 --> 00:05:44,790
+But yeah, as far as this goes, yeah, I mean, it's
+
+135
+00:05:45,239 --> 00:05:46,390
+generally speaking, yeah,
+
+136
+00:05:46,399 --> 00:05:49,459
+the systems have slightly different assumptions or the code has been, you know,
+
+137
+00:05:49,470 --> 00:05:51,769
+around for 30 years and modified enough that they're,
+
+138
+00:05:51,779 --> 00:05:55,220
+they've diverged enough that, you know, we just don't have the same problem.
+
+139
+00:05:55,380 --> 00:05:56,589
+It's kind of
+
+140
+00:05:57,049 --> 00:06:02,510
+a flaw in the general architecture of X 86 as well just because of how they work.
+
+141
+00:06:03,200 --> 00:06:04,390
+Yeah, I mean, if you want to get,
+
+142
+00:06:04,399 --> 00:06:07,350
+I guess technical it would be what the Von Neumann architecture and I forget
+
+143
+00:06:07,359 --> 00:06:10,070
+if that's the one with the data and code separated or with the mixed,
+
+144
+00:06:10,670 --> 00:06:14,339
+-- you have a comp sci degree, you should know this.
+-- I, I don't know, you know, I
+
+145
+00:06:15,390 --> 00:06:16,489
+anyways, yeah. So the
+
+146
+00:06:16,649 --> 00:06:21,519
+one of the classic ideas of computing was to split executable and
+
+147
+00:06:22,070 --> 00:06:23,970
+like data data, right?
+
+148
+00:06:24,160 --> 00:06:28,269
+And, and the stack and the heap and all of that sort of kind of does that.
+
+149
+00:06:28,279 --> 00:06:29,880
+But the problem is, you know,
+
+150
+00:06:30,769 --> 00:06:35,799
+well, you can write past your stack and jump over the guard pages effectively,
+
+151
+00:06:35,809 --> 00:06:38,750
+you know, and get into, well, you know,
+
+152
+00:06:38,760 --> 00:06:42,670
+the the into the bits of memory that you shouldn't be able to change.
+
+153
+00:06:42,679 --> 00:06:43,079
+And that,
+
+154
+00:06:43,489 --> 00:06:43,850
+you know,
+
+155
+00:06:43,859 --> 00:06:46,220
+we're running the program on the assumption that these parts of memory
+
+156
+00:06:46,230 --> 00:06:48,239
+are not going to change and that they're safe to just,
+
+157
+00:06:48,250 --> 00:06:49,839
+you know, execute as is well.
+
+158
+00:06:49,850 --> 00:06:52,739
+OK. So why don't we back this up for a little bit?
+
+159
+00:06:52,880 --> 00:06:53,549
+Is
+
+160
+00:06:53,820 --> 00:06:55,100
+a long time ago,
+
+161
+00:06:55,529 --> 00:06:59,470
+there was an attack called a stack smash,
+
+162
+00:07:00,149 --> 00:07:00,980
+right? Which is a
+
+163
+00:07:01,250 --> 00:07:03,540
+one and Frack was at 43 I think
+
+164
+00:07:04,390 --> 00:07:05,579
+is the one who
+
+165
+00:07:05,820 --> 00:07:08,160
+it does. And it was very clever
+
+166
+00:07:08,410 --> 00:07:10,399
+and essentially you could
+
+167
+00:07:11,049 --> 00:07:11,869
+do some things.
+
+168
+00:07:11,880 --> 00:07:15,769
+And because the stack grows down when you overflow, a buffer,
+
+169
+00:07:15,779 --> 00:07:19,059
+you're writing into stack metadata essentially which
+
+170
+00:07:19,070 --> 00:07:22,209
+is located above the the variables,
+
+171
+00:07:22,220 --> 00:07:22,489
+right?
+
+172
+00:07:22,500 --> 00:07:24,079
+Just because that's how it's growing.
+
+173
+00:07:24,380 --> 00:07:28,750
+And so we, we got rid of that using something called stack protector,
+
+174
+00:07:28,760 --> 00:07:32,730
+which essentially puts a canary on the stack checks, the canary make sure nothing
+
+175
+00:07:33,079 --> 00:07:35,079
+did weird things to
+
+176
+00:07:35,279 --> 00:07:37,049
+the metadata on the stack, right?
+
+177
+00:07:37,890 --> 00:07:38,670
+And then
+
+178
+00:07:39,059 --> 00:07:40,070
+that's all good.
+
+179
+00:07:40,470 --> 00:07:44,140
+And then we end up in a situation where people found out you
+
+180
+00:07:44,149 --> 00:07:47,779
+could just grow the stack in the heap which grow towards each other
+
+181
+00:07:48,160 --> 00:07:51,070
+and you could grow them in such a way that they, they basically
+
+182
+00:07:51,339 --> 00:07:52,109
+collide.
+
+183
+00:07:52,329 --> 00:07:54,390
+And so now you have the stack writing into
+
+184
+00:07:54,399 --> 00:07:56,589
+heap data and the heap writing into stack data,
+
+185
+00:07:56,640 --> 00:07:57,260
+right?
+
+186
+00:07:57,760 --> 00:07:58,619
+And that was bad.
+
+187
+00:07:58,839 --> 00:08:02,130
+And so the solution to that was we created what was called a guard page,
+
+188
+00:08:02,140 --> 00:08:03,579
+which is basically a page of memory.
+
+189
+00:08:03,589 --> 00:08:04,859
+A page of memory is four K
+
+190
+00:08:04,959 --> 00:08:07,670
+page of memory just sitting kind of somewhere
+
+191
+00:08:08,079 --> 00:08:08,779
+that says
+
+192
+00:08:08,890 --> 00:08:11,019
+the stack cannot cross this,
+
+193
+00:08:11,380 --> 00:08:11,820
+right?
+
+194
+00:08:12,100 --> 00:08:14,890
+And, and the heap is a little different because of the way the heap works.
+
+195
+00:08:14,899 --> 00:08:17,059
+It's a little less dicey as to because,
+
+196
+00:08:17,609 --> 00:08:19,420
+but anyway, stat can't cross this right?
+
+197
+00:08:19,429 --> 00:08:22,869
+-- Too long
+-- didn't read memory management is quite tricky as it turns out.
+
+198
+00:08:22,880 --> 00:08:23,350
+Well,
+
+199
+00:08:23,679 --> 00:08:24,230
+look,
+
+200
+00:08:24,880 --> 00:08:25,410
+no,
+
+201
+00:08:25,519 --> 00:08:26,029
+no,
+
+202
+00:08:26,239 --> 00:08:27,390
+no, I'm gonna say no.
+
+203
+00:08:27,480 --> 00:08:33,909
+The problem is the X 86 architecture is like 90 years of cobbled together nonsense.
+
+204
+00:08:34,020 --> 00:08:38,390
+That's the problem. Although funny enough, I I, after reading the Callis Advisory,
+
+205
+00:08:38,890 --> 00:08:39,650
+I then thought,
+
+206
+00:08:39,659 --> 00:08:42,159
+I wonder if this affects arm because I don't know off the top of my head.
+
+207
+00:08:42,169 --> 00:08:43,729
+How arm does stack management?
+
+208
+00:08:43,859 --> 00:08:46,969
+Yeah, it's basically the same. So, like, good job guys, you could have done it.
+
+209
+00:08:46,979 --> 00:08:48,020
+Right. But you didn't.
+
+210
+00:08:48,229 --> 00:08:50,609
+So, anyway, although even the arm
+
+211
+00:08:50,799 --> 00:08:54,690
+architecture is old. So, anyway, anyway, the idea is you have your stack guard
+
+212
+00:08:55,210 --> 00:08:57,869
+or page, right? Your guard page for the stack.
+
+213
+00:08:58,710 --> 00:08:59,210
+And now if
+
+214
+00:08:59,989 --> 00:09:02,580
+it's more of a, it's more of a trip wire than anything else. It's
+
+215
+00:09:02,760 --> 00:09:04,260
+only if something touches that
+
+216
+00:09:04,469 --> 00:09:04,669
+page
+
+217
+00:09:05,909 --> 00:09:06,929
+and that's the problem.
+
+218
+00:09:07,130 --> 00:09:07,619
+And you can,
+
+219
+00:09:08,510 --> 00:09:10,780
+right when the spy sees the trip wire,
+
+220
+00:09:10,789 --> 00:09:14,030
+he just steps over the trip wire and then everything's cool again.
+
+221
+00:09:14,039 --> 00:09:15,570
+And so, I mean, that's basically what this Q
+
+222
+00:09:15,750 --> 00:09:16,929
+thing does is it,
+
+223
+00:09:17,200 --> 00:09:18,880
+it jumps over the guard page.
+
+224
+00:09:19,250 --> 00:09:21,599
+But the beauty of it is that they
+
+225
+00:09:22,109 --> 00:09:24,590
+found so many ways to exploit this.
+
+226
+00:09:24,599 --> 00:09:26,219
+It's not even funny,
+
+227
+00:09:26,280 --> 00:09:29,559
+-- which is just crazy
+-- and some of them are really fundamental like the Q
+
+228
+00:09:29,679 --> 00:09:30,349
+sort issue
+
+229
+00:09:30,909 --> 00:09:31,340
+like that
+
+230
+00:09:31,729 --> 00:09:32,150
+right? In
+
+231
+00:09:32,280 --> 00:09:34,270
+so many things on BS D oh man,
+
+232
+00:09:34,280 --> 00:09:37,150
+it's I give these guys so much credit because I have
+
+233
+00:09:37,159 --> 00:09:40,429
+not seen an advisory this thorough in a long time.
+
+234
+00:09:40,440 --> 00:09:42,159
+But the other thing that's really awesome and,
+
+235
+00:09:42,169 --> 00:09:44,750
+and this is something to touch on in a little bit is
+
+236
+00:09:45,340 --> 00:09:47,479
+they talk about probabilities a lot
+
+237
+00:09:48,090 --> 00:09:51,719
+because back in the day of like smashing the stack,
+
+238
+00:09:51,869 --> 00:09:54,109
+you knew where everything was, right?
+
+239
+00:09:54,119 --> 00:09:56,729
+Everything was always loaded in the same
+
+240
+00:09:56,739 --> 00:09:59,919
+memory address every time you executed a binary
+
+241
+00:10:00,619 --> 00:10:02,039
+and things don't work like that anymore.
+
+242
+00:10:02,049 --> 00:10:04,719
+We have all these randomization technologies built in
+
+243
+00:10:04,849 --> 00:10:07,619
+that are designed to make attacks like this harder.
+
+244
+00:10:07,859 --> 00:10:08,809
+But obviously Qis
+
+245
+00:10:09,169 --> 00:10:11,380
+has kind of, I
+
+246
+00:10:11,929 --> 00:10:13,739
+guess they cracked the lottery, right.
+
+247
+00:10:13,750 --> 00:10:16,239
+They, they kind of figured out how this all works and now they can tell you, you know,
+
+248
+00:10:16,250 --> 00:10:18,840
+one in 28 runs of this will gain your root,
+
+249
+00:10:19,270 --> 00:10:20,039
+which is
+
+250
+00:10:20,770 --> 00:10:22,419
+good for them. I mean,
+
+251
+00:10:22,690 --> 00:10:23,799
+that's fantastic.
+
+252
+00:10:24,359 --> 00:10:27,690
+So, yeah, so the the original idea was, yeah,
+
+253
+00:10:27,700 --> 00:10:30,059
+let's increase the size of the guard page and you know,
+
+254
+00:10:30,070 --> 00:10:31,729
+chances are people will hit it, right?
+
+255
+00:10:31,739 --> 00:10:32,880
+Make a bigger trip wire.
+
+256
+00:10:33,309 --> 00:10:36,840
+Um The, the problem we found was to make it truly effective,
+
+257
+00:10:36,849 --> 00:10:39,179
+the guard page would have to be something like 1.6 gigs
+
+258
+00:10:40,020 --> 00:10:42,450
+which, you know, would basically break everything horribly,
+
+259
+00:10:42,989 --> 00:10:43,409
+right?
+
+260
+00:10:43,710 --> 00:10:45,859
+Uh Especially on 32 bit systems where you'd run out
+
+261
+00:10:45,869 --> 00:10:48,200
+of memory space once you have about three threads,
+
+262
+00:10:48,710 --> 00:10:49,799
+a minor detail.
+
+263
+00:10:50,309 --> 00:10:52,070
+Yeah, so obviously that's not going to fly.
+
+264
+00:10:52,080 --> 00:10:55,179
+So the good news is there were some changes made to
+
+265
+00:10:55,380 --> 00:10:57,630
+Gipsy and, and what was really surprising to me is
+
+266
+00:10:58,750 --> 00:11:01,659
+they're actually not that big, like for the number of lines of code,
+
+267
+00:11:01,669 --> 00:11:03,320
+like I was kind of working on the assumption that, you know,
+
+268
+00:11:03,330 --> 00:11:08,239
+Florian and the related g lipsy guys would, you know, be submitting like, you know,
+
+269
+00:11:08,250 --> 00:11:10,859
+thousands of lines of changes, you know, to,
+
+270
+00:11:10,869 --> 00:11:13,119
+to rewrite this whole thing and they actually did it with like
+
+271
+00:11:13,320 --> 00:11:15,460
+it's like a couple 100 lines of code at most.
+
+272
+00:11:16,000 --> 00:11:16,250
+It's
+
+273
+00:11:16,479 --> 00:11:18,849
+Yeah. No. Well, these guys are pretty crazy smart.
+
+274
+00:11:19,619 --> 00:11:20,320
+It is true.
+
+275
+00:11:20,590 --> 00:11:21,409
+You know, I mean, this is
+
+276
+00:11:21,590 --> 00:11:23,570
+Gipsy, this is, this is Rocket science,
+
+277
+00:11:24,400 --> 00:11:26,000
+you know, based on like 30 year old show
+
+278
+00:11:26,919 --> 00:11:28,659
+and it works. So like, wow,
+
+279
+00:11:28,909 --> 00:11:30,090
+that's, that's good.
+
+280
+00:11:30,320 --> 00:11:32,450
+So, you know, the good news is with the kernel and the
+
+281
+00:11:32,609 --> 00:11:37,409
+Gypsy changes, you're mostly safe And then with some additional um
+
+282
+00:11:37,559 --> 00:11:40,599
+essentially removing attack vectors, for example, with pseudo and
+
+283
+00:11:40,880 --> 00:11:41,239
+exim
+
+284
+00:11:41,590 --> 00:11:43,969
+you know, these programs are set U id.
+
+285
+00:11:43,979 --> 00:11:47,580
+So if you get arbitrary code execution within this program, you, you know,
+
+286
+00:11:47,590 --> 00:11:48,419
+you're now root.
+
+287
+00:11:49,090 --> 00:11:49,739
+Um
+
+288
+00:11:49,890 --> 00:11:51,210
+And, and that's a problem.
+
+289
+00:11:51,659 --> 00:11:53,500
+So with some changes to pseudo
+
+290
+00:11:53,789 --> 00:11:57,989
+examine some other programs, um you know, like everything on BS TQ sort,
+
+291
+00:11:58,789 --> 00:12:03,039
+you're effectively closing off all the avenues of the Attackers.
+
+292
+00:12:03,520 --> 00:12:06,890
+And I'm making air quotes here easily manipulating the heap and stack memory
+
+293
+00:12:08,109 --> 00:12:10,059
+in order to exploit this flaw.
+
+294
+00:12:10,359 --> 00:12:13,559
+And uh so honestly, between those three sets of changes.
+
+295
+00:12:13,659 --> 00:12:17,020
+Yeah, I mean, that's the problem is pretty much uh dealt with
+
+296
+00:12:17,200 --> 00:12:19,229
+and what's even better, of course is, you know, the,
+
+297
+00:12:19,239 --> 00:12:21,909
+the G Lipsy guys looked into this a bit more and you know,
+
+298
+00:12:21,919 --> 00:12:23,590
+have made some additional changes.
+
+299
+00:12:23,840 --> 00:12:24,510
+Um So
+
+300
+00:12:24,700 --> 00:12:26,880
+Gipsy, for example, only had one CV assigned to this,
+
+301
+00:12:26,890 --> 00:12:29,270
+they sort of only had one actual flaw.
+
+302
+00:12:29,669 --> 00:12:32,739
+Um But they actually made a bunch of changes that hardened
+
+303
+00:12:32,950 --> 00:12:35,299
+Gipsy and Harden how memory is handled
+
+304
+00:12:35,549 --> 00:12:39,070
+and we make this kind of thing in the future. Uh Quite a bit more difficult.
+
+305
+00:12:39,479 --> 00:12:39,619
+Nice.
+
+306
+00:12:40,179 --> 00:12:41,150
+That's awesome.
+
+307
+00:12:41,739 --> 00:12:43,599
+I'm also working on the assumption too that, you know,
+
+308
+00:12:43,609 --> 00:12:45,020
+now that people know about this,
+
+309
+00:12:45,030 --> 00:12:47,250
+there's going to be renewed interest in research into this, right?
+
+310
+00:12:47,260 --> 00:12:47,530
+Because
+
+311
+00:12:47,760 --> 00:12:51,330
+the dirty secret is like, uh this is based on research from,
+
+312
+00:12:51,590 --> 00:12:54,440
+-- I want to say 2004 was some of the first stuff.
+-- It's pretty old.
+
+313
+00:12:54,450 --> 00:12:58,969
+I remember some of the first attacks where you had the heap and the stack overlap
+
+314
+00:12:59,409 --> 00:13:00,030
+and,
+
+315
+00:13:00,250 --> 00:13:02,070
+and I remember the guard page was created and we even
+
+316
+00:13:02,080 --> 00:13:05,229
+talked about it at the time that this isn't 100%.
+
+317
+00:13:05,239 --> 00:13:07,489
+This is, I mean, yeah, it stops the current known attacks,
+
+318
+00:13:07,500 --> 00:13:09,359
+but we know this is a problem and of course,
+
+319
+00:13:09,500 --> 00:13:10,950
+we never revisited it.
+
+320
+00:13:11,239 --> 00:13:11,969
+So I give KAC
+
+321
+00:13:12,210 --> 00:13:15,750
+a lot of credit for, for actually going back to something that
+
+322
+00:13:16,000 --> 00:13:20,700
+we kind of knew was a problem but, but nobody really put the effort in to prove it.
+
+323
+00:13:21,469 --> 00:13:23,140
+Yeah. And I, I always wonder about that, right?
+
+324
+00:13:23,150 --> 00:13:25,929
+Because you hear about, you know, the NSA and all these guys with their, you know,
+
+325
+00:13:25,940 --> 00:13:27,809
+secret efforts to find flaws and stuff.
+
+326
+00:13:28,150 --> 00:13:29,969
+And I, I kind of wonder, you know, didn't,
+
+327
+00:13:30,299 --> 00:13:33,599
+did some attacker or group of Attackers discover this at
+
+328
+00:13:33,609 --> 00:13:35,250
+some point say in the last 10 years and,
+
+329
+00:13:35,260 --> 00:13:35,929
+and, you know,
+
+330
+00:13:36,030 --> 00:13:37,539
+were they silently using it?
+
+331
+00:13:37,549 --> 00:13:40,609
+You know, whenever they gained local access to a system to get root.
+
+332
+00:13:41,059 --> 00:13:41,650
+Um,
+
+333
+00:13:42,729 --> 00:13:44,409
+and I, the answer is obviously, we don't know.
+
+334
+00:13:44,419 --> 00:13:47,309
+I suspect the answer is no, actually because, you know, at some point,
+
+335
+00:13:47,320 --> 00:13:49,450
+somebody would have noticed on some forensics and been like, oh,
+
+336
+00:13:49,460 --> 00:13:50,320
+look at what I found.
+
+337
+00:13:51,010 --> 00:13:53,349
+So it is kind of crazy to think that, yeah,
+
+338
+00:13:53,359 --> 00:13:57,609
+Wallace essentially looked at some papers from, I think, yeah, 2004, 2006 and,
+
+339
+00:13:57,619 --> 00:13:59,760
+and literally asked the question of like, well, you know,
+
+340
+00:13:59,770 --> 00:14:01,979
+what happens when the heap and the stack meet?
+
+341
+00:14:02,210 --> 00:14:04,809
+And as it turns out, you know, really bad things happen, that's
+
+342
+00:14:05,070 --> 00:14:06,669
+really bad things happen.
+
+343
+00:14:07,789 --> 00:14:08,340
+So,
+
+344
+00:14:08,809 --> 00:14:13,030
+yeah, the good news is pretty much all the major Linuxes are shipping patches today,
+
+345
+00:14:13,039 --> 00:14:16,650
+uh mostly around the kernel and G Lipsy and then um
+
+346
+00:14:16,919 --> 00:14:18,200
+same for the B sds.
+
+347
+00:14:18,940 --> 00:14:22,200
+Uh It doesn't look like anybody else is really affected.
+
+348
+00:14:22,210 --> 00:14:24,820
+Uh I know that Microsoft was informed because they
+
+349
+00:14:24,830 --> 00:14:26,909
+now have a Linux compatibility layer and I,
+
+350
+00:14:27,530 --> 00:14:30,859
+I have no idea how it works or allocates memory or what it's doing.
+
+351
+00:14:31,049 --> 00:14:31,250
+Well,
+
+352
+00:14:31,460 --> 00:14:32,789
+fundamentally though, I mean,
+
+353
+00:14:33,469 --> 00:14:38,070
+Os X and well, Os X is based off the BS D. So we kind of know how that works.
+
+354
+00:14:38,080 --> 00:14:42,969
+But but windows, regardless of what they do, like the way the heap and the stack work,
+
+355
+00:14:42,979 --> 00:14:44,750
+this is part of the architecture.
+
+356
+00:14:44,760 --> 00:14:47,820
+This isn't like some decision the Linux guys made up one day.
+
+357
+00:14:47,979 --> 00:14:49,609
+So my suspicion is
+
+358
+00:14:49,789 --> 00:14:53,770
+Microsoft probably has a degree of this unless they
+
+359
+00:14:53,780 --> 00:14:55,969
+have a massive guard page in the middle,
+
+360
+00:14:55,979 --> 00:14:57,890
+which they might, I, I honestly don't know.
+
+361
+00:14:58,830 --> 00:14:59,210
+Yeah.
+
+362
+00:14:59,219 --> 00:15:02,049
+Well, and they also have a very different permissions model as well with, you know,
+
+363
+00:15:02,059 --> 00:15:03,929
+respect to set U ID and that kind of stuff.
+
+364
+00:15:03,940 --> 00:15:05,539
+So it's quite a bit different.
+
+365
+00:15:05,830 --> 00:15:06,530
+Um, I mean,
+
+366
+00:15:06,780 --> 00:15:09,450
+that, see that, that was one of the big challenges here, right? Is, it's
+
+367
+00:15:10,229 --> 00:15:14,020
+not only did qualify that basically there's a whole pile of set U ID
+
+368
+00:15:14,719 --> 00:15:16,820
+applications you can use to exploit this,
+
+369
+00:15:17,090 --> 00:15:18,919
+but like one of them is pseudo
+
+370
+00:15:19,419 --> 00:15:21,130
+and like pseudo is
+
+371
+00:15:21,349 --> 00:15:23,950
+as far as I know it's installed by default
+
+372
+00:15:24,239 --> 00:15:25,130
+everywhere
+
+373
+00:15:25,770 --> 00:15:25,890
+since
+
+374
+00:15:26,460 --> 00:15:30,159
+I don't think there's a distribution on the planet that doesn't come with pseudo.
+
+375
+00:15:30,799 --> 00:15:31,219
+Yeah,
+
+376
+00:15:31,349 --> 00:15:35,119
+maybe some IOT devices hopefully don't have it because they're never going to get
+
+377
+00:15:35,419 --> 00:15:35,500
+paid
+
+378
+00:15:35,619 --> 00:15:36,130
+-- for it.
+-- All right.
+
+379
+00:15:36,140 --> 00:15:42,609
+You just, you just said IOT which we have to give the, we'll say token nod to IOT here.
+
+380
+00:15:42,619 --> 00:15:45,210
+Uh It should please everyone to know that basically
+
+381
+00:15:45,219 --> 00:15:47,989
+every IOT device on the planet now has a nice
+
+382
+00:15:48,000 --> 00:15:50,559
+way to get from a regular user to root
+
+383
+00:15:50,570 --> 00:15:52,679
+just in case it wasn't already running its route,
+
+384
+00:15:52,690 --> 00:15:53,859
+which most of them do.
+
+385
+00:15:54,340 --> 00:15:58,340
+But uh given the, we'll say history of IOT updates,
+
+386
+00:15:58,500 --> 00:16:01,960
+we know that, that these will be running forever with this
+
+387
+00:16:02,299 --> 00:16:04,320
+local to root exploit, right?
+
+388
+00:16:05,020 --> 00:16:08,119
+Yeah. No, it's um and it's a reliable one too.
+
+389
+00:16:09,820 --> 00:16:10,989
+You know, that's, that's the thing, right.
+
+390
+00:16:11,000 --> 00:16:13,830
+I've, I've seen some exploits where it's like it, they are crazy,
+
+391
+00:16:13,840 --> 00:16:16,159
+difficult to exploit, like race conditions in the kernel.
+
+392
+00:16:16,450 --> 00:16:18,760
+This is not that this is, you know, Qac
+
+393
+00:16:19,049 --> 00:16:19,640
+found.
+
+394
+00:16:20,010 --> 00:16:20,349
+Yeah,
+
+395
+00:16:20,690 --> 00:16:24,109
+they found this was a gold nugget, like a giant gold nugget.
+
+396
+00:16:26,080 --> 00:16:26,099
+Oh,
+
+397
+00:16:26,320 --> 00:16:28,109
+it's the hope diamond, isn't it?
+
+398
+00:16:28,359 --> 00:16:29,590
+Pretty much? Yeah, I mean,
+
+399
+00:16:29,690 --> 00:16:30,380
+but like I said,
+
+400
+00:16:30,390 --> 00:16:33,969
+the good news is hopefully people will do some more research into this and, you know,
+
+401
+00:16:33,979 --> 00:16:36,900
+between g lipsy hardening and more people doing research,
+
+402
+00:16:37,690 --> 00:16:42,450
+you know, we might actually squash a whole pile of bugs in the next year or so.
+
+403
+00:16:42,479 --> 00:16:43,429
+-- I
+-- certainly
+
+404
+00:16:43,440 --> 00:16:47,109
+-- can generally make things better.
+-- I certainly hope so. This is,
+
+405
+00:16:48,530 --> 00:16:49,919
+yeah, I, I don't have a lot to say.
+
+406
+00:16:49,929 --> 00:16:50,400
+-- I mean,
+-- just
+
+407
+00:16:50,429 --> 00:16:53,859
+-- memory
+-- management isn't something you can, like, abstract away. Like,
+
+408
+00:16:54,000 --> 00:16:55,919
+for example, with this law, if you
+
+409
+00:16:56,229 --> 00:16:59,169
+virtual machine, everything and containerized everything
+
+410
+00:16:59,669 --> 00:17:00,289
+and
+
+411
+00:17:00,780 --> 00:17:01,780
+managed to get rid of Moet
+
+412
+00:17:01,969 --> 00:17:03,359
+U I Ds, like you,
+
+413
+00:17:03,500 --> 00:17:04,709
+you'd still be affected,
+
+414
+00:17:05,239 --> 00:17:07,180
+you know, that's just the reality of it. Right.
+
+415
+00:17:08,150 --> 00:17:08,689
+Um,
+
+416
+00:17:09,608 --> 00:17:10,550
+it's just, it's,
+
+417
+00:17:10,560 --> 00:17:13,290
+it's not something that you can sort of like stick a firewall in front of.
+
+418
+00:17:13,300 --> 00:17:16,030
+It's just that fundamental to the system. Right.
+
+419
+00:17:16,839 --> 00:17:18,469
+And that's the other piece of good news here is, it's
+
+420
+00:17:19,010 --> 00:17:21,050
+from what we can tell there's nothing,
+
+421
+00:17:21,310 --> 00:17:23,680
+this is all local so far and it
+
+422
+00:17:23,689 --> 00:17:26,510
+doesn't look like there's anything really remotely exp
+
+423
+00:17:26,880 --> 00:17:29,170
+I would not say that I think this will
+
+424
+00:17:29,180 --> 00:17:32,040
+be the area that the researchers investigate is there,
+
+425
+00:17:32,050 --> 00:17:33,349
+there's no reason
+
+426
+00:17:33,660 --> 00:17:37,410
+this doesn't affect demons listening on the network. It's just Qac
+
+427
+00:17:37,569 --> 00:17:40,280
+didn't find any. And my suspicion
+
+428
+00:17:40,530 --> 00:17:41,219
+is
+
+429
+00:17:41,380 --> 00:17:45,290
+they might have some hints for things they think they could look at.
+
+430
+00:17:45,489 --> 00:17:48,439
+But when you're generally exploiting things like a network facing demon,
+
+431
+00:17:48,709 --> 00:17:51,030
+you can't exploit it as fast,
+
+432
+00:17:51,260 --> 00:17:53,609
+which means what might take four minutes on a
+
+433
+00:17:53,619 --> 00:17:56,729
+local system might take four days once you're,
+
+434
+00:17:56,739 --> 00:18:00,390
+you're dealing with network and, and tear up and shut down and, and, you know,
+
+435
+00:18:00,400 --> 00:18:02,770
+standing up network connections and all that kind of stuff.
+
+436
+00:18:02,939 --> 00:18:05,290
+Well, there's one bit of good news here is that in general,
+
+437
+00:18:05,300 --> 00:18:07,280
+any network Damon that will sort of
+
+438
+00:18:07,400 --> 00:18:09,530
+allocate that much memory
+
+439
+00:18:10,189 --> 00:18:13,050
+would already be experiencing a denial of service typically, right?
+
+440
+00:18:13,060 --> 00:18:15,329
+Like if you can basically get say Apache
+
+441
+00:18:15,500 --> 00:18:18,550
+to allocate one or two or four gigs of ra M,
+
+442
+00:18:18,660 --> 00:18:19,300
+that's true.
+
+443
+00:18:19,619 --> 00:18:20,510
+You know, generally speaking,
+
+444
+00:18:20,520 --> 00:18:23,770
+these network demons are going to get killed or run out of memory.
+
+445
+00:18:24,150 --> 00:18:24,760
+Um
+
+446
+00:18:25,560 --> 00:18:27,180
+So in general, like I said, you know,
+
+447
+00:18:27,189 --> 00:18:31,140
+there's a good chance that the avenue of attack for this
+
+448
+00:18:31,459 --> 00:18:32,300
+flaw
+
+449
+00:18:32,689 --> 00:18:37,329
+has been found enclosed in a lot of network programs as a denial of service, you know,
+
+450
+00:18:37,339 --> 00:18:39,729
+over the last decade or two, right?
+
+451
+00:18:40,359 --> 00:18:42,900
+Um The cases where, you know, you can send a small
+
+452
+00:18:43,079 --> 00:18:45,790
+uh the great example, always being FTP servers with, you know,
+
+453
+00:18:45,800 --> 00:18:48,359
+regular expression globbing on the command line, right?
+
+454
+00:18:48,540 --> 00:18:52,959
+You feed it like star slash star slash star slash star, like 50 of those and then,
+
+455
+00:18:52,969 --> 00:18:53,369
+like,
+
+456
+00:18:53,650 --> 00:18:55,469
+the poor little FTP server, you know,
+
+457
+00:18:55,859 --> 00:18:58,239
+allocates all the memory and tips over like
+
+458
+00:18:58,719 --> 00:18:58,770
+a, a
+
+459
+00:18:59,969 --> 00:19:01,579
+top heavy whatever
+
+460
+00:19:02,390 --> 00:19:02,839
+and
+
+461
+00:19:03,339 --> 00:19:03,900
+whatever.
+
+462
+00:19:04,349 --> 00:19:04,459
+I
+
+463
+00:19:04,890 --> 00:19:07,060
+couldn't think of anything politically correct to say.
+
+464
+00:19:07,619 --> 00:19:10,930
+Um, well, I'm sad because I found out cow tipping is an urban myth.
+
+465
+00:19:10,939 --> 00:19:12,050
+It's not a real thing.
+
+466
+00:19:12,869 --> 00:19:12,900
+I'm
+
+467
+00:19:13,119 --> 00:19:15,599
+-- so sad.
+-- It is an urban myth. Cows don't tell.
+
+468
+00:19:16,520 --> 00:19:19,589
+Yeah, I was watching youtube videos of people trying to do cow tipping.
+
+469
+00:19:19,599 --> 00:19:20,890
+And those are actually really funny.
+
+470
+00:19:20,900 --> 00:19:24,520
+It's like when they, the Boston dynamics video and they kick that robot,
+
+471
+00:19:24,829 --> 00:19:24,869
+it,
+
+472
+00:19:25,010 --> 00:19:26,900
+-- it's basically that
+-- right.
+
+473
+00:19:27,839 --> 00:19:30,060
+So, so anyways, the good news is it doesn't, I mean,
+
+474
+00:19:30,069 --> 00:19:34,410
+basically any network Damon that is vulnerable to this is already has
+
+475
+00:19:34,420 --> 00:19:37,680
+a lot of other problems anyways that need to be fixed regardless.
+
+476
+00:19:37,689 --> 00:19:38,739
+You're probably right.
+
+477
+00:19:38,750 --> 00:19:41,780
+And I guess that's a good point is because having read this advisory,
+
+478
+00:19:42,109 --> 00:19:42,969
+it's really, it's,
+
+479
+00:19:42,979 --> 00:19:45,729
+it's at start up when they just kind of poison
+
+480
+00:19:45,739 --> 00:19:48,770
+the environment to make the staff do crazy things is,
+
+481
+00:19:48,780 --> 00:19:50,140
+is where it's all at.
+
+482
+00:19:50,150 --> 00:19:51,890
+And obviously in a network demon,
+
+483
+00:19:52,239 --> 00:19:54,489
+if you can do things to the environment,
+
+484
+00:19:54,500 --> 00:19:59,050
+like you've got way bigger problems than me connecting to your demon, you know.
+
+485
+00:19:59,609 --> 00:20:02,109
+Well, yes and no, because there are now
+
+486
+00:20:02,459 --> 00:20:05,670
+other service providers that do run code
+
+487
+00:20:05,680 --> 00:20:08,790
+within sandbox or a constrained environment,
+
+488
+00:20:08,969 --> 00:20:11,729
+but do allow you the user to pass things to it, like, say,
+
+489
+00:20:11,739 --> 00:20:13,939
+user names and passwords for the database connections.
+
+490
+00:20:13,949 --> 00:20:14,000
+Yeah.
+
+491
+00:20:14,010 --> 00:20:14,449
+But look,
+
+492
+00:20:14,459 --> 00:20:16,869
+if you're running a service like that and I'm not in
+
+493
+00:20:16,880 --> 00:20:19,709
+my own little sandbox and you know what I mean?
+
+494
+00:20:19,719 --> 00:20:20,849
+You're doing it wrong
+
+495
+00:20:21,060 --> 00:20:24,500
+if I can escape in any way, even if I was route.
+
+496
+00:20:25,260 --> 00:20:25,670
+Yeah,
+
+497
+00:20:25,839 --> 00:20:27,670
+I agree. But the reality is, you know,
+
+498
+00:20:28,300 --> 00:20:31,540
+we've had a lot of people build a lot of technology using old stuff, you know,
+
+499
+00:20:31,550 --> 00:20:34,030
+containers really weren't available five years ago.
+
+500
+00:20:34,040 --> 00:20:35,880
+I mean, they kind of were, but not really.
+
+501
+00:20:36,209 --> 00:20:38,439
+That's true. And they've matured a lot since then.
+
+502
+00:20:38,989 --> 00:20:39,599
+So.
+
+503
+00:20:40,030 --> 00:20:40,390
+Yeah.
+
+504
+00:20:40,780 --> 00:20:42,920
+Um, but yeah, so, I mean, basically, yeah. No, Qac
+
+505
+00:20:43,130 --> 00:20:44,680
+hit a home run. Um,
+
+506
+00:20:44,810 --> 00:20:48,199
+and like I said, the good news is, you know, with about a 4.5, 5 week embargo,
+
+507
+00:20:48,209 --> 00:20:51,520
+we basically got everybody patched, you know, every
+
+508
+00:20:51,920 --> 00:20:54,839
+in the next few hours, pretty much all the vendors have got all their
+
+509
+00:20:55,130 --> 00:20:56,819
+Gipsy kernel updates out and
+
+510
+00:20:57,410 --> 00:21:00,140
+for everybody that does apply these patches and reboot.
+
+511
+00:21:00,699 --> 00:21:01,829
+Good, great.
+
+512
+00:21:01,930 --> 00:21:02,869
+You can go home tonight.
+
+513
+00:21:05,979 --> 00:21:08,119
+Yeah. II, I high fives. Right.
+
+514
+00:21:08,130 --> 00:21:10,930
+I mean, I guess it sounds like everything worked the way it should have worked.
+
+515
+00:21:10,939 --> 00:21:12,209
+And that's amazing.
+
+516
+00:21:12,310 --> 00:21:12,969
+And, and,
+
+517
+00:21:13,130 --> 00:21:13,949
+yeah, I love it.
+
+518
+00:21:13,959 --> 00:21:15,859
+I guess that's one of the other ironic things
+
+519
+00:21:15,869 --> 00:21:18,530
+is the named vulnerabilities that really get the attention
+
+520
+00:21:18,699 --> 00:21:21,689
+are when something goes horribly wrong. Right.
+
+521
+00:21:22,000 --> 00:21:24,310
+And in this instance it has a name but it's like
+
+522
+00:21:24,459 --> 00:21:26,459
+good job guys, you know, pat on the back. I
+
+523
+00:21:27,239 --> 00:21:27,619
+love it. Pretty
+
+524
+00:21:28,180 --> 00:21:31,390
+fantastic. Well done. Kurt, well done everybody involved.
+
+525
+00:21:33,459 --> 00:21:35,589
+And I have to say the community did a great job here.
+
+526
+00:21:36,099 --> 00:21:39,079
+All I did was CV S and they were pretty easy by and large.
+
+527
+00:21:40,680 --> 00:21:41,349
+Although in fairness,
+
+528
+00:21:41,359 --> 00:21:43,819
+writing CV descriptions was tricky for this one because trying to compress
+
+529
+00:21:43,829 --> 00:21:46,650
+some of these things down into one or two sentences was nontrivial.
+
+530
+00:21:46,660 --> 00:21:47,770
+Yeah, I can see that.
+
+531
+00:21:47,949 --> 00:21:52,430
+I can see that. Well, and it should also be said that DWF assigned all of the I DS,
+
+532
+00:21:52,619 --> 00:21:53,890
+which is super cool too.
+
+533
+00:21:54,589 --> 00:21:54,930
+Yeah.
+
+534
+00:21:55,530 --> 00:21:55,739
+Yeah.
+
+535
+00:21:55,750 --> 00:21:57,729
+So, yeah, if you haven't been using, uh,
+
+536
+00:21:57,819 --> 00:21:59,839
+or if you haven't gotten ready for those longer I DS.
+
+537
+00:21:59,849 --> 00:22:00,969
+Uh, well, sorry,
+
+538
+00:22:02,420 --> 00:22:03,589
+whatever, man.
+
+539
+00:22:03,719 --> 00:22:08,079
+If you're not ready, you live in like 1997. I'm sorry, you just,
+
+540
+00:22:08,290 --> 00:22:10,439
+whatever. I, I don't feel bad for those people.
+
+541
+00:22:10,959 --> 00:22:14,959
+So I guess, uh, do we want to move on to some, uh, some bad news?
+
+542
+00:22:15,410 --> 00:22:16,020
+Yes.
+
+543
+00:22:16,030 --> 00:22:18,160
+Yes, we shall, we shall talk about the,
+
+544
+00:22:18,170 --> 00:22:21,699
+the terrible tragedy in London of the Grenfell
+
+545
+00:22:21,829 --> 00:22:22,439
+Tower,
+
+546
+00:22:23,140 --> 00:22:27,239
+which, which will, I guess we'll do the PS A up front of, I'm sure we'll,
+
+547
+00:22:27,250 --> 00:22:31,560
+we'll make some silly jokes and, and have some bizarre comparisons, but
+
+548
+00:22:31,709 --> 00:22:35,540
+we recognize the, the terrible tragedy, such a thing is to,
+
+549
+00:22:35,550 --> 00:22:38,849
+to the world for that matter and, and what makes it even worse is that it
+
+550
+00:22:39,060 --> 00:22:40,479
+is the fault of people,
+
+551
+00:22:40,670 --> 00:22:44,959
+right? This wasn't an accident like people did this. Which, which is terrible.
+
+552
+00:22:45,500 --> 00:22:47,479
+Yeah. No, it's, it's much, I,
+
+553
+00:22:47,609 --> 00:22:49,040
+well, from everything I've been reading, it's
+
+554
+00:22:49,630 --> 00:22:51,890
+what frustrates me is, it's not just a criminal
+
+555
+00:22:52,140 --> 00:22:55,349
+action at a small level. It's, it's, anyways, it's,
+
+556
+00:22:55,750 --> 00:22:57,359
+it's much worse than even, you know,
+
+557
+00:22:57,369 --> 00:23:00,189
+we thought it was 24 hours ago with some of the stuff that's come out.
+
+558
+00:23:00,199 --> 00:23:00,699
+Now.
+
+559
+00:23:00,790 --> 00:23:05,869
+Why don't, why don't you give us the, I guess, brief description of what's going on.
+
+560
+00:23:05,880 --> 00:23:06,390
+And then
+
+561
+00:23:06,500 --> 00:23:06,969
+the,
+
+562
+00:23:06,979 --> 00:23:09,530
+the fundamental comparison we're going to end up with
+
+563
+00:23:09,540 --> 00:23:12,000
+is this is a failure of risk management,
+
+564
+00:23:12,010 --> 00:23:12,359
+right.
+
+565
+00:23:12,780 --> 00:23:17,489
+Yeah. Um So, uh Grenfell Tower is this apartment block
+
+566
+00:23:17,729 --> 00:23:19,530
+in London that's owned by a council
+
+567
+00:23:20,209 --> 00:23:23,109
+and uh it was refurbished uh the exterior,
+
+568
+00:23:23,859 --> 00:23:28,209
+uh and they use these panels, uh that as it turns out are quite flammable.
+
+569
+00:23:28,709 --> 00:23:31,359
+And so there was a fire in the tower, I think,
+
+570
+00:23:31,369 --> 00:23:34,229
+I believe they think it started on the fourth floor and the fire
+
+571
+00:23:34,670 --> 00:23:35,359
+um
+
+572
+00:23:36,219 --> 00:23:37,760
+went to the exterior of the tower.
+
+573
+00:23:37,770 --> 00:23:41,209
+And so the exterior of the tower caught fire and the whole thing,
+
+574
+00:23:41,420 --> 00:23:43,170
+fuck it. It's horrible.
+
+575
+00:23:44,510 --> 00:23:45,119
+Um
+
+576
+00:23:45,589 --> 00:23:46,770
+Yeah, anyways,
+
+577
+00:23:46,949 --> 00:23:51,849
+a lot of people died. I think they're talking about 58 or so. Now.
+
+578
+00:23:51,859 --> 00:23:53,520
+I, and that's the other thing is that the
+
+579
+00:23:53,750 --> 00:23:55,300
+death toll has been rising.
+
+580
+00:23:56,859 --> 00:24:00,869
+Um And yeah, just, I mean, at its simplest, the horrific
+
+581
+00:24:01,089 --> 00:24:02,199
+fact is that
+
+582
+00:24:02,410 --> 00:24:05,430
+they could have used uh flame retardant panels
+
+583
+00:24:05,439 --> 00:24:07,489
+and it would have cost about 5000 pounds,
+
+584
+00:24:07,500 --> 00:24:08,089
+sterling more.
+
+585
+00:24:08,099 --> 00:24:11,680
+-- That's about, what, 8000 $10,000 us more,
+-- give or take.
+
+586
+00:24:12,109 --> 00:24:14,719
+-- And that would have prevented this.
+-- That's free
+
+587
+00:24:14,839 --> 00:24:17,109
+-- when you're talking about a project like this.
+-- Right.
+
+588
+00:24:17,329 --> 00:24:17,709
+Yeah.
+
+589
+00:24:18,089 --> 00:24:20,160
+And, and what's even worse? I mean,
+
+590
+00:24:20,369 --> 00:24:21,599
+what really gets me is,
+
+591
+00:24:23,150 --> 00:24:24,239
+oh, so many levels.
+
+592
+00:24:24,250 --> 00:24:25,119
+Uh, number one, you know,
+
+593
+00:24:25,130 --> 00:24:27,800
+who signed off on this because apparently these panels are illegal
+
+594
+00:24:28,790 --> 00:24:32,089
+to use in structures over a certain height. I think it's like 10 m.
+
+595
+00:24:32,099 --> 00:24:33,689
+So that's what about three stories.
+
+596
+00:24:34,709 --> 00:24:38,050
+Um, because quite frankly, this is a, this is an obvious failure mode.
+
+597
+00:24:38,060 --> 00:24:39,439
+You know, when you have a cladding
+
+598
+00:24:40,300 --> 00:24:44,439
+on something that is flammable and it catches fire and there's a lot of it,
+
+599
+00:24:44,859 --> 00:24:48,770
+you know, you're gonna have uh what's called chimney effect where the air draws in
+
+600
+00:24:49,239 --> 00:24:51,640
+and it gets worse, you know, the fire grows.
+
+601
+00:24:51,969 --> 00:24:56,719
+Uh And what's even worse is these are panels with, uh, so there's an aluminum skin.
+
+602
+00:24:56,729 --> 00:24:57,239
+Um,
+
+603
+00:24:57,739 --> 00:24:59,050
+there's a, uh polyethylene
+
+604
+00:24:59,569 --> 00:25:00,540
+like core
+
+605
+00:25:01,300 --> 00:25:02,760
+and then another panel.
+
+606
+00:25:03,579 --> 00:25:07,599
+So you can't get water onto the fire because it's burning between these panels,
+
+607
+00:25:07,609 --> 00:25:07,859
+right?
+
+608
+00:25:07,869 --> 00:25:08,979
+So you, you,
+
+609
+00:25:09,089 --> 00:25:09,579
+yeah,
+
+610
+00:25:09,859 --> 00:25:12,119
+so you've basically essentially made like
+
+611
+00:25:12,130 --> 00:25:14,160
+something super flammable and then glued it
+
+612
+00:25:14,170 --> 00:25:16,540
+to the side or bolted it to the side of a building,
+
+613
+00:25:16,689 --> 00:25:17,569
+you know. Ok.
+
+614
+00:25:17,579 --> 00:25:22,079
+So let's, let's try to, to lighten this up a bit and, and point out the fact that
+
+615
+00:25:22,530 --> 00:25:24,839
+a significant amount of it
+
+616
+00:25:24,939 --> 00:25:25,959
+works like this
+
+617
+00:25:26,219 --> 00:25:27,670
+where we are adding
+
+618
+00:25:27,819 --> 00:25:32,280
+what is essentially flammable material to products and services
+
+619
+00:25:32,650 --> 00:25:33,530
+because it,
+
+620
+00:25:33,640 --> 00:25:34,939
+-- let's face it, it
+-- solves
+
+621
+00:25:35,810 --> 00:25:37,180
+problem. Right. Yeah,
+
+622
+00:25:37,369 --> 00:25:38,109
+seriously.
+
+623
+00:25:38,239 --> 00:25:38,680
+-- But it's
+-- a
+
+624
+00:25:38,839 --> 00:25:39,209
+problem
+
+625
+00:25:39,920 --> 00:25:41,119
+and then people don't,
+
+626
+00:25:41,239 --> 00:25:44,829
+don't take it into account and you think the building industry
+
+627
+00:25:44,849 --> 00:25:48,989
+is heavily regulated and obviously it didn't work in this instance.
+
+628
+00:25:49,000 --> 00:25:50,079
+But you look at,
+
+629
+00:25:50,449 --> 00:25:53,349
+you know, information, security, cybersecurity, whatever you want to call it,
+
+630
+00:25:53,750 --> 00:25:57,760
+-- there's basically no regulation, there,
+-- there's no meaningful regulation.
+
+631
+00:25:57,770 --> 00:26:00,390
+I mean, based on the fact that we keep having these huge data breaches
+
+632
+00:26:00,890 --> 00:26:02,400
+or, you know, people,
+
+633
+00:26:02,739 --> 00:26:05,109
+uh yeah, uh keep getting compromised.
+
+634
+00:26:05,469 --> 00:26:06,140
+Um
+
+635
+00:26:06,530 --> 00:26:08,589
+And what's, and what's worse is apparently there's
+
+636
+00:26:08,699 --> 00:26:10,959
+hundreds or even thousands of buildings in,
+
+637
+00:26:10,969 --> 00:26:13,969
+in the United Kingdom with this cladding on the exterior.
+
+638
+00:26:14,229 --> 00:26:15,800
+And that again goes back to that in.
+
+639
+00:26:16,010 --> 00:26:19,599
+It's kind of the classic problem of if you build something and you build it wrong,
+
+640
+00:26:19,609 --> 00:26:24,219
+it's going to cost, you know, 10 to 1000 times more to remediate it,
+
+641
+00:26:25,310 --> 00:26:28,260
+you know, and that's where we are with a lot of these technical systems
+
+642
+00:26:28,599 --> 00:26:29,540
+where, you know,
+
+643
+00:26:29,550 --> 00:26:34,119
+people have a mainframe that they've come to rely upon and to replace that thing.
+
+644
+00:26:34,130 --> 00:26:34,469
+Now,
+
+645
+00:26:34,800 --> 00:26:38,130
+um, you know, great example, being like the airline reservation industry,
+
+646
+00:26:38,140 --> 00:26:39,130
+you know, um
+
+647
+00:26:39,329 --> 00:26:42,989
+that whole thing is based on a piece of software called Saber from,
+
+648
+00:26:43,199 --> 00:26:44,329
+I want to say the seventies,
+
+649
+00:26:46,040 --> 00:26:46,680
+it's pretty,
+
+650
+00:26:47,199 --> 00:26:47,859
+I know that
+
+651
+00:26:48,119 --> 00:26:48,780
+and it's,
+
+652
+00:26:49,890 --> 00:26:50,109
+you know,
+
+653
+00:26:50,119 --> 00:26:52,599
+we're at the point where replacing it would cost I
+
+654
+00:26:52,609 --> 00:26:54,709
+would have to guess in the tens of billions of dollars
+
+655
+00:26:54,969 --> 00:26:56,630
+and, and it would most likely fail
+
+656
+00:26:57,209 --> 00:27:00,680
+-- because it's just too complex of a project.
+-- They build it on. No Js.
+
+657
+00:27:01,819 --> 00:27:02,270
+Yeah.
+
+658
+00:27:03,040 --> 00:27:06,150
+You know, like that FBI case management system that they ran, what,
+
+659
+00:27:06,160 --> 00:27:08,750
+one or $2 billion and it just never worked.
+
+660
+00:27:08,760 --> 00:27:09,349
+Right.
+
+661
+00:27:09,550 --> 00:27:11,260
+Right. Learning experience.
+
+662
+00:27:11,609 --> 00:27:13,569
+But, I mean, so, so here's the thing and you,
+
+663
+00:27:13,579 --> 00:27:16,329
+and you bring up some of these other it systems is
+
+664
+00:27:16,589 --> 00:27:17,189
+so
+
+665
+00:27:17,380 --> 00:27:19,989
+they know buildings in the UK have this,
+
+666
+00:27:20,500 --> 00:27:21,069
+there,
+
+667
+00:27:21,170 --> 00:27:22,520
+there is going to be
+
+668
+00:27:23,199 --> 00:27:26,500
+kind of, this was a forcing function to get rid of it everywhere else, right?
+
+669
+00:27:26,510 --> 00:27:28,060
+They're gonna make a huge deal about this
+
+670
+00:27:28,449 --> 00:27:28,500
+going
+
+671
+00:27:28,630 --> 00:27:29,959
+get dealt with and you know,
+
+672
+00:27:29,969 --> 00:27:32,729
+there's probably going to be legislation that comes out of this.
+
+673
+00:27:33,530 --> 00:27:34,979
+The last big breach,
+
+674
+00:27:35,839 --> 00:27:36,979
+nothing happened,
+
+675
+00:27:37,290 --> 00:27:38,380
+right? And, and
+
+676
+00:27:38,760 --> 00:27:41,140
+this is something that terrifies me is
+
+677
+00:27:41,150 --> 00:27:43,739
+I think until computers start killing people,
+
+678
+00:27:44,109 --> 00:27:46,060
+we're never going to see anything change.
+
+679
+00:27:46,219 --> 00:27:46,489
+I mean,
+
+680
+00:27:46,500 --> 00:27:48,739
+because like this is an example of where people have
+
+681
+00:27:48,750 --> 00:27:51,180
+to literally die before anyone cares about a problem.
+
+682
+00:27:51,189 --> 00:27:52,790
+Like people knew this was a problem.
+
+683
+00:27:52,989 --> 00:27:54,140
+They just didn't care.
+
+684
+00:27:54,560 --> 00:27:57,619
+Yeah. Well, and, and the other thing that's, that's really sad.
+
+685
+00:27:57,630 --> 00:28:01,439
+I find about just, and this is just one of the fundamentals of human beings is
+
+686
+00:28:01,599 --> 00:28:05,560
+unless a whole bunch of people die at once, we generally don't care, right? Um Like
+
+687
+00:28:06,189 --> 00:28:07,530
+I was looking at traffic deaths
+
+688
+00:28:07,780 --> 00:28:08,339
+and you know,
+
+689
+00:28:08,790 --> 00:28:13,300
+traffic kills far more people than most anything else really.
+
+690
+00:28:13,810 --> 00:28:14,660
+And, you know,
+
+691
+00:28:14,859 --> 00:28:15,760
+-- we just live
+-- with
+
+692
+00:28:15,770 --> 00:28:17,540
+-- it,
+-- whatever. I know. I know. And
+
+693
+00:28:17,900 --> 00:28:20,780
+that's something I always think of that. Every time I get on an airplane,
+
+694
+00:28:21,060 --> 00:28:24,150
+the odds of me dying on the ride to the airport were
+
+695
+00:28:24,170 --> 00:28:27,469
+magnitudes higher than the odds of me dying on an airplane.
+
+696
+00:28:27,489 --> 00:28:29,630
+But nobody's afraid of the ride to the airport,
+
+697
+00:28:29,739 --> 00:28:30,239
+you know.
+
+698
+00:28:30,430 --> 00:28:30,719
+Yeah,
+
+699
+00:28:30,979 --> 00:28:31,560
+man.
+
+700
+00:28:31,569 --> 00:28:33,650
+every time and I think we've reached a point
+
+701
+00:28:33,660 --> 00:28:36,310
+now where more humans have died from automobiles.
+
+702
+00:28:36,319 --> 00:28:39,439
+I think malaria is the only thing that has killed more people. Right.
+
+703
+00:28:40,030 --> 00:28:40,780
+Obesity.
+
+704
+00:28:42,420 --> 00:28:42,439
+Yeah.
+
+705
+00:28:43,979 --> 00:28:44,489
+Has it?
+
+706
+00:28:44,819 --> 00:28:45,280
+I mean,
+
+707
+00:28:45,560 --> 00:28:49,140
+-- uh,
+-- yeah, obesity is now the leading cause of death, I believe in
+
+708
+00:28:49,150 --> 00:28:49,270
+the leading
+
+709
+00:28:49,829 --> 00:28:50,530
+cause of death.
+
+710
+00:28:50,540 --> 00:28:52,530
+But has it killed more people than traffic
+
+711
+00:28:52,540 --> 00:28:55,250
+accidents has over the course of human history?
+
+712
+00:28:56,010 --> 00:28:57,150
+I would suspect.
+
+713
+00:28:57,380 --> 00:28:58,469
+Well, if it hasn't, it
+
+714
+00:28:58,869 --> 00:29:02,520
+has really only been a problem for the last, what, 2030 years, I mean,
+
+715
+00:29:03,410 --> 00:29:08,219
+yeah. So, anyway, anyway, whatever. Ok. So malaria, maybe obesity
+
+716
+00:29:08,760 --> 00:29:12,349
+and nothing else but yet because it's a slow burn,
+
+717
+00:29:12,479 --> 00:29:13,709
+we let it go.
+
+718
+00:29:13,989 --> 00:29:14,510
+Right.
+
+719
+00:29:16,199 --> 00:29:18,030
+Yeah, I mean, hands up who here has not
+
+720
+00:29:18,380 --> 00:29:20,670
+been almost run over in a crosswalk
+
+721
+00:29:20,800 --> 00:29:23,390
+every day, man, like every day.
+
+722
+00:29:24,699 --> 00:29:27,030
+So, yeah. No, it's so I'm hoping, I mean,
+
+723
+00:29:27,310 --> 00:29:30,760
+this is what gets me is, is from what I understand is this
+
+724
+00:29:31,189 --> 00:29:32,479
+Grenfell Tower,
+
+725
+00:29:32,910 --> 00:29:36,560
+the cladding should not have been used and yet it was you know, and so I'm wondering,
+
+726
+00:29:36,569 --> 00:29:36,839
+like,
+
+727
+00:29:37,050 --> 00:29:40,589
+you know, who signed off on this product, who signed off on the inspection? You know,
+
+728
+00:29:41,300 --> 00:29:41,359
+I,
+
+729
+00:29:41,369 --> 00:29:45,349
+I imagine all the engineers involved with that building ever at this point are like,
+
+730
+00:29:45,630 --> 00:29:49,239
+you know, phoning their lawyers and trying to find the paperwork.
+
+731
+00:29:49,670 --> 00:29:51,959
+Right. And somebody
+
+732
+00:29:52,209 --> 00:29:55,599
+probably made a malicious decision at some point. And now that, that is
+
+733
+00:29:55,770 --> 00:29:58,109
+-- one of the things,
+-- I don't think it probably was malicious.
+
+734
+00:29:58,119 --> 00:30:01,150
+I, I would have to bet that it was just simply cost savings
+
+735
+00:30:01,750 --> 00:30:02,339
+which,
+
+736
+00:30:02,630 --> 00:30:03,290
+and that they
+
+737
+00:30:03,670 --> 00:30:03,790
+were,
+
+738
+00:30:04,229 --> 00:30:05,660
+they weren't supposed to do it. Right.
+
+739
+00:30:05,670 --> 00:30:08,760
+Let's just say that we won't, we won't go so far to say malicious.
+
+740
+00:30:08,770 --> 00:30:11,819
+But I guess that's one of the things is even with regulation,
+
+741
+00:30:12,239 --> 00:30:15,849
+you can't stop purposeful intent with regulation, right?
+
+742
+00:30:15,859 --> 00:30:18,020
+Regulation can maybe stop stupid mistakes.
+
+743
+00:30:18,030 --> 00:30:21,359
+But if somebody is bound and determined to save those 5000 pounds,
+
+744
+00:30:21,560 --> 00:30:23,979
+you can, you will not stop them. They will get around that.
+
+745
+00:30:24,569 --> 00:30:26,160
+Well, that's, that's one thing I got like, uh,
+
+746
+00:30:26,170 --> 00:30:29,410
+so I had to do some uh get some wiring done in my house
+
+747
+00:30:29,589 --> 00:30:33,439
+and I actually bought a copy of the uh Alberta electrical code and read it.
+
+748
+00:30:33,449 --> 00:30:36,349
+And it was really interesting from an information security point of view because
+
+749
+00:30:36,459 --> 00:30:38,349
+you could literally see where every regulation,
+
+750
+00:30:38,359 --> 00:30:41,459
+like there's a story behind that and why that regulation exists now.
+
+751
+00:30:41,969 --> 00:30:44,459
+And the other thing is they were, they were layering security, right?
+
+752
+00:30:44,469 --> 00:30:44,640
+You know,
+
+753
+00:30:44,650 --> 00:30:46,589
+you ground stuff and then you have like
+
+754
+00:30:46,599 --> 00:30:49,119
+ground fault interrupt circuit breakers and then you,
+
+755
+00:30:49,130 --> 00:30:49,780
+you know, you do,
+
+756
+00:30:49,989 --> 00:30:53,319
+you have hopefully multiple stages of failure so that, you know,
+
+757
+00:30:53,329 --> 00:30:56,689
+when some poor schmuck drives a nail into the wall, he doesn't get killed.
+
+758
+00:30:57,069 --> 00:30:57,530
+You know.
+
+759
+00:30:58,280 --> 00:31:01,900
+And, um, and that's what gets me about these kinds of regulations is, you know,
+
+760
+00:31:01,910 --> 00:31:03,040
+they're, they're typically,
+
+761
+00:31:03,530 --> 00:31:05,520
+there's a whole bunch of stuff that,
+
+762
+00:31:05,920 --> 00:31:07,439
+you know, was intended to
+
+763
+00:31:07,589 --> 00:31:09,599
+save lives or help people or whatever
+
+764
+00:31:10,530 --> 00:31:12,949
+part of the problem, I think sometimes, um,
+
+765
+00:31:12,959 --> 00:31:15,390
+is that some of this stuff kind of needs to be expired?
+
+766
+00:31:15,400 --> 00:31:15,589
+Right.
+
+767
+00:31:15,599 --> 00:31:15,770
+Like,
+
+768
+00:31:15,780 --> 00:31:18,349
+there's certain building materials we don't use anymore or
+
+769
+00:31:18,359 --> 00:31:20,310
+certain methods of construction we don't use anymore.
+
+770
+00:31:21,920 --> 00:31:24,040
+Yes, exactly. You know, hey, that stuff
+
+771
+00:31:24,150 --> 00:31:26,280
+and that stuff is fire retardant. So, you know,
+
+772
+00:31:26,449 --> 00:31:26,489
+super
+
+773
+00:31:26,739 --> 00:31:27,020
+awesome.
+
+774
+00:31:27,800 --> 00:31:28,219
+Yeah.
+
+775
+00:31:28,359 --> 00:31:28,969
+Um,
+
+776
+00:31:29,770 --> 00:31:33,750
+and, you know, part of the problem I've seen is too, is I've seen people who
+
+777
+00:31:34,140 --> 00:31:37,349
+they don't agree with or like the regulation. So they, like, ignore it.
+
+778
+00:31:37,800 --> 00:31:41,420
+Well, yeah, we knew Asbestos was bad for like, 30 years and we kept
+
+779
+00:31:42,689 --> 00:31:44,180
+in 19 thirties.
+
+780
+00:31:44,189 --> 00:31:47,359
+Germany people who worked with Asbestos were given a stipend from
+
+781
+00:31:47,369 --> 00:31:50,390
+the government because they knew statistically these people died earlier.
+
+782
+00:31:50,880 --> 00:31:53,349
+-- Did they know why though? Or did they?
+-- Well, they
+
+783
+00:31:53,479 --> 00:31:53,609
+didn't,
+
+784
+00:31:54,729 --> 00:31:57,290
+but they knew they had the correlation, they had the statistics to back
+
+785
+00:31:57,410 --> 00:31:57,430
+it
+
+786
+00:31:57,609 --> 00:31:57,670
+up.
+
+787
+00:31:57,780 --> 00:31:58,380
+Right. Right.
+
+788
+00:31:58,829 --> 00:32:00,609
+So we, yeah, we've known for a
+
+789
+00:32:01,119 --> 00:32:03,270
+long time. Asbestos is not good for you.
+
+790
+00:32:03,280 --> 00:32:07,089
+I think they used asbestos into the eighties, at least in the United States.
+
+791
+00:32:07,479 --> 00:32:09,810
+We were the last country to outlaw it on the planet.
+
+792
+00:32:10,390 --> 00:32:10,400
+Uh,
+
+793
+00:32:10,900 --> 00:32:11,670
+funny story.
+
+794
+00:32:11,829 --> 00:32:12,000
+I
+
+795
+00:32:12,310 --> 00:32:12,449
+think
+
+796
+00:32:12,829 --> 00:32:16,010
+we stopped exporting it about five or 10 years ago
+
+797
+00:32:16,400 --> 00:32:17,079
+and I'm sure.
+
+798
+00:32:17,219 --> 00:32:19,489
+And Russia still has asbestos minds.
+
+799
+00:32:19,670 --> 00:32:20,369
+Oh, good.
+
+800
+00:32:20,699 --> 00:32:20,979
+Because we,
+
+801
+00:32:22,180 --> 00:32:25,520
+well, and here's the frustrating thing again. Asbestos isn't, I mean,
+
+802
+00:32:25,640 --> 00:32:28,010
+it's not, you know, if it gets powdered and you breathe it in.
+
+803
+00:32:28,020 --> 00:32:31,579
+Yeah, that's bad for you. But this is also true of like uranium or, you know,
+
+804
+00:32:32,369 --> 00:32:32,489
+flu.
+
+805
+00:32:32,939 --> 00:32:34,449
+Your house doesn't have any U
+
+806
+00:32:34,630 --> 00:32:34,660
+in
+
+807
+00:32:35,020 --> 00:32:35,550
+it.
+
+808
+00:32:35,770 --> 00:32:37,680
+Well, I got rid of it.
+
+809
+00:32:37,689 --> 00:32:41,079
+I actually got rid of an original smoke alarm that had a stick around it saying,
+
+810
+00:32:41,400 --> 00:32:43,939
+uh essentially to call atomic energy of Canada,
+
+811
+00:32:44,119 --> 00:32:46,560
+-- uh this number to dispose of this unit.
+-- Did
+
+812
+00:32:46,699 --> 00:32:47,119
+you call him?
+
+813
+00:32:47,880 --> 00:32:49,189
+No, I mean, it, it was like
+
+814
+00:32:50,170 --> 00:32:51,609
+that in a podcast.
+
+815
+00:32:53,030 --> 00:32:56,689
+I mean, this was smoke alarm was actually made in Canada. That's how old it was.
+
+816
+00:32:57,800 --> 00:32:58,430
+So,
+
+817
+00:32:58,979 --> 00:33:00,180
+but see, this is the thing, right?
+
+818
+00:33:00,189 --> 00:33:03,819
+It's, it's not that like asbestos, asbestos is a dangerous
+
+819
+00:33:04,030 --> 00:33:04,560
+material.
+
+820
+00:33:04,569 --> 00:33:08,069
+But, you know, we regularly have trucks full of gasoline coming down, you know,
+
+821
+00:33:08,079 --> 00:33:09,869
+residential streets, going to gas stations.
+
+822
+00:33:10,109 --> 00:33:11,339
+The trick is, you know,
+
+823
+00:33:11,349 --> 00:33:15,050
+to use the thing appropriately and to take the safety precautions around it,
+
+824
+00:33:16,140 --> 00:33:18,260
+you know. So hopefully people don't get hurt and die.
+
+825
+00:33:18,270 --> 00:33:22,160
+I mean, uh, yeah, fuel tankers being a great example. Right. They generally,
+
+826
+00:33:22,920 --> 00:33:24,619
+it, uh, don't
+
+827
+00:33:24,790 --> 00:33:25,709
+cause problems, you know,
+
+828
+00:33:25,719 --> 00:33:27,729
+except for that one that caught fire and burned
+
+829
+00:33:27,739 --> 00:33:29,459
+down a bit of interstate a few months ago.
+
+830
+00:33:31,349 --> 00:33:33,359
+Um, it was Atlanta, I think.
+
+831
+00:33:33,500 --> 00:33:34,959
+Yeah, because it was just after they had that other one,
+
+832
+00:33:35,239 --> 00:33:36,380
+they fix their road yet.
+
+833
+00:33:37,239 --> 00:33:38,219
+I haven't looked into that.
+
+834
+00:33:38,229 --> 00:33:38,339
+I,
+
+835
+00:33:38,349 --> 00:33:40,380
+I haven't been to Atlanta in a long time and honestly
+
+836
+00:33:40,390 --> 00:33:43,119
+I'm afraid to go because they haven't fixed the road.
+
+837
+00:33:43,170 --> 00:33:44,939
+The traffic got to be terrible.
+
+838
+00:33:45,920 --> 00:33:50,150
+But so back to this, I mean, we, these panels are not inherently bad.
+
+839
+00:33:50,310 --> 00:33:51,819
+It's just, they can't,
+
+840
+00:33:52,140 --> 00:33:55,219
+you know, they're not appropriate or safe for use in, say,
+
+841
+00:33:55,229 --> 00:33:57,979
+applications of like higher than 10 m or,
+
+842
+00:33:58,479 --> 00:34:02,459
+you know, maybe in a large, uh, residential thing, you know, maybe in a commercial.
+
+843
+00:34:02,469 --> 00:34:05,619
+Well, and part of the problem too is this building had no fire sprinkler system.
+
+844
+00:34:06,099 --> 00:34:07,209
+It only had one.
+
+845
+00:34:07,569 --> 00:34:09,649
+Yeah. Oh, yeah. So dirty secret.
+
+846
+00:34:09,659 --> 00:34:13,320
+Uh, apparently fire sprinklers are not required by code in the UK because
+
+847
+00:34:13,850 --> 00:34:16,159
+they essentially didn't want to pass that because they
+
+848
+00:34:16,168 --> 00:34:18,000
+didn't want to discourage people from building housing.
+
+849
+00:34:18,010 --> 00:34:21,350
+And, and that goes, I mean, there's a great example of a trade off to make,
+
+850
+00:34:21,360 --> 00:34:22,750
+we need housing for people.
+
+851
+00:34:23,418 --> 00:34:24,408
+But the country is
+
+852
+00:34:24,688 --> 00:34:26,467
+obsessed with telling people how to live their
+
+853
+00:34:26,478 --> 00:34:28,608
+lives and they don't put freaking fire spring.
+
+854
+00:34:28,618 --> 00:34:31,349
+I mean, they have, they have cameras watching everything you do in the city
+
+855
+00:34:31,467 --> 00:34:31,509
+of
+
+856
+00:34:31,628 --> 00:34:31,728
+London
+
+857
+00:34:32,408 --> 00:34:34,559
+Well, it's one of those tradeoffs they decided to make and,
+
+858
+00:34:34,569 --> 00:34:37,398
+and then what made it apparently much worse is that the official
+
+859
+00:34:37,408 --> 00:34:40,239
+policy for this building for fire alarms was shelter in place.
+
+860
+00:34:40,549 --> 00:34:43,128
+Which no offense if you have a sprinkler system, sort of makes sense.
+
+861
+00:34:43,138 --> 00:34:44,589
+But if you don't have a sprinkler system,
+
+862
+00:34:45,118 --> 00:34:48,039
+-- but the problem is again, they only had the one stairwell.
+-- Oh, man,
+
+863
+00:34:48,329 --> 00:34:50,069
+this is like every bad
+
+864
+00:34:51,520 --> 00:34:51,958
+it is.
+
+865
+00:34:51,969 --> 00:34:54,090
+It is literally like you want to build a building
+
+866
+00:34:54,100 --> 00:34:56,120
+that will ultimately kill a whole bunch of people.
+
+867
+00:34:56,129 --> 00:34:57,500
+Yeah, this is what you build
+
+868
+00:34:58,270 --> 00:34:59,540
+and what you tell them to do.
+
+869
+00:35:00,729 --> 00:35:01,290
+You know.
+
+870
+00:35:01,840 --> 00:35:02,030
+That's,
+
+871
+00:35:03,479 --> 00:35:03,780
+yeah.
+
+872
+00:35:03,790 --> 00:35:06,489
+And I mean, and the worst thing is though, this was, you know,
+
+873
+00:35:06,500 --> 00:35:10,219
+all done by experts who had the best interests of people in mind.
+
+874
+00:35:10,899 --> 00:35:14,719
+And, you know, unfortunately they came up with a plan that had a very
+
+875
+00:35:15,080 --> 00:35:19,639
+-- bad, you know, very catastrophic failure scenario. Oh my
+-- goodness,
+
+876
+00:35:19,770 --> 00:35:21,239
+this is, this is madness.
+
+877
+00:35:21,969 --> 00:35:24,780
+Well, like I said, I mean, anybody who's ever been involved with this building,
+
+878
+00:35:24,790 --> 00:35:25,310
+I mean,
+
+879
+00:35:25,879 --> 00:35:26,350
+yeah,
+
+880
+00:35:28,280 --> 00:35:28,860
+you know,
+
+881
+00:35:29,229 --> 00:35:32,080
+this is literally terrible. Now, what I'm hoping is, you know, from this,
+
+882
+00:35:32,459 --> 00:35:33,540
+the problem is though,
+
+883
+00:35:33,550 --> 00:35:36,600
+like if you have a building like this retrofitting a sprinkler system costs,
+
+884
+00:35:36,610 --> 00:35:38,219
+you know, several $100,000
+
+885
+00:35:39,070 --> 00:35:39,310
+going to pay
+
+886
+00:35:39,540 --> 00:35:42,939
+for it to almost just build a new building in some instances
+
+887
+00:35:43,649 --> 00:35:45,679
+or things like adding an extra stairwell,
+
+888
+00:35:45,870 --> 00:35:46,199
+right?
+
+889
+00:35:46,989 --> 00:35:49,820
+You know, that's a very nontrivial Right. You know, thing,
+
+890
+00:35:50,219 --> 00:35:52,090
+um, at a minimum, I hope, you know,
+
+891
+00:35:52,100 --> 00:35:55,159
+I know by code in North America stairwells have to have
+
+892
+00:35:55,260 --> 00:35:58,159
+uh positive pressure so that smoke doesn't get into them
+
+893
+00:35:58,929 --> 00:36:01,229
+because there's no point going down the stairwell if it's full of smoke.
+
+894
+00:36:01,239 --> 00:36:01,979
+Right, you're going to die.
+
+895
+00:36:03,729 --> 00:36:08,870
+Here's what you just made me think of with, with this line of conversation is
+
+896
+00:36:09,320 --> 00:36:11,290
+this is what we do in it
+
+897
+00:36:11,669 --> 00:36:13,989
+almost all the time. And even this qual
+
+898
+00:36:14,120 --> 00:36:14,629
+thing
+
+899
+00:36:14,810 --> 00:36:16,669
+is, is comparable of,
+
+900
+00:36:17,290 --> 00:36:21,379
+we basically figured out how to fix it without really fixing it.
+
+901
+00:36:21,850 --> 00:36:22,750
+And so
+
+902
+00:36:22,939 --> 00:36:23,550
+it's still
+
+903
+00:36:24,070 --> 00:36:24,080
+a
+
+904
+00:36:24,679 --> 00:36:26,989
+really fix it without rewriting everything.
+
+905
+00:36:27,639 --> 00:36:32,379
+And, and sometimes you got to tear down the building because it's that bad.
+
+906
+00:36:33,110 --> 00:36:36,969
+And, and I'm not gonna say that with that, Linux is that bad.
+
+907
+00:36:37,149 --> 00:36:39,169
+But I think this is something that
+
+908
+00:36:39,370 --> 00:36:41,649
+we're reaching a point with a lot of this technology.
+
+909
+00:36:41,659 --> 00:36:43,810
+We've been kicking the can down the road for so long
+
+910
+00:36:44,040 --> 00:36:44,600
+that
+
+911
+00:36:44,879 --> 00:36:47,649
+it, it might be time to burn some of these buildings down.
+
+912
+00:36:47,790 --> 00:36:50,219
+-- I mean,
+-- well, in a, in a way it's happened, um,
+
+913
+00:36:50,229 --> 00:36:54,469
+like a lot of newer languages like Python and go, well, Python's not new.
+
+914
+00:36:54,479 --> 00:36:57,409
+But anyways, there's a lot of languages now that essentially, you know,
+
+915
+00:36:57,419 --> 00:36:58,530
+take the tact of,
+
+916
+00:36:58,979 --> 00:37:00,090
+we're not going to let you me,
+
+917
+00:37:00,409 --> 00:37:03,510
+we're just not going to let you manage memory, we're going to do it for you.
+
+918
+00:37:03,840 --> 00:37:05,600
+I don't think that's far enough. I think
+
+919
+00:37:06,280 --> 00:37:06,290
+I
+
+920
+00:37:06,469 --> 00:37:06,659
+agree.
+
+921
+00:37:08,810 --> 00:37:09,000
+Yeah.
+
+922
+00:37:09,209 --> 00:37:12,320
+But I mean, we, we're getting to that point like so go for example,
+
+923
+00:37:12,330 --> 00:37:14,909
+I looked at the temporary file creation function and you,
+
+924
+00:37:15,020 --> 00:37:16,679
+you're not allowed to do it insecurely,
+
+925
+00:37:17,310 --> 00:37:18,280
+you're just not
+
+926
+00:37:18,699 --> 00:37:19,110
+end of story.
+
+927
+00:37:20,300 --> 00:37:23,350
+No, the way it does it is it, you know, it does the randomized name,
+
+928
+00:37:23,360 --> 00:37:24,969
+it does the o exclusion open,
+
+929
+00:37:24,979 --> 00:37:26,850
+it does all the things that you should be doing
+
+930
+00:37:26,860 --> 00:37:29,459
+to create a temporary file safely and that's the default.
+
+931
+00:37:29,469 --> 00:37:32,570
+And as far as I know there's, I don't think there's any overrides for it.
+
+932
+00:37:33,270 --> 00:37:35,250
+And that's a great example of like, well, that,
+
+933
+00:37:35,639 --> 00:37:37,850
+that class of vulnerability is now gone.
+
+934
+00:37:38,919 --> 00:37:39,449
+Although,
+
+935
+00:37:39,669 --> 00:37:40,250
+sadly,
+
+936
+00:37:40,260 --> 00:37:43,290
+I've seen one or two go programs that shelled out
+
+937
+00:37:43,300 --> 00:37:45,810
+to bash to create temporary files and have floss,
+
+938
+00:37:45,939 --> 00:37:46,409
+which
+
+939
+00:37:47,360 --> 00:37:47,919
+I don't know that
+
+940
+00:37:49,100 --> 00:37:50,129
+I know exactly.
+
+941
+00:37:50,300 --> 00:37:53,090
+Well, and this is a, you know, like the, like, like this
+
+942
+00:37:53,360 --> 00:37:55,540
+tower block that, you know, if they spent an extra,
+
+943
+00:37:56,229 --> 00:37:59,639
+like, what, eight or $10,000 us on, on the cladding.
+
+944
+00:38:01,330 --> 00:38:03,909
+Yeah, this wouldn't have been nearly as much of a problem.
+
+945
+00:38:04,830 --> 00:38:05,030
+Uh,
+
+946
+00:38:05,399 --> 00:38:06,100
+you know.
+
+947
+00:38:07,189 --> 00:38:10,290
+Yes. And, and so here's where I want to tie it back to though.
+
+948
+00:38:10,830 --> 00:38:13,760
+You mentioned automobile accidents
+
+949
+00:38:14,209 --> 00:38:16,969
+and we know they're terrible and we know it's a slow burn.
+
+950
+00:38:17,959 --> 00:38:20,550
+What's gonna be the solution to automobile accidents?
+
+951
+00:38:20,560 --> 00:38:23,060
+Is it gonna be adding safety features into cars?
+
+952
+00:38:25,449 --> 00:38:26,840
+Well, I think that's part of it.
+
+953
+00:38:27,159 --> 00:38:27,260
+Oh,
+
+954
+00:38:28,189 --> 00:38:28,979
+yeah. And
+
+955
+00:38:29,649 --> 00:38:30,250
+I'll get there in a second.
+
+956
+00:38:30,500 --> 00:38:31,250
+Well, and
+
+957
+00:38:31,540 --> 00:38:33,570
+yes, self driving cars, but also, um,
+
+958
+00:38:33,580 --> 00:38:36,810
+there's a lot of cars now that also have pedestrian safety features
+
+959
+00:38:37,449 --> 00:38:39,429
+so that when they hit a pedestrian, they don't, you know,
+
+960
+00:38:39,600 --> 00:38:41,010
+destroy the pedestrian.
+
+961
+00:38:41,429 --> 00:38:45,679
+Um, but for example, I know Jaguar, uh, to get the profile of the car for their look.
+
+962
+00:38:45,689 --> 00:38:46,100
+Right,
+
+963
+00:38:46,260 --> 00:38:47,469
+the hood is actually,
+
+964
+00:38:48,129 --> 00:38:49,899
+uh, basically it's too low.
+
+965
+00:38:49,909 --> 00:38:53,840
+Like if you hit a pedestrian, it's gonna just, you're gonna knock the person flying.
+
+966
+00:38:54,030 --> 00:38:55,629
+So the hood actually pops up
+
+967
+00:38:56,010 --> 00:38:57,870
+to give a crumple zone for the pedestrian.
+
+968
+00:38:59,120 --> 00:39:01,149
+Like it pops up, I think, four or five inches
+
+969
+00:39:01,429 --> 00:39:03,649
+because otherwise it's basically right on the engine. Right.
+
+970
+00:39:03,659 --> 00:39:05,639
+So if you hit the hood, you're basically hitting the engine.
+
+971
+00:39:05,659 --> 00:39:09,649
+I don't view that as a feature because you still hit the person
+
+972
+00:39:09,850 --> 00:39:10,300
+and
+
+973
+00:39:10,750 --> 00:39:14,449
+-- you know what, just don't hit him. That's the right answer.
+-- Yes. Oh, I agree.
+
+974
+00:39:14,459 --> 00:39:17,649
+But the problem is until we take humans out of the equation.
+
+975
+00:39:18,350 --> 00:39:20,659
+Yeah. And, you know, machines won't be infallible.
+
+976
+00:39:20,669 --> 00:39:23,669
+But, uh, for example, yesterday, at a marked crosswalk with my kids,
+
+977
+00:39:23,909 --> 00:39:24,449
+the,
+
+978
+00:39:24,620 --> 00:39:24,929
+you know,
+
+979
+00:39:24,939 --> 00:39:26,139
+and we were having some trouble getting
+
+980
+00:39:26,149 --> 00:39:28,159
+everybody collected and organized across the street.
+
+981
+00:39:28,169 --> 00:39:28,449
+You know,
+
+982
+00:39:28,459 --> 00:39:31,810
+the car will wait and not just get impatient and
+
+983
+00:39:31,820 --> 00:39:33,929
+drive when my one son steps into the road,
+
+984
+00:39:34,739 --> 00:39:35,149
+right.
+
+985
+00:39:35,260 --> 00:39:37,550
+You know, with his arm out and he's wearing orange. So,
+
+986
+00:39:38,270 --> 00:39:39,820
+yeah, anyways,
+
+987
+00:39:41,179 --> 00:39:44,000
+no, the, the, the simple answer is to take humans out of the equation.
+
+988
+00:39:44,010 --> 00:39:47,129
+I mean, the number of people texting and driving now is responsible for, I think,
+
+989
+00:39:47,139 --> 00:39:47,540
+what was it?
+
+990
+00:39:47,550 --> 00:39:49,590
+Two thirds of all accidents or some ridiculous amount.
+
+991
+00:39:49,600 --> 00:39:52,110
+Oh, man, I have no doubt of that. II,
+
+992
+00:39:52,360 --> 00:39:54,360
+I see that so often
+
+993
+00:39:55,050 --> 00:39:58,260
+where, where the vast majority of people who almost hit me,
+
+994
+00:39:58,270 --> 00:40:01,179
+I ride my bike a lot so I almost get hit a lot.
+
+995
+00:40:01,590 --> 00:40:02,149
+And
+
+996
+00:40:02,530 --> 00:40:04,229
+I more often,
+
+997
+00:40:04,500 --> 00:40:06,850
+I bet in 80% of the instances I,
+
+998
+00:40:06,860 --> 00:40:10,370
+I can see they're on their cell phone or they're screwing around with it.
+
+999
+00:40:10,899 --> 00:40:13,129
+Right. And of course, then they yell at me because it was my fault.
+
+1000
+00:40:13,459 --> 00:40:14,429
+But it's,
+
+1001
+00:40:14,689 --> 00:40:17,830
+oh man, it's so, so here's the question though, is
+
+1002
+00:40:18,389 --> 00:40:21,669
+can we take people out of writing software?
+
+1003
+00:40:21,959 --> 00:40:26,030
+And I'm sure there are a bunch of people that just threw their shoe at their computer.
+
+1004
+00:40:26,040 --> 00:40:26,250
+And y
+
+1005
+00:40:26,399 --> 00:40:26,489
+no.
+
+1006
+00:40:27,340 --> 00:40:31,550
+Well, and, and the answer is there sort of is um I think one of the things we,
+
+1007
+00:40:31,560 --> 00:40:35,409
+we as an industry need to push is more use of frameworks.
+
+1008
+00:40:36,149 --> 00:40:38,739
+You know, there's a lot of really good web frameworks, for example,
+
+1009
+00:40:38,750 --> 00:40:41,060
+that just don't have like cross site request
+
+1010
+00:40:41,070 --> 00:40:44,810
+forgery issues because the framework authenticates every request.
+
+1011
+00:40:46,159 --> 00:40:48,629
+You know what? Yes, I agree with you.
+
+1012
+00:40:48,639 --> 00:40:51,570
+And I used to think that way, but I've come to realize, I mean,
+
+1013
+00:40:51,780 --> 00:40:53,909
+Google can't get rid of the cross site scripting
+
+1014
+00:40:53,919 --> 00:40:55,629
+and I'm sure they are framework to death.
+
+1015
+00:40:55,949 --> 00:40:56,520
+There is
+
+1016
+00:40:57,120 --> 00:40:58,610
+that is a good start.
+
+1017
+00:40:58,770 --> 00:41:01,239
+But again, I think that's the hood flipping up.
+
+1018
+00:41:01,250 --> 00:41:05,209
+So now we decapitate the pedestrian instead of just flipping them over the car.
+
+1019
+00:41:05,219 --> 00:41:05,719
+Right.
+
+1020
+00:41:06,090 --> 00:41:06,620
+Yeah.
+
+1021
+00:41:07,050 --> 00:41:10,870
+Well, I, I don't think we can fully take humans out of the equation.
+
+1022
+00:41:10,879 --> 00:41:14,459
+Um, because part of it too is, you know, you've got like, things like logical bugs or
+
+1023
+00:41:14,969 --> 00:41:18,860
+behaviors that we defined that we thought were safe and as it turns out whoops.
+
+1024
+00:41:18,870 --> 00:41:20,340
+No, that was a bad assumption.
+
+1025
+00:41:20,489 --> 00:41:21,850
+Like email.
+
+1026
+00:41:22,949 --> 00:41:26,110
+Yeah. Actually, no, that's a great example because, um,
+
+1027
+00:41:26,399 --> 00:41:28,889
+I deal with one organization and they constantly get
+
+1028
+00:41:28,899 --> 00:41:31,320
+phishing attempts and they're not even very sophisticated.
+
+1029
+00:41:31,330 --> 00:41:35,020
+They're like, you know, the CEO name at gmail.com, you know,
+
+1030
+00:41:35,030 --> 00:41:37,780
+go pay this invoice to this Russian bank account right now.
+
+1031
+00:41:37,790 --> 00:41:38,129
+I'm,
+
+1032
+00:41:38,270 --> 00:41:41,860
+I'm unavailable for the next 12 hours. So, just do it
+
+1033
+00:41:42,570 --> 00:41:43,260
+right. And,
+
+1034
+00:41:43,800 --> 00:41:44,239
+you know,
+
+1035
+00:41:44,350 --> 00:41:45,899
+the reality is if people
+
+1036
+00:41:46,070 --> 00:41:50,110
+read email and then follow the instructions blindly. Well, yeah.
+
+1037
+00:41:51,610 --> 00:41:52,320
+Yep. Yep.
+
+1038
+00:41:53,129 --> 00:41:54,750
+That's all I got. I don't have a solution.
+
+1039
+00:41:56,250 --> 00:41:57,860
+People, people that are the problem.
+
+1040
+00:41:57,870 --> 00:42:02,000
+Kurt, in nearly everything we look at the fundamental problem comes down to people.
+
+1041
+00:42:02,370 --> 00:42:02,760
+Right.
+
+1042
+00:42:03,159 --> 00:42:06,760
+Well, and the worst thing is it's people who are well meaning and trying to help. I,
+
+1043
+00:42:07,409 --> 00:42:09,620
+most people are well meaning
+
+1044
+00:42:09,889 --> 00:42:12,199
+and, and that's what makes it even more sad
+
+1045
+00:42:12,340 --> 00:42:15,050
+is these aren't bad or evil people.
+
+1046
+00:42:15,060 --> 00:42:18,439
+Generally speaking, these are just people who make silly mistakes.
+
+1047
+00:42:22,409 --> 00:42:23,290
+Oh, man.
+
+1048
+00:42:23,679 --> 00:42:25,429
+Uh, yeah. Anyway,
+
+1049
+00:42:25,610 --> 00:42:29,239
+you know, in, in, so here's something else to think about actually is, is
+
+1050
+00:42:29,340 --> 00:42:31,169
+kind of tying together
+
+1051
+00:42:31,520 --> 00:42:35,790
+Wallace's stack clash with this Grenfell Tower is
+
+1052
+00:42:36,199 --> 00:42:39,669
+Wallace did all this research and nobody really got hurt. Right.
+
+1053
+00:42:40,350 --> 00:42:41,250
+That, that we know of
+
+1054
+00:42:41,399 --> 00:42:42,790
+-- not so far as we know.
+-- Right.
+
+1055
+00:42:43,159 --> 00:42:47,899
+Whereas in the vast majority of real world kind of tragedies it,
+
+1056
+00:42:47,909 --> 00:42:51,070
+we find out about it because something terrible
+
+1057
+00:42:51,080 --> 00:42:53,449
+happens and lots of people get hurt and
+
+1058
+00:42:53,969 --> 00:42:56,159
+it's kind of crazy to think about is
+
+1059
+00:42:56,510 --> 00:43:00,290
+more often than not. I don't think this is like nice quiet research.
+
+1060
+00:43:00,300 --> 00:43:04,810
+It's usually something crazy, literally lit on fire or exploded. And now we know,
+
+1061
+00:43:05,320 --> 00:43:05,979
+well, I mean,
+
+1062
+00:43:05,989 --> 00:43:08,439
+recently the city removed something like 30 or 40
+
+1063
+00:43:08,449 --> 00:43:11,169
+slides from playgrounds because they're made out of metal,
+
+1064
+00:43:11,179 --> 00:43:13,159
+they're welded, the welds can crack.
+
+1065
+00:43:13,649 --> 00:43:14,060
+Uh,
+
+1066
+00:43:14,070 --> 00:43:16,580
+and these two pieces of metal are joined at 90 degrees and
+
+1067
+00:43:16,590 --> 00:43:18,629
+you can get your fingers in there and get them amputated.
+
+1068
+00:43:18,639 --> 00:43:23,000
+And that's apparently happened to two kids, not in this city, but in other places.
+
+1069
+00:43:23,270 --> 00:43:25,500
+Uh So there's a nationwide recall on these slides.
+
+1070
+00:43:26,350 --> 00:43:26,699
+These
+
+1071
+00:43:27,110 --> 00:43:28,709
+two little kids lost their fingers.
+
+1072
+00:43:29,030 --> 00:43:30,570
+Uh They've been around for a few years.
+
+1073
+00:43:30,580 --> 00:43:33,770
+It's basically three pieces of metal welded at 90 degrees. So you've got
+
+1074
+00:43:34,129 --> 00:43:34,139
+a
+
+1075
+00:43:34,250 --> 00:43:34,850
+slide.
+
+1076
+00:43:34,969 --> 00:43:36,510
+-- I
+-- remember when I was a kid,
+
+1077
+00:43:36,520 --> 00:43:40,169
+like all the slides were metal because like there weren't plastic slides.
+
+1078
+00:43:40,810 --> 00:43:43,459
+And so, yeah, no, two kids ended up with, you know,
+
+1079
+00:43:43,469 --> 00:43:47,889
+losing bits of their fingers before we had a nationwide recall on these slides and,
+
+1080
+00:43:48,669 --> 00:43:49,110
+right. And
+
+1081
+00:43:49,370 --> 00:43:50,409
+not like that.
+
+1082
+00:43:50,419 --> 00:43:53,409
+If it's only a couple of kids, you're never even gonna hear about it because it,
+
+1083
+00:43:53,419 --> 00:43:54,959
+it's just not, it's not big enough.
+
+1084
+00:43:55,340 --> 00:43:56,239
+-- Right?
+-- I mean, in this
+
+1085
+00:43:56,550 --> 00:43:57,020
+case, it's how the
+
+1086
+00:43:57,129 --> 00:43:57,310
+news is.
+
+1087
+00:44:00,010 --> 00:44:01,830
+But, well, in this case, the system has worked, right,
+
+1088
+00:44:01,840 --> 00:44:04,520
+because they identified the problem clearly, you know, one kid,
+
+1089
+00:44:04,530 --> 00:44:05,659
+maybe it's a weird accent.
+
+1090
+00:44:05,669 --> 00:44:07,229
+Two kids. Ok. Now it's a pattern
+
+1091
+00:44:07,919 --> 00:44:09,219
+and, you know, I mean,
+
+1092
+00:44:09,229 --> 00:44:12,379
+I've always wondered about these slides because they didn't weld the entire scene,
+
+1093
+00:44:12,389 --> 00:44:13,790
+just spot welded the scene.
+
+1094
+00:44:13,800 --> 00:44:17,620
+-- Basically,
+-- it seems bonkers. I mean, come on, you've got to know that's a problem.
+
+1095
+00:44:18,010 --> 00:44:20,449
+Well, yeah, with like kids jumping up and down on the slide,
+
+1096
+00:44:20,459 --> 00:44:22,409
+I always kind of looked at them a little bit, you know.
+
+1097
+00:44:23,370 --> 00:44:23,780
+Right.
+
+1098
+00:44:23,790 --> 00:44:26,850
+So, anyway, so, you know, they, what's interesting is the city was like, yeah,
+
+1099
+00:44:26,860 --> 00:44:31,290
+a whole bunch of people have called and been really angry until they find out why.
+
+1100
+00:44:33,379 --> 00:44:33,830
+Right.
+
+1101
+00:44:34,850 --> 00:44:37,159
+So, and I think that's one of the things with Infosec is,
+
+1102
+00:44:37,929 --> 00:44:40,709
+you know, sometimes, well, like today, you know, it's like, yeah,
+
+1103
+00:44:40,719 --> 00:44:43,439
+we had this embargo extended because otherwise we would have
+
+1104
+00:44:43,449 --> 00:44:45,629
+gone public with something and not had a solution.
+
+1105
+00:44:46,389 --> 00:44:46,879
+Well, no,
+
+1106
+00:44:46,889 --> 00:44:50,429
+even more dangerous though is when you don't have a solution and
+
+1107
+00:44:50,439 --> 00:44:53,889
+you don't have cool heads looking at something you can make foolish mistakes
+
+1108
+00:44:54,350 --> 00:44:57,780
+and, and I'll point to shell shock is one of the greatest examples. There is
+
+1109
+00:44:58,169 --> 00:44:59,909
+the shell shock story and,
+
+1110
+00:44:59,919 --> 00:45:01,560
+and a lot of people don't know this story and
+
+1111
+00:45:01,570 --> 00:45:04,729
+I do love telling it is so shell shock gets announced
+
+1112
+00:45:05,199 --> 00:45:08,129
+and there was a very, I was, I don't even know if there was an embargo.
+
+1113
+00:45:08,139 --> 00:45:08,929
+I think there was a very
+
+1114
+00:45:09,189 --> 00:45:09,860
+embargo.
+
+1115
+00:45:10,229 --> 00:45:12,260
+-- It was like a one week embargo.
+-- And I remember
+
+1116
+00:45:12,540 --> 00:45:13,510
+we were involved in a
+
+1117
+00:45:13,689 --> 00:45:16,909
+Florian Verner who you mentioned earlier who works on GLC.
+
+1118
+00:45:16,919 --> 00:45:20,429
+He helped with shell shock and basically, he said your fix isn't complete.
+
+1119
+00:45:20,439 --> 00:45:21,419
+We should do it this way,
+
+1120
+00:45:21,449 --> 00:45:23,979
+but it would have broken some backwards compatibility in bash.
+
+1121
+00:45:23,989 --> 00:45:26,919
+And so the bash guy said, no, we're not gonna fix it the right way.
+
+1122
+00:45:26,929 --> 00:45:30,540
+We're just gonna fix literally this one instance of the problem.
+
+1123
+00:45:31,050 --> 00:45:33,389
+And everybody knew there were more of these
+
+1124
+00:45:33,399 --> 00:45:35,830
+bugs right under the surface and we're like,
+
+1125
+00:45:36,510 --> 00:45:38,830
+ok, I guess we'll do it your way.
+
+1126
+00:45:39,080 --> 00:45:39,989
+Right. And then
+
+1127
+00:45:40,310 --> 00:45:43,030
+it gets released and like, two hours later,
+
+1128
+00:45:43,040 --> 00:45:46,310
+I think it was Tavis Ormandy finds more bugs.
+
+1129
+00:45:46,320 --> 00:45:49,870
+Exactly the same problem for the most part. And we're like, oh, crap.
+
+1130
+00:45:50,330 --> 00:45:54,469
+And that's when I know like Fedora and Friends and Red Hat said
+
+1131
+00:45:54,479 --> 00:45:58,350
+we're just gonna do what Florian said we should do because that seems better
+
+1132
+00:45:58,610 --> 00:46:00,870
+and, and they technically broke backwards compatibility
+
+1133
+00:46:01,120 --> 00:46:04,389
+upstream. Fix the one bug Tavis found.
+
+1134
+00:46:04,679 --> 00:46:06,199
+And then I think it was, uh, Matthew
+
+1135
+00:46:06,350 --> 00:46:09,239
+Zalewski with his one, a FL American fuzzle
+
+1136
+00:46:09,409 --> 00:46:09,919
+laps fuzz.
+
+1137
+00:46:10,330 --> 00:46:11,090
+He
+
+1138
+00:46:11,239 --> 00:46:17,139
+he started fuzzing it and he's like, I found more than 50 bugs exactly like this.
+
+1139
+00:46:17,149 --> 00:46:18,030
+Right. What are we gonna do?
+
+1140
+00:46:18,040 --> 00:46:21,350
+And then the bash guys were like, I guess we'll fix it the right way
+
+1141
+00:46:21,739 --> 00:46:22,139
+and like,
+
+1142
+00:46:23,270 --> 00:46:26,000
+and see part of me doesn't disagree because on the one hand,
+
+1143
+00:46:26,010 --> 00:46:29,489
+you have this theoretical security, potentially terrible thing.
+
+1144
+00:46:29,790 --> 00:46:32,870
+On the other hand, you definitely have breaking backwards compatibility,
+
+1145
+00:46:32,879 --> 00:46:34,379
+which definitely will break.
+
+1146
+00:46:34,709 --> 00:46:37,270
+I'm gonna say no. And I'm gonna, I'm gonna stand.
+
+1147
+00:46:37,399 --> 00:46:37,629
+I'm not
+
+1148
+00:46:37,889 --> 00:46:37,959
+agreeing
+
+1149
+00:46:38,129 --> 00:46:42,290
+-- with them. I'm saying I just see their point of view.
+-- We have committed too many sins
+
+1150
+00:46:42,639 --> 00:46:44,489
+in the history of computing
+
+1151
+00:46:45,320 --> 00:46:47,250
+in the name of backwards compatibility
+
+1152
+00:46:47,949 --> 00:46:48,530
+and
+
+1153
+00:46:48,760 --> 00:46:53,250
+a, a nontrivial number of problems have resulted due to that fact.
+
+1154
+00:46:53,260 --> 00:46:56,979
+Instead of saying we need to throw this away and start over,
+
+1155
+00:46:57,300 --> 00:47:02,310
+we've tried to keep this broken down, train on fire on the tracks and that,
+
+1156
+00:47:02,520 --> 00:47:03,770
+that is not OK.
+
+1157
+00:47:03,909 --> 00:47:07,669
+I, I have become a huge opponent of backwards compatibility.
+
+1158
+00:47:07,679 --> 00:47:11,679
+What do we do with all the in-house corporate software that's been written,
+
+1159
+00:47:12,060 --> 00:47:17,179
+look, but here's the thing. OK. So let's use IE six as an example. IE six is end of life.
+
+1160
+00:47:17,189 --> 00:47:20,760
+You need IE six. Great. Get a virtual machine and run IE six.
+
+1161
+00:47:20,909 --> 00:47:22,520
+You know what firewall to death,
+
+1162
+00:47:22,750 --> 00:47:24,080
+you know, the risk you're taking
+
+1163
+00:47:24,739 --> 00:47:27,159
+instead of limping this crap along forever.
+
+1164
+00:47:27,330 --> 00:47:30,120
+And, and you're, I, I understand the argument you're making,
+
+1165
+00:47:30,129 --> 00:47:32,280
+but I think the counter argument which is the only right
+
+1166
+00:47:32,290 --> 00:47:34,350
+way to go is to say if you need this,
+
+1167
+00:47:34,379 --> 00:47:38,899
+like, you need to take extraordinary measures to make it work,
+
+1168
+00:47:38,909 --> 00:47:42,000
+not expect the world to support your poor decisions.
+
+1169
+00:47:42,330 --> 00:47:44,270
+Well, yeah, no, no more. My point is that
+
+1170
+00:47:44,489 --> 00:47:44,850
+I,
+
+1171
+00:47:45,300 --> 00:47:47,149
+yeah, if it was up to me, I,
+
+1172
+00:47:47,159 --> 00:47:50,040
+I am much happier with breaking backwards compatibility
+
+1173
+00:47:50,050 --> 00:47:51,489
+because I live in the open source world.
+
+1174
+00:47:51,500 --> 00:47:53,020
+So quite frankly, if something breaks,
+
+1175
+00:47:53,060 --> 00:47:55,270
+we have the source code and generally enough smart people to
+
+1176
+00:47:55,280 --> 00:47:57,570
+fix it and then we recompile it and life goes on.
+
+1177
+00:47:58,090 --> 00:48:00,090
+But that's not true of most of the world, right?
+
+1178
+00:48:00,100 --> 00:48:03,689
+They, they may not have the source code or they don't have the expertise to fix it.
+
+1179
+00:48:03,820 --> 00:48:06,110
+So I can understand why these programmers.
+
+1180
+00:48:06,120 --> 00:48:08,350
+For example, the bash guys would want to say, you know,
+
+1181
+00:48:08,360 --> 00:48:10,989
+we want to make a minimally invasive change
+
+1182
+00:48:12,040 --> 00:48:15,020
+so that we, you know, break as little stuff as possible.
+
+1183
+00:48:15,030 --> 00:48:18,479
+And I think that's a laudable goal, but the problem is, as you pointed out
+
+1184
+00:48:18,629 --> 00:48:21,580
+-- quite often, those changes are insufficient,
+-- right?
+
+1185
+00:48:21,610 --> 00:48:22,979
+Well, not only that, let's face it,
+
+1186
+00:48:22,989 --> 00:48:25,580
+the people who actually need the backwards compatibility
+
+1187
+00:48:25,760 --> 00:48:28,489
+probably are never going to upgrade and I'm sure they're running
+
+1188
+00:48:28,500 --> 00:48:30,979
+a version of bash from 20 years ago as it is.
+
+1189
+00:48:31,629 --> 00:48:33,409
+Well, and see, that's one of my concerns is,
+
+1190
+00:48:33,419 --> 00:48:36,080
+and that's one of my fundamental concerns with this whole industry.
+
+1191
+00:48:36,090 --> 00:48:37,290
+We have no data.
+
+1192
+00:48:38,360 --> 00:48:39,729
+We literally like,
+
+1193
+00:48:39,909 --> 00:48:42,879
+I don't know what what is the patching curve?
+
+1194
+00:48:43,110 --> 00:48:44,850
+You know, for a given organization?
+
+1195
+00:48:44,860 --> 00:48:48,860
+Like, do they patch 10% of systems within an hour, within 10 hours, within 10 days?
+
+1196
+00:48:48,870 --> 00:48:49,600
+10 years?
+
+1197
+00:48:50,189 --> 00:48:51,989
+You know, what's, what's the, you know,
+
+1198
+00:48:52,000 --> 00:48:54,209
+it's like when I think Trump came out and said, oh my God.
+
+1199
+00:48:54,219 --> 00:48:56,290
+You know, the, I forget which government department has, like,
+
+1200
+00:48:56,300 --> 00:48:57,659
+this 40 year old it system.
+
+1201
+00:48:57,669 --> 00:48:58,300
+And I'm like,
+
+1202
+00:48:58,629 --> 00:49:01,580
+no, they don't, they have like, 50 of those. Are you kidding me? Like,
+
+1203
+00:49:02,120 --> 00:49:04,340
+like, I, you know, every, like,
+
+1204
+00:49:04,780 --> 00:49:07,459
+uh, I'm trying to think of what my oldest it system at home is,
+
+1205
+00:49:07,469 --> 00:49:09,239
+but it's probably 10 or 20
+
+1206
+00:49:09,409 --> 00:49:10,649
+years old if I had to guess,
+
+1207
+00:49:10,659 --> 00:49:13,959
+just because I'm a pessimist and there's probably something I've forgotten about,
+
+1208
+00:49:15,770 --> 00:49:16,959
+like, literally, you know.
+
+1209
+00:49:17,979 --> 00:49:18,379
+Oh, yeah.
+
+1210
+00:49:18,389 --> 00:49:20,570
+No, my wireless routers, they haven't had ad DW,
+
+1211
+00:49:20,580 --> 00:49:23,830
+they're old enough that I can't get DDW RT updates for them in the last two,
+
+1212
+00:49:23,840 --> 00:49:24,370
+three years.
+
+1213
+00:49:24,560 --> 00:49:27,550
+My wireless routers cook themselves about every two years.
+
+1214
+00:49:28,120 --> 00:49:29,669
+Yeah, it's, it's about time for an upgrade.
+
+1215
+00:49:29,679 --> 00:49:32,610
+Plus I can, it doesn't seem to reach the basement very well anymore.
+
+1216
+00:49:33,260 --> 00:49:33,540
+There you go.
+
+1217
+00:49:33,679 --> 00:49:34,110
+Um,
+
+1218
+00:49:34,350 --> 00:49:37,750
+but, yeah, so, I mean, you know, even myself, I, I've still got it.
+
+1219
+00:49:37,760 --> 00:49:40,989
+Well, I have out of date it systems because I have to go spend 2,
+
+1220
+00:49:41,000 --> 00:49:45,330
+300 bucks on new hardware that essentially only gets me up to date software.
+
+1221
+00:49:45,979 --> 00:49:47,070
+Not really much
+
+1222
+00:49:47,320 --> 00:49:50,550
+-- advantages or features that I don't already have
+-- Right.
+
+1223
+00:49:50,739 --> 00:49:54,030
+-- Right. You should probably check those things for, uh, CIA Malware.
+-- Now,
+
+1224
+00:49:55,159 --> 00:49:55,199
+that's
+
+1225
+00:49:56,159 --> 00:49:57,479
+not the worst idea. I was
+
+1226
+00:49:57,939 --> 00:49:58,100
+with the
+
+1227
+00:49:58,310 --> 00:49:58,409
+idea of
+
+1228
+00:49:58,649 --> 00:50:02,510
+-- using raspberry pies with external antennas.
+-- I've thought about that before.
+
+1229
+00:50:02,520 --> 00:50:05,110
+It's, I don't know, every now and then I get tempted and then I'm like, ah,
+
+1230
+00:50:05,120 --> 00:50:07,110
+these things are 100 bucks.
+
+1231
+00:50:07,120 --> 00:50:10,070
+They're so cheap now and they work really well.
+
+1232
+00:50:10,800 --> 00:50:13,310
+Well, I've been looking at some of the higher end wireless routers
+
+1233
+00:50:13,500 --> 00:50:14,879
+to get better coverage in. This
+
+1234
+00:50:15,629 --> 00:50:17,379
+might be why yours is 20 years old.
+
+1235
+00:50:17,389 --> 00:50:21,780
+And mine only last two years because I buy the, I buy the $90 router
+
+1236
+00:50:22,580 --> 00:50:25,169
+at the same time. Like it works. Right. It basically works.
+
+1237
+00:50:25,189 --> 00:50:28,419
+And the beauty though, too of replacing them every two years is every two years.
+
+1238
+00:50:28,429 --> 00:50:31,419
+There's something new and exciting in the world of wireless I get.
+
+1239
+00:50:31,699 --> 00:50:33,580
+So I do see an advantage to that
+
+1240
+00:50:35,310 --> 00:50:36,070
+anyway.
+
+1241
+00:50:36,250 --> 00:50:38,709
+I think, I think it's time to clean this one up. It's
+
+1242
+00:50:38,939 --> 00:50:40,229
+thank, thank you, everybody.
+
+1243
+00:50:40,239 --> 00:50:44,909
+It's been kind of a, a wild conversation to say the least, uh, good luck patching
+
+1244
+00:50:45,219 --> 00:50:49,030
+for, for Stat Clash. And if you haven't read the qual, this advisory
+
+1245
+00:50:49,290 --> 00:50:53,469
+do it, it's insanely long, but it is marvelous.
+
+1246
+00:50:53,659 --> 00:50:55,790
+-- Was beautiful.
+-- It is, it is a work of art.
+
+1247
+00:50:56,330 --> 00:50:58,310
+Yeah. When they send it to me, I was like, oh,
+
+1248
+00:50:59,120 --> 00:51:00,959
+yeah. Ok. I guess that answers all my questions.
+
+1249
+00:51:00,969 --> 00:51:02,189
+Like, normally when somebody, you know,
+
+1250
+00:51:02,199 --> 00:51:03,870
+find something bad and they send in an advisory.
+
+1251
+00:51:03,879 --> 00:51:06,530
+You're like, OK, I need clarification on like these seven things.
+
+1252
+00:51:06,540 --> 00:51:09,550
+-- But in this case, it was like, oh no, that's, it's like,
+-- wow,
+
+1253
+00:51:10,300 --> 00:51:13,070
+this thing deserves a literature award
+
+1254
+00:51:13,199 --> 00:51:17,270
+for writing. It is, it is well done and it has uh quotes from Clash
+
+1255
+00:51:17,629 --> 00:51:18,090
+the
+
+1256
+00:51:18,360 --> 00:51:20,110
+the Band, the Clash in it. So
+
+1257
+00:51:20,250 --> 00:51:21,389
+you got to love that. Right.
+
+1258
+00:51:21,909 --> 00:51:24,399
+So I guess anyway, if anyone wants to see the,
+
+1259
+00:51:24,409 --> 00:51:28,090
+the various links to the stories we've spoken of today,
+
+1260
+00:51:28,100 --> 00:51:30,419
+you can go to open source security podcast.com.
+
+1261
+00:51:30,429 --> 00:51:31,459
+We'll have links to the QIS
+
+1262
+00:51:31,750 --> 00:51:33,580
+blog, which is very short and the Qis
+
+1263
+00:51:33,820 --> 00:51:36,989
+advisory which is very long. I recommend you read them both.
+
+1264
+00:51:37,620 --> 00:51:41,889
+And if you visit the website, you can have links to Twitter and Facebook,
+
+1265
+00:51:41,899 --> 00:51:44,040
+you can reach us with the Pound Os S podcast.
+
+1266
+00:51:44,050 --> 00:51:44,879
+Hashtag
+
+1267
+00:51:45,199 --> 00:51:48,399
+I guess if anyone has any questions or feedback by all means, you know, hit us up,
+
+1268
+00:51:48,409 --> 00:51:49,139
+let us know.
+
+1269
+00:51:49,290 --> 00:51:54,139
+And if nothing else, Kurt, you have a marvelous day and, and good luck and well done,
+
+1270
+00:51:54,149 --> 00:51:54,419
+man.
+
+1271
+00:51:55,080 --> 00:51:55,639
+Thanks.
+
+1272
+00:51:55,879 --> 00:51:59,250
+And I guess for everybody out there, you know, if you see something, say something
+
+1273
+00:51:59,429 --> 00:52:01,939
+and don't just, oh, and literally don't, you know,
+
+1274
+00:52:02,080 --> 00:52:05,219
+sometimes people will try and fob you off and be like, oh, no, it's not a big deal.
+
+1275
+00:52:05,229 --> 00:52:06,760
+No, it, it could be a big deal.
+
+1276
+00:52:06,770 --> 00:52:11,659
+-- So make sure somebody knows, you know, tell an adult as it were.
+-- Indeed. Indeed.
+
+1277
+00:52:11,760 --> 00:52:14,090
+All right. Have a good one, everybody. Thanks. Bye bye.

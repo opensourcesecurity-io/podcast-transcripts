@@ -1,0 +1,2385 @@
+0
+00:00:05,309 --> 00:00:08,699
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,710 --> 00:00:11,510
+Kurt Siefried and my partner in Thought Crime, Josh Pressers.
+
+2
+00:00:11,640 --> 00:00:15,090
+All right. So I'm going to give some backstory in this one. We have a guest today.
+
+3
+00:00:15,100 --> 00:00:18,379
+We have Emile, who is the co founder and head of Data Science at
+
+4
+00:00:18,530 --> 00:00:21,290
+Debrecht. But this episode I think has been
+
+5
+00:00:21,420 --> 00:00:24,590
+more than six months in the making where Debrecht is doing some really
+
+6
+00:00:24,600 --> 00:00:26,860
+interesting things and I'll let Emile talk about that in a moment,
+
+7
+00:00:26,870 --> 00:00:29,253
+but every time we schedule is like something
+
+8
+00:00:29,263 --> 00:00:32,262
+ridiculous happened that prevented him from appearing.
+
+9
+00:00:32,272 --> 00:00:36,882
+So Emil, I'm so pleased that you're finally here. Welcome to the show.
+
+10
+00:00:36,893 --> 00:00:38,002
+-- Thank you,
+-- Josh and Kurt.
+
+11
+00:00:38,013 --> 00:00:38,173
+Yeah,
+
+12
+00:00:38,182 --> 00:00:40,222
+it's been a long time in the making and I
+
+13
+00:00:40,233 --> 00:00:42,702
+really look forward to having this talk to you guys.
+
+14
+00:00:42,713 --> 00:00:43,083
+Yeah.
+
+15
+00:00:43,092 --> 00:00:47,362
+So I'm Emil and one of the actually not a co founder from the beginning,
+
+16
+00:00:47,373 --> 00:00:50,092
+but one of the earliest employees, it's actually quite recent.
+
+17
+00:00:50,103 --> 00:00:55,195
+I was acknowledged the co founder. So I'm happy about presenting that today as well.
+
+18
+00:00:55,986 --> 00:00:56,875
+What I do at the BRIC
+
+19
+00:00:57,015 --> 00:00:59,596
+is usually work a lot with all our data.
+
+20
+00:00:59,605 --> 00:01:04,456
+We do a lot of data collection in terms of open source vulnerabilities and a
+
+21
+00:01:04,465 --> 00:01:08,475
+lot of other interesting data in regards to all open source in the world.
+
+22
+00:01:08,486 --> 00:01:09,896
+In a short presentation. The BRIC
+
+23
+00:01:10,005 --> 00:01:12,555
+T is a software composition analysis tool
+
+24
+00:01:12,825 --> 00:01:14,396
+that's looking to
+
+25
+00:01:14,575 --> 00:01:19,005
+solve some challenges within open source management. Looking at
+
+26
+00:01:19,400 --> 00:01:22,139
+how you work with open source,
+
+27
+00:01:22,150 --> 00:01:27,699
+both from an intake uh perspective and how you understand what you're using and find
+
+28
+00:01:27,709 --> 00:01:30,720
+opportunities where you can possibly contribute back to
+
+29
+00:01:30,730 --> 00:01:32,419
+the open source you're using as well.
+
+30
+00:01:32,839 --> 00:01:33,349
+Nice.
+
+31
+00:01:33,510 --> 00:01:35,580
+And you are a Swedish company. Yes.
+
+32
+00:01:35,959 --> 00:01:38,260
+Yeah. So a start up based in
+
+33
+00:01:38,540 --> 00:01:39,949
+Mal, it's very close to Denmark
+
+34
+00:01:40,139 --> 00:01:40,250
+Mal
+
+35
+00:01:40,430 --> 00:01:45,580
+actually. Uh so I can actually see uh Copenhagen outside my window here.
+
+36
+00:01:46,610 --> 00:01:47,129
+Awesome.
+
+37
+00:01:48,309 --> 00:01:49,569
+That's exciting.
+
+38
+00:01:49,750 --> 00:01:51,639
+OK. OK. So let's just jump right in.
+
+39
+00:01:51,669 --> 00:01:54,699
+So the, the real reason I'm so excited to talk to Die
+
+40
+00:01:54,849 --> 00:01:56,720
+Bricht and this is a pain point,
+
+41
+00:01:56,730 --> 00:02:01,459
+Kurt and I have complained about at length and constantly is all of
+
+42
+00:02:01,470 --> 00:02:04,519
+the vulnerability databases that exist today are
+
+43
+00:02:04,529 --> 00:02:08,210
+these artisanal hand curated data sources.
+
+44
+00:02:08,324 --> 00:02:08,595
+And De
+
+45
+00:02:08,735 --> 00:02:11,054
+Brecht is taking a completely different view of
+
+46
+00:02:11,065 --> 00:02:13,205
+this and you're doing some amazing things.
+
+47
+00:02:13,214 --> 00:02:16,375
+So tell us what you're doing and why I'm so excited. Yeah.
+
+48
+00:02:16,384 --> 00:02:20,205
+So yeah, I'm really happy that you're excited about this. I'm too.
+
+49
+00:02:20,375 --> 00:02:24,065
+So what we're doing is we're trying to automate the collection
+
+50
+00:02:24,074 --> 00:02:30,345
+of vulnerabilities in a different way than looking at manually curated databases
+
+51
+00:02:30,740 --> 00:02:33,330
+and looking at those databases.
+
+52
+00:02:33,419 --> 00:02:38,520
+It takes a lot of work to maintain and analyze and understand vulnerabilities and
+
+53
+00:02:38,889 --> 00:02:42,169
+how they contextualized in different environments.
+
+54
+00:02:42,539 --> 00:02:46,190
+So what we are doing instead is that we're trying to
+
+55
+00:02:46,500 --> 00:02:49,490
+automatically with a lot of machine learning,
+
+56
+00:02:49,500 --> 00:02:53,210
+find vulnerabilities straight in the code in the
+
+57
+00:02:53,220 --> 00:02:55,929
+sources of the open source in the world.
+
+58
+00:02:55,940 --> 00:02:57,429
+So looking at for instance,
+
+59
+00:02:57,440 --> 00:03:03,449
+commits and the code changes and the raw code itself issues pull request
+
+60
+00:03:03,554 --> 00:03:06,244
+in different open source projects
+
+61
+00:03:06,464 --> 00:03:11,695
+and trying to map what is potentially security related or not.
+
+62
+00:03:11,705 --> 00:03:14,154
+And this has a couple of advantages compared to
+
+63
+00:03:14,164 --> 00:03:17,294
+the normal way of doing it with manual analysis,
+
+64
+00:03:17,304 --> 00:03:20,615
+public disclosure through NVD or something like that
+
+65
+00:03:20,960 --> 00:03:22,389
+is that we are,
+
+66
+00:03:22,399 --> 00:03:25,559
+our vulnerabilities are really close to the source to
+
+67
+00:03:25,570 --> 00:03:30,059
+the code and we can quite easily map out
+
+68
+00:03:30,360 --> 00:03:36,460
+if you, for instance, are using that code in both a static or a dynamic way,
+
+69
+00:03:36,509 --> 00:03:37,539
+which is quite cool.
+
+70
+00:03:37,669 --> 00:03:38,779
+-- That's
+-- amazing.
+
+71
+00:03:39,699 --> 00:03:45,000
+So looking at, I usually like to think of it like this like of course, you know that
+
+72
+00:03:45,130 --> 00:03:48,059
+-- machine learning is not perfect
+-- always.
+
+73
+00:03:48,089 --> 00:03:50,160
+That's not what I've been told, machine learning.
+
+74
+00:03:50,169 --> 00:03:52,889
+-- Does it all the only thing better is Blockchain?
+-- Right.
+
+75
+00:03:53,149 --> 00:03:57,080
+Yeah, of course. Yeah, we should, we should try to incorporate that here as well.
+
+76
+00:03:57,570 --> 00:03:58,130
+No,
+
+77
+00:03:58,509 --> 00:04:00,330
+but uh yeah, we, we have a,
+
+78
+00:04:00,339 --> 00:04:04,539
+we have a quite high performing algorithm like the overall performance
+
+79
+00:04:04,550 --> 00:04:08,380
+is that we have an F one measure of about 85%.
+
+80
+00:04:08,660 --> 00:04:11,460
+What does, what does an F one measure mean, can you tell us?
+
+81
+00:04:11,789 --> 00:04:17,230
+So it's the, it's the harmonic mean between the recall and the precision.
+
+82
+00:04:17,238 --> 00:04:20,690
+So the precision is looking at the true positive rate.
+
+83
+00:04:20,700 --> 00:04:24,390
+So of the predictions, how many of those are true positives?
+
+84
+00:04:24,559 --> 00:04:29,209
+And that's about 8780 88% right now.
+
+85
+00:04:30,649 --> 00:04:31,790
+So that's quite cool.
+
+86
+00:04:31,920 --> 00:04:32,950
+That's crazy.
+
+87
+00:04:33,489 --> 00:04:35,290
+Yeah, it's better than most people.
+
+88
+00:04:35,410 --> 00:04:37,059
+-- It's
+-- way better than people.
+
+89
+00:04:37,200 --> 00:04:38,600
+Yeah, that's really, really high.
+
+90
+00:04:38,609 --> 00:04:43,980
+We have and we realized when we experimented with different models, we,
+
+91
+00:04:44,190 --> 00:04:48,179
+we got that position when we aggregated all the different data sources,
+
+92
+00:04:48,190 --> 00:04:52,420
+like looking at both with N LP at the commit messages and the pull requests,
+
+93
+00:04:52,450 --> 00:04:56,929
+looking at the statistical properties of commits, how many lines were changing in
+
+94
+00:04:57,369 --> 00:04:59,750
+what type of files it was,
+
+95
+00:04:59,850 --> 00:05:05,790
+was the code shown in that commit and so on and also looking at the actual code itself.
+
+96
+00:05:05,799 --> 00:05:10,540
+But with that high performance, we, when we look at all the commits
+
+97
+00:05:10,790 --> 00:05:15,429
+in all the open source projects, we get quite a lot of false positives still. But
+
+98
+00:05:15,760 --> 00:05:17,679
+I think what we're doing here is
+
+99
+00:05:17,690 --> 00:05:20,940
+that we're collecting vulnerabilities that are really,
+
+100
+00:05:20,950 --> 00:05:25,660
+really easy and nice to contextualize to the software that you're using.
+
+101
+00:05:25,670 --> 00:05:26,140
+So
+
+102
+00:05:26,369 --> 00:05:28,600
+if you look at normal vulnerabilities that the ones
+
+103
+00:05:28,609 --> 00:05:31,579
+that you find in advisories such as NVD,
+
+104
+00:05:31,589 --> 00:05:34,500
+we know that those are actual vulnerabilities,
+
+105
+00:05:34,510 --> 00:05:36,540
+but the false positives are not in terms
+
+106
+00:05:36,549 --> 00:05:39,450
+of their vulnerabilities or not because we know that
+
+107
+00:05:39,820 --> 00:05:42,179
+the false positive rate comes from
+
+108
+00:05:42,589 --> 00:05:44,079
+whether you're using
+
+109
+00:05:44,339 --> 00:05:47,299
+that dependency, you may have mapped that wrong.
+
+110
+00:05:47,320 --> 00:05:50,010
+It's whether you're using the vulnerable code,
+
+111
+00:05:50,170 --> 00:05:55,519
+if it's only used during tests, if it's used during run time in an environment,
+
+112
+00:05:55,529 --> 00:05:56,170
+that is,
+
+113
+00:05:56,450 --> 00:05:58,720
+that makes you susceptible to that vulnerable
+
+114
+00:05:59,045 --> 00:05:59,695
+or not.
+
+115
+00:05:59,765 --> 00:06:03,975
+But mapping whether you're actually using a vulnerability
+
+116
+00:06:03,984 --> 00:06:07,125
+from those normal types of vulnerabilities is really,
+
+117
+00:06:07,135 --> 00:06:07,924
+really hard
+
+118
+00:06:08,154 --> 00:06:10,774
+because they're quite far from the code.
+
+119
+00:06:10,785 --> 00:06:15,095
+And, but looking at where we have analyzed the code itself and found
+
+120
+00:06:15,295 --> 00:06:17,454
+vulnerabilities that the risk is
+
+121
+00:06:17,674 --> 00:06:18,774
+rather that
+
+122
+00:06:19,279 --> 00:06:19,679
+you,
+
+123
+00:06:19,690 --> 00:06:22,429
+they may not be vulnerable vulnerabilities at
+
+124
+00:06:22,440 --> 00:06:24,209
+all because we have classified them wrong.
+
+125
+00:06:24,380 --> 00:06:25,029
+But
+
+126
+00:06:25,209 --> 00:06:31,399
+we know that you are 100% using that code that we have classified as a vulnerability.
+
+127
+00:06:31,670 --> 00:06:34,730
+So it's a completely other approach in terms
+
+128
+00:06:34,739 --> 00:06:38,010
+of how you view security and open source,
+
+129
+00:06:38,019 --> 00:06:38,540
+I'd say
+
+130
+00:06:38,679 --> 00:06:44,059
+I love this. I mean, this is one of my pet peeves of source composition analysis is
+
+131
+00:06:44,570 --> 00:06:46,769
+every single one I've seen today
+
+132
+00:06:46,880 --> 00:06:50,609
+just takes kind of like the stupid approach of you ship it you're vulnerable.
+
+133
+00:06:50,619 --> 00:06:51,290
+Whereas
+
+134
+00:06:51,579 --> 00:06:54,049
+a lot of these open source libraries do a lot
+
+135
+00:06:54,059 --> 00:06:56,809
+of things and you might only need one method.
+
+136
+00:06:57,470 --> 00:06:59,029
+-- So that's ah
+-- that's so cool.
+
+137
+00:06:59,059 --> 00:07:03,250
+It's quite a fun challenge to work with both, both in terms of like,
+
+138
+00:07:03,489 --> 00:07:06,869
+yeah, but looking at both the machine learning parts and
+
+139
+00:07:07,119 --> 00:07:10,320
+the analysis of the code because then you really get to
+
+140
+00:07:10,420 --> 00:07:13,989
+dig deep into how different languages work like most
+
+141
+00:07:14,000 --> 00:07:18,660
+languages aren't maybe no languages built for static analysis but
+
+142
+00:07:19,010 --> 00:07:19,750
+but but,
+
+143
+00:07:19,859 --> 00:07:24,589
+but most language like most common languages are terrible in
+
+144
+00:07:24,869 --> 00:07:26,309
+in static analysis
+
+145
+00:07:26,489 --> 00:07:27,480
+such as Python or
+
+146
+00:07:27,600 --> 00:07:31,989
+and javascript. So looking at like dynamic runtime analysis rather
+
+147
+00:07:32,339 --> 00:07:35,779
+and what is actually called in, in production
+
+148
+00:07:35,940 --> 00:07:36,559
+and
+
+149
+00:07:36,730 --> 00:07:39,609
+analyzing that this is way more efficient there
+
+150
+00:07:39,739 --> 00:07:40,850
+than simply
+
+151
+00:07:40,980 --> 00:07:41,910
+mapping out to
+
+152
+00:07:42,140 --> 00:07:42,160
+the
+
+153
+00:07:42,529 --> 00:07:46,220
+-- dependency files or, or just looking at the static code.
+-- OK.
+
+154
+00:07:46,230 --> 00:07:48,959
+So let me, let me understand this. You're saying
+
+155
+00:07:49,130 --> 00:07:49,799
+that
+
+156
+00:07:50,170 --> 00:07:50,420
+Dri
+
+157
+00:07:50,869 --> 00:07:53,519
+is, is watching the running application.
+
+158
+00:07:53,529 --> 00:07:55,320
+Do you watch it in production or do you watch it
+
+159
+00:07:55,329 --> 00:07:58,059
+during test runs or I guess how are you doing that?
+
+160
+00:07:58,700 --> 00:08:02,880
+So like currently we are, we're looking statically only
+
+161
+00:08:03,750 --> 00:08:04,359
+but we,
+
+162
+00:08:04,369 --> 00:08:07,200
+but we're working together with uh with some friends
+
+163
+00:08:07,209 --> 00:08:09,309
+of ours in the northern parts of Sweden,
+
+164
+00:08:09,320 --> 00:08:10,589
+not elastic search
+
+165
+00:08:10,709 --> 00:08:11,540
+but elastic,
+
+166
+00:08:13,059 --> 00:08:14,230
+quite close name there.
+
+167
+00:08:14,239 --> 00:08:19,510
+We are building out the functionality to do run time monitoring. Nice.
+
+168
+00:08:19,920 --> 00:08:24,890
+So then we will that we will use both in uh test environments to look at.
+
+169
+00:08:24,899 --> 00:08:28,630
+For for instance, we have this small plug in already for pi test
+
+170
+00:08:28,799 --> 00:08:31,709
+where we trace the full test graph
+
+171
+00:08:31,869 --> 00:08:35,260
+and we can map if you're calling a vulnerable functionality or not.
+
+172
+00:08:35,380 --> 00:08:40,510
+Oh Cool. But that of course, then depends on your, on your test coverage. So
+
+173
+00:08:40,950 --> 00:08:41,340
+right,
+
+174
+00:08:42,590 --> 00:08:44,929
+but we, we, but then again,
+
+175
+00:08:44,940 --> 00:08:47,049
+this will also work in a runtime
+
+176
+00:08:47,059 --> 00:08:50,630
+environment where we can monitor different functionalities
+
+177
+00:08:50,640 --> 00:08:53,960
+that we deem to be vulnerable and whether they are called or not.
+
+178
+00:08:54,080 --> 00:08:55,659
+So 11 thing I'm curious with this.
+
+179
+00:08:55,669 --> 00:08:59,049
+So it sounds like you're, you're trying to automate both the,
+
+180
+00:08:59,169 --> 00:09:01,090
+the finding of the,
+
+181
+00:09:01,625 --> 00:09:05,645
+let's call them the base flaws, right? So somebody makes a commit, makes a whoopsie.
+
+182
+00:09:05,655 --> 00:09:11,054
+But then you're also trying to automate the is this application this composed of,
+
+183
+00:09:11,065 --> 00:09:12,705
+you know, 1000 open source libraries
+
+184
+00:09:12,815 --> 00:09:15,664
+actually using this in a vulnerable way?
+
+185
+00:09:15,804 --> 00:09:19,854
+-- Yeah.
+-- So exactly that can vary quite a lot in difficulty
+
+186
+00:09:20,229 --> 00:09:22,349
+for the simple cases where
+
+187
+00:09:22,479 --> 00:09:26,400
+you maybe have an injection type of vulnerability as an SQL injection.
+
+188
+00:09:26,409 --> 00:09:29,320
+Those are usually quite compartmentalized into maybe one
+
+189
+00:09:29,330 --> 00:09:32,719
+single function within that particular open source library.
+
+190
+00:09:32,729 --> 00:09:35,380
+And then we can map if you're using that function
+
+191
+00:09:35,390 --> 00:09:38,760
+is that if that function is ever called either statically,
+
+192
+00:09:38,770 --> 00:09:39,280
+for instance,
+
+193
+00:09:39,289 --> 00:09:42,099
+we are doing that with java or dynamically
+
+194
+00:09:42,109 --> 00:09:44,690
+during a run time environment where you can
+
+195
+00:09:45,030 --> 00:09:46,830
+install one of our plugins
+
+196
+00:09:47,179 --> 00:09:49,359
+later on than when it, when it's finished.
+
+197
+00:09:49,369 --> 00:09:52,179
+But install this plug in and we will monitor
+
+198
+00:09:52,190 --> 00:09:54,979
+whether that function is ever called or not.
+
+199
+00:09:55,369 --> 00:09:56,760
+And and when it's called, we will,
+
+200
+00:09:56,770 --> 00:09:59,890
+you will get uh you will get to know that in our tool and you can
+
+201
+00:10:00,049 --> 00:10:03,479
+make decisions accordingly to actually handle that risk.
+
+202
+00:10:03,510 --> 00:10:05,239
+Oh, that seems actually really self evident
+
+203
+00:10:06,020 --> 00:10:09,380
+now that you say no seriously like it, that you monitor your system for
+
+204
+00:10:09,669 --> 00:10:13,049
+what it does. And does it use some known vulnerable issue?
+
+205
+00:10:13,059 --> 00:10:15,869
+And then flake it and I've never heard anybody do that before,
+
+206
+00:10:16,219 --> 00:10:18,409
+which now I'm kind of embarrassed. I didn't think of it
+
+207
+00:10:20,520 --> 00:10:21,340
+when
+
+208
+00:10:21,650 --> 00:10:25,020
+we did this exercise a while ago internally
+
+209
+00:10:25,030 --> 00:10:27,510
+with our security team where we tried to think
+
+210
+00:10:27,520 --> 00:10:29,919
+of what are the different ways to reason
+
+211
+00:10:29,929 --> 00:10:34,690
+about false positives within vulnerabilities in open source.
+
+212
+00:10:34,700 --> 00:10:38,700
+And we actually divided it into four levels where most of
+
+213
+00:10:38,710 --> 00:10:41,260
+the tools are still at level one where you can,
+
+214
+00:10:41,270 --> 00:10:44,229
+where you simply incorrectly map vulnerabilities
+
+215
+00:10:44,239 --> 00:10:48,260
+to dependencies or create inaccurate S bombs
+
+216
+00:10:49,239 --> 00:10:52,330
+-- because we've never seen that happen before.
+-- No, of course not.
+
+217
+00:10:52,340 --> 00:10:56,020
+We actually map all our ourselves and our competitors
+
+218
+00:10:56,140 --> 00:10:57,619
+in only in that regard.
+
+219
+00:10:57,630 --> 00:11:00,109
+It's quite interesting to look at how it differs so
+
+220
+00:11:00,119 --> 00:11:04,460
+much depending on the software that you're benchmarking on or
+
+221
+00:11:04,669 --> 00:11:07,299
+the language that you're working with and so on.
+
+222
+00:11:07,309 --> 00:11:12,640
+It's uh but it is a hard problem and uh and the indication that we're seeing is that
+
+223
+00:11:12,960 --> 00:11:14,950
+yeah, you can get better there, but
+
+224
+00:11:15,070 --> 00:11:18,280
+it's maybe not the right way to go at all because you're
+
+225
+00:11:18,599 --> 00:11:22,719
+not getting into other layers of false positives. So the second layer,
+
+226
+00:11:22,940 --> 00:11:25,559
+the level two of false positives.
+
+227
+00:11:25,570 --> 00:11:28,940
+So when you have the correct S bomb and you correctly map
+
+228
+00:11:29,219 --> 00:11:32,119
+those vulnerabilities to the dependencies,
+
+229
+00:11:32,130 --> 00:11:36,179
+it's the second layer is kind of similar to what I just described.
+
+230
+00:11:36,190 --> 00:11:39,330
+It's where it's a false positive if you're not using
+
+231
+00:11:39,849 --> 00:11:42,590
+the vulnerable functionality in a static way.
+
+232
+00:11:42,599 --> 00:11:46,630
+So it's not statically called and then we are looking at the third layer,
+
+233
+00:11:46,640 --> 00:11:49,979
+which is that the vulnerability is called
+
+234
+00:11:49,989 --> 00:11:52,309
+in a critical environment during run time.
+
+235
+00:11:52,710 --> 00:11:52,940
+Sure.
+
+236
+00:11:52,960 --> 00:11:55,289
+And then we look at the fourth and final layer is
+
+237
+00:11:55,299 --> 00:11:59,869
+that it's exploitable in a critical environment during run time.
+
+238
+00:12:00,109 --> 00:12:00,869
+I mean, that's,
+
+239
+00:12:02,599 --> 00:12:04,869
+it's, it's you say that out loud
+
+240
+00:12:05,390 --> 00:12:06,219
+and it's
+
+241
+00:12:06,440 --> 00:12:07,789
+completely obvious.
+
+242
+00:12:07,799 --> 00:12:08,909
+But I don't think we,
+
+243
+00:12:08,919 --> 00:12:11,349
+we don't always take that into consideration because most of
+
+244
+00:12:11,359 --> 00:12:13,880
+the composition tools just assume if you have it,
+
+245
+00:12:13,890 --> 00:12:15,309
+you're vulnerable right there,
+
+246
+00:12:15,320 --> 00:12:19,190
+there's zero intelligence regarding what the exploit actually is.
+
+247
+00:12:19,200 --> 00:12:19,469
+But,
+
+248
+00:12:19,630 --> 00:12:23,450
+but again, this is OK, this is such a crazy problem because so II,
+
+249
+00:12:23,460 --> 00:12:28,044
+I want to call something out that I suspect a lot of the audience isn't thinking of
+
+250
+00:12:28,364 --> 00:12:32,465
+is the vast majority of vulnerability information that exists today,
+
+251
+00:12:32,474 --> 00:12:36,604
+has virtually no usable machine information in it.
+
+252
+00:12:36,614 --> 00:12:40,484
+Like for example, all of the NVD data is just a prose description.
+
+253
+00:12:40,715 --> 00:12:43,804
+You're saying that you have the ability to take
+
+254
+00:12:44,280 --> 00:12:49,869
+what little data exists, figure out what part of the dependency it actually affects
+
+255
+00:12:50,020 --> 00:12:52,690
+because obviously you can't tell me I'm not
+
+256
+00:12:52,700 --> 00:12:55,330
+vulnerable because I'm not using the function.
+
+257
+00:12:55,530 --> 00:12:57,539
+If you don't know what the function is, you know what I mean?
+
+258
+00:12:57,590 --> 00:13:00,299
+And I think that is that is mind blowing because
+
+259
+00:13:00,780 --> 00:13:03,109
+there are hundreds of thousands of vulnerabilities,
+
+260
+00:13:03,119 --> 00:13:04,419
+there probably should be millions
+
+261
+00:13:04,700 --> 00:13:05,320
+and
+
+262
+00:13:05,510 --> 00:13:09,020
+-- obviously humans can't possibly do this.
+-- No, no, of course not.
+
+263
+00:13:09,030 --> 00:13:09,479
+So, yeah,
+
+264
+00:13:09,489 --> 00:13:12,520
+that's uh this is actually like one of the essences of
+
+265
+00:13:12,530 --> 00:13:16,960
+of the problem here is that finding the vulnerable functionality,
+
+266
+00:13:17,210 --> 00:13:17,599
+right?
+
+267
+00:13:17,789 --> 00:13:22,520
+And looking at existing vulnerabilities, we do that for those as well.
+
+268
+00:13:22,530 --> 00:13:23,830
+That can be quite challenging.
+
+269
+00:13:23,840 --> 00:13:28,659
+Because then you have to first of all find automatically the software,
+
+270
+00:13:28,669 --> 00:13:29,989
+the open source project
+
+271
+00:13:30,260 --> 00:13:31,380
+and understand,
+
+272
+00:13:31,580 --> 00:13:33,719
+understand that open source project in a in
+
+273
+00:13:33,729 --> 00:13:36,140
+an automatic way which can be quite challenging
+
+274
+00:13:36,250 --> 00:13:41,219
+there. You can usually find information about what version ranges are vulnerable.
+
+275
+00:13:41,229 --> 00:13:47,159
+And from that you can derive if there is a safe version and a vulnerable version.
+
+276
+00:13:47,169 --> 00:13:49,359
+And you can look at the differences in the
+
+277
+00:13:49,369 --> 00:13:53,130
+code that were made during those version updates.
+
+278
+00:13:53,219 --> 00:13:55,260
+That was my life for about 12 years.
+
+279
+00:13:55,450 --> 00:13:55,760
+Yeah,
+
+280
+00:13:56,369 --> 00:13:58,364
+like every time bind released
+
+281
+00:13:58,575 --> 00:14:03,744
+or ISC you know, released a binder DH P update like 2 300 kilobytes of D
+
+282
+00:14:04,015 --> 00:14:07,224
+and then yeah, digging through that to find the vulnerable function and,
+
+283
+00:14:07,234 --> 00:14:10,505
+and humans are terrible at this work like we make tons of mistakes,
+
+284
+00:14:10,875 --> 00:14:11,575
+it and
+
+285
+00:14:11,765 --> 00:14:14,965
+even if they're good at it, it's hugely time consuming.
+
+286
+00:14:15,184 --> 00:14:19,635
+Yeah. And, and here's another thing that you're looking at, you're looking at a VD
+
+287
+00:14:19,914 --> 00:14:21,025
+where a version
+
+288
+00:14:21,234 --> 00:14:21,335
+D
+
+289
+00:14:21,515 --> 00:14:23,945
+may contain many commits,
+
+290
+00:14:24,229 --> 00:14:28,489
+usually usually quite a lot of them and then what functions were changed.
+
+291
+00:14:28,500 --> 00:14:30,099
+And when uh during that D
+
+292
+00:14:30,340 --> 00:14:35,530
+can vary from just a couple of them, three or four to many, many hundreds,
+
+293
+00:14:35,539 --> 00:14:40,010
+usually hundreds if it's a major or minor release.
+
+294
+00:14:40,229 --> 00:14:46,409
+And, and not a, not a, not a patch sure. And then if you're looking at that data, you,
+
+295
+00:14:46,539 --> 00:14:47,969
+you may, of course,
+
+296
+00:14:47,979 --> 00:14:50,750
+you can say that I found the vulnerable functionality but also
+
+297
+00:14:50,760 --> 00:14:54,770
+99 other non existing problems that you're mapping to what we're doing
+
+298
+00:14:54,780 --> 00:14:58,059
+here is that we're using our machine learning algorithm to look
+
+299
+00:14:58,070 --> 00:15:01,830
+at that set of commits that were made during that version update
+
+300
+00:15:01,979 --> 00:15:06,159
+and seeing if what are the highest probability commits that,
+
+301
+00:15:06,479 --> 00:15:08,710
+that fixed that vulnerability.
+
+302
+00:15:09,010 --> 00:15:11,549
+So we can narrow down those matches
+
+303
+00:15:11,559 --> 00:15:15,429
+of potential vulnerable functionalities quite a lot.
+
+304
+00:15:15,450 --> 00:15:17,830
+And, and instead of uh mapping
+
+305
+00:15:17,950 --> 00:15:22,169
+to hundreds of potentially vulnerable functionalities, we can f find
+
+306
+00:15:22,309 --> 00:15:28,789
+maybe the 3 to 4 to 5 highest candidates of functions that we think those,
+
+307
+00:15:28,799 --> 00:15:30,909
+these are the ones that we think are vulnerable.
+
+308
+00:15:30,919 --> 00:15:31,450
+You should,
+
+309
+00:15:31,559 --> 00:15:34,059
+if you're using those and where you're using those,
+
+310
+00:15:34,070 --> 00:15:35,700
+you should really look into that.
+
+311
+00:15:35,979 --> 00:15:37,356
+I love this. I mean,
+
+312
+00:15:37,685 --> 00:15:41,106
+one of my other long standing complaints about all this
+
+313
+00:15:41,116 --> 00:15:43,976
+is most of these scanners don't tell you what,
+
+314
+00:15:43,986 --> 00:15:45,265
+what you should like if,
+
+315
+00:15:45,276 --> 00:15:48,776
+if I was going to prioritize all these findings in a list and basically
+
+316
+00:15:48,786 --> 00:15:51,645
+start at the top at the most dangerous and work my way down.
+
+317
+00:15:51,656 --> 00:15:55,986
+They rarely take any of this into account. You just get this huge pile of stuff
+
+318
+00:15:56,205 --> 00:15:59,106
+and it's frustrating to me because obviously like
+
+319
+00:15:59,325 --> 00:16:02,596
+that, we have limited resources, we can't literally fix everything immediately.
+
+320
+00:16:02,606 --> 00:16:04,265
+We have to figure out what is important. What's
+
+321
+00:16:04,471 --> 00:16:07,031
+like, that's something I do now is I do this manually and it's like,
+
+322
+00:16:07,041 --> 00:16:08,322
+it's a horrible task.
+
+323
+00:16:08,331 --> 00:16:13,382
+-- Having a computer do. This sounds amazing to me.
+-- Yeah. And like, first of all,
+
+324
+00:16:13,791 --> 00:16:17,521
+maybe a computer in this manner can probably do a lot.
+
+325
+00:16:17,711 --> 00:16:21,302
+But even if it can't, it can give you the information you want.
+
+326
+00:16:21,351 --> 00:16:24,882
+Sure to actually do that analysis yourself if you need to,
+
+327
+00:16:25,021 --> 00:16:26,531
+which is huge.
+
+328
+00:16:26,541 --> 00:16:27,851
+Well, that's the thing I keep finding right is,
+
+329
+00:16:27,861 --> 00:16:31,932
+is people like me and Josh have a lot of domain specific knowledge
+
+330
+00:16:32,280 --> 00:16:34,539
+that we can apply to looking at a vulnerability.
+
+331
+00:16:34,880 --> 00:16:35,739
+But, you know,
+
+332
+00:16:35,750 --> 00:16:38,119
+not everybody else has spent 20 years in the open source
+
+333
+00:16:38,130 --> 00:16:41,020
+world digging through thousands of vulnerabilities and to be honest,
+
+334
+00:16:41,030 --> 00:16:41,559
+nor should they.
+
+335
+00:16:41,570 --> 00:16:42,090
+It's insane.
+
+336
+00:16:42,919 --> 00:16:46,380
+And what drives me nuts is like, is this not the whole point of it to,
+
+337
+00:16:46,390 --> 00:16:49,700
+to automate stuff and to take human knowledge and shove it into a computer?
+
+338
+00:16:49,750 --> 00:16:51,659
+-- Yeah.
+-- Yeah. Yeah. I completely agree with that.
+
+339
+00:16:51,729 --> 00:16:53,169
+And I know it's not easy but it,
+
+340
+00:16:53,309 --> 00:16:58,260
+it drives me nuts that we're stuck with all these scanning products that do things
+
+341
+00:16:58,770 --> 00:17:03,750
+in a way that I personally, I find it more painful than useful in most cases. Yeah.
+
+342
+00:17:03,760 --> 00:17:05,868
+I completely agree that we,
+
+343
+00:17:05,880 --> 00:17:09,739
+you should never consume more time than you give to the end
+
+344
+00:17:09,750 --> 00:17:13,290
+user and try to enable them to do a better job in,
+
+345
+00:17:13,410 --> 00:17:16,050
+in a faster manner and, uh, and more accurately.
+
+346
+00:17:16,530 --> 00:17:19,949
+Than you did before. And I agree that all scanners don't do that,
+
+347
+00:17:20,060 --> 00:17:22,449
+you may just be fed with false positives. And
+
+348
+00:17:22,660 --> 00:17:25,650
+like if you look at ourselves a couple of years ago, we were not there
+
+349
+00:17:25,948 --> 00:17:29,448
+and this way and by talking a lot to our users and
+
+350
+00:17:29,598 --> 00:17:32,828
+people that could tolerate us, but we wanted them to love us.
+
+351
+00:17:32,838 --> 00:17:35,678
+This is what they asked for. They wanted,
+
+352
+00:17:35,968 --> 00:17:39,149
+they wanted to be able to accurately reduce their
+
+353
+00:17:39,159 --> 00:17:42,588
+vulnerability risk in a manner and in a way
+
+354
+00:17:42,739 --> 00:17:45,548
+that they could perform this analysis and do this in
+
+355
+00:17:45,698 --> 00:17:52,249
+faster and save time and be very accurate in their work. And I think this is
+
+356
+00:17:52,650 --> 00:17:55,930
+the right way to go and the way the industry will help as well
+
+357
+00:17:56,109 --> 00:17:59,000
+in terms of managing open source vulnerabilities.
+
+358
+00:17:59,099 --> 00:17:59,270
+Well,
+
+359
+00:17:59,280 --> 00:18:01,180
+because because the one thing I've consistently
+
+360
+00:18:01,189 --> 00:18:03,329
+seen with respect to false positives is,
+
+361
+00:18:03,760 --> 00:18:04,099
+you know,
+
+362
+00:18:04,109 --> 00:18:06,969
+a lot of these scanning tools want to generate
+
+363
+00:18:06,979 --> 00:18:10,709
+a giant phone book sized report of results because,
+
+364
+00:18:10,719 --> 00:18:11,989
+you know, it looks very impressive.
+
+365
+00:18:12,000 --> 00:18:13,430
+We found 500 issues.
+
+366
+00:18:14,000 --> 00:18:14,650
+And then of course,
+
+367
+00:18:14,660 --> 00:18:18,180
+how many of those are actually legitimate or real is another question.
+
+368
+00:18:18,189 --> 00:18:18,459
+So
+
+369
+00:18:18,599 --> 00:18:21,449
+it seems to me like there's essentially two strategies here, right?
+
+370
+00:18:21,459 --> 00:18:25,439
+Sort of two reproductive strategies or one is to have a lot of a lot of Children
+
+371
+00:18:25,550 --> 00:18:26,599
+that are very low quality.
+
+372
+00:18:26,609 --> 00:18:28,060
+And the other one is while your approach to
+
+373
+00:18:28,069 --> 00:18:30,099
+have very few Children that are high quality,
+
+374
+00:18:30,300 --> 00:18:33,209
+like I just ran one of our code repositories through your scanner
+
+375
+00:18:33,479 --> 00:18:35,579
+and the results you give versus the github
+
+376
+00:18:35,729 --> 00:18:36,010
+depend
+
+377
+00:18:36,300 --> 00:18:37,630
+Abot alerts are
+
+378
+00:18:37,790 --> 00:18:39,180
+vastly different.
+
+379
+00:18:40,219 --> 00:18:41,900
+And from what I can tell the github
+
+380
+00:18:42,170 --> 00:18:45,589
+just goes straight off of the, the NVD data.
+
+381
+00:18:45,859 --> 00:18:48,650
+Whereas your data seems to have a bit more context.
+
+382
+00:18:48,660 --> 00:18:51,510
+That's, that's really great to hear actually. Thanks.
+
+383
+00:18:52,079 --> 00:18:54,650
+Yeah. And you actually, you have more stuff than the dependable
+
+384
+00:18:54,780 --> 00:18:56,069
+alerts. Which kind of worries me.
+
+385
+00:18:56,400 --> 00:18:56,589
+I
+
+386
+00:18:56,869 --> 00:18:57,819
+was sort of,
+
+387
+00:18:58,189 --> 00:19:01,609
+well, it depend a lot. It's free. Right? Why not? So we use it? It's free.
+
+388
+00:19:01,619 --> 00:19:04,150
+One of the rules I have now is I will not buy or
+
+389
+00:19:04,160 --> 00:19:08,900
+use a security tool that requires a significant amount of time and expertise
+
+390
+00:19:09,189 --> 00:19:12,939
+because we just, we don't have the time and effort to care and feed for these things.
+
+391
+00:19:12,949 --> 00:19:14,540
+Right. I, I don't have
+
+392
+00:19:14,670 --> 00:19:17,579
+basically, I don't want to buy tools that require me to hire more people.
+
+393
+00:19:17,680 --> 00:19:18,050
+Yeah.
+
+394
+00:19:18,430 --> 00:19:19,339
+Yeah. You know, it's
+
+395
+00:19:19,900 --> 00:19:23,079
+because in most cases these tools are not doing
+
+396
+00:19:23,089 --> 00:19:24,989
+things that are so amazing that it will,
+
+397
+00:19:25,000 --> 00:19:28,229
+you know, prevent all compromises of our system or whatever, you know,
+
+398
+00:19:28,239 --> 00:19:30,880
+if they did that guaranteed, then I would absolutely hire another person.
+
+399
+00:19:30,890 --> 00:19:31,300
+But,
+
+400
+00:19:31,560 --> 00:19:33,569
+well, that's the thing. Right. Even even if you
+
+401
+00:19:33,709 --> 00:19:36,650
+keep your software completely up to date, you're still not guaranteed. Right.
+
+402
+00:19:36,660 --> 00:19:39,449
+There's still your database will eventually find stuff because
+
+403
+00:19:39,459 --> 00:19:41,969
+I'm really curious about your comments about the,
+
+404
+00:19:41,979 --> 00:19:43,670
+the looking at commits.
+
+405
+00:19:43,680 --> 00:19:45,329
+Like just looking at commits and
+
+406
+00:19:45,550 --> 00:19:49,670
+sort of classifying them as security or not security, so to speak. Right.
+
+407
+00:19:49,680 --> 00:19:54,020
+And I'm wondering, sort of, have you found issues
+
+408
+00:19:54,459 --> 00:19:56,890
+that, you know, weren't publicly identified yet?
+
+409
+00:19:57,199 --> 00:19:57,449
+Yeah.
+
+410
+00:19:57,729 --> 00:20:01,060
+Yeah, we are, we have found quite a lot of them and, like,
+
+411
+00:20:01,069 --> 00:20:03,170
+there's one discussion to be had,
+
+412
+00:20:03,479 --> 00:20:05,459
+like, what should we do with those?
+
+413
+00:20:06,380 --> 00:20:07,209
+But we can,
+
+414
+00:20:07,500 --> 00:20:10,329
+-- we can pause that. We
+-- won't talk about that on this show.
+
+415
+00:20:10,449 --> 00:20:13,209
+That is a very fascinating discussion for sure.
+
+416
+00:20:13,890 --> 00:20:16,569
+Yeah, because, well, I mean, we saw this a redhead all the time, right?
+
+417
+00:20:16,579 --> 00:20:18,310
+Like somebody would look at a five year old Linux
+
+418
+00:20:18,569 --> 00:20:21,449
+and be like, hey, guys, it's a security vulnerability.
+
+419
+00:20:21,459 --> 00:20:25,729
+And so, you know, we'd retroactively assign a CV for it and panic and fix it,
+
+420
+00:20:25,900 --> 00:20:30,349
+you know, five years later or hopefully we just pulled it in because it was so old
+
+421
+00:20:30,780 --> 00:20:34,550
+and I can't help but wonder, you know, how much of the open source world has that.
+
+422
+00:20:34,640 --> 00:20:38,020
+I mean, it has to happen, right? People accidentally fix stuff all the time. Yeah.
+
+423
+00:20:38,030 --> 00:20:42,310
+Yeah, it happens quite a lot and it's quite, it's interesting to
+
+424
+00:20:42,599 --> 00:20:47,050
+when we present the project and we, um internally, we say, OK,
+
+425
+00:20:47,060 --> 00:20:50,300
+we found this issue where we found or we found this commit and we say
+
+426
+00:20:50,310 --> 00:20:54,060
+that this is probably most likely a vulnerability and there's no CD assigned to it
+
+427
+00:20:54,189 --> 00:20:57,430
+when we, when we present it. A couple of months later, it's usually a CV
+
+428
+00:20:57,609 --> 00:20:58,449
+F assigned to it.
+
+429
+00:20:59,280 --> 00:21:00,349
+That's happened
+
+430
+00:21:00,550 --> 00:21:04,290
+many times now, which is really validating for the project.
+
+431
+00:21:04,619 --> 00:21:05,089
+Um
+
+432
+00:21:05,270 --> 00:21:08,239
+But I think it's actually like just to touch upon this.
+
+433
+00:21:08,250 --> 00:21:11,329
+Like, if we, let's say that we could accurately
+
+434
+00:21:11,699 --> 00:21:12,380
+find
+
+435
+00:21:12,880 --> 00:21:14,199
+a lot of undisclosed v
+
+436
+00:21:14,439 --> 00:21:17,579
+potential vulnerabilities in all open source,
+
+437
+00:21:17,880 --> 00:21:20,420
+how do we handle that in a way that's,
+
+438
+00:21:20,770 --> 00:21:22,479
+that's reasonable and,
+
+439
+00:21:22,800 --> 00:21:27,219
+and good for the community because we don't intend, intend to say that OK,
+
+440
+00:21:27,229 --> 00:21:29,949
+this is our vulnerabilities and no one else can look at this.
+
+441
+00:21:30,020 --> 00:21:30,079
+I
+
+442
+00:21:30,569 --> 00:21:32,939
+don't think that's a good way to handle that
+
+443
+00:21:33,140 --> 00:21:37,300
+at all. You should be open and just as the open source and,
+
+444
+00:21:37,829 --> 00:21:40,589
+and try to publicly disclose those,
+
+445
+00:21:40,599 --> 00:21:44,130
+but it's many hundreds of thousands that are potential
+
+446
+00:21:44,140 --> 00:21:47,859
+vulnerabilities right now that we find and how can
+
+447
+00:21:47,869 --> 00:21:51,969
+we do that in a way that so so that we don't spend all our time doing that,
+
+448
+00:21:51,979 --> 00:21:54,319
+but trying to maybe distribute that or
+
+449
+00:21:54,500 --> 00:21:57,290
+have bug bounty programs and not
+
+450
+00:21:57,579 --> 00:21:58,329
+make it
+
+451
+00:21:58,589 --> 00:22:00,810
+publicly available in a way that,
+
+452
+00:22:00,819 --> 00:22:05,619
+that it's not accessible to all open source consumers, but rather only to,
+
+453
+00:22:05,660 --> 00:22:06,810
+to the hackers.
+
+454
+00:22:06,819 --> 00:22:08,400
+And I, I don't know, it's a hard,
+
+455
+00:22:08,410 --> 00:22:11,489
+it's a tricky question that we haven't solved completely yet.
+
+456
+00:22:11,689 --> 00:22:15,550
+One of the biggest challenges I see there is is you get to the law of large numbers,
+
+457
+00:22:15,560 --> 00:22:15,660
+right?
+
+458
+00:22:15,670 --> 00:22:17,910
+You're no longer dealing with security issues.
+
+459
+00:22:17,920 --> 00:22:20,540
+You're dealing, you know, sort of policy and strategy,
+
+460
+00:22:20,939 --> 00:22:24,619
+right? Because one vulnerability, sure, 10 vulnerabilities, OK?
+
+461
+00:22:24,699 --> 00:22:27,420
+100 maybe 1000 10,000,
+
+462
+00:22:27,689 --> 00:22:30,579
+you know, 100,000, it's, it's a totally different thing
+
+463
+00:22:30,989 --> 00:22:35,479
+and I like, uh, again, me and Josh have dealt with this and it's,
+
+464
+00:22:35,739 --> 00:22:36,359
+well, it's,
+
+465
+00:22:36,829 --> 00:22:38,829
+you can't deal with it like you do
+
+466
+00:22:39,180 --> 00:22:42,650
+-- of
+-- vulnerability. Artisanal data sets don't fly.
+
+467
+00:22:42,939 --> 00:22:43,449
+Right.
+
+468
+00:22:43,510 --> 00:22:47,300
+And artisanal everything, how it's communicated, you know,
+
+469
+00:22:47,310 --> 00:22:48,689
+using email to talk to people.
+
+470
+00:22:48,699 --> 00:22:50,969
+You can't do that when you have 100,000 issues. No.
+
+471
+00:22:51,020 --> 00:22:51,310
+And I,
+
+472
+00:22:51,319 --> 00:22:53,420
+I can't help but wonder this is part of where
+
+473
+00:22:53,430 --> 00:22:56,540
+the open source industry has to grow up too because,
+
+474
+00:22:56,729 --> 00:22:58,530
+well, we have this problem whether we like it or not.
+
+475
+00:22:58,895 --> 00:23:01,744
+Well, the, the whole industry I think, OK, so we're,
+
+476
+00:23:01,755 --> 00:23:04,685
+we're running ourselves out of time and I wanted to touch on one other.
+
+477
+00:23:04,694 --> 00:23:07,364
+I think important thing you mentioned way back at the beginning
+
+478
+00:23:07,574 --> 00:23:12,724
+was you are empowering people to become more involved in open source.
+
+479
+00:23:12,734 --> 00:23:15,925
+And I'm curious what you meant by that comment because that intrigues me.
+
+480
+00:23:16,135 --> 00:23:16,964
+Yeah. So
+
+481
+00:23:17,094 --> 00:23:19,685
+I think, I think that's actually a challenge today
+
+482
+00:23:19,814 --> 00:23:20,285
+that
+
+483
+00:23:20,719 --> 00:23:22,979
+open source project are not aware
+
+484
+00:23:23,479 --> 00:23:27,469
+what and how those projects are being used for. In reality.
+
+485
+00:23:27,479 --> 00:23:29,180
+We have uh a friend,
+
+486
+00:23:29,199 --> 00:23:33,640
+a friend of ours at the company of the former head of open source at Sony.
+
+487
+00:23:33,810 --> 00:23:36,239
+Usually when they needed to use an open
+
+488
+00:23:36,250 --> 00:23:39,550
+source project that had a non compliant license,
+
+489
+00:23:39,560 --> 00:23:39,900
+they,
+
+490
+00:23:39,910 --> 00:23:42,709
+they needed to talk to the open source project and see if they could
+
+491
+00:23:42,719 --> 00:23:46,229
+maybe release a dual license for them and see what they could do.
+
+492
+00:23:46,510 --> 00:23:51,250
+And the projects themselves were usually reacted according to him that,
+
+493
+00:23:51,560 --> 00:23:54,609
+oh my God, Sony is using the software I built, of course,
+
+494
+00:23:54,619 --> 00:23:56,119
+you can have any license you want.
+
+495
+00:23:56,310 --> 00:23:59,930
+And I think that kind of articulates a challenge
+
+496
+00:24:00,260 --> 00:24:00,810
+that
+
+497
+00:24:01,239 --> 00:24:03,910
+how, how does the how can the industry
+
+498
+00:24:04,030 --> 00:24:08,369
+be contribute more and more efficiently to open source projects
+
+499
+00:24:08,709 --> 00:24:12,939
+and coming and with the power of deeply understanding
+
+500
+00:24:13,140 --> 00:24:17,770
+code from similar systems as we've talked about of
+
+501
+00:24:18,050 --> 00:24:19,609
+both static and dynamic analysis,
+
+502
+00:24:19,619 --> 00:24:24,359
+we can also look at what open source projects are using, how much,
+
+503
+00:24:24,369 --> 00:24:27,180
+how much of each project are you using and
+
+504
+00:24:27,189 --> 00:24:31,020
+which is your most impactful project in your software
+
+505
+00:24:31,420 --> 00:24:33,180
+and linking that to
+
+506
+00:24:33,339 --> 00:24:36,800
+the overall project health for instance
+
+507
+00:24:36,939 --> 00:24:40,390
+and seeing where you can be most impactful in your contribution.
+
+508
+00:24:40,619 --> 00:24:42,560
+I mean, that makes that makes perfect sense.
+
+509
+00:24:42,569 --> 00:24:45,709
+It's I I feel like everything you've said today has been
+
+510
+00:24:45,939 --> 00:24:47,099
+one of those.
+
+511
+00:24:47,459 --> 00:24:50,239
+Well, it's so obvious now that you say it out loud,
+
+512
+00:24:50,250 --> 00:24:52,880
+but I guess I hadn't really thought of it before.
+
+513
+00:24:53,329 --> 00:24:54,630
+Yeah, but because when we,
+
+514
+00:24:54,640 --> 00:24:57,510
+when we talk to our customers and potential
+
+515
+00:24:57,520 --> 00:25:01,770
+users and like looking at their contribution strategy,
+
+516
+00:25:01,780 --> 00:25:04,359
+it's usually something that's quite new.
+
+517
+00:25:04,369 --> 00:25:08,079
+Only really, really large companies in my experience have,
+
+518
+00:25:08,290 --> 00:25:11,400
+have something a contribution strategy in mind.
+
+519
+00:25:11,739 --> 00:25:14,760
+Uh But it's usually so the projects that you
+
+520
+00:25:14,770 --> 00:25:16,979
+think are the ones you need to contribute to
+
+521
+00:25:17,300 --> 00:25:19,640
+that are top of mind. Tensorflow. Qbert
+
+522
+00:25:20,020 --> 00:25:22,209
+is the large ones that you're using a lot.
+
+523
+00:25:22,390 --> 00:25:26,599
+Those are not the ones that bear real risk always to your
+
+524
+00:25:26,609 --> 00:25:30,920
+organization because those are backed by Google and other large companies.
+
+525
+00:25:30,930 --> 00:25:33,500
+It's, it may be the smaller projects
+
+526
+00:25:33,709 --> 00:25:35,359
+that's not backed by any company
+
+527
+00:25:35,729 --> 00:25:37,479
+that may be trending down, that be,
+
+528
+00:25:37,489 --> 00:25:41,719
+that are very dependent on a very few active maintainers
+
+529
+00:25:42,140 --> 00:25:44,829
+and, and understanding like where,
+
+530
+00:25:44,839 --> 00:25:49,449
+where that future health risk of the project is
+
+531
+00:25:49,459 --> 00:25:52,619
+and what projects are actually impactful to your software.
+
+532
+00:25:52,969 --> 00:25:56,069
+Uh I think that's a really good opportunity here
+
+533
+00:25:56,079 --> 00:25:59,150
+and that's where I want to bring the brit
+
+534
+00:25:59,400 --> 00:26:05,390
+and see to it so that we can close the full, full chain of consuming using and
+
+535
+00:26:05,640 --> 00:26:10,319
+-- understanding and contributing back to open source.
+-- That's amazing. I mean,
+
+536
+00:26:10,520 --> 00:26:12,829
+you know, what you just made me realize is there's,
+
+537
+00:26:12,839 --> 00:26:16,160
+I'm sure you've seen that XK CD Comic where it talks about, you know,
+
+538
+00:26:16,170 --> 00:26:19,390
+it shows like the stack and there's one little cube holding it up and it says,
+
+539
+00:26:19,400 --> 00:26:22,390
+you know, some guy in Nebraska or whatever you are,
+
+540
+00:26:22,689 --> 00:26:25,719
+I mean, you're in a position to identify that, that brick, right?
+
+541
+00:26:25,729 --> 00:26:29,579
+That's like literally one guy who's committing only on the weekends
+
+542
+00:26:29,750 --> 00:26:32,989
+and it's critical path for your application. Like that's,
+
+543
+00:26:33,510 --> 00:26:34,900
+that is really cool.
+
+544
+00:26:34,910 --> 00:26:37,589
+The thing that gets me is not just the critical path for the application,
+
+545
+00:26:37,599 --> 00:26:39,380
+but so much stuff gets pulled in.
+
+546
+00:26:39,390 --> 00:26:42,839
+Now, I'm not number one just having a list of it is amazing.
+
+547
+00:26:42,939 --> 00:26:44,209
+But number two, having
+
+548
+00:26:44,609 --> 00:26:47,430
+actually knowing roughly how important it is,
+
+549
+00:26:48,380 --> 00:26:50,319
+you know, how critical is this? Like how
+
+550
+00:26:50,449 --> 00:26:54,400
+like if this breaks or it has a security issue, how badly would my application break
+
+551
+00:26:54,920 --> 00:26:56,579
+that would be hugely helpful,
+
+552
+00:26:56,770 --> 00:26:57,359
+you know,
+
+553
+00:26:57,660 --> 00:26:59,560
+knowing where to focus because yeah, there's,
+
+554
+00:27:00,089 --> 00:27:02,099
+I I suspect most people have no idea.
+
+555
+00:27:02,599 --> 00:27:02,939
+No,
+
+556
+00:27:04,089 --> 00:27:06,400
+no, because this is a, I mean,
+
+557
+00:27:06,640 --> 00:27:08,760
+to understand software
+
+558
+00:27:09,069 --> 00:27:13,050
+is a really, really hard challenge uh in general. So I mean,
+
+559
+00:27:13,369 --> 00:27:16,410
+isolating the open source open source software in depth and
+
+560
+00:27:16,420 --> 00:27:20,800
+mapping that towards actual people contributing to those projects.
+
+561
+00:27:20,810 --> 00:27:21,810
+I mean, i
+
+562
+00:27:22,219 --> 00:27:24,859
+it is a hard challenge but I think it's,
+
+563
+00:27:24,869 --> 00:27:29,890
+it's so fun to work with and it's so cool to be part and try to understand
+
+564
+00:27:30,199 --> 00:27:33,689
+all the amazing people doing good stuff for software in the world.
+
+565
+00:27:33,890 --> 00:27:34,569
+Absolutely.
+
+566
+00:27:35,380 --> 00:27:36,959
+This is OK. I'm going,
+
+567
+00:27:37,750 --> 00:27:42,430
+I want to keep talking to you but I know we have to end this, which does make me sad, but
+
+568
+00:27:42,780 --> 00:27:46,000
+I will give you the last word emile. Why don't you
+
+569
+00:27:46,229 --> 00:27:50,530
+let us know the one thing you want everyone to take away from this this episode?
+
+570
+00:27:50,699 --> 00:27:53,430
+I think what I want to achieve is
+
+571
+00:27:53,685 --> 00:27:55,194
+I want to enable
+
+572
+00:27:55,314 --> 00:27:58,055
+all developers to simply use the open source.
+
+573
+00:27:58,064 --> 00:28:03,464
+-- They love
+-- that is a lofty and admirable goal. Thank you so much.
+
+574
+00:28:03,474 --> 00:28:07,484
+Thank you for your patience in dealing with us in all the rescheduling.
+
+575
+00:28:07,555 --> 00:28:09,584
+We truly appreciate it. And
+
+576
+00:28:09,905 --> 00:28:11,805
+I feel like Debri
+
+577
+00:28:12,244 --> 00:28:15,185
+is one of the few companies doing this sort of
+
+578
+00:28:15,194 --> 00:28:18,625
+work that I feel like is on the right path.
+
+579
+00:28:18,645 --> 00:28:19,305
+So,
+
+580
+00:28:19,699 --> 00:28:22,189
+congratulations and I hope you the best
+
+581
+00:28:22,390 --> 00:28:25,310
+for sure. And so. All right. Thank you, everyone for listening.
+
+582
+00:28:25,319 --> 00:28:26,930
+Go to open source security podcast.com.
+
+583
+00:28:26,939 --> 00:28:29,959
+I'll have links in the show notes to all the stuff we talked about today. Use
+
+584
+00:28:30,119 --> 00:28:30,290
+a Pound
+
+585
+00:28:30,420 --> 00:28:30,430
+O
+
+586
+00:28:30,569 --> 00:28:32,920
+as podcast. Hashtag Get us up on social media.
+
+587
+00:28:32,930 --> 00:28:37,650
+-- Kurt and Emile have marvelous rest of your
+-- days. Thank you. You too, Josh and
+
+588
+00:28:37,660 --> 00:28:37,969
+Kurt.
+
+589
+00:28:37,979 --> 00:28:39,030
+Thanks everybody.
+
+590
+00:28:39,250 --> 00:28:40,630
+-- Thanks
+-- everyone. Bye bye
+
+591
+00:28:45,219 --> 00:28:45,280
+the.

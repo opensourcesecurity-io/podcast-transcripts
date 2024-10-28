@@ -1,0 +1,2991 @@
+0
+00:00:05,300 --> 00:00:09,449
+Hello and welcome to episode 108 of open source security podcast with myself,
+
+1
+00:00:09,460 --> 00:00:11,930
+Kurt Siefried and my partner in Thought Crime, Josh Bresser.
+
+2
+00:00:12,569 --> 00:00:14,369
+Well, we broke Bluetooth again.
+
+3
+00:00:14,779 --> 00:00:17,840
+Oh, yeah, like security. Not like it just stopped.
+
+4
+00:00:17,850 --> 00:00:18,559
+Yeah, I have,
+
+5
+00:00:18,569 --> 00:00:20,530
+I've got so many Bluetooth devices that will
+
+6
+00:00:20,540 --> 00:00:22,500
+work with most of our phones or computers,
+
+7
+00:00:22,510 --> 00:00:23,280
+but not like
+
+8
+00:00:23,639 --> 00:00:24,549
+all of them
+
+9
+00:00:25,299 --> 00:00:28,750
+like speakers that will pair with one phone but not the other phone,
+
+10
+00:00:28,760 --> 00:00:29,489
+things like that.
+
+11
+00:00:29,829 --> 00:00:31,399
+Yeah, I, I have similar problems.
+
+12
+00:00:31,409 --> 00:00:33,159
+Bluetooth is surprisingly flaky,
+
+13
+00:00:33,169 --> 00:00:36,069
+but we should probably explain this particular issue,
+
+14
+00:00:36,299 --> 00:00:36,680
+right?
+
+15
+00:00:37,409 --> 00:00:40,240
+Yeah. Well, so
+
+16
+00:00:40,500 --> 00:00:43,619
+it's not even worth explaining. I think basically elliptical curve,
+
+17
+00:00:44,250 --> 00:00:47,000
+elliptical curve cryptography is difficult
+
+18
+00:00:47,159 --> 00:00:48,549
+and if you don't do it right,
+
+19
+00:00:49,029 --> 00:00:52,090
+it doesn't work so good. And of course, what do software people do?
+
+20
+00:00:52,099 --> 00:00:53,080
+They don't do things, right?
+
+21
+00:00:53,689 --> 00:00:53,819
+That's the
+
+22
+00:00:54,069 --> 00:00:58,259
+nature of software's fault or is this hardware's fault? Is it both
+
+23
+00:00:59,500 --> 00:00:59,930
+anyway?
+
+24
+00:00:59,939 --> 00:01:03,060
+Well, ultimately, the hardware was designed by somebody who then, you know?
+
+25
+00:01:03,540 --> 00:01:07,379
+Ok. No, no, let's, it's a security podcast. We can't, we can't weasel our way.
+
+26
+00:01:09,459 --> 00:01:11,019
+All right. So ec DH
+
+27
+00:01:11,730 --> 00:01:13,400
+elliptical curve Diffie
+
+28
+00:01:13,569 --> 00:01:13,870
+Hellman
+
+29
+00:01:14,279 --> 00:01:16,379
+is what that is. And there's a
+
+30
+00:01:16,540 --> 00:01:19,199
+an algorithm, many of us may be familiar with called Diffie
+
+31
+00:01:19,330 --> 00:01:21,300
+Hellman, which is essentially a way
+
+32
+00:01:21,690 --> 00:01:23,180
+for you and I
+
+33
+00:01:23,370 --> 00:01:24,290
+to
+
+34
+00:01:24,669 --> 00:01:25,860
+share
+
+35
+00:01:25,989 --> 00:01:28,019
+like a public key each
+
+36
+00:01:28,410 --> 00:01:31,279
+and then use that to generate a private key.
+
+37
+00:01:31,290 --> 00:01:35,709
+Only the two of us know it's actually a very ingenious algorithm that
+
+38
+00:01:36,150 --> 00:01:40,230
+like without it, the much of the modern internet couldn't exist.
+
+39
+00:01:40,699 --> 00:01:45,739
+-- And
+-- even more simply than that, it's a way for two parties to share a secret such that
+
+40
+00:01:46,040 --> 00:01:48,050
+a third party cannot see the secret
+
+41
+00:01:48,540 --> 00:01:51,459
+and both parties can be absolutely certain
+
+42
+00:01:51,879 --> 00:01:52,309
+that
+
+43
+00:01:52,669 --> 00:01:54,580
+they actually got the correct secret
+
+44
+00:01:55,160 --> 00:01:55,410
+from
+
+45
+00:01:56,040 --> 00:01:57,309
+sharing the correct secret.
+
+46
+00:01:57,620 --> 00:02:00,040
+There's a really cool video using paint.
+
+47
+00:02:00,440 --> 00:02:00,449
+I
+
+48
+00:02:00,620 --> 00:02:00,639
+see.
+
+49
+00:02:01,930 --> 00:02:05,959
+OK. I'll put it in the show notes, but it basically it gives a demo of
+
+50
+00:02:06,410 --> 00:02:10,000
+kind of how this works using paint, which is quite clever.
+
+51
+00:02:10,089 --> 00:02:14,380
+But anyway, anyway, so the issue being ec is just elliptical curve D
+
+52
+00:02:14,690 --> 00:02:14,789
+Hellman.
+
+53
+00:02:15,369 --> 00:02:18,080
+And basically there is an issue with the way the
+
+54
+00:02:18,089 --> 00:02:21,309
+algorithm works with certain Bluetooth devices it sounds like.
+
+55
+00:02:21,800 --> 00:02:23,229
+And essentially
+
+56
+00:02:23,770 --> 00:02:26,880
+the the device doesn't make sure that the divvy
+
+57
+00:02:27,039 --> 00:02:29,160
+Homan handshake happened correctly,
+
+58
+00:02:29,179 --> 00:02:32,440
+meaning the it sounds like an attacker and I won't lie.
+
+59
+00:02:32,449 --> 00:02:34,470
+I'm not an expert on this. I just read this today,
+
+60
+00:02:34,750 --> 00:02:37,369
+but it sounds like an attacker could essentially man in the middle,
+
+61
+00:02:37,380 --> 00:02:38,869
+certain Bluetooth handshakes
+
+62
+00:02:39,369 --> 00:02:44,619
+and render them such that the encryption key used is extremely weak
+
+63
+00:02:44,720 --> 00:02:48,029
+and then you could basically steal it and
+
+64
+00:02:48,240 --> 00:02:51,970
+and go from there, obviously decrypt all the Bluetooth communication. It
+
+65
+00:02:52,240 --> 00:02:55,335
+sounds more like a somewhat active man in the middle of his card. Quote.
+
+66
+00:02:55,345 --> 00:02:55,975
+From a certain note,
+
+67
+00:02:55,985 --> 00:02:59,054
+the device must also uh the devices rather must
+
+68
+00:02:59,065 --> 00:03:02,384
+also agree on the elliptical curve parameters being used,
+
+69
+00:03:02,395 --> 00:03:02,634
+right?
+
+70
+00:03:02,645 --> 00:03:03,934
+Obviously, you know, you,
+
+71
+00:03:03,945 --> 00:03:08,535
+you can't do VC DH D without agreeing on which curve frame you're gonna use.
+
+72
+00:03:08,804 --> 00:03:09,794
+And a bunch of them
+
+73
+00:03:10,014 --> 00:03:10,554
+didn't
+
+74
+00:03:10,774 --> 00:03:13,684
+like make sure that they were validating that they were using the same one.
+
+75
+00:03:15,375 --> 00:03:15,964
+Whoops,
+
+76
+00:03:16,255 --> 00:03:18,044
+you know, classic software. Whoopsy.
+
+77
+00:03:19,919 --> 00:03:20,940
+It happens.
+
+78
+00:03:21,350 --> 00:03:24,429
+It, I guess here's, here's what I keep thinking of though. Here is,
+
+79
+00:03:24,679 --> 00:03:29,460
+it sounds like some of the Bluetooth stacks on operating systems are at fault
+
+80
+00:03:30,029 --> 00:03:32,210
+and it also sounds like some of the devices,
+
+81
+00:03:32,720 --> 00:03:32,740
+all
+
+82
+00:03:32,860 --> 00:03:32,990
+of them,
+
+83
+00:03:33,110 --> 00:03:34,990
+it was Apple Broadcom, Intel, Qualcomm,
+
+84
+00:03:35,220 --> 00:03:37,580
+Microsoft Android, Bluetooth sig.
+
+85
+00:03:38,460 --> 00:03:40,729
+So that's like the standards group that does that Google
+
+86
+00:03:40,740 --> 00:03:42,960
+and the Linux kernel were all affected or sorry.
+
+87
+00:03:42,970 --> 00:03:45,929
+No affected was Apple Broadcom Intel, Qualcomm,
+
+88
+00:03:46,220 --> 00:03:47,860
+Microsoft was not affected.
+
+89
+00:03:47,869 --> 00:03:50,779
+And then the rest, the last four I listed are unknown, but
+
+90
+00:03:51,789 --> 00:03:55,080
+like Apple Broadcom and Intel and Qualcomm are all affected. Then it's,
+
+91
+00:03:55,289 --> 00:03:56,279
+that's pretty widespread.
+
+92
+00:03:56,830 --> 00:03:59,899
+Well, here's, here's what I'm wondering is,
+
+93
+00:04:00,429 --> 00:04:04,110
+and, and this can be more of a hypothetical question than anything is
+
+94
+00:04:04,630 --> 00:04:09,020
+my assumption is you're going to have to update the clients and the servers
+
+95
+00:04:09,179 --> 00:04:13,490
+and obviously updating an operating system is something that can be done.
+
+96
+00:04:14,259 --> 00:04:16,238
+But updating a lot of these devices, like, I,
+
+97
+00:04:16,250 --> 00:04:19,250
+I have a Bluetooth headset that costs like $5.
+
+98
+00:04:19,279 --> 00:04:19,298
+Oh,
+
+99
+00:04:19,440 --> 00:04:21,858
+-- yeah, that'll never get an update. Right. That's
+-- never getting an update.
+
+100
+00:04:21,869 --> 00:04:24,299
+But does that mean then that the, the client that the,
+
+101
+00:04:24,309 --> 00:04:26,029
+that the computers are going to have
+
+102
+00:04:26,040 --> 00:04:29,269
+to support the broken Bluetooth handshake forever?
+
+103
+00:04:29,279 --> 00:04:33,820
+Uh, sort of, I mean, the, the, the, the real potential there would be, for example,
+
+104
+00:04:33,829 --> 00:04:35,109
+you have like a Bluetooth keyboard
+
+105
+00:04:35,760 --> 00:04:40,299
+and maybe I can now, you know, more likely impersonate the keyboard.
+
+106
+00:04:40,500 --> 00:04:41,010
+Right?
+
+107
+00:04:41,299 --> 00:04:41,700
+Sure.
+
+108
+00:04:41,859 --> 00:04:44,089
+But the client in theory, if they fix,
+
+109
+00:04:44,339 --> 00:04:49,019
+if they fix one end of the Bluetooth, then that end should refuse
+
+110
+00:04:49,290 --> 00:04:50,609
+to talk to the other side.
+
+111
+00:04:50,619 --> 00:04:53,739
+And so if you're fixing all the computers and phones and tablets,
+
+112
+00:04:54,309 --> 00:04:56,980
+then you don't really care if somebody can attack your keyboard.
+
+113
+00:04:57,290 --> 00:04:59,279
+Uh Maybe, right?
+
+114
+00:04:59,399 --> 00:04:59,910
+I don't know
+
+115
+00:05:00,140 --> 00:05:00,329
+in
+
+116
+00:05:00,459 --> 00:05:00,640
+I'm
+
+117
+00:05:00,959 --> 00:05:02,429
+saying in general, right?
+
+118
+00:05:02,440 --> 00:05:05,089
+Like in general, the concern more is that you're attacking the computer, you know,
+
+119
+00:05:05,100 --> 00:05:06,549
+you're Impersonating a keyboard
+
+120
+00:05:06,720 --> 00:05:09,989
+and sending keystrokes to the tablet saying, you know, like delete everything or
+
+121
+00:05:10,299 --> 00:05:12,179
+go send the banking password to this Russian,
+
+122
+00:05:12,390 --> 00:05:12,630
+whatever,
+
+123
+00:05:13,029 --> 00:05:17,269
+the more dangerous part of a keyboard is being able to sniff it and get the password,
+
+124
+00:05:17,750 --> 00:05:20,450
+right? Because I type my passwords on my keyboard.
+
+125
+00:05:21,859 --> 00:05:23,890
+This is, this is a marvelous segue
+
+126
+00:05:24,299 --> 00:05:29,820
+into the article Krems just published saying that thanks to UTU two F and UBI
+
+127
+00:05:30,390 --> 00:05:33,290
+keys that Google hasn't been fished in the last year.
+
+128
+00:05:34,119 --> 00:05:35,149
+Yep, that's like,
+
+129
+00:05:36,440 --> 00:05:37,829
+it's awesome. Right.
+
+130
+00:05:38,420 --> 00:05:40,329
+The first thing I thought of was like,
+
+131
+00:05:40,609 --> 00:05:46,600
+this is proof that fishing training doesn't work but U two F keys do work. Right.
+
+132
+00:05:46,609 --> 00:05:47,059
+Well,
+
+133
+00:05:47,250 --> 00:05:49,320
+I'm honestly at the point now we're
+
+134
+00:05:49,329 --> 00:05:52,239
+trying to solve technical security problems with people
+
+135
+00:05:52,929 --> 00:05:55,549
+that doesn't work and it doesn't scale. Right. It's like the spam problem.
+
+136
+00:05:55,609 --> 00:05:58,640
+Yeah, you could have a human being review all your email and delete all the spam.
+
+137
+00:05:59,200 --> 00:06:00,820
+You need like 400 of them,
+
+138
+00:06:01,260 --> 00:06:05,670
+400. You need at least one person per employee who gets email.
+
+139
+00:06:05,679 --> 00:06:08,929
+-- Well, no,
+-- I mean, no, no, no, I meant 400 people per person.
+
+140
+00:06:09,380 --> 00:06:11,470
+-- I see
+-- with the amount of spam I get.
+
+141
+00:06:12,250 --> 00:06:14,440
+It's insane. Exactly. You know,
+
+142
+00:06:14,739 --> 00:06:17,220
+I should say that I have no idea how much spam I get anymore.
+
+143
+00:06:17,619 --> 00:06:18,220
+Well, exactly,
+
+144
+00:06:18,570 --> 00:06:20,160
+because the computer works.
+
+145
+00:06:20,739 --> 00:06:23,799
+Um, and the same thing with, like, the fishing stuff is like,
+
+146
+00:06:24,019 --> 00:06:27,920
+yeah, like the, the human will be hyper vigilant and always
+
+147
+00:06:28,239 --> 00:06:30,359
+do the correct thing and never make a mistake.
+
+148
+00:06:30,369 --> 00:06:34,119
+No, that's not, that's literally the opposite of how people work. Right.
+
+149
+00:06:34,480 --> 00:06:35,559
+That is correct.
+
+150
+00:06:35,950 --> 00:06:41,000
+And more to the point is that cost effective. I know UTF keys are 50 bucks done.
+
+151
+00:06:41,279 --> 00:06:43,220
+You replace them? I don't know every couple of years.
+
+152
+00:06:43,230 --> 00:06:45,640
+If somebody accidentally smashes it with a hammer,
+
+153
+00:06:45,890 --> 00:06:47,339
+they're not 50 bucks,
+
+154
+00:06:47,510 --> 00:06:50,100
+they're, they're like $20 or less.
+
+155
+00:06:50,109 --> 00:06:53,660
+Well, I'm talking about the nice fancy ones that also do NFC wireless and all that.
+
+156
+00:06:53,670 --> 00:06:57,260
+-- Other stuff which you want
+-- because whatever, nobody needs all that.
+
+157
+00:06:57,390 --> 00:06:58,769
+Yeah, you do if you want it on your phone.
+
+158
+00:06:59,130 --> 00:07:01,059
+I want my UTF key to work on my phone.
+
+159
+00:07:01,209 --> 00:07:02,869
+I do all my stuff on my phone now.
+
+160
+00:07:02,980 --> 00:07:05,700
+-- I,
+-- I do a lot on my phone but I'm, I'm thinking
+
+161
+00:07:06,109 --> 00:07:08,940
+most of the logins on my phone
+
+162
+00:07:09,410 --> 00:07:13,230
+are now the result of an action I took on my computer though.
+
+163
+00:07:13,510 --> 00:07:15,769
+So I, I won't disagree with you.
+
+164
+00:07:16,149 --> 00:07:19,010
+-- Somewhat.
+-- True. Yeah. Well, regardless, 20 to 50 bucks,
+
+165
+00:07:20,440 --> 00:07:22,679
+50 bucks is still cheaper than no offense.
+
+166
+00:07:22,690 --> 00:07:24,709
+An hour of employee time taking fishing training,
+
+167
+00:07:24,720 --> 00:07:26,260
+that's 50 bucks of lost productivity.
+
+168
+00:07:26,269 --> 00:07:26,429
+Right.
+
+169
+00:07:27,000 --> 00:07:29,429
+Wait, I bet you could buy them five
+
+170
+00:07:29,549 --> 00:07:30,190
+UB keys
+
+171
+00:07:30,600 --> 00:07:32,470
+because most of the fishing training is like a couple
+
+172
+00:07:32,670 --> 00:07:34,190
+hours, if not days.
+
+173
+00:07:34,529 --> 00:07:37,709
+Yeah, totally. And, and let's see, from, from what I've read
+
+174
+00:07:38,230 --> 00:07:40,609
+when you, before fishing training you'll probably have like,
+
+175
+00:07:40,619 --> 00:07:44,190
+30% of your employees clicking fishing links and after you'll have, like, 20%.
+
+176
+00:07:44,200 --> 00:07:44,769
+So,
+
+177
+00:07:45,880 --> 00:07:47,480
+it's not a good investment.
+
+178
+00:07:47,850 --> 00:07:48,730
+And not only that,
+
+179
+00:07:48,739 --> 00:07:54,299
+I bet you're paying more per employee than the cost of a UBK per employee.
+
+180
+00:07:54,380 --> 00:07:54,660
+Right.
+
+181
+00:07:56,279 --> 00:07:59,540
+Well, a lot of this stuff is like some BS online course. That's not very,
+
+182
+00:07:59,790 --> 00:08:00,679
+you know, I,
+
+183
+00:08:01,089 --> 00:08:03,459
+you click through it as fast as you can because you got work to do.
+
+184
+00:08:03,709 --> 00:08:04,230
+Really?
+
+185
+00:08:04,529 --> 00:08:08,019
+-- Wait.
+-- I'm, I'm what? No, no, you're not supposed to do that.
+
+186
+00:08:08,029 --> 00:08:10,269
+You're supposed to go through the course and and pay
+
+187
+00:08:10,279 --> 00:08:12,779
+attention and then take the test at the end.
+
+188
+00:08:16,549 --> 00:08:17,929
+Yeah, I, I've, I personally
+
+189
+00:08:18,100 --> 00:08:18,359
+met people
+
+190
+00:08:19,109 --> 00:08:20,380
+through as fast as,
+
+191
+00:08:20,950 --> 00:08:22,940
+like, like you and me for
+
+192
+00:08:23,220 --> 00:08:23,420
+hands
+
+193
+00:08:23,809 --> 00:08:23,890
+up.
+
+194
+00:08:24,690 --> 00:08:26,950
+Oh, man. I, I remember at, at,
+
+195
+00:08:27,540 --> 00:08:28,399
+there was
+
+196
+00:08:28,709 --> 00:08:29,559
+an employer. I
+
+197
+00:08:29,670 --> 00:08:29,690
+know
+
+198
+00:08:29,859 --> 00:08:30,040
+exactly.
+
+199
+00:08:31,929 --> 00:08:33,789
+And we would have contests to see who
+
+200
+00:08:33,799 --> 00:08:36,679
+could complete the training the fastest every year.
+
+201
+00:08:36,690 --> 00:08:40,469
+I, I got it down because it was the same training with the same exam every year.
+
+202
+00:08:40,479 --> 00:08:43,679
+I got it down to about 1520 minutes and, and in fairness though,
+
+203
+00:08:43,690 --> 00:08:46,669
+I actually remember the answers because it was pretty clear that like
+
+204
+00:08:46,820 --> 00:08:50,179
+you shouldn't take bribes to build a bad orphanage that then burns down.
+
+205
+00:08:50,190 --> 00:08:53,840
+Like I generally would agree that that's a bad don't thing.
+
+206
+00:08:54,479 --> 00:08:55,109
+Well, you know,
+
+207
+00:08:55,119 --> 00:08:57,650
+it always amused me about some of those questions is
+
+208
+00:08:57,659 --> 00:09:01,869
+there were questions that are legally acceptable but morally wrong
+
+209
+00:09:01,979 --> 00:09:03,909
+and I'd always get this wrong.
+
+210
+00:09:04,609 --> 00:09:07,750
+No, I would not do that. Like, no, no, it's perfectly legal to do this.
+
+211
+00:09:07,760 --> 00:09:09,510
+And it's like, I don't care, I'm not doing it right.
+
+212
+00:09:10,179 --> 00:09:12,299
+So, anyway, anyway, no, that's,
+
+213
+00:09:12,679 --> 00:09:13,510
+I love,
+
+214
+00:09:14,030 --> 00:09:15,150
+I love my, you know,
+
+215
+00:09:15,159 --> 00:09:18,349
+it always makes me laugh is when you explain how to use a up key to somebody
+
+216
+00:09:18,900 --> 00:09:22,900
+because a lot of two factor authentication stuff is a right pain in the ass, right?
+
+217
+00:09:22,909 --> 00:09:25,049
+You have to either install an app on your phone and then you have to
+
+218
+00:09:25,059 --> 00:09:28,039
+like take screenshots of QR codes or you have to type in stuff or,
+
+219
+00:09:28,489 --> 00:09:31,400
+or you have to like badge your administrator to mail something
+
+220
+00:09:31,409 --> 00:09:33,950
+out and then you like have to sync the token or,
+
+221
+00:09:34,299 --> 00:09:36,729
+you know, blah, blah, blah, right. UB key. You like
+
+222
+00:09:36,859 --> 00:09:37,719
+literally
+
+223
+00:09:37,859 --> 00:09:41,080
+um it arrives in the mail and you uh stick it into,
+
+224
+00:09:41,099 --> 00:09:44,159
+like you go to a site that wants to set it up, like, say Google or github
+
+225
+00:09:44,330 --> 00:09:44,840
+or whatever.
+
+226
+00:09:45,190 --> 00:09:47,479
+So you plug this little USB thingy into the computer and
+
+227
+00:09:47,489 --> 00:09:49,090
+the little green light goes on and then you touch it
+
+228
+00:09:50,210 --> 00:09:50,400
+right?
+
+229
+00:09:50,500 --> 00:09:51,039
+And that's it.
+
+230
+00:09:51,250 --> 00:09:54,109
+There's, there's, that's it, that, that basically syncs it
+
+231
+00:09:54,320 --> 00:09:55,169
+to that
+
+232
+00:09:55,340 --> 00:09:56,450
+service, Google github,
+
+233
+00:09:56,619 --> 00:09:57,210
+whatever,
+
+234
+00:09:57,549 --> 00:10:01,130
+you know, because basically every UB key has like a built in like little
+
+235
+00:10:01,270 --> 00:10:04,090
+secret and a random number generator and all that good stuff.
+
+236
+00:10:04,539 --> 00:10:05,239
+And so
+
+237
+00:10:05,669 --> 00:10:06,669
+yeah, basically you have to,
+
+238
+00:10:06,679 --> 00:10:10,659
+you have to register the UB key with um sort of each site you're going to use it with.
+
+239
+00:10:10,669 --> 00:10:13,169
+But that registration basically consists of plugging it in and
+
+240
+00:10:13,179 --> 00:10:15,890
+touching the little copper pad that has a green light
+
+241
+00:10:16,130 --> 00:10:16,179
+in
+
+242
+00:10:16,289 --> 00:10:18,640
+the really important thing with U two
+
+243
+00:10:18,750 --> 00:10:20,250
+F. Is that
+
+244
+00:10:20,489 --> 00:10:20,729
+what's you?
+
+245
+00:10:21,659 --> 00:10:22,799
+It's,
+
+246
+00:10:23,500 --> 00:10:25,210
+I don't even know what it stands for. It's the
+
+247
+00:10:25,419 --> 00:10:27,330
+Fido alliance, it's universal
+
+248
+00:10:27,750 --> 00:10:29,250
+two factor, universal factor.
+
+249
+00:10:29,619 --> 00:10:30,190
+Thank you.
+
+250
+00:10:30,840 --> 00:10:31,690
+So U two
+
+251
+00:10:31,799 --> 00:10:33,849
+F, what it does though is
+
+252
+00:10:34,330 --> 00:10:36,109
+when I go to say google.com
+
+253
+00:10:36,330 --> 00:10:39,140
+and it wants me to put my U two F key in
+
+254
+00:10:39,440 --> 00:10:42,809
+the, the URL and this is why Google has
+
+255
+00:10:43,469 --> 00:10:47,710
+not the URL or right? The host name, I'm sorry, the host name, google.com
+
+256
+00:10:48,039 --> 00:10:52,869
+is packaged up with some other information and then basically sent to the U key,
+
+257
+00:10:53,030 --> 00:10:53,510
+right?
+
+258
+00:10:53,919 --> 00:10:56,669
+And it's, it's basically a hash goes to the UE key
+
+259
+00:10:57,039 --> 00:10:59,080
+and it's kind of like challenge response where there's
+
+260
+00:10:59,090 --> 00:11:01,669
+like a uh like think about public key encryption,
+
+261
+00:11:01,679 --> 00:11:01,840
+right?
+
+262
+00:11:01,849 --> 00:11:04,940
+Where there's kind of like a key on the on the U A key
+
+263
+00:11:05,640 --> 00:11:06,700
+encryption key.
+
+264
+00:11:06,750 --> 00:11:10,000
+And when I hit the button, it transforms the data,
+
+265
+00:11:10,010 --> 00:11:13,340
+the browser sent it and then sends back a response.
+
+266
+00:11:13,750 --> 00:11:14,700
+And so
+
+267
+00:11:14,809 --> 00:11:17,900
+the reason phishing doesn't work with this and you can still fish people
+
+268
+00:11:17,909 --> 00:11:22,369
+with like S MS or even the the number generator on their phones
+
+269
+00:11:22,729 --> 00:11:28,400
+is because the the domain I am visiting in my web browser is part of the challenge.
+
+270
+00:11:28,409 --> 00:11:29,210
+If I go to
+
+271
+00:11:29,320 --> 00:11:30,460
+google.com,
+
+272
+00:11:30,780 --> 00:11:32,919
+I will not get a proper response.
+
+273
+00:11:33,340 --> 00:11:39,159
+So the fishing side doesn't work. But the in theory man in the middle could work
+
+274
+00:11:39,460 --> 00:11:41,859
+but any well, no, no, let me finish please.
+
+275
+00:11:42,049 --> 00:11:42,719
+But
+
+276
+00:11:42,929 --> 00:11:47,200
+anybody doing this is gonna be using TLS correctly pretty much,
+
+277
+00:11:48,349 --> 00:11:51,440
+right? If it was over an unencrypted http channel,
+
+278
+00:11:51,659 --> 00:11:52,630
+in theory,
+
+279
+00:11:52,640 --> 00:11:54,119
+it could maybe be man in the middle
+
+280
+00:11:54,130 --> 00:11:56,830
+like essentially you could proxy the authentication request,
+
+281
+00:11:56,940 --> 00:11:57,849
+you could not.
+
+282
+00:11:58,890 --> 00:11:59,510
+Uh
+
+283
+00:11:59,859 --> 00:12:00,260
+No, no,
+
+284
+00:12:00,270 --> 00:12:04,669
+I mean once you get in like so you UTF uh authenticate to Google Google
+
+285
+00:12:04,679 --> 00:12:07,549
+hands you back a token over a clear text channel that's what I'm talking about.
+
+286
+00:12:08,200 --> 00:12:08,559
+It
+
+287
+00:12:08,789 --> 00:12:08,820
+does
+
+288
+00:12:08,969 --> 00:12:09,000
+not
+
+289
+00:12:09,159 --> 00:12:09,409
+work that
+
+290
+00:12:09,520 --> 00:12:10,280
+way. You can't act,
+
+291
+00:12:10,400 --> 00:12:10,960
+no, no.
+
+292
+00:12:11,330 --> 00:12:14,369
+What I'm saying is the actual UTF itself can't be man in the middle.
+
+293
+00:12:14,380 --> 00:12:17,250
+But then what the UTF sets up like where Google hands
+
+294
+00:12:17,260 --> 00:12:19,570
+-- you a token or a cookie
+-- or you mean like whatever,
+
+295
+00:12:20,219 --> 00:12:21,570
+man, if you're doing that
+
+296
+00:12:22,299 --> 00:12:23,140
+and that's my point.
+
+297
+00:12:23,409 --> 00:12:27,690
+That's my point, right? Everybody now does TLS because, well, for one thing,
+
+298
+00:12:27,880 --> 00:12:28,729
+our, as of what is
+
+299
+00:12:28,840 --> 00:12:30,409
+as of today, our web browsers
+
+300
+00:12:31,739 --> 00:12:33,690
+because this isn't coming out for weeks
+
+301
+00:12:35,070 --> 00:12:35,239
+of
+
+302
+00:12:35,409 --> 00:12:35,729
+July
+
+303
+00:12:35,979 --> 00:12:36,250
+Day.
+
+304
+00:12:36,849 --> 00:12:41,609
+Yeah. As of July 2018, you know, Google Chrome now labels insecure websites
+
+305
+00:12:41,729 --> 00:12:47,979
+or rather labels http websites as insecure now rather than labeling htps as secure
+
+306
+00:12:48,250 --> 00:12:48,400
+that
+
+307
+00:12:48,640 --> 00:12:49,419
+-- which
+-- is great
+
+308
+00:12:49,739 --> 00:12:53,950
+and it's totally the right way to do it, right. It's one of those things where
+
+309
+00:12:54,219 --> 00:12:57,469
+these small changes are going to have huge impacts.
+
+310
+00:12:58,039 --> 00:12:58,380
+Yeah.
+
+311
+00:12:59,760 --> 00:13:00,179
+Yeah.
+
+312
+00:13:00,659 --> 00:13:03,539
+Um but yeah, no UTF itself is pretty much
+
+313
+00:13:03,650 --> 00:13:05,539
+I'm not gonna say un hackable, but
+
+314
+00:13:05,719 --> 00:13:07,580
+as we understand cryptography,
+
+315
+00:13:08,549 --> 00:13:11,280
+yeah, it's, it's, yeah, you're, you're, you're ok.
+
+316
+00:13:11,400 --> 00:13:13,510
+And as long as you don't do something totally dumb,
+
+317
+00:13:13,520 --> 00:13:16,570
+like use UTF and then hand a token over http
+
+318
+00:13:17,309 --> 00:13:21,210
+-- Yeah. No, you're fine.
+-- But that's not even U two F has nothing to do with that.
+
+319
+00:13:21,219 --> 00:13:21,599
+That's just,
+
+320
+00:13:21,900 --> 00:13:25,109
+that's what, but the thing is U two F only does the authentication. You still,
+
+321
+00:13:25,210 --> 00:13:27,750
+no, but the thing to remember, right is UTF doesn't exist in a vacuum,
+
+322
+00:13:27,760 --> 00:13:29,530
+you have to have other stuff wrapped around it.
+
+323
+00:13:29,849 --> 00:13:32,809
+Right. Like it's not like IUTF and then magically my email works.
+
+324
+00:13:34,429 --> 00:13:36,900
+The majority of this stuff is being used with a website. So, right.
+
+325
+00:13:36,909 --> 00:13:39,330
+So the website still has to do authentication properly. But
+
+326
+00:13:39,450 --> 00:13:43,169
+the good news is well as you pointed out and I think you did this presentation where,
+
+327
+00:13:43,309 --> 00:13:45,780
+you know, that's a framework problem. Go use a good framework.
+
+328
+00:13:47,599 --> 00:13:51,039
+That's it. That's just literally go pick one of these like frameworks
+
+329
+00:13:51,229 --> 00:13:54,289
+that is well known and reliable and they all do authentication
+
+330
+00:13:54,599 --> 00:13:54,820
+proper.
+
+331
+00:13:55,099 --> 00:13:55,890
+Exactly.
+
+332
+00:13:56,099 --> 00:13:57,489
+Exactly.
+
+333
+00:13:58,299 --> 00:14:01,700
+Well, it's even easier than that. Just don't do off anymore. Right.
+
+334
+00:14:01,710 --> 00:14:03,130
+Let people log in with Google.
+
+335
+00:14:03,419 --> 00:14:04,049
+That's,
+
+336
+00:14:05,630 --> 00:14:05,669
+please
+
+337
+00:14:05,849 --> 00:14:09,390
+don't ask for access to all my email and documents. When, when I do do that,
+
+338
+00:14:10,599 --> 00:14:12,270
+that's a secondary problem.
+
+339
+00:14:12,280 --> 00:14:12,989
+And, and I,
+
+340
+00:14:13,000 --> 00:14:17,690
+I still wish Google had the ability for me to like uncheck those boxes and say yes,
+
+341
+00:14:17,700 --> 00:14:18,679
+I want to log in,
+
+342
+00:14:19,000 --> 00:14:20,049
+but no, I don't want you.
+
+343
+00:14:20,679 --> 00:14:21,510
+Exactly.
+
+344
+00:14:22,119 --> 00:14:23,510
+And I love that you can like,
+
+345
+00:14:23,520 --> 00:14:27,299
+do that on Android now or you can just take away permissions to stuff
+
+346
+00:14:27,400 --> 00:14:28,739
+and I love it when I start something up.
+
+347
+00:14:28,750 --> 00:14:32,070
+But it's like, please, sir, can I have access to your location? Like? Nope,
+
+348
+00:14:32,200 --> 00:14:33,030
+sure can't.
+
+349
+00:14:33,409 --> 00:14:34,020
+Yeah.
+
+350
+00:14:34,479 --> 00:14:37,669
+Yeah, I mean, I, I get some apps legit needed location
+
+351
+00:14:37,820 --> 00:14:39,460
+data while I'm using it like
+
+352
+00:14:39,830 --> 00:14:40,289
+apple maps,
+
+353
+00:14:40,520 --> 00:14:43,309
+but not like all the time. Like when I'm ordering,
+
+354
+00:14:43,570 --> 00:14:45,099
+you know, it's a pizza app or whatever.
+
+355
+00:14:45,429 --> 00:14:49,739
+Yep. Yep. Exactly. Exactly. I love it when web browsers ask for my location.
+
+356
+00:14:49,770 --> 00:14:52,710
+Just, no, you can't have it. You know, I'm not going to let you
+
+357
+00:14:52,940 --> 00:14:55,900
+send alerts to my computer either. Right.
+
+358
+00:14:58,400 --> 00:15:01,219
+People didn't abuse it. It could in theory be really cool. Right.
+
+359
+00:15:01,229 --> 00:15:03,460
+Like, for new sites for, like, weather alerts and stuff.
+
+360
+00:15:03,469 --> 00:15:04,979
+But no, no, it's going to be used to spam
+
+361
+00:15:05,309 --> 00:15:05,330
+you
+
+362
+00:15:05,710 --> 00:15:07,140
+totally. And I love that. Like,
+
+363
+00:15:07,400 --> 00:15:12,789
+80% of the websites I go to ask if I want to enable alerts for this site. And it's like,
+
+364
+00:15:13,020 --> 00:15:13,159
+yeah.
+
+365
+00:15:13,275 --> 00:15:13,604
+No,
+
+366
+00:15:14,025 --> 00:15:14,505
+-- no,
+-- I
+
+367
+00:15:14,945 --> 00:15:17,015
+100% of people accidentally click. Yes,
+
+368
+00:15:17,125 --> 00:15:19,085
+-- that's
+-- all I can figure. Maybe 10
+
+369
+00:15:19,094 --> 00:15:19,575
+percent.
+
+370
+00:15:19,905 --> 00:15:21,955
+Well, or some bright spark thought it was a good idea.
+
+371
+00:15:21,965 --> 00:15:24,005
+Pushed it through a committee and then, you know, some poor
+
+372
+00:15:24,304 --> 00:15:27,215
+had to implement it even though it's like a terrible idea and everybody hates it,
+
+373
+00:15:27,424 --> 00:15:29,684
+-- like, from a user perspective.
+-- Right. Maybe,
+
+374
+00:15:29,854 --> 00:15:36,354
+maybe anyway. Anyway. All right, man. So we, we, we also wanted to talk about air gaps
+
+375
+00:15:36,585 --> 00:15:41,054
+which are vaguely related to Bluetooth according to you, which I disagree with, but
+
+376
+00:15:41,369 --> 00:15:42,030
+we'll get there.
+
+377
+00:15:42,039 --> 00:15:43,469
+Well, no, I mean, just in the sense of,
+
+378
+00:15:43,479 --> 00:15:47,630
+I think a lot of people misunderstand what an air gap actually is.
+
+379
+00:15:47,640 --> 00:15:51,309
+Uh because I mean, you got to remember like air gapping computers.
+
+380
+00:15:51,320 --> 00:15:54,429
+Well, it used to be the default state. We did not have networks,
+
+381
+00:15:55,349 --> 00:15:56,130
+right? Like
+
+382
+00:15:56,390 --> 00:15:57,729
+prior to the internet.
+
+383
+00:15:57,919 --> 00:16:00,570
+Having a computer on a network was
+
+384
+00:16:00,789 --> 00:16:01,770
+pretty rare.
+
+385
+00:16:04,080 --> 00:16:04,460
+Yeah.
+
+386
+00:16:04,469 --> 00:16:07,460
+Well, I remember, like, all the computers I used as a kid at school, like,
+
+387
+00:16:07,469 --> 00:16:08,520
+there was no network.
+
+388
+00:16:08,530 --> 00:16:12,090
+Like what, you know, there was, they were like boss boxes with floppy drives that
+
+389
+00:16:12,380 --> 00:16:12,469
+they
+
+390
+00:16:12,659 --> 00:16:12,840
+were,
+
+391
+00:16:12,989 --> 00:16:14,070
+-- that was,
+-- you know, we played a local
+
+392
+00:16:14,200 --> 00:16:14,419
+turtle.
+
+393
+00:16:17,619 --> 00:16:19,020
+Turtle was the best.
+
+394
+00:16:19,400 --> 00:16:19,849
+Yeah.
+
+395
+00:16:20,900 --> 00:16:22,859
+Yeah. But, uh, so, I mean,
+
+396
+00:16:23,119 --> 00:16:28,000
+and then I think there's a lot of misunderstanding about why you would want an air
+
+397
+00:16:28,010 --> 00:16:29,900
+gap network because I think people always focus
+
+398
+00:16:29,909 --> 00:16:32,070
+on the being attacked part of air gapping.
+
+399
+00:16:32,429 --> 00:16:33,390
+But forget about
+
+400
+00:16:33,530 --> 00:16:37,909
+for a lot of people that air gap, it's actually more about the the data exfiltration
+
+401
+00:16:38,039 --> 00:16:40,270
+piece than it is about stuff coming in.
+
+402
+00:16:40,729 --> 00:16:42,479
+Uh I can see it both ways.
+
+403
+00:16:42,489 --> 00:16:44,200
+I mean, you can argue what was,
+
+404
+00:16:44,210 --> 00:16:47,869
+what was the name of the virus that ruined the centrifuges?
+
+405
+00:16:50,599 --> 00:16:50,630
+That
+
+406
+00:16:50,880 --> 00:16:51,080
+was
+
+407
+00:16:51,510 --> 00:16:52,020
+that you're right.
+
+408
+00:16:52,270 --> 00:16:54,270
+I was thinking something else anyway, right?
+
+409
+00:16:54,280 --> 00:16:57,150
+Like that's an instance of going in was clearly more
+
+410
+00:16:57,409 --> 00:16:58,659
+dangerous than coming out.
+
+411
+00:16:59,299 --> 00:16:59,570
+But
+
+412
+00:16:59,799 --> 00:17:01,710
+I feel like it goes both ways.
+
+413
+00:17:01,890 --> 00:17:02,380
+And
+
+414
+00:17:02,739 --> 00:17:04,098
+so, so anyway, let's
+
+415
+00:17:04,290 --> 00:17:05,569
+start at the beginning.
+
+416
+00:17:05,829 --> 00:17:09,098
+And what is an air gap? What is the intention of an air gap?
+
+417
+00:17:09,108 --> 00:17:11,459
+-- So
+-- the idea behind an air gap network is,
+
+418
+00:17:11,469 --> 00:17:14,739
+is you have a computer or a computer network even
+
+419
+00:17:15,288 --> 00:17:19,378
+that is not attached to any external network,
+
+420
+00:17:19,388 --> 00:17:21,368
+-- which nowadays is a way to save
+-- the internet.
+
+421
+00:17:21,588 --> 00:17:25,338
+Like there's maybe a gap of air between two different networks.
+
+422
+00:17:25,858 --> 00:17:28,538
+-- Yeah,
+-- there's literally ideally no
+
+423
+00:17:29,219 --> 00:17:33,359
+physical link between this computer network and
+
+424
+00:17:33,800 --> 00:17:36,640
+the general internet or anything attached to the internet,
+
+425
+00:17:36,650 --> 00:17:38,170
+even if it's all firewalled and everything.
+
+426
+00:17:38,479 --> 00:17:38,780
+Right.
+
+427
+00:17:38,790 --> 00:17:39,880
+So the idea being that, you know,
+
+428
+00:17:39,890 --> 00:17:43,800
+some schmuck on the internet literally just cannot touch your network,
+
+429
+00:17:44,119 --> 00:17:46,270
+right? They would have to physically go to wherever it is
+
+430
+00:17:46,479 --> 00:17:48,140
+and try to hack it by getting
+
+431
+00:17:48,630 --> 00:17:48,819
+physical,
+
+432
+00:17:48,949 --> 00:17:52,520
+you know, I was talking to somebody. This is like 100 years ago.
+
+433
+00:17:53,040 --> 00:17:56,199
+And there are one way network devices
+
+434
+00:17:56,319 --> 00:18:00,180
+that can go from kind of like the the general internet to
+
+435
+00:18:00,319 --> 00:18:04,260
+an air gamp network, but they literally can only send data in one direction.
+
+436
+00:18:04,270 --> 00:18:06,250
+As you can imagine, the challenges here is
+
+437
+00:18:06,510 --> 00:18:09,359
+you need to build massive redundancy into your protocol because
+
+438
+00:18:09,369 --> 00:18:12,209
+you literally have no idea if a packet gets dropped.
+
+439
+00:18:12,670 --> 00:18:15,739
+-- And
+-- so well, what I've seen actually, and this was like 1520 years ago,
+
+440
+00:18:15,750 --> 00:18:17,109
+was a device that
+
+441
+00:18:17,500 --> 00:18:20,979
+it was basically two physical computers sharing a memory,
+
+442
+00:18:20,989 --> 00:18:22,619
+like a physical memory device.
+
+443
+00:18:23,430 --> 00:18:25,170
+Uh And there was sort of an interlock,
+
+444
+00:18:25,180 --> 00:18:28,329
+so only one of the computers could read and write to the memory,
+
+445
+00:18:28,969 --> 00:18:30,989
+the physical memory device at a time.
+
+446
+00:18:31,530 --> 00:18:34,140
+And then there was a really well defined sort of,
+
+447
+00:18:34,290 --> 00:18:37,420
+it's just, it's like a file system, right? It's not like a network
+
+448
+00:18:37,550 --> 00:18:38,979
+thing, it's just like a file system.
+
+449
+00:18:39,170 --> 00:18:41,050
+And so essentially, you know, it's like,
+
+450
+00:18:41,209 --> 00:18:44,189
+it's, it's essentially you're sharing like a pad of paper, right?
+
+451
+00:18:44,199 --> 00:18:47,069
+So I hand the pad of paper to you, you, you read it,
+
+452
+00:18:47,270 --> 00:18:48,180
+you write on it,
+
+453
+00:18:48,390 --> 00:18:48,969
+you're done,
+
+454
+00:18:48,979 --> 00:18:51,119
+you hand it back to me and then I can read
+
+455
+00:18:51,130 --> 00:18:54,150
+whatever was previously written on it by myself or by you
+
+456
+00:18:54,609 --> 00:18:56,619
+and I can erase it and write new stuff.
+
+457
+00:18:56,630 --> 00:18:59,209
+And so the idea was that way you could transfer files
+
+458
+00:18:59,750 --> 00:19:02,969
+uh to and from an air gapped network in a very controlled way.
+
+459
+00:19:02,979 --> 00:19:04,369
+And the device also had things like
+
+460
+00:19:04,729 --> 00:19:07,270
+you could have um like filter, you know,
+
+461
+00:19:07,280 --> 00:19:11,459
+you had filtering expressions on both sides of what was allowed in and out, right?
+
+462
+00:19:11,469 --> 00:19:15,000
+So like, oh, you know, we're only going to allow like a CS V file with like,
+
+463
+00:19:15,130 --> 00:19:19,140
+like, you know, 20 characters for first name, 20 characters for last name,
+
+464
+00:19:19,400 --> 00:19:21,869
+the social insurance number and like what their balance is,
+
+465
+00:19:22,410 --> 00:19:25,109
+-- you know, things like that kind of, right? So
+-- that's interesting.
+
+466
+00:19:25,119 --> 00:19:30,930
+The device I I learned of here was using fiber optics with the intent being
+
+467
+00:19:31,060 --> 00:19:33,790
+by using a piece of glass and literally having
+
+468
+00:19:34,089 --> 00:19:37,890
+the there was no hardware to transmit on the receiving end.
+
+469
+00:19:38,760 --> 00:19:40,390
+You didn't have to worry about it.
+
+470
+00:19:40,400 --> 00:19:45,060
+There was literally no way to make that send back across the line at all.
+
+471
+00:19:45,069 --> 00:19:49,520
+And that's where a lot of this comes in is that data exfiltration piece of, you know,
+
+472
+00:19:49,729 --> 00:19:51,979
+certain types of data
+
+473
+00:19:52,219 --> 00:19:57,079
+are incredibly valuable, not even to a targeted attacker, but just in general
+
+474
+00:19:57,530 --> 00:19:58,069
+you know,
+
+475
+00:19:58,489 --> 00:19:59,900
+um, or the,
+
+476
+00:19:59,910 --> 00:20:02,849
+the data being public could be horrendously embarrassing
+
+477
+00:20:02,859 --> 00:20:04,449
+to say a government or a company,
+
+478
+00:20:04,680 --> 00:20:05,189
+you know?
+
+479
+00:20:05,319 --> 00:20:07,229
+Ok. Well, so, so
+
+480
+00:20:07,680 --> 00:20:10,900
+the real reason this topic is being discussed is there's a story on
+
+481
+00:20:10,910 --> 00:20:15,750
+the register about Russia hacking us power plants over air gap networks.
+
+482
+00:20:15,920 --> 00:20:18,800
+And so this kind of comes back to the idea of
+
+483
+00:20:19,219 --> 00:20:20,739
+air gaps don't really exist,
+
+484
+00:20:21,000 --> 00:20:21,390
+right?
+
+485
+00:20:21,500 --> 00:20:22,229
+There's just
+
+486
+00:20:22,510 --> 00:20:24,189
+vast and slow networks,
+
+487
+00:20:24,630 --> 00:20:24,920
+right?
+
+488
+00:20:24,930 --> 00:20:27,680
+Air gaps are so incredibly painful because for example,
+
+489
+00:20:27,689 --> 00:20:29,520
+how do you get security updates to your computers?
+
+490
+00:20:29,530 --> 00:20:31,560
+Now, how do you get antivirus updates to your computer?
+
+491
+00:20:31,569 --> 00:20:35,699
+Now, how do you get any of the data you need to work with, to your computer? Now,
+
+492
+00:20:35,800 --> 00:20:38,660
+how do you get any of that data out into a reporting system?
+
+493
+00:20:38,670 --> 00:20:42,000
+So you can generate a nice spreadsheet for your boss every month, right? Like
+
+494
+00:20:42,140 --> 00:20:43,239
+the whole point.
+
+495
+00:20:43,369 --> 00:20:45,930
+Generally speaking of computers and data is
+
+496
+00:20:46,099 --> 00:20:47,800
+to share and mingle the data
+
+497
+00:20:48,560 --> 00:20:51,000
+to add value to it or to extract value from it.
+
+498
+00:20:51,459 --> 00:20:54,469
+Right. That's kind of the point. That's why the internet works so well.
+
+499
+00:20:54,699 --> 00:20:55,060
+Right.
+
+500
+00:20:56,170 --> 00:21:00,489
+And so there's very, very few use cases where you can like live without that,
+
+501
+00:21:00,680 --> 00:21:03,109
+you know, where you're like, yeah, whatever this thing exists, like you,
+
+502
+00:21:03,119 --> 00:21:05,550
+you can't have a bank that's offline because like, how,
+
+503
+00:21:05,560 --> 00:21:07,469
+how would I go get money from my account?
+
+504
+00:21:08,790 --> 00:21:10,160
+You know? Right. Like
+
+505
+00:21:10,880 --> 00:21:13,449
+-- it's all sorts of things,
+-- you know. However, however,
+
+506
+00:21:13,550 --> 00:21:17,579
+apparently these power plants were air gapped and they were still hacked.
+
+507
+00:21:17,869 --> 00:21:19,099
+So, in theory and,
+
+508
+00:21:19,109 --> 00:21:20,739
+and the simple reason for this is because most
+
+509
+00:21:20,750 --> 00:21:22,739
+of these power plants have really old skater systems,
+
+510
+00:21:22,750 --> 00:21:25,280
+you know, supervisory control and data acquisition networks.
+
+511
+00:21:25,550 --> 00:21:27,420
+Most of these network protocols are sold.
+
+512
+00:21:27,430 --> 00:21:29,859
+They don't have any concept of authentication
+
+513
+00:21:29,869 --> 00:21:32,400
+or even remote security built into them.
+
+514
+00:21:32,410 --> 00:21:33,099
+Right. They're just
+
+515
+00:21:33,380 --> 00:21:36,619
+-- like open wide message buses,
+-- which is probably why they were air gamp.
+
+516
+00:21:37,349 --> 00:21:37,680
+Yeah.
+
+517
+00:21:37,689 --> 00:21:38,560
+Well, uh no,
+
+518
+00:21:38,569 --> 00:21:41,319
+the reason they were air gapped originally is because they didn't talk TCP/IP.
+
+519
+00:21:42,050 --> 00:21:42,250
+Right.
+
+520
+00:21:42,260 --> 00:21:42,750
+They, again,
+
+521
+00:21:42,760 --> 00:21:46,400
+it was like the technology is sold and crafty or crafty rather that they
+
+522
+00:21:46,410 --> 00:21:50,030
+don't talk like what you and I think of as a network protocol,
+
+523
+00:21:50,040 --> 00:21:51,849
+like they have sort of network protocols, but they're like,
+
+524
+00:21:51,859 --> 00:21:54,140
+meant to be used like within a factory not
+
+525
+00:21:54,709 --> 00:21:57,589
+to have the factory talk to some other system. You know what I mean?
+
+526
+00:21:58,109 --> 00:21:58,900
+Um So no,
+
+527
+00:21:58,910 --> 00:22:00,410
+the reason they were air gapped originally is because
+
+528
+00:22:00,420 --> 00:22:02,030
+the technology was just old and crap and,
+
+529
+00:22:02,040 --> 00:22:04,589
+you know, you can't retrofit this stuff to talk to CP IP.
+
+530
+00:22:04,599 --> 00:22:05,829
+Well, you can now, but
+
+531
+00:22:05,949 --> 00:22:07,089
+you probably don't want to.
+
+532
+00:22:07,420 --> 00:22:08,579
+Well, except you do want to.
+
+533
+00:22:08,589 --> 00:22:12,880
+So you do and then you end up with a sort of, but not really air gap, you know, network
+
+534
+00:22:13,079 --> 00:22:13,800
+whatever.
+
+535
+00:22:14,140 --> 00:22:16,839
+Um But even the ones that are still physically air gapped, you know,
+
+536
+00:22:16,849 --> 00:22:19,560
+there's people swapping data around on USB keys
+
+537
+00:22:19,969 --> 00:22:20,790
+or
+
+538
+00:22:20,959 --> 00:22:21,270
+so you
+
+539
+00:22:21,410 --> 00:22:21,520
+know,
+
+540
+00:22:22,189 --> 00:22:28,880
+what happened is most of the time you've got some sort of technician with a laptop
+
+541
+00:22:29,189 --> 00:22:31,810
+and he literally unplugs his laptop from
+
+542
+00:22:32,109 --> 00:22:35,250
+the network over here and then goes and plugs it in to the
+
+543
+00:22:35,260 --> 00:22:38,880
+Skater system or in some cases they're still connected to the Wi Fi
+
+544
+00:22:39,290 --> 00:22:42,420
+and then they plug into the Skater system and it's like, you've just, like,
+
+545
+00:22:42,430 --> 00:22:44,109
+ruined everything, you know.
+
+546
+00:22:44,119 --> 00:22:45,810
+Well, the problem there is is that a laptop,
+
+547
+00:22:45,819 --> 00:22:48,849
+by definition is smart enough to run some code actively,
+
+548
+00:22:48,859 --> 00:22:52,449
+that the code can be smart enough to like go poke away the skater system and break in.
+
+549
+00:22:53,280 --> 00:22:57,670
+You know, like for example, if you, well, a better example, no,
+
+550
+00:22:57,680 --> 00:22:58,530
+that's a terrible example.
+
+551
+00:22:58,540 --> 00:23:00,300
+USB key I was going to say might be a better example,
+
+552
+00:23:00,310 --> 00:23:02,069
+but it's actually bad because USB keys again can
+
+553
+00:23:02,239 --> 00:23:04,439
+cause code execution on the remote system.
+
+554
+00:23:04,750 --> 00:23:07,060
+Um Same thing even with burned C DS, right?
+
+555
+00:23:07,069 --> 00:23:10,900
+A lot of air gap networks to transfer data back and forth, they will burn a CD.
+
+556
+00:23:11,020 --> 00:23:11,040
+Um
+
+557
+00:23:11,290 --> 00:23:15,089
+because then they feel like, you know, number one, it's easy to verify,
+
+558
+00:23:15,589 --> 00:23:15,949
+right?
+
+559
+00:23:15,959 --> 00:23:17,500
+Worst case example,
+
+560
+00:23:17,510 --> 00:23:20,310
+you can actually get a good optical microscope and like look at it.
+
+561
+00:23:21,930 --> 00:23:25,390
+Um you know, so you can't, well, no, the point is you can't really hide data, right?
+
+562
+00:23:25,400 --> 00:23:27,069
+It's, it's there or it's not
+
+563
+00:23:27,349 --> 00:23:29,540
+right. There's not like USB where you got this wonky
+
+564
+00:23:29,729 --> 00:23:31,160
+control chip that can
+
+565
+00:23:31,319 --> 00:23:34,189
+potentially be hacked to do things that are weird.
+
+566
+00:23:34,199 --> 00:23:36,430
+There's also the fact that when you,
+
+567
+00:23:36,569 --> 00:23:39,349
+when, when a CD is used to traverse a gap,
+
+568
+00:23:39,359 --> 00:23:41,709
+you're not supposed to ever put it in another computer,
+
+569
+00:23:41,719 --> 00:23:45,229
+you're supposed to destroy it after the data is copied just in case
+
+570
+00:23:45,339 --> 00:23:46,290
+somehow
+
+571
+00:23:46,770 --> 00:23:50,959
+something was copied back on the, the CD, which burnable C DS you can, I mean,
+
+572
+00:23:50,969 --> 00:23:52,569
+whatever, there's weird stuff you can do.
+
+573
+00:23:52,949 --> 00:23:54,369
+But, I mean, fundamentally,
+
+574
+00:23:54,479 --> 00:23:54,869
+right.
+
+575
+00:23:55,969 --> 00:23:56,349
+Yeah.
+
+576
+00:23:56,719 --> 00:23:57,020
+And,
+
+577
+00:23:57,030 --> 00:24:00,130
+but fundamentally this makes it so painful to use a computer
+
+578
+00:24:00,140 --> 00:24:02,800
+and the data and whatnot that like almost nobody does it
+
+579
+00:24:03,020 --> 00:24:05,750
+right? Because generally speaking sharing works,
+
+580
+00:24:05,930 --> 00:24:07,790
+lets us do things that are useful.
+
+581
+00:24:09,130 --> 00:24:11,949
+So, and then, then the problem of course is that even if you have,
+
+582
+00:24:11,959 --> 00:24:15,439
+let's assume for a moment you have a properly air gapped network, right?
+
+583
+00:24:15,449 --> 00:24:17,050
+Let, let's just say for the sake of argument,
+
+584
+00:24:17,219 --> 00:24:19,589
+you have a really old computer with no network card,
+
+585
+00:24:19,800 --> 00:24:22,510
+the serial ports are glued shut, you only have a PS OK.
+
+586
+00:24:22,520 --> 00:24:24,780
+For those of you that are younger, a PS two port,
+
+587
+00:24:24,790 --> 00:24:27,750
+it's like a round thing with pins that you plug your keyboard and mouse into.
+
+588
+00:24:27,859 --> 00:24:29,469
+Uh and let's say it is video out.
+
+589
+00:24:29,479 --> 00:24:32,979
+So it's like super, you know, old, even with physical access,
+
+590
+00:24:32,989 --> 00:24:34,310
+it would be a pain to get data off of it.
+
+591
+00:24:34,319 --> 00:24:34,500
+Well,
+
+592
+00:24:34,510 --> 00:24:37,959
+the thing is that computer still does things like probably as a built in speaker,
+
+593
+00:24:38,579 --> 00:24:39,910
+for example,
+
+594
+00:24:39,920 --> 00:24:43,180
+you can still make the computer generate like electromagnetic
+
+595
+00:24:43,189 --> 00:24:45,880
+energy and interference by monkeying with the CPU,
+
+596
+00:24:45,890 --> 00:24:46,650
+for example.
+
+597
+00:24:47,030 --> 00:24:47,520
+Right.
+
+598
+00:24:48,130 --> 00:24:52,390
+Uh There's all sorts of secondary channels that are not designed to carry data.
+
+599
+00:24:52,400 --> 00:24:54,459
+But, you know, for example, if you have a speaker on a computer,
+
+600
+00:24:54,469 --> 00:24:55,569
+you could make a play Morse code
+
+601
+00:24:56,160 --> 00:24:57,910
+and have another computer. Listen,
+
+602
+00:24:58,069 --> 00:25:01,219
+there's some group out of like Israel that does
+
+603
+00:25:01,229 --> 00:25:04,849
+all these wacky things with ex filtrating data off of
+
+604
+00:25:05,280 --> 00:25:05,650
+like,
+
+605
+00:25:05,760 --> 00:25:05,989
+does your
+
+606
+00:25:06,099 --> 00:25:06,180
+computer
+
+607
+00:25:06,489 --> 00:25:07,180
+have a blinking,
+
+608
+00:25:07,510 --> 00:25:10,739
+does your keyboard have a light on it that can be made to blink by the computer?
+
+609
+00:25:11,329 --> 00:25:16,050
+Like blinking lights and audio? And there's even one that they used like thermal
+
+610
+00:25:16,619 --> 00:25:20,310
+uh using, using the thermal signatures of the CPU to send
+
+611
+00:25:20,689 --> 00:25:21,319
+data.
+
+612
+00:25:21,459 --> 00:25:22,280
+It's completely
+
+613
+00:25:22,589 --> 00:25:26,229
+insane. But again, there's no such thing as an air gap. Like that's the lesson here.
+
+614
+00:25:26,260 --> 00:25:29,199
+-- Well,
+-- that's the problem is to properly air gap, a computer,
+
+615
+00:25:29,209 --> 00:25:34,729
+you also then need to have it in like a tempest, shielded heat shield
+
+616
+00:25:36,160 --> 00:25:39,900
+-- shield room.
+-- Humans are there like humans are the problem
+
+617
+00:25:40,089 --> 00:25:42,760
+unless you lock the door and don't let anybody in.
+
+618
+00:25:43,050 --> 00:25:43,599
+Now, your,
+
+619
+00:25:43,979 --> 00:25:44,180
+your
+
+620
+00:25:44,359 --> 00:25:46,829
+network is useless. But there's at least no people,
+
+621
+00:25:47,160 --> 00:25:50,790
+people are the problem like this goes back to the fishing problem. Right.
+
+622
+00:25:50,800 --> 00:25:53,229
+It's all people, people are the problem.
+
+623
+00:25:54,180 --> 00:25:54,550
+Yeah.
+
+624
+00:25:54,900 --> 00:25:58,550
+So fundamentally, I think like outside of like about three or four really rabid,
+
+625
+00:25:58,560 --> 00:26:00,400
+insanely corner corner cases.
+
+626
+00:26:00,410 --> 00:26:01,290
+Air gapping is,
+
+627
+00:26:01,449 --> 00:26:02,439
+yeah. No, it's,
+
+628
+00:26:03,199 --> 00:26:04,560
+it's something that will
+
+629
+00:26:04,810 --> 00:26:06,859
+not so much ultimately fail from a security point of view,
+
+630
+00:26:06,869 --> 00:26:09,699
+but we just ultimately fail from like trying to do anything useful.
+
+631
+00:26:09,709 --> 00:26:14,520
+Here's the other thing I think about a lot around things like air gaps is so now
+
+632
+00:26:14,630 --> 00:26:15,260
+if there,
+
+633
+00:26:15,270 --> 00:26:19,290
+if there's anyone like legitimately from the intelligence community listening,
+
+634
+00:26:19,630 --> 00:26:20,020
+uh
+
+635
+00:26:20,260 --> 00:26:21,609
+you're probably laughing at us
+
+636
+00:26:21,780 --> 00:26:23,099
+and that's fine. That's fine. Right.
+
+637
+00:26:23,109 --> 00:26:25,219
+But I'm thinking from the context of like a power plant,
+
+638
+00:26:25,979 --> 00:26:29,520
+if, if you, if you have an air gap system, you're going to be lazy
+
+639
+00:26:29,680 --> 00:26:32,400
+because you're gonna think, oh, nobody can attack this. So I don't care.
+
+640
+00:26:32,410 --> 00:26:33,920
+I don't have to install security updates.
+
+641
+00:26:33,930 --> 00:26:35,689
+I don't have to worry about login and passwords. Right.
+
+642
+00:26:35,699 --> 00:26:37,069
+I don't need any of this stuff.
+
+643
+00:26:37,359 --> 00:26:39,560
+And so this is a place where I have a suspicion
+
+644
+00:26:39,900 --> 00:26:43,609
+that having an air gap network is actually far more dangerous than if you just
+
+645
+00:26:43,619 --> 00:26:46,530
+plug the freaking thing into the internet because then at least you'd be like,
+
+646
+00:26:46,540 --> 00:26:47,630
+oh, crap, it's on the internet.
+
+647
+00:26:47,640 --> 00:26:48,719
+I need to protect this stuff.
+
+648
+00:26:49,300 --> 00:26:52,750
+Well, the other problem too is the discipline needed to maintain that air gap when,
+
+649
+00:26:52,760 --> 00:26:55,439
+you know, like, oh, man, I really want to get this data off this thing quickly.
+
+650
+00:26:55,449 --> 00:26:57,310
+Ok. You know what? Just plug the laptop into it,
+
+651
+00:26:57,824 --> 00:27:00,885
+you know, turn the Wi Fi on and just SCP the data out quickly.
+
+652
+00:27:00,895 --> 00:27:01,875
+Don't tell anybody you did.
+
+653
+00:27:02,464 --> 00:27:02,474
+I
+
+654
+00:27:03,135 --> 00:27:03,895
+just plug this
+
+655
+00:27:04,015 --> 00:27:06,334
+cable in for a few minutes. It'll be fine. Yeah,
+
+656
+00:27:06,525 --> 00:27:07,114
+exactly.
+
+657
+00:27:07,145 --> 00:27:10,375
+You know, we'll just stick it or we'll use it, you know, like the Stuxnet guys.
+
+658
+00:27:10,385 --> 00:27:12,395
+Oh, we'll just use a USB key. Those things are safe
+
+659
+00:27:12,935 --> 00:27:13,094
+in the
+
+660
+00:27:13,265 --> 00:27:13,515
+parking
+
+661
+00:27:13,765 --> 00:27:15,045
+lot, you know. It's ok.
+
+662
+00:27:15,354 --> 00:27:15,564
+Yeah.
+
+663
+00:27:16,829 --> 00:27:17,180
+Yeah.
+
+664
+00:27:17,189 --> 00:27:20,969
+Oh, I love that because, well, realistically if you find a random USB key, you,
+
+665
+00:27:20,979 --> 00:27:22,810
+you have two choices, you either throw in the garbage
+
+666
+00:27:23,020 --> 00:27:25,109
+-- or you plug it into something and see what's
+-- on it.
+
+667
+00:27:25,910 --> 00:27:26,949
+Normal people plug it in,
+
+668
+00:27:27,099 --> 00:27:27,180
+I
+
+669
+00:27:27,339 --> 00:27:27,949
+guarantee it.
+
+670
+00:27:28,079 --> 00:27:29,369
+Yeah, because they're nice and normal.
+
+671
+00:27:29,380 --> 00:27:32,160
+Like, it's like when you find a wallet you open it up to see whose it is.
+
+672
+00:27:32,359 --> 00:27:35,770
+Not because you want to rob them. But like, oh, there's a driver's license here.
+
+673
+00:27:35,780 --> 00:27:36,150
+Great.
+
+674
+00:27:36,500 --> 00:27:38,760
+-- You know, or you give it to the cops or whatever.
+-- Right.
+
+675
+00:27:39,170 --> 00:27:40,229
+Right. Right. You know,
+
+676
+00:27:40,579 --> 00:27:42,689
+I, I, um, sort of, I don't know
+
+677
+00:27:43,025 --> 00:27:43,564
+when I find
+
+678
+00:27:43,935 --> 00:27:43,944
+a
+
+679
+00:27:44,444 --> 00:27:44,724
+set of
+
+680
+00:27:44,875 --> 00:27:45,135
+keys,
+
+681
+00:27:45,515 --> 00:27:50,545
+I find a USB key on the ground and I, I feel like I've actually never found one on.
+
+682
+00:27:50,694 --> 00:27:52,954
+What is this? I want to know what's on it.
+
+683
+00:27:52,964 --> 00:27:53,724
+And of course,
+
+684
+00:27:53,755 --> 00:27:57,385
+unfortunately my better sense always tells me to throw it away and I always do
+
+685
+00:27:57,614 --> 00:27:59,015
+but like, there's a part of me that
+
+686
+00:27:59,214 --> 00:28:01,314
+it's, it's like the forbidden fruit.
+
+687
+00:28:01,324 --> 00:28:04,854
+-- Where are you
+-- finding all these random USB keys, like, at conferences or something?
+
+688
+00:28:04,984 --> 00:28:08,405
+-- I don't find lots of them. Um, I find quite a few.
+-- I never found
+
+689
+00:28:08,515 --> 00:28:08,675
+one.
+
+690
+00:28:08,969 --> 00:28:12,810
+Uh, lots of hotels. If you walk around hotels, you just for whatever reason.
+
+691
+00:28:12,819 --> 00:28:17,430
+Find a lot of USB keys, especially if you're near, if there's like public terminals,
+
+692
+00:28:17,800 --> 00:28:18,239
+there's
+
+693
+00:28:19,119 --> 00:28:21,979
+quite often they're already plugged in there
+
+694
+00:28:22,260 --> 00:28:24,319
+that where people, like, plug them in and leave
+
+695
+00:28:24,609 --> 00:28:26,770
+and, and again, it's like, they're like the forbidden
+
+696
+00:28:27,020 --> 00:28:30,640
+-- because
+-- they went and got like, like a $2 USB key to get that one
+
+697
+00:28:30,969 --> 00:28:33,239
+file off their computer so they could print it or whatever.
+
+698
+00:28:33,250 --> 00:28:35,430
+And I've actually done that before too where I've,
+
+699
+00:28:35,439 --> 00:28:38,250
+I've gotten a USB key just for that reason where, like,
+
+700
+00:28:38,260 --> 00:28:41,109
+I copy a file onto it and then I bring it to the hotel
+
+701
+00:28:41,239 --> 00:28:42,979
+business computer and then I,
+
+702
+00:28:42,989 --> 00:28:45,880
+I print it and then I throw the USB key away because I'm like,
+
+703
+00:28:45,890 --> 00:28:47,790
+I'm never using this again.
+
+704
+00:28:48,810 --> 00:28:52,369
+Well, you know, the reality is like USB devices can trivially
+
+705
+00:28:52,550 --> 00:28:52,859
+be
+
+706
+00:28:54,250 --> 00:28:57,969
+any public computer. Who knows what that thing is? Right.
+
+707
+00:28:58,319 --> 00:29:02,609
+I, I know I, every time I see someone checking their email in a public computer,
+
+708
+00:29:02,619 --> 00:29:03,160
+I just want to, like,
+
+709
+00:29:03,170 --> 00:29:06,630
+grab them by the shoulders and shake them and scream what is wrong with you?
+
+710
+00:29:06,880 --> 00:29:09,910
+-- Like, every
+-- time, you know, it's like licking soup off the floor,
+
+711
+00:29:09,920 --> 00:29:11,479
+it's worse than that.
+
+712
+00:29:12,280 --> 00:29:13,839
+It's, uh, oh, my goodness.
+
+713
+00:29:13,849 --> 00:29:16,819
+I, because like the thought of lifting soup off the floor while really gross,
+
+714
+00:29:17,170 --> 00:29:19,849
+-- appalls me less than using a public
+-- computer soup
+
+715
+00:29:19,979 --> 00:29:23,439
+-- off the floor at an airport.
+-- Uh, that, that would be pretty bad.
+
+716
+00:29:23,449 --> 00:29:26,880
+But I'm still, I'm thinking I would still, I would still do that before.
+
+717
+00:29:26,890 --> 00:29:29,459
+I would check my email on a public computer. I'm not going to lie to you.
+
+718
+00:29:29,469 --> 00:29:33,130
+Like I would do that first because at least looking soup off the floor,
+
+719
+00:29:33,410 --> 00:29:36,949
+I'm pretty comfortable understanding what's going to happen to me
+
+720
+00:29:38,030 --> 00:29:40,900
+using that public computer. I have no idea.
+
+721
+00:29:41,310 --> 00:29:43,030
+It's too many unknowns.
+
+722
+00:29:43,750 --> 00:29:43,770
+Oh,
+
+723
+00:29:43,890 --> 00:29:44,579
+man.
+
+724
+00:29:45,079 --> 00:29:45,229
+So,
+
+725
+00:29:45,239 --> 00:29:47,069
+I guess the moral of the story is it's ok that you
+
+726
+00:29:47,079 --> 00:29:49,229
+soup off the floor as long as you don't use public computers.
+
+727
+00:29:53,239 --> 00:29:54,349
+Anyway.
+
+728
+00:29:54,479 --> 00:29:57,160
+I, I probably set myself up for that.
+
+729
+00:29:57,359 --> 00:29:58,140
+So
+
+730
+00:29:58,410 --> 00:30:03,050
+fantastic, I guess. Thank you, Kurt. Thank you everyone for making it this far.
+
+731
+00:30:03,369 --> 00:30:05,739
+If you, if you want the show notes,
+
+732
+00:30:06,000 --> 00:30:08,589
+you can go to open source security podcast.com
+
+733
+00:30:08,979 --> 00:30:09,650
+and,
+
+734
+00:30:09,939 --> 00:30:13,670
+and check out our, our Facebook group. We've got a Pound Os S Podcast.
+
+735
+00:30:13,680 --> 00:30:16,839
+Hashtag I ju I just keep thinking about soup on the floor now like
+
+736
+00:30:18,790 --> 00:30:21,910
+you've ruined my day. Uh Anyway, thank you, everyone for listening.
+
+737
+00:30:21,920 --> 00:30:24,550
+Thank you, Kurt. Have, have a great rest of your day. You too.
+
+738
+00:30:24,930 --> 00:30:25,430
+Thanks.
+
+739
+00:30:25,660 --> 00:30:26,229
+Bye bye.

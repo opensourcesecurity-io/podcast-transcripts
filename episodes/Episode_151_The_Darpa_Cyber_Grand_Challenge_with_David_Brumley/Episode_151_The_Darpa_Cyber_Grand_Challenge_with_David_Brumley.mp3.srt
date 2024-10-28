@@ -1,0 +1,2898 @@
+0
+00:00:05,789 --> 00:00:10,789
+Hello and welcome to the open source security podcast episode 151 with myself,
+
+1
+00:00:10,800 --> 00:00:13,439
+Kurt Siefried and my partner in Thought Crime, Josh Pressers.
+
+2
+00:00:13,760 --> 00:00:16,290
+Awesome. Thanks, Kurt. And today I'm super excited.
+
+3
+00:00:16,299 --> 00:00:20,170
+We have David Brumley who is the CEO of for all secure
+
+4
+00:00:20,370 --> 00:00:23,239
+and he is a professor at Carnegie Mellon University. Why don't you say?
+
+5
+00:00:23,250 --> 00:00:23,850
+Hello, David.
+
+6
+00:00:24,020 --> 00:00:27,489
+Hi, everybody. Awesome. And I, I'm so excited to have you here because
+
+7
+00:00:27,750 --> 00:00:32,770
+your team won the DARPA Grand Challenge a couple of years back and that is so cool.
+
+8
+00:00:32,779 --> 00:00:35,689
+So I guess let's before I start getting all crazy on you,
+
+9
+00:00:35,700 --> 00:00:37,520
+why don't you introduce yourself properly?
+
+10
+00:00:37,529 --> 00:00:40,610
+Tell us a little bit about yourself and then we can talk about why you're here.
+
+11
+00:00:40,619 --> 00:00:42,779
+Absolutely. So I'm CEO of F all
+
+12
+00:00:43,080 --> 00:00:43,799
+Secure. What Falca
+
+13
+00:00:44,110 --> 00:00:47,439
+is trying to do is bring actual security testing through the full abs
+
+14
+00:00:47,680 --> 00:00:48,049
+lifestyle.
+
+15
+00:00:48,575 --> 00:00:50,735
+The reason this has been our mission actually goes back
+
+16
+00:00:50,744 --> 00:00:52,985
+to what you just mentioned the CGC for years.
+
+17
+00:00:52,994 --> 00:00:54,525
+We've been researching ways
+
+18
+00:00:54,674 --> 00:00:58,284
+that we can better identify exploitable vulnerabilities in software.
+
+19
+00:00:58,415 --> 00:00:59,994
+And part of what the CGC
+
+20
+00:01:00,154 --> 00:01:02,034
+challenge us to do is not only identify them but
+
+21
+00:01:02,044 --> 00:01:04,584
+repair them and then decide when to field those fixes.
+
+22
+00:01:04,595 --> 00:01:08,444
+So it was the full application life cycle from. Can you find a problem? Can you fix it?
+
+23
+00:01:08,699 --> 00:01:12,519
+And can you make sure that that fix when you actually deploy it? Does what it should?
+
+24
+00:01:12,819 --> 00:01:15,639
+Can I ask what CGC is where I I know you,
+
+25
+00:01:15,839 --> 00:01:20,599
+you're obviously very in the government space which you love your acronyms.
+
+26
+00:01:20,610 --> 00:01:23,239
+And so I'm going to keep interrupting you and making you define them.
+
+27
+00:01:23,860 --> 00:01:24,389
+Awesome.
+
+28
+00:01:24,529 --> 00:01:28,800
+Yeah. So in 2014, DARPA announced a cyber grand challenge. So DARPA,
+
+29
+00:01:28,959 --> 00:01:30,980
+the defense advanced research project agency are
+
+30
+00:01:30,989 --> 00:01:33,319
+the people who originally funded the internet.
+
+31
+00:01:33,839 --> 00:01:36,480
+And every so often they'll issue a grand challenge.
+
+32
+00:01:36,489 --> 00:01:38,089
+And probably the one that comes most to mind
+
+33
+00:01:38,099 --> 00:01:40,349
+for people are the autonomous vehicle challenges they had
+
+34
+00:01:40,550 --> 00:01:41,980
+where they said, hey, can we build a
+
+35
+00:01:42,294 --> 00:01:42,995
+driving car?
+
+36
+00:01:43,135 --> 00:01:44,555
+In 2014?
+
+37
+00:01:44,565 --> 00:01:49,614
+They issued a similar question, hey, can we build self driving app security?
+
+38
+00:01:49,745 --> 00:01:51,235
+And what they meant by that is,
+
+39
+00:01:51,375 --> 00:01:53,205
+can you come up with a fully autonomous system?
+
+40
+00:01:53,214 --> 00:01:56,154
+No humans allowed running on these big high performance
+
+41
+00:01:56,165 --> 00:01:58,794
+computers where their job is to ingest applications,
+
+42
+00:01:58,805 --> 00:02:00,754
+run them, provide, you know, high up time,
+
+43
+00:02:00,970 --> 00:02:03,230
+but also be able to find exploitable bugs,
+
+44
+00:02:03,239 --> 00:02:06,970
+be able to break into our opponents because we want to cause downtime to them
+
+45
+00:02:07,089 --> 00:02:08,350
+while defending ourselves,
+
+46
+00:02:09,020 --> 00:02:11,550
+right? It was actually kind of genius, right? Because
+
+47
+00:02:11,770 --> 00:02:12,699
+for a long time,
+
+48
+00:02:12,710 --> 00:02:14,309
+people have been talking about security is like a
+
+49
+00:02:14,320 --> 00:02:16,830
+binary value like you're either secure or insecure.
+
+50
+00:02:16,839 --> 00:02:20,229
+And what DARPA did is make it a lot more realistic. They said it's
+
+51
+00:02:20,570 --> 00:02:23,309
+not a binary value. What you're trying to do is win.
+
+52
+00:02:23,320 --> 00:02:24,929
+You're trying to beat the attacker,
+
+53
+00:02:25,220 --> 00:02:28,309
+not be the most secure system. And I think that's a lot more definable.
+
+54
+00:02:28,369 --> 00:02:30,949
+-- That's
+-- awesome. So I guess the,
+
+55
+00:02:31,220 --> 00:02:32,350
+the first question
+
+56
+00:02:32,589 --> 00:02:35,229
+that everyone wants to ask is this how
+
+57
+00:02:35,559 --> 00:02:37,100
+the Terminator movies start?
+
+58
+00:02:37,339 --> 00:02:39,309
+-- You
+-- know, I think it is.
+
+59
+00:02:41,169 --> 00:02:42,899
+I was just looking at the web page and
+
+60
+00:02:43,009 --> 00:02:45,869
+remember how excited we were for the DARPA autonomous
+
+61
+00:02:45,880 --> 00:02:48,229
+vehicle challenges and those were only 15 years ago
+
+62
+00:02:48,509 --> 00:02:52,360
+and now to be blunt, like autonomous vehicles driving themselves around.
+
+63
+00:02:53,169 --> 00:02:55,070
+Yeah, no big deal. Like it's a thing,
+
+64
+00:02:55,919 --> 00:02:59,330
+you know, it's, it's not ready for prime time but another 1020 years, it's,
+
+65
+00:02:59,339 --> 00:03:01,570
+it's no longer a question of, can we do it?
+
+66
+00:03:01,580 --> 00:03:03,660
+It's just a question of like, OK, we got to polish the edges.
+
+67
+00:03:03,789 --> 00:03:04,630
+So I'm curious,
+
+68
+00:03:04,830 --> 00:03:07,339
+do you think the uh the cyber Grand challenge might
+
+69
+00:03:07,350 --> 00:03:10,580
+kind of come to normalcy on the same time frame?
+
+70
+00:03:10,770 --> 00:03:11,130
+I mean,
+
+71
+00:03:11,139 --> 00:03:13,490
+I think so and I think the time frame you laid
+
+72
+00:03:13,500 --> 00:03:15,860
+out 10 to 15 years is probably about the right one.
+
+73
+00:03:15,869 --> 00:03:17,945
+So we're here two years after the contrast
+
+74
+00:03:17,955 --> 00:03:20,375
+trying to commercialize some of the technology,
+
+75
+00:03:20,384 --> 00:03:23,434
+but definitely not everything that was demonstrated at the CGC.
+
+76
+00:03:23,445 --> 00:03:26,024
+And it's going to be a matter of watching it mature.
+
+77
+00:03:26,164 --> 00:03:28,425
+Ultimately, I think the Cyber grand challenge in Darb
+
+78
+00:03:28,604 --> 00:03:32,095
+set the, the ultimate vision and what we're going to see is in 15 years,
+
+79
+00:03:32,104 --> 00:03:34,475
+that's a product you're going to be able to buy a self
+
+80
+00:03:34,485 --> 00:03:37,645
+-- defending computer system
+-- because I keep coming back to app security.
+
+81
+00:03:37,654 --> 00:03:37,914
+And
+
+82
+00:03:38,235 --> 00:03:42,134
+for the last about, I'm going to say 50 years, we've kind of tried the strategy of, ok,
+
+83
+00:03:42,145 --> 00:03:44,895
+so programmers learn to program better and
+
+84
+00:03:45,175 --> 00:03:46,104
+secure apps
+
+85
+00:03:46,580 --> 00:03:47,119
+and
+
+86
+00:03:47,289 --> 00:03:50,919
+judging by the number of security flaws we still have every month,
+
+87
+00:03:50,929 --> 00:03:52,839
+it doesn't seem to have worked.
+
+88
+00:03:52,850 --> 00:03:54,750
+Yeah, I'm kind of a heretic at CMU.
+
+89
+00:03:54,759 --> 00:03:55,490
+So CMU,
+
+90
+00:03:55,500 --> 00:03:58,759
+we very much have the party line that we need a better programming language and,
+
+91
+00:03:58,770 --> 00:04:01,940
+and you need to prove programs safe and that's the way you go about security.
+
+92
+00:04:01,949 --> 00:04:04,160
+And I'm just like, no, I mean, no one ever is going to do that.
+
+93
+00:04:04,169 --> 00:04:07,699
+Maybe, maybe people who do like nuclear weapons, hopefully,
+
+94
+00:04:07,710 --> 00:04:09,080
+but not the average programmer.
+
+95
+00:04:09,369 --> 00:04:09,600
+Well,
+
+96
+00:04:09,610 --> 00:04:12,610
+and it's also worth pointing out that that CMU
+
+97
+00:04:12,619 --> 00:04:16,070
+is where cert the computer emergency response team.
+
+98
+00:04:16,079 --> 00:04:19,750
+Like that's where they came from. Right. That was the inception.
+
+99
+00:04:19,920 --> 00:04:20,070
+Yeah.
+
+100
+00:04:20,079 --> 00:04:23,470
+From the very first Robert Morris worm cmu served as
+
+101
+00:04:23,480 --> 00:04:25,910
+the Coordinations Center for like all major security events.
+
+102
+00:04:26,160 --> 00:04:26,890
+Right. Right.
+
+103
+00:04:26,899 --> 00:04:27,950
+So, like, that's,
+
+104
+00:04:27,959 --> 00:04:32,380
+that's the nexus point of security and if you're telling people they can't fix it.
+
+105
+00:04:32,390 --> 00:04:35,670
+I, yeah, I bet that goes over real good at the Christmas party. Right.
+
+106
+00:04:36,630 --> 00:04:37,119
+Yeah,
+
+107
+00:04:37,769 --> 00:04:41,190
+it's, uh, I mean, it's kind of a weird viewpoint, I think because
+
+108
+00:04:41,649 --> 00:04:43,390
+when you're a professor or an academic,
+
+109
+00:04:43,399 --> 00:04:46,549
+you want to prove things because you get this comfort and proof.
+
+110
+00:04:46,559 --> 00:04:51,140
+But the Real World is messy, right? And what you really want to do is beat Attackers.
+
+111
+00:04:51,149 --> 00:04:52,739
+You just don't want to get hacked.
+
+112
+00:04:52,750 --> 00:04:55,500
+You don't want to like, go through the effort of proving your programs, correct.
+
+113
+00:04:55,510 --> 00:04:55,799
+So, I
+
+114
+00:04:56,369 --> 00:04:57,709
+think CGC set it up. Right?
+
+115
+00:04:57,720 --> 00:05:00,619
+Like there's no, you know, there was no, like, yes, you're secure at the end,
+
+116
+00:05:00,630 --> 00:05:01,309
+I'm gonna bless you.
+
+117
+00:05:01,320 --> 00:05:03,670
+Put holy water on you and you're a perfect program.
+
+118
+00:05:03,980 --> 00:05:05,440
+-- It was. Did you
+-- survive?
+
+119
+00:05:05,609 --> 00:05:06,239
+So, I'm curious.
+
+120
+00:05:06,250 --> 00:05:10,529
+So, what, what strategies did you use to get these programs to be here? Because,
+
+121
+00:05:10,709 --> 00:05:12,200
+you know, like, for example,
+
+122
+00:05:12,209 --> 00:05:14,649
+one thing I've seen that is somewhat counterintuitive is that
+
+123
+00:05:14,809 --> 00:05:17,829
+the ability to change the program and to make rapid updates to it,
+
+124
+00:05:18,220 --> 00:05:18,980
+in my opinion,
+
+125
+00:05:19,059 --> 00:05:23,239
+is actually one of the number one aspects that allows it to be secure now
+
+126
+00:05:23,390 --> 00:05:24,040
+to put it bluntly,
+
+127
+00:05:24,049 --> 00:05:26,920
+I've seen a lot of software where it's not that they can't ship security updates.
+
+128
+00:05:26,929 --> 00:05:30,589
+It's, they can't ship updates at all in any reasonable amount of time. Right.
+
+129
+00:05:30,600 --> 00:05:32,820
+So, it just doesn't matter how secure the program is
+
+130
+00:05:33,000 --> 00:05:35,000
+because at some point they'll find a problem and,
+
+131
+00:05:35,359 --> 00:05:37,600
+and then you got to wait six months to a year for an update.
+
+132
+00:05:37,829 --> 00:05:41,970
+Yeah, I, I agree, like a lot of programs aren't even, I call it testable.
+
+133
+00:05:41,980 --> 00:05:45,160
+Like, I've gone to companies who want to use CGC tech and they're like, hey,
+
+134
+00:05:45,170 --> 00:05:46,089
+can you protect this?
+
+135
+00:05:46,100 --> 00:05:47,179
+And I'm like, how do you test it?
+
+136
+00:05:47,190 --> 00:05:50,260
+And they're like, well, we put it on a vehicle and we fly the vehicle and I'm like,
+
+137
+00:05:50,269 --> 00:05:52,380
+I don't think our technology is right for you.
+
+138
+00:05:52,450 --> 00:05:55,420
+I think you need to be able to test that program
+
+139
+00:05:55,829 --> 00:05:57,980
+in like a regression test before we even touch it.
+
+140
+00:05:57,989 --> 00:05:59,970
+Because I don't want to, you know, die
+
+141
+00:06:00,160 --> 00:06:04,869
+and II I take for granted the idea of like unit tests and smoke tests and,
+
+142
+00:06:05,040 --> 00:06:06,500
+but the reality is, yeah, I mean,
+
+143
+00:06:07,290 --> 00:06:10,869
+-- a lot of people still don't even have that.
+-- Most people don't have it. I mean,
+
+144
+00:06:11,100 --> 00:06:13,059
+one of the things that we're doing when we go to market,
+
+145
+00:06:13,070 --> 00:06:15,269
+right is we're starting to look more at modern dev shops,
+
+146
+00:06:15,600 --> 00:06:16,350
+not just
+
+147
+00:06:16,899 --> 00:06:18,910
+because we think they need it the most often.
+
+148
+00:06:18,920 --> 00:06:20,359
+They don't, they have the best security,
+
+149
+00:06:20,470 --> 00:06:22,149
+but because they're the most
+
+150
+00:06:22,369 --> 00:06:24,839
+able to absorb new technology because,
+
+151
+00:06:25,100 --> 00:06:28,190
+you know, if you go into one of these shops that doesn't, don't have even test cases,
+
+152
+00:06:28,200 --> 00:06:29,589
+you have to solve that problem
+
+153
+00:06:29,730 --> 00:06:31,429
+before you can get started.
+
+154
+00:06:31,799 --> 00:06:34,279
+Let let's take a step back for a minute because I think we,
+
+155
+00:06:34,290 --> 00:06:36,220
+we kind of dove into this one head first.
+
+156
+00:06:36,230 --> 00:06:40,700
+But why don't, why don't you explain kind of what happened
+
+157
+00:06:41,019 --> 00:06:45,299
+at the Grand Challenge and then what you're doing today, David,
+
+158
+00:06:45,309 --> 00:06:48,100
+because I think it sounds, it's a fascinating story.
+
+159
+00:06:48,239 --> 00:06:50,899
+Well, let me set the stage really for the Cyber Grand challenge.
+
+160
+00:06:50,910 --> 00:06:55,339
+So it was motivated by DARPA PM program manager
+
+161
+00:06:55,350 --> 00:06:57,380
+who had hacked and capture the flag contest.
+
+162
+00:06:57,390 --> 00:07:00,869
+So in defcon every year, the elite hackers get together and back
+
+163
+00:07:01,006 --> 00:07:03,126
+it out to see really who's the best hacking
+
+164
+00:07:03,135 --> 00:07:06,665
+team and what the program manager asked himself is,
+
+165
+00:07:06,675 --> 00:07:08,265
+can we teach computers to do that?
+
+166
+00:07:08,485 --> 00:07:11,496
+And so he got money to run this contest to build it up to do that.
+
+167
+00:07:11,506 --> 00:07:14,045
+And so what we built as well as our other competitors.
+
+168
+00:07:14,055 --> 00:07:16,925
+So there were seven in the final round was a machine.
+
+169
+00:07:16,936 --> 00:07:19,985
+And what the machine did is it ingested program binaries.
+
+170
+00:07:20,126 --> 00:07:23,276
+So we didn't have source code, we just had the executable that was compiled
+
+171
+00:07:23,436 --> 00:07:25,476
+and our goal was to find flaws
+
+172
+00:07:25,605 --> 00:07:28,165
+and then prevent those programs from being exploited.
+
+173
+00:07:28,376 --> 00:07:30,105
+And so there's really kind of three key technology.
+
+174
+00:07:30,212 --> 00:07:34,152
+One is every team employed some sort of fuzzing or symbolic execution.
+
+175
+00:07:34,161 --> 00:07:36,631
+So what they didn't do is run a S
+
+176
+00:07:36,772 --> 00:07:39,902
+a tool. They didn't run check marks to find new vulnerabilities
+
+177
+00:07:40,101 --> 00:07:40,481
+or
+
+178
+00:07:40,712 --> 00:07:41,242
+coverity or not.
+
+179
+00:07:41,691 --> 00:07:44,041
+They use dynamic testing because they wanted something
+
+180
+00:07:44,052 --> 00:07:45,661
+that they could prove there was a problem.
+
+181
+00:07:45,772 --> 00:07:47,622
+And then the second component would be,
+
+182
+00:07:47,631 --> 00:07:50,712
+they fix the vulnerability and they would rewrite the binary to do that.
+
+183
+00:07:50,721 --> 00:07:52,391
+And that's actually kind of a hard problem,
+
+184
+00:07:52,631 --> 00:07:54,191
+but we don't need to go into depth here.
+
+185
+00:07:54,201 --> 00:07:56,641
+The third thing that we had to do is once we fix the problem,
+
+186
+00:07:56,652 --> 00:07:59,312
+we had to automatically create in a regression test
+
+187
+00:07:59,640 --> 00:08:01,980
+and decide whether it was worth fielding that fix.
+
+188
+00:08:02,179 --> 00:08:04,440
+And so this is really the interesting strategy component.
+
+189
+00:08:04,450 --> 00:08:05,709
+And one of the reasons we did so well,
+
+190
+00:08:05,720 --> 00:08:10,540
+actually is if we created a fix that had like 500% performance overhead,
+
+191
+00:08:10,549 --> 00:08:13,269
+and we didn't think anyone was going to exploit the vulnerability or
+
+192
+00:08:13,279 --> 00:08:15,500
+the machine didn't think anyone was going to exploit the vulnerability.
+
+193
+00:08:15,510 --> 00:08:16,790
+We just wouldn't feel the patch
+
+194
+00:08:17,000 --> 00:08:18,880
+and I think that really reflects reality
+
+195
+00:08:18,890 --> 00:08:20,540
+where even though you have a vulnerability,
+
+196
+00:08:20,549 --> 00:08:21,359
+you have a patch,
+
+197
+00:08:21,579 --> 00:08:22,529
+you make a business,
+
+198
+00:08:22,640 --> 00:08:26,380
+this decision on whether to field it based upon data on, you know,
+
+199
+00:08:26,390 --> 00:08:28,739
+what is the functionality, what is the performance overhead?
+
+200
+00:08:28,750 --> 00:08:29,980
+What is the security impact?
+
+201
+00:08:29,989 --> 00:08:31,470
+And so it was really those three components,
+
+202
+00:08:31,480 --> 00:08:33,520
+finding bugs proving they're exploitable,
+
+203
+00:08:33,530 --> 00:08:35,799
+being able to patch them and assess the impact
+
+204
+00:08:35,808 --> 00:08:37,669
+of that patch and then a decision making engine
+
+205
+00:08:37,780 --> 00:08:43,429
+and, and now just to just to clarify, this was all done by your system, right?
+
+206
+00:08:43,440 --> 00:08:45,500
+Like humans didn't make these decisions, right?
+
+207
+00:08:46,020 --> 00:08:49,809
+Humans made zero decisions. So we had to install our system the night before.
+
+208
+00:08:49,820 --> 00:08:50,799
+And then what happened?
+
+209
+00:08:50,940 --> 00:08:53,830
+Cyber Grand Challenge was held at defcon 2016.
+
+210
+00:08:53,840 --> 00:08:55,840
+So we're in front of like 30,000 people
+
+211
+00:08:56,200 --> 00:09:00,080
+and DARPA flips on the power switch and it boots up the seven
+
+212
+00:09:00,090 --> 00:09:01,570
+competitors and then there's a couple other
+
+213
+00:09:01,580 --> 00:09:03,159
+machines that are doing things like scoring
+
+214
+00:09:03,330 --> 00:09:06,229
+and the way this works is the machines are trying to attack each other and they
+
+215
+00:09:06,239 --> 00:09:09,919
+have a round based system where every round you get a chance to attack and defend.
+
+216
+00:09:09,929 --> 00:09:12,080
+The reason they did that is they wanted to say, OK,
+
+217
+00:09:12,090 --> 00:09:13,690
+you have a chance to field a defense.
+
+218
+00:09:13,700 --> 00:09:15,090
+Let's see if that defense worked.
+
+219
+00:09:15,349 --> 00:09:17,940
+And so you'd field your defense and then it would give people
+
+220
+00:09:17,950 --> 00:09:20,219
+a chance to ret attack and see if they could get persistence
+
+221
+00:09:20,500 --> 00:09:24,229
+at the end of a round. DARPA would give everyone's patches to every other player.
+
+222
+00:09:24,239 --> 00:09:26,969
+So there was no like secrecy as far as how you were fixing a dress.
+
+223
+00:09:27,070 --> 00:09:27,150
+Oh
+
+224
+00:09:27,270 --> 00:09:28,059
+Nice.
+
+225
+00:09:28,229 --> 00:09:30,510
+-- Yeah. So people could just steal stuff. So
+-- wait.
+
+226
+00:09:30,520 --> 00:09:34,500
+So your system also had the ability to take a binary patch
+
+227
+00:09:35,010 --> 00:09:37,190
+and essentially examine it and figure out
+
+228
+00:09:37,429 --> 00:09:37,830
+OK,
+
+229
+00:09:37,840 --> 00:09:41,309
+this is what this thing does and whether or not I want to use it or not based
+
+230
+00:09:41,320 --> 00:09:43,929
+on say performance metrics or we believe that this
+
+231
+00:09:43,940 --> 00:09:45,750
+type of flaw will be exploited or not.
+
+232
+00:09:45,760 --> 00:09:48,109
+We, in our system, we looked at our own patches.
+
+233
+00:09:48,119 --> 00:09:51,450
+We made a conscious decision to not look much at other people's patches.
+
+234
+00:09:51,460 --> 00:09:54,140
+And that's because we were being a little bit evil.
+
+235
+00:09:54,289 --> 00:09:55,169
+It turned out, DARPA
+
+236
+00:09:55,299 --> 00:09:57,549
+clarified a rule and we couldn't do that.
+
+237
+00:09:57,989 --> 00:10:02,770
+But when we release patches, we would actually put a zero day for Qu in them.
+
+238
+00:10:02,780 --> 00:10:05,460
+So if our competitors tried to run it under qu
+
+239
+00:10:05,469 --> 00:10:07,500
+we would own their system and could turn it off.
+
+240
+00:10:07,640 --> 00:10:08,460
+You know, you should never,
+
+241
+00:10:08,809 --> 00:10:10,609
+we were an untrusted patch, you know.
+
+242
+00:10:11,219 --> 00:10:12,979
+Well, that was, yeah, that was my first thought.
+
+243
+00:10:13,260 --> 00:10:16,390
+So, it was, uh, it was clarified, you weren't supposed to do that.
+
+244
+00:10:16,400 --> 00:10:18,960
+So, we removed that the last day before the contest because of that.
+
+245
+00:10:18,969 --> 00:10:22,760
+We never designed a system that we really spent much time on other people's patches.
+
+246
+00:10:23,010 --> 00:10:24,109
+And the other thing I'm curious about.
+
+247
+00:10:24,119 --> 00:10:30,130
+So what classes of flaws were you able to automated find? Like was it just buffer
+
+248
+00:10:30,255 --> 00:10:32,344
+or was it more like logic bugs?
+
+249
+00:10:32,515 --> 00:10:36,525
+Yeah, for, for most of the cyber Grand challenge, it was really memory safety.
+
+250
+00:10:36,534 --> 00:10:39,494
+So there was like invalid reads and things where you could leak secrets.
+
+251
+00:10:39,505 --> 00:10:40,455
+So could you leak a crypto
+
+252
+00:10:40,635 --> 00:10:42,705
+secret was one set and then,
+
+253
+00:10:42,844 --> 00:10:43,054
+you know,
+
+254
+00:10:43,065 --> 00:10:44,804
+they would divide them into like reading a
+
+255
+00:10:44,815 --> 00:10:46,804
+single byte or reading from anywhere in memory
+
+256
+00:10:46,924 --> 00:10:49,594
+and then anything that would result in control flow hijack.
+
+257
+00:10:50,075 --> 00:10:53,145
+So they were looking at kind of the bugs that they cared about most, really,
+
+258
+00:10:53,155 --> 00:10:55,164
+most prevalent in C C++
+
+259
+00:10:55,364 --> 00:10:56,594
+and non safe languages.
+
+260
+00:10:56,880 --> 00:10:59,809
+So basically the, the, the ones we read about in the news,
+
+261
+00:10:59,820 --> 00:11:02,359
+the ones you read about in the news, the ones that are on the airplanes,
+
+262
+00:11:02,369 --> 00:11:03,260
+the destroyers.
+
+263
+00:11:03,539 --> 00:11:07,859
+All right. That's cool. So, so let's continue this story because I I'm loving it. So
+
+264
+00:11:08,000 --> 00:11:14,539
+the challenge happens, you guys win obviously at the very end. Right. And so I guess
+
+265
+00:11:14,710 --> 00:11:15,580
+what now?
+
+266
+00:11:15,729 --> 00:11:19,090
+-- Well,
+-- that was actually kind of a time for reflection. So we were like, yeah, we won.
+
+267
+00:11:19,099 --> 00:11:19,890
+DARPA spent
+
+268
+00:11:20,000 --> 00:11:23,280
+$60 million showing the world that autonomous cyber is possible.
+
+269
+00:11:23,320 --> 00:11:27,619
+And it turns out Darpa's mission is to simply demonstrate the art of the possible.
+
+270
+00:11:27,630 --> 00:11:30,340
+They're not really someone who's going to take that forward.
+
+271
+00:11:30,500 --> 00:11:31,090
+Right.
+
+272
+00:11:31,289 --> 00:11:32,289
+So we had about
+
+273
+00:11:32,400 --> 00:11:34,299
+eight months where we were
+
+274
+00:11:34,429 --> 00:11:37,020
+wandering in the wind as a company, what should we be doing?
+
+275
+00:11:37,039 --> 00:11:41,539
+Finally, another organization in the dod called the Defense Innovation Unit said,
+
+276
+00:11:41,549 --> 00:11:42,979
+you know, we really should take this,
+
+277
+00:11:43,330 --> 00:11:47,309
+this technology and help use it to protect ships, planes,
+
+278
+00:11:47,320 --> 00:11:48,710
+everything the dod cares about.
+
+279
+00:11:48,890 --> 00:11:51,690
+And so that was really the start of our commercialization was taking
+
+280
+00:11:51,700 --> 00:11:54,169
+the CGC check that worked in this kind of artificial environment,
+
+281
+00:11:54,179 --> 00:11:55,039
+DARPA created
+
+282
+00:11:55,330 --> 00:11:59,099
+and starting to port it. So it worked on real operating systems like Linux
+
+283
+00:11:59,489 --> 00:12:02,359
+real programs that weren't artificially created by DARPA.
+
+284
+00:12:02,729 --> 00:12:07,309
+-- And so we've been on that path really since about 2017,
+-- which is not,
+
+285
+00:12:07,320 --> 00:12:08,700
+that's not very long.
+
+286
+00:12:08,869 --> 00:12:09,390
+I mean,
+
+287
+00:12:09,719 --> 00:12:11,520
+and that's, it's crazy to think about.
+
+288
+00:12:11,530 --> 00:12:14,580
+I mean, this is like this is brand freaking new technology, right?
+
+289
+00:12:14,710 --> 00:12:17,739
+It is and it's a brand new paradigm as well.
+
+290
+00:12:17,750 --> 00:12:21,020
+And so there's a set of people who get it, they see the CGC and they're like,
+
+291
+00:12:21,260 --> 00:12:22,960
+that's the vision I want to have,
+
+292
+00:12:22,969 --> 00:12:26,059
+I want to have something that can automatically detect a flaw, fix it,
+
+293
+00:12:26,070 --> 00:12:30,039
+feel that patch and do it in under a minute as opposed to the current process where
+
+294
+00:12:30,239 --> 00:12:33,190
+it takes hours, years or even decades in the dod.
+
+295
+00:12:33,659 --> 00:12:37,479
+Literally, if you think about it, those ships, they're out at sea for a long time,
+
+296
+00:12:37,489 --> 00:12:39,260
+they don't get software updates while they're out at sea.
+
+297
+00:12:40,059 --> 00:12:42,330
+So that's the vision and that's, that's what we're trying to bring,
+
+298
+00:12:42,340 --> 00:12:43,890
+but incrementally piece by piece.
+
+299
+00:12:43,900 --> 00:12:44,969
+But there is, you know,
+
+300
+00:12:44,979 --> 00:12:48,330
+quite a bit of education we have to do because we're creating a new market category.
+
+301
+00:12:48,340 --> 00:12:51,729
+Like why not just use static analysis is a common question. We have
+
+302
+00:12:53,840 --> 00:12:57,419
+no one who asked that has ever actually used static analysis. I think
+
+303
+00:12:57,919 --> 00:12:59,950
+I thought that too. So
+
+304
+00:13:00,270 --> 00:13:02,349
+what I've seen is actually kind of interesting
+
+305
+00:13:02,750 --> 00:13:04,590
+often in practice,
+
+306
+00:13:04,609 --> 00:13:08,830
+you have the security people who are like we know our stuff needs to be more secure.
+
+307
+00:13:08,840 --> 00:13:11,539
+But then you have the developer who's like my job is to push out
+
+308
+00:13:11,549 --> 00:13:15,510
+software features and I'm already checking the box on a tool to check security.
+
+309
+00:13:15,520 --> 00:13:17,039
+So there's really this kind of interesting question
+
+310
+00:13:17,049 --> 00:13:19,219
+of incentives like what incentive does it develop?
+
+311
+00:13:19,375 --> 00:13:19,905
+Have
+
+312
+00:13:20,015 --> 00:13:21,085
+to do anything else?
+
+313
+00:13:21,315 --> 00:13:21,775
+Yeah. No.
+
+314
+00:13:21,784 --> 00:13:24,255
+As me and Josh have discussed at length in the past, you know,
+
+315
+00:13:24,265 --> 00:13:27,974
+developers get yelled at when they don't get their features in but you know,
+
+316
+00:13:27,984 --> 00:13:30,184
+security flaws, whatever, that's the thing that happens.
+
+317
+00:13:30,445 --> 00:13:30,684
+Yeah.
+
+318
+00:13:30,854 --> 00:13:31,325
+And
+
+319
+00:13:31,565 --> 00:13:36,065
+it's a really interesting problem. One of the things that we hope will happen is
+
+320
+00:13:36,395 --> 00:13:37,924
+a side effect of our analysis.
+
+321
+00:13:37,934 --> 00:13:40,244
+So we're using techniques like fuzzing and symbolic execution
+
+322
+00:13:40,469 --> 00:13:43,429
+is we're automatically building a regression test suite.
+
+323
+00:13:43,440 --> 00:13:46,210
+We use this in the cyber ground challenge. That's how we assessed patches.
+
+324
+00:13:46,380 --> 00:13:49,059
+And we're hoping that we won't just be another security tool,
+
+325
+00:13:49,070 --> 00:13:50,750
+but we will help them build the regression test,
+
+326
+00:13:50,760 --> 00:13:52,690
+which is something we know they don't like to do
+
+327
+00:13:53,760 --> 00:13:56,349
+and can help automate. But that's still kind of like up in the air.
+
+328
+00:13:56,359 --> 00:14:00,289
+You've got my, my brain is starting to, some wheels are spinning, but there's,
+
+329
+00:14:00,559 --> 00:14:02,340
+there's kind of two pieces to this, right?
+
+330
+00:14:02,349 --> 00:14:06,119
+There's the offensive aspect of it where you're actually looking for problems.
+
+331
+00:14:06,130 --> 00:14:09,650
+But then there's also kind of that defensive view of let's write
+
+332
+00:14:09,659 --> 00:14:13,219
+tests and make sure this is doing what we expected to do.
+
+333
+00:14:13,309 --> 00:14:18,049
+Yeah, absolutely. That's perfectly right. In fact, maybe is too abstract.
+
+334
+00:14:18,219 --> 00:14:21,849
+But the way I think of things like fuzzing is they're just testing a program, right?
+
+335
+00:14:21,940 --> 00:14:22,679
+And they're just
+
+336
+00:14:22,849 --> 00:14:23,859
+typically we say we,
+
+337
+00:14:23,950 --> 00:14:26,729
+we want better coverage as we're doing things like fuzzing or symbolics,
+
+338
+00:14:26,739 --> 00:14:28,809
+which is just saying we want a better test suite
+
+339
+00:14:28,940 --> 00:14:30,969
+and we just assume the better we get our test suite,
+
+340
+00:14:30,979 --> 00:14:32,640
+we'll run into the vulnerabilities.
+
+341
+00:14:32,820 --> 00:14:32,989
+Well,
+
+342
+00:14:33,000 --> 00:14:34,359
+the problem and the problem I've run into there
+
+343
+00:14:34,369 --> 00:14:36,309
+is I back when I was doing CV assignments,
+
+344
+00:14:36,320 --> 00:14:38,090
+I'd literally have people send me like here's
+
+345
+00:14:38,119 --> 00:14:40,210
+100 fuzzing test cases that crashed the program.
+
+346
+00:14:40,460 --> 00:14:41,380
+And I'm like,
+
+347
+00:14:41,630 --> 00:14:42,950
+that's absolutely fantastic.
+
+348
+00:14:42,960 --> 00:14:43,080
+Now,
+
+349
+00:14:43,090 --> 00:14:45,429
+you need to go do your homework and sort that out
+
+350
+00:14:45,440 --> 00:14:47,250
+and figure out what the root cause is because I'm not.
+
+351
+00:14:47,479 --> 00:14:50,450
+Yeah, absolutely. Like root cause analysis is still a challenge.
+
+352
+00:14:50,469 --> 00:14:52,390
+And I think you got it something more than that,
+
+353
+00:14:52,400 --> 00:14:54,260
+which is also you want to assess the severity.
+
+354
+00:14:54,270 --> 00:14:57,729
+So if you just fuzz and it crashes, you need to understand what that means.
+
+355
+00:14:57,739 --> 00:15:00,219
+And in the cyber Grand challenge, what they had us do is create
+
+356
+00:15:00,359 --> 00:15:02,099
+what they call a proof of vulnerability.
+
+357
+00:15:02,369 --> 00:15:05,369
+And they use that term, I think because they didn't want to call it. An exploit
+
+358
+00:15:05,520 --> 00:15:07,309
+is bad. Pr to say
+
+359
+00:15:07,650 --> 00:15:10,710
+the US is funding exploit development with the university researchers.
+
+360
+00:15:10,719 --> 00:15:12,450
+But really what they were trying to do is walk
+
+361
+00:15:12,460 --> 00:15:15,710
+this line of saying I can prove to anyone reasonable
+
+362
+00:15:15,719 --> 00:15:19,380
+insecurity that I can control the computer while not going
+
+363
+00:15:19,390 --> 00:15:21,750
+so far as to have to worry about weaponizing it.
+
+364
+00:15:21,760 --> 00:15:25,799
+So in the CGC, just for the technically minded, we had to show that we can control
+
+365
+00:15:25,900 --> 00:15:28,250
+the CPU and get it to execute arbitrary instructions,
+
+366
+00:15:28,260 --> 00:15:30,510
+but it didn't matter what instructions we got it to execute.
+
+367
+00:15:30,890 --> 00:15:34,520
+Ah So when you were attacking the other competitors,
+
+368
+00:15:34,530 --> 00:15:36,429
+it wasn't like you weren't literally pointing them.
+
+369
+00:15:36,440 --> 00:15:39,510
+You were just showing that I found a bug that could do something bad,
+
+370
+00:15:39,520 --> 00:15:42,450
+-- but you didn't have to actually do the something bad we
+-- had to, yeah,
+
+371
+00:15:42,460 --> 00:15:44,640
+we had to show that we could gain control of their
+
+372
+00:15:44,650 --> 00:15:47,330
+CPU but we didn't have to like execute random code.
+
+373
+00:15:47,760 --> 00:15:50,169
+And part of that is just part of that is just the
+
+374
+00:15:50,179 --> 00:15:53,530
+metric of the game as soon as you allow arbitrary code execution.
+
+375
+00:15:53,539 --> 00:15:54,049
+Then
+
+376
+00:15:54,419 --> 00:15:56,200
+for example, one of the things we could do with our cio
+
+377
+00:15:56,419 --> 00:15:59,489
+exploit is we could turn off their machine, we could wipe out their machine
+
+378
+00:15:59,820 --> 00:16:02,039
+and it would not be in the spirit of the game
+
+379
+00:16:02,250 --> 00:16:02,989
+like, you know,
+
+380
+00:16:03,630 --> 00:16:04,760
+the backdoor battle.
+
+381
+00:16:04,900 --> 00:16:05,109
+Uh
+
+382
+00:16:05,349 --> 00:16:07,549
+No, hold sparred is better left for Defcon,
+
+383
+00:16:07,700 --> 00:16:07,950
+right?
+
+384
+00:16:07,960 --> 00:16:10,559
+That, that sounds like the what is the the robot,
+
+385
+00:16:10,570 --> 00:16:13,119
+the Bat Wars show that used to be on where like one
+
+386
+00:16:13,489 --> 00:16:16,479
+-- would totally destroy the other, right. Yeah.
+-- Yeah.
+
+387
+00:16:16,549 --> 00:16:19,669
+It'd be fun to do that, to totally, to totally destroy the other person.
+
+388
+00:16:19,679 --> 00:16:22,500
+So I think like root cause analysis is an important part.
+
+389
+00:16:22,650 --> 00:16:23,320
+Um
+
+390
+00:16:23,809 --> 00:16:28,280
+As you said, being able to triage, I think also providing people more information.
+
+391
+00:16:28,580 --> 00:16:30,969
+One of the cool things in the product that we have is
+
+392
+00:16:30,979 --> 00:16:33,799
+we also give a person a command line on how to reproduce.
+
+393
+00:16:34,270 --> 00:16:36,549
+Oh, very cool. Kind of a silly thing.
+
+394
+00:16:37,239 --> 00:16:37,869
+No, not
+
+395
+00:16:38,440 --> 00:16:38,840
+a thing because
+
+396
+00:16:39,059 --> 00:16:41,469
+no, like working at product security at Red Hat.
+
+397
+00:16:41,479 --> 00:16:46,010
+That was, how much time did we have people spending trying to reproduce these flaws?
+
+398
+00:16:46,479 --> 00:16:50,799
+-- It was, it was a huge part of the job.
+-- So no, that is no, that is.
+
+399
+00:16:50,809 --> 00:16:54,309
+-- So that is such a critical component.
+-- Yeah, I'm glad you're saying.
+
+400
+00:16:54,320 --> 00:16:55,599
+So it's, it's something that I,
+
+401
+00:16:55,750 --> 00:16:57,070
+to me it's like huge because I'm like,
+
+402
+00:16:57,080 --> 00:17:00,030
+if I'm going to debug a test case is so much better than someone just telling me
+
+403
+00:17:00,039 --> 00:17:02,130
+there's a problem in this code because then I have to figure out what the code.
+
+404
+00:17:02,672 --> 00:17:05,492
+Yeah, definitely. So I think that's what we're trying to do for it.
+
+405
+00:17:05,502 --> 00:17:08,012
+Now, I got to say there's some limitations, right? So as we said,
+
+406
+00:17:08,343 --> 00:17:10,162
+DARPA was about memory safety.
+
+407
+00:17:10,321 --> 00:17:13,821
+And so that's the first generation of the tool. So it's mostly C C++
+
+408
+00:17:14,061 --> 00:17:16,213
+and looking for memory safety vulnerabilities,
+
+409
+00:17:16,223 --> 00:17:18,373
+you can also find any assertion violation.
+
+410
+00:17:18,383 --> 00:17:21,281
+So I think you may be aware of Java property testing.
+
+411
+00:17:21,291 --> 00:17:23,983
+It's heavily you lose in elastic search, I think.
+
+412
+00:17:24,123 --> 00:17:24,843
+Right. Right.
+
+413
+00:17:25,051 --> 00:17:25,652
+So I think
+
+414
+00:17:25,833 --> 00:17:27,213
+the idea there is
+
+415
+00:17:27,415 --> 00:17:29,895
+you're not just looking for security bugs.
+
+416
+00:17:29,906 --> 00:17:31,475
+What you're going to do is you're going to write an assert,
+
+417
+00:17:31,485 --> 00:17:34,755
+you're going to assert that your program should have a property like, you know,
+
+418
+00:17:34,765 --> 00:17:36,505
+this should never be null or
+
+419
+00:17:37,015 --> 00:17:39,806
+you should have never have a SQL query of this form.
+
+420
+00:17:39,826 --> 00:17:41,365
+And then the goal of the,
+
+421
+00:17:41,375 --> 00:17:44,046
+the fuzz and symbolic execution is try to violate that property.
+
+422
+00:17:44,056 --> 00:17:46,586
+I always love the comments in C code where you'd have
+
+423
+00:17:46,595 --> 00:17:49,605
+the case statement and it says you should never get here.
+
+424
+00:17:50,836 --> 00:17:51,946
+We did.
+
+425
+00:17:53,449 --> 00:17:57,630
+Yeah. That paradigm of assert false like this should never happen just
+
+426
+00:17:58,520 --> 00:17:58,650
+Yeah.
+
+427
+00:17:58,660 --> 00:18:03,069
+And that's, that's exactly what asserts for and then you get there and it's like,
+
+428
+00:18:03,079 --> 00:18:04,589
+I don't know how we did this.
+
+429
+00:18:04,859 --> 00:18:08,199
+-- But yeah. No, I'm, I'm familiar with that
+-- as we're taking this technology.
+
+430
+00:18:08,209 --> 00:18:09,479
+I mean, we actually have to run the program,
+
+431
+00:18:09,489 --> 00:18:12,109
+we have to prove there's a vulnerability, we have to show how to reproduce it.
+
+432
+00:18:12,310 --> 00:18:15,180
+So we're asking people to do a little bit more when they want to
+
+433
+00:18:15,189 --> 00:18:19,160
+use mayhem than just run a spell check over their program like static analysis,
+
+434
+00:18:19,709 --> 00:18:20,229
+right?
+
+435
+00:18:21,250 --> 00:18:22,650
+That you see that's OK though,
+
+436
+00:18:22,660 --> 00:18:25,670
+I think because I have been dealing with static
+
+437
+00:18:25,680 --> 00:18:28,630
+analysis for longer than I can remember now.
+
+438
+00:18:28,650 --> 00:18:31,880
+And I've yet to come across a single static analysis report
+
+439
+00:18:31,890 --> 00:18:34,099
+that I looked at and said this is a really good report
+
+440
+00:18:34,569 --> 00:18:37,219
+at, at best. It's like, well, it doesn't totally suck.
+
+441
+00:18:37,229 --> 00:18:40,040
+And that's about the best I've seen so far. And I get it though.
+
+442
+00:18:40,050 --> 00:18:40,989
+It's, it's hard, right?
+
+443
+00:18:41,000 --> 00:18:44,109
+Static analysis is really hard and you guys are,
+
+444
+00:18:44,119 --> 00:18:46,719
+it sounds like you're skipping over the really,
+
+445
+00:18:46,729 --> 00:18:50,319
+really hard problem and moving towards something that's just sort of hard, right?
+
+446
+00:18:50,329 --> 00:18:53,800
+Which is kind of binary analysis and just beating the crap out of this stuff.
+
+447
+00:18:53,810 --> 00:18:56,040
+And well, it it's dynamic analysis essentially, right?
+
+448
+00:18:56,244 --> 00:18:57,974
+Yeah, it's a type of dynamic analysis.
+
+449
+00:18:57,984 --> 00:19:01,895
+I try to be careful because like I read the Gardener reports and then as an academic,
+
+450
+00:19:01,905 --> 00:19:03,474
+I'm not really sure what they're saying and they say there's
+
+451
+00:19:03,484 --> 00:19:05,875
+something called DAST and DS T is not what we do.
+
+452
+00:19:05,984 --> 00:19:06,755
+Sorry. What's dat
+
+453
+00:19:06,994 --> 00:19:08,994
+dynamic application, security testing.
+
+454
+00:19:09,005 --> 00:19:13,094
+-- And,
+-- and there's also SAS T which is static application, security testing.
+
+455
+00:19:13,114 --> 00:19:13,545
+And I
+
+456
+00:19:13,775 --> 00:19:16,785
+A which as far as I can tell is an LD preload. Um I don't know.
+
+457
+00:19:17,314 --> 00:19:17,344
+It's
+
+458
+00:19:18,219 --> 00:19:19,560
+so, yeah, what we're doing is dynamic.
+
+459
+00:19:19,569 --> 00:19:22,920
+We're running the program, we're learning every time we execute the program.
+
+460
+00:19:23,050 --> 00:19:25,800
+And I mean, fundamentally both fuzzing and symbolic execution,
+
+461
+00:19:25,810 --> 00:19:29,130
+you you guess an input, you run the program, you watch how it executes
+
+462
+00:19:29,329 --> 00:19:31,579
+and you learn from that to generate another input.
+
+463
+00:19:31,650 --> 00:19:33,979
+I can't help but wonder if part of this is tied to.
+
+464
+00:19:33,989 --> 00:19:36,800
+I guess the word I would use is intent, right? If you have
+
+465
+00:19:37,030 --> 00:19:38,199
+a binary
+
+466
+00:19:38,489 --> 00:19:43,109
+and you have a test case that allows you to control code execution, then you know
+
+467
+00:19:43,660 --> 00:19:46,680
+that you have a security flaw, right? I mean, there's just there's no question
+
+468
+00:19:47,209 --> 00:19:49,849
+whereas with, you know, static analysis, well,
+
+469
+00:19:49,859 --> 00:19:52,760
+we have a flaw and it may or may not affect
+
+470
+00:19:52,829 --> 00:19:55,390
+the flow of the program and control of the program.
+
+471
+00:19:55,400 --> 00:19:56,150
+But it's, you know,
+
+472
+00:19:56,329 --> 00:19:57,949
+you haven't actually tried it out,
+
+473
+00:19:58,699 --> 00:20:00,310
+you haven't really confirmed it, right?
+
+474
+00:20:01,020 --> 00:20:02,170
+And that that was something always,
+
+475
+00:20:02,180 --> 00:20:04,619
+I saw a lot with these static analysis tools is OK?
+
+476
+00:20:04,630 --> 00:20:05,910
+There's definitely something
+
+477
+00:20:06,329 --> 00:20:10,010
+-- not right here, but what kind of not right? Is it?
+-- I agree with you.
+
+478
+00:20:10,020 --> 00:20:14,160
+And I think also this is just my personal heretical opinion but
+
+479
+00:20:14,540 --> 00:20:15,680
+the incentive structure.
+
+480
+00:20:15,689 --> 00:20:19,040
+When you build a static analysis tool is the salesman has to come in and
+
+481
+00:20:19,050 --> 00:20:21,880
+be able to run on any code base and point out at least one flaw.
+
+482
+00:20:22,319 --> 00:20:23,000
+Right.
+
+483
+00:20:23,229 --> 00:20:23,709
+Right.
+
+484
+00:20:24,540 --> 00:20:27,760
+Like that is just the business thing you have to do. And so
+
+485
+00:20:27,989 --> 00:20:32,319
+there's actually not really, there's an incentive to like remove false positives,
+
+486
+00:20:32,329 --> 00:20:32,800
+but
+
+487
+00:20:33,119 --> 00:20:35,829
+there's also an incentive to always find a problem.
+
+488
+00:20:36,050 --> 00:20:38,290
+I think when you look at our techniques, it's quite different.
+
+489
+00:20:38,300 --> 00:20:41,800
+Our incentive is simply can we generate tests for the program?
+
+490
+00:20:41,810 --> 00:20:44,280
+And I feel like that's a much saner metric.
+
+491
+00:20:44,290 --> 00:20:46,609
+-- So
+-- I guess the thing coming to mind now that I
+
+492
+00:20:46,619 --> 00:20:50,589
+would imagine a number of audience members are wondering is we,
+
+493
+00:20:50,599 --> 00:20:52,380
+we talked about some fuzzing.
+
+494
+00:20:52,390 --> 00:20:53,800
+We've talked about fuzzing quite a lot.
+
+495
+00:20:54,050 --> 00:20:56,630
+How are you different from fuzzing with what you're doing?
+
+496
+00:20:56,819 --> 00:20:58,410
+Well, that's actually a good question.
+
+497
+00:20:58,420 --> 00:21:04,180
+So we are big fans of fuzzing and a lot of what we're doing is making fuzzing faster.
+
+498
+00:21:04,189 --> 00:21:05,310
+So that's one side of it.
+
+499
+00:21:05,449 --> 00:21:08,329
+So for example, if you take a fl and you run a fl
+
+500
+00:21:08,959 --> 00:21:09,520
+which is uh
+
+501
+00:21:10,569 --> 00:21:11,189
+advance.
+
+502
+00:21:11,199 --> 00:21:15,989
+Oh man, anyone who Fuzzs needs to know a FL, it's uh American fuzzy lop,
+
+503
+00:21:16,000 --> 00:21:17,390
+which I don't think describes any better.
+
+504
+00:21:17,400 --> 00:21:18,459
+It's kind of the standard
+
+505
+00:21:18,619 --> 00:21:19,630
+that people would use.
+
+506
+00:21:19,859 --> 00:21:23,910
+That's open source. It's well known. It's well documented, has a very long
+
+507
+00:21:24,015 --> 00:21:26,574
+list of successful uses. It's easy to get started
+
+508
+00:21:27,594 --> 00:21:28,064
+and
+
+509
+00:21:28,375 --> 00:21:29,474
+what you end up doing with,
+
+510
+00:21:29,484 --> 00:21:31,954
+with a FL is you end up having to compile
+
+511
+00:21:31,964 --> 00:21:34,074
+your program and make sure it reads from a file.
+
+512
+00:21:34,084 --> 00:21:35,834
+And then what A FL does is it fills in the
+
+513
+00:21:35,844 --> 00:21:39,155
+file and it tries to learn from executions through instrumentation,
+
+514
+00:21:39,435 --> 00:21:41,915
+how to generate files that get better and better coverage.
+
+515
+00:21:41,925 --> 00:21:43,165
+And then it's just been found to find
+
+516
+00:21:43,175 --> 00:21:45,224
+lots of bugs and security vulnerabilities this way.
+
+517
+00:21:46,060 --> 00:21:48,050
+So that's what A FL does. And it's a great product.
+
+518
+00:21:48,520 --> 00:21:49,479
+Like
+
+519
+00:21:50,119 --> 00:21:53,410
+by all means, if you're looking for great open source available,
+
+520
+00:21:53,420 --> 00:21:55,510
+uh things go download a FL.
+
+521
+00:21:55,930 --> 00:21:59,199
+So what are the things that we do? So first, a FL can be a little bit hard to use.
+
+522
+00:21:59,209 --> 00:22:00,989
+For example, if I have Apache orgen
+
+523
+00:22:01,150 --> 00:22:03,800
+X, it's not reading from a file, it's reading from a network socket.
+
+524
+00:22:04,400 --> 00:22:08,060
+And so a lot of our work has actually been trying to bring down
+
+525
+00:22:08,170 --> 00:22:10,989
+the expertise needed to get started. And so we'll take in engine
+
+526
+00:22:11,109 --> 00:22:11,219
+X,
+
+527
+00:22:11,329 --> 00:22:14,839
+we'll take an Apache as is and we'll be able to fuzz that network port.
+
+528
+00:22:15,329 --> 00:22:17,589
+The US are doing nothing, which is the normal build.
+
+529
+00:22:17,599 --> 00:22:21,719
+I think another thing when you look at a FL is I'm sure it's fine for your,
+
+530
+00:22:21,729 --> 00:22:22,300
+for your audience.
+
+531
+00:22:22,310 --> 00:22:24,569
+Like what it's doing is it's forking and exacting the process, right?
+
+532
+00:22:24,579 --> 00:22:26,630
+It's launching a new process every time it reads an input.
+
+533
+00:22:27,109 --> 00:22:27,670
+And
+
+534
+00:22:27,880 --> 00:22:28,790
+if you look at it,
+
+535
+00:22:28,800 --> 00:22:30,569
+it can only do that up to like 16
+
+536
+00:22:30,579 --> 00:22:32,979
+cores before you start getting a performance degradation.
+
+537
+00:22:32,989 --> 00:22:36,030
+So on the one hand, we know like the more we run it, the better results we get.
+
+538
+00:22:36,250 --> 00:22:38,469
+But on hand, you have kind of this bottleneck,
+
+539
+00:22:39,089 --> 00:22:42,290
+right? And so we've spent a lot of time trying to remove that bottleneck and got it.
+
+540
+00:22:42,300 --> 00:22:43,630
+So things are much, much faster.
+
+541
+00:22:44,069 --> 00:22:46,849
+So that's kind of the the side of the second part of it though
+
+542
+00:22:47,020 --> 00:22:49,949
+is we don't just use fuzzing in the cyber grand challenge.
+
+543
+00:22:50,276 --> 00:22:51,656
+We used a portfolio of techniques.
+
+544
+00:22:51,666 --> 00:22:53,526
+And what I meant by that is we use a couple of
+
+545
+00:22:53,536 --> 00:22:56,015
+different things all running at once that are feeding off each other.
+
+546
+00:22:56,026 --> 00:22:59,296
+And one of the big ones where we got patents was called symbolic execution,
+
+547
+00:22:59,306 --> 00:23:00,725
+symbolic execution.
+
+548
+00:23:00,806 --> 00:23:02,095
+What it does is
+
+549
+00:23:02,245 --> 00:23:05,005
+as you watch the program execute on an input,
+
+550
+00:23:05,015 --> 00:23:09,145
+it builds up a mathematical formula of what's necessary to take that path like model
+
+551
+00:23:09,156 --> 00:23:11,225
+checking and then it tries to come up
+
+552
+00:23:11,235 --> 00:23:13,586
+with an input that would violate that mathematical
+
+553
+00:23:13,732 --> 00:23:14,202
+model.
+
+554
+00:23:14,212 --> 00:23:17,421
+And so we've turned reasoning about a program into reasoning about mathematics
+
+555
+00:23:17,432 --> 00:23:19,921
+and we take advantage of things like SMT and SAT solvers.
+
+556
+00:23:19,932 --> 00:23:22,062
+So this is what all my work as a professor at
+
+557
+00:23:22,072 --> 00:23:24,121
+CMU had been is how do we make this efficient?
+
+558
+00:23:24,131 --> 00:23:25,271
+How do we make this good?
+
+559
+00:23:25,771 --> 00:23:26,302
+And
+
+560
+00:23:26,411 --> 00:23:30,021
+we ran both together. And so you kind of have on the one hand fuzz
+
+561
+00:23:30,171 --> 00:23:32,421
+which just quickly execute a program again and
+
+562
+00:23:32,432 --> 00:23:34,822
+again with heuristics and then symbolic executors,
+
+563
+00:23:34,832 --> 00:23:36,921
+which are more like the turtle in this race
+
+564
+00:23:37,349 --> 00:23:39,319
+where they're slow, but they're very methodical.
+
+565
+00:23:39,329 --> 00:23:41,910
+They make sure they never duplicate state space and we
+
+566
+00:23:41,920 --> 00:23:44,920
+use both together and then lots of tricky optimizations,
+
+567
+00:23:44,930 --> 00:23:47,250
+you know, like everyone kind of went in with these two techniques.
+
+568
+00:23:47,380 --> 00:23:50,339
+And then the question is how well can you execute with these two techniques?
+
+569
+00:23:50,359 --> 00:23:52,569
+So do you get like 100%
+
+570
+00:23:52,849 --> 00:23:54,219
+coverage of all the code paths?
+
+571
+00:23:54,660 --> 00:23:57,349
+No, no, we don't. This is a great question. So no,
+
+572
+00:23:57,569 --> 00:23:59,910
+one of the things that was really frustrating for me is
+
+573
+00:23:59,920 --> 00:24:03,359
+I ran symbolic execution and fuzzing on the program called clear.
+
+574
+00:24:03,369 --> 00:24:05,310
+So clear is the dumbest program you'll ever see it simply
+
+575
+00:24:05,319 --> 00:24:08,150
+clears your screen and we are getting like 33% coverage.
+
+576
+00:24:08,719 --> 00:24:11,619
+And I was like, why are we only get 33% coverage?
+
+577
+00:24:11,630 --> 00:24:15,380
+And then I'd ran it, run it on Pearl and I was getting 67% coverage
+
+578
+00:24:15,540 --> 00:24:17,010
+and this is just running at five minutes, right?
+
+579
+00:24:17,020 --> 00:24:19,219
+So I was completely mystified what's going on here.
+
+580
+00:24:19,229 --> 00:24:22,560
+And the reason is what we're doing is we're testing a particular input source and
+
+581
+00:24:22,569 --> 00:24:24,800
+clear has different code paths that are only
+
+582
+00:24:24,810 --> 00:24:27,319
+executed when you vary the environment variables.
+
+583
+00:24:27,420 --> 00:24:27,650
+Ah
+
+584
+00:24:28,640 --> 00:24:31,859
+Yeah, I was just, I would just check and it doesn't take any command line options.
+
+585
+00:24:31,869 --> 00:24:35,599
+-- So I was like, yeah, wait like what, why not?
+-- 100? Yeah.
+
+586
+00:24:36,020 --> 00:24:39,359
+So we would vary 111 environment variable not another because
+
+587
+00:24:39,369 --> 00:24:41,260
+really what you're talking about in all of these,
+
+588
+00:24:41,270 --> 00:24:42,920
+it's more of like a testing paradigm, right?
+
+589
+00:24:42,930 --> 00:24:44,579
+Like you're taking one thing and you're iterating
+
+590
+00:24:44,589 --> 00:24:46,199
+and trying to explore all the combinations,
+
+591
+00:24:46,349 --> 00:24:48,589
+going to the next thing, trying to explore all the combinations.
+
+592
+00:24:48,810 --> 00:24:51,430
+And so what you're trying to do is maximize code coverage.
+
+593
+00:24:51,439 --> 00:24:53,489
+And if someone hands us code coverage, we can
+
+594
+00:24:53,930 --> 00:24:55,479
+every case I've seen improve it.
+
+595
+00:24:55,790 --> 00:24:58,640
+But saying 100% I mean, you have to realize there may be dead code,
+
+596
+00:24:58,650 --> 00:25:02,099
+unreachable code code that is outside your configuration just like clear.
+
+597
+00:25:02,219 --> 00:25:05,079
+And this has also been one of the hard parts when you go to market like, you know,
+
+598
+00:25:05,089 --> 00:25:07,290
+static analysis looks at all the code
+
+599
+00:25:08,150 --> 00:25:10,670
+and therefore can find all security vulnerabilities.
+
+600
+00:25:10,939 --> 00:25:13,989
+I just don't believe it. I would rather have something that looks at less code
+
+601
+00:25:14,199 --> 00:25:15,050
+and is actionable.
+
+602
+00:25:15,060 --> 00:25:17,760
+Has zero false positives than something that purports to look
+
+603
+00:25:17,770 --> 00:25:19,359
+at all the code but has a huge amount.
+
+604
+00:25:19,660 --> 00:25:23,650
+What you just said about the zero false positives is huge because that
+
+605
+00:25:23,660 --> 00:25:26,939
+I mean me and Josh being on the receiving end of these reports
+
+606
+00:25:27,469 --> 00:25:30,420
+and the false positive rate was I would say anywhere from like
+
+607
+00:25:30,599 --> 00:25:31,849
+very low to
+
+608
+00:25:31,979 --> 00:25:33,760
+99.9%.
+
+609
+00:25:34,420 --> 00:25:36,640
+Like I literally received reports where people like
+
+610
+00:25:36,650 --> 00:25:38,969
+this product doesn't store credit card information correctly.
+
+611
+00:25:38,979 --> 00:25:41,680
+And I'm like, wait, what we take credit cards to this product now.
+
+612
+00:25:41,689 --> 00:25:43,760
+Wait, that doesn't sound right like what
+
+613
+00:25:44,050 --> 00:25:46,579
+you know, and they literally were just cutting and pasting
+
+614
+00:25:46,890 --> 00:25:48,530
+reports from, I guess,
+
+615
+00:25:48,680 --> 00:25:49,880
+ecommerce sites or something.
+
+616
+00:25:49,890 --> 00:25:52,199
+And so that, that false positive rate, I mean, Josh,
+
+617
+00:25:52,209 --> 00:25:55,760
+how many times did we spend hours or days chasing,
+
+618
+00:25:56,280 --> 00:25:57,270
+you know, phantoms?
+
+619
+00:25:57,619 --> 00:26:02,170
+I do it every day where I get a phone book of a report
+
+620
+00:26:02,390 --> 00:26:05,510
+and then I have to refute some or all of it
+
+621
+00:26:05,780 --> 00:26:06,689
+and yet
+
+622
+00:26:07,260 --> 00:26:11,569
+hearing no false positives is that is the dream
+
+623
+00:26:11,709 --> 00:26:13,469
+and that's what these techniques deliver.
+
+624
+00:26:13,479 --> 00:26:15,800
+Zero false positives is always reproducible. But
+
+625
+00:26:16,020 --> 00:26:18,550
+you know, the very first hacker was this guy named Turing, right?
+
+626
+00:26:18,560 --> 00:26:19,989
+He was trying to break the German code.
+
+627
+00:26:21,209 --> 00:26:22,920
+I've heard of that guy before.
+
+628
+00:26:23,420 --> 00:26:27,459
+Yeah. Isn't it interesting how the first computer scientist is a hacker or at least
+
+629
+00:26:27,709 --> 00:26:28,180
+one of the first
+
+630
+00:26:29,489 --> 00:26:30,699
+like he has, you know, we go,
+
+631
+00:26:30,810 --> 00:26:34,359
+we go into computer science courses and we all hear about
+
+632
+00:26:34,709 --> 00:26:38,780
+undecidable and how you can't even decide whether a program terminates or not,
+
+633
+00:26:38,790 --> 00:26:39,079
+right?
+
+634
+00:26:39,089 --> 00:26:42,630
+-- If we remember this from CS 101. Yeah.
+-- The stomping the halting problem, right?
+
+635
+00:26:42,810 --> 00:26:43,359
+Yeah.
+
+636
+00:26:43,609 --> 00:26:45,680
+And the artifact of this in our world of
+
+637
+00:26:45,790 --> 00:26:48,359
+programs and try to check them for vulnerabilities is
+
+638
+00:26:48,709 --> 00:26:51,569
+you can either have false positives and check everything or
+
+639
+00:26:51,579 --> 00:26:53,810
+you can have no false positives and not check everything.
+
+640
+00:26:53,819 --> 00:26:54,729
+And I think
+
+641
+00:26:54,900 --> 00:26:58,040
+really the world was kind of fooled by these initial products.
+
+642
+00:26:58,050 --> 00:27:01,810
+I mean, they came out actually as like bug detectors and co quality detectors like
+
+643
+00:27:02,079 --> 00:27:02,250
+coity
+
+644
+00:27:03,290 --> 00:27:04,800
+and then got relabeled as security tools
+
+645
+00:27:04,810 --> 00:27:06,770
+when the security budget suddenly materialized.
+
+646
+00:27:06,869 --> 00:27:07,609
+Yeah, that's true.
+
+647
+00:27:08,400 --> 00:27:09,709
+You know, their, their entire,
+
+648
+00:27:09,969 --> 00:27:12,790
+their entire life was trying to prove the absence of something
+
+649
+00:27:13,000 --> 00:27:13,339
+when,
+
+650
+00:27:13,349 --> 00:27:14,750
+what we're trying to do in security is prove
+
+651
+00:27:14,760 --> 00:27:16,469
+the presence of something we want to prove.
+
+652
+00:27:16,479 --> 00:27:17,430
+Is it a problem
+
+653
+00:27:18,060 --> 00:27:20,109
+again? Very philosophical. But you got to think of it.
+
+654
+00:27:20,119 --> 00:27:22,079
+Are you trying to prove the absence of the presence of something? Right.
+
+655
+00:27:22,109 --> 00:27:24,380
+Well, no, that, that's, I don't think it's philosophical at all.
+
+656
+00:27:24,390 --> 00:27:27,670
+I think that's exactly the right way to look at this is you, you know,
+
+657
+00:27:27,680 --> 00:27:29,829
+you can't prove a negative as they say.
+
+658
+00:27:29,979 --> 00:27:30,510
+And
+
+659
+00:27:30,780 --> 00:27:33,119
+yeah, you're right. That's exactly what they're doing. Cool.
+
+660
+00:27:33,130 --> 00:27:36,719
+So, so let's do this, David. We're, we're approaching the end of our time together.
+
+661
+00:27:36,729 --> 00:27:38,839
+So I'll give you the floor for a few minutes.
+
+662
+00:27:39,300 --> 00:27:40,319
+Yeah. So,
+
+663
+00:27:41,010 --> 00:27:44,540
+I mean, I was, I'm a tenured computer science professor at CMU.
+
+664
+00:27:44,550 --> 00:27:48,209
+That's a pretty nice gig, right? Like I have a lifetime appointment.
+
+665
+00:27:48,319 --> 00:27:50,869
+I'm moving out to do a start up giving up on that
+
+666
+00:27:51,079 --> 00:27:53,650
+because I think this idea that we can,
+
+667
+00:27:53,880 --> 00:27:56,329
+that we can check the world software for exploitable bugs that
+
+668
+00:27:56,339 --> 00:27:58,729
+we can make it actionable is something that the world needs
+
+669
+00:27:58,979 --> 00:27:59,079
+to.
+
+670
+00:27:59,319 --> 00:28:01,069
+And so we're building a product for this.
+
+671
+00:28:01,079 --> 00:28:01,589
+As you said,
+
+672
+00:28:01,599 --> 00:28:04,540
+there's tools like a FL that are open source that are also along these lines
+
+673
+00:28:04,550 --> 00:28:07,260
+that it's good when there's a community if I was the only one saying it,
+
+674
+00:28:07,270 --> 00:28:08,150
+I'd be the crazy nut.
+
+675
+00:28:08,160 --> 00:28:09,270
+But I think we're seeing
+
+676
+00:28:09,709 --> 00:28:11,780
+enough people out there who want tools that
+
+677
+00:28:11,790 --> 00:28:14,550
+provide actionable results that can test programs,
+
+678
+00:28:14,739 --> 00:28:16,760
+check the code that's actually going to execute the
+
+679
+00:28:16,770 --> 00:28:18,339
+thing that's actually going to run on your machine.
+
+680
+00:28:18,349 --> 00:28:22,290
+I think the full promise of these techniques in the long term is you can
+
+681
+00:28:22,300 --> 00:28:23,900
+check compiled code which means I no
+
+682
+00:28:23,910 --> 00:28:26,300
+longer need developer participation to check it.
+
+683
+00:28:26,310 --> 00:28:29,109
+I think today in the products that are shipping, including including ours,
+
+684
+00:28:29,119 --> 00:28:31,579
+they tend to do best when you have developer participation
+
+685
+00:28:32,229 --> 00:28:33,660
+just from a usability perspective.
+
+686
+00:28:33,670 --> 00:28:36,454
+But I do want to get to that world where we can be fully autonomous,
+
+687
+00:28:36,464 --> 00:28:38,714
+but also where I can check other people's code
+
+688
+00:28:38,974 --> 00:28:40,244
+for security vulnerabilities.
+
+689
+00:28:40,255 --> 00:28:43,275
+Like, you know, I've been able to download code from various vendors,
+
+690
+00:28:43,285 --> 00:28:45,675
+never had access to the developer and find new zero days.
+
+691
+00:28:45,685 --> 00:28:48,875
+I think that's the world we want not because it's offensive,
+
+692
+00:28:48,885 --> 00:28:52,114
+but now I can hold those people responsible for their code quality.
+
+693
+00:28:52,125 --> 00:28:53,515
+And so that's what our company is trying,
+
+694
+00:28:53,525 --> 00:28:57,135
+trying to get to is that world where it's fully autonomous, we can find problems,
+
+695
+00:28:57,145 --> 00:28:58,895
+fix them, test them, give you
+
+696
+00:28:59,165 --> 00:29:01,435
+an accurate view of the performance impact,
+
+697
+00:29:01,739 --> 00:29:04,790
+but also kind of get to this world where deep software
+
+698
+00:29:04,800 --> 00:29:07,239
+testing is the norm and everyone can check everyone else.
+
+699
+00:29:07,250 --> 00:29:09,359
+And that's how we know everyone's playing it safe.
+
+700
+00:29:09,489 --> 00:29:10,920
+That's awesome. I
+
+701
+00:29:11,280 --> 00:29:15,920
+I cannot wait for that future because I think today if you look at the state of things,
+
+702
+00:29:15,930 --> 00:29:17,520
+it, it doesn't look so bright.
+
+703
+00:29:17,739 --> 00:29:18,310
+So
+
+704
+00:29:19,010 --> 00:29:20,819
+here's I, I hope it works out, man.
+
+705
+00:29:20,829 --> 00:29:24,890
+So I guess if people want to get a hold of you guys, where should we send them?
+
+706
+00:29:24,900 --> 00:29:31,359
+Uh go to our website for All secure.com, forallsecure.com.
+
+707
+00:29:31,369 --> 00:29:33,800
+We chose that name because it kind of reflects what I just said.
+
+708
+00:29:33,810 --> 00:29:35,750
+We think security is for everyone
+
+709
+00:29:35,969 --> 00:29:37,189
+and we're kind of math geek.
+
+710
+00:29:37,199 --> 00:29:40,189
+So the for all symbol, the universal quantifier is our logo.
+
+711
+00:29:40,875 --> 00:29:44,055
+That's very cool. All right. And I'll put links to all this in the show notes.
+
+712
+00:29:44,064 --> 00:29:47,334
+So, yeah, I guess. Awesome. Thank you so much, David. Thank you, Kurt.
+
+713
+00:29:47,344 --> 00:29:49,494
+This has been a fantastic episode.
+
+714
+00:29:49,755 --> 00:29:51,775
+You can go to open source security podcast.com,
+
+715
+00:29:51,785 --> 00:29:53,385
+hit up the show notes so you can use the Pound
+
+716
+00:29:53,395 --> 00:29:56,824
+Os S podcast hashtag to find us on social media.
+
+717
+00:29:56,834 --> 00:30:01,025
+-- Yeah, Kurt and David have fabulous rest of your days.
+-- Thanks everybody. Thank
+
+718
+00:30:01,035 --> 00:30:01,295
+you.
+
+719
+00:30:01,364 --> 00:30:02,854
+Awesome. Thanks everyone. Bye bye.

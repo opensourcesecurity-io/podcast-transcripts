@@ -1,0 +1,2479 @@
+0
+00:00:05,570 --> 00:00:08,720
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,729 --> 00:00:11,149
+Kurt Siefried and my partner in Sidewalk Crime.
+
+2
+00:00:11,159 --> 00:00:12,819
+Josh Pressers Sidewalk.
+
+3
+00:00:12,829 --> 00:00:17,229
+This was a marvelous opportunity to make a joke
+
+4
+00:00:17,239 --> 00:00:20,190
+about Mr rogers' neighborhood and you blew it.
+
+5
+00:00:20,299 --> 00:00:23,180
+-- I don't
+-- want to drag Mr Rogers into this. He's, he's better than us.
+
+6
+00:00:23,190 --> 00:00:23,790
+-- That's
+-- true.
+
+7
+00:00:23,799 --> 00:00:27,319
+-- He's a lovely person.
+-- I was going to say he's better than this, but he's better than us
+
+8
+00:00:27,530 --> 00:00:30,709
+actually. So I have a little side tangent story. I'll tell it is
+
+9
+00:00:31,270 --> 00:00:31,959
+there was, I,
+
+10
+00:00:31,969 --> 00:00:34,029
+I don't know if there was some anniversary or
+
+11
+00:00:34,040 --> 00:00:36,270
+birthday or something that happened with Mr Rogers,
+
+12
+00:00:36,279 --> 00:00:37,189
+but there was
+
+13
+00:00:37,349 --> 00:00:41,479
+a number of specials on my local public television station about Mr Rogers.
+
+14
+00:00:41,490 --> 00:00:42,020
+And of course,
+
+15
+00:00:42,240 --> 00:00:46,020
+during these, they're doing their usual pledge drive. Like please give us money and
+
+16
+00:00:46,130 --> 00:00:48,759
+as someone who they call them sustaining members
+
+17
+00:00:48,770 --> 00:00:50,319
+where I just give them a monthly amount
+
+18
+00:00:51,009 --> 00:00:53,229
+annoy me to no end because I'm like, I'm already giving you money.
+
+19
+00:00:53,240 --> 00:00:56,299
+-- Like give me a secret channel or something.
+-- Skip a skip a
+
+20
+00:00:56,959 --> 00:00:57,950
+seriously.
+
+21
+00:00:58,369 --> 00:00:59,040
+-- Both
+-- of my
+
+22
+00:00:59,049 --> 00:01:01,869
+Children, they're doing this little, you know,
+
+23
+00:01:01,880 --> 00:01:05,029
+send us money and they have a Mr Rogers tote bag you can get.
+
+24
+00:01:05,040 --> 00:01:07,720
+Which of course, if you ever watch any public television,
+
+25
+00:01:07,730 --> 00:01:10,870
+like a tote bag is like the default gift for donating.
+
+26
+00:01:11,449 --> 00:01:11,949
+And
+
+27
+00:01:12,209 --> 00:01:15,940
+my kids thought I was nuts because I literally, like, went and got my computer
+
+28
+00:01:16,160 --> 00:01:18,150
+and gave them more money just to get this tote
+
+29
+00:01:18,160 --> 00:01:19,949
+bag because I really liked it and I wanted it.
+
+30
+00:01:19,959 --> 00:01:23,879
+-- So I paid an enormous amount of money for a tote
+-- bag.
+
+31
+00:01:23,889 --> 00:01:28,150
+I paid 100 bucks for a coffee cup for the, uh, for the reading Rainbow Kickstarter.
+
+32
+00:01:28,360 --> 00:01:31,489
+Why not? Right. I did not do that. Which makes me sad. But in
+
+33
+00:01:32,099 --> 00:01:33,349
+fairness they raised
+
+34
+00:01:34,029 --> 00:01:35,879
+was it $6 million in a week?
+
+35
+00:01:36,370 --> 00:01:38,699
+-- And they wanted a million. So
+-- everybody loves reading
+
+36
+00:01:38,849 --> 00:01:38,900
+Rainbow
+
+37
+00:01:39,330 --> 00:01:39,699
+Levar.
+
+38
+00:01:39,930 --> 00:01:42,690
+Burton is almost as cool as Mr Rogers.
+
+39
+00:01:42,959 --> 00:01:43,930
+All right. All right. Anyway,
+
+40
+00:01:44,089 --> 00:01:50,040
+today we're going to talk about Amazon Sidewalk, which is, we'll say the opposite
+
+41
+00:01:50,180 --> 00:01:53,010
+of the neighborhood of make believe in every possible way.
+
+42
+00:01:53,330 --> 00:01:54,349
+And what's interesting is
+
+43
+00:01:54,720 --> 00:01:57,930
+I think it's only available in America because I cannot find it
+
+44
+00:01:58,089 --> 00:02:01,430
+on my account to disable. I don't think they're doing it
+
+45
+00:02:01,599 --> 00:02:03,430
+outside of America right now.
+
+46
+00:02:03,489 --> 00:02:07,379
+We should explain what this is before we start bashing it.
+
+47
+00:02:08,508 --> 00:02:09,020
+Ok.
+
+48
+00:02:09,229 --> 00:02:12,580
+So long story short, Apple, very cleverly realized
+
+49
+00:02:12,770 --> 00:02:15,250
+we have the world's largest distributed network
+
+50
+00:02:15,580 --> 00:02:16,259
+iphones
+
+51
+00:02:16,559 --> 00:02:18,940
+and so they can do things like find my iphone
+
+52
+00:02:19,220 --> 00:02:20,979
+and originally find my iphone, you know,
+
+53
+00:02:20,990 --> 00:02:23,330
+worked over Wi Fi and the internet and stuff.
+
+54
+00:02:23,339 --> 00:02:26,070
+So I can see, you know, I can see, oh, like I left my ipad.
+
+55
+00:02:26,080 --> 00:02:29,410
+Oh, funny story once I visited my sister and we accidentally swapped ipads.
+
+56
+00:02:29,419 --> 00:02:31,610
+So I guess the moral of the story is if you
+
+57
+00:02:31,619 --> 00:02:34,759
+have the exact same case on your ipad as someone else,
+
+58
+00:02:34,770 --> 00:02:37,660
+maybe make sure it's actually your ipad before you pack it in your bag.
+
+59
+00:02:37,919 --> 00:02:41,050
+-- Whatever, that's easier said than done. Nobody checks that
+-- anyways.
+
+60
+00:02:41,449 --> 00:02:44,759
+But then Apple realized, you know, with, through some cryptographic pokey,
+
+61
+00:02:44,830 --> 00:02:45,949
+jiggery and magic,
+
+62
+00:02:46,199 --> 00:02:51,339
+we could have all these Bluetooth devices that we've deployed A K A iphones,
+
+63
+00:02:51,520 --> 00:02:55,029
+uh essentially report their Bluetooth ID securely and thus
+
+64
+00:02:55,100 --> 00:02:58,610
+vastly improve the effectiveness and the coverage of like
+
+65
+00:02:58,800 --> 00:03:02,350
+find my iphone. Well, also find my ipad, find my computer, whatever.
+
+66
+00:03:02,830 --> 00:03:05,089
+And they've even extended that now to those Apple
+
+67
+00:03:05,619 --> 00:03:07,929
+tags. I forget what they're called air
+
+68
+00:03:08,110 --> 00:03:08,570
+tags, air
+
+69
+00:03:08,860 --> 00:03:13,839
+-- tags. Thank you. Right. Because like I have tile tags.
+-- Amazon owns tile now. Right.
+
+70
+00:03:14,029 --> 00:03:14,690
+Well, exactly.
+
+71
+00:03:14,970 --> 00:03:17,690
+And so, you know, Amazon is jealous of Apple
+
+72
+00:03:17,929 --> 00:03:18,740
+and they're,
+
+73
+00:03:19,529 --> 00:03:20,520
+well, Apple has
+
+74
+00:03:20,740 --> 00:03:21,179
+again,
+
+75
+00:03:21,190 --> 00:03:23,699
+like the world's largest network for coverage of
+
+76
+00:03:23,710 --> 00:03:25,699
+looking for Bluetooth items that have been lost.
+
+77
+00:03:25,710 --> 00:03:28,710
+And so Amazon wanted to do this and of course,
+
+78
+00:03:29,089 --> 00:03:32,139
+what's interesting to me is nobody seemed to really mind Apple doing this,
+
+79
+00:03:32,149 --> 00:03:33,830
+but I think Apple did it in a way that was,
+
+80
+00:03:34,050 --> 00:03:36,770
+you know, much lower bandwidth and much less intrusive.
+
+81
+00:03:36,779 --> 00:03:38,350
+Amazon, of course, did not do that.
+
+82
+00:03:38,360 --> 00:03:42,860
+Amazon is like, oh, it'll only use up to 500 megabytes per month of your data
+
+83
+00:03:43,190 --> 00:03:44,470
+on your internet. Which,
+
+84
+00:03:44,720 --> 00:03:46,380
+well, ok. Hang on. We,
+
+85
+00:03:46,690 --> 00:03:51,139
+I think we're missing an important piece of this is you, you dove into Apple.
+
+86
+00:03:51,179 --> 00:03:53,610
+But fundamentally what Amazon is doing is
+
+87
+00:03:53,619 --> 00:03:56,270
+they've created this program called Amazon Sidewalk,
+
+88
+00:03:56,279 --> 00:03:58,389
+which basically is going to turn
+
+89
+00:03:58,639 --> 00:04:02,979
+a bunch of Amazon devices like your echoes and your rings
+
+90
+00:04:03,220 --> 00:04:05,285
+and that's sort of thing
+
+91
+00:04:05,475 --> 00:04:11,455
+into a large mesh network. The intent of this I don't think is totally clear.
+
+92
+00:04:11,464 --> 00:04:15,725
+It's to support their iot devices and to support their lost stuff.
+
+93
+00:04:16,334 --> 00:04:18,494
+And, but the problem is,
+
+94
+00:04:18,714 --> 00:04:21,803
+and historically, Amazon has a lot of my purchasing data
+
+95
+00:04:22,234 --> 00:04:25,174
+and while they don't really share it externally,
+
+96
+00:04:25,195 --> 00:04:28,165
+they do use it to harass me to buy stuff.
+
+97
+00:04:28,589 --> 00:04:31,410
+I, I think there's some other pieces to this though.
+
+98
+00:04:31,809 --> 00:04:37,410
+Amazon is basically, people have these devices, they're opting you into this.
+
+99
+00:04:37,420 --> 00:04:41,290
+You have to opt out. There's no like, sort of opt in
+
+100
+00:04:41,869 --> 00:04:41,940
+because
+
+101
+00:04:42,339 --> 00:04:46,010
+it's like we've discovered with organ donors and blood donors that, you know,
+
+102
+00:04:46,149 --> 00:04:49,730
+you got to make people opt out otherwise only 3% will opt in.
+
+103
+00:04:49,890 --> 00:04:52,010
+Right. Well, and, and I love how
+
+104
+00:04:52,279 --> 00:04:53,570
+in the Apple Universe
+
+105
+00:04:54,160 --> 00:04:57,250
+they're basically blocking a bunch of information
+
+106
+00:04:57,470 --> 00:05:01,779
+to advertisers unless, unless you opt in and Facebook is having a conniption.
+
+107
+00:05:01,869 --> 00:05:04,019
+-- Yes,
+-- it is the end of the western world as we know
+
+108
+00:05:04,029 --> 00:05:05,859
+it. It's absolutely hilarious.
+
+109
+00:05:05,869 --> 00:05:07,320
+I love it. It's so good.
+
+110
+00:05:07,510 --> 00:05:08,970
+But so anyway, anyway,
+
+111
+00:05:09,279 --> 00:05:15,140
+so Amazon has sidewalk and a bunch of people are kind of making a big deal about it.
+
+112
+00:05:15,149 --> 00:05:20,179
+I think your parallels drawn with Apple are very interesting and fair
+
+113
+00:05:20,500 --> 00:05:21,279
+because you're right,
+
+114
+00:05:21,290 --> 00:05:24,559
+Apple's doing very similar things and no one seems to care but Amazon
+
+115
+00:05:24,570 --> 00:05:27,820
+-- does it and everyone starts losing their mind
+-- and Amazon has stated that,
+
+116
+00:05:27,829 --> 00:05:30,070
+you know, the data will only go to their Amazon services.
+
+117
+00:05:30,079 --> 00:05:34,119
+-- It's not like they're providing general internet access to these devices,
+-- right?
+
+118
+00:05:34,130 --> 00:05:39,230
+And so my favorite part is if you look on the Amazon sidewalk,
+
+119
+00:05:39,320 --> 00:05:42,109
+they talk about how secure it is because it's encrypted.
+
+120
+00:05:42,119 --> 00:05:44,429
+And it's like the thing I keep thinking of is
+
+121
+00:05:44,510 --> 00:05:47,940
+I'm not worried about hackers stealing this in transit.
+
+122
+00:05:47,950 --> 00:05:50,100
+I'm worried about you having it
+
+123
+00:05:50,559 --> 00:05:51,890
+when it gets there.
+
+124
+00:05:52,119 --> 00:05:54,529
+And there was that tweet about that guy who, you know,
+
+125
+00:05:54,540 --> 00:05:57,910
+visited his mother and now he's getting ads for his mother's toothpaste brand.
+
+126
+00:05:58,549 --> 00:06:00,730
+And some people on hacker news pointed out, look, I mean,
+
+127
+00:06:00,829 --> 00:06:04,709
+if you think you have privacy, no, you know, geolocation of your phone,
+
+128
+00:06:04,720 --> 00:06:06,959
+it's tied to your credit card, it's tied to your accounts.
+
+129
+00:06:07,320 --> 00:06:07,980
+I mean,
+
+130
+00:06:08,239 --> 00:06:13,420
+I I remember the kind of data that choice point had on me 1015 years ago
+
+131
+00:06:13,619 --> 00:06:15,730
+and that's only vastly improved, right?
+
+132
+00:06:15,739 --> 00:06:19,160
+Data storage is effectively free at scale now like
+
+133
+00:06:19,420 --> 00:06:21,619
+to store a makeup by on every American
+
+134
+00:06:22,019 --> 00:06:26,239
+you can buy a single compute device for under $10,000 that will do that.
+
+135
+00:06:26,929 --> 00:06:27,299
+Right.
+
+136
+00:06:27,309 --> 00:06:29,579
+You know, we talked about this in the magic of Santa Claus or the,
+
+137
+00:06:29,589 --> 00:06:31,299
+the crime of Santa Claus or whatever that
+
+138
+00:06:31,690 --> 00:06:33,000
+the point is like
+
+139
+00:06:33,209 --> 00:06:37,160
+the amount of data and data correlation going on is amazing.
+
+140
+00:06:37,320 --> 00:06:41,019
+And I fully trust and expect Amazon
+
+141
+00:06:41,470 --> 00:06:45,980
+to try to use it to jam more ads and more junk down my throat.
+
+142
+00:06:46,320 --> 00:06:49,239
+I mean, there's recently the, the Amazon Prime controversy where
+
+143
+00:06:49,450 --> 00:06:52,040
+they're apparently inflating prices on prime
+
+144
+00:06:52,820 --> 00:06:55,989
+items because I'll probably buy it because, hey, prime shipping,
+
+145
+00:06:56,000 --> 00:06:57,260
+it will just arrive here quickly because
+
+146
+00:06:57,369 --> 00:07:00,369
+I needed a new copy of, uh, The Hungry Caterpillar. And
+
+147
+00:07:00,470 --> 00:07:04,359
+the one on Prime is like $10 more than the one on, you know, the, the chapters.
+
+148
+00:07:04,369 --> 00:07:06,649
+It's like our big Canadian white bookseller.
+
+149
+00:07:07,350 --> 00:07:10,869
+Yeah. But, and I, I was kind of looking at it and I'm like, 35 bucks. Seems
+
+150
+00:07:11,149 --> 00:07:14,019
+like a lot like, I don't remember this book costing more than about 20 bucks.
+
+151
+00:07:14,369 --> 00:07:18,279
+So I look at chapters and it's like, no, it's like 2025 bucks.
+
+152
+00:07:18,549 --> 00:07:19,480
+Free shipping.
+
+153
+00:07:19,709 --> 00:07:21,329
+Not as fast as prime, but
+
+154
+00:07:21,779 --> 00:07:24,679
+am I gonna pay $10 extra for prime shipping, basically?
+
+155
+00:07:25,269 --> 00:07:26,600
+Well, no, I'm, you know,
+
+156
+00:07:27,429 --> 00:07:29,959
+and so I, I fully anticipate like I like you.
+
+157
+00:07:29,970 --> 00:07:33,839
+I actually broke down and bought two apple TV. S to get rid of my fires sticks because
+
+158
+00:07:34,100 --> 00:07:37,679
+I am tired of the host style user experience in the firestick.
+
+159
+00:07:38,109 --> 00:07:38,339
+Yeah.
+
+160
+00:07:38,609 --> 00:07:41,239
+Did you get the, the new one with the nice remote.
+
+161
+00:07:41,429 --> 00:07:44,119
+I got the four K with the, I, I just went for the,
+
+162
+00:07:44,130 --> 00:07:45,670
+the one that was most expensive was like,
+
+163
+00:07:45,679 --> 00:07:47,649
+30 bucks more than the slightly cheaper one.
+
+164
+00:07:47,660 --> 00:07:48,299
+So, I was like,
+
+165
+00:07:48,559 --> 00:07:50,559
+whatever. Just buy the, the biggest one
+
+166
+00:07:50,940 --> 00:07:53,850
+-- times two
+-- is your remote. Aluminum or black.
+
+167
+00:07:53,859 --> 00:07:54,769
+-- It's aluminum.
+-- That's
+
+168
+00:07:54,779 --> 00:07:55,559
+-- the
+-- good remote.
+
+169
+00:07:56,100 --> 00:07:56,790
+Yeah, it's,
+
+170
+00:07:57,089 --> 00:07:59,500
+it's quite nice. But again, you know, it's,
+
+171
+00:08:00,100 --> 00:08:02,760
+I'm ok with buying stuff. I do need to buy stuff. I'm a North American.
+
+172
+00:08:02,769 --> 00:08:03,660
+That's how we function.
+
+173
+00:08:03,880 --> 00:08:04,549
+But
+
+174
+00:08:04,829 --> 00:08:08,010
+at the same time I'm sort of getting tired of Amazon trying to
+
+175
+00:08:08,019 --> 00:08:12,029
+constantly just shove stuff down my throat and tricking me like that,
+
+176
+00:08:12,040 --> 00:08:15,600
+that prime, like the hungry Caterpillar does not cost 35 bucks.
+
+177
+00:08:15,750 --> 00:08:17,230
+-- It
+-- does now.
+
+178
+00:08:17,899 --> 00:08:18,209
+I mean,
+
+179
+00:08:19,160 --> 00:08:19,630
+you know,
+
+180
+00:08:19,959 --> 00:08:24,859
+I, I didn't know that. That's interesting because I won't lie is I rarely
+
+181
+00:08:25,149 --> 00:08:30,059
+look past Amazon if I need something quick where it's just like I load up Amazon.
+
+182
+00:08:30,070 --> 00:08:32,340
+I buy what I need and whatever. I don't think twice about it.
+
+183
+00:08:32,349 --> 00:08:37,260
+But I'm going to maybe pay attention to some of this now because that's interesting.
+
+184
+00:08:37,510 --> 00:08:39,299
+And the thing is, again, yeah, I tend to,
+
+185
+00:08:39,359 --> 00:08:41,960
+when I'm shopping I tend to click that prime button because I don't want to
+
+186
+00:08:42,080 --> 00:08:45,739
+because, you know, again, the scam aspect of you order something and it's,
+
+187
+00:08:46,219 --> 00:08:47,679
+it ships in 6 to 8 months
+
+188
+00:08:48,020 --> 00:08:49,320
+like you with your laptop.
+
+189
+00:08:50,729 --> 00:08:55,580
+It's down to August 31st as the date now
+
+190
+00:08:55,960 --> 00:08:57,140
+that it's supposed to ship.
+
+191
+00:08:57,150 --> 00:09:01,210
+So we'll see it, it, every, every couple of weeks they decrease it a little bit.
+
+192
+00:09:01,419 --> 00:09:05,140
+So, anyway, anyway, we're talking about sidewalk here. So
+
+193
+00:09:05,270 --> 00:09:06,559
+I guess here is
+
+194
+00:09:06,830 --> 00:09:10,719
+the question I have in my brain that I don't have an
+
+195
+00:09:10,729 --> 00:09:13,119
+answer to because I don't know how I feel about this is
+
+196
+00:09:13,299 --> 00:09:17,640
+Google has created a massive surveillance network with devices.
+
+197
+00:09:17,650 --> 00:09:22,130
+Apple has created a massive surveillance network with devices. Amazon wants one
+
+198
+00:09:22,330 --> 00:09:25,869
+and now we're losing our minds. Why do we care?
+
+199
+00:09:25,880 --> 00:09:30,239
+Amazon is doing this when countless other companies have already done it,
+
+200
+00:09:30,250 --> 00:09:35,159
+-- I
+-- think because historically Apple has not grossly abused
+
+201
+00:09:35,169 --> 00:09:38,969
+their position of trust and knowledge over consumers,
+
+202
+00:09:39,159 --> 00:09:41,729
+but Google has Google has, but,
+
+203
+00:09:41,840 --> 00:09:42,150
+ah,
+
+204
+00:09:42,570 --> 00:09:45,710
+-- people have given up, I think with Google
+-- maybe.
+
+205
+00:09:45,719 --> 00:09:47,010
+Well, what's the alternative use?
+
+206
+00:09:47,020 --> 00:09:51,650
+-- Bing? So
+-- actually I have been using duck duck go for
+
+207
+00:09:52,090 --> 00:09:55,760
+probably three or four months exclusively now for my searching.
+
+208
+00:09:56,000 --> 00:09:58,419
+And I will say that when I started using,
+
+209
+00:09:58,429 --> 00:10:02,000
+I would try it every now and then about maybe one or two years ago.
+
+210
+00:10:02,010 --> 00:10:05,169
+I, I would, every now and then I'd give it a go and be like, all right, it's, it's ok.
+
+211
+00:10:05,179 --> 00:10:05,700
+It's ok.
+
+212
+00:10:05,929 --> 00:10:09,219
+But now like, it's pretty good.
+
+213
+00:10:09,229 --> 00:10:13,299
+I would highly recommend duck duck go as a, as an acceptable replacement.
+
+214
+00:10:13,309 --> 00:10:16,409
+I do think Google is slightly better in certain instances,
+
+215
+00:10:16,419 --> 00:10:20,099
+but generally speaking for my usual searches, I am having
+
+216
+00:10:20,359 --> 00:10:22,369
+-- complete success with duck. Duck go
+-- so
+
+217
+00:10:22,539 --> 00:10:25,650
+stupid question. But looking at this, how does duck duck go make money?
+
+218
+00:10:25,659 --> 00:10:27,440
+And it's advertising and affiliate marketing?
+
+219
+00:10:27,559 --> 00:10:31,799
+They do have some ads but they're, they claim a bunch of privacy.
+
+220
+00:10:31,919 --> 00:10:34,849
+Are they clearly marked? Unlike, say Google? Where?
+
+221
+00:10:35,219 --> 00:10:38,059
+-- Yes,
+-- the duck duck go ads have a very nice little ad
+
+222
+00:10:38,640 --> 00:10:39,789
+in the corner. It
+
+223
+00:10:40,619 --> 00:10:45,500
+is, it is, it is where Google used to be and I have no doubt
+
+224
+00:10:45,750 --> 00:10:47,890
+they will travel the same road
+
+225
+00:10:48,119 --> 00:10:49,479
+but for the moment
+
+226
+00:10:49,659 --> 00:10:52,000
+I find them to be an acceptable alternative.
+
+227
+00:10:52,059 --> 00:10:54,380
+Oh, their ad button is just the same as Google.
+
+228
+00:10:54,390 --> 00:10:57,969
+It's not super, it's just a little tiny thing at the corner.
+
+229
+00:10:58,039 --> 00:11:02,039
+-- It's,
+-- yeah, it's not like blaring the obvious but whatever. It's, it's good enough.
+
+230
+00:11:02,049 --> 00:11:03,609
+I can easily tell the difference.
+
+231
+00:11:03,909 --> 00:11:05,369
+Yeah, because like I'm at the point where like
+
+232
+00:11:05,476 --> 00:11:08,445
+usually the first page of Google results for
+
+233
+00:11:08,666 --> 00:11:09,526
+just skip. That stuff
+
+234
+00:11:09,685 --> 00:11:10,216
+is just.
+
+235
+00:11:11,085 --> 00:11:12,125
+But anyway, anyway.
+
+236
+00:11:12,135 --> 00:11:15,835
+Ok, so back to my question, why do we care that Amazon is doing this?
+
+237
+00:11:15,846 --> 00:11:17,695
+-- But we don't care that Apple and
+-- Google,
+
+238
+00:11:17,705 --> 00:11:21,216
+I suspect part of it is because people actually own Amazon devices,
+
+239
+00:11:21,265 --> 00:11:23,176
+people own Google devices.
+
+240
+00:11:23,466 --> 00:11:26,986
+I mean, every freaking Google phone is just like, like it's a,
+
+241
+00:11:26,995 --> 00:11:29,565
+it's a fire hose of data straight to
+
+242
+00:11:29,575 --> 00:11:31,895
+Google about everything you've done in your life.
+
+243
+00:11:32,401 --> 00:11:35,781
+I don't know. It's a good question. Maybe because people here's the thing.
+
+244
+00:11:35,791 --> 00:11:38,421
+I have a direct relationship with Amazon in a way that I
+
+245
+00:11:38,432 --> 00:11:42,512
+do not with Google and I am actually a paying Google customer.
+
+246
+00:11:42,632 --> 00:11:44,952
+The majority of people do not have
+
+247
+00:11:45,411 --> 00:11:49,231
+a customer relationship with Google. They don't pay Google for services,
+
+248
+00:11:49,351 --> 00:11:49,562
+right.
+
+249
+00:11:49,572 --> 00:11:51,781
+They don't buy Google works suite or whatever the
+
+250
+00:11:51,791 --> 00:11:53,831
+-- hell it's called this
+-- week to a degree.
+
+251
+00:11:53,841 --> 00:11:58,221
+And, and that's sort of a fair argument is I did pay Amazon
+
+252
+00:11:58,401 --> 00:11:59,192
+for
+
+253
+00:11:59,539 --> 00:12:03,940
+my fire TV. S and my echo dots and all of those things.
+
+254
+00:12:03,950 --> 00:12:07,200
+And now suddenly they're abusing that device.
+
+255
+00:12:07,369 --> 00:12:09,619
+-- Do
+-- I truly own this device? If they can
+
+256
+00:12:09,929 --> 00:12:11,659
+quickly opt me into,
+
+257
+00:12:11,909 --> 00:12:13,359
+you know, it's one thing to,
+
+258
+00:12:13,500 --> 00:12:16,700
+to get automated software updates, but to get opted into a, you know,
+
+259
+00:12:16,710 --> 00:12:19,460
+this global surveillance network and it literally is,
+
+260
+00:12:19,469 --> 00:12:22,669
+it's meant to be a surveillance network to like find lost Bluetooth devices,
+
+261
+00:12:23,280 --> 00:12:25,849
+right. I'm not trying to be hyperbolic and crazy and paranoid, but
+
+262
+00:12:26,070 --> 00:12:28,260
+this is literally what this thing is supposed to be doing.
+
+263
+00:12:28,520 --> 00:12:29,260
+Right. Right.
+
+264
+00:12:29,520 --> 00:12:32,309
+Also, historically, Amazon's and Google, well,
+
+265
+00:12:32,479 --> 00:12:37,419
+Amazon's behavior historically has been incredibly abusive of their workers.
+
+266
+00:12:37,619 --> 00:12:41,309
+Well, not just that, look at how they are partnering with law enforcement,
+
+267
+00:12:41,525 --> 00:12:46,155
+with Ring and there, there, it's super sketchy what's going on there. I mean,
+
+268
+00:12:46,364 --> 00:12:49,005
+I feel like Google is stupid,
+
+269
+00:12:49,015 --> 00:12:54,034
+evil and Amazon is true evil in many of these discussions, you know what I mean?
+
+270
+00:12:54,284 --> 00:12:54,585
+Well,
+
+271
+00:12:54,594 --> 00:12:56,075
+I feel like Google still has a lot of
+
+272
+00:12:56,085 --> 00:12:59,385
+influence by engineers who will please don't be evil,
+
+273
+00:13:00,010 --> 00:13:01,630
+sort of try and do the right thing. But
+
+274
+00:13:01,780 --> 00:13:05,590
+let's be clear, Amazon is Amazon is Jeff Bezos.
+
+275
+00:13:06,119 --> 00:13:07,859
+That's it. Like, don't pretend otherwise.
+
+276
+00:13:08,570 --> 00:13:12,989
+No, I, I, that's true. And he's a ruthless gentleman, for sure.
+
+277
+00:13:13,109 --> 00:13:16,109
+He makes bond villains look grossly incompetent.
+
+278
+00:13:16,119 --> 00:13:18,869
+-- He's
+-- got the look like Goldfinger
+
+279
+00:13:18,880 --> 00:13:21,349
+was, you know, ridiculous compared to him.
+
+280
+00:13:21,359 --> 00:13:24,359
+I mean, I don't know. I really wonder about this.
+
+281
+00:13:24,369 --> 00:13:28,049
+I do know I've made a decision now that I'm not going to be buying more Google products
+
+282
+00:13:28,239 --> 00:13:30,260
+and, and it's not because of the privacy issue even.
+
+283
+00:13:30,270 --> 00:13:33,190
+It's because none of them work with my Google account.
+
+284
+00:13:33,510 --> 00:13:35,460
+And people are like, what, what do you mean? They don't work with your Google app?
+
+285
+00:13:35,469 --> 00:13:37,890
+Well, I have a Google works Suite account.
+
+286
+00:13:37,979 --> 00:13:39,890
+So my nest stuff,
+
+287
+00:13:39,900 --> 00:13:43,609
+I can't do two of a with it because it's not supported with a paid Google account.
+
+288
+00:13:43,859 --> 00:13:45,909
+I pay for youtube premium because I bought
+
+289
+00:13:45,919 --> 00:13:48,250
+youtube premium hoping to get the family plan.
+
+290
+00:13:48,260 --> 00:13:51,570
+-- You can't do that with a paid Google account.
+-- I know that's so ridiculous.
+
+291
+00:13:51,960 --> 00:13:54,289
+Same thing with my Google Home Wi Fi.
+
+292
+00:13:54,299 --> 00:13:57,830
+I have to use the Google home app now which lacks functionality,
+
+293
+00:13:58,070 --> 00:14:00,859
+including some big stuff. Like what is the speed to my devices?
+
+294
+00:14:00,869 --> 00:14:04,190
+Well, in the old app, it would test it and say like 27 megabits up,
+
+295
+00:14:04,200 --> 00:14:06,210
+three megabits down whatever, right?
+
+296
+00:14:06,729 --> 00:14:10,030
+In the new one, it says good, sometimes excellent.
+
+297
+00:14:10,169 --> 00:14:11,969
+And I'm like, what is that?
+
+298
+00:14:14,179 --> 00:14:14,789
+So,
+
+299
+00:14:15,280 --> 00:14:16,479
+so actually
+
+300
+00:14:16,700 --> 00:14:19,239
+I have a for, for anyone listening.
+
+301
+00:14:19,580 --> 00:14:24,130
+I also have some Google devices and I would very much like to get rid of them and I
+
+302
+00:14:24,140 --> 00:14:28,039
+was going to go ubiquity at one point and I feel like they're maybe kind of on the air.
+
+303
+00:14:28,049 --> 00:14:30,369
+I'm not so sure about this. And so
+
+304
+00:14:30,599 --> 00:14:32,849
+I don't know what to get if someone has suggestions,
+
+305
+00:14:32,859 --> 00:14:36,830
+like tweet them at me please or send me an email because I would absolutely
+
+306
+00:14:36,840 --> 00:14:44,474
+love to get some suggestions on like good solid home wi fi slash networking,
+
+307
+00:14:44,645 --> 00:14:49,775
+but also not like a fire hose of stealing my data to some terrible company.
+
+308
+00:14:49,784 --> 00:14:51,914
+-- Well,
+-- or a fire hose of, oh, you know,
+
+309
+00:14:51,924 --> 00:14:54,094
+we added advertising to the interface and also we
+
+310
+00:14:54,104 --> 00:14:55,924
+took away these features and now they're paid and,
+
+311
+00:14:56,515 --> 00:14:57,304
+you know, it's
+
+312
+00:14:57,734 --> 00:14:58,905
+anyway.
+
+313
+00:15:00,010 --> 00:15:00,140
+Yeah,
+
+314
+00:15:00,150 --> 00:15:01,859
+I don't know because I do like the aspect
+
+315
+00:15:01,869 --> 00:15:03,580
+like the Google wifi does do some things well,
+
+316
+00:15:03,590 --> 00:15:07,909
+-- in that it ros packets and it just works, it
+-- does just work, which is convenient.
+
+317
+00:15:07,919 --> 00:15:11,250
+And when I got mine just work was
+
+318
+00:15:11,559 --> 00:15:15,169
+-- we'll say a difficult proposition at the time, especially
+-- with mesh networking.
+
+319
+00:15:15,320 --> 00:15:16,659
+Right. Right. So, ok.
+
+320
+00:15:16,669 --> 00:15:17,869
+So anyway, anyway,
+
+321
+00:15:17,890 --> 00:15:23,309
+here is where I'm going to interject a great deal of opinion into this conversation.
+
+322
+00:15:23,320 --> 00:15:27,150
+Here is my thought on this whole Amazon debacle
+
+323
+00:15:27,510 --> 00:15:31,380
+and everyone has their own pet opinions and things like that.
+
+324
+00:15:31,710 --> 00:15:35,909
+And I think what has happened is the world is starting
+
+325
+00:15:36,080 --> 00:15:40,719
+to, we'll say pay attention to privacy like it has never done before.
+
+326
+00:15:40,729 --> 00:15:43,969
+I think this is where Apple found itself in a convenient position and
+
+327
+00:15:43,979 --> 00:15:47,409
+it always amuses me that Apple appears to be this privacy champion.
+
+328
+00:15:47,419 --> 00:15:48,010
+And I think
+
+329
+00:15:48,280 --> 00:15:52,159
+my, the reality is Apple probably doesn't give two craps about privacy.
+
+330
+00:15:52,169 --> 00:15:54,299
+They just happen to find themselves in the right
+
+331
+00:15:54,309 --> 00:15:55,799
+place at the right time and they're like,
+
+332
+00:15:55,869 --> 00:15:59,000
+well, you know, hell yeah, like sign me up for this.
+
+333
+00:15:59,250 --> 00:16:03,039
+But the thing is, I think people are paying attention to this and I think
+
+334
+00:16:03,150 --> 00:16:04,020
+we,
+
+335
+00:16:04,150 --> 00:16:07,530
+to a certain degree, subconsciously recognize that
+
+336
+00:16:07,989 --> 00:16:11,380
+Facebook and Google are lost causes. They've gone too far.
+
+337
+00:16:11,390 --> 00:16:13,909
+-- There's nothing we can do. There's no turning back. I think
+-- it's worse than that.
+
+338
+00:16:13,919 --> 00:16:15,700
+It's the bait and switch aspect of
+
+339
+00:16:16,099 --> 00:16:17,140
+apple doesn't
+
+340
+00:16:17,679 --> 00:16:20,580
+do a lot of bait and switch. But Google and Amazon
+
+341
+00:16:20,770 --> 00:16:22,419
+constantly do bait and switch well.
+
+342
+00:16:22,429 --> 00:16:25,809
+-- But,
+-- but Google has bait and switched us to death.
+
+343
+00:16:25,820 --> 00:16:28,809
+I mean, that's all like my favorite is my kids.
+
+344
+00:16:29,030 --> 00:16:32,500
+Anytime Google releases a product they joke about when Google is going to kill it.
+
+345
+00:16:32,510 --> 00:16:33,340
+I think
+
+346
+00:16:33,559 --> 00:16:36,659
+we've reached this point where people are fed up
+
+347
+00:16:36,780 --> 00:16:39,500
+and we can now complain about something.
+
+348
+00:16:39,510 --> 00:16:42,419
+Now, not everyone will because I'm sure like there's,
+
+349
+00:16:42,525 --> 00:16:46,664
+my parents will never hear of what Amazon is doing with their echo dots.
+
+350
+00:16:46,674 --> 00:16:48,385
+You know, it's just that sort of thing.
+
+351
+00:16:48,395 --> 00:16:53,544
+But I think people are truly starting to pay attention and that, that gives me hope.
+
+352
+00:16:53,575 --> 00:16:55,275
+I think we have a long way to go.
+
+353
+00:16:55,424 --> 00:16:56,465
+But I think
+
+354
+00:16:56,715 --> 00:17:00,114
+this is less about Amazon and more about just I'm
+
+355
+00:17:00,224 --> 00:17:03,184
+effing tired of all of this. Please stop.
+
+356
+00:17:03,284 --> 00:17:04,854
+And I think that's a big part of it is
+
+357
+00:17:04,864 --> 00:17:07,305
+this bait and switch aspect from Google and Amazon.
+
+358
+00:17:07,640 --> 00:17:08,130
+And
+
+359
+00:17:08,439 --> 00:17:12,709
+it's now an understandable privacy problem of, oh, wait,
+
+360
+00:17:12,719 --> 00:17:16,140
+you're just gonna randomly opt me into my network to be part of your
+
+361
+00:17:16,500 --> 00:17:22,459
+-- global mothership surveillance thing of a jigger.
+-- One positive aspect of this I saw
+
+362
+00:17:22,959 --> 00:17:26,368
+is for example, let's say you have internet in your house
+
+363
+00:17:26,640 --> 00:17:31,339
+and you have a camera on your garage, but your garage camera can't see
+
+364
+00:17:31,859 --> 00:17:35,150
+your house internet, but it can see the echo.in your kitchen or whatever.
+
+365
+00:17:35,160 --> 00:17:35,760
+You know what I mean?
+
+366
+00:17:35,969 --> 00:17:39,680
+-- So like there can be value in this mesh network.
+-- Absolutely.
+
+367
+00:17:39,689 --> 00:17:43,040
+Like I had um originally with my previous wireless network,
+
+368
+00:17:43,050 --> 00:17:47,300
+my ring doorbell on the front door is sitting on a big chunk of metal channel,
+
+369
+00:17:47,310 --> 00:17:50,640
+which is very good at blocking Wi Fi from inside the house.
+
+370
+00:17:50,689 --> 00:17:53,213
+And so I actually had to put it a Wi Fi extender
+
+371
+00:17:53,522 --> 00:17:57,072
+in the garage like 10 ft away from the doorbell because just
+
+372
+00:17:57,213 --> 00:17:59,753
+otherwise it was just getting like one or two megabits per second.
+
+373
+00:17:59,963 --> 00:18:02,373
+And then I deployed Google mesh Wi Fi
+
+374
+00:18:02,652 --> 00:18:07,383
+and it's actually connected to the Wi Fi unit up on the upstairs bedroom,
+
+375
+00:18:07,392 --> 00:18:10,993
+which is kind of at a nice anyways, the angles work out basically, right
+
+376
+00:18:11,493 --> 00:18:11,843
+and the problem
+
+377
+00:18:12,115 --> 00:18:12,426
+though
+
+378
+00:18:12,586 --> 00:18:14,495
+it's on a chunk, like most
+
+379
+00:18:14,725 --> 00:18:16,105
+door frames have
+
+380
+00:18:16,225 --> 00:18:19,666
+like metal on the outside, you know, flashing or siding or whatever.
+
+381
+00:18:20,235 --> 00:18:23,765
+Because, well, yeah, that's what you do so that it doesn't rot and, oh, yeah.
+
+382
+00:18:23,776 --> 00:18:25,145
+No, it's, it's stuff like this.
+
+383
+00:18:25,156 --> 00:18:29,306
+I, it would be nice to, you know, if every echo in my house did proper mesh Wi Fi,
+
+384
+00:18:29,316 --> 00:18:31,546
+I could throw my Google stuff out basically.
+
+385
+00:18:31,556 --> 00:18:31,985
+Right.
+
+386
+00:18:32,255 --> 00:18:35,465
+Yeah. No, if Amazon's gonna opt me into, to being
+
+387
+00:18:36,099 --> 00:18:39,660
+part of, maybe it's because there's this clear benefit to them.
+
+388
+00:18:39,670 --> 00:18:42,209
+There's like a clear line of Amazon doesn't want to pay to deploy this.
+
+389
+00:18:42,219 --> 00:18:45,270
+So they're just opting me in. Maybe that's why people are so upset.
+
+390
+00:18:45,400 --> 00:18:48,150
+That could certainly be, I don't know. It's, it's interesting.
+
+391
+00:18:48,160 --> 00:18:51,290
+This is, I think one of those just aspects of human behavior that,
+
+392
+00:18:51,300 --> 00:18:54,770
+that no one will ever understand that we get upset about one thing and not another.
+
+393
+00:18:54,780 --> 00:18:57,569
+-- It's,
+-- and it's just, it's not just one aspect of this, right?
+
+394
+00:18:57,579 --> 00:18:59,180
+For many people, like I know for myself,
+
+395
+00:18:59,189 --> 00:19:01,930
+there's sort of three or four things I'm annoyed about with respect to this
+
+396
+00:19:02,430 --> 00:19:04,770
+and I suspect there's probably a constellation of
+
+397
+00:19:04,780 --> 00:19:07,369
+20 or 30 reasons in total if you interviewed
+
+398
+00:19:07,510 --> 00:19:08,569
+1000 people.
+
+399
+00:19:08,910 --> 00:19:10,569
+But yeah, no, that's a good point why,
+
+400
+00:19:10,640 --> 00:19:12,969
+because Apple has opted us into a whole bunch of
+
+401
+00:19:12,979 --> 00:19:15,530
+this tracking stuff with not a lot of consent.
+
+402
+00:19:15,640 --> 00:19:18,520
+So, I mean, in all serious, this air tags.
+
+403
+00:19:19,300 --> 00:19:21,290
+That's how air tags literally work.
+
+404
+00:19:21,300 --> 00:19:23,869
+They, so one thing that's really interesting is there's,
+
+405
+00:19:23,880 --> 00:19:28,530
+I think it might have been the eff published a story about air tags where basically
+
+406
+00:19:28,689 --> 00:19:31,609
+the reporter, someone put an airtag and someone,
+
+407
+00:19:32,020 --> 00:19:35,099
+-- it was using it as a stalking tracker thing.
+-- Right. Right. Right. Right.
+
+408
+00:19:35,250 --> 00:19:37,479
+And there's so what's wild is
+
+409
+00:19:38,369 --> 00:19:41,790
+like if I put an air tag in your bag, I can obviously track it.
+
+410
+00:19:41,800 --> 00:19:43,079
+Now if you have an Apple device,
+
+411
+00:19:43,089 --> 00:19:45,829
+your Apple device because this happens because my wife has an Airtag,
+
+412
+00:19:46,010 --> 00:19:47,449
+my phone will be like, hey,
+
+413
+00:19:47,729 --> 00:19:49,349
+there's an Airtag following you around
+
+414
+00:19:49,670 --> 00:19:51,050
+and I'm like, yes, it's fine.
+
+415
+00:19:51,229 --> 00:19:54,930
+Right? And I can't be like, yes, it's fine. Never like never show up again.
+
+416
+00:19:55,239 --> 00:19:59,130
+It says don't show up for a while and then like a week or two later.
+
+417
+00:19:59,439 --> 00:20:02,290
+-- And,
+-- and that's one thing Apple got right on those things is they,
+
+418
+00:20:02,300 --> 00:20:05,130
+their engineers are trying to do the right thing because for example,
+
+419
+00:20:05,140 --> 00:20:07,810
+I own some tile devices and they, they do nothing like that.
+
+420
+00:20:07,900 --> 00:20:13,729
+Right. Right. And so, I mean, I totally get the whole stalker aspect of this because
+
+421
+00:20:13,949 --> 00:20:16,729
+like historically, a lot of these devices were
+
+422
+00:20:16,859 --> 00:20:18,829
+push the button, make a beep.
+
+423
+00:20:18,839 --> 00:20:19,930
+And if it's not near you,
+
+424
+00:20:19,939 --> 00:20:24,699
+you're sol there's value in having the ability to track things for long distances.
+
+425
+00:20:24,709 --> 00:20:26,469
+But obviously the whole like just
+
+426
+00:20:26,660 --> 00:20:30,170
+-- tracking and spying angle is disturbing.
+-- I'm divorced.
+
+427
+00:20:30,180 --> 00:20:34,209
+My kids live in two households there was a case where my son lost,
+
+428
+00:20:34,219 --> 00:20:38,140
+he put his phone in a basket of his mother's house and it was quote unquote,
+
+429
+00:20:38,709 --> 00:20:39,410
+lost.
+
+430
+00:20:40,040 --> 00:20:42,420
+And I'm like, well, I know it's at your house,
+
+431
+00:20:42,630 --> 00:20:45,459
+like, I'm not trying to be difficult but it's at your house, like,
+
+432
+00:20:46,250 --> 00:20:50,020
+and, but the battery just died. So I can't make it ping otherwise I would make it ping
+
+433
+00:20:50,569 --> 00:20:54,000
+and they eventually found it under a, you know, a thing of wool, like it had
+
+434
+00:20:54,349 --> 00:20:56,099
+kind of slipped under something
+
+435
+00:20:56,349 --> 00:20:57,380
+ball of yarn or whatever,
+
+436
+00:20:57,719 --> 00:21:01,619
+you know. And so, but so there's, there is a lot of,
+
+437
+00:21:01,780 --> 00:21:04,380
+there are a lot of common use cases where people,
+
+438
+00:21:04,540 --> 00:21:06,280
+Children live in multiple households.
+
+439
+00:21:06,329 --> 00:21:10,140
+Uh, you know, I remember in the before time there was a lot of people who went to,
+
+440
+00:21:10,329 --> 00:21:11,479
+I forget how to pronounce it.
+
+441
+00:21:11,640 --> 00:21:11,699
+W
+
+442
+00:21:13,119 --> 00:21:16,939
+it was like these big buildings that, where people would congregate and,
+
+443
+00:21:17,050 --> 00:21:18,689
+and, and do stuff together
+
+444
+00:21:18,849 --> 00:21:19,619
+to get paid
+
+445
+00:21:19,920 --> 00:21:21,939
+and, you know, sometimes they forget their stuff there.
+
+446
+00:21:21,949 --> 00:21:23,520
+I think there's huge value in this.
+
+447
+00:21:23,530 --> 00:21:26,250
+But yeah, it's, it's, are we making it hard for stalkers to abuse?
+
+448
+00:21:26,260 --> 00:21:28,199
+Are we making it privacy friendly? And
+
+449
+00:21:28,349 --> 00:21:32,180
+in Apple's case, they seem to be trying. And in Amazon's case,
+
+450
+00:21:32,369 --> 00:21:33,400
+I don't trust them.
+
+451
+00:21:33,589 --> 00:21:36,020
+-- I mean,
+-- I, I agree. I, I feel like
+
+452
+00:21:36,125 --> 00:21:39,564
+trust Apple slightly more. I mean, for now don't get me wrong.
+
+453
+00:21:39,574 --> 00:21:41,665
+It would not shock me if at some point
+
+454
+00:21:41,875 --> 00:21:44,305
+in the near future, Apple does a total 180
+
+455
+00:21:44,515 --> 00:21:45,665
+goes full Google.
+
+456
+00:21:45,675 --> 00:21:49,964
+But so far, Apple has gradually ratcheted up and improved privacy.
+
+457
+00:21:49,984 --> 00:21:52,305
+And Amazon and Google have sort of done the opposite, at
+
+458
+00:21:52,724 --> 00:21:53,805
+least perceptually.
+
+459
+00:21:53,974 --> 00:21:54,305
+Yeah.
+
+460
+00:21:54,525 --> 00:21:57,665
+But again, I think we kind of come back to the situation of
+
+461
+00:21:58,145 --> 00:22:02,305
+Apple sells me devices which I gladly keep purchasing
+
+462
+00:22:02,959 --> 00:22:06,540
+and Google and, and I think Amazon may be slightly less,
+
+463
+00:22:06,550 --> 00:22:07,780
+but I feel like they're heading in the
+
+464
+00:22:07,790 --> 00:22:10,339
+wrong direction of like you are Google's product,
+
+465
+00:22:10,349 --> 00:22:10,569
+right?
+
+466
+00:22:10,579 --> 00:22:11,560
+We are their cattle
+
+467
+00:22:11,780 --> 00:22:15,420
+and I think Amazon is starting to treat us in a similar way.
+
+468
+00:22:15,609 --> 00:22:19,560
+I went to buy some AAA batteries because I finally ran out of the AAA batteries.
+
+469
+00:22:19,569 --> 00:22:20,819
+I bought three years ago
+
+470
+00:22:21,270 --> 00:22:26,359
+and by default, Amazon had it set as a subscription, not a one time purchase.
+
+471
+00:22:27,469 --> 00:22:27,790
+Yeah, but
+
+472
+00:22:27,969 --> 00:22:29,430
+like once every three years,
+
+473
+00:22:29,439 --> 00:22:31,540
+are they going to send you a case of batteries every month?
+
+474
+00:22:31,589 --> 00:22:34,829
+Go to Amazon type in AAA batteries. Choose the Amazon brand.
+
+475
+00:22:34,910 --> 00:22:40,040
+-- If you need a battery subscription, you're doing something wrong.
+-- And by default,
+
+476
+00:22:40,140 --> 00:22:42,560
+there's a gray box at the top that says one time purchase
+
+477
+00:22:42,770 --> 00:22:43,540
+and below it
+
+478
+00:22:43,709 --> 00:22:46,890
+selected by default is subscribe and say 5%
+
+479
+00:22:47,410 --> 00:22:51,939
+say 5% now and up to 15% on repeat deliveries cancel at any time.
+
+480
+00:22:52,469 --> 00:22:53,079
+So it's,
+
+481
+00:22:53,209 --> 00:22:56,319
+you know, it's and it's delivery every six months, which is perfect because I'll,
+
+482
+00:22:56,329 --> 00:22:59,069
+I'll absolutely forget about this in six months and then get
+
+483
+00:22:59,079 --> 00:23:01,040
+another package of batteries in the mail that I don't need.
+
+484
+00:23:01,150 --> 00:23:02,540
+So now when I shop at Amazon,
+
+485
+00:23:02,550 --> 00:23:04,140
+I have to be super careful to make sure I'm
+
+486
+00:23:04,150 --> 00:23:07,170
+only buying one of them and not a subscription.
+
+487
+00:23:07,609 --> 00:23:08,079
+Uh,
+
+488
+00:23:08,560 --> 00:23:11,229
+I don't, I don't need to worry about this crap.
+
+489
+00:23:11,339 --> 00:23:12,069
+I don't,
+
+490
+00:23:12,479 --> 00:23:15,949
+and that's why I'm just like, oh man, Amazon. Not cool, man.
+
+491
+00:23:16,250 --> 00:23:19,310
+I need to find somewhere to order things on the internet easily.
+
+492
+00:23:19,520 --> 00:23:21,500
+I tried. There's, there's Amazon, that's it.
+
+493
+00:23:22,709 --> 00:23:25,270
+But Costco will only, you know,
+
+494
+00:23:25,550 --> 00:23:28,339
+sell me certain things in historically large amounts.
+
+495
+00:23:28,540 --> 00:23:30,270
+I love it, which is good though,
+
+496
+00:23:30,479 --> 00:23:32,589
+you know, for certain things. But yeah,
+
+497
+00:23:33,060 --> 00:23:34,760
+I, so and this is a perfect example, right?
+
+498
+00:23:34,770 --> 00:23:37,680
+This, this kind of constant bait and switch and trying to trick,
+
+499
+00:23:37,689 --> 00:23:40,140
+I feel like Amazon and Google are trying to constantly trick
+
+500
+00:23:40,150 --> 00:23:42,359
+me into clicking an ad or buying something I don't need.
+
+501
+00:23:42,540 --> 00:23:45,920
+Yeah, I'll agree anyway. It's frustrating.
+
+502
+00:23:46,180 --> 00:23:48,689
+Here's my ending thought on this and this is
+
+503
+00:23:48,699 --> 00:23:50,979
+something I've been thinking about a generous amount lately.
+
+504
+00:23:50,989 --> 00:23:51,420
+So
+
+505
+00:23:51,589 --> 00:23:54,239
+there when, when you and I were Children,
+
+506
+00:23:54,579 --> 00:23:56,359
+do you remember all the reduced reuse,
+
+507
+00:23:56,369 --> 00:24:00,660
+recycle messaging that we had like just shoveled into our brains where it was like,
+
+508
+00:24:00,670 --> 00:24:02,479
+oh everyone needs to do their part.
+
+509
+00:24:02,900 --> 00:24:06,859
+And then we've recently discovered that something like 80% of
+
+510
+00:24:06,869 --> 00:24:10,170
+pollution is coming from like 15 companies on the planet.
+
+511
+00:24:10,369 --> 00:24:13,599
+-- And it's like, wait a minute what
+-- I have a problem with that because like it's,
+
+512
+00:24:13,609 --> 00:24:15,530
+I need to buy a lot of that stuff that they make.
+
+513
+00:24:15,540 --> 00:24:17,170
+-- Well. Well,
+-- but here's the point. Right. Ok.
+
+514
+00:24:17,180 --> 00:24:20,839
+Here's the point is there's been this historic trend
+
+515
+00:24:20,949 --> 00:24:21,800
+of
+
+516
+00:24:22,140 --> 00:24:24,650
+kind of almost victim blaming for
+
+517
+00:24:24,849 --> 00:24:24,859
+a
+
+518
+00:24:25,010 --> 00:24:29,560
+large number of the world's problems and I think even things like privacy
+
+519
+00:24:29,890 --> 00:24:30,989
+were part of that
+
+520
+00:24:31,239 --> 00:24:35,719
+where it was. Oh, don't click links. Don't do this on the internet. Don't type.
+
+521
+00:24:35,729 --> 00:24:38,310
+And it's like you just, it doesn't work that way. Like you can't,
+
+522
+00:24:38,479 --> 00:24:41,319
+you can't defend yourself against these adversaries.
+
+523
+00:24:41,329 --> 00:24:43,670
+They're too big and they're too powerful. And I think,
+
+524
+00:24:44,300 --> 00:24:47,989
+I mean, to a degree, this is what we're kind of seeing with Amazon is, yeah,
+
+525
+00:24:48,000 --> 00:24:51,189
+you can opt out a sidewalk but most people won't and
+
+526
+00:24:51,469 --> 00:24:57,189
+they're clearly taking an adversarial stamps from the perspective of the users.
+
+527
+00:24:57,199 --> 00:25:02,880
+And so I think in the context of privacy on the internet and just in general, right?
+
+528
+00:25:02,890 --> 00:25:06,560
+Not even with Amazon or without or whatever is the only
+
+529
+00:25:06,569 --> 00:25:09,569
+way we're going to solve a lot of these problems is when
+
+530
+00:25:10,069 --> 00:25:14,839
+the governments of the world start to care about these problems because as a human,
+
+531
+00:25:15,030 --> 00:25:20,189
+there's just nothing you can do. There's no way to stop Google from spying on you.
+
+532
+00:25:20,199 --> 00:25:23,030
+There just isn't, even if you don't use the internet,
+
+533
+00:25:23,160 --> 00:25:25,969
+they're spying on you. Right. There's like there is no way,
+
+534
+00:25:26,239 --> 00:25:30,540
+let's say about 10% of people who are Google and Amazon users to stop,
+
+535
+00:25:30,709 --> 00:25:33,890
+which would be a massive ridiculous amount of success. Right.
+
+536
+00:25:33,900 --> 00:25:35,989
+It's just not possible. It, it, I
+
+537
+00:25:36,109 --> 00:25:38,969
+guess it would show up on their end of year spreadsheets, but that's about
+
+538
+00:25:39,160 --> 00:25:41,780
+-- it.
+-- They siphon this data from everything.
+
+539
+00:25:42,300 --> 00:25:46,000
+I mean, it, it's coming from purchases you make in meet space,
+
+540
+00:25:46,010 --> 00:25:49,839
+it's coming from purchases you make online, it's coming from websites you visit.
+
+541
+00:25:49,849 --> 00:25:50,420
+It's just
+
+542
+00:25:50,640 --> 00:25:54,300
+we exist in this massive surveillance universe.
+
+543
+00:25:54,310 --> 00:25:56,890
+And so I'm hopeful that more and more people pay
+
+544
+00:25:56,900 --> 00:26:00,920
+attention and we see a push in the right direction because
+
+545
+00:26:01,380 --> 00:26:02,280
+I think
+
+546
+00:26:02,479 --> 00:26:04,040
+for a long time
+
+547
+00:26:04,380 --> 00:26:06,810
+there was, I don't know if I'd even say it was apathy.
+
+548
+00:26:06,819 --> 00:26:07,239
+It's just,
+
+549
+00:26:07,250 --> 00:26:11,119
+I don't think people understood and I think we're starting to figure it out.
+
+550
+00:26:11,130 --> 00:26:14,359
+It reminds me of like the Edward Snowden revelations where everybody's like, oh,
+
+551
+00:26:14,369 --> 00:26:18,540
+he's paranoid crackpot and now here we are 5, 10 years later and we're like, oh,
+
+552
+00:26:18,550 --> 00:26:19,329
+oh my goodness,
+
+553
+00:26:19,744 --> 00:26:20,545
+never forget that.
+
+554
+00:26:20,555 --> 00:26:23,204
+Where for a long time, all the security people were like, yeah,
+
+555
+00:26:23,214 --> 00:26:26,564
+the NSA is totally doing this and like, oh, you're all just paranoid nuts.
+
+556
+00:26:26,734 --> 00:26:31,084
+I worked for a company full of ex-military people and I, you know, was just talking,
+
+557
+00:26:31,094 --> 00:26:32,084
+I'm like, oh, yeah, it's too bad.
+
+558
+00:26:32,094 --> 00:26:33,885
+We can't do something like echelon and just monitor
+
+559
+00:26:33,895 --> 00:26:34,964
+all the RC networks and the guy's like,
+
+560
+00:26:34,974 --> 00:26:36,165
+you can't say that on the phone.
+
+561
+00:26:36,175 --> 00:26:38,035
+I'm like, say what on the phone? Like,
+
+562
+00:26:38,560 --> 00:26:42,760
+he's like, you can't say that word and I'm like, which word Irc like, no, like, come
+
+563
+00:26:42,910 --> 00:26:45,380
+on, he's like, yeah, don't say that on the phone. I'm like, God, I mean,
+
+564
+00:26:45,829 --> 00:26:45,979
+yeah.
+
+565
+00:26:45,989 --> 00:26:48,859
+And, but I remember telling people about stuff like echelon, they're like,
+
+566
+00:26:48,869 --> 00:26:50,040
+you're just a nut then.
+
+567
+00:26:50,050 --> 00:26:54,599
+I'm like, oh, ha ha, not a nut. And they're like, shut up nerd. We still don't care.
+
+568
+00:26:54,619 --> 00:26:58,739
+Well, the NSA using Danish telecoms to spy on the German Chancellor and
+
+569
+00:26:58,915 --> 00:26:59,584
+Merkel, like,
+
+570
+00:27:00,074 --> 00:27:01,005
+yeah, that,
+
+571
+00:27:01,204 --> 00:27:03,925
+I mean, and that's, this is just new stuff in the last week.
+
+572
+00:27:04,135 --> 00:27:06,265
+I, I know, I know it's,
+
+573
+00:27:06,494 --> 00:27:07,885
+I guess the thing
+
+574
+00:27:08,234 --> 00:27:12,324
+I will hopefully fill us all with some hope is that
+
+575
+00:27:12,555 --> 00:27:15,125
+I think a lot of this went unchecked for a long time
+
+576
+00:27:15,135 --> 00:27:16,974
+and I think we have a very long way to go.
+
+577
+00:27:16,984 --> 00:27:19,074
+I think this is the beginning of the beginning,
+
+578
+00:27:19,234 --> 00:27:21,005
+you know, to steal the Churchill quote.
+
+579
+00:27:21,285 --> 00:27:22,435
+But I think
+
+580
+00:27:22,785 --> 00:27:25,084
+I feel it feels like
+
+581
+00:27:25,609 --> 00:27:28,479
+we're starting to at least look in the right direction
+
+582
+00:27:28,489 --> 00:27:31,310
+here versus before where I feel like no one knew
+
+583
+00:27:31,459 --> 00:27:33,189
+-- like
+-- awareness is step one because
+
+584
+00:27:33,589 --> 00:27:34,969
+for the longest time, you know,
+
+585
+00:27:34,979 --> 00:27:37,060
+the NSA and all this warrantless surveillance and
+
+586
+00:27:37,069 --> 00:27:39,569
+FISA courts and everything was going on just
+
+587
+00:27:39,790 --> 00:27:41,349
+behind closed doors literally.
+
+588
+00:27:41,959 --> 00:27:45,150
+And same thing with these companies like Choicepoint and Experian and
+
+589
+00:27:45,160 --> 00:27:49,150
+Transunion and all these places that have massive amounts of data on
+
+590
+00:27:49,489 --> 00:27:53,170
+everyone. Like not most of us, literally, everyone
+
+591
+00:27:53,640 --> 00:27:57,020
+and we were blissfully unaware and well, now we're aware.
+
+592
+00:27:57,030 --> 00:28:01,500
+So that's step you know, it's to quote, uh, what is it, Dan Aykroyd, you know, you,
+
+593
+00:28:01,510 --> 00:28:03,349
+now you've discovered the source of the smell.
+
+594
+00:28:03,359 --> 00:28:04,319
+What are you gonna do about it?
+
+595
+00:28:05,079 --> 00:28:05,619
+You know, from?
+
+596
+00:28:06,670 --> 00:28:10,260
+Well, I don't know the answer to that yet, but we'll see.
+
+597
+00:28:10,270 --> 00:28:12,170
+All right, I'm going to end it.
+
+598
+00:28:12,239 --> 00:28:19,979
+I guess if anyone has suggestions or insights or any details that could be useful,
+
+599
+00:28:19,989 --> 00:28:21,000
+let us know.
+
+600
+00:28:21,219 --> 00:28:23,180
+And if this is a topic
+
+601
+00:28:23,619 --> 00:28:27,959
+you're working on, let us know we'd love to talk to you. But thank you, Kurt.
+
+602
+00:28:27,969 --> 00:28:30,790
+Thank you everyone for listening. Go to open source security, podcast.com.
+
+603
+00:28:30,800 --> 00:28:31,000
+Head to Pando.
+
+604
+00:28:32,119 --> 00:28:34,800
+It says podcast hashtag do hit us up on social media.
+
+605
+00:28:34,810 --> 00:28:37,160
+Kurt have a marvelous rest of your day.
+
+606
+00:28:37,430 --> 00:28:38,760
+You too. Thanks everybody.
+
+607
+00:28:39,010 --> 00:28:40,670
+Thanks everyone. Bye bye
+
+608
+00:28:45,329 --> 00:28:45,390
+the.

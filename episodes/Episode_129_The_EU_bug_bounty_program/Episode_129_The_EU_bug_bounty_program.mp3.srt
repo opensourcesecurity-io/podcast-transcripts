@@ -1,0 +1,3159 @@
+0
+00:00:05,710 --> 00:00:10,130
+Hello and welcome to the open source security podcast episode 129 with myself,
+
+1
+00:00:10,140 --> 00:00:10,739
+Kurt Siefried
+
+2
+00:00:10,930 --> 00:00:12,899
+and my partner in Thought Crime. Josh Bresser.
+
+3
+00:00:13,210 --> 00:00:14,210
+-- What's
+-- new Man?
+
+4
+00:00:14,399 --> 00:00:16,639
+-- Uh
+-- It's Christmas. It's the New Year.
+
+5
+00:00:16,959 --> 00:00:18,329
+It, it is the new year.
+
+6
+00:00:18,340 --> 00:00:20,190
+But thanks to the magic of podcasting,
+
+7
+00:00:20,200 --> 00:00:22,569
+this is going to come out like in the middle of January.
+
+8
+00:00:22,590 --> 00:00:23,770
+So that's fun.
+
+9
+00:00:24,020 --> 00:00:25,969
+I thought you were gonna say the middle of the year.
+
+10
+00:00:26,430 --> 00:00:28,760
+I could do that though. If you really wanted to,
+
+11
+00:00:29,670 --> 00:00:32,529
+we could just start releasing episodes in random order.
+
+12
+00:00:33,029 --> 00:00:33,590
+Like a,
+
+13
+00:00:33,799 --> 00:00:34,439
+I don't know,
+
+14
+00:00:34,680 --> 00:00:36,549
+I don't know that they really have an order per se.
+
+15
+00:00:37,310 --> 00:00:40,520
+Uh They have numbers that have been increasing in value for the most part.
+
+16
+00:00:40,529 --> 00:00:42,299
+And then that's something I think about sometimes is like,
+
+17
+00:00:42,310 --> 00:00:43,650
+does this really have a purpose?
+
+18
+00:00:43,659 --> 00:00:46,130
+But I guess the one good thing I think of is
+
+19
+00:00:46,470 --> 00:00:48,209
+I have podcasts.
+
+20
+00:00:48,220 --> 00:00:52,250
+I listen to that don't have like numbers associated with the episodes and sometimes
+
+21
+00:00:52,259 --> 00:00:54,970
+I want to listen to like three or four at a time because like,
+
+22
+00:00:54,979 --> 00:00:56,779
+I've lost track or whatever.
+
+23
+00:00:56,790 --> 00:00:57,720
+There's a million reasons
+
+24
+00:00:58,139 --> 00:01:00,860
+and putting them in the right order is a pain in my butt.
+
+25
+00:01:01,130 --> 00:01:05,660
+So, the numbers are helpful in that regard, which is why I've kept them to date.
+
+26
+00:01:05,739 --> 00:01:06,000
+Well,
+
+27
+00:01:06,010 --> 00:01:09,370
+I guess there's a reason ISBN barcodes and CV E numbers and
+
+28
+00:01:09,379 --> 00:01:12,330
+all those numbers exist because we humans do like sequential numbers.
+
+29
+00:01:12,500 --> 00:01:12,889
+Right.
+
+30
+00:01:13,300 --> 00:01:16,940
+Even, even, yeah, I mean, in the case of CV, E sequential,
+
+31
+00:01:17,250 --> 00:01:20,209
+-- sequential. Well, no,
+-- it doesn't matter but having an identifying number.
+
+32
+00:01:20,669 --> 00:01:22,720
+Yeah. Totally. Absolutely. Yep. Yep.
+
+33
+00:01:23,720 --> 00:01:28,300
+So, so anyway, the topic today is the EU bug bounty, which is,
+
+34
+00:01:28,309 --> 00:01:29,900
+I think a super interesting topic.
+
+35
+00:01:29,910 --> 00:01:34,019
+-- I, I wrote a blog post about it which I hope you've read if you haven't shame
+-- on you.
+
+36
+00:01:34,269 --> 00:01:34,699
+No,
+
+37
+00:01:34,870 --> 00:01:35,839
+I was sleeping
+
+38
+00:01:36,050 --> 00:01:38,620
+shame on you. Uh, no, it's a great topic though.
+
+39
+00:01:38,629 --> 00:01:41,379
+So, why don't you give us the background and then we'll dive right here.
+
+40
+00:01:42,089 --> 00:01:47,430
+So, uh, the EU is a major government thing
+
+41
+00:01:47,680 --> 00:01:48,459
+and one of the
+
+42
+00:01:48,580 --> 00:01:48,620
+things,
+
+43
+00:01:49,379 --> 00:01:49,860
+-- yeah.
+-- Uh,
+
+44
+00:01:49,970 --> 00:01:54,069
+one of the things they do is this free and open source software auditing
+
+45
+00:01:54,239 --> 00:01:55,209
+project
+
+46
+00:01:55,410 --> 00:01:57,019
+quite simply put,
+
+47
+00:01:57,029 --> 00:02:00,069
+it's an effort to audit free and open source
+
+48
+00:02:00,080 --> 00:02:02,589
+software for security flaws and get them fixed.
+
+49
+00:02:02,599 --> 00:02:04,309
+Um, and this is software
+
+50
+00:02:04,720 --> 00:02:06,169
+that the EU
+
+51
+00:02:06,470 --> 00:02:11,389
+government has decided that they essentially rely upon heavily.
+
+52
+00:02:11,770 --> 00:02:14,130
+And one thing that really impressed me is that they actually
+
+53
+00:02:14,139 --> 00:02:17,550
+managed to identify the open source projects that they care about.
+
+54
+00:02:17,949 --> 00:02:20,990
+And if you look at the list for the bug bounty, it's actually
+
+55
+00:02:21,279 --> 00:02:23,679
+like, it makes sense. It's, it's stuff that's like
+
+56
+00:02:24,130 --> 00:02:28,330
+public facing or that is accepting weird files from random people that you,
+
+57
+00:02:28,339 --> 00:02:30,630
+you kind of have to open as part of your job function.
+
+58
+00:02:30,639 --> 00:02:31,000
+Right.
+
+59
+00:02:31,009 --> 00:02:34,899
+Well, the list is a little weird but, I mean, fundamentally I think it's, it's over,
+
+60
+00:02:35,360 --> 00:02:37,509
+I think the list is entirely rational and,
+
+61
+00:02:37,660 --> 00:02:39,789
+and I was actually looking through it trying to figure out
+
+62
+00:02:39,800 --> 00:02:41,169
+what all these things are because half of these things,
+
+63
+00:02:41,179 --> 00:02:44,550
+I, well, not half a quarter of these things I'd never heard of.
+
+64
+00:02:44,669 --> 00:02:46,229
+But when I hunted them down, it was like, wow,
+
+65
+00:02:46,240 --> 00:02:49,869
+that actually really like having a bug bounty for this piece of software makes
+
+66
+00:02:50,000 --> 00:02:51,309
+a lot of sense.
+
+67
+00:02:51,490 --> 00:02:53,869
+Yeah. No, I won't disagree. It's
+
+68
+00:02:54,169 --> 00:02:55,669
+what, 14
+
+69
+00:02:56,470 --> 00:02:57,619
+project I believe
+
+70
+00:02:58,369 --> 00:02:59,539
+and funny story.
+
+71
+00:02:59,550 --> 00:03:01,750
+But I can't open the website that talks about it a lot
+
+72
+00:03:01,759 --> 00:03:04,350
+right now because it's not available today on I PV four.
+
+73
+00:03:04,720 --> 00:03:08,699
+And I guess I need to go set up I PV six. Finally.
+
+74
+00:03:09,160 --> 00:03:11,059
+Luckily I live in the future.
+
+75
+00:03:11,070 --> 00:03:16,360
+So I have the website and, and I'll quickly read the list that's, that's put here.
+
+76
+00:03:16,369 --> 00:03:17,580
+So there's file Zilla
+
+77
+00:03:17,830 --> 00:03:17,919
+Apache,
+
+78
+00:03:18,600 --> 00:03:21,839
+Kafka notepad plus plus, which made me laugh out loud.
+
+79
+00:03:22,070 --> 00:03:22,570
+I love that
+
+80
+00:03:22,759 --> 00:03:23,369
+on windows.
+
+81
+00:03:24,100 --> 00:03:24,380
+Uh
+
+82
+00:03:24,729 --> 00:03:25,179
+-- OK.
+-- That's,
+
+83
+00:03:25,369 --> 00:03:27,259
+I kind of wish they would just buy it and integrate it.
+
+84
+00:03:27,270 --> 00:03:28,509
+So I didn't have to go install it. Uh
+
+85
+00:03:29,259 --> 00:03:33,699
+VLC media player, something called flux TL. I don't know what that is.
+
+86
+00:03:33,710 --> 00:03:37,380
+-- Flux
+-- transport layer. It's for the fisheries data platform,
+
+87
+00:03:37,660 --> 00:03:40,279
+-- uh
+-- fishery, like people fishing,
+
+88
+00:03:40,509 --> 00:03:44,434
+-- like literally boats catching fish,
+-- giant boats going out in fishing.
+
+89
+00:03:44,445 --> 00:03:47,315
+We'll talk about that one a lot. Actually, that's one, that one is interesting.
+
+90
+00:03:47,404 --> 00:03:49,774
+Fishing means something else to us.
+
+91
+00:03:50,975 --> 00:03:52,824
+As I said, seven zip
+
+92
+00:03:53,014 --> 00:03:55,485
+digital signature services. I don't know that one.
+
+93
+00:03:55,695 --> 00:03:56,994
+Drupal
+
+94
+00:03:57,304 --> 00:04:04,654
+GC Library, Glips CPHP Symphony. I don't know that. Really. Apache tomcat wso two.
+
+95
+00:04:04,664 --> 00:04:06,514
+No idea what that is and midpoint
+
+96
+00:04:06,960 --> 00:04:08,429
+and that is the current list.
+
+97
+00:04:08,960 --> 00:04:14,220
+So most of these, we've heard of like file Zilla Great FTP S FTP client, right?
+
+98
+00:04:14,229 --> 00:04:14,669
+I love it.
+
+99
+00:04:15,940 --> 00:04:17,220
+You know, same thing Apache
+
+100
+00:04:17,619 --> 00:04:18,350
+Kafka, you know,
+
+101
+00:04:18,488 --> 00:04:23,200
+it's uh message bus, message bus with transformations on the data,
+
+102
+00:04:23,679 --> 00:04:27,829
+-- right?
+-- Yep. Yep. It's used heavily, especially like in the elastic universe
+
+103
+00:04:28,089 --> 00:04:28,579
+because
+
+104
+00:04:28,769 --> 00:04:31,769
+elastic search, I should say because obviously people bring data in,
+
+105
+00:04:31,779 --> 00:04:33,720
+they do stuff and they need to put it somewhere
+
+106
+00:04:33,899 --> 00:04:35,679
+and, and so it's a cool tool
+
+107
+00:04:36,170 --> 00:04:37,399
+and notepad plus plus.
+
+108
+00:04:37,410 --> 00:04:38,480
+I mean, if you don't,
+
+109
+00:04:38,489 --> 00:04:41,670
+if you use windows and you don't know what notepad plus plus is like,
+
+110
+00:04:41,890 --> 00:04:45,040
+go find out what it is. It's, it's a great little text editor.
+
+111
+00:04:45,459 --> 00:04:47,170
+Uh same thing for Putty, right? Well, uh
+
+112
+00:04:47,679 --> 00:04:51,119
+having you know a command line SSH S FTP
+
+113
+00:04:51,130 --> 00:04:53,119
+client on Windows who knew that could be useful.
+
+114
+00:04:53,890 --> 00:04:57,459
+I mean, VLC media player, if, if you don't know what VLC media player is,
+
+115
+00:04:57,489 --> 00:04:58,640
+how do you even compute?
+
+116
+00:04:58,649 --> 00:04:59,420
+No, like seriously,
+
+117
+00:04:59,429 --> 00:05:03,109
+because that thing is installed on every single one of my Windows Macs,
+
+118
+00:05:03,209 --> 00:05:05,839
+it's even installed on my kids like ipads because
+
+119
+00:05:06,160 --> 00:05:11,049
+-- it's the only player that will play all the files.
+-- Right. It's, it's on my fire TV.
+
+120
+00:05:11,059 --> 00:05:11,239
+Yeah,
+
+121
+00:05:12,470 --> 00:05:14,359
+you're right. It plays all the files
+
+122
+00:05:14,750 --> 00:05:15,899
+and nothing else will.
+
+123
+00:05:15,910 --> 00:05:18,700
+Uh, we'll skip Flux TL for a sec because we'll keep to the simple stuff.
+
+124
+00:05:18,709 --> 00:05:19,589
+So, key pass, key
+
+125
+00:05:19,899 --> 00:05:23,649
+-- pass is, um, it's a password keeper.
+-- It's an offline password
+
+126
+00:05:23,899 --> 00:05:24,299
+essentially.
+
+127
+00:05:24,730 --> 00:05:25,829
+And it's not
+
+128
+00:05:25,950 --> 00:05:26,720
+sort of the best one,
+
+129
+00:05:26,730 --> 00:05:29,720
+but it's one of the most widely used ones and it sort of decides the format
+
+130
+00:05:30,209 --> 00:05:31,269
+of the file.
+
+131
+00:05:31,369 --> 00:05:35,440
+So it's kind of the parent password file program.
+
+132
+00:05:35,450 --> 00:05:38,559
+There's, there's a uh I guess clones maybe is the word I would use.
+
+133
+00:05:38,720 --> 00:05:40,920
+There's some clones of it that are actually a bit better,
+
+134
+00:05:40,929 --> 00:05:42,079
+but they're not as widely useful.
+
+135
+00:05:42,089 --> 00:05:42,519
+They,
+
+136
+00:05:42,809 --> 00:05:46,200
+they basically rely on key pass to define the password file format,
+
+137
+00:05:46,470 --> 00:05:50,739
+uh seven zip to put it bluntly if you need to open weirdly compressed files
+
+138
+00:05:50,910 --> 00:05:52,679
+and you don't know how to use the command line,
+
+139
+00:05:52,690 --> 00:05:56,010
+-- then probably seven zip is your best bet
+-- even if you do actually.
+
+140
+00:05:56,019 --> 00:05:58,510
+So, so funny enough on, on Linux,
+
+141
+00:05:58,869 --> 00:06:03,790
+there is a seven zip command that I, I assume is related to this,
+
+142
+00:06:03,799 --> 00:06:05,329
+that's command line only.
+
+143
+00:06:05,589 --> 00:06:08,309
+And, and fun fact is the zip command
+
+144
+00:06:08,809 --> 00:06:10,559
+doesn't do the, the encryption.
+
+145
+00:06:10,570 --> 00:06:14,359
+It does sucks, but the seven zip one does proper zip encryption.
+
+146
+00:06:14,369 --> 00:06:17,269
+So if you actually need to like ever ever encrypt a zip file
+
+147
+00:06:17,279 --> 00:06:19,920
+to send it to someone use the seven zip command line tool.
+
+148
+00:06:19,929 --> 00:06:21,329
+Don't use the zip tool
+
+149
+00:06:21,440 --> 00:06:23,160
+because seven zip does it right.
+
+150
+00:06:23,570 --> 00:06:26,239
+So yeah, like seven zip, I can totally get behind and,
+
+151
+00:06:26,250 --> 00:06:30,160
+and the seven zip compression for like the seven zip format is freaking awesome.
+
+152
+00:06:30,420 --> 00:06:30,839
+Yeah,
+
+153
+00:06:31,209 --> 00:06:35,049
+see I'm just used to like beating myself with tools like be zip and XZ and GP G
+
+154
+00:06:35,230 --> 00:06:35,929
+which are,
+
+155
+00:06:36,440 --> 00:06:37,720
+which are fine for me to use.
+
+156
+00:06:37,730 --> 00:06:39,839
+But when I want to, yeah, then when I send the file to somebody,
+
+157
+00:06:39,850 --> 00:06:41,519
+it's kind of like uh how do you open it?
+
+158
+00:06:41,529 --> 00:06:43,720
+-- Great. I don't,
+-- what is this thing?
+
+159
+00:06:43,899 --> 00:06:44,760
+Exactly.
+
+160
+00:06:44,929 --> 00:06:45,570
+Actually,
+
+161
+00:06:45,804 --> 00:06:47,704
+I remember we would do that when I was younger when
+
+162
+00:06:47,714 --> 00:06:49,774
+we wanted to troll someone who asked for a file,
+
+163
+00:06:49,785 --> 00:06:51,774
+we would send them a TGZ.
+
+164
+00:06:52,165 --> 00:06:53,825
+They're like, I don't know what to do with this.
+
+165
+00:06:53,954 --> 00:06:55,454
+We're like, oh, you just need to
+
+166
+00:06:55,875 --> 00:06:59,184
+G zip it and then un tar it. They're like, yeah, you didn't help me at all.
+
+167
+00:06:59,195 --> 00:07:01,445
+It's like we know by click
+
+168
+00:07:01,635 --> 00:07:03,984
+which not quite that anymore.
+
+169
+00:07:04,524 --> 00:07:06,575
+Well, you've, you've become a kinder person. Uh
+
+170
+00:07:06,774 --> 00:07:08,704
+No, I, I just don't send people things
+
+171
+00:07:09,540 --> 00:07:14,239
+and even if I did send them a tar ball, like everything can deal with them now,
+
+172
+00:07:14,649 --> 00:07:17,700
+it's nothing like it used to be and seven zip deals with them.
+
+173
+00:07:17,790 --> 00:07:22,079
+It's weird how the built in tools for Windows and Mac for so long languished
+
+174
+00:07:22,329 --> 00:07:22,940
+moving on
+
+175
+00:07:23,049 --> 00:07:27,359
+digital signature services is exactly what it sounds like. It is
+
+176
+00:07:27,839 --> 00:07:31,619
+a digital signature services, open source software library
+
+177
+00:07:31,869 --> 00:07:34,480
+uh for doing signature creation and validation.
+
+178
+00:07:35,179 --> 00:07:35,399
+But
+
+179
+00:07:35,559 --> 00:07:35,679
+that's,
+
+180
+00:07:35,940 --> 00:07:36,950
+that's pretty important.
+
+181
+00:07:37,179 --> 00:07:40,179
+Well, when you're, when you're doing electronic documents,
+
+182
+00:07:40,570 --> 00:07:41,029
+uh
+
+183
+00:07:41,130 --> 00:07:45,059
+knowing where it came from and so on, uh Drew Paul, Drew Paul is Drew Paul
+
+184
+00:07:45,160 --> 00:07:46,829
+the, the content management system
+
+185
+00:07:47,540 --> 00:07:48,619
+because it's,
+
+186
+00:07:49,200 --> 00:07:50,269
+everyone uses it.
+
+187
+00:07:50,410 --> 00:07:53,160
+-- A lot of stuff sits on top of it.
+-- It's everywhere and
+
+188
+00:07:53,549 --> 00:07:55,369
+it's, like, always on fire.
+
+189
+00:07:55,670 --> 00:07:56,010
+Yeah.
+
+190
+00:07:56,019 --> 00:07:57,250
+Well, it's interesting if you look at it,
+
+191
+00:07:57,260 --> 00:08:01,690
+Putty and Drew Paul got the two highest bug bounty dollar amounts for this project.
+
+192
+00:08:01,700 --> 00:08:05,570
+Yeah, I was, I was just looking at that actually, but I would also, I have a suspicion.
+
+193
+00:08:05,579 --> 00:08:09,950
+-- They're probably the two riskiest of the whole list.
+-- Putty shouldn't be that risky.
+
+194
+00:08:09,959 --> 00:08:13,750
+But Putty is one of those things where it's like a high value. If you compromise.
+
+195
+00:08:14,500 --> 00:08:17,570
+I'm just trying to think if you can somehow compromise Putty,
+
+196
+00:08:17,709 --> 00:08:21,739
+there's a lot of windows users using Putty to log into a lot of sensitive systems.
+
+197
+00:08:21,890 --> 00:08:25,250
+Well, and not only that, I also have a suspicion, Putty.
+
+198
+00:08:25,260 --> 00:08:26,929
+The finding the security issues in.
+
+199
+00:08:26,940 --> 00:08:29,779
+Putty is going to be, I guess Putty and Drupal have opposite problems.
+
+200
+00:08:29,790 --> 00:08:33,210
+Drupal is really easy to find security issues in but I bet Putty is really hard.
+
+201
+00:08:33,219 --> 00:08:36,380
+Well, Putty is also, it's a small command line client, like it's only several,
+
+202
+00:08:36,390 --> 00:08:37,570
+you know, it's a couple 100 K
+
+203
+00:08:37,869 --> 00:08:38,409
+it's,
+
+204
+00:08:38,510 --> 00:08:41,770
+yeah, it's not a monstrosity whereas Dr Paul. Yeah, it's the opposite or?
+
+205
+00:08:41,780 --> 00:08:42,200
+Well, it's like
+
+206
+00:08:42,369 --> 00:08:44,809
+Gipsy, like g lipsy is so big.
+
+207
+00:08:45,210 --> 00:08:48,969
+It's enormous. Yeah, like it, it is literally all the things
+
+208
+00:08:49,159 --> 00:08:52,770
+PHP Symphony. Similar problem. It's all the things. It's, it's basically
+
+209
+00:08:53,179 --> 00:08:57,700
+no Js type thing. It's, it's all your PHP libraries pulling them in automatically.
+
+210
+00:08:57,859 --> 00:09:01,929
+-- Got you. Yeah, that's pretty serious. So,
+-- dependency management. Skipping
+
+211
+00:09:02,130 --> 00:09:05,530
+a well. Ok. A patchy Tomcat is Apache Tomcat, right? You run your Java
+
+212
+00:09:05,659 --> 00:09:06,390
+three
+
+213
+00:09:06,500 --> 00:09:08,330
+tier layer cake application,
+
+214
+00:09:08,520 --> 00:09:12,640
+right. Right. And I remember man, Tomcat was like the only game in town for a long time
+
+215
+00:09:12,919 --> 00:09:15,520
+when if you wanted to run Java on the web like
+
+216
+00:09:16,080 --> 00:09:17,400
+that was that or pay so
+
+217
+00:09:17,580 --> 00:09:20,530
+-- like a dump truck of money. Yeah,
+-- for glass fish or whatever,
+
+218
+00:09:20,539 --> 00:09:20,900
+right?
+
+219
+00:09:20,909 --> 00:09:22,690
+I don't even remember the name of it. Exactly.
+
+220
+00:09:22,880 --> 00:09:27,530
+There's WSO two which is a API management when you deploy services and API S
+
+221
+00:09:27,539 --> 00:09:31,190
+obviously those API S are probably going to change a little bit over time.
+
+222
+00:09:31,200 --> 00:09:32,570
+So this is doing things, you know,
+
+223
+00:09:32,580 --> 00:09:35,479
+management of those API S inversion so that you
+
+224
+00:09:35,489 --> 00:09:38,090
+don't break all your clients or all your services
+
+225
+00:09:38,820 --> 00:09:40,020
+because you did an update.
+
+226
+00:09:40,469 --> 00:09:42,719
+Um and then midpoint, I forgot to look at midpoint.
+
+227
+00:09:42,909 --> 00:09:43,250
+That's what
+
+228
+00:09:43,609 --> 00:09:43,650
+I
+
+229
+00:09:43,909 --> 00:09:47,479
+funny enough for some reason I expected you to say that. So I looked it up.
+
+230
+00:09:47,489 --> 00:09:49,640
+It's an identity management platform.
+
+231
+00:09:49,929 --> 00:09:51,159
+Oh, interesting.
+
+232
+00:09:51,260 --> 00:09:53,179
+Yeah. And identity management, you know,
+
+233
+00:09:53,359 --> 00:09:54,559
+kind of a big deal.
+
+234
+00:09:55,429 --> 00:09:55,750
+So,
+
+235
+00:09:55,760 --> 00:09:58,640
+going up now here's what's the most interesting
+
+236
+00:09:58,650 --> 00:10:00,700
+to me because pretty much all of these,
+
+237
+00:10:01,000 --> 00:10:06,000
+all of these I knew except for Flux TL, the DS S and the WSO Two and midpoint.
+
+238
+00:10:06,239 --> 00:10:09,409
+But, you know, when you look up the digital signature service, it's like, well,
+
+239
+00:10:09,419 --> 00:10:10,799
+that's exactly what it is.
+
+240
+00:10:10,809 --> 00:10:11,219
+Ok.
+
+241
+00:10:11,429 --> 00:10:14,179
+Right. Easy WSO two API Management. Ok.
+
+242
+00:10:14,190 --> 00:10:18,309
+You know, it's a little esoteric but it's, it's like Red Hat bought that.
+
+243
+00:10:18,320 --> 00:10:20,919
+Uh what was it called three scale company that does API management.
+
+244
+00:10:20,929 --> 00:10:23,020
+-- So
+-- yeah, API S are a big deal man.
+
+245
+00:10:23,229 --> 00:10:23,580
+Yeah.
+
+246
+00:10:23,900 --> 00:10:26,130
+Uh midpoint. OK. Identity management.
+
+247
+00:10:26,299 --> 00:10:27,799
+Yeah. Identity management, right?
+
+248
+00:10:27,809 --> 00:10:31,619
+Like again, lots of companies have identity management products kind of a common.
+
+249
+00:10:31,630 --> 00:10:32,719
+-- Everyone
+-- has identity.
+
+250
+00:10:33,119 --> 00:10:33,489
+Yes. OK.
+
+251
+00:10:33,719 --> 00:10:35,200
+That's fair. But everyone needs it, right?
+
+252
+00:10:35,210 --> 00:10:38,750
+Like if you have more than two users, you probably need identity management.
+
+253
+00:10:39,169 --> 00:10:43,369
+So then that really that left us with like what the heck is Flux TL? And I'm like, OK.
+
+254
+00:10:43,380 --> 00:10:45,539
+Flux TL is the current transport layer of choice for a
+
+255
+00:10:45,549 --> 00:10:49,390
+family of applications under the integrated fisheries data management program.
+
+256
+00:10:49,400 --> 00:10:52,030
+And I'm like, wait, what, how did we end up in the fisheries?
+
+257
+00:10:52,630 --> 00:10:52,929
+Right?
+
+258
+00:10:52,940 --> 00:10:54,219
+Because all of a sudden we go from like
+
+259
+00:10:54,229 --> 00:10:56,659
+all of this stuff is normal desktop server type,
+
+260
+00:10:56,669 --> 00:10:58,369
+whatever to like fisheries.
+
+261
+00:10:58,549 --> 00:10:59,669
+And so I did a bunch of digging,
+
+262
+00:10:59,679 --> 00:11:04,059
+read a bunch of interesting PDF S uh learned a lot about uh sustainable
+
+263
+00:11:04,070 --> 00:11:08,390
+fishing and the eu challenges with that and fish stock management and whatnot.
+
+264
+00:11:08,460 --> 00:11:10,250
+But basically the too long didn't read of it is
+
+265
+00:11:10,489 --> 00:11:14,679
+you're in Iceland, you're a fishing boat registered out of Holland,
+
+266
+00:11:14,690 --> 00:11:20,340
+going to a piece of ocean owned by some other country or not even owned by a country,
+
+267
+00:11:20,349 --> 00:11:21,669
+but, you know, controlled by
+
+268
+00:11:22,000 --> 00:11:23,539
+some international agreement.
+
+269
+00:11:23,890 --> 00:11:26,020
+And you want to go catch a bunch of herring.
+
+270
+00:11:26,140 --> 00:11:29,580
+Are you allowed to do that? What kind of permitting do you need and so on and so forth.
+
+271
+00:11:29,590 --> 00:11:31,940
+And this is an electronic system to handle all of that.
+
+272
+00:11:32,440 --> 00:11:33,460
+That's pretty cool.
+
+273
+00:11:33,469 --> 00:11:39,619
+And so thinking about this, number one, this is like all the countries, right,
+
+274
+00:11:39,630 --> 00:11:42,719
+all the countries with fishing boats, all the countries that control ocean,
+
+275
+00:11:42,729 --> 00:11:44,130
+all the countries that are part of
+
+276
+00:11:44,140 --> 00:11:46,380
+groups that control international parts of the ocean
+
+277
+00:11:46,719 --> 00:11:48,320
+that are, you know, covered by fishing treaties,
+
+278
+00:11:48,330 --> 00:11:50,219
+which is like all of it at this point because,
+
+279
+00:11:50,340 --> 00:11:52,659
+well, the tragedy of the commons literally, right,
+
+280
+00:11:52,669 --> 00:11:55,979
+we tend to over fish things because the fish are very tasty.
+
+281
+00:11:56,760 --> 00:11:57,789
+And so
+
+282
+00:11:57,919 --> 00:12:02,020
+this is things like the permitting reporting your catches,
+
+283
+00:12:02,260 --> 00:12:02,469
+you know,
+
+284
+00:12:02,479 --> 00:12:06,440
+because we can only allow people to haul so many thousands or millions of tons
+
+285
+00:12:06,450 --> 00:12:08,630
+of fish out of that part of the ocean before we have to like,
+
+286
+00:12:08,640 --> 00:12:09,880
+tell them to stop for the year.
+
+287
+00:12:10,010 --> 00:12:14,119
+And I was thinking about this, I've always kind of wondered with boats and well,
+
+288
+00:12:14,130 --> 00:12:16,630
+not submarines, but that, that's more of a military problem.
+
+289
+00:12:16,640 --> 00:12:20,390
+But with boats, you know, they typically don't have great internet connectivity.
+
+290
+00:12:20,530 --> 00:12:21,429
+Uh Right.
+
+291
+00:12:21,710 --> 00:12:23,429
+Also, let's say you do
+
+292
+00:12:23,539 --> 00:12:24,809
+great internet connectivity.
+
+293
+00:12:24,820 --> 00:12:28,250
+Let, let's assume for a moment, like let's, we'll do an episode on Spacex's,
+
+294
+00:12:28,260 --> 00:12:30,570
+you know, future internet satellite plans.
+
+295
+00:12:30,580 --> 00:12:33,010
+But let's assume for a moment, like every part of the planet is covered in,
+
+296
+00:12:33,020 --> 00:12:33,619
+what was it like?
+
+297
+00:12:33,630 --> 00:12:35,320
+10 megabit or gigabit internet
+
+298
+00:12:35,549 --> 00:12:36,239
+magic?
+
+299
+00:12:36,409 --> 00:12:36,619
+Well,
+
+300
+00:12:36,630 --> 00:12:39,469
+even then you still don't necessarily want like the mechanic on the
+
+301
+00:12:39,479 --> 00:12:41,700
+boat upgrading a computer system out in the middle of the ocean.
+
+302
+00:12:41,710 --> 00:12:43,080
+Because if it fails,
+
+303
+00:12:43,239 --> 00:12:47,479
+then like, how do you like get a tech out there to fix it?
+
+304
+00:12:47,489 --> 00:12:48,950
+You know, helicopter, some guy out
+
+305
+00:12:49,340 --> 00:12:50,280
+at a cost of
+
+306
+00:12:50,789 --> 00:12:52,630
+something in the four digits per hour.
+
+307
+00:12:52,900 --> 00:12:55,289
+So obviously with fishing boats,
+
+308
+00:12:55,299 --> 00:12:58,450
+I assume there's a lot of hesitancy to upgrade or
+
+309
+00:12:58,460 --> 00:13:01,210
+change systems at random in the middle of the ocean.
+
+310
+00:13:01,219 --> 00:13:02,070
+And this is, of course,
+
+311
+00:13:02,080 --> 00:13:03,429
+assuming everything is going well and you're not in
+
+312
+00:13:03,440 --> 00:13:05,049
+the middle of a storm trying to catch fish.
+
+313
+00:13:05,349 --> 00:13:08,750
+Do they catch fish during storms? That seems like a foolish thing to do.
+
+314
+00:13:08,820 --> 00:13:14,409
+I would assume that they work as much as they can because I mean, you,
+
+315
+00:13:14,539 --> 00:13:19,364
+you've seen a last, what was that fishing boat show out of Alaska? The crabbing one,
+
+316
+00:13:19,484 --> 00:13:21,924
+-- uh, dangerous catch,
+-- maybe
+
+317
+00:13:22,094 --> 00:13:25,205
+dangerous. They were fishing in some pretty horrible weather because
+
+318
+00:13:25,354 --> 00:13:28,924
+they only had a certain, like, what one or two weeks for the season?
+
+319
+00:13:29,094 --> 00:13:32,724
+It always amazed me. Like, more people didn't fly off the boat and die. I
+
+320
+00:13:33,005 --> 00:13:33,265
+know
+
+321
+00:13:33,794 --> 00:13:35,674
+every time those guys were stepping in the
+
+322
+00:13:35,684 --> 00:13:37,174
+ropes when the traps were going overboard,
+
+323
+00:13:37,184 --> 00:13:38,325
+I was just like, like, you know,
+
+324
+00:13:38,335 --> 00:13:40,114
+that cartoon character thing where the rope titans around
+
+325
+00:13:40,125 --> 00:13:41,674
+their ankle and drapes them down and they're dead.
+
+326
+00:13:42,114 --> 00:13:43,885
+And it just always gave me the heebie Jeebies.
+
+327
+00:13:44,200 --> 00:13:45,380
+I, I agree.
+
+328
+00:13:45,390 --> 00:13:46,469
+I, I would make,
+
+329
+00:13:46,479 --> 00:13:48,820
+I am not a boat person and I would be a very
+
+330
+00:13:48,830 --> 00:13:52,140
+bad fisherman and I guarantee I would be dead on day three.
+
+331
+00:13:52,150 --> 00:13:53,659
+Like no questions asked.
+
+332
+00:13:53,669 --> 00:13:57,820
+Like I'm not even going to pretend I have the ability to, to work that job.
+
+333
+00:13:58,330 --> 00:13:58,979
+Yeah, I know.
+
+334
+00:13:59,630 --> 00:14:01,770
+I don't think physically we could do it let alone like
+
+335
+00:14:02,059 --> 00:14:03,929
+safety wise, not die.
+
+336
+00:14:04,340 --> 00:14:05,869
+-- Right.
+-- Right. Exactly.
+
+337
+00:14:06,179 --> 00:14:11,479
+This is, this is a great example of, not only is it a very complicated it system,
+
+338
+00:14:11,489 --> 00:14:11,650
+I mean,
+
+339
+00:14:11,659 --> 00:14:13,489
+we've got data flowing backwards and forwards
+
+340
+00:14:13,500 --> 00:14:15,130
+and being shared with multiple governments,
+
+341
+00:14:15,359 --> 00:14:18,099
+they've got these centralized data nodes, they've, you know,
+
+342
+00:14:18,109 --> 00:14:21,739
+there's stuff flowing in over satellite, over radio links over the internet.
+
+343
+00:14:21,799 --> 00:14:22,109
+You
+
+344
+00:14:22,349 --> 00:14:25,179
+have it platforms literally in the middle of the ocean,
+
+345
+00:14:25,190 --> 00:14:28,460
+possibly with no or very limited internet connectivity.
+
+346
+00:14:28,469 --> 00:14:32,289
+Definitely nobody with like computer certification aboard on a lot of these boats,
+
+347
+00:14:32,390 --> 00:14:35,500
+you know, some of these boats are only 12 m long or less, right.
+
+348
+00:14:35,510 --> 00:14:40,080
+Like they, they break up the fishing by, it was like 0 to 12 m 12 to 24 and 24 plus.
+
+349
+00:14:40,619 --> 00:14:43,419
+You know, and I'm guessing like a 24 m plus boat. Yeah, it'll,
+
+350
+00:14:43,799 --> 00:14:45,390
+that's a pretty big boat
+
+351
+00:14:45,559 --> 00:14:46,140
+but
+
+352
+00:14:46,530 --> 00:14:48,469
+some little crabbing boat,
+
+353
+00:14:48,570 --> 00:14:51,330
+you know, you're in the middle of fishing season.
+
+354
+00:14:51,340 --> 00:14:54,440
+Uh, let me just reboot this for an update and you're going to get smacked.
+
+355
+00:14:54,640 --> 00:14:56,099
+That, that does make sense.
+
+356
+00:14:56,109 --> 00:15:00,159
+And then, so this system is taking data in from the Lord only knows where. Right.
+
+357
+00:15:00,570 --> 00:15:03,739
+And it's taking in data that I'm with latencies.
+
+358
+00:15:03,750 --> 00:15:07,719
+So I there's just, it's a lot of complicated problems essentially.
+
+359
+00:15:08,289 --> 00:15:11,500
+Right. The, the, the use case is very complicated. It's not like,
+
+360
+00:15:11,690 --> 00:15:11,909
+you know,
+
+361
+00:15:11,919 --> 00:15:13,369
+my computer can just talk to everything
+
+362
+00:15:13,380 --> 00:15:15,760
+on the internet with 50 millisecond latency.
+
+363
+00:15:15,770 --> 00:15:16,890
+-- No problem.
+-- Right. Right.
+
+364
+00:15:17,270 --> 00:15:19,070
+And, and that's, that's awesome. Right.
+
+365
+00:15:19,080 --> 00:15:24,710
+I love seeing open source projects that affect an entire industry because
+
+366
+00:15:25,059 --> 00:15:27,190
+obviously in an instance like this,
+
+367
+00:15:27,200 --> 00:15:29,400
+everyone can help and everyone can make it
+
+368
+00:15:29,409 --> 00:15:31,750
+better depending upon what they need to do.
+
+369
+00:15:32,090 --> 00:15:35,859
+Now, the, the place I want to talk about with this bug bounty though.
+
+370
+00:15:35,869 --> 00:15:39,909
+And this is this is where the conversation has kind of ended up a little bit is
+
+371
+00:15:40,539 --> 00:15:42,559
+the bug bounty is a great idea
+
+372
+00:15:42,710 --> 00:15:43,590
+and I'd love it.
+
+373
+00:15:43,900 --> 00:15:47,960
+But there are a nontrivial number of people who are saying,
+
+374
+00:15:48,150 --> 00:15:51,919
+but what about the projects? Why are we paying bug bounties to researchers?
+
+375
+00:15:51,929 --> 00:15:55,340
+Why aren't we paying the projects? And I actually know what the answer is.
+
+376
+00:15:55,349 --> 00:15:57,020
+And this is what my blog post is about.
+
+377
+00:15:57,030 --> 00:16:01,359
+But I would love to hear your thoughts before we kind of dive into what's going on.
+
+378
+00:16:01,989 --> 00:16:05,710
+So, my thoughts are two folds. Number one, I agree that in some ways the bug bounty
+
+379
+00:16:06,099 --> 00:16:09,309
+is sort of the crowning achievement for a software project, security
+
+380
+00:16:10,080 --> 00:16:10,979
+response
+
+381
+00:16:11,719 --> 00:16:12,890
+because quite frankly,
+
+382
+00:16:13,229 --> 00:16:16,780
+and especially a bug bounty with this, there's quite a bit of money involved in this.
+
+383
+00:16:16,789 --> 00:16:22,989
+-- It was, what was it? €851,000 in total in bounty
+-- just under a million euros.
+
+384
+00:16:23,000 --> 00:16:24,700
+So probably a million dollars
+
+385
+00:16:24,940 --> 00:16:27,099
+or pretty close, we'll say, using
+
+386
+00:16:27,419 --> 00:16:28,820
+whatever sort of
+
+387
+00:16:29,070 --> 00:16:29,869
+American dollars
+
+388
+00:16:30,760 --> 00:16:33,169
+or some dollars from somewhere. Right.
+
+389
+00:16:35,130 --> 00:16:37,349
+So, so number one, I would say, you know, yeah,
+
+390
+00:16:37,359 --> 00:16:40,690
+bug bounty is definitely sort of the crowning achievement because essentially,
+
+391
+00:16:40,700 --> 00:16:43,150
+you know, if a tree falls in the forest and lands on your head,
+
+392
+00:16:43,159 --> 00:16:45,239
+that's not very helpful, you need to be able to dodge it.
+
+393
+00:16:45,250 --> 00:16:47,950
+So, you know, if these projects can't fix these security flaws,
+
+394
+00:16:48,630 --> 00:16:51,890
+then the bug bounty is literally wasted money
+
+395
+00:16:52,119 --> 00:16:53,719
+on the flip side. However,
+
+396
+00:16:54,070 --> 00:16:56,539
+bug bounties can sort of let you know how bad things are
+
+397
+00:16:57,549 --> 00:16:58,630
+and maybe you do
+
+398
+00:16:59,010 --> 00:17:02,229
+need to justify funding for that project because,
+
+399
+00:17:02,400 --> 00:17:03,159
+uh, ok,
+
+400
+00:17:03,169 --> 00:17:05,660
+I'm going to pick on Putty because it's pretty blameless
+
+401
+00:17:05,670 --> 00:17:07,319
+and it's actually got a pretty good track record.
+
+402
+00:17:07,420 --> 00:17:10,329
+But let's say, for the sake of argument, this bug bounty for Putty comes out
+
+403
+00:17:10,530 --> 00:17:13,780
+and some guy finds like 20 bugs in it, like really bad ones.
+
+404
+00:17:14,089 --> 00:17:15,680
+Well, then we know maybe, you know,
+
+405
+00:17:15,920 --> 00:17:15,930
+uh,
+
+406
+00:17:15,939 --> 00:17:20,500
+we need to invest some money in actually improving Putty and maybe funding
+
+407
+00:17:20,510 --> 00:17:23,699
+the developer or funding another developer to help that guy with it or,
+
+408
+00:17:23,709 --> 00:17:24,380
+or whatever.
+
+409
+00:17:25,000 --> 00:17:28,599
+So it kind of reminds me of, um, of penetration testing, right?
+
+410
+00:17:28,609 --> 00:17:30,329
+A lot of people like, oh, penetration testing is done.
+
+411
+00:17:30,339 --> 00:17:31,709
+They always get in and I'm like, yeah, exactly.
+
+412
+00:17:31,719 --> 00:17:34,180
+And then you use that to scare your executives into giving you more money.
+
+413
+00:17:34,849 --> 00:17:39,189
+So here's the, I, I agree with you, but here's the real problem.
+
+414
+00:17:39,770 --> 00:17:44,530
+The eu can't pay putty, they have no way to legally pay putty.
+
+415
+00:17:44,760 --> 00:17:50,020
+And here's so here's let me kind of let me set out the, the, the landscape here.
+
+416
+00:17:50,030 --> 00:17:51,310
+And this is something I wrote about.
+
+417
+00:17:51,319 --> 00:17:55,069
+In fact, someone from the EU replied to me basically saying, yes, you're right.
+
+418
+00:17:55,079 --> 00:17:55,550
+Good job.
+
+419
+00:17:55,560 --> 00:17:56,510
+This is the lady that,
+
+420
+00:17:56,520 --> 00:17:59,000
+whose website I couldn't load the talks about all
+
+421
+00:17:59,010 --> 00:18:00,640
+the stuff that we've been using as our resource.
+
+422
+00:18:00,650 --> 00:18:02,589
+Yes. Perfect. OK. Good. Yeah.
+
+423
+00:18:02,719 --> 00:18:05,390
+So, so anyway, here's basically the problem.
+
+424
+00:18:05,560 --> 00:18:08,949
+So the EU has money, that's their resource, right?
+
+425
+00:18:09,310 --> 00:18:12,689
+They don't have developers necessarily, they don't, you know, and, and
+
+426
+00:18:12,869 --> 00:18:15,329
+yes, I know there are developers.
+
+427
+00:18:15,339 --> 00:18:19,219
+Uh No, no, no, even worse, worse, they have government developers.
+
+428
+00:18:19,489 --> 00:18:20,670
+Right. Exactly.
+
+429
+00:18:20,680 --> 00:18:21,680
+And so like,
+
+430
+00:18:21,770 --> 00:18:25,489
+oftentimes like their ability to contribute to open source is going to be
+
+431
+00:18:25,500 --> 00:18:29,000
+limited fundamentally to money and I know there's some asterisks on that,
+
+432
+00:18:29,010 --> 00:18:31,709
+but we're going to ignore all the weird details for the moment.
+
+433
+00:18:31,719 --> 00:18:33,050
+So their resource is money,
+
+434
+00:18:33,569 --> 00:18:34,050
+right?
+
+435
+00:18:34,540 --> 00:18:36,439
+What is the only thing
+
+436
+00:18:36,640 --> 00:18:38,630
+they can do with that money today
+
+437
+00:18:38,810 --> 00:18:41,670
+that has the ability to directly affect a project?
+
+438
+00:18:41,680 --> 00:18:45,439
+And the answer is a bug bounty because these bug bounties exist and,
+
+439
+00:18:45,449 --> 00:18:46,800
+and like they're not paying the,
+
+440
+00:18:46,979 --> 00:18:49,989
+like the, the researchers, they're working with people like hacker one,
+
+441
+00:18:50,000 --> 00:18:51,750
+for example, for these bug bounties,
+
+442
+00:18:51,880 --> 00:18:55,439
+which is important because these bug bounty organizations,
+
+443
+00:18:55,979 --> 00:18:58,319
+they have the legal entities and the frameworks in
+
+444
+00:18:58,329 --> 00:19:01,079
+place to take money in and pay researchers.
+
+445
+00:19:01,089 --> 00:19:01,469
+Right?
+
+446
+00:19:01,479 --> 00:19:04,239
+So the eu can cut a check to hacker one and say,
+
+447
+00:19:04,250 --> 00:19:07,260
+here's a pile of money for bug bounties on these projects.
+
+448
+00:19:07,469 --> 00:19:08,729
+Like make it work,
+
+449
+00:19:08,939 --> 00:19:09,430
+right?
+
+450
+00:19:09,560 --> 00:19:10,920
+So the eu can do that.
+
+451
+00:19:10,969 --> 00:19:14,589
+The eu can't go to Putty and say, here's a bunch of money, like, make it better.
+
+452
+00:19:14,599 --> 00:19:17,050
+They're like, what the, what the f do I do with this?
+
+453
+00:19:17,119 --> 00:19:20,839
+You know, he, I'm assuming has a day job or something and he,
+
+454
+00:19:20,849 --> 00:19:22,520
+he may not even be able to take that money
+
+455
+00:19:22,930 --> 00:19:24,469
+even if they were able to give it to him.
+
+456
+00:19:24,619 --> 00:19:25,650
+-- Right.
+-- Exactly.
+
+457
+00:19:25,660 --> 00:19:28,989
+And they probably can't because like, is this guy a European citizen?
+
+458
+00:19:29,000 --> 00:19:32,060
+-- Where does he live? Like, how does that work?
+-- Well, he's in Cambridge.
+
+459
+00:19:32,079 --> 00:19:33,040
+He's a British guy.
+
+460
+00:19:33,469 --> 00:19:35,089
+Uh, ok, great. Well,
+
+461
+00:19:35,859 --> 00:19:37,719
+not an EU citizen for long
+
+462
+00:19:38,800 --> 00:19:39,339
+burn.
+
+463
+00:19:40,250 --> 00:19:43,969
+-- But anyway, anyway. Anyway, I can't, I can't wait. We finally
+-- covered breast
+
+464
+00:19:44,660 --> 00:19:45,810
+and that's it, folks. That's
+
+465
+00:19:45,920 --> 00:19:48,170
+-- all you're getting.
+-- We'll never talk about it again.
+
+466
+00:19:48,400 --> 00:19:49,890
+Uh But anyway, so here's the thing.
+
+467
+00:19:50,099 --> 00:19:50,689
+So
+
+468
+00:19:51,020 --> 00:19:55,829
+for now they're doing the only thing they can and if this is the only way it is,
+
+469
+00:19:55,839 --> 00:20:00,640
+if we never get past the ability to pay like projects and it's only ever bug mommies,
+
+470
+00:20:00,650 --> 00:20:00,920
+this is
+
+471
+00:20:01,030 --> 00:20:03,869
+going to fizzle out and die because eventually someone from the EU is going to
+
+472
+00:20:03,880 --> 00:20:07,099
+look at this and say like the return on this investment kind of sucks.
+
+473
+00:20:07,250 --> 00:20:09,239
+And the projects are getting mad at us because
+
+474
+00:20:09,250 --> 00:20:10,969
+we're just reporting bugs and not helping them.
+
+475
+00:20:10,979 --> 00:20:12,109
+Like what do we do next?
+
+476
+00:20:12,319 --> 00:20:16,270
+Right. So this is where there's an organization called Tide Lift that
+
+477
+00:20:16,469 --> 00:20:18,219
+I know I've tweeted about them a lot.
+
+478
+00:20:18,229 --> 00:20:21,150
+But basically, it's a bunch of ex red hat people started a company
+
+479
+00:20:21,260 --> 00:20:24,449
+that has the ability to basically pay open source projects is
+
+480
+00:20:24,459 --> 00:20:27,300
+what it fundamentally comes down to where companies pay Tide Lift,
+
+481
+00:20:27,310 --> 00:20:28,489
+tide Lift, pay some projects.
+
+482
+00:20:28,949 --> 00:20:29,780
+And, and this,
+
+483
+00:20:29,790 --> 00:20:33,689
+that's the sort of framework you need because the eu can't pay projects.
+
+484
+00:20:33,699 --> 00:20:36,930
+So you need like some sort of intermediary that the
+
+485
+00:20:36,939 --> 00:20:38,719
+Eu can give a bunch of money to and say,
+
+486
+00:20:38,729 --> 00:20:40,189
+I want you to fund these projects.
+
+487
+00:20:40,359 --> 00:20:43,660
+And now when I say fund, I don't just mean writing checks
+
+488
+00:20:43,770 --> 00:20:46,040
+because some projects want money
+
+489
+00:20:46,150 --> 00:20:47,300
+but not all of them, right?
+
+490
+00:20:47,310 --> 00:20:49,609
+You're going to have projects that want pizza,
+
+491
+00:20:49,640 --> 00:20:52,410
+you're going to have projects that will say like I need hosting in,
+
+492
+00:20:52,420 --> 00:20:56,170
+in this data center over whatever they're like a million things, right?
+
+493
+00:20:56,609 --> 00:21:00,439
+And that's the thing, the eu can't do that. Like the eu literally has a check
+
+494
+00:21:00,589 --> 00:21:03,310
+and they need to give a check to somebody and they have a whole
+
+495
+00:21:03,319 --> 00:21:06,609
+bunch of crazy rules that say how they can and can't spend money.
+
+496
+00:21:06,760 --> 00:21:09,550
+When I was thinking my partner works for the government and they were,
+
+497
+00:21:09,750 --> 00:21:14,250
+she was talking about, yeah, how they spend money and it's,
+
+498
+00:21:14,579 --> 00:21:16,589
+oh boy, the regulations. Wow.
+
+499
+00:21:16,760 --> 00:21:17,949
+Yeah. Right. Exactly.
+
+500
+00:21:18,050 --> 00:21:19,829
+It's like crazy town for these people.
+
+501
+00:21:20,060 --> 00:21:22,670
+Well, but it's, it's, you know, the road to hell is paved with good intentions,
+
+502
+00:21:22,680 --> 00:21:22,869
+right?
+
+503
+00:21:22,880 --> 00:21:26,239
+Because all of these regulations came from, well, somebody abused this.
+
+504
+00:21:26,250 --> 00:21:29,500
+Like I remember specifically to not to mention Red Hat yet again,
+
+505
+00:21:29,510 --> 00:21:31,910
+but I remember specifically at Red Hat, the travel,
+
+506
+00:21:31,920 --> 00:21:35,819
+uh the Red Hat travel guide specifically stated that I think it
+
+507
+00:21:35,829 --> 00:21:39,390
+was that anybody under director level cannot charter a helicopter or a boat
+
+508
+00:21:40,920 --> 00:21:42,400
+and that got added in at some point.
+
+509
+00:21:42,410 --> 00:21:46,099
+And it's like, well, pretty clearly somebody did that and so they went, nope,
+
+510
+00:21:46,109 --> 00:21:47,199
+we're not allowing that again.
+
+511
+00:21:47,209 --> 00:21:49,880
+And so they, they put in an explicit rule saying, you know,
+
+512
+00:21:49,890 --> 00:21:51,640
+unless you're a director or above or whatever,
+
+513
+00:21:51,650 --> 00:21:53,599
+you can't charter boats and helicopters.
+
+514
+00:21:53,689 --> 00:21:57,959
+That's fantastic in every possible way and, and right,
+
+515
+00:21:57,969 --> 00:22:00,239
+the rule is there because someone did it.
+
+516
+00:22:00,530 --> 00:22:01,869
+Yeah. And got away with it.
+
+517
+00:22:02,060 --> 00:22:03,849
+No, you're right thinking about it.
+
+518
+00:22:03,859 --> 00:22:06,719
+Like, because I remember I worked for the government for six months once when I was,
+
+519
+00:22:06,729 --> 00:22:07,189
+like, 20
+
+520
+00:22:08,439 --> 00:22:11,709
+yeah. No, it's, um, a lot of people work for the government.
+
+521
+00:22:11,719 --> 00:22:12,819
+They have good intentions.
+
+522
+00:22:12,979 --> 00:22:14,619
+But, yeah, they're, they're literally
+
+523
+00:22:15,099 --> 00:22:16,979
+bureaucracy is holding
+
+524
+00:22:17,250 --> 00:22:20,180
+back what they want to do. So, what they do end up doing
+
+525
+00:22:20,489 --> 00:22:22,589
+from the outside looks insane.
+
+526
+00:22:23,020 --> 00:22:26,119
+But if you, if you look at the bureaucracy and what the rules are,
+
+527
+00:22:26,449 --> 00:22:28,439
+that's literally all they can do
+
+528
+00:22:28,650 --> 00:22:29,949
+and, and not just that.
+
+529
+00:22:30,089 --> 00:22:33,839
+So in, in this context, we're obviously talking about the eu as a government,
+
+530
+00:22:33,849 --> 00:22:36,670
+but even large companies have similar problems.
+
+531
+00:22:36,680 --> 00:22:40,199
+Well, and the EU is a government, but it's, it's like a meta government too.
+
+532
+00:22:40,209 --> 00:22:41,270
+So it's even messier
+
+533
+00:22:41,699 --> 00:22:43,520
+uh Right. That, that's a very good point.
+
+534
+00:22:43,530 --> 00:22:43,780
+So I,
+
+535
+00:22:43,790 --> 00:22:45,839
+I have a great story actually about this and I don't
+
+536
+00:22:45,849 --> 00:22:48,239
+feel bad because like most of the people involved are,
+
+537
+00:22:48,250 --> 00:22:49,369
+are long, the company is gone.
+
+538
+00:22:49,380 --> 00:22:53,290
+So a long time ago, I worked for a company called uh Progeny Linux Systems
+
+539
+00:22:53,650 --> 00:22:55,439
+and Red Hat
+
+540
+00:22:55,609 --> 00:23:00,199
+stopped supporting Red Hat Linux 71728 and nine, I think,
+
+541
+00:23:00,709 --> 00:23:01,359
+way back in
+
+542
+00:23:01,640 --> 00:23:01,699
+the,
+
+543
+00:23:02,380 --> 00:23:03,250
+I remember those.
+
+544
+00:23:03,380 --> 00:23:03,530
+Yeah,
+
+545
+00:23:03,540 --> 00:23:05,250
+basically at the same time because they were
+
+546
+00:23:05,260 --> 00:23:07,250
+obviously focusing on Red Hat enterprise Linux.
+
+547
+00:23:07,420 --> 00:23:08,800
+And like I was at Progeny,
+
+548
+00:23:08,810 --> 00:23:11,489
+I was doing security updates for our Linux distribution that, like,
+
+549
+00:23:11,500 --> 00:23:12,839
+nobody bought at the time.
+
+550
+00:23:13,109 --> 00:23:15,250
+And I remember I went to my boss and I'm like, hey, Red Hats,
+
+551
+00:23:15,260 --> 00:23:16,359
+discontinuing this stuff.
+
+552
+00:23:16,369 --> 00:23:19,810
+Like I'm already doing this work. Why we could just start, you know,
+
+553
+00:23:19,939 --> 00:23:21,689
+selling updates for Red Hat Linux.
+
+554
+00:23:22,319 --> 00:23:23,959
+And they were like, well, that sounds neat. Right.
+
+555
+00:23:23,969 --> 00:23:28,319
+And we went from like very few customers to like a bazillion customers overnight.
+
+556
+00:23:28,380 --> 00:23:28,849
+Right.
+
+557
+00:23:29,270 --> 00:23:31,050
+And I remember we talked about
+
+558
+00:23:31,709 --> 00:23:31,739
+that
+
+559
+00:23:31,930 --> 00:23:32,170
+stuff.
+
+560
+00:23:32,550 --> 00:23:35,319
+Well, of course not. Then what happened was
+
+561
+00:23:35,619 --> 00:23:37,589
+we were like, well, well, how much are we charge for this?
+
+562
+00:23:37,599 --> 00:23:41,250
+And someone like said, 0 $5 a machine. We're like, great. That sounds neat.
+
+563
+00:23:41,699 --> 00:23:44,560
+It was super cheap, whatever. It doesn't matter. This is a million years ago.
+
+564
+00:23:44,569 --> 00:23:45,380
+Kurt, it's too late now.
+
+565
+00:23:45,635 --> 00:23:47,305
+Right. So it's very inexpensive.
+
+566
+00:23:47,484 --> 00:23:51,135
+And I remember we had like, some fortune 500 companies that were like, we have like,
+
+567
+00:23:51,145 --> 00:23:51,964
+you know, 100 machines.
+
+568
+00:23:51,974 --> 00:23:53,704
+We're like, oh, that's $500 a month.
+
+569
+00:23:53,925 --> 00:23:54,405
+They're like,
+
+570
+00:23:54,675 --> 00:23:58,474
+we can't pay you $500 like we need, it has to cost more.
+
+571
+00:23:58,744 --> 00:24:01,125
+We're like, well, it's $500. So, like,
+
+572
+00:24:01,869 --> 00:24:04,969
+here's my personal credit card. Like I'll figure it out. Right.
+
+573
+00:24:05,300 --> 00:24:08,589
+That happened more often than not because, like, these companies just,
+
+574
+00:24:08,619 --> 00:24:11,280
+they couldn't spend a small amount of money.
+
+575
+00:24:11,300 --> 00:24:15,800
+-- Right. They had, it had to be an enormous bill
+-- or it looks like fraud. Right.
+
+576
+00:24:15,810 --> 00:24:16,109
+Right.
+
+577
+00:24:16,119 --> 00:24:17,890
+And, and this is the same problem with, like,
+
+578
+00:24:17,900 --> 00:24:19,880
+open source projects is a large company.
+
+579
+00:24:19,890 --> 00:24:24,280
+Can't say, like, here's 100 bucks putty, go fix my buck. Right.
+
+580
+00:24:24,290 --> 00:24:28,650
+They need some way to pay some, like, legitimate organization
+
+581
+00:24:29,109 --> 00:24:32,199
+-- and then that money has to go somewhere else.
+-- Well, and it's even worse than that.
+
+582
+00:24:32,209 --> 00:24:34,239
+Right. For large companies, things
+
+583
+00:24:34,650 --> 00:24:38,650
+can't be one offs. They have to be part of a process. They have to be part of
+
+584
+00:24:39,119 --> 00:24:40,439
+an ongoing,
+
+585
+00:24:40,579 --> 00:24:44,000
+recurring, quarterly, yearly, whatever billing cycle.
+
+586
+00:24:44,619 --> 00:24:45,229
+Right. Right.
+
+587
+00:24:45,239 --> 00:24:49,170
+So these people who say, oh, just give some money to the project like it's hard,
+
+588
+00:24:49,180 --> 00:24:50,319
+it's not something you can do.
+
+589
+00:24:50,329 --> 00:24:52,530
+-- So
+-- anyone, they're not legally allowed to in a lot of cases,
+
+590
+00:24:52,540 --> 00:24:56,050
+you can't just disperse money to an individual without the auditors going.
+
+591
+00:24:56,060 --> 00:24:57,699
+-- Like what
+-- now?
+
+592
+00:24:57,859 --> 00:25:00,119
+Wink, wink in the memo. Right? Like
+
+593
+00:25:00,890 --> 00:25:01,089
+this is
+
+594
+00:25:01,579 --> 00:25:02,369
+so anyway.
+
+595
+00:25:02,500 --> 00:25:03,089
+Right.
+
+596
+00:25:04,000 --> 00:25:05,699
+But, but I guess here's the thing and,
+
+597
+00:25:05,709 --> 00:25:08,579
+and this is kind of the way I would sum all of this up is
+
+598
+00:25:08,709 --> 00:25:11,099
+I give the eu tons of credit for doing this.
+
+599
+00:25:11,109 --> 00:25:13,760
+And I think there's a lot of people that want to stand up and say, oh, no, no.
+
+600
+00:25:13,770 --> 00:25:16,390
+But what about the projects? What about the Children, blah, blah, blah, blah.
+
+601
+00:25:16,400 --> 00:25:16,900
+It's like no,
+
+602
+00:25:17,030 --> 00:25:17,699
+look,
+
+603
+00:25:17,819 --> 00:25:22,380
+the eu is taking the first step now, if, if we never take a second step, then yes,
+
+604
+00:25:22,390 --> 00:25:24,859
+your criticism is 100% valid.
+
+605
+00:25:25,150 --> 00:25:25,530
+But the,
+
+606
+00:25:25,540 --> 00:25:27,349
+the thing is instead of just whining and
+
+607
+00:25:27,359 --> 00:25:29,849
+complaining like an annoying internet gas bag,
+
+608
+00:25:29,859 --> 00:25:31,719
+which is of course, what a lot of people like to do,
+
+609
+00:25:31,900 --> 00:25:35,310
+but now we need to go to the next place and,
+
+610
+00:25:35,319 --> 00:25:37,459
+and the thing to think about is how do we make it?
+
+611
+00:25:37,469 --> 00:25:41,119
+So, in a large organization or a government or somebody
+
+612
+00:25:41,469 --> 00:25:44,699
+can somehow get money to a project
+
+613
+00:25:44,900 --> 00:25:47,579
+to make sure the thing they want done gets done.
+
+614
+00:25:47,589 --> 00:25:50,550
+Because like, obviously one of the things I think about in my head a lot
+
+615
+00:25:50,660 --> 00:25:53,209
+is think of like a reverse bug bounty
+
+616
+00:25:53,219 --> 00:25:55,569
+where instead of paying people for finding bugs,
+
+617
+00:25:55,579 --> 00:25:57,800
+you pay people for fixing bugs where you say like, hey,
+
+618
+00:25:57,810 --> 00:26:00,369
+I want this feature that's been tried.
+
+619
+00:26:00,670 --> 00:26:02,010
+It, it, it never worked.
+
+620
+00:26:02,020 --> 00:26:06,319
+And, but again, we didn't have like the frameworks to actually do this.
+
+621
+00:26:06,599 --> 00:26:10,670
+Well, there were a couple of companies that did build that, but it's just,
+
+622
+00:26:10,910 --> 00:26:15,430
+-- it, I suspect part of it is for a lot of,
+-- I think it was premature. Right?
+
+623
+00:26:15,439 --> 00:26:18,550
+I mean, I think open source is way more popular, I think.
+
+624
+00:26:18,560 --> 00:26:20,839
+Yeah, I think part of it at the market wasn't ready
+
+625
+00:26:21,349 --> 00:26:24,209
+and I think part of it too is a lot of the people who can fix
+
+626
+00:26:24,219 --> 00:26:27,760
+these bugs are not doing it for the money and when you start paying them,
+
+627
+00:26:27,900 --> 00:26:29,890
+they, they go and they look at their time and they're like, well,
+
+628
+00:26:29,900 --> 00:26:31,729
+this actually isn't really worth my time,
+
+629
+00:26:32,800 --> 00:26:35,260
+you know, if you do something. Some of that is true.
+
+630
+00:26:35,400 --> 00:26:37,619
+Well, there's been multiple studies done where you know,
+
+631
+00:26:37,630 --> 00:26:39,310
+something was a volunteer action and then they
+
+632
+00:26:39,319 --> 00:26:41,010
+started paying the volunteers and it dried up.
+
+633
+00:26:41,869 --> 00:26:45,739
+Yes. Yes. And, and I'll post a link. Actually, there's a really nice video.
+
+634
+00:26:45,750 --> 00:26:48,260
+One of those animated videos, it might have been a TED talk. Even
+
+635
+00:26:48,500 --> 00:26:51,020
+where they talk about kind of rewards and money in
+
+636
+00:26:51,150 --> 00:26:53,810
+effect. Open source is a huge part of the talk.
+
+637
+00:26:54,060 --> 00:26:56,550
+-- And, and anyway, I, I'll link it in the show notes.
+-- Well, I agree.
+
+638
+00:26:56,560 --> 00:26:59,439
+Like, if, if people paid me to do CV E, I'd be like, great.
+
+639
+00:26:59,449 --> 00:27:01,689
+My professional rate is this three digit number,
+
+640
+00:27:01,819 --> 00:27:05,420
+-- right? Like a gazillion dollars.
+-- I'm not doing it for five bucks an hour.
+
+641
+00:27:05,430 --> 00:27:06,489
+-- And
+-- that's fair.
+
+642
+00:27:06,780 --> 00:27:08,280
+I, I think that's,
+
+643
+00:27:08,469 --> 00:27:11,680
+but again, again, this is where I kind of come back to
+
+644
+00:27:12,050 --> 00:27:14,280
+resources don't have to be money, right?
+
+645
+00:27:14,290 --> 00:27:17,030
+It could be as simple as saying, you fix my bug,
+
+646
+00:27:17,140 --> 00:27:18,119
+here's a pizza
+
+647
+00:27:18,260 --> 00:27:21,250
+or you fix my bug, like here's a free ipad, whatever.
+
+648
+00:27:21,260 --> 00:27:24,670
+There's a million things you can do here and, and it, it, if,
+
+649
+00:27:24,680 --> 00:27:28,099
+if we just obsess over sending money to a project,
+
+650
+00:27:28,369 --> 00:27:31,390
+I think we end up in the exact trap you're talking about.
+
+651
+00:27:31,400 --> 00:27:35,390
+And so this is, this is, again, this is part of step two, is figuring out
+
+652
+00:27:35,500 --> 00:27:36,920
+how do we actually
+
+653
+00:27:37,040 --> 00:27:41,910
+fund these projects in ways that is acceptable and increases
+
+654
+00:27:42,400 --> 00:27:42,780
+the,
+
+655
+00:27:42,790 --> 00:27:44,810
+the output they have because a lot of
+
+656
+00:27:44,819 --> 00:27:46,530
+these projects like you mentioned earlier are like,
+
+657
+00:27:46,540 --> 00:27:47,780
+it's literally a guy
+
+658
+00:27:47,959 --> 00:27:50,060
+and they do it on the weekend for fun.
+
+659
+00:27:50,239 --> 00:27:52,140
+And what do you do with that person? Right.
+
+660
+00:27:52,150 --> 00:27:54,089
+How do we make sure they stay motivated and
+
+661
+00:27:54,099 --> 00:27:56,170
+they feel like what they're doing is worthwhile?
+
+662
+00:27:56,180 --> 00:27:57,939
+-- So,
+-- one thing I was just thinking, well, two things.
+
+663
+00:27:57,949 --> 00:28:00,060
+Number one, you say, how do we fund these projects? I would say
+
+664
+00:28:00,310 --> 00:28:04,329
+more generally, how do we allocate resources to them that they need?
+
+665
+00:28:05,469 --> 00:28:06,880
+And number two
+
+666
+00:28:07,069 --> 00:28:12,260
+would be um the, the second thing that always drives me nuts is every time I run into,
+
+667
+00:28:12,270 --> 00:28:14,520
+well, this is not so much now, but back in the day, especially,
+
+668
+00:28:14,530 --> 00:28:17,130
+I'd run into people that, you know, were like, wow, I started using open source.
+
+669
+00:28:17,140 --> 00:28:17,540
+It's great,
+
+670
+00:28:17,709 --> 00:28:19,109
+you know, I'd love to give back. How can I get back?
+
+671
+00:28:19,119 --> 00:28:20,869
+And I'm like, have you ever encountered like a bug with it?
+
+672
+00:28:20,880 --> 00:28:22,410
+They're like, yeah, and I'm like, did you report it?
+
+673
+00:28:23,510 --> 00:28:27,040
+Right? Like seriously just reporting the bugs reporting them.
+
+674
+00:28:27,050 --> 00:28:29,349
+Well, would honestly,
+
+675
+00:28:29,359 --> 00:28:33,109
+that's what a lot of these developers do want is good bug reports.
+
+676
+00:28:33,180 --> 00:28:33,310
+Yeah,
+
+677
+00:28:34,119 --> 00:28:35,189
+I mean, again,
+
+678
+00:28:35,400 --> 00:28:37,760
+debt potentially is a resource
+
+679
+00:28:37,900 --> 00:28:40,880
+you can help fund these, these developers with or
+
+680
+00:28:40,989 --> 00:28:44,079
+I know there's a lot of projects that would like, they'd be in heaven
+
+681
+00:28:44,180 --> 00:28:48,060
+if someone just went through their bug trackers and was like, this is a valid bug.
+
+682
+00:28:48,069 --> 00:28:50,800
+This isn't a valid bug, right? Or, or fixing do, right?
+
+683
+00:28:50,810 --> 00:28:54,479
+Documentation is another big one like there's so much
+
+684
+00:28:54,650 --> 00:28:56,880
+that these projects need and every project's different.
+
+685
+00:28:56,890 --> 00:29:00,339
+And so you can't just say, like, throw money at them. It's not that easy.
+
+686
+00:29:00,349 --> 00:29:01,979
+Well, the problem here is then you have a company.
+
+687
+00:29:01,989 --> 00:29:04,959
+It's like, ok, we're going to pay an intern or we're gonna pay some guy to do this
+
+688
+00:29:05,430 --> 00:29:08,939
+unless you kind of like wink, wink, nudge, nudge, 10% of your time thing, you know,
+
+689
+00:29:08,949 --> 00:29:10,099
+and it, it just, again,
+
+690
+00:29:10,109 --> 00:29:14,099
+it gets very messy for these large companies that are driven by process and by
+
+691
+00:29:14,270 --> 00:29:15,510
+rules because
+
+692
+00:29:15,739 --> 00:29:19,829
+they're ultimately trying not to be driven by people who make mistakes and,
+
+693
+00:29:20,150 --> 00:29:22,500
+or if they do make mistakes, they want the mistakes catalog, you know,
+
+694
+00:29:22,510 --> 00:29:25,760
+the iso 9000 process where like everything is documented.
+
+695
+00:29:25,770 --> 00:29:26,729
+So if it goes wrong
+
+696
+00:29:27,069 --> 00:29:31,680
+while we in theory, can go update the documentation and stop doing it wrong. Sure.
+
+697
+00:29:31,819 --> 00:29:34,699
+So it's, but I agree it's a very complicated problem of, you know,
+
+698
+00:29:34,880 --> 00:29:37,640
+yeah, a fortune 500 company might be quite happy to,
+
+699
+00:29:38,030 --> 00:29:38,550
+you know,
+
+700
+00:29:38,880 --> 00:29:41,469
+allocate some sort of resources to some open source they're using.
+
+701
+00:29:41,479 --> 00:29:43,089
+But how do they actually do that?
+
+702
+00:29:43,099 --> 00:29:48,199
+Especially if they're financially or legally constrained
+
+703
+00:29:48,209 --> 00:29:49,329
+with what they're allowed to do.
+
+704
+00:29:49,619 --> 00:29:51,010
+Yep. Yep. Exactly.
+
+705
+00:29:51,329 --> 00:29:55,119
+So, I, yeah, I mean, I, I guess we'll see where we go next all in all.
+
+706
+00:29:55,130 --> 00:29:58,239
+Like I said, I think what the eu is doing is awesome.
+
+707
+00:29:58,250 --> 00:29:58,489
+Well,
+
+708
+00:29:58,500 --> 00:30:00,119
+this also presupposes that people are actually going
+
+709
+00:30:00,130 --> 00:30:01,599
+to look at this bug bounty and participate.
+
+710
+00:30:01,609 --> 00:30:04,260
+Right. Bug bounty is the demand side of. We want to pay for bugs.
+
+711
+00:30:04,530 --> 00:30:06,800
+You still need a supply of bugs. You need some,
+
+712
+00:30:06,905 --> 00:30:07,984
+you go find, you need to go
+
+713
+00:30:08,805 --> 00:30:08,895
+for the
+
+714
+00:30:09,214 --> 00:30:09,295
+supply
+
+715
+00:30:09,594 --> 00:30:12,525
+-- of bugs but
+-- people willing to sell them. And I,
+
+716
+00:30:12,535 --> 00:30:14,694
+I, I think, I think it'll be ok.
+
+717
+00:30:14,925 --> 00:30:19,525
+There are a nontrivial number of people who basically are now making a living.
+
+718
+00:30:19,535 --> 00:30:21,604
+I mean, think of like the gig economy where they're,
+
+719
+00:30:21,614 --> 00:30:24,125
+they're literally making their living on bug bunnies.
+
+720
+00:30:24,574 --> 00:30:26,405
+And if you're good at it,
+
+721
+00:30:26,694 --> 00:30:30,444
+-- you can do quite well. Well,
+-- especially if you live in a cheaper part of the world.
+
+722
+00:30:30,454 --> 00:30:31,984
+Yeah. $10,000 payday.
+
+723
+00:30:32,474 --> 00:30:33,805
+That's a good chunk of money.
+
+724
+00:30:34,670 --> 00:30:38,319
+And computers and internet are not that expensive. And open source by definition is
+
+725
+00:30:38,530 --> 00:30:42,819
+well, and that's the beauty too, is like all the fuzzing tools and most of the pretty,
+
+726
+00:30:43,089 --> 00:30:45,959
+what I would say are the really good security tools for doing this
+
+727
+00:30:46,130 --> 00:30:50,060
+kind of bug bounty fuzzing and stuff. With one or two exceptions. They are all free.
+
+728
+00:30:50,180 --> 00:30:54,319
+-- Yeah,
+-- for the most part. So I have a suspicion this is going to be successful.
+
+729
+00:30:54,329 --> 00:30:56,260
+The, the one worry I have
+
+730
+00:30:56,709 --> 00:31:01,709
+that, that I think is a legitimate worry. That isn't step two is my concern.
+
+731
+00:31:01,719 --> 00:31:06,300
+Is some of these bug bounties might be too successful and overwhelm the projects
+
+732
+00:31:06,670 --> 00:31:08,449
+and that would be equally bad
+
+733
+00:31:08,760 --> 00:31:10,979
+because now you have projects that are like,
+
+734
+00:31:10,989 --> 00:31:14,000
+I have 1000 bugs and I don't have time to fix them.
+
+735
+00:31:14,079 --> 00:31:16,109
+I don't think they're going to end up with 1000 bugs.
+
+736
+00:31:16,270 --> 00:31:19,500
+Now. I don't think they will either. I'm just saying like it is conceivable.
+
+737
+00:31:19,510 --> 00:31:21,890
+Even a dozen bugs would be a pain in the. Right.
+
+738
+00:31:21,959 --> 00:31:26,619
+So, anyway, but again, this is where we need step two. Right. We need some way
+
+739
+00:31:26,839 --> 00:31:30,930
+to, to go to the next level and, and it doesn't even have to be security focused.
+
+740
+00:31:30,939 --> 00:31:33,739
+I know obviously bug bounties are very security focused, but
+
+741
+00:31:34,050 --> 00:31:35,310
+there's no reason
+
+742
+00:31:35,410 --> 00:31:39,079
+that you can't fund features that have nothing to do with security, right? It's just
+
+743
+00:31:39,239 --> 00:31:42,229
+again, bug bounties are the only mechanism they have like
+
+744
+00:31:42,400 --> 00:31:44,339
+the, the E U's hammer is money
+
+745
+00:31:44,540 --> 00:31:46,510
+and that's the only nail they could find
+
+746
+00:31:46,839 --> 00:31:47,729
+like for real.
+
+747
+00:31:47,969 --> 00:31:48,869
+-- Yeah.
+-- No, that makes sense.
+
+748
+00:31:49,675 --> 00:31:51,155
+So, any closing thoughts on this one,
+
+749
+00:31:51,334 --> 00:31:54,344
+-- if
+-- you do find security flaws, please,
+
+750
+00:31:54,694 --> 00:31:56,084
+and you're going through a bug bamy, please,
+
+751
+00:31:56,094 --> 00:31:58,005
+please please have them request a CV number.
+
+752
+00:31:58,214 --> 00:31:58,954
+-- Yeah,
+-- that's fair.
+
+753
+00:31:58,964 --> 00:32:00,574
+And I guess on that note also,
+
+754
+00:32:00,584 --> 00:32:03,094
+and I put this in my blog post and I'll reiterate it again.
+
+755
+00:32:03,104 --> 00:32:04,925
+Here is if you are a project
+
+756
+00:32:05,550 --> 00:32:08,119
+and whether you're part of this EU list or not,
+
+757
+00:32:08,459 --> 00:32:12,349
+and you need help with security things like dealing with security reports,
+
+758
+00:32:12,359 --> 00:32:16,069
+dealing with advisory CD ES whatever, like feel free to get in touch with me.
+
+759
+00:32:16,079 --> 00:32:20,280
+My Twitter D MS are open and I will help you because I know what this is like
+
+760
+00:32:20,469 --> 00:32:23,739
+and kind of the, the, the closing statement on my blog was something like, you know,
+
+761
+00:32:23,750 --> 00:32:24,750
+the only thing worse than,
+
+762
+00:32:24,760 --> 00:32:26,459
+than being part of running an open source
+
+763
+00:32:26,469 --> 00:32:28,930
+project is running security for an open source project
+
+764
+00:32:29,189 --> 00:32:32,010
+because it's like, it's, you think that's thankless, right?
+
+765
+00:32:32,020 --> 00:32:35,589
+Like come to my world sometime, but, but for real, it's tricky to do.
+
+766
+00:32:35,599 --> 00:32:37,609
+It's not simple and it's something like I,
+
+767
+00:32:37,619 --> 00:32:40,930
+I both of us have been doing longer than we can possibly remember.
+
+768
+00:32:40,939 --> 00:32:43,369
+So by all means, ask for help and, and
+
+769
+00:32:43,589 --> 00:32:45,410
+it's kind of like the, the Harry Potter thing, right?
+
+770
+00:32:45,420 --> 00:32:47,359
+Anyone who asked for help at Hogwarts would get it.
+
+771
+00:32:47,479 --> 00:32:48,910
+No, it's, it's definitely,
+
+772
+00:32:49,209 --> 00:32:52,479
+-- it's a nontrivial type of work.
+-- Yep. Yep. Totally. All right, sweet.
+
+773
+00:32:52,489 --> 00:32:54,089
+So, thank you, Kurt. Thank you everyone for listening.
+
+774
+00:32:54,099 --> 00:32:56,390
+You can go to open source security podcast.com. Hit up the show
+
+775
+00:32:56,550 --> 00:33:00,810
+notes. You can use the pound. Oh, it says podcast hashtag to hit us up on social media
+
+776
+00:33:01,180 --> 00:33:05,880
+and yeah, Kurt have a fantastic rest of your day. You too. Thanks. Thanks everyone.
+
+777
+00:33:05,890 --> 00:33:06,459
+Bye bye
+
+778
+00:33:10,969 --> 00:33:11,030
+the

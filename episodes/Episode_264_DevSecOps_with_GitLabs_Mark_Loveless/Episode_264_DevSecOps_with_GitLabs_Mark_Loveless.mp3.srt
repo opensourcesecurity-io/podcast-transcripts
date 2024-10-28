@@ -1,0 +1,2885 @@
+0
+00:00:05,269 --> 00:00:08,579
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,590 --> 00:00:10,479
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:10,489 --> 00:00:11,229
+Josh Bresser.
+
+3
+00:00:11,989 --> 00:00:15,060
+Hey, Kurt, I, I'm super excited today. We, we have another guest.
+
+4
+00:00:15,069 --> 00:00:18,170
+We have Mark Lovelace security researcher at Git lab.
+
+5
+00:00:18,200 --> 00:00:21,969
+Uh Mark goes by Simple Nomad on Twitter, which is what I've known him as forever.
+
+6
+00:00:21,979 --> 00:00:25,969
+-- So, Mark, welcome to the show. I'm very excited for you to be here.
+-- Good to be here.
+
+7
+00:00:26,149 --> 00:00:29,209
+Good to see you or to hear you and
+
+8
+00:00:29,309 --> 00:00:29,979
+uh and Kurt.
+
+9
+00:00:30,659 --> 00:00:33,569
+Awesome. Thanks. So, I guess tell, tell us what you're up to, man.
+
+10
+00:00:34,299 --> 00:00:37,439
+-- What am I up to?
+-- You're at, you're at Git lab, you're doing some cool stuff.
+
+11
+00:00:37,450 --> 00:00:40,040
+-- Tell us a story.
+-- I'm work, I'm working at Git lab.
+
+12
+00:00:40,049 --> 00:00:44,509
+You know, the uh the fun uh open source kind of company that does uh DEV
+
+13
+00:00:44,799 --> 00:00:48,200
+ops and I'm desperately trying to put SEC
+
+14
+00:00:48,450 --> 00:00:49,520
+into the
+
+15
+00:00:50,130 --> 00:00:50,450
+DEV
+
+16
+00:00:50,680 --> 00:00:55,490
+ops part of everything I do. So, and just my whole background of being a
+
+17
+00:00:56,000 --> 00:01:01,779
+uh paranoid uh security researcher is just perfect with this type of job.
+
+18
+00:01:01,790 --> 00:01:04,949
+Everything they give me, they feel like they're giving me something to work on,
+
+19
+00:01:04,959 --> 00:01:08,220
+that's horrid and and, uh, sad and, and
+
+20
+00:01:08,620 --> 00:01:10,139
+soul crushingly
+
+21
+00:01:10,519 --> 00:01:11,580
+hard to do.
+
+22
+00:01:11,589 --> 00:01:15,489
+And it, for me it's just like, oh, my gosh, this is the most wonderful job ever.
+
+23
+00:01:15,500 --> 00:01:17,860
+So, I'm having the time of my life doing what I'm doing.
+
+24
+00:01:18,269 --> 00:01:21,500
+That's awesome. Well, and you've been, I mean, you've been around as long as we have,
+
+25
+00:01:22,120 --> 00:01:25,389
+-- like, definitely no newcomer to this industry. No,
+-- I'm not.
+
+26
+00:01:25,400 --> 00:01:28,199
+-- I've been, yeah, I've been doing this for quite a while. All right. All
+-- right.
+
+27
+00:01:28,209 --> 00:01:28,330
+So,
+
+28
+00:01:28,339 --> 00:01:30,050
+I guess let's kind of start at the beginning because
+
+29
+00:01:30,059 --> 00:01:31,650
+I'm actually a pretty big fan of git Lab.
+
+30
+00:01:31,660 --> 00:01:35,209
+I, I think they're doing some really interesting stuff and I think the most, I,
+
+31
+00:01:35,220 --> 00:01:37,680
+I guess unique thing I would describe is
+
+32
+00:01:37,980 --> 00:01:40,669
+Git Lab has a very unique way of releasing
+
+33
+00:01:40,819 --> 00:01:41,620
+software.
+
+34
+00:01:41,809 --> 00:01:43,069
+Do you, do you want to tell us about it?
+
+35
+00:01:43,080 --> 00:01:46,269
+-- Like, it's, it's a special day, isn't
+-- it a special day?
+
+36
+00:01:46,480 --> 00:01:48,580
+The 22nd of every month? Right.
+
+37
+00:01:49,379 --> 00:01:49,959
+Like,
+
+38
+00:01:50,139 --> 00:01:51,339
+who does that?
+
+39
+00:01:51,489 --> 00:01:56,330
+Well? 000, just the fact that we release so freaking often.
+
+40
+00:01:56,339 --> 00:02:00,190
+-- Is that what you're talking about
+-- that? And just, it's like, it's a day, right.
+
+41
+00:02:00,199 --> 00:02:00,400
+And,
+
+42
+00:02:00,410 --> 00:02:01,910
+and I think that the discipline to
+
+43
+00:02:01,919 --> 00:02:05,150
+accomplish that boggles my mind sometimes because
+
+44
+00:02:05,370 --> 00:02:06,269
+that is
+
+45
+00:02:06,650 --> 00:02:10,029
+a skill set. I don't think you find often
+
+46
+00:02:10,627 --> 00:02:13,208
+in just the, the software industry in general.
+
+47
+00:02:13,229 --> 00:02:16,328
+-- Yeah,
+-- the thing is, is like, ok, working here,
+
+48
+00:02:16,339 --> 00:02:19,218
+I don't even think about that if that makes sense.
+
+49
+00:02:20,050 --> 00:02:21,350
+Ok, because
+
+50
+00:02:21,740 --> 00:02:22,139
+I,
+
+51
+00:02:22,309 --> 00:02:24,960
+it's just, there's because I, I run my own
+
+52
+00:02:25,080 --> 00:02:29,000
+git lab instance here in my home lab or whatever
+
+53
+00:02:29,190 --> 00:02:29,720
+and,
+
+54
+00:02:30,050 --> 00:02:34,660
+and it's like, it's a full, like, stand alone on its own server.
+
+55
+00:02:34,669 --> 00:02:39,240
+It's got its own static IP address and up on the internet for people
+
+56
+00:02:39,250 --> 00:02:42,860
+to come in and attack and we look at it and see what happens
+
+57
+00:02:43,100 --> 00:02:43,839
+and
+
+58
+00:02:44,149 --> 00:02:46,550
+it is constantly updated. Right?
+
+59
+00:02:46,559 --> 00:02:50,229
+Because we're not, not just, not just talking about the uh
+
+60
+00:02:50,919 --> 00:02:53,229
+uh the point releases, but just the
+
+61
+00:02:53,949 --> 00:02:56,380
+in between those, there'll be just, you know,
+
+62
+00:02:57,059 --> 00:02:58,940
+up, you know, updates that occur.
+
+63
+00:02:58,949 --> 00:03:02,619
+I would say I'm seeing updates probably almost weekly.
+
+64
+00:03:03,440 --> 00:03:04,580
+Wow, that's awesome.
+
+65
+00:03:04,770 --> 00:03:10,089
+I just set my system up at home here to download the new package that they've got,
+
+66
+00:03:10,100 --> 00:03:13,720
+you know, the Debian style package and just pull the thing down and,
+
+67
+00:03:13,729 --> 00:03:16,690
+and do it and it just, uh it's, it is amazing.
+
+68
+00:03:16,699 --> 00:03:19,649
+It is, uh it is amazing when you think about
+
+69
+00:03:19,750 --> 00:03:19,770
+it.
+
+70
+00:03:19,779 --> 00:03:22,580
+The, the, the other amazing thing is trying to,
+
+71
+00:03:22,589 --> 00:03:24,850
+uh make sure that what you're releasing is secure,
+
+72
+00:03:25,589 --> 00:03:26,850
+unquestionably.
+
+73
+00:03:26,860 --> 00:03:31,300
+Yeah, that's, that's the other, other uh uh fun and exciting challenge with that.
+
+74
+00:03:31,759 --> 00:03:34,399
+I mean, ok, so, so tell us about that, you know, you, I,
+
+75
+00:03:34,410 --> 00:03:39,610
+I know just from paying attention to your, your workings over the many years that
+
+76
+00:03:39,750 --> 00:03:42,020
+you have a strong background in security research.
+
+77
+00:03:42,029 --> 00:03:43,020
+And so I'm curious,
+
+78
+00:03:43,029 --> 00:03:46,220
+what does that mean in the context of a company that releases software and,
+
+79
+00:03:46,229 --> 00:03:47,509
+and git lab is
+
+80
+00:03:47,800 --> 00:03:48,899
+incredibly open.
+
+81
+00:03:49,330 --> 00:03:50,059
+There's
+
+82
+00:03:50,240 --> 00:03:51,750
+an alarming amount of openness.
+
+83
+00:03:51,759 --> 00:03:56,929
+-- You could almost say the inner workings of git lab
+-- before I started working here, I,
+
+84
+00:03:56,940 --> 00:04:01,710
+I became unemployed, as they say, from my last job, I didn't want to,
+
+85
+00:04:01,820 --> 00:04:05,190
+I worked at Duo that got bought by Cisco. I didn't want to work at Cisco.
+
+86
+00:04:05,279 --> 00:04:06,729
+And so that was, and that was fine.
+
+87
+00:04:06,740 --> 00:04:11,800
+So I'm unemployed and I'm, I get contacted by some, some people that get labs and say,
+
+88
+00:04:11,809 --> 00:04:14,389
+hey, we saw on your blog that you're
+
+89
+00:04:15,070 --> 00:04:17,678
+funemployed, maybe you should come work here
+
+90
+00:04:17,920 --> 00:04:22,600
+and I start taking a look at, at that and I see the
+
+91
+00:04:22,809 --> 00:04:24,089
+handbook online
+
+92
+00:04:24,980 --> 00:04:27,079
+and it's just like holy moly.
+
+93
+00:04:27,089 --> 00:04:29,720
+This is like really wide open,
+
+94
+00:04:29,769 --> 00:04:34,640
+this is frightfully wide open and I'm supposed to do security at this place.
+
+95
+00:04:35,380 --> 00:04:35,690
+Yeah.
+
+96
+00:04:36,250 --> 00:04:37,480
+But you know, it's funny because
+
+97
+00:04:37,670 --> 00:04:40,929
+like we come from Red Hat and we're sort of used to, well,
+
+98
+00:04:40,940 --> 00:04:44,570
+Red Hat's not as open as g lap to be fair, but like the source code is out there.
+
+99
+00:04:44,579 --> 00:04:46,579
+-- No, nobody's just
+-- open it.
+
+100
+00:04:48,500 --> 00:04:50,470
+But yeah, and that's, but that's the thing.
+
+101
+00:04:50,480 --> 00:04:52,619
+It's just like every single process I'm reading
+
+102
+00:04:52,630 --> 00:04:55,250
+about almost literally everything that I can,
+
+103
+00:04:55,260 --> 00:04:58,649
+I can read about that I can think of is, is there.
+
+104
+00:04:59,029 --> 00:04:59,529
+And
+
+105
+00:05:00,230 --> 00:05:03,839
+the, but the thing is, is like, as a researcher particularly,
+
+106
+00:05:03,850 --> 00:05:06,739
+it becomes extraordinarily freeing.
+
+107
+00:05:06,809 --> 00:05:10,459
+OK? I mean, we have there is data that's going to be uh
+
+108
+00:05:11,329 --> 00:05:15,920
+uh you know, secret ok, that's, that's, that's obvious customer data, you know,
+
+109
+00:05:15,929 --> 00:05:16,329
+just,
+
+110
+00:05:16,670 --> 00:05:21,750
+you know, stuff that would be handled by, you know, hr kind of thing. But
+
+111
+00:05:21,880 --> 00:05:25,089
+there's a lot of openness in there and
+
+112
+00:05:25,609 --> 00:05:30,630
+as a result at other places where I've worked, they've had problems where they said,
+
+113
+00:05:30,640 --> 00:05:31,109
+ok,
+
+114
+00:05:31,390 --> 00:05:33,250
+we found a security flaw.
+
+115
+00:05:33,750 --> 00:05:37,950
+We need to be really careful how we word this when we release it.
+
+116
+00:05:38,410 --> 00:05:39,170
+So
+
+117
+00:05:39,329 --> 00:05:40,959
+we don't look bad,
+
+118
+00:05:41,160 --> 00:05:44,859
+you know, or, or whatever their motivation is at git lab,
+
+119
+00:05:44,869 --> 00:05:49,220
+it's just we're going to be completely open and say, ok, here's the flaw, here's
+
+120
+00:05:49,350 --> 00:05:52,450
+how someone could potentially exploit it. Here's how
+
+121
+00:05:52,600 --> 00:05:56,730
+we recommend you mitigate it. Here's our fix for it, et cetera, et cetera.
+
+122
+00:05:56,859 --> 00:05:59,299
+We just lay it all out there and
+
+123
+00:05:59,730 --> 00:06:02,799
+from a security perspective that makes it a lot easier because
+
+124
+00:06:02,809 --> 00:06:06,420
+I don't have to focus on someone from upper management telling me
+
+125
+00:06:07,140 --> 00:06:09,779
+you can't say this, you can't word it that way.
+
+126
+00:06:09,790 --> 00:06:14,140
+It's just like we're going to have, we're going to just basically lay out the facts
+
+127
+00:06:14,619 --> 00:06:19,660
+here. It is because the idea is this is what we would want if we work someplace else,
+
+128
+00:06:20,269 --> 00:06:20,600
+you know,
+
+129
+00:06:20,609 --> 00:06:23,609
+get the most amount of information that we possibly
+
+130
+00:06:23,619 --> 00:06:25,329
+can so that we can make a decision.
+
+131
+00:06:25,339 --> 00:06:29,079
+And so that's really, uh that's really exciting and, and to be able to do that,
+
+132
+00:06:29,089 --> 00:06:32,380
+that makes it a lot easier doing security here.
+
+133
+00:06:32,390 --> 00:06:36,779
+Totally. Totally. So you have uh a blog post that I will.
+
+134
+00:06:37,049 --> 00:06:38,690
+Well, I'm, I'm gonna put a bunch of stuff in the show.
+
+135
+00:06:38,709 --> 00:06:41,369
+Not, it's like all the crazy stuff git lab's doing for anyone listening.
+
+136
+00:06:41,380 --> 00:06:42,429
+So just go find those.
+
+137
+00:06:42,440 --> 00:06:44,450
+But anyway, you wrote this blog post that,
+
+138
+00:06:44,459 --> 00:06:47,140
+that really resonated with me where you talk about, what's the title?
+
+139
+00:06:47,149 --> 00:06:50,779
+It's called How We Approach Open source security. And you focus on that
+
+140
+00:06:50,899 --> 00:06:53,730
+openness aspect of security. And I feel like
+
+141
+00:06:54,100 --> 00:06:56,350
+this is something coming
+
+142
+00:06:56,609 --> 00:06:58,190
+that I don't think everyone gets yet.
+
+143
+00:06:58,200 --> 00:06:58,429
+But II,
+
+144
+00:06:58,440 --> 00:07:00,510
+I think Kurt and I just talked about this in the last
+
+145
+00:07:00,519 --> 00:07:04,350
+episode even is there's like this cult of secrecy in security.
+
+146
+00:07:04,420 --> 00:07:06,809
+And I think it's actually more damaging
+
+147
+00:07:06,959 --> 00:07:08,269
+than helpful.
+
+148
+00:07:08,279 --> 00:07:12,470
+And I feel like, but we, we secretly think it works but it, it totally doesn't. Right.
+
+149
+00:07:12,940 --> 00:07:15,670
+Yeah, the, the, this is the fun, this is the fun thing.
+
+150
+00:07:15,679 --> 00:07:17,709
+I've been working some of the stuff I've been working on.
+
+151
+00:07:17,720 --> 00:07:18,200
+I'm hoping there's,
+
+152
+00:07:18,285 --> 00:07:20,304
+it's gonna be another fun and exciting blog
+
+153
+00:07:20,315 --> 00:07:22,855
+post coming out pretty soon on the project.
+
+154
+00:07:22,864 --> 00:07:23,625
+I'm working on that.
+
+155
+00:07:23,635 --> 00:07:28,165
+I, I want to say I just completed because it's, it's not completed by any means.
+
+156
+00:07:28,174 --> 00:07:31,744
+Now does hoping mean the editors need a poke with a stick
+
+157
+00:07:31,755 --> 00:07:34,584
+or does hoping mean Mark needs to write the blog post.
+
+158
+00:07:34,674 --> 00:07:34,744
+Uh
+
+159
+00:07:35,515 --> 00:07:39,575
+I'm going to say the former, but it's truly the latter.
+
+160
+00:07:41,709 --> 00:07:42,529
+No, I,
+
+161
+00:07:42,820 --> 00:07:48,679
+I just, I put a lot on my own plate because I just like doing a lot of stuff. And so,
+
+162
+00:07:48,869 --> 00:07:52,809
+yeah, things get, things get tossed by the wayside sometimes,
+
+163
+00:07:53,049 --> 00:07:54,910
+which is unfortunate. But, uh,
+
+164
+00:07:55,339 --> 00:07:59,609
+I know the project I worked on for the past couple of quarters
+
+165
+00:07:59,850 --> 00:08:02,329
+was a threat modeling. And
+
+166
+00:08:03,329 --> 00:08:07,529
+introducing this is kind of like you go to talk to DEV and OPS and say, hey,
+
+167
+00:08:07,540 --> 00:08:09,519
+there's this thing called SEC and we got to get
+
+168
+00:08:09,529 --> 00:08:11,489
+that in there because we're going to do this devs
+
+169
+00:08:11,829 --> 00:08:15,329
+ops thing. So we came up with this idea where we're using threat modeling.
+
+170
+00:08:15,339 --> 00:08:18,380
+We're using um kind of a variation on
+
+171
+00:08:18,649 --> 00:08:19,869
+the uh pasta
+
+172
+00:08:20,165 --> 00:08:23,375
+threat modeling and pasta stands for, oh
+
+173
+00:08:23,984 --> 00:08:25,045
+threat modeling.
+
+174
+00:08:25,744 --> 00:08:26,855
+I, I can't,
+
+175
+00:08:27,225 --> 00:08:27,614
+I
+
+176
+00:08:27,744 --> 00:08:29,174
+can't remember what it stands for.
+
+177
+00:08:29,184 --> 00:08:30,015
+The biggest,
+
+178
+00:08:30,024 --> 00:08:31,454
+I think the biggest thing because I've just been
+
+179
+00:08:31,464 --> 00:08:33,145
+through this with a bunch of different threat modeling.
+
+180
+00:08:33,155 --> 00:08:36,614
+I actually wrote like a 30 page paper on all the different threat modeling systems
+
+181
+00:08:36,895 --> 00:08:39,354
+and the biggest takeaway I had from Pasta versus Stride.
+
+182
+00:08:39,364 --> 00:08:42,604
+And these other more technical methods was pasta takes
+
+183
+00:08:42,614 --> 00:08:46,695
+a very holistic view and includes components like actually getting
+
+184
+00:08:46,825 --> 00:08:49,094
+buy in from the upper echelon,
+
+185
+00:08:49,320 --> 00:08:52,929
+you know, defining the business requirements and sort of all that, that non
+
+186
+00:08:53,039 --> 00:08:56,820
+technical squishy stuff that to put it bluntly, a lot of threat models ignore.
+
+187
+00:08:57,219 --> 00:08:57,820
+Oh yeah,
+
+188
+00:08:58,090 --> 00:09:02,450
+exactly. And the other thing that I really liked about uh pasta was the fact that
+
+189
+00:09:02,900 --> 00:09:05,809
+it would take elements of, uh let's see,
+
+190
+00:09:05,820 --> 00:09:08,909
+how would you word this previous threats
+
+191
+00:09:08,919 --> 00:09:11,229
+that are previous risks that have occurred,
+
+192
+00:09:11,239 --> 00:09:14,539
+like you've had previous incidents, security incidences or just like, you know,
+
+193
+00:09:14,549 --> 00:09:15,869
+hey, we had a problem with this code.
+
+194
+00:09:15,880 --> 00:09:16,390
+They had a
+
+195
+00:09:16,609 --> 00:09:20,059
+security issue with it or whatever. So you can take that
+
+196
+00:09:20,270 --> 00:09:23,219
+kind of stuff and so you can list out all your risks and everything. Ok.
+
+197
+00:09:23,229 --> 00:09:27,260
+Here's all the potential threats that we might see regardless of whether they
+
+198
+00:09:27,390 --> 00:09:29,869
+are going to occur or not, But here they all are.
+
+199
+00:09:29,880 --> 00:09:33,940
+Now, let's use our past to help us say here,
+
+200
+00:09:33,950 --> 00:09:37,450
+this will help define what's more likely to occur
+
+201
+00:09:37,890 --> 00:09:38,669
+than others.
+
+202
+00:09:38,679 --> 00:09:42,429
+I mean, you can still say, well, because we're introducing this new component,
+
+203
+00:09:42,440 --> 00:09:45,070
+it's gonna cause we're going to open up this new world.
+
+204
+00:09:45,080 --> 00:09:49,210
+But it does allow you to go back and look at your past and be able to say
+
+205
+00:09:49,400 --> 00:09:52,070
+uh based upon the way things have gone before
+
+206
+00:09:52,400 --> 00:09:55,469
+it looks like our major areas of risk are going to be here.
+
+207
+00:09:55,880 --> 00:09:58,989
+And so being able to take that and then include that in
+
+208
+00:09:59,260 --> 00:10:00,469
+so, and that's fine.
+
+209
+00:10:00,479 --> 00:10:05,070
+The, the, the the thing with uh using threat modelling, that's, that's great,
+
+210
+00:10:05,080 --> 00:10:05,289
+that's,
+
+211
+00:10:05,429 --> 00:10:09,500
+that's fine. And because past is in seven stages and, and we're
+
+212
+00:10:09,739 --> 00:10:12,020
+mainly focusing on three of them.
+
+213
+00:10:12,030 --> 00:10:15,969
+So we're kind of doing kind of our own kind of version of that.
+
+214
+00:10:16,159 --> 00:10:19,409
+Uh mainly focusing on identifying the threats and
+
+215
+00:10:19,789 --> 00:10:22,820
+trying and figuring out which which ones are most
+
+216
+00:10:22,830 --> 00:10:25,080
+likely and that's where we dedicate our resources.
+
+217
+00:10:25,789 --> 00:10:27,890
+So that's, that's the fun part. Now,
+
+218
+00:10:28,090 --> 00:10:30,750
+the real trick is trying to get
+
+219
+00:10:30,919 --> 00:10:35,590
+everyone in DEV or everyone in ops or everyone
+
+220
+00:10:35,750 --> 00:10:39,669
+in whatever department there is because you can apply this.
+
+221
+00:10:39,760 --> 00:10:42,690
+And this was the, this was the goal was that we didn't want to have a, a
+
+222
+00:10:43,059 --> 00:10:45,229
+threat model that just applied to code.
+
+223
+00:10:45,239 --> 00:10:48,169
+All right, we wanted it to be able to apply it to operations.
+
+224
+00:10:48,179 --> 00:10:49,950
+We want to be able to apply it to, I
+
+225
+00:10:50,090 --> 00:10:52,130
+mean, you could even apply this to marketing,
+
+226
+00:10:52,919 --> 00:10:55,049
+ok? Or sales,
+
+227
+00:10:55,549 --> 00:10:55,780
+you know,
+
+228
+00:10:55,789 --> 00:10:58,809
+someone's coming up with a new sales strategy and they're
+
+229
+00:10:58,820 --> 00:11:02,059
+going into a new vertical market to go do whatever,
+
+230
+00:11:02,070 --> 00:11:05,900
+where are their big risks with doing it this way, et cetera.
+
+231
+00:11:05,909 --> 00:11:08,460
+So there's all kinds of ways that you can apply
+
+232
+00:11:08,469 --> 00:11:09,820
+this and that's what we are trying to do.
+
+233
+00:11:09,969 --> 00:11:13,679
+That's pretty cool. The big one, the really big one is trying to get
+
+234
+00:11:13,919 --> 00:11:15,570
+the people that are
+
+235
+00:11:15,880 --> 00:11:17,239
+coming up with the new thing,
+
+236
+00:11:17,250 --> 00:11:19,200
+writing the new chunk of code or whatever
+
+237
+00:11:19,260 --> 00:11:22,559
+to go through the process themselves to where
+
+238
+00:11:22,760 --> 00:11:26,359
+they don't need the security department in there yelling at them,
+
+239
+00:11:26,650 --> 00:11:27,599
+ok?
+
+240
+00:11:27,900 --> 00:11:28,599
+You know, just
+
+241
+00:11:28,940 --> 00:11:31,679
+get them to be involved in the process.
+
+242
+00:11:31,690 --> 00:11:35,260
+And so that's the main thing that we've been working on is trying to get,
+
+243
+00:11:35,280 --> 00:11:37,739
+start getting these things involved because there is
+
+244
+00:11:37,750 --> 00:11:39,719
+a review process that where security has to
+
+245
+00:11:39,729 --> 00:11:41,719
+get involved when you're introducing new features and
+
+246
+00:11:41,729 --> 00:11:43,880
+stuff like that into the git lab product.
+
+247
+00:11:43,960 --> 00:11:45,955
+So instead of like at the,
+
+248
+00:11:46,205 --> 00:11:48,794
+you know, they're saying, ok, here's our code. What do you think?
+
+249
+00:11:48,804 --> 00:11:50,994
+And we go through the threat model and say, look,
+
+250
+00:11:51,005 --> 00:11:55,375
+this is what you should be looking at when you started the project and
+
+251
+00:11:55,385 --> 00:11:58,375
+get them to start to say you go through the threat model thing,
+
+252
+00:11:58,484 --> 00:12:00,755
+we don't have to be there for you to do this,
+
+253
+00:12:01,244 --> 00:12:03,054
+but you go through that threat model thing.
+
+254
+00:12:03,065 --> 00:12:05,994
+And if you have questions during the process, certainly bring us in,
+
+255
+00:12:06,359 --> 00:12:08,239
+then when we come time to that review thing,
+
+256
+00:12:08,250 --> 00:12:10,419
+you've already got this whole threat model thing worked out
+
+257
+00:12:10,679 --> 00:12:11,140
+and
+
+258
+00:12:11,320 --> 00:12:15,250
+in the process, they ended, they end up writing more secure code to begin with
+
+259
+00:12:15,830 --> 00:12:17,159
+by the time they reach that point.
+
+260
+00:12:17,309 --> 00:12:21,770
+And so that's kind of a neat thing that we didn't think was
+
+261
+00:12:21,780 --> 00:12:26,260
+going to work and so far everyone that's done it has been like,
+
+262
+00:12:26,270 --> 00:12:27,969
+oh, well, this makes it easier because
+
+263
+00:12:28,159 --> 00:12:30,409
+I fly through that security review or
+
+264
+00:12:30,590 --> 00:12:34,309
+whatever really. They're not, they're not flying through the security review.
+
+265
+00:12:34,320 --> 00:12:36,969
+They kind of did it themselves before they got to us.
+
+266
+00:12:37,609 --> 00:12:38,409
+And so
+
+267
+00:12:38,690 --> 00:12:40,969
+I'm not saying we're tricking them, but I mean, they get,
+
+268
+00:12:40,979 --> 00:12:45,479
+they get it and it ends up where their code is more secure and,
+
+269
+00:12:46,090 --> 00:12:46,820
+and uh
+
+270
+00:12:47,280 --> 00:12:51,500
+overall everything works better now, that's I'm giving you the ideal thing.
+
+271
+00:12:51,510 --> 00:12:55,830
+I mean, obviously this isn't gonna work perfect in every aspect everywhere,
+
+272
+00:12:55,989 --> 00:12:59,909
+but the, in some of the initial projects we've been working on, it's been hopeful
+
+273
+00:13:00,250 --> 00:13:05,700
+and the thing is we put out, I think this got committed to the project.
+
+274
+00:13:05,710 --> 00:13:08,710
+Just I think within the past two or three days,
+
+275
+00:13:09,250 --> 00:13:13,190
+we put out some uh examples of what we've been doing. So if you search the
+
+276
+00:13:13,510 --> 00:13:17,469
+handbook for threat modeling, there'll be links to show all this stuff.
+
+277
+00:13:18,210 --> 00:13:20,799
+Some examples like on my stand alone that I have here,
+
+278
+00:13:20,809 --> 00:13:23,039
+I did a whole full threat model on that
+
+279
+00:13:23,179 --> 00:13:25,979
+as a result of some of that, there have been
+
+280
+00:13:26,080 --> 00:13:28,789
+some uh code changes that have occurred in
+
+281
+00:13:28,799 --> 00:13:31,390
+the product simply because it's just like we,
+
+282
+00:13:31,400 --> 00:13:33,619
+we found some things here, we need to make this change.
+
+283
+00:13:33,630 --> 00:13:34,239
+And someone said,
+
+284
+00:13:34,380 --> 00:13:38,090
+hey, I've been working on that and just like, OK, now, now they've got some, you know,
+
+285
+00:13:38,099 --> 00:13:41,989
+kind of ammo or whatever to kind of help back up their point of view.
+
+286
+00:13:42,000 --> 00:13:46,229
+And so things are, it, it does work, it does work. So it's just, it's good.
+
+287
+00:13:46,510 --> 00:13:48,369
+So one thing I'm curious about because I've been doing
+
+288
+00:13:48,380 --> 00:13:50,169
+a ton of work on threat modeling and trying to,
+
+289
+00:13:50,450 --> 00:13:53,369
+one of the biggest things I've been struggling with is trying to
+
+290
+00:13:53,650 --> 00:13:55,169
+clearly define
+
+291
+00:13:55,489 --> 00:13:58,609
+the value and benefit of threat modeling. And
+
+292
+00:13:58,830 --> 00:14:01,010
+in general, I've only come up with essentially it,
+
+293
+00:14:01,210 --> 00:14:04,650
+it allows you to kind of add security to existing things,
+
+294
+00:14:04,659 --> 00:14:06,890
+it doesn't sort of create anything new, right?
+
+295
+00:14:06,900 --> 00:14:10,849
+Like for example, network programming brought something completely new to dev,
+
+296
+00:14:11,440 --> 00:14:13,320
+you know, now systems can talk to each other
+
+297
+00:14:13,479 --> 00:14:16,900
+but threat modeling, you know, it doesn't sort of enable anything
+
+298
+00:14:17,080 --> 00:14:19,239
+new or it doesn't create something new.
+
+299
+00:14:19,250 --> 00:14:21,739
+It just kind of slips into existing processes.
+
+300
+00:14:21,960 --> 00:14:24,500
+Is that what you found or have you found
+
+301
+00:14:24,510 --> 00:14:27,530
+it sort of enables and allows completely new things?
+
+302
+00:14:27,539 --> 00:14:30,700
+I wish it was uh enabling completely new things.
+
+303
+00:14:30,710 --> 00:14:35,619
+Uh But no, it just, it just basically has been helping to secure what we have.
+
+304
+00:14:35,630 --> 00:14:36,219
+I mean, it's,
+
+305
+00:14:36,400 --> 00:14:39,479
+there's always this thing that I, I've talked about this before,
+
+306
+00:14:39,489 --> 00:14:42,099
+I've given talks about it and stuff where, you know,
+
+307
+00:14:42,109 --> 00:14:45,169
+you got to make sure you cover the basics in things.
+
+308
+00:14:45,179 --> 00:14:47,809
+And the analogy I like to use is uh
+
+309
+00:14:48,179 --> 00:14:52,729
+OK, if we will die, all of us will die at the end of our lives. All right.
+
+310
+00:14:53,099 --> 00:14:54,799
+So when you die,
+
+311
+00:14:54,909 --> 00:14:57,880
+there's a reason why you died. OK.
+
+312
+00:14:58,700 --> 00:14:59,369
+So
+
+313
+00:14:59,580 --> 00:15:00,940
+the odds are,
+
+314
+00:15:01,229 --> 00:15:04,440
+and so, you know, people think of, oh, I, I don't want to die.
+
+315
+00:15:04,849 --> 00:15:06,729
+Uh But you know, of course they are.
+
+316
+00:15:06,739 --> 00:15:09,559
+And there's a chunk of people who say, well, hey, you know what?
+
+317
+00:15:09,570 --> 00:15:11,330
+I, I've discovered that
+
+318
+00:15:11,500 --> 00:15:14,289
+murder is a bad thing and I don't want to be murdered
+
+319
+00:15:14,679 --> 00:15:17,929
+and they'll focus on that because that's what's in the press all the time.
+
+320
+00:15:18,659 --> 00:15:20,919
+And then you look at the odds of them
+
+321
+00:15:21,169 --> 00:15:23,000
+having died for murder
+
+322
+00:15:23,409 --> 00:15:23,900
+and
+
+323
+00:15:24,289 --> 00:15:26,200
+I think the odds were, I think the,
+
+324
+00:15:26,210 --> 00:15:30,630
+the figures that I quoted from were from a couple of years ago or so, but it was like,
+
+325
+00:15:30,640 --> 00:15:33,880
+your odds were like one in 400 or something like that.
+
+326
+00:15:34,049 --> 00:15:36,190
+And it was like one in 400. 0, my gosh.
+
+327
+00:15:36,760 --> 00:15:39,520
+And they get all freaked out about that
+
+328
+00:15:39,940 --> 00:15:43,150
+value. But then you say, well, suicide,
+
+329
+00:15:43,489 --> 00:15:45,640
+it's one in 100 and 19.
+
+330
+00:15:46,830 --> 00:15:51,280
+Ok. So, and then that puts it into a completely different perspective and
+
+331
+00:15:51,989 --> 00:15:52,729
+then
+
+332
+00:15:53,460 --> 00:15:58,760
+saying, well, ok, the most common way is from heart disease. One in six.
+
+333
+00:16:00,130 --> 00:16:01,250
+Ok. So,
+
+334
+00:16:01,640 --> 00:16:02,119
+you know,
+
+335
+00:16:02,250 --> 00:16:03,280
+it's just like
+
+336
+00:16:04,059 --> 00:16:08,169
+a lot of people that are not deep down in security
+
+337
+00:16:08,179 --> 00:16:11,630
+are in there saying either and the vendors do this too.
+
+338
+00:16:11,640 --> 00:16:14,479
+So they'll, they'll sell the try to sell murder blankets or,
+
+339
+00:16:14,640 --> 00:16:15,950
+or, or whatever
+
+340
+00:16:16,119 --> 00:16:17,299
+it is to prevent,
+
+341
+00:16:17,530 --> 00:16:20,239
+you know, so you got to have this murder blanket to prevent your murder.
+
+342
+00:16:20,729 --> 00:16:24,679
+But really, it's just like they need to be eating salads and stuff like that,
+
+343
+00:16:24,690 --> 00:16:25,080
+you know.
+
+344
+00:16:25,359 --> 00:16:27,359
+But hamburgers are so much better.
+
+345
+00:16:27,570 --> 00:16:28,590
+-- Well, yeah.
+-- Yeah,
+
+346
+00:16:29,489 --> 00:16:33,119
+you could sit under your, you know, your murder blanket with your hamburger.
+
+347
+00:16:33,460 --> 00:16:33,989
+But
+
+348
+00:16:35,840 --> 00:16:39,659
+that's someone who eats bacon every single day for breakfast. I
+
+349
+00:16:39,840 --> 00:16:40,900
+like, I actually
+
+350
+00:16:41,080 --> 00:16:43,460
+consciously did this cost benefit analysis.
+
+351
+00:16:43,630 --> 00:16:46,979
+Well, you see, you're probably doing what you're doing what a keto diet.
+
+352
+00:16:47,530 --> 00:16:47,989
+Uh,
+
+353
+00:16:48,729 --> 00:16:49,900
+sorry, let's call it that.
+
+354
+00:16:50,609 --> 00:16:52,169
+No, I just, I like bacon
+
+355
+00:16:53,030 --> 00:16:54,000
+or that.
+
+356
+00:16:54,479 --> 00:16:58,030
+Yeah. But that's the, that's the thing. It's just like, that's what secure.
+
+357
+00:16:58,039 --> 00:17:00,450
+That's the hard part about security,
+
+358
+00:17:00,580 --> 00:17:03,820
+getting people to do this stuff is saying, hey, man,
+
+359
+00:17:03,830 --> 00:17:06,939
+there's some basics you need to get back to the salad thing.
+
+360
+00:17:06,989 --> 00:17:10,229
+-- Ok,
+-- I mean, you, that was a lot, a
+
+361
+00:17:10,630 --> 00:17:15,098
+lot. You just, you just dropped on us from, from many different angles.
+
+362
+00:17:15,108 --> 00:17:19,160
+I will, I will add, but I, um, we're gonna focus on security security podcast.
+
+363
+00:17:19,469 --> 00:17:19,939
+But,
+
+364
+00:17:20,040 --> 00:17:21,069
+ok, so
+
+365
+00:17:21,468 --> 00:17:23,288
+you're, you're talking about
+
+366
+00:17:23,509 --> 00:17:28,288
+this kind of realistic view of security? And this is not,
+
+367
+00:17:28,519 --> 00:17:28,639
+can I
+
+368
+00:17:28,889 --> 00:17:29,208
+for a second?
+
+369
+00:17:29,218 --> 00:17:31,129
+I think this is one of the things is having
+
+370
+00:17:31,139 --> 00:17:33,468
+data to actually inform you of what the like,
+
+371
+00:17:33,479 --> 00:17:36,249
+there's a huge difference between one and six and one in 400.
+
+372
+00:17:36,688 --> 00:17:37,688
+Right. Right. Well,
+
+373
+00:17:38,019 --> 00:17:39,198
+that's just it. Right is.
+
+374
+00:17:39,359 --> 00:17:41,208
+But even with security people,
+
+375
+00:17:41,338 --> 00:17:44,828
+I feel like I'm constantly pushing away
+
+376
+00:17:45,068 --> 00:17:46,989
+movie plots of
+
+377
+00:17:47,300 --> 00:17:51,189
+no, like I don't care about like Russians breaking into our network.
+
+378
+00:17:51,199 --> 00:17:55,319
+We have to like password protect this thing over here because this is,
+
+379
+00:17:55,449 --> 00:17:56,550
+you know what I mean? And
+
+380
+00:17:56,849 --> 00:17:58,959
+I, I feel like this infects
+
+381
+00:17:59,410 --> 00:18:03,239
+all of a nonsecurity and security people alike and, and
+
+382
+00:18:03,349 --> 00:18:04,680
+we have no data
+
+383
+00:18:04,810 --> 00:18:07,670
+to back this up. And it sounds like you're, you're
+
+384
+00:18:07,819 --> 00:18:09,469
+so curt and I
+
+385
+00:18:09,770 --> 00:18:13,430
+not, not on the podcast necessarily, but I'm always harping about that
+
+386
+00:18:13,540 --> 00:18:17,869
+threat modeling today is a process that is incredibly manual
+
+387
+00:18:18,119 --> 00:18:18,750
+and
+
+388
+00:18:19,050 --> 00:18:22,109
+almost always ineffective and it sounds like
+
+389
+00:18:22,489 --> 00:18:27,119
+that is not what you and git lab are trying to push because, like, I'll, I'll put a,
+
+390
+00:18:27,130 --> 00:18:31,660
+like, git lab has this list of, like, all the security stuff in the product and it's,
+
+391
+00:18:32,160 --> 00:18:36,349
+it's a large list and this obviously is, is another thing to add to it. And this is,
+
+392
+00:18:37,500 --> 00:18:41,319
+I'm thinking about this now and I, I like this. This, this makes sense to me.
+
+393
+00:18:41,510 --> 00:18:43,430
+Oh, cool. I'm, I'm, I'm glad.
+
+394
+00:18:44,020 --> 00:18:45,329
+Yeah. And that's, that's the thing.
+
+395
+00:18:45,339 --> 00:18:49,079
+And that was kind of the, the influence in with the threat modeling
+
+396
+00:18:49,489 --> 00:18:52,219
+part of it was, you know, so at the beginning,
+
+397
+00:18:52,229 --> 00:18:55,849
+we can have all the fun and we can talk about and say, yeah, you could be
+
+398
+00:18:56,260 --> 00:19:00,280
+eaten by sharks, you could be murdered, you could be whatever and
+
+399
+00:19:00,689 --> 00:19:05,000
+you know, and still bring up heart disease and stuff. But then you look at the
+
+400
+00:19:05,729 --> 00:19:10,060
+patterns of what's happened in the past and you look at what's most likely to occur
+
+401
+00:19:10,810 --> 00:19:11,459
+and
+
+402
+00:19:11,819 --> 00:19:16,660
+yeah, even though it would be really, really exciting to say, yes, we were
+
+403
+00:19:16,949 --> 00:19:18,189
+killed by
+
+404
+00:19:18,560 --> 00:19:21,540
+invading extraterrestrials.
+
+405
+00:19:22,109 --> 00:19:25,229
+The odds of that happening are rather low,
+
+406
+00:19:26,310 --> 00:19:29,050
+you know. And so, but you know, so it's
+
+407
+00:19:29,270 --> 00:19:30,369
+it it does,
+
+408
+00:19:30,900 --> 00:19:32,589
+it does add an interesting dimension.
+
+409
+00:19:32,849 --> 00:19:35,989
+So I mean, the the thing I think of here and obviously
+
+410
+00:19:36,290 --> 00:19:39,729
+git lab is completely focused on developers given what git lab is
+
+411
+00:19:39,900 --> 00:19:40,479
+and
+
+412
+00:19:40,680 --> 00:19:42,020
+making your developers.
+
+413
+00:19:42,030 --> 00:19:43,670
+Well, I guess making is maybe the wrong word,
+
+414
+00:19:43,680 --> 00:19:46,770
+but we'll say letting the developers create the industry threat model.
+
+415
+00:19:46,780 --> 00:19:49,709
+This feels like the comparison I would use is like a,
+
+416
+00:19:49,719 --> 00:19:52,949
+a wiki where everyone gets all excited with a wiki,
+
+417
+00:19:52,959 --> 00:19:55,780
+you fill in a bunch of content and then it rots for like six years, right?
+
+418
+00:19:55,790 --> 00:19:57,609
+Because like it's no one's job to take care of that.
+
+419
+00:19:57,739 --> 00:20:01,250
+Whereas if, if, if, if part of your development process is
+
+420
+00:20:01,689 --> 00:20:03,699
+putting together this threat model, which is really,
+
+421
+00:20:03,709 --> 00:20:05,839
+let's face it just a fancy architecture model.
+
+422
+00:20:05,849 --> 00:20:06,239
+Like
+
+423
+00:20:06,650 --> 00:20:09,920
+that's, ah man, this, this solves so many problems because every,
+
+424
+00:20:09,930 --> 00:20:11,020
+every time I've ever done this,
+
+425
+00:20:11,030 --> 00:20:13,069
+it's always the security people making the threat model.
+
+426
+00:20:13,280 --> 00:20:16,489
+And the developer is like, oh, these guys again, you know, and it's just,
+
+427
+00:20:16,500 --> 00:20:18,229
+it never goes well.
+
+428
+00:20:18,770 --> 00:20:22,390
+Exactly. And that's the thing, it just hand the, the, the whole thing. OK?
+
+429
+00:20:22,400 --> 00:20:23,500
+Here's, here's my,
+
+430
+00:20:23,810 --> 00:20:30,819
+my goal and I, everyone in security goal should be to work ourselves out of a job.
+
+431
+00:20:31,099 --> 00:20:31,760
+Ok?
+
+432
+00:20:32,160 --> 00:20:32,890
+Totally.
+
+433
+00:20:33,569 --> 00:20:33,989
+And
+
+434
+00:20:34,380 --> 00:20:37,040
+I, this is a, this is a step in that direction.
+
+435
+00:20:37,050 --> 00:20:37,839
+I mean, the,
+
+436
+00:20:37,849 --> 00:20:41,079
+the other thing too to keep in mind is like if we were doing
+
+437
+00:20:41,089 --> 00:20:45,479
+the old school traditional threat model thing where we had to run the thing,
+
+438
+00:20:45,609 --> 00:20:49,000
+we would need a security department of thousands, ok?
+
+439
+00:20:49,010 --> 00:20:53,775
+Because basically we need one security person for every single line of code,
+
+440
+00:20:53,785 --> 00:20:55,224
+I would think it would just,
+
+441
+00:20:55,234 --> 00:20:59,084
+you need this ridiculous amount of security people to go in there and, and do that.
+
+442
+00:20:59,094 --> 00:21:00,775
+It doesn't scale. And so
+
+443
+00:21:00,935 --> 00:21:04,204
+this also helps that whole problem of just like how am I gonna
+
+444
+00:21:04,395 --> 00:21:05,805
+reach all these people
+
+445
+00:21:06,750 --> 00:21:07,040
+and
+
+446
+00:21:07,180 --> 00:21:13,270
+get to that. So this, this is kind of the, this is why I want to do a blog post on this
+
+447
+00:21:13,849 --> 00:21:18,729
+is I think this is kind of the direction that we need to be, need to be heading it.
+
+448
+00:21:18,920 --> 00:21:23,339
+And so far just initial, like I said, early days on this with us right now, but
+
+449
+00:21:23,449 --> 00:21:24,670
+it's working, I mean,
+
+450
+00:21:24,969 --> 00:21:28,750
+the other thing too that kind of helped us with this is we're also
+
+451
+00:21:29,430 --> 00:21:33,849
+we've got a fairly healthy hacker one program going on.
+
+452
+00:21:33,859 --> 00:21:37,209
+And so with that, we can actually incorporate
+
+453
+00:21:37,439 --> 00:21:40,260
+hacker one data into our threat models
+
+454
+00:21:40,900 --> 00:21:42,849
+and say, look, here's where we're
+
+455
+00:21:43,140 --> 00:21:46,609
+paying out all this money for these people, finding bugs
+
+456
+00:21:46,989 --> 00:21:47,630
+is
+
+457
+00:21:48,189 --> 00:21:49,939
+in, in these types of flaws.
+
+458
+00:21:50,209 --> 00:21:53,369
+So let's look for those in our code, that kind of thing
+
+459
+00:21:53,619 --> 00:21:54,869
+-- that
+-- makes a lot of sense.
+
+460
+00:21:55,099 --> 00:21:55,410
+Yeah.
+
+461
+00:21:55,569 --> 00:21:57,160
+So one thing I'm curious because again,
+
+462
+00:21:57,170 --> 00:21:58,770
+when I was looking at all these threat modeling tools,
+
+463
+00:21:58,780 --> 00:22:01,349
+there's essentially a huge pile of like sort of,
+
+464
+00:22:01,719 --> 00:22:05,069
+well, basically visio diagram style making things
+
+465
+00:22:05,270 --> 00:22:09,430
+which you know, is not the most friendly thing for developers to be using.
+
+466
+00:22:09,439 --> 00:22:12,069
+You know, it's yet another step. And I was looking for tools that
+
+467
+00:22:12,310 --> 00:22:14,150
+for example, allow you to actually put,
+
+468
+00:22:14,410 --> 00:22:14,640
+you know,
+
+469
+00:22:14,650 --> 00:22:17,790
+structured comments in your source code that then get collected
+
+470
+00:22:17,800 --> 00:22:20,819
+by the threat modeling tool and turned into a something useful
+
+471
+00:22:21,099 --> 00:22:22,099
+like what
+
+472
+00:22:22,369 --> 00:22:26,390
+technology are you guys using to actually do the threat modeling and, you know,
+
+473
+00:22:26,400 --> 00:22:28,310
+make this less painful for the developers.
+
+474
+00:22:28,880 --> 00:22:31,709
+Well, we're not doing anything with like that.
+
+475
+00:22:31,890 --> 00:22:33,709
+That's, that's for sure. It's
+
+476
+00:22:34,349 --> 00:22:35,520
+mark down.
+
+477
+00:22:35,989 --> 00:22:41,770
+I mean, we're basically creating documents and, and working off of that at best,
+
+478
+00:22:41,780 --> 00:22:42,430
+we'll get a, a,
+
+479
+00:22:42,800 --> 00:22:44,890
+you know, a mermaid diagram in there
+
+480
+00:22:45,479 --> 00:22:47,500
+-- and that's,
+-- that's actually what I ended up using.
+
+481
+00:22:48,469 --> 00:22:50,109
+-- No,
+-- I'm not kidding. Like I, yeah,
+
+482
+00:22:50,130 --> 00:22:50,739
+that's
+
+483
+00:22:50,949 --> 00:22:55,599
+otherwise I spent 90% of my time doing artwork trying to make the boxes fit.
+
+484
+00:22:56,949 --> 00:22:59,630
+Yeah, that seems to be kind of the going thing.
+
+485
+00:22:59,810 --> 00:23:00,959
+It literally is
+
+486
+00:23:01,219 --> 00:23:06,079
+and, and we do it within, uh within the, you know, the git lab product.
+
+487
+00:23:06,089 --> 00:23:08,239
+It was, it was kind of cool when someone, we had a,
+
+488
+00:23:08,250 --> 00:23:12,540
+a coder that we'd worked on this before and then she was working on another
+
+489
+00:23:12,550 --> 00:23:16,569
+project and as a part of that project in there in the project files,
+
+490
+00:23:16,579 --> 00:23:18,829
+she had her Threat Model and, you know, just, I, I
+
+491
+00:23:19,079 --> 00:23:20,530
+don't know, threat model dot
+
+492
+00:23:21,339 --> 00:23:23,160
+MD or whatever it was called. But,
+
+493
+00:23:23,359 --> 00:23:25,430
+you know, it was just a simple markdown file that had,
+
+494
+00:23:25,439 --> 00:23:28,400
+that had she where she'd gone through and, and worked this
+
+495
+00:23:29,239 --> 00:23:30,540
+and it was, it was great.
+
+496
+00:23:30,640 --> 00:23:31,439
+-- That's pretty
+-- awesome.
+
+497
+00:23:31,449 --> 00:23:35,619
+I have to say, it worries me when I see convergent evolution, you know,
+
+498
+00:23:35,630 --> 00:23:38,239
+from two completely different people and organizations.
+
+499
+00:23:38,250 --> 00:23:40,459
+That's either I'm right or I'm completely wrong
+
+500
+00:23:42,130 --> 00:23:44,069
+now, now you're both wrong. Right.
+
+501
+00:23:45,390 --> 00:23:47,359
+Yeah, but we're both spectacularly wrong.
+
+502
+00:23:47,790 --> 00:23:48,239
+That's
+
+503
+00:23:49,589 --> 00:23:52,869
+no, you know. No. You know what I mean? So, here's the thing is,
+
+504
+00:23:53,189 --> 00:23:56,479
+I mean, I, I gave up on threat modeling a long time ago just because the tooling was,
+
+505
+00:23:56,489 --> 00:23:58,780
+was beyond atrocious and I feel like
+
+506
+00:24:00,150 --> 00:24:01,569
+I know, not
+
+507
+00:24:01,859 --> 00:24:02,880
+all agree on that,
+
+508
+00:24:03,050 --> 00:24:07,439
+but I, I think starting, I think this is one of the reasons it, it hasn't
+
+509
+00:24:07,859 --> 00:24:12,430
+ceded the way it has because virtually everything I've read or seen about this area.
+
+510
+00:24:12,439 --> 00:24:12,719
+And I mean,
+
+511
+00:24:12,729 --> 00:24:14,560
+this is true of just security in general in many
+
+512
+00:24:14,569 --> 00:24:17,739
+cases is it's here is the the perfect solution,
+
+513
+00:24:17,750 --> 00:24:17,900
+right?
+
+514
+00:24:17,910 --> 00:24:19,459
+This is what you need to do it. It's like
+
+515
+00:24:19,599 --> 00:24:23,939
+you're starting at step 70 instead of telling people like here's step one,
+
+516
+00:24:23,949 --> 00:24:24,739
+start here.
+
+517
+00:24:24,750 --> 00:24:29,489
+This is easy and you basically like this is fall, you can't fall off the floor, right?
+
+518
+00:24:29,500 --> 00:24:30,359
+Like step one.
+
+519
+00:24:30,910 --> 00:24:35,380
+And this sounds like that's what it is where if you start with Markdown,
+
+520
+00:24:35,819 --> 00:24:38,760
+everyone knows how Mark Dunn works. Nobody's going to screw that up.
+
+521
+00:24:38,770 --> 00:24:39,760
+Whereas if you have,
+
+522
+00:24:39,770 --> 00:24:43,020
+oh here's this giant diagram you have to create like that's just you,
+
+523
+00:24:43,050 --> 00:24:45,949
+you failed at the beginning, like just give up, you failed.
+
+524
+00:24:45,959 --> 00:24:47,760
+You know, this is cool. I like this.
+
+525
+00:24:48,199 --> 00:24:48,479
+Yeah. Yeah.
+
+526
+00:24:49,469 --> 00:24:49,739
+Well,
+
+527
+00:24:49,750 --> 00:24:53,050
+and the other thing I found is is this has to be done by the people close to
+
+528
+00:24:53,060 --> 00:24:55,680
+the code because the just the time and effort
+
+529
+00:24:55,689 --> 00:24:57,640
+needed for me to understand what the code,
+
+530
+00:24:57,650 --> 00:25:00,079
+you know, I had this happen at Red Hat all the time where I'd have products
+
+531
+00:25:00,500 --> 00:25:03,050
+and to understand a security flaw in the product.
+
+532
+00:25:03,060 --> 00:25:04,900
+Well, first I had to understand what the product does,
+
+533
+00:25:05,459 --> 00:25:06,020
+you know,
+
+534
+00:25:06,270 --> 00:25:08,670
+like, what's the intent of the product? How does it operate?
+
+535
+00:25:08,680 --> 00:25:11,489
+You know, because it was Red Hat had over 100 different products
+
+536
+00:25:12,000 --> 00:25:13,400
+and just the amount of time I spent
+
+537
+00:25:13,410 --> 00:25:16,359
+understanding products so that I could then apply,
+
+538
+00:25:16,369 --> 00:25:19,119
+like, how does security flaw actually affect it?
+
+539
+00:25:19,790 --> 00:25:21,229
+You know, it's significant, right?
+
+540
+00:25:21,239 --> 00:25:25,250
+Whereas the developers just, well in theory know that like off the top of their head
+
+541
+00:25:25,380 --> 00:25:27,599
+and I think that's the other problem with security people is, you know,
+
+542
+00:25:27,770 --> 00:25:29,540
+we don't know their, well, in theory,
+
+543
+00:25:29,550 --> 00:25:31,770
+we don't know the products as well as the developers should.
+
+544
+00:25:31,859 --> 00:25:34,209
+We don't, not, in theory we don't
+
+545
+00:25:34,640 --> 00:25:36,800
+anyway. Anyway. All right, we are, we, we've,
+
+546
+00:25:36,969 --> 00:25:40,189
+we've run ourselves out of time already. I, I feel like I could talk to you for days.
+
+547
+00:25:40,199 --> 00:25:43,109
+I won't. But so I want to end this mark with you.
+
+548
+00:25:43,119 --> 00:25:47,020
+Have a very interesting story on your blog that is about
+
+549
+00:25:47,030 --> 00:25:50,650
+the time the TS A picked you up for having TNT.
+
+550
+00:25:50,920 --> 00:25:54,020
+Why don't you tell us your story? Because this is really funny.
+
+551
+00:25:54,739 --> 00:25:55,300
+Yeah. Yeah. Well,
+
+552
+00:25:55,420 --> 00:25:57,260
+it's funny because it wasn't me
+
+553
+00:25:59,530 --> 00:26:03,130
+and it's funny because it's in the past. OK.
+
+554
+00:26:05,229 --> 00:26:06,109
+But I,
+
+555
+00:26:06,229 --> 00:26:08,449
+the thing was, is like, I don't know why,
+
+556
+00:26:08,459 --> 00:26:14,489
+but it just I have a habit of weird things seem to happen to me a lot
+
+557
+00:26:15,260 --> 00:26:15,890
+and
+
+558
+00:26:16,439 --> 00:26:18,420
+I'm in Las Vegas
+
+559
+00:26:19,010 --> 00:26:20,589
+for a, um,
+
+560
+00:26:20,979 --> 00:26:24,109
+conference. It wasn't a black at defcon. It's another,
+
+561
+00:26:24,359 --> 00:26:25,520
+another conference
+
+562
+00:26:25,930 --> 00:26:27,160
+that I'm there for,
+
+563
+00:26:27,489 --> 00:26:28,680
+you know, at the time,
+
+564
+00:26:28,939 --> 00:26:29,829
+you know, I hadn't,
+
+565
+00:26:30,030 --> 00:26:32,670
+you know, started losing my hair or anything like that,
+
+566
+00:26:33,250 --> 00:26:34,000
+you know, I'm,
+
+567
+00:26:34,130 --> 00:26:37,479
+I, you know, I shaved my head bald now in, in protest,
+
+568
+00:26:37,780 --> 00:26:39,199
+uh, to that happening.
+
+569
+00:26:39,209 --> 00:26:44,239
+But at the time I had really long hair, you know, scraggly beard.
+
+570
+00:26:44,719 --> 00:26:46,420
+I probably didn't look great.
+
+571
+00:26:47,079 --> 00:26:48,949
+So I'm going through,
+
+572
+00:26:49,319 --> 00:26:50,780
+uh, security
+
+573
+00:26:51,300 --> 00:26:53,469
+and they do this occasionally. They would,
+
+574
+00:26:53,660 --> 00:26:56,170
+uh, they would do this and they pulled me aside and they said,
+
+575
+00:26:56,859 --> 00:26:57,359
+uh,
+
+576
+00:26:58,069 --> 00:27:00,489
+we want to do, uh, they were doing like, uh,
+
+577
+00:27:00,619 --> 00:27:02,560
+swabs on your,
+
+578
+00:27:02,819 --> 00:27:06,069
+on your hands. I don't know if you, you've encountered this before.
+
+579
+00:27:06,079 --> 00:27:07,689
+I've had that many times actually.
+
+580
+00:27:07,790 --> 00:27:09,310
+-- Too
+-- many wires in the backpack.
+
+581
+00:27:09,520 --> 00:27:13,050
+Yeah. Yeah, you have, he have had these odd tools and stuff like that.
+
+582
+00:27:13,060 --> 00:27:17,060
+And so, you know, I had, you know, a lot of basic gadgets and gizmos that a
+
+583
+00:27:17,400 --> 00:27:19,890
+lot of us hacker types might, might have.
+
+584
+00:27:19,900 --> 00:27:22,650
+You know, we're on a trip, we're bored, we're going to play around with stuff.
+
+585
+00:27:23,050 --> 00:27:25,449
+We bring, we bring fun things to play with.
+
+586
+00:27:26,199 --> 00:27:26,849
+And
+
+587
+00:27:27,329 --> 00:27:28,859
+so I get the hand swab
+
+588
+00:27:29,229 --> 00:27:29,939
+and
+
+589
+00:27:30,079 --> 00:27:33,430
+no big deal and then they get the results and the guy
+
+590
+00:27:33,439 --> 00:27:35,819
+is kind of like looking at the thing and it's like,
+
+591
+00:27:35,829 --> 00:27:36,359
+hm.
+
+592
+00:27:36,550 --> 00:27:40,459
+And so then he comes over and he does, let's do the hand swab again. And
+
+593
+00:27:40,589 --> 00:27:43,760
+then next thing I know he's calling someone over to talk
+
+594
+00:27:43,770 --> 00:27:45,619
+to him about it and they're talking and I'm starting to get
+
+595
+00:27:45,630 --> 00:27:47,579
+a little nervous and then they come back and they start
+
+596
+00:27:47,589 --> 00:27:50,540
+asking me all these weird questions that didn't make any sense.
+
+597
+00:27:50,550 --> 00:27:53,359
+They said, have you been on a military base? No.
+
+598
+00:27:53,969 --> 00:27:55,670
+Have you been to a gun range?
+
+599
+00:27:55,930 --> 00:28:00,189
+No. And just all these weird things and it didn't make any sense to me.
+
+600
+00:28:00,430 --> 00:28:04,829
+I, I finally, you know, asked one of the guys says, what's going on and they said,
+
+601
+00:28:05,109 --> 00:28:07,390
+well, you tested positive for TNT.
+
+602
+00:28:09,290 --> 00:28:10,180
+It's just like
+
+603
+00:28:10,790 --> 00:28:11,579
+I'm thinking,
+
+604
+00:28:12,000 --> 00:28:13,670
+oh, this isn't good.
+
+605
+00:28:15,579 --> 00:28:17,750
+This isn't good at all.
+
+606
+00:28:17,979 --> 00:28:20,560
+And so they, they're swabbing my bag
+
+607
+00:28:21,000 --> 00:28:25,900
+and everything and it's all over the outside of my bag. They pull apart my bag.
+
+608
+00:28:25,910 --> 00:28:29,099
+There's like swabbing the inside and it's apparently ok. But
+
+609
+00:28:29,599 --> 00:28:32,560
+so they're just like tearing apart all my luggage and everything.
+
+610
+00:28:32,739 --> 00:28:33,939
+They call over there.
+
+611
+00:28:33,949 --> 00:28:37,290
+I mean, all of a sudden there's like some guy shows up that's like, you know,
+
+612
+00:28:37,300 --> 00:28:38,089
+he's got a,
+
+613
+00:28:38,560 --> 00:28:39,839
+he's got a gun
+
+614
+00:28:40,829 --> 00:28:42,140
+and he's standing there
+
+615
+00:28:42,380 --> 00:28:45,459
+and I'm thinking, oh, this is really, really bad.
+
+616
+00:28:45,800 --> 00:28:46,319
+And,
+
+617
+00:28:46,750 --> 00:28:50,420
+and so I get more questions, you know, about where I'd been and
+
+618
+00:28:51,000 --> 00:28:52,520
+who I've been in contact with.
+
+619
+00:28:52,530 --> 00:28:54,219
+I mean, everything except, you know,
+
+620
+00:28:54,229 --> 00:28:57,540
+them just like holding me down and saying where's the bomb?
+
+621
+00:28:57,800 --> 00:28:59,050
+You know, I mean,
+
+622
+00:28:59,750 --> 00:29:01,319
+that's what I'm thinking
+
+623
+00:29:01,430 --> 00:29:04,780
+but they're, they're mystified because
+
+624
+00:29:04,930 --> 00:29:09,099
+I, oh, this is the funny thing too. They even swabbed my fly
+
+625
+00:29:09,290 --> 00:29:10,540
+on my pants
+
+626
+00:29:10,989 --> 00:29:12,489
+of the zipper fly,
+
+627
+00:29:12,959 --> 00:29:15,060
+I guess because, you know, you make,
+
+628
+00:29:15,180 --> 00:29:16,849
+if you're making a bomb,
+
+629
+00:29:17,060 --> 00:29:18,930
+you might have to go to the bathroom
+
+630
+00:29:19,369 --> 00:29:23,069
+and you, you're probably lucky you still had clothes on at this point, honestly.
+
+631
+00:29:23,319 --> 00:29:24,339
+Ok. So then,
+
+632
+00:29:24,660 --> 00:29:26,550
+so they're, they're calling like a, you know,
+
+633
+00:29:26,560 --> 00:29:29,310
+supervisor over and all this other kind of stuff
+
+634
+00:29:29,829 --> 00:29:32,750
+and another guy shows up and he has a bigger gun
+
+635
+00:29:33,170 --> 00:29:36,050
+and II I am thinking, ok, this is
+
+636
+00:29:36,339 --> 00:29:39,109
+we're gonna, it's gonna be body cavity search time
+
+637
+00:29:39,260 --> 00:29:39,609
+or
+
+638
+00:29:39,729 --> 00:29:40,829
+you know, any moment
+
+639
+00:29:41,050 --> 00:29:43,949
+they finally get one of these other supervisor guys and he's a little bit,
+
+640
+00:29:43,959 --> 00:29:45,180
+a little bit of an older guy
+
+641
+00:29:45,329 --> 00:29:48,489
+and comes over and they kind of are filling him in and everything.
+
+642
+00:29:48,500 --> 00:29:51,619
+Oh and by this, by this time they got me pulled aside and
+
+643
+00:29:52,260 --> 00:29:54,880
+yeah, I'm away from other people and everything
+
+644
+00:29:55,160 --> 00:29:57,670
+and so everyone else over there is staring and
+
+645
+00:29:57,680 --> 00:29:59,819
+people are taking pictures of me and stuff because
+
+646
+00:30:00,000 --> 00:30:00,479
+you know,
+
+647
+00:30:00,619 --> 00:30:02,089
+they figured they're gonna be
+
+648
+00:30:02,189 --> 00:30:05,000
+selling it to CNN later or something. I don't know.
+
+649
+00:30:06,469 --> 00:30:07,010
+So
+
+650
+00:30:07,239 --> 00:30:10,770
+that the guy that the older guy, he comes over to me and he said,
+
+651
+00:30:10,780 --> 00:30:13,329
+um he started to ask me some different questions.
+
+652
+00:30:13,339 --> 00:30:16,510
+He was saying, where, what hotel were you staying at? And,
+
+653
+00:30:16,689 --> 00:30:22,670
+and II I tell him whatever hotel it was that I was staying at, it was a Treasure Island.
+
+654
+00:30:23,900 --> 00:30:24,329
+And
+
+655
+00:30:25,339 --> 00:30:29,089
+he said, did you go to the pirate show? Because at, at
+
+656
+00:30:29,709 --> 00:30:33,140
+Treasure Island, they used to have this pirate show and they'd have like, you know,
+
+657
+00:30:33,400 --> 00:30:34,150
+all these pyro
+
+658
+00:30:34,280 --> 00:30:35,790
+techniques and they, because they have the
+
+659
+00:30:36,609 --> 00:30:37,280
+and everything.
+
+660
+00:30:37,449 --> 00:30:38,540
+And I said,
+
+661
+00:30:38,680 --> 00:30:40,180
+I said, no, I didn't.
+
+662
+00:30:40,290 --> 00:30:43,439
+I says, but I walked by that thing every day because the
+
+663
+00:30:43,579 --> 00:30:46,199
+conference I was attending was at the hotel next door.
+
+664
+00:30:46,209 --> 00:30:49,709
+And so I would walk by there and he said, did you walk by there today
+
+665
+00:30:50,229 --> 00:30:52,739
+with your bag before you came here?
+
+666
+00:30:52,750 --> 00:30:55,449
+And it's like, yeah, in fact, I set the bag down and,
+
+667
+00:30:55,560 --> 00:30:58,400
+you know, adjusted some stuff and, and whatnot.
+
+668
+00:30:58,410 --> 00:31:02,329
+And so I, yeah, I set it down on the right there where they do the thing and that was it.
+
+669
+00:31:02,339 --> 00:31:02,969
+That was,
+
+670
+00:31:03,170 --> 00:31:06,770
+he, he told, told the guys, he says that's where you're getting that you're,
+
+671
+00:31:06,780 --> 00:31:07,770
+you're picking up the,
+
+672
+00:31:08,130 --> 00:31:10,089
+the, the TNT, it's from the uh,
+
+673
+00:31:10,369 --> 00:31:13,469
+explosives that there were the, the pyrotechnics that they were using
+
+674
+00:31:13,579 --> 00:31:17,770
+the flash pots, I guess. And that was, and so that was it. So that was, uh,
+
+675
+00:31:18,479 --> 00:31:20,079
+that was horrifying,
+
+676
+00:31:20,750 --> 00:31:26,300
+I can imagine. Scary. II I just thought I'm going, I'm going to jail right now.
+
+677
+00:31:26,969 --> 00:31:27,630
+You know,
+
+678
+00:31:28,020 --> 00:31:28,719
+I, I'm,
+
+679
+00:31:28,839 --> 00:31:33,510
+you know, this is, I mean, as, as an old school hacker type, I figured
+
+680
+00:31:33,650 --> 00:31:35,310
+the one time that I was gonna call
+
+681
+00:31:35,719 --> 00:31:36,979
+Jennifer Granick,
+
+682
+00:31:37,119 --> 00:31:37,640
+you know,
+
+683
+00:31:37,969 --> 00:31:41,229
+the uh the to come to come help me,
+
+684
+00:31:41,449 --> 00:31:43,660
+I didn't want it to be, hey Jennifer,
+
+685
+00:31:44,219 --> 00:31:44,750
+you know,
+
+686
+00:31:45,000 --> 00:31:47,170
+you want it to be something glorious like the h
+
+687
+00:31:47,349 --> 00:31:49,109
+something spectacular.
+
+688
+00:31:49,359 --> 00:31:52,050
+But no, it would be like, hey Jennifer, I,
+
+689
+00:31:52,270 --> 00:31:54,250
+they, they think I have a bomb,
+
+690
+00:31:54,609 --> 00:31:55,270
+you know. Oh,
+
+691
+00:31:55,439 --> 00:31:55,589
+my
+
+692
+00:31:55,800 --> 00:31:56,050
+goodness.
+
+693
+00:31:56,890 --> 00:31:57,750
+You know. So
+
+694
+00:31:58,599 --> 00:32:00,910
+I barely made my flight because I mean, they just,
+
+695
+00:32:01,000 --> 00:32:05,069
+everything is just torn apart and they're just like you're free to go,
+
+696
+00:32:05,250 --> 00:32:09,150
+you're free to go. And they point me at this table where all my stuff is spread.
+
+697
+00:32:09,319 --> 00:32:11,790
+Of course, they don't, they never repack the bag.
+
+698
+00:32:12,199 --> 00:32:17,180
+-- No,
+-- I can't even imagine. Wow, that you'll need your murder blanket for that story.
+
+699
+00:32:17,189 --> 00:32:19,300
+Oh, yeah, I got to wrap myself in my, my
+
+700
+00:32:19,400 --> 00:32:20,780
+murder blanket.
+
+701
+00:32:21,069 --> 00:32:24,219
+That's the thing. They threw my murder blanket out on the floor.
+
+702
+00:32:24,540 --> 00:32:26,020
+It's dirty.
+
+703
+00:32:26,719 --> 00:32:31,180
+Oh my goodness. That is, that is a marvelous story. I'm so glad it wasn't me.
+
+704
+00:32:31,579 --> 00:32:32,170
+So
+
+705
+00:32:32,780 --> 00:32:34,560
+I guess thank you so much, Mark.
+
+706
+00:32:34,569 --> 00:32:39,020
+This has been an absolute pleasure and I will have lots of links in the show
+
+707
+00:32:39,030 --> 00:32:40,930
+notes for anyone interested in what git lab's
+
+708
+00:32:40,939 --> 00:32:42,479
+up to because they're doing some really,
+
+709
+00:32:42,489 --> 00:32:45,160
+really cool stuff and I'd highly highly suggest you take a look.
+
+710
+00:32:45,170 --> 00:32:47,489
+So, all right, I guess. Thank you, Kurt. Thank you, Mark.
+
+711
+00:32:47,500 --> 00:32:50,430
+Thank you everyone for listening. You go to open source security podcast.com.
+
+712
+00:32:50,439 --> 00:32:52,089
+Hit up all those show notes. I'm talking about use a Pound
+
+713
+00:32:52,410 --> 00:32:54,729
+Os podcast. Hashtag Hit us up on social media.
+
+714
+00:32:54,739 --> 00:32:57,719
+Kurt Mark have marvelous rest of your days.
+
+715
+00:32:57,939 --> 00:33:00,880
+Thanks everybody. Awesome. Thanks everyone. Bye bye
+
+716
+00:33:05,229 --> 00:33:05,369
+that.

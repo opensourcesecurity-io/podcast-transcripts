@@ -1,0 +1,3347 @@
+0
+00:00:05,550 --> 00:00:09,590
+Hello and welcome to the open source security podcast with myself, Kurt Siegfried
+
+1
+00:00:09,829 --> 00:00:13,890
+and my partner and getting older and occasionally sicker. Josh Bresser.
+
+2
+00:00:14,060 --> 00:00:16,219
+How many times have you started the show like that?
+
+3
+00:00:16,229 --> 00:00:18,459
+I suspect it's more than 10 at this point.
+
+4
+00:00:18,469 --> 00:00:20,729
+Like everyone knows we're old, we know we're old.
+
+5
+00:00:20,739 --> 00:00:24,329
+It's like three or four times a year. Usually about this time
+
+6
+00:00:24,534 --> 00:00:25,954
+when all the bugs are going around.
+
+7
+00:00:26,165 --> 00:00:26,834
+That's true.
+
+8
+00:00:27,135 --> 00:00:28,375
+You know, the sickness is going around,
+
+9
+00:00:28,385 --> 00:00:30,514
+which is actually directly that time of year
+
+10
+00:00:30,524 --> 00:00:32,194
+related to what we're going to talk about,
+
+11
+00:00:32,205 --> 00:00:32,755
+which is
+
+12
+00:00:32,895 --> 00:00:35,744
+things need maintenance and especially things connected to
+
+13
+00:00:35,755 --> 00:00:38,555
+the internet need to sort of be maintained.
+
+14
+00:00:38,604 --> 00:00:43,075
+I don't know if I would bucket like that. So the, the topic of the day,
+
+15
+00:00:44,009 --> 00:00:49,409
+Kurt found a hacker news discussion where someone said Kubernetes needs an LTs,
+
+16
+00:00:49,419 --> 00:00:51,259
+a long term support version,
+
+17
+00:00:51,959 --> 00:00:53,520
+which they apparently don't have.
+
+18
+00:00:53,529 --> 00:00:56,159
+I honestly don't track Kubernetes releases very much
+
+19
+00:00:56,169 --> 00:00:57,889
+because I just run whatever I'm handed.
+
+20
+00:00:58,150 --> 00:00:59,319
+But the idea being
+
+21
+00:00:59,709 --> 00:01:01,650
+Kubernetes is an open source project
+
+22
+00:01:01,759 --> 00:01:03,400
+and people are saying it needs
+
+23
+00:01:03,569 --> 00:01:06,419
+longer term support versus more bleeding edge,
+
+24
+00:01:06,430 --> 00:01:09,629
+which is how it works today where it's just kind of like YOLO
+
+25
+00:01:09,839 --> 00:01:11,669
+if you're, if you're trying to keep up. Right.
+
+26
+00:01:11,680 --> 00:01:14,110
+-- Yeah,
+-- it looks like they're given about a year.
+
+27
+00:01:14,910 --> 00:01:15,190
+Ish.
+
+28
+00:01:15,480 --> 00:01:15,690
+That's not,
+
+29
+00:01:15,790 --> 00:01:17,309
+no, not a year. Sorry. Sorry.
+
+30
+00:01:17,470 --> 00:01:20,260
+Uh, this is weird. This is gonna, ok, so 126,
+
+31
+00:01:21,080 --> 00:01:26,669
+latest release was 2023. 1114, end of life is 2024 02.
+
+32
+00:01:26,680 --> 00:01:30,180
+So February, but when was the first release of 126?
+
+33
+00:01:30,690 --> 00:01:32,809
+Um, it looks to be about a year
+
+34
+00:01:32,930 --> 00:01:33,419
+ish.
+
+35
+00:01:33,830 --> 00:01:38,989
+-- Yeah,
+-- but I bet you can't stay on like a version of 126 from a long time ago.
+
+36
+00:01:39,000 --> 00:01:41,319
+-- You need to keep up with the minor versions,
+-- right?
+
+37
+00:01:41,519 --> 00:01:45,250
+Well, yeah. Yeah. Yeah. But in theory, the minor versions are safe to keep up with.
+
+38
+00:01:45,260 --> 00:01:45,949
+Right? That's
+
+39
+00:01:46,069 --> 00:01:49,809
+well and again, see and that's the beauty of this, right? Like again, OK.
+
+40
+00:01:49,819 --> 00:01:53,779
+So let's let's spherical cow the world a little bit
+
+41
+00:01:53,790 --> 00:01:56,790
+just to simplify things because otherwise we're gonna rattle.
+
+42
+00:01:56,800 --> 00:01:59,760
+So we're gonna go unlike us. Yeah.
+
+43
+00:02:00,010 --> 00:02:02,209
+So there's this idea of um
+
+44
+00:02:02,809 --> 00:02:03,150
+I'm spa,
+
+45
+00:02:03,339 --> 00:02:06,839
+you know what is Xyz versioning called again? Semantic versioning. Semantic.
+
+46
+00:02:06,930 --> 00:02:07,260
+Sorry,
+
+47
+00:02:07,269 --> 00:02:08,490
+I was just reading the thing about a guy
+
+48
+00:02:08,500 --> 00:02:11,130
+wrote a good article about pragmatic versioning anyway.
+
+49
+00:02:11,139 --> 00:02:16,199
+So semantic semantic versioning is XYZ and basically the promise is X
+
+50
+00:02:16,880 --> 00:02:18,289
+makes breaking changes.
+
+51
+00:02:18,300 --> 00:02:19,679
+Like if you go from 1 to 2,
+
+52
+00:02:19,690 --> 00:02:22,940
+we're gonna make breaking changes and give you cool new stuff
+
+53
+00:02:23,389 --> 00:02:27,119
+and, and possibly also get rid of stuff that you really need quite, quite likely.
+
+54
+00:02:27,130 --> 00:02:28,979
+Yes. Why so
+
+55
+00:02:29,199 --> 00:02:31,940
+dot Like 1.2 or 1.3 is like,
+
+56
+00:02:32,149 --> 00:02:33,399
+we are going to,
+
+57
+00:02:33,899 --> 00:02:36,610
+we're committing to supporting what we have
+
+58
+00:02:37,050 --> 00:02:37,850
+and
+
+59
+00:02:38,220 --> 00:02:40,410
+we might add new stuff moving forwards that
+
+60
+00:02:40,419 --> 00:02:42,970
+you have to do something to take advantage of
+
+61
+00:02:43,440 --> 00:02:46,970
+in the sense of like, if you don't change your configuration, it might break. Yep.
+
+62
+00:02:46,979 --> 00:02:47,610
+Yep. Right.
+
+63
+00:02:47,809 --> 00:02:49,369
+But nothing is going away
+
+64
+00:02:49,690 --> 00:02:51,039
+in theory. That's right. That's right.
+
+65
+00:02:51,339 --> 00:02:58,679
+And then there's the, the Z which is like, so 1.2 0.01 0.2 0.11 0.2 0.2 1.2 0.4006.
+
+66
+00:02:59,369 --> 00:03:03,009
+And the idea there is is that we're not making any breaking changes.
+
+67
+00:03:03,169 --> 00:03:09,160
+Like it's, it's air quotes safe to go from 1.2 0.3 to 1.2 0.4. And
+
+68
+00:03:09,410 --> 00:03:11,919
+basically, if you find a bug then
+
+69
+00:03:12,220 --> 00:03:14,479
+that needs to be fixed, that's an incompatibility.
+
+70
+00:03:14,490 --> 00:03:16,720
+Whereas if we go from like 1 to 2 and you're like,
+
+71
+00:03:17,020 --> 00:03:19,309
+it doesn't talk to this anymore. It's like, yeah. Well,
+
+72
+00:03:19,600 --> 00:03:21,149
+yeah, good luck with that. Go fix it.
+
+73
+00:03:21,500 --> 00:03:21,979
+That's right.
+
+74
+00:03:22,270 --> 00:03:26,119
+And the challenge, of course, like there's a, there's a lot of big issues,
+
+75
+00:03:26,130 --> 00:03:28,679
+but I'm just going to throw a few of the big ones out here first is
+
+76
+00:03:28,899 --> 00:03:29,740
+number one,
+
+77
+00:03:30,309 --> 00:03:32,970
+people forget that most people don't want software,
+
+78
+00:03:33,399 --> 00:03:34,330
+they want a solution for
+
+79
+00:03:34,669 --> 00:03:34,899
+sure.
+
+80
+00:03:35,100 --> 00:03:35,740
+Right. Exactly.
+
+81
+00:03:35,750 --> 00:03:38,639
+And that's the first thing that always blows my mind where, like like,
+
+82
+00:03:38,649 --> 00:03:40,779
+I don't want to maintain my light bulbs.
+
+83
+00:03:41,779 --> 00:03:43,800
+I'm buying light bulbs so I can have light
+
+84
+00:03:45,309 --> 00:03:47,960
+because I like maintaining software on light bulbs.
+
+85
+00:03:48,190 --> 00:03:51,600
+That's right. That's right. Same thing with my Wi Fi. I, I finally,
+
+86
+00:03:51,779 --> 00:03:53,130
+you know, I, I went and bought,
+
+87
+00:03:53,630 --> 00:03:54,130
+I think it's
+
+88
+00:03:54,289 --> 00:03:54,380
+Dlin,
+
+89
+00:03:55,339 --> 00:03:57,750
+-- you don't know. And it doesn't matter. I think
+-- it's delink.
+
+90
+00:03:57,759 --> 00:03:59,270
+I enabled automatic updates.
+
+91
+00:03:59,539 --> 00:04:00,360
+I changed the time,
+
+92
+00:04:00,369 --> 00:04:03,210
+the automatic updates happened because that was a fun thing to find out
+
+93
+00:04:03,589 --> 00:04:04,410
+where I would just like,
+
+94
+00:04:04,419 --> 00:04:07,160
+I would be like working at 11 o'clock and my whole internet would like just
+
+95
+00:04:07,559 --> 00:04:09,449
+poo itself for 15 minutes.
+
+96
+00:04:09,630 --> 00:04:10,369
+Awesome.
+
+97
+00:04:11,309 --> 00:04:12,889
+So change that to like 3 a.m.
+
+98
+00:04:13,050 --> 00:04:17,459
+and like, I just, I want like, like that the washer by me has software on it,
+
+99
+00:04:17,470 --> 00:04:18,480
+but it's not internet connected.
+
+100
+00:04:18,488 --> 00:04:19,298
+So don't care.
+
+101
+00:04:19,600 --> 00:04:21,350
+Now if it was internet connected,
+
+102
+00:04:21,820 --> 00:04:24,329
+the manufacturer is going to want to make me update it and
+
+103
+00:04:24,579 --> 00:04:26,179
+turn that off. I don't.
+
+104
+00:04:26,190 --> 00:04:30,660
+Yeah, like it's like the I have two TV s that are quote unquote smart TV. S
+
+105
+00:04:30,839 --> 00:04:33,679
+they are not connected to the Wi Fi or anything. They are.
+
+106
+00:04:34,029 --> 00:04:37,100
+-- It's
+-- like anyway, versioning, we're talking about versioning in LTs.
+
+107
+00:04:37,109 --> 00:04:40,489
+So the versioning well, but this is implicit to
+
+108
+00:04:40,899 --> 00:04:42,640
+sometimes I want
+
+109
+00:04:43,239 --> 00:04:47,279
+software that is updated and has new features
+
+110
+00:04:47,410 --> 00:04:51,690
+-- and sometimes I don't, I just want a solution. I,
+-- I think, I think you're too simple.
+
+111
+00:04:51,779 --> 00:04:53,679
+I think in the context of Kubernetes,
+
+112
+00:04:53,850 --> 00:04:57,260
+Kubernetes is a giant monolithic monster,
+
+113
+00:04:57,470 --> 00:05:01,140
+right? Where you need a team of people, often to actually run and maintain
+
+114
+00:05:01,440 --> 00:05:02,559
+-- Kubernetes
+-- or you need to
+
+115
+00:05:02,665 --> 00:05:03,855
+buy something like openshift,
+
+116
+00:05:03,864 --> 00:05:07,464
+which is Kubernetes under the hood with like a layer of stuff on top of it to
+
+117
+00:05:07,565 --> 00:05:09,445
+-- make it more usable in a
+-- little bit, a little bit.
+
+118
+00:05:09,755 --> 00:05:10,285
+So
+
+119
+00:05:10,575 --> 00:05:12,255
+let's say I want to run Kubernetes.
+
+120
+00:05:12,545 --> 00:05:14,964
+This is true of like operating systems, right? Where
+
+121
+00:05:15,334 --> 00:05:18,945
+I, and let's just pretend Kubernetes is an operating system because I think it's,
+
+122
+00:05:19,755 --> 00:05:21,125
+I mean, I, I won't argue with that.
+
+123
+00:05:21,484 --> 00:05:22,165
+It's not,
+
+124
+00:05:22,684 --> 00:05:24,744
+it's a runtime environment anyway.
+
+125
+00:05:25,204 --> 00:05:25,644
+So
+
+126
+00:05:26,570 --> 00:05:26,769
+I
+
+127
+00:05:26,940 --> 00:05:26,989
+have,
+
+128
+00:05:28,190 --> 00:05:28,329
+I
+
+129
+00:05:28,489 --> 00:05:29,529
+know. Right. Exactly.
+
+130
+00:05:29,670 --> 00:05:30,640
+I have Kubernetes
+
+131
+00:05:31,160 --> 00:05:31,739
+and
+
+132
+00:05:31,929 --> 00:05:32,920
+I have Kubernetes
+
+133
+00:05:33,320 --> 00:05:35,269
+and I deploy Kubernetes
+
+134
+00:05:35,760 --> 00:05:37,850
+and now I need to make sure that
+
+135
+00:05:38,000 --> 00:05:42,739
+it's working so other people can use Kubernetes to do the things they need to do.
+
+136
+00:05:42,790 --> 00:05:46,640
+Because fundamentally Kubernetes by itself is a useless application.
+
+137
+00:05:46,649 --> 00:05:47,920
+We need to run things on it
+
+138
+00:05:48,054 --> 00:05:48,334
+for.
+
+139
+00:05:48,875 --> 00:05:52,035
+Yes, I mean that operating system is a great example, right?
+
+140
+00:05:52,554 --> 00:05:55,635
+An operating system doing nothing is a paperweight. Who cares?
+
+141
+00:05:55,644 --> 00:05:57,304
+So I've got Kubernetes,
+
+142
+00:05:57,454 --> 00:06:01,075
+I install a version of Kubernetes and now I have to care and feed it right,
+
+143
+00:06:01,494 --> 00:06:01,945
+and
+
+144
+00:06:02,125 --> 00:06:02,815
+upgrading Kubernetes.
+
+145
+00:06:04,174 --> 00:06:05,774
+Why do we have to care and feed it?
+
+146
+00:06:06,065 --> 00:06:06,644
+No, seriously,
+
+147
+00:06:06,654 --> 00:06:09,674
+let's examine this assumption because this is kind of a big assumption
+
+148
+00:06:09,915 --> 00:06:13,744
+because I, I'm not carrying and feeding the software in my, my washer back there,
+
+149
+00:06:14,089 --> 00:06:16,750
+right? Because no one's using that.
+
+150
+00:06:16,880 --> 00:06:17,980
+Not like you would Ker
+
+151
+00:06:18,200 --> 00:06:20,029
+-- Neti,
+-- I use that washer every day.
+
+152
+00:06:20,040 --> 00:06:21,350
+No, no, no. You misunderstand me
+
+153
+00:06:21,679 --> 00:06:23,100
+when I say care and feeding,
+
+154
+00:06:23,209 --> 00:06:25,869
+you have to do things like, make sure there's enough disk,
+
+155
+00:06:25,890 --> 00:06:27,779
+make sure there's enough nodes in my cluster.
+
+156
+00:06:27,790 --> 00:06:31,989
+-- Make sure I don't have pods or containers. I have to put soap
+-- in that damn thing.
+
+157
+00:06:32,040 --> 00:06:33,149
+Right. That's using it.
+
+158
+00:06:33,290 --> 00:06:33,910
+OK?
+
+159
+00:06:34,059 --> 00:06:34,390
+But
+
+160
+00:06:34,799 --> 00:06:39,070
+-- I, I don't think this is a valid analogy and I think you're mudding the waters.
+-- Ok.
+
+161
+00:06:39,079 --> 00:06:41,899
+Well, the Washington, but in general I'm, I'm gonna say,
+
+162
+00:06:42,029 --> 00:06:42,339
+but
+
+163
+00:06:42,480 --> 00:06:45,410
+I'm paying you to care and feed Kubernetes Kurt.
+
+164
+00:06:45,420 --> 00:06:49,369
+If you don't, I'm going to fire you and hire someone who actually does that job.
+
+165
+00:06:49,429 --> 00:06:51,429
+I think you misunderstand the question I'm saying,
+
+166
+00:06:51,440 --> 00:06:53,660
+why do we have to care and feed it and you're pointing out?
+
+167
+00:06:53,670 --> 00:06:55,720
+Right? Because for example, the disc fill up, right?
+
+168
+00:06:55,730 --> 00:06:57,859
+Like, unless people are, you know,
+
+169
+00:06:57,869 --> 00:07:00,406
+unless we have some job running automatically that nukes stuff,
+
+170
+00:07:00,415 --> 00:07:04,425
+which that's not going to be awesome either or for example, my favorite is, you know,
+
+171
+00:07:04,656 --> 00:07:07,196
+it's a useful solution. So more people want to use it.
+
+172
+00:07:07,205 --> 00:07:10,876
+And so you go from 100 users to 200 users and then they all complain it slow.
+
+173
+00:07:11,305 --> 00:07:14,855
+Well, yes, that's how it works when we go from 100 users to 200 users.
+
+174
+00:07:14,865 --> 00:07:17,705
+Like I need more budget for ra M and disk and CPU.
+
+175
+00:07:18,045 --> 00:07:21,816
+There's many things, a lot of, I find a lot of times people assume thing.
+
+176
+00:07:21,825 --> 00:07:23,332
+I'm just, I want to be clear on this, like
+
+177
+00:07:23,752 --> 00:07:26,812
+there are some good reasons as to why you have to maintain it.
+
+178
+00:07:26,981 --> 00:07:29,381
+And sometimes those reasons are things like we want
+
+179
+00:07:29,391 --> 00:07:31,131
+the machine to do twice as much work.
+
+180
+00:07:31,141 --> 00:07:33,372
+So, yeah, you're gonna have to change the oil twice as often
+
+181
+00:07:33,571 --> 00:07:33,941
+or
+
+182
+00:07:34,221 --> 00:07:36,332
+put in twice as much memory.
+
+183
+00:07:36,532 --> 00:07:37,372
+Right. Right.
+
+184
+00:07:37,502 --> 00:07:39,381
+Now, I am maintaining
+
+185
+00:07:39,891 --> 00:07:43,731
+Kernes. I have to install security updates. Occasionally.
+
+186
+00:07:43,992 --> 00:07:45,752
+There might be bug fixes I need,
+
+187
+00:07:46,040 --> 00:07:48,140
+there can be whatever reasons. Right.
+
+188
+00:07:48,630 --> 00:07:51,579
+And I'm gonna want to do as little work as possible
+
+189
+00:07:51,850 --> 00:07:55,859
+on operations that could potentially disrupt
+
+190
+00:07:56,130 --> 00:07:57,299
+the uptime of Mike
+
+191
+00:07:57,420 --> 00:07:58,619
+Kubernetes instance. Right.
+
+192
+00:07:58,850 --> 00:08:00,420
+I don't think anyone would argue with that.
+
+193
+00:08:00,429 --> 00:08:03,619
+And now what happens in, in things like the open source world,
+
+194
+00:08:03,899 --> 00:08:06,690
+it's very common for software to move very quickly.
+
+195
+00:08:06,820 --> 00:08:12,130
+And so it's conceivable you'll have a major version update once or twice a year.
+
+196
+00:08:12,869 --> 00:08:13,230
+Now,
+
+197
+00:08:13,239 --> 00:08:16,290
+if I'm operating something like Kubernetes and let's
+
+198
+00:08:16,299 --> 00:08:19,089
+say there's a version update that's downtime.
+
+199
+00:08:19,100 --> 00:08:21,730
+Right. That's not going to be a seamless magic upgrade.
+
+200
+00:08:21,739 --> 00:08:25,640
+I'm going to have to either stand up a new Kubernetes cluster
+
+201
+00:08:25,869 --> 00:08:27,799
+and migrate into it or
+
+202
+00:08:27,910 --> 00:08:31,730
+I'm gonna have to shut down the one I have do my work and then start it back up.
+
+203
+00:08:31,760 --> 00:08:34,159
+Well, and I think going back a step, it's worse than that.
+
+204
+00:08:34,169 --> 00:08:36,489
+It's an unknown amount of risk.
+
+205
+00:08:36,900 --> 00:08:41,479
+That's true too. Right. Like it's, it might be a really easy, quick update
+
+206
+00:08:41,989 --> 00:08:47,059
+and it might literally catch fire and the update breaks your server because reme
+
+207
+00:08:47,250 --> 00:08:50,799
+like we've seen that happen where software updates, you know,
+
+208
+00:08:50,809 --> 00:08:53,299
+don't install that redhead update on your Dells because um
+
+209
+00:08:53,830 --> 00:08:56,890
+-- it breaks your server.
+-- Like I remember when I was a Cis
+
+210
+00:08:57,020 --> 00:08:57,570
+Edmund,
+
+211
+00:08:57,789 --> 00:09:02,159
+we would plan for major upgrades to infrastructure
+
+212
+00:09:02,570 --> 00:09:04,780
+and it would be like, we're going to start this Friday night,
+
+213
+00:09:04,789 --> 00:09:06,080
+we have all weekend to do it.
+
+214
+00:09:06,090 --> 00:09:07,809
+And sometimes by like 10 pm,
+
+215
+00:09:07,820 --> 00:09:13,219
+we were at the pub hanging out and sometimes by like 10 am Sunday, it's like, dear God,
+
+216
+00:09:13,229 --> 00:09:14,119
+please let this work.
+
+217
+00:09:14,130 --> 00:09:15,950
+I want to go home, you know,
+
+218
+00:09:16,080 --> 00:09:17,469
+and that is how it happened.
+
+219
+00:09:17,479 --> 00:09:21,119
+You never really knew if it was going to go well or going to go horribly,
+
+220
+00:09:21,130 --> 00:09:21,880
+horribly wrong.
+
+221
+00:09:22,280 --> 00:09:23,229
+And I mean, unless you have
+
+222
+00:09:23,349 --> 00:09:26,710
+budget to have like a double it infrastructure and have like
+
+223
+00:09:26,830 --> 00:09:29,869
+broad and a full working copy of tests that you can like
+
+224
+00:09:30,219 --> 00:09:32,700
+update and install and then cut over. But
+
+225
+00:09:33,380 --> 00:09:34,239
+realistically,
+
+226
+00:09:34,369 --> 00:09:37,250
+well, I was about to say, first of all, realistically, nobody has that
+
+227
+00:09:37,580 --> 00:09:38,260
+because you can,
+
+228
+00:09:38,500 --> 00:09:40,710
+you can't do that for like a network
+
+229
+00:09:40,820 --> 00:09:43,450
+like a major network. Sure, you
+
+230
+00:09:43,609 --> 00:09:43,820
+can
+
+231
+00:09:44,640 --> 00:09:46,820
+ask your boss to be like, hey, I,
+
+232
+00:09:47,049 --> 00:09:50,500
+you know, our network budget for last year, I would like to double that, please. Why,
+
+233
+00:09:50,830 --> 00:09:52,500
+you know, just to make upgrades easier.
+
+234
+00:09:52,909 --> 00:09:54,099
+Oh, no, you won't. Ok,
+
+235
+00:09:54,210 --> 00:09:57,349
+-- good
+-- luck. And I think this is one of the reasons Cloud started to take off. Right.
+
+236
+00:09:57,359 --> 00:09:58,369
+Because that on demand,
+
+237
+00:09:58,380 --> 00:10:01,750
+it's like I can actually do this and stand it up for a few 1000 bucks.
+
+238
+00:10:01,760 --> 00:10:02,030
+But anyway,
+
+239
+00:10:02,409 --> 00:10:03,059
+back to this.
+
+240
+00:10:03,070 --> 00:10:04,780
+So, so the part of the problem is,
+
+241
+00:10:04,789 --> 00:10:08,150
+is there's this huge unknown risk and then the thing you forget too is
+
+242
+00:10:08,159 --> 00:10:11,530
+it's not like you upgrade it and all the problems show up right away.
+
+243
+00:10:11,580 --> 00:10:11,599
+Oh,
+
+244
+00:10:11,700 --> 00:10:12,929
+right. Yeah, for sure.
+
+245
+00:10:13,349 --> 00:10:15,770
+Because then you run your quarterly report and
+
+246
+00:10:16,090 --> 00:10:17,109
+the numbers are off
+
+247
+00:10:17,330 --> 00:10:21,609
+are the numbers off. They look weird. I'm not sure. What do we have a bad quarter?
+
+248
+00:10:21,619 --> 00:10:23,570
+Were they wrong before? Right.
+
+249
+00:10:23,760 --> 00:10:26,070
+So anyway, let's sum it all up. Ok.
+
+250
+00:10:26,080 --> 00:10:28,169
+-- And then we'll go on,
+-- I want to say one important thing though
+
+251
+00:10:28,460 --> 00:10:30,250
+and something a lot of people forget
+
+252
+00:10:30,739 --> 00:10:34,820
+developers are almost never operational people despite the whole dese
+
+253
+00:10:35,340 --> 00:10:38,679
+ops thing. But I guarantee you, I'm gonna say something kind of mean
+
+254
+00:10:38,780 --> 00:10:40,530
+because I've had this experience at Red Hat,
+
+255
+00:10:40,539 --> 00:10:44,520
+the vast majority of developers working on software that runs at scale.
+
+256
+00:10:44,619 --> 00:10:48,010
+They have never run it at scale or even beyond
+
+257
+00:10:48,270 --> 00:10:51,130
+one or two systems. And even if they have run a test
+
+258
+00:10:51,530 --> 00:10:53,219
+like, oh we ran it on 1000 systems.
+
+259
+00:10:53,349 --> 00:10:56,500
+They haven't been responsible for running 24 7 like and I'm
+
+260
+00:10:56,510 --> 00:10:58,869
+talking like getting woken up at 3 a.m. if it doesn't
+
+261
+00:10:59,020 --> 00:10:59,900
+work, right?
+
+262
+00:10:59,909 --> 00:11:01,929
+And so I've literally had the case where the developer like, oh,
+
+263
+00:11:01,940 --> 00:11:03,299
+it works for me and I'm like, Well,
+
+264
+00:11:03,309 --> 00:11:06,059
+what about when the use case of 100,000 servers hit it?
+
+265
+00:11:06,070 --> 00:11:09,440
+And he's like, oh, that would probably be slow. And I'm like, that's the whole point.
+
+266
+00:11:09,450 --> 00:11:11,799
+It works fine on a thinkpad laptop.
+
+267
+00:11:13,039 --> 00:11:14,859
+That was actually word for word what he said.
+
+268
+00:11:16,679 --> 00:11:17,299
+I'm not surprised.
+
+269
+00:11:17,570 --> 00:11:19,539
+And I was like the use case for this product.
+
+270
+00:11:19,549 --> 00:11:22,919
+This is why we sell this product because 100,000 clients like
+
+271
+00:11:23,489 --> 00:11:24,340
+hit the server.
+
+272
+00:11:24,590 --> 00:11:26,690
+So let's let's bring it all together now, right?
+
+273
+00:11:26,820 --> 00:11:27,500
+You've got
+
+274
+00:11:27,719 --> 00:11:28,700
+an application,
+
+275
+00:11:28,950 --> 00:11:30,929
+you've got someone managing the application,
+
+276
+00:11:30,940 --> 00:11:34,419
+be it developers or operations or whoever, right, then
+
+277
+00:11:34,530 --> 00:11:37,640
+you have the forward march of time
+
+278
+00:11:38,109 --> 00:11:38,619
+and
+
+279
+00:11:38,960 --> 00:11:42,330
+a every application is going to see updates of some manner
+
+280
+00:11:42,809 --> 00:11:44,479
+and you have to decide when you are
+
+281
+00:11:44,489 --> 00:11:47,320
+going to install those updates in your infrastructure right
+
+282
+00:11:47,950 --> 00:11:48,520
+now.
+
+283
+00:11:48,859 --> 00:11:51,099
+Things like Kubernetes move very quickly.
+
+284
+00:11:51,109 --> 00:11:54,979
+A lot of applications now move very quickly because we're all like agile and DEV
+
+285
+00:11:55,159 --> 00:11:56,090
+ops and whatever
+
+286
+00:11:56,219 --> 00:11:59,059
+I have to make decisions about when I'm going to do my updates.
+
+287
+00:11:59,070 --> 00:12:02,919
+And if the application in question, especially an open source application
+
+288
+00:12:03,299 --> 00:12:05,270
+doesn't necessarily care about saying we're
+
+289
+00:12:05,280 --> 00:12:07,359
+going to support this particular version for
+
+290
+00:12:07,369 --> 00:12:10,520
+10 years or 20 years or whatever and they're like whatever YOLO,
+
+291
+00:12:10,530 --> 00:12:13,489
+we're just gonna steam right ahead and when we break things,
+
+292
+00:12:13,500 --> 00:12:16,719
+we just change the major version and you're going to deal with it and that's life.
+
+293
+00:12:16,969 --> 00:12:18,070
+So what's happening
+
+294
+00:12:18,229 --> 00:12:21,219
+is it is not an unreasonable, ask for someone to say,
+
+295
+00:12:21,229 --> 00:12:23,270
+wouldn't it be swell if there is a version of
+
+296
+00:12:23,799 --> 00:12:26,070
+Kernes that was supported for five years or 10
+
+297
+00:12:26,080 --> 00:12:28,880
+years or some relatively long amount of time,
+
+298
+00:12:28,890 --> 00:12:29,349
+right?
+
+299
+00:12:29,835 --> 00:12:31,244
+The fact is there is,
+
+300
+00:12:31,375 --> 00:12:34,655
+I know it's just not available as software, it's available as a service.
+
+301
+00:12:34,664 --> 00:12:35,744
+Well, not just that, I mean,
+
+302
+00:12:35,755 --> 00:12:39,375
+this is where you can do things like pay a company like Red Hat for openshift and,
+
+303
+00:12:39,385 --> 00:12:41,414
+and they maintain that for a long time.
+
+304
+00:12:41,424 --> 00:12:43,015
+-- Well,
+-- they abstract it away.
+
+305
+00:12:43,025 --> 00:12:44,635
+They basically say we will give you this
+
+306
+00:12:44,645 --> 00:12:46,844
+nice openshift interface and under the hood,
+
+307
+00:12:46,854 --> 00:12:49,575
+sometimes it's going to be maintained, sometimes we're going to upgrade it,
+
+308
+00:12:49,585 --> 00:12:51,284
+but you're not going to have to worry.
+
+309
+00:12:51,294 --> 00:12:51,544
+Yeah, we're
+
+310
+00:12:51,695 --> 00:12:51,905
+taking care
+
+311
+00:12:52,395 --> 00:12:52,804
+of the last
+
+312
+00:12:52,965 --> 00:12:52,984
+day.
+
+313
+00:12:53,375 --> 00:12:56,135
+And this is the part where this goes back to
+
+314
+00:12:56,760 --> 00:12:58,989
+people want solutions
+
+315
+00:12:59,409 --> 00:13:02,429
+that are free because duh like for sure, for sure.
+
+316
+00:13:02,580 --> 00:13:03,530
+But that's just
+
+317
+00:13:03,760 --> 00:13:07,489
+the, the open source community can't always give you your free solution, right?
+
+318
+00:13:07,500 --> 00:13:08,960
+-- I mean,
+-- look at the Linux kernel, right?
+
+319
+00:13:08,969 --> 00:13:12,270
+The Linux kernel used to have their long term support stream and
+
+320
+00:13:12,440 --> 00:13:14,710
+-- yeah,
+-- and it turns out nobody was using them. So they're like
+
+321
+00:13:15,440 --> 00:13:16,210
+they, they got rid of.
+
+322
+00:13:16,219 --> 00:13:18,210
+Actually, I bet, I bet a lot of people were using it,
+
+323
+00:13:18,219 --> 00:13:21,250
+but no one wanted to work on it because it's, it's terrible.
+
+324
+00:13:21,260 --> 00:13:24,429
+Well, also nobody, well, more importantly, nobody wanted to pay for it.
+
+325
+00:13:24,900 --> 00:13:27,840
+That's probably fair, right? People pay Red Hat all the time.
+
+326
+00:13:27,849 --> 00:13:29,510
+But you're also, here's the thing
+
+327
+00:13:29,820 --> 00:13:32,140
+when you work with someone like Red Hat or really
+
+328
+00:13:32,150 --> 00:13:34,469
+any sort of large vendor that does a good job.
+
+329
+00:13:34,479 --> 00:13:37,039
+I don't say any vendor because there's a lot of bad vendors. But
+
+330
+00:13:37,409 --> 00:13:39,400
+like when you work with Red Hat,
+
+331
+00:13:39,690 --> 00:13:42,859
+you're not paying for Linux, you're paying for an experience.
+
+332
+00:13:43,010 --> 00:13:43,479
+Right.
+
+333
+00:13:43,489 --> 00:13:46,760
+They're giving you someone to call, they're giving you someone to blame,
+
+334
+00:13:46,770 --> 00:13:48,280
+they're giving you someone to talk to.
+
+335
+00:13:48,400 --> 00:13:49,450
+They're telling you
+
+336
+00:13:49,599 --> 00:13:52,650
+we're going to make sure this works for 10 years come hell or high water,
+
+337
+00:13:52,750 --> 00:13:54,080
+we're gonna make it happen
+
+338
+00:13:54,260 --> 00:13:55,909
+and then they employ people to
+
+339
+00:13:56,090 --> 00:14:00,369
+move mountains and, and work miracles sometimes to make this stuff work.
+
+340
+00:14:00,380 --> 00:14:03,669
+I mean, we were there, we saw behind the curtain like it's,
+
+341
+00:14:04,140 --> 00:14:05,239
+it's not always fun.
+
+342
+00:14:06,080 --> 00:14:08,530
+Yeah, it's not always fun, but we got it done, you know,
+
+343
+00:14:08,820 --> 00:14:10,390
+and, and that's, that's the whole thing.
+
+344
+00:14:10,400 --> 00:14:12,969
+And I think that's where when I'm a developer
+
+345
+00:14:12,979 --> 00:14:15,690
+working on an open source project like Kubernetes,
+
+346
+00:14:16,440 --> 00:14:18,590
+I'm not giving people an experience.
+
+347
+00:14:18,809 --> 00:14:23,549
+I'm doing something probably for someone else solving their problem, right?
+
+348
+00:14:23,559 --> 00:14:25,049
+It's a very different dynamic.
+
+349
+00:14:25,059 --> 00:14:27,849
+And so I think expecting open source or even asking
+
+350
+00:14:27,859 --> 00:14:30,619
+a lot of open source projects for long term support is
+
+351
+00:14:30,780 --> 00:14:32,229
+well outside of this
+
+352
+00:14:32,794 --> 00:14:36,804
+-- universe or even caring quite often,
+-- I'm just going to go back to the market,
+
+353
+00:14:36,815 --> 00:14:38,025
+but the market has spoken here.
+
+354
+00:14:38,034 --> 00:14:40,885
+If somebody really, wow, this is fun. I want to do this,
+
+355
+00:14:41,005 --> 00:14:41,755
+it would be done
+
+356
+00:14:42,145 --> 00:14:46,695
+and it's not, it's absolutely not fun and amazing and exciting work.
+
+357
+00:14:46,715 --> 00:14:48,215
+So people don't want to do it.
+
+358
+00:14:48,830 --> 00:14:51,679
+And I, again, I get it, I get that you want your solution,
+
+359
+00:14:51,690 --> 00:14:53,520
+you want to turn your light bulbs on and just have them work.
+
+360
+00:14:53,530 --> 00:14:56,710
+You want to have your Kubernetes cluster and just have the darn thing work.
+
+361
+00:14:56,739 --> 00:14:58,760
+Your light bulbs are a perfect example.
+
+362
+00:14:58,770 --> 00:15:01,640
+Remember like you've been, what, two or three years now?
+
+363
+00:15:01,650 --> 00:15:03,419
+I think you had those horrible cheap
+
+364
+00:15:03,719 --> 00:15:07,960
+-- crap light bulbs
+-- from Costco, those that were on the Wi Fi and they, they just,
+
+365
+00:15:08,030 --> 00:15:09,320
+if you turn them off and on a few,
+
+366
+00:15:09,330 --> 00:15:11,679
+too many times they would like reset and start blinking and just,
+
+367
+00:15:12,385 --> 00:15:12,625
+and,
+
+368
+00:15:12,635 --> 00:15:14,924
+and you ponied up and you paid Phillips for
+
+369
+00:15:14,934 --> 00:15:17,184
+bulbs that are probably 10 times as expensive,
+
+370
+00:15:17,195 --> 00:15:18,554
+but also just work.
+
+371
+00:15:18,645 --> 00:15:20,994
+I'm in the same boat. I paid Phillips a long time ago.
+
+372
+00:15:21,005 --> 00:15:23,474
+I pay an ungodly amount of money for a light bulb,
+
+373
+00:15:23,505 --> 00:15:27,145
+but it does exactly what I want it to do and it does it for 10 years.
+
+374
+00:15:27,155 --> 00:15:28,265
+-- So
+-- great.
+
+375
+00:15:28,434 --> 00:15:30,455
+But so what's fascinating to me is
+
+376
+00:15:30,585 --> 00:15:34,734
+what gets me is I think a lot of the people asking for these LTs solutions
+
+377
+00:15:35,239 --> 00:15:37,929
+haven't really examined what they want.
+
+378
+00:15:37,940 --> 00:15:41,719
+I, I feel like a lot of them are stuck in this trap of, I, I need this solution.
+
+379
+00:15:41,729 --> 00:15:44,130
+I need to be stable. I need it to be boring
+
+380
+00:15:44,390 --> 00:15:45,650
+and they're Yeah, boring is great.
+
+381
+00:15:45,900 --> 00:15:47,510
+And they're, but then they're like, oh,
+
+382
+00:15:47,520 --> 00:15:49,729
+that means running it myself and doing it myself.
+
+383
+00:15:49,739 --> 00:15:52,760
+And sometimes if you want something stable and boring,
+
+384
+00:15:52,960 --> 00:15:56,539
+-- you outsource it to an expert at that
+-- sometimes for sure.
+
+385
+00:15:56,729 --> 00:16:00,159
+I pay Epcor for my electricity. Could I have a generator on site?
+
+386
+00:16:00,260 --> 00:16:03,190
+Yeah, I looked at even having a whole home generator as a backup.
+
+387
+00:16:03,200 --> 00:16:06,330
+But then I'm like, oh, the power only cuts out like twice a year for 10 minutes.
+
+388
+00:16:06,340 --> 00:16:06,780
+So like,
+
+389
+00:16:06,880 --> 00:16:08,320
+right, like who cares?
+
+390
+00:16:08,520 --> 00:16:11,840
+And now, especially now, you know, I live in a neighborhood with underground lines.
+
+391
+00:16:11,849 --> 00:16:13,489
+It's super duper reliable.
+
+392
+00:16:13,520 --> 00:16:15,229
+I just feel like a lot of people are caught in
+
+393
+00:16:15,239 --> 00:16:17,789
+the trap of doing things the old way and doing it.
+
+394
+00:16:17,799 --> 00:16:18,109
+Like
+
+395
+00:16:18,640 --> 00:16:20,429
+let's dig harder faster
+
+396
+00:16:21,130 --> 00:16:24,239
+and the solution might be a bulldozer or the solution might be
+
+397
+00:16:24,559 --> 00:16:26,119
+like, we don't even need to dig this hole.
+
+398
+00:16:26,130 --> 00:16:28,840
+Maybe we just like send the package by airplane.
+
+399
+00:16:29,239 --> 00:16:31,719
+Like, you know what I'm saying? They leap frog to some other thing.
+
+400
+00:16:32,770 --> 00:16:34,080
+I've seen this happen where,
+
+401
+00:16:34,840 --> 00:16:36,609
+you know, people get stuck in these,
+
+402
+00:16:37,380 --> 00:16:39,989
+I have to incrementally fix this problem
+
+403
+00:16:40,219 --> 00:16:43,030
+and they don't step back and say what, what is the whole point of this?
+
+404
+00:16:43,619 --> 00:16:45,559
+And I feel like a lot of this LTs stuff,
+
+405
+00:16:45,570 --> 00:16:48,630
+maybe you don't need to run a full Linux kernel with a network ST
+
+406
+00:16:48,909 --> 00:16:51,200
+stack on this device if you truly want to.
+
+407
+00:16:51,210 --> 00:16:53,489
+Like there was this um discussion for, uh,
+
+408
+00:16:53,500 --> 00:16:55,619
+Linux kernel support for 50 or 100 year
+
+409
+00:16:55,630 --> 00:16:58,520
+old devices for pipelines and for things that,
+
+410
+00:16:58,530 --> 00:17:01,880
+like get thrown into the ocean at the bottom of the ocean and can't be serviced.
+
+411
+00:17:01,890 --> 00:17:02,679
+Right. That's right.
+
+412
+00:17:03,219 --> 00:17:04,420
+You know, not reasonably.
+
+413
+00:17:04,699 --> 00:17:05,199
+And look.
+
+414
+00:17:05,219 --> 00:17:08,890
+So here's, here's, I think the, the other end of the conversation, right is,
+
+415
+00:17:09,118 --> 00:17:09,608
+so
+
+416
+00:17:09,739 --> 00:17:14,449
+the hacker news thread goes to, it's, I think it's just a blog post article,
+
+417
+00:17:14,459 --> 00:17:15,449
+whatever doesn't matter.
+
+418
+00:17:15,718 --> 00:17:16,618
+And at the end,
+
+419
+00:17:16,868 --> 00:17:18,558
+this person talks about the
+
+420
+00:17:18,779 --> 00:17:22,659
+Kubernetes apparently had an LTs working group which is being
+
+421
+00:17:22,858 --> 00:17:24,118
+resurrected now.
+
+422
+00:17:24,708 --> 00:17:28,798
+And like this is a cool example of where open source if people actually want this
+
+423
+00:17:29,038 --> 00:17:30,948
+and they're willing to basically pay for it because you're
+
+424
+00:17:30,958 --> 00:17:32,899
+gonna have to send people to the LTs group.
+
+425
+00:17:33,038 --> 00:17:34,149
+It can happen,
+
+426
+00:17:34,318 --> 00:17:34,818
+but
+
+427
+00:17:35,099 --> 00:17:37,699
+it's not going to be easy and it's not going to be cheap
+
+428
+00:17:37,709 --> 00:17:40,680
+because you're gonna have to find people and basically pay them like that.
+
+429
+00:17:40,689 --> 00:17:44,319
+You're going to turn money into suffering is what an LTs program is.
+
+430
+00:17:44,369 --> 00:17:46,380
+Well, and I love the spherical cow world.
+
+431
+00:17:46,390 --> 00:17:48,040
+So I'm going to read straight from the blog posting.
+
+432
+00:17:48,209 --> 00:17:50,910
+I really hope the team seriously consider something like this.
+
+433
+00:17:51,130 --> 00:17:53,880
+It would be a massive benefit to operators of Kate Kernes
+
+434
+00:17:54,260 --> 00:17:55,500
+around the world to not have to be
+
+435
+00:17:55,510 --> 00:17:57,704
+in a state of constantly upgrading existing clusters.
+
+436
+00:17:57,864 --> 00:18:01,785
+It would simplify the third party ecosystem as well allowing for easier validation
+
+437
+00:18:01,795 --> 00:18:04,334
+against a known stable target that will be around for a little while.
+
+438
+00:18:04,344 --> 00:18:06,925
+It also encourages better workflows from cluster operators,
+
+439
+00:18:06,935 --> 00:18:09,724
+pushing them towards the correct answer of getting in the habit of
+
+440
+00:18:09,734 --> 00:18:13,285
+making new clusters at regular intervals versus keeping clusters around forever.
+
+441
+00:18:13,295 --> 00:18:13,545
+Yeah.
+
+442
+00:18:13,844 --> 00:18:14,805
+In a perfect cer
+
+443
+00:18:15,114 --> 00:18:16,824
+world that would absolutely happen. So
+
+444
+00:18:17,165 --> 00:18:18,324
+who's going to pay for it?
+
+445
+00:18:18,665 --> 00:18:20,994
+Well, and that's the thing, right? I mean, that's basically
+
+446
+00:18:21,125 --> 00:18:23,444
+the foundation of open source, right?
+
+447
+00:18:23,744 --> 00:18:24,444
+Where
+
+448
+00:18:24,694 --> 00:18:25,214
+if
+
+449
+00:18:25,930 --> 00:18:28,780
+there, there is open source people will do for free because it's fun.
+
+450
+00:18:29,140 --> 00:18:30,060
+There's people,
+
+451
+00:18:30,280 --> 00:18:32,420
+it scratches my itch and it's not that hard and
+
+452
+00:18:32,920 --> 00:18:34,060
+it goes like, I'm sure that's how,
+
+453
+00:18:34,329 --> 00:18:38,010
+like, literally, that's how stuff like N map and curl and Nessus start is like, I
+
+454
+00:18:38,979 --> 00:18:41,329
+my itch a little and then it just sort of got out of control.
+
+455
+00:18:41,439 --> 00:18:42,229
+Right. Right.
+
+456
+00:18:42,239 --> 00:18:44,270
+And sometimes it catches on and like we, you know,
+
+457
+00:18:44,280 --> 00:18:48,189
+we talked to Daniel a while back and he's getting paid to work on curl now.
+
+458
+00:18:48,199 --> 00:18:48,709
+That's great.
+
+459
+00:18:49,390 --> 00:18:53,109
+It is a complicated and difficult thing and it's easy to just say, oh,
+
+460
+00:18:53,119 --> 00:18:55,550
+just throw money at it because it's not even that simple.
+
+461
+00:18:55,560 --> 00:19:00,349
+If you want Kubernetes LTs. At this point, you need to find Kubernetes developers
+
+462
+00:19:00,569 --> 00:19:01,800
+that you can pay
+
+463
+00:19:02,069 --> 00:19:06,180
+-- that are going to work on old dead end code
+-- or maybe
+
+464
+00:19:06,189 --> 00:19:09,280
+you need to take a step back and even consider training people
+
+465
+00:19:09,449 --> 00:19:12,290
+-- like taking a long term investment.
+-- I would argue that right.
+
+466
+00:19:12,300 --> 00:19:16,489
+But you need to find a way to send people because you can't just send money. Right.
+
+467
+00:19:16,500 --> 00:19:16,849
+Like
+
+468
+00:19:17,069 --> 00:19:17,099
+it,
+
+469
+00:19:17,310 --> 00:19:21,430
+-- it, it's a hilariously complicated problem.
+-- That's the thing too. Right.
+
+470
+00:19:21,439 --> 00:19:25,089
+Is, this is not a fungible problem. This is actually a very
+
+471
+00:19:25,329 --> 00:19:27,800
+skilled artisanal problem.
+
+472
+00:19:27,979 --> 00:19:31,369
+-- Yeah,
+-- that's true too. It's really hard to keep some of this old stuff alive.
+
+473
+00:19:31,380 --> 00:19:35,319
+This, well, this is like we need to renovate the Sistine Chapel.
+
+474
+00:19:35,540 --> 00:19:38,439
+You don't just put out a tender and take the lows bitter.
+
+475
+00:19:38,869 --> 00:19:39,729
+-- So
+-- actually,
+
+476
+00:19:40,469 --> 00:19:44,427
+it's funny you mentioned that a better example is Notre Dame Cathedral, right?
+
+477
+00:19:44,578 --> 00:19:45,787
+It had a fire.
+
+478
+00:19:46,017 --> 00:19:46,758
+It had
+
+479
+00:19:46,968 --> 00:19:48,517
+enormous losses.
+
+480
+00:19:48,807 --> 00:19:49,958
+And I, I've been like,
+
+481
+00:19:49,968 --> 00:19:53,277
+I love watching documentaries on public television in the United States.
+
+482
+00:19:53,287 --> 00:19:53,868
+It's like,
+
+483
+00:19:54,008 --> 00:19:56,167
+probably I don't watch a lot of TV,
+
+484
+00:19:56,177 --> 00:19:59,968
+but I bet 90% of it is PBS documentaries that I do watch or,
+
+485
+00:19:59,978 --> 00:20:01,838
+and Star Trek is the other 10%.
+
+486
+00:20:02,128 --> 00:20:02,637
+But
+
+487
+00:20:02,958 --> 00:20:03,437
+when,
+
+488
+00:20:03,637 --> 00:20:04,478
+when I watch it, they,
+
+489
+00:20:04,488 --> 00:20:08,546
+they had this documentary about how they were restoring Notre Dame.
+
+490
+00:20:08,875 --> 00:20:09,385
+And
+
+491
+00:20:09,645 --> 00:20:10,385
+yeah, like they,
+
+492
+00:20:10,395 --> 00:20:14,965
+they found artisans that did woodworking literally in the style it
+
+493
+00:20:14,975 --> 00:20:17,725
+was built in from hundreds and hundreds of years ago using
+
+494
+00:20:17,895 --> 00:20:22,225
+on it like the same trees from the same forest that orig like this is
+
+495
+00:20:22,395 --> 00:20:23,465
+bananas.
+
+496
+00:20:23,475 --> 00:20:24,946
+Well, that's like my cousin in Germany,
+
+497
+00:20:24,956 --> 00:20:28,145
+he's a proper carpenter and he's trained in the old ways of making things.
+
+498
+00:20:28,156 --> 00:20:28,465
+And so
+
+499
+00:20:28,686 --> 00:20:29,105
+like
+
+500
+00:20:29,526 --> 00:20:30,984
+ignoring all the disease issues,
+
+501
+00:20:30,994 --> 00:20:33,683
+you could drop him off in 1600 Germany he could build a barn.
+
+502
+00:20:33,784 --> 00:20:40,683
+That sounds bizarre and wild to some of us. But there's obviously a demand for this.
+
+503
+00:20:40,703 --> 00:20:41,894
+We live in countries
+
+504
+00:20:42,083 --> 00:20:45,713
+that are younger than a lot of the housing infrastructure stock.
+
+505
+00:20:45,864 --> 00:20:46,894
+That's true. That's
+
+506
+00:20:47,223 --> 00:20:49,093
+-- like,
+-- right. Like, well, you figure,
+
+507
+00:20:49,313 --> 00:20:51,624
+I live in a house that is 100 years old and in
+
+508
+00:20:51,634 --> 00:20:54,693
+North America that is incredibly old for a house in Europe.
+
+509
+00:20:54,703 --> 00:20:54,994
+That's probably
+
+510
+00:20:55,812 --> 00:20:57,271
+-- not
+-- old at all. That's new info
+
+511
+00:20:57,391 --> 00:20:57,722
+from,
+
+512
+00:20:57,871 --> 00:20:59,942
+you know, the last, last war.
+
+513
+00:21:00,082 --> 00:21:00,462
+Right.
+
+514
+00:21:00,472 --> 00:21:02,521
+And I'll tell you now, like, owning 100 year old house,
+
+515
+00:21:02,531 --> 00:21:04,011
+don't ever buy 100 year old house.
+
+516
+00:21:04,021 --> 00:21:05,001
+It's a terrible decision.
+
+517
+00:21:05,411 --> 00:21:07,911
+I love every time somebody buys a building more than 50 years old.
+
+518
+00:21:07,921 --> 00:21:09,612
+And they're like, and then we found asbestos
+
+519
+00:21:09,852 --> 00:21:11,482
+-- and it's like,
+-- yes, I did find,
+
+520
+00:21:12,112 --> 00:21:15,161
+I didn't find it. It was wide open in the basement.
+
+521
+00:21:15,171 --> 00:21:18,322
+I got it removed and then I also had the basement removed in the place.
+
+522
+00:21:18,332 --> 00:21:19,511
+But that's another story. But
+
+523
+00:21:20,000 --> 00:21:23,219
+all right, I'm like, how do you not think that was an outcome?
+
+524
+00:21:23,430 --> 00:21:26,050
+I totally knew there would be, I knew the wiring every,
+
+525
+00:21:26,060 --> 00:21:29,209
+whatever everything was old and shot and most of it's been replaced.
+
+526
+00:21:29,219 --> 00:21:30,939
+I have a lot less money than I would have
+
+527
+00:21:31,489 --> 00:21:31,520
+bought
+
+528
+00:21:31,849 --> 00:21:31,880
+that.
+
+529
+00:21:32,329 --> 00:21:32,780
+But
+
+530
+00:21:33,050 --> 00:21:33,069
+yeah,
+
+531
+00:21:33,520 --> 00:21:34,140
+but anyway,
+
+532
+00:21:35,000 --> 00:21:38,329
+I just want windows 11 to stay the way it is with no major
+
+533
+00:21:38,439 --> 00:21:39,959
+changes because I hate change.
+
+534
+00:21:40,989 --> 00:21:41,619
+And,
+
+535
+00:21:41,849 --> 00:21:42,780
+you know, like,
+
+536
+00:21:42,790 --> 00:21:44,989
+but at the same time I also get that Microsoft
+
+537
+00:21:45,000 --> 00:21:48,219
+wants to move forward and not support Windows 95 forever.
+
+538
+00:21:49,000 --> 00:21:50,550
+And, and look, this is,
+
+539
+00:21:50,880 --> 00:21:52,150
+this is always going to be the
+
+540
+00:21:53,260 --> 00:21:54,300
+yearly fee for it. So that's
+
+541
+00:21:54,680 --> 00:21:55,060
+Windows.
+
+542
+00:21:55,260 --> 00:21:56,339
+You have to just run Linux,
+
+543
+00:21:56,449 --> 00:21:59,459
+-- like as cool
+-- people probably end up in a Mac world
+
+544
+00:21:59,670 --> 00:22:02,140
+again because like the thing is like, I used to
+
+545
+00:22:02,380 --> 00:22:06,520
+need a Windows machine because to get this much CPU and ra M in an affordable package,
+
+546
+00:22:07,130 --> 00:22:08,560
+couldn't do it in the Mac world, right.
+
+547
+00:22:08,920 --> 00:22:09,300
+That's
+
+548
+00:22:09,680 --> 00:22:09,689
+a
+
+549
+00:22:10,189 --> 00:22:11,829
+little better now. Well, the,
+
+550
+00:22:12,229 --> 00:22:14,670
+the like the M series chips are,
+
+551
+00:22:15,579 --> 00:22:16,619
+-- that's
+-- what
+-- I keep hearing.
+
+552
+00:22:16,630 --> 00:22:19,599
+I still haven't used an M whatever chip and they're on what M three now,
+
+553
+00:22:19,609 --> 00:22:20,119
+-- I think
+-- I
+
+554
+00:22:20,130 --> 00:22:21,469
+-- have
+-- an M one
+
+555
+00:22:21,739 --> 00:22:25,099
+that's now about 34 years old and it still feels fast. That's
+
+556
+00:22:25,199 --> 00:22:26,209
+-- cool.
+-- That's nice and
+
+557
+00:22:26,630 --> 00:22:28,599
+like never felt fast even from day one.
+
+558
+00:22:28,849 --> 00:22:29,839
+-- Yeah, like
+-- it's,
+
+559
+00:22:30,359 --> 00:22:31,589
+I can't even imagine going
+
+560
+00:22:31,859 --> 00:22:32,339
+anyway.
+
+561
+00:22:32,619 --> 00:22:32,849
+-- Anyway,
+-- I
+
+562
+00:22:32,859 --> 00:22:32,920
+tell
+
+563
+00:22:33,060 --> 00:22:35,439
+you what happened. This is part of it is like just with the
+
+564
+00:22:35,609 --> 00:22:38,369
+Ker Netti, especially by definition, nobody wants to run Ker
+
+565
+00:22:38,579 --> 00:22:38,819
+Netti.
+
+566
+00:22:39,000 --> 00:22:40,890
+They want the capability that Cooper
+
+567
+00:22:41,050 --> 00:22:42,140
+Netti provides.
+
+568
+00:22:42,900 --> 00:22:43,420
+That's it
+
+569
+00:22:43,569 --> 00:22:43,890
+like.
+
+570
+00:22:44,729 --> 00:22:45,599
+And so,
+
+571
+00:22:45,910 --> 00:22:48,170
+and that's an important capability for most people because the
+
+572
+00:22:48,180 --> 00:22:51,750
+alternative is running like virtual machines or God forbid,
+
+573
+00:22:51,760 --> 00:22:55,660
+bare metal servers, which if you thought managing Cooper Nets was bad.
+
+574
+00:22:55,849 --> 00:22:56,449
+That's true.
+
+575
+00:22:56,880 --> 00:22:59,829
+Just wait till you have to manage a fleet of 1000 bare metal servers.
+
+576
+00:22:59,839 --> 00:23:01,630
+I mean, that's a really good point because
+
+577
+00:23:01,939 --> 00:23:03,949
+there are worse alternatives. It,
+
+578
+00:23:04,140 --> 00:23:06,010
+I hadn't even thought of it in that context.
+
+579
+00:23:06,020 --> 00:23:09,329
+But right, if we want to talk about like LTs, this is why Red Hat
+
+580
+00:23:09,599 --> 00:23:12,619
+is supporting Red Hat Enterprise Linux for like 10 years
+
+581
+00:23:13,010 --> 00:23:14,560
+because is it 13 now? It,
+
+582
+00:23:14,949 --> 00:23:17,540
+it's been 13 for a long while. Oh, has it? I, I don't even know
+
+583
+00:23:17,770 --> 00:23:17,910
+why.
+
+584
+00:23:18,050 --> 00:23:21,300
+And, and, and this is the thing I always bring up with people that forget about
+
+585
+00:23:21,790 --> 00:23:25,459
+Red Hat has to support software for 13 years with an A B I
+
+586
+00:23:25,739 --> 00:23:27,949
+and API compatibility promise
+
+587
+00:23:28,650 --> 00:23:30,119
+that they have
+
+588
+00:23:30,334 --> 00:23:32,405
+and will never see
+
+589
+00:23:32,734 --> 00:23:34,854
+internal software written at some company.
+
+590
+00:23:35,255 --> 00:23:35,265
+A
+
+591
+00:23:35,444 --> 00:23:36,155
+Red Hat.
+
+592
+00:23:36,564 --> 00:23:38,285
+And if it breaks they'll scream at Red Hat
+
+593
+00:23:38,474 --> 00:23:41,234
+and Red Hat's like, what on earth are you talking about? Right. And that's,
+
+594
+00:23:41,444 --> 00:23:44,234
+well, they'll, they'll help them fix it. This is part of the experience. Right.
+
+595
+00:23:44,405 --> 00:23:46,515
+Well, but that's my point is Red Hat.
+
+596
+00:23:46,525 --> 00:23:49,824
+Not only has to support the software for 13 years, but they have to support,
+
+597
+00:23:49,834 --> 00:23:50,954
+use cases and
+
+598
+00:23:51,520 --> 00:23:52,300
+stuff
+
+599
+00:23:52,410 --> 00:23:53,849
+that they haven't even seen.
+
+600
+00:23:54,520 --> 00:23:56,569
+I mean, that's how Kubernetes works like that too though.
+
+601
+00:23:56,579 --> 00:23:57,619
+Like, that's just software.
+
+602
+00:23:57,630 --> 00:24:00,170
+But I think a lot of people forget this because they go, oh, well,
+
+603
+00:24:00,180 --> 00:24:02,290
+you should use Red Hat this way and not do that with it.
+
+604
+00:24:02,300 --> 00:24:04,329
+And it's like that's not what the customers decide.
+
+605
+00:24:05,060 --> 00:24:05,489
+I mean,
+
+606
+00:24:05,719 --> 00:24:09,530
+but, but again, like in that context, right, the reason people pay them and they,
+
+607
+00:24:09,540 --> 00:24:11,910
+they need that level of support is because, like,
+
+608
+00:24:11,920 --> 00:24:15,619
+racking and stacking and reinstalling operating systems is very, very difficult.
+
+609
+00:24:15,630 --> 00:24:15,880
+It's,
+
+610
+00:24:16,439 --> 00:24:18,319
+I mean, if we think Kubernetes is a pain in the butt,
+
+611
+00:24:18,750 --> 00:24:23,880
+imagine having to go and find a computer in a rack with 100 computers in it.
+
+612
+00:24:24,199 --> 00:24:25,939
+Right. Like, pick out the right one.
+
+613
+00:24:25,949 --> 00:24:29,099
+Hope you didn't turn off the wrong computer, which we've all done more than once.
+
+614
+00:24:29,109 --> 00:24:31,119
+They have indicator lights on the front now, typically.
+
+615
+00:24:31,410 --> 00:24:32,910
+Well, yeah, they're always supposed to,
+
+616
+00:24:32,920 --> 00:24:36,500
+but it's still easy to grab the wrong one when there's the indicator lights broken.
+
+617
+00:24:36,569 --> 00:24:40,000
+You've got 100 computers that all look the same and they're all like, you know, what,
+
+618
+00:24:40,010 --> 00:24:41,750
+2.5 centimeters high,
+
+619
+00:24:42,099 --> 00:24:43,609
+one 0.75 inches.
+
+620
+00:24:43,800 --> 00:24:43,819
+Yeah.
+
+621
+00:24:43,969 --> 00:24:44,599
+Right. Right.
+
+622
+00:24:44,770 --> 00:24:45,349
+But, like,
+
+623
+00:24:46,060 --> 00:24:47,719
+that is obscenely difficult.
+
+624
+00:24:47,729 --> 00:24:51,010
+And that's why people want operating systems that last for decades.
+
+625
+00:24:51,069 --> 00:24:54,739
+And fun fact, the hyper scalars now, the majority of them, if a server has a problem,
+
+626
+00:24:54,819 --> 00:24:57,020
+they don't pull it and fix it anymore, they pull it
+
+627
+00:24:57,239 --> 00:24:58,349
+and sell it.
+
+628
+00:24:58,699 --> 00:25:02,609
+-- Will
+-- they wait for the rack to be like, what, 20% dead before they even look at it.
+
+629
+00:25:02,619 --> 00:25:03,390
+Stuff like that.
+
+630
+00:25:03,640 --> 00:25:05,569
+-- But
+-- somebody was horrified to find out that they're just,
+
+631
+00:25:05,579 --> 00:25:07,250
+like selling the stuff as waste.
+
+632
+00:25:07,260 --> 00:25:09,930
+And it's like, but like, at that scale you can't,
+
+633
+00:25:10,040 --> 00:25:11,939
+-- it's not worth fixing it. It's really hard
+-- to
+
+634
+00:25:11,949 --> 00:25:12,479
+fix.
+
+635
+00:25:12,619 --> 00:25:15,530
+You would need the infrastructure equivalent to a small country.
+
+636
+00:25:15,540 --> 00:25:18,959
+-- To do this at that scale.
+-- Yeah. And, and what's wrong with the computer?
+
+637
+00:25:18,969 --> 00:25:22,239
+Is it the ra M is it the disk? Is it the processor? Is it the motherboard?
+
+638
+00:25:22,250 --> 00:25:24,670
+It could be any one of a million things that it's going to take? Yeah.
+
+639
+00:25:24,680 --> 00:25:26,810
+-- And
+-- can you trust to put it back into rotation?
+
+640
+00:25:26,819 --> 00:25:27,569
+No,
+
+641
+00:25:28,040 --> 00:25:31,000
+that's like, honestly. So, you know, that reminds me of as well.
+
+642
+00:25:31,089 --> 00:25:34,160
+I love watching people on youtube like fix old hardware and stuff
+
+643
+00:25:34,520 --> 00:25:37,140
+and I just keep thinking like I watched this one guy was fixing
+
+644
+00:25:37,150 --> 00:25:39,540
+like Nintendo switches and saying he's going to sell them on ebay.
+
+645
+00:25:39,550 --> 00:25:41,489
+And I'm thinking I would never buy a
+
+646
+00:25:41,660 --> 00:25:45,699
+Nintendo switch repaired by like some guy on, on youtube.
+
+647
+00:25:46,719 --> 00:25:50,670
+Maybe that solder joint with that new capacitor is perfect and will last 100 years.
+
+648
+00:25:50,680 --> 00:25:54,170
+I don't know. And maybe it's a dry solder joint and it's just
+
+649
+00:25:54,880 --> 00:25:57,089
+for sure if you ever flex the board, it's gonna crack and poop.
+
+650
+00:25:57,359 --> 00:25:58,579
+-- But anyway,
+-- anyway,
+
+651
+00:25:58,599 --> 00:26:01,430
+so we're running ourselves out of time and we're supposed to be talking about LT
+
+652
+00:26:01,439 --> 00:26:04,910
+si feel like if I was gonna kind of sum all of this up,
+
+653
+00:26:04,920 --> 00:26:05,260
+right?
+
+654
+00:26:05,650 --> 00:26:06,400
+I think
+
+655
+00:26:06,650 --> 00:26:09,359
+asking an open source project to do LTs
+
+656
+00:26:09,469 --> 00:26:10,939
+is a foolish ask.
+
+657
+00:26:11,069 --> 00:26:12,839
+I think you either need to do it
+
+658
+00:26:13,119 --> 00:26:15,810
+or deal with what you've got or alternatively
+
+659
+00:26:15,819 --> 00:26:18,380
+find someone like Red Hat has openshift,
+
+660
+00:26:18,390 --> 00:26:21,459
+you've got Google has Gke Amazon, what is Amazon
+
+661
+00:26:21,609 --> 00:26:21,660
+Cooper
+
+662
+00:26:22,060 --> 00:26:22,359
+called
+
+663
+00:26:23,030 --> 00:26:23,199
+Elastic?
+
+664
+00:26:25,239 --> 00:26:26,189
+That's an eck,
+
+665
+00:26:26,609 --> 00:26:27,660
+I don't know what that stands for.
+
+666
+00:26:29,329 --> 00:26:30,219
+The K is probably
+
+667
+00:26:30,400 --> 00:26:30,479
+Kernes.
+
+668
+00:26:31,510 --> 00:26:32,020
+But anyway,
+
+669
+00:26:32,560 --> 00:26:32,709
+like,
+
+670
+00:26:33,449 --> 00:26:34,410
+I, I think
+
+671
+00:26:34,780 --> 00:26:38,979
+this is where you either need to fund it yourself and do
+
+672
+00:26:38,989 --> 00:26:42,349
+the work or you just find someone else to deal with,
+
+673
+00:26:42,359 --> 00:26:44,199
+like, the crap you don't want to deal with.
+
+674
+00:26:44,329 --> 00:26:44,689
+-- You
+-- know,
+
+675
+00:26:44,969 --> 00:26:47,060
+I'm gonna summarize everything you said. Which is,
+
+676
+00:26:47,709 --> 00:26:50,170
+if you want a solution you're gonna have to pay for it.
+
+677
+00:26:50,400 --> 00:26:53,599
+-- I mean,
+-- yeah, I agree. Yeah, I think that's, that's exactly what it is.
+
+678
+00:26:53,609 --> 00:26:54,880
+I think you're right. I think,
+
+679
+00:26:55,229 --> 00:26:56,319
+like, it's,
+
+680
+00:26:56,469 --> 00:27:00,569
+what is the old JWZ saying? Linux is only free if your time is worthless.
+
+681
+00:27:00,780 --> 00:27:01,560
+And I think, like,
+
+682
+00:27:01,569 --> 00:27:05,630
+Kubernetes is the same deal where you can pay someone to deal with the crap.
+
+683
+00:27:05,900 --> 00:27:07,760
+Like, you can pay a company to deal with the crap.
+
+684
+00:27:07,770 --> 00:27:10,290
+You can pay someone who works for you to deal with the crap
+
+685
+00:27:10,390 --> 00:27:11,050
+or
+
+686
+00:27:11,310 --> 00:27:13,000
+that's it. Like those are pretty much the
+
+687
+00:27:13,170 --> 00:27:14,880
+stuff, stuff that's broken once in a while and
+
+688
+00:27:15,579 --> 00:27:18,849
+it probably won't be broken once in a while. I think it'll be broken a lot.
+
+689
+00:27:18,979 --> 00:27:19,650
+Right. I mean,
+
+690
+00:27:20,069 --> 00:27:20,969
+I think that's,
+
+691
+00:27:21,589 --> 00:27:23,050
+that is one of the things that I find
+
+692
+00:27:23,060 --> 00:27:25,439
+most interesting and bizarre about open source is we've
+
+693
+00:27:25,449 --> 00:27:29,880
+come to expect all of this amazing technology for free and for the most part it is,
+
+694
+00:27:30,099 --> 00:27:31,819
+but it's not actually free. Right.
+
+695
+00:27:31,829 --> 00:27:34,680
+Like we're trading something for what we're doing.
+
+696
+00:27:34,689 --> 00:27:38,459
+It could be, we're paying developers, we're paying red hat like somebody. Right.
+
+697
+00:27:38,560 --> 00:27:39,619
+I mean, we're also sometimes
+
+698
+00:27:39,729 --> 00:27:40,109
+in the,
+
+699
+00:27:40,119 --> 00:27:43,630
+in the beautiful circumstance of like curl where there's enough
+
+700
+00:27:43,640 --> 00:27:46,229
+people who are willing to pay and pony up that
+
+701
+00:27:46,530 --> 00:27:49,050
+-- I can absolutely be a free rider. And that's
+-- ok.
+
+702
+00:27:49,160 --> 00:27:53,630
+And I, I think that is the nature of society though. Right. Society is
+
+703
+00:27:53,800 --> 00:27:54,739
+riddled with people,
+
+704
+00:27:56,530 --> 00:27:58,030
+people, you know, expect the,
+
+705
+00:27:58,239 --> 00:27:58,670
+you know,
+
+706
+00:27:58,680 --> 00:28:02,099
+it's funny to me every time the cost of the road infrastructure in Edmonton comes up,
+
+707
+00:28:02,109 --> 00:28:03,900
+it's in the billions of dollars that we spend
+
+708
+00:28:04,270 --> 00:28:04,589
+this
+
+709
+00:28:05,250 --> 00:28:06,349
+massive
+
+710
+00:28:06,560 --> 00:28:07,829
+road network, right?
+
+711
+00:28:07,839 --> 00:28:09,900
+Because while we would like fire trucks to be able to
+
+712
+00:28:09,910 --> 00:28:12,540
+-- get cars if it's burning down or the Amazon delivery
+-- person,
+
+713
+00:28:12,550 --> 00:28:15,140
+society relies on like infrastructure,
+
+714
+00:28:15,290 --> 00:28:15,939
+infrastructure
+
+715
+00:28:16,160 --> 00:28:16,550
+like,
+
+716
+00:28:17,060 --> 00:28:17,989
+-- and
+-- we all
+
+717
+00:28:18,140 --> 00:28:21,260
+benefit from it and it just blows my mind when people are like, but I don't pay,
+
+718
+00:28:21,270 --> 00:28:23,109
+I don't want to pay for those roads because I don't use them.
+
+719
+00:28:23,119 --> 00:28:24,910
+And I'm like, do you eat food?
+
+720
+00:28:25,459 --> 00:28:28,670
+Oh, man, you know, I've got a really good example of this. So where I live,
+
+721
+00:28:29,079 --> 00:28:31,800
+we get our water from Lake Michigan because there's,
+
+722
+00:28:31,810 --> 00:28:34,420
+there's actually this amazing amount of
+
+723
+00:28:34,699 --> 00:28:38,699
+like law in everything like who can use water from Lake Michigan,
+
+724
+00:28:38,709 --> 00:28:40,219
+how the Great Lakes work it, whatever.
+
+725
+00:28:40,229 --> 00:28:40,500
+And
+
+726
+00:28:40,810 --> 00:28:43,849
+-- oh man,
+-- water rights are one of those things that, that goes back a long time.
+
+727
+00:28:43,869 --> 00:28:45,160
+It's, it's pretty wild.
+
+728
+00:28:45,349 --> 00:28:45,979
+But anyway,
+
+729
+00:28:45,989 --> 00:28:48,819
+I live in a place that can draw the water directly from Lake
+
+730
+00:28:48,829 --> 00:28:51,650
+Michigan because we're part of the basin or whatever they call it.
+
+731
+00:28:52,030 --> 00:28:52,420
+And
+
+732
+00:28:53,010 --> 00:28:56,719
+when they switched from these wells that were high in radium, so,
+
+733
+00:28:56,729 --> 00:29:00,050
+like the water was literally radioactive and the water bills
+
+734
+00:29:00,060 --> 00:29:02,890
+like doubled because they were piping water from Lake Michigan,
+
+735
+00:29:02,900 --> 00:29:05,810
+like literally hundreds of miles to the city because you have to get it like way
+
+736
+00:29:05,819 --> 00:29:08,209
+in the middle of the lake and all this crap and whatever I get it.
+
+737
+00:29:08,219 --> 00:29:09,510
+Right. It's expensive and hard.
+
+738
+00:29:09,660 --> 00:29:11,500
+They increase the water bills and all these people were like, oh,
+
+739
+00:29:11,510 --> 00:29:12,449
+this is ridiculous.
+
+740
+00:29:12,459 --> 00:29:15,079
+It's like you need water to be in a functional society in the old
+
+741
+00:29:15,189 --> 00:29:19,609
+water was radioactive, like shut up. This is just how it works.
+
+742
+00:29:19,619 --> 00:29:20,290
+There's actually,
+
+743
+00:29:20,300 --> 00:29:24,089
+it's funny because this is one of the ongoing sagas in Canadian politics where
+
+744
+00:29:24,099 --> 00:29:27,650
+a lot of the indigenous communities don't have access to clean safe water.
+
+745
+00:29:27,979 --> 00:29:30,170
+They kind of point out that like if this happened in Toronto
+
+746
+00:29:30,359 --> 00:29:31,270
+it get fixed.
+
+747
+00:29:31,380 --> 00:29:32,260
+Right. Right.
+
+748
+00:29:32,369 --> 00:29:36,020
+For sure. There was a community that lost their water many a decade or two ago.
+
+749
+00:29:36,030 --> 00:29:37,530
+And the, the member of parliament,
+
+750
+00:29:37,640 --> 00:29:41,719
+that area literally wrote a long article pointing out that one of the quickest,
+
+751
+00:29:41,729 --> 00:29:44,420
+fastest ways to kill a community is not have clean water.
+
+752
+00:29:44,430 --> 00:29:45,579
+Oh, I have no doubt.
+
+753
+00:29:45,699 --> 00:29:47,699
+Yeah. Yeah, you need water. I mean,
+
+754
+00:29:47,880 --> 00:29:50,619
+like water, sewer roads, power, internet now.
+
+755
+00:29:50,880 --> 00:29:51,589
+Like these are,
+
+756
+00:29:51,910 --> 00:29:52,739
+I wouldn't move
+
+757
+00:29:52,969 --> 00:29:55,979
+-- without any of those, you know,
+-- logistics. Like
+
+758
+00:29:56,160 --> 00:29:57,569
+when I hear these small towns in the middle
+
+759
+00:29:57,579 --> 00:29:59,339
+of nowhere complaining that people won't ship to them.
+
+760
+00:29:59,349 --> 00:29:59,979
+It's like, well,
+
+761
+00:30:00,770 --> 00:30:01,189
+yeah,
+
+762
+00:30:01,780 --> 00:30:02,790
+it's hard. But,
+
+763
+00:30:03,140 --> 00:30:03,339
+but the
+
+764
+00:30:03,589 --> 00:30:03,689
+post office,
+
+765
+00:30:04,369 --> 00:30:06,630
+I mean, but this is another good example of where
+
+766
+00:30:07,160 --> 00:30:10,949
+the post office of a country usually lose money because it's the same,
+
+767
+00:30:10,959 --> 00:30:14,709
+like if I mail a letter across the street or I mail it across the country,
+
+768
+00:30:14,959 --> 00:30:16,180
+I pay the same amount,
+
+769
+00:30:16,189 --> 00:30:17,910
+but it obviously doesn't cost the same amount
+
+770
+00:30:17,920 --> 00:30:19,989
+to move that letter to those two places.
+
+771
+00:30:20,000 --> 00:30:20,949
+Well, and that's the thing.
+
+772
+00:30:21,030 --> 00:30:21,530
+Historically,
+
+773
+00:30:21,540 --> 00:30:24,170
+the post office was also one of the things that drew the country together.
+
+774
+00:30:24,180 --> 00:30:25,699
+It helped glue the country together.
+
+775
+00:30:25,920 --> 00:30:29,810
+It's one of the things that defined you as a country as having a proper post office,
+
+776
+00:30:29,819 --> 00:30:33,520
+just like having a military or law enforcement or a judiciary system.
+
+777
+00:30:33,530 --> 00:30:37,290
+Now, here's how I wanna, here's how I'm gonna end this. This is my last word. I think
+
+778
+00:30:37,719 --> 00:30:39,910
+a lot of open source is becoming
+
+779
+00:30:40,069 --> 00:30:40,939
+infrastructure.
+
+780
+00:30:41,410 --> 00:30:41,510
+It
+
+781
+00:30:41,689 --> 00:30:41,959
+does, it
+
+782
+00:30:42,260 --> 00:30:43,579
+-- is,
+-- it is infrastructure
+
+783
+00:30:44,030 --> 00:30:44,750
+and I think
+
+784
+00:30:45,030 --> 00:30:45,630
+it is
+
+785
+00:30:46,109 --> 00:30:48,369
+in a similar manner to how we fund
+
+786
+00:30:48,380 --> 00:30:50,630
+our infrastructure through taxes and other things.
+
+787
+00:30:50,640 --> 00:30:54,130
+I, I'm not saying we should be taxed, the open source tax or something.
+
+788
+00:30:54,140 --> 00:30:55,510
+But like, I think this is where,
+
+789
+00:30:55,520 --> 00:30:58,469
+like the governments of the world need to start recognizing that
+
+790
+00:30:58,719 --> 00:31:00,150
+this is infrastructure
+
+791
+00:31:00,339 --> 00:31:01,709
+and we can't just ignore it.
+
+792
+00:31:02,229 --> 00:31:04,579
+And I don't know what that looks like and I don't know what that means,
+
+793
+00:31:04,670 --> 00:31:07,060
+-- or
+-- we ignore it and hope somebody else fixes it.
+
+794
+00:31:07,069 --> 00:31:08,579
+That's probably what's going to happen.
+
+795
+00:31:08,589 --> 00:31:11,400
+-- But, because
+-- that has worked in the past for almost every other problem.
+
+796
+00:31:11,410 --> 00:31:13,939
+It, it often does until
+
+797
+00:31:14,170 --> 00:31:14,319
+it,
+
+798
+00:31:14,510 --> 00:31:15,819
+whatever lights on fire.
+
+799
+00:31:15,959 --> 00:31:17,829
+All right, I'm, I'm calling this one.
+
+800
+00:31:18,069 --> 00:31:19,599
+This is a wild man. I don't know.
+
+801
+00:31:19,609 --> 00:31:23,099
+-- Or
+-- somebody sinks a barge full of oil next to your intake pipe.
+
+802
+00:31:23,109 --> 00:31:23,709
+It's fine.
+
+803
+00:31:23,719 --> 00:31:24,459
+Everything's fine.
+
+804
+00:31:24,939 --> 00:31:26,199
+I don't, I don't know. We'll see.
+
+805
+00:31:26,209 --> 00:31:29,819
+I, I, I'll be interested to see what this Kubernetes LTs working group does in,
+
+806
+00:31:29,829 --> 00:31:30,920
+in six months or a year.
+
+807
+00:31:30,930 --> 00:31:32,640
+I don't think it's gonna happen because it's,
+
+808
+00:31:32,650 --> 00:31:36,079
+it's the thing people forget is it's not a lot of work.
+
+809
+00:31:36,130 --> 00:31:40,010
+-- It's a lot of work on an ongoing basis forever.
+-- Well, and that's just it. Right.
+
+810
+00:31:40,020 --> 00:31:42,030
+It's easy to start. It's hard to keep going
+
+811
+00:31:42,170 --> 00:31:43,199
+and that'll be the trick
+
+812
+00:31:43,339 --> 00:31:45,189
+like it's like getting six cats
+
+813
+00:31:45,339 --> 00:31:50,729
+right, start it now and talk to me in a year, right? Or five years. That'll be. Well,
+
+814
+00:31:50,839 --> 00:31:53,660
+that's true. Probably. I mean, five years is the true test. But
+
+815
+00:31:54,069 --> 00:31:57,459
+yeah, I get it. I get it. All right. Thank you, Kurt. Thank you for listening. Go
+
+816
+00:31:57,599 --> 00:31:58,979
+up social security podcast.com. Yup,
+
+817
+00:31:59,089 --> 00:31:59,140
+Podos
+
+818
+00:31:59,680 --> 00:32:00,560
+podcast. Hashtag I
+
+819
+00:32:00,739 --> 00:32:00,979
+Mastodon.
+
+820
+00:32:01,109 --> 00:32:04,300
+-- Kurt have a marvelous rest of your day. You too.
+-- Thanks everybody. Thanks
+
+821
+00:32:04,310 --> 00:32:04,750
+everyone.
+
+822
+00:32:04,760 --> 00:32:05,500
+Bye bye.

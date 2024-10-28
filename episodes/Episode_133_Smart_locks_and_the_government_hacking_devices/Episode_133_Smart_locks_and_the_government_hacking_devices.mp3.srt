@@ -1,0 +1,2927 @@
+0
+00:00:05,449 --> 00:00:10,279
+Hello and welcome to the open source security podcast episode 133 with myself,
+
+1
+00:00:10,289 --> 00:00:11,010
+Kurt Siefried
+
+2
+00:00:11,270 --> 00:00:13,510
+and my partner in Thought crime. Josh Bresser, man.
+
+3
+00:00:13,520 --> 00:00:16,870
+It feels like the world is more on fire than usual right now,
+
+4
+00:00:16,879 --> 00:00:19,709
+which is pretty bad because it's generally pretty on fire.
+
+5
+00:00:20,370 --> 00:00:21,329
+Yeah, I mean, it's,
+
+6
+00:00:21,340 --> 00:00:24,790
+there's even stuff that we won't talk about because of the political side of it now.
+
+7
+00:00:25,190 --> 00:00:28,409
+Right? Like the world, the world burns all of it.
+
+8
+00:00:28,459 --> 00:00:31,819
+It's pretty much getting nonstop radio on the news radio here.
+
+9
+00:00:31,860 --> 00:00:33,240
+Although our news radio is CBC,
+
+10
+00:00:33,250 --> 00:00:37,590
+-- which is quite boring and respectable
+-- versus it should be boring and respectable.
+
+11
+00:00:37,599 --> 00:00:40,819
+I don't want exciting news radio because that means either something
+
+12
+00:00:40,924 --> 00:00:42,915
+terrible is happening or more likely
+
+13
+00:00:43,154 --> 00:00:45,875
+it's just a bunch of annoying idiots yelling at each other.
+
+14
+00:00:46,845 --> 00:00:48,884
+Speaking of annoying idiots yelling at each other.
+
+15
+00:00:48,895 --> 00:00:50,424
+Welcome to the podcast, everybody.
+
+16
+00:00:51,485 --> 00:00:51,735
+Yeah.
+
+17
+00:00:51,744 --> 00:00:52,034
+Well,
+
+18
+00:00:52,044 --> 00:00:54,415
+so it's interesting because we were going to start this
+
+19
+00:00:54,424 --> 00:00:58,665
+one with that whole piece about the Japanese government scanning.
+
+20
+00:00:58,865 --> 00:01:01,365
+I don't know what word to use exactly their network
+
+21
+00:01:01,735 --> 00:01:03,145
+networks within Japan
+
+22
+00:01:03,529 --> 00:01:06,260
+IP blocks registered to Japanese companies
+
+23
+00:01:06,440 --> 00:01:09,400
+or not so much Japanese companies, but Japanese network providers.
+
+24
+00:01:09,650 --> 00:01:12,040
+And it's not like they were, you know, using zero days.
+
+25
+00:01:12,050 --> 00:01:15,110
+They, they literally were going to take a list of known
+
+26
+00:01:15,459 --> 00:01:19,000
+default passwords for devices and, you know,
+
+27
+00:01:19,360 --> 00:01:21,430
+see if they were, had been changed or not
+
+28
+00:01:22,150 --> 00:01:26,180
+and then something came up on Twitter, which I found quite horrifying.
+
+29
+00:01:26,190 --> 00:01:27,419
+I'm going to leave her name out of it,
+
+30
+00:01:27,559 --> 00:01:30,300
+-- but it's not hard to find,
+-- everyone knows who Leslie Carr
+
+31
+00:01:30,440 --> 00:01:34,040
+-- is. Hacks for pancakes. You don't need to leave her name out of it.
+-- Ok. Well,
+
+32
+00:01:34,500 --> 00:01:35,129
+so,
+
+33
+00:01:35,309 --> 00:01:38,779
+and apparently this is happening to a lot of people, not just her,
+
+34
+00:01:38,790 --> 00:01:41,349
+but I guess she's the first one to kind of really not be ok with it.
+
+35
+00:01:41,360 --> 00:01:44,360
+So the premise is basically she lives, it sounds like in an apartment building
+
+36
+00:01:44,620 --> 00:01:46,050
+and when you live in an apartment building,
+
+37
+00:01:46,510 --> 00:01:47,239
+you don't
+
+38
+00:01:47,349 --> 00:01:51,800
+have as much control over the building and stuff in general as maybe you'd like.
+
+39
+00:01:51,809 --> 00:01:52,779
+You know, for example,
+
+40
+00:01:52,830 --> 00:01:54,279
+I know a lot of us apartment buildings will
+
+41
+00:01:54,290 --> 00:01:56,500
+sign an exclusivity agreement with a network provider,
+
+42
+00:01:56,510 --> 00:01:57,739
+like say Comcast or Verizon.
+
+43
+00:01:57,750 --> 00:02:02,139
+-- And that's your only choice as
+-- opposed to me living in a house where I have
+
+44
+00:02:02,550 --> 00:02:05,010
+one choice. Yeah, in my neighborhood.
+
+45
+00:02:05,279 --> 00:02:07,569
+Yeah. So basically it sounds like this com
+
+46
+00:02:07,739 --> 00:02:10,460
+this, the company that owns the apartment building
+
+47
+00:02:10,639 --> 00:02:14,929
+is essentially changing all the locks
+
+48
+00:02:15,210 --> 00:02:16,729
+which, ok, that's
+
+49
+00:02:16,919 --> 00:02:19,110
+kind of abnormal because that costs quite a bit of money,
+
+50
+00:02:19,309 --> 00:02:23,250
+but they're going with smart locks. What's interesting to me.
+
+51
+00:02:23,259 --> 00:02:25,210
+Well, there's two sort of main aspects of this.
+
+52
+00:02:25,449 --> 00:02:28,160
+Number one, normally when you replace a mechanical lock,
+
+53
+00:02:28,169 --> 00:02:29,729
+then you give the person a key and that's it.
+
+54
+00:02:29,740 --> 00:02:32,850
+There's no sort of additional cost to them or ongoing
+
+55
+00:02:33,399 --> 00:02:37,660
+maintenance or ongoing fees to keep that mechanical lock working.
+
+56
+00:02:37,820 --> 00:02:40,020
+And that's not the case with smart locks with a smart lock,
+
+57
+00:02:40,029 --> 00:02:42,229
+it needs to be able to talk to the internet.
+
+58
+00:02:42,240 --> 00:02:42,740
+Right.
+
+59
+00:02:43,039 --> 00:02:47,339
+And number two is the the safety and security aspect of it.
+
+60
+00:02:47,470 --> 00:02:50,009
+I've been looking into smart locks from my house
+
+61
+00:02:50,320 --> 00:02:51,539
+and to be blunt,
+
+62
+00:02:51,550 --> 00:02:54,550
+I have not found one that will reliably unlock and let
+
+63
+00:02:54,559 --> 00:02:58,809
+me in every single lock I've researched has had incidents,
+
+64
+00:02:58,820 --> 00:03:02,300
+shall we say where for example, glitch in Yale, smart lock security, uh
+
+65
+00:03:02,500 --> 00:03:05,470
+Yale smart security system sees Brits locked out of homes.
+
+66
+00:03:05,919 --> 00:03:07,259
+Now, I live in a house.
+
+67
+00:03:07,270 --> 00:03:08,860
+So I have a front door and a back door and,
+
+68
+00:03:08,869 --> 00:03:10,710
+and part of my plan was I was going to put a smart lock
+
+69
+00:03:10,720 --> 00:03:13,220
+on the front door and leave the mechanical lock on the back door so that
+
+70
+00:03:13,860 --> 00:03:17,119
+if I come home and the smart lock is not working or the internet's out or whatever,
+
+71
+00:03:17,330 --> 00:03:20,169
+I can go to the back door, use the mechanical key to get in.
+
+72
+00:03:20,470 --> 00:03:22,399
+And that's wonderful if you live in a house with two doors.
+
+73
+00:03:22,410 --> 00:03:24,250
+But typically when you live in an apartment,
+
+74
+00:03:24,490 --> 00:03:28,520
+I'm not really aware of any apartments that I've ever seen with two doors,
+
+75
+00:03:28,970 --> 00:03:29,880
+you know, to
+
+76
+00:03:30,550 --> 00:03:32,229
+both doors to the same hallway.
+
+77
+00:03:32,679 --> 00:03:33,410
+So
+
+78
+00:03:33,639 --> 00:03:37,679
+the second thing here is, you know, is this lock actually safe?
+
+79
+00:03:37,690 --> 00:03:39,050
+Is it reliable enough?
+
+80
+00:03:39,059 --> 00:03:42,649
+-- All right,
+-- I'm gonna interrupt you for a minute because you,
+
+81
+00:03:42,660 --> 00:03:45,809
+if you already have a key for your backup back door,
+
+82
+00:03:45,820 --> 00:03:48,089
+like why even have the freaking smart lock,
+
+83
+00:03:48,100 --> 00:03:50,369
+then isn't the whole point to not have any keys?
+
+84
+00:03:50,380 --> 00:03:52,210
+-- For
+-- example, I could allow my cleaner in
+
+85
+00:03:52,320 --> 00:03:53,220
+when I'm not at home.
+
+86
+00:03:53,369 --> 00:03:56,199
+That's fair. Ok. I mean, that, that's a good reason. Right.
+
+87
+00:03:56,210 --> 00:03:58,759
+I could allow my cleaner in or my kids could use their phone
+
+88
+00:03:58,770 --> 00:04:01,699
+instead of a key point being is the mechanical locks I've had,
+
+89
+00:04:01,710 --> 00:04:04,300
+I've only ever had a mechanical lock once, fail to let me in my house.
+
+90
+00:04:04,309 --> 00:04:05,649
+And that was because somebody tried to open it with
+
+91
+00:04:05,660 --> 00:04:07,869
+a screwdriver and just beat the bejesus out of it.
+
+92
+00:04:08,570 --> 00:04:09,160
+Right.
+
+93
+00:04:09,350 --> 00:04:11,440
+You know, like it was pretty clear when I looked at the key way.
+
+94
+00:04:11,449 --> 00:04:14,520
+It's like, oh, it's all mangled and there's scratch marks and it's,
+
+95
+00:04:14,529 --> 00:04:16,149
+it's kind of bigger now.
+
+96
+00:04:16,160 --> 00:04:17,690
+It's about the size of a screwdriver.
+
+97
+00:04:17,839 --> 00:04:19,858
+Whereas with these smart locks, you Google it, they're,
+
+98
+00:04:19,869 --> 00:04:22,108
+they're terrible and that's assuming that the apps even work.
+
+99
+00:04:22,119 --> 00:04:22,220
+Right.
+
+100
+00:04:22,230 --> 00:04:26,119
+You go in the app store and look at the reviews of these apps and, and their garbage.
+
+101
+00:04:26,130 --> 00:04:27,709
+Um, we stayed at an airbnb
+
+102
+00:04:27,950 --> 00:04:32,850
+and it was an ordeal to get this smart lock to, you know, we had to, like,
+
+103
+00:04:32,859 --> 00:04:34,679
+we had to download an app, we had to get it registered.
+
+104
+00:04:34,690 --> 00:04:35,279
+We have to get the key,
+
+105
+00:04:35,450 --> 00:04:36,519
+the key to work.
+
+106
+00:04:36,720 --> 00:04:37,190
+And it,
+
+107
+00:04:37,769 --> 00:04:39,890
+there were times where it would take us upwards of five minutes
+
+108
+00:04:39,899 --> 00:04:42,350
+after we left the apartment to get the door to lock,
+
+109
+00:04:42,359 --> 00:04:43,750
+it just did not want to lock.
+
+110
+00:04:43,760 --> 00:04:47,329
+They didn't have just like a lock thing. You could twist on the outside to lock it.
+
+111
+00:04:47,339 --> 00:04:47,619
+-- No,
+-- the
+
+112
+00:04:47,630 --> 00:04:49,500
+-- whole
+-- point was just a smart lock.
+
+113
+00:04:49,510 --> 00:04:50,880
+I mean, that, that's just dumb.
+
+114
+00:04:50,980 --> 00:04:53,809
+Well, a lot of these smart locks were not well made or designed.
+
+115
+00:04:54,000 --> 00:04:55,549
+They're, they're dumb, they're all dumb.
+
+116
+00:04:55,559 --> 00:04:58,799
+And I'm just gonna say that we, we're at a point where the,
+
+117
+00:04:58,809 --> 00:05:02,149
+the people making these things clearly don't know what the heck they're doing.
+
+118
+00:05:02,160 --> 00:05:05,089
+-- And it's very
+-- sad but they don't need to because people keep buying them.
+
+119
+00:05:05,779 --> 00:05:09,859
+-- I, I guess
+-- I, like, look at the lock picking lawyer that, that biometric,
+
+120
+00:05:09,970 --> 00:05:14,119
+uh smart lock. Where, what was it? If you unscrewed it, you could just open it
+
+121
+00:05:14,579 --> 00:05:17,160
+like the lock itself wasn't really physically secure.
+
+122
+00:05:17,170 --> 00:05:22,309
+-- Uh
+-- It had, you had to take off one screw on, I think it was on the back and then
+
+123
+00:05:22,410 --> 00:05:24,179
+you basically had unfettered access.
+
+124
+00:05:24,190 --> 00:05:27,540
+It was supposed to be a padlock that unlocked with the fingerprint and it sucked.
+
+125
+00:05:27,549 --> 00:05:28,959
+And the company's response is, oh, well,
+
+126
+00:05:28,970 --> 00:05:30,619
+bad guys typically don't have screwdrivers.
+
+127
+00:05:30,720 --> 00:05:33,470
+-- Like what? No,
+-- what they, they all have screwdrivers.
+
+128
+00:05:33,480 --> 00:05:35,769
+I don't know, I, I guess here's my take on this. Right.
+
+129
+00:05:35,779 --> 00:05:37,359
+And, and I'll make it short and sweet.
+
+130
+00:05:37,779 --> 00:05:42,040
+We have automatic locks on automobiles. We have for a long time.
+
+131
+00:05:42,109 --> 00:05:46,059
+They also have manual locks on automobiles and they have pretty much,
+
+132
+00:05:46,070 --> 00:05:48,720
+I think since day one because not having one is dumb.
+
+133
+00:05:48,890 --> 00:05:49,160
+Right.
+
+134
+00:05:49,170 --> 00:05:50,200
+Carmakers know this,
+
+135
+00:05:50,209 --> 00:05:52,179
+I have a suspicion that the carmakers are also
+
+136
+00:05:52,190 --> 00:05:56,079
+somewhat controlled by the Department of Transportation or somebody
+
+137
+00:05:56,359 --> 00:05:59,880
+because they can't sneeze without having to fill up paperwork and,
+
+138
+00:05:59,890 --> 00:06:00,880
+and that's a good thing, right?
+
+139
+00:06:00,890 --> 00:06:02,559
+I have no problem with that. I,
+
+140
+00:06:02,809 --> 00:06:06,859
+I don't think the home lock market
+
+141
+00:06:07,339 --> 00:06:09,320
+is controlled by anyone really.
+
+142
+00:06:09,329 --> 00:06:12,250
+I imagine there are insurance companies that will say,
+
+143
+00:06:12,260 --> 00:06:13,679
+what kind of locks do you have?
+
+144
+00:06:13,690 --> 00:06:17,220
+And if you say I have a lock made by Hasbro, the toy company,
+
+145
+00:06:17,329 --> 00:06:19,679
+they will say you're gonna have to fix that.
+
+146
+00:06:19,690 --> 00:06:21,290
+But I mean, fundamentally, yeah,
+
+147
+00:06:21,299 --> 00:06:23,640
+these things suck and you know how you're going to get them fixed is
+
+148
+00:06:23,649 --> 00:06:26,269
+the insurance company just need to show up and say like this lock sucks,
+
+149
+00:06:26,279 --> 00:06:27,440
+get it off your door now.
+
+150
+00:06:27,700 --> 00:06:30,839
+And because I, I don't see another way and these lock companies, like you said,
+
+151
+00:06:30,850 --> 00:06:33,010
+if people are buying them, they're gonna make them right.
+
+152
+00:06:33,130 --> 00:06:34,440
+We're basically building
+
+153
+00:06:34,714 --> 00:06:35,695
+out a very
+
+154
+00:06:35,875 --> 00:06:39,915
+sickly ecosystem of internet of things, devices. You know,
+
+155
+00:06:40,035 --> 00:06:43,744
+these devices. This is and assuming for a moment these devices will even get
+
+156
+00:06:43,945 --> 00:06:46,304
+software updates, which a lot of them won't.
+
+157
+00:06:46,315 --> 00:06:50,005
+And even the, you know, quote unquote air quotes, good ones from, you know,
+
+158
+00:06:50,144 --> 00:06:54,424
+large American brands like Yale Lock or Quick Set or
+
+159
+00:06:54,674 --> 00:06:55,024
+Mode
+
+160
+00:06:55,285 --> 00:06:56,265
+o or whatever. Right.
+
+161
+00:06:56,385 --> 00:06:58,204
+You know, these are not tech companies, uh,
+
+162
+00:06:58,214 --> 00:07:01,625
+you and I both know and a lot of people listening to our show will know,
+
+163
+00:07:01,859 --> 00:07:05,079
+maintaining a piece of software and shipping updates to it is difficult
+
+164
+00:07:05,239 --> 00:07:08,410
+and making sure you don't break somebody's front door lock
+
+165
+00:07:08,529 --> 00:07:12,239
+is hard and, and that has happened where, you know, software updates have bricked
+
+166
+00:07:12,440 --> 00:07:16,540
+a percent or two of the smart lock population for a given vendor.
+
+167
+00:07:16,549 --> 00:07:18,959
+-- Every
+-- software update is going to
+
+168
+00:07:19,119 --> 00:07:23,279
+deactivate some low percentage of devices just because there's,
+
+169
+00:07:23,290 --> 00:07:24,880
+there's a million reasons why.
+
+170
+00:07:25,339 --> 00:07:27,480
+And I'm going to point you at De
+
+171
+00:07:27,760 --> 00:07:30,890
+Bold as the poster child for companies struggling
+
+172
+00:07:30,899 --> 00:07:32,959
+to switch kind of what they're doing now,
+
+173
+00:07:32,970 --> 00:07:33,910
+for those of you, I know de
+
+174
+00:07:34,079 --> 00:07:36,290
+bold anyone in, in security, like you say the word
+
+175
+00:07:36,440 --> 00:07:40,679
+Deol and they, they start frothing at the mouth and go into a rage and that's ok.
+
+176
+00:07:41,119 --> 00:07:43,320
+But like so historically speaking at
+
+177
+00:07:43,739 --> 00:07:44,660
+my bank,
+
+178
+00:07:44,829 --> 00:07:48,670
+the the lock of the the safe safe deposit box I have
+
+179
+00:07:48,829 --> 00:07:49,549
+is made by De
+
+180
+00:07:49,739 --> 00:07:53,459
+Bold, right? Like they make most of them and they do a nice job. It's a very nice box.
+
+181
+00:07:53,730 --> 00:07:56,529
+The ATM outside is probably made by De
+
+182
+00:07:56,739 --> 00:07:58,220
+Bold. Again, they do a nice job
+
+183
+00:07:58,540 --> 00:07:59,040
+and
+
+184
+00:07:59,209 --> 00:08:01,630
+I have a feeling the company just thought voting
+
+185
+00:08:01,640 --> 00:08:04,119
+machines that can't be any harder than an ATM
+
+186
+00:08:04,549 --> 00:08:06,869
+guess what guys it is.
+
+187
+00:08:07,309 --> 00:08:10,250
+And, and I imagine these lock makers are the same deal like locks.
+
+188
+00:08:10,260 --> 00:08:11,239
+We know how to make locks.
+
+189
+00:08:11,250 --> 00:08:15,399
+We'll just like, put a raspberry pie inside of it and, and plug it in or whatever.
+
+190
+00:08:15,410 --> 00:08:16,559
+I don't know. Just make it work.
+
+191
+00:08:16,920 --> 00:08:19,279
+Yeah. And it's like, yeah, those are two really different skill sets.
+
+192
+00:08:19,380 --> 00:08:19,899
+Well, I mean,
+
+193
+00:08:19,910 --> 00:08:21,959
+your car lock analogy was a great example
+
+194
+00:08:21,970 --> 00:08:24,540
+because most of them use various radio technologies
+
+195
+00:08:24,549 --> 00:08:26,940
+that are actually quite trivial to intercept and
+
+196
+00:08:26,950 --> 00:08:29,119
+hack with about 60 bucks worth of electronics.
+
+197
+00:08:29,380 --> 00:08:32,479
+-- Uh,
+-- yeah. And it's just having SDRS were hard to get before
+
+198
+00:08:32,619 --> 00:08:32,799
+and,
+
+199
+00:08:32,890 --> 00:08:35,320
+-- and I know some of them have gotten a little better
+-- software to
+
+200
+00:08:35,330 --> 00:08:38,349
+find radios for those of you that don't know what an SDR is.
+
+201
+00:08:38,359 --> 00:08:38,909
+That's true.
+
+202
+00:08:39,020 --> 00:08:42,469
+-- That's true. I, I just assume everyone
+-- does. I had to think about it for a moment.
+
+203
+00:08:42,719 --> 00:08:45,179
+-- Yeah.
+-- They're like 20 bucks go get one they're fun to play with.
+
+204
+00:08:45,200 --> 00:08:46,179
+Yeah. So
+
+205
+00:08:46,280 --> 00:08:47,150
+this, this
+
+206
+00:08:47,429 --> 00:08:48,780
+Japanese government,
+
+207
+00:08:49,409 --> 00:08:52,469
+uh project which apparently starts in a month or two so, quite soon
+
+208
+00:08:52,770 --> 00:08:55,510
+where they're going to, at least,
+
+209
+00:08:56,020 --> 00:08:58,789
+I mean, at a minimum if you have devices on the internet. Yeah.
+
+210
+00:08:58,799 --> 00:09:01,679
+Change the default password that allows you to control them.
+
+211
+00:09:01,690 --> 00:09:03,479
+That, that's a minimal start
+
+212
+00:09:03,690 --> 00:09:05,750
+except the people who need to hear that message
+
+213
+00:09:05,760 --> 00:09:07,859
+are not going to listen to this podcast.
+
+214
+00:09:07,960 --> 00:09:08,140
+But
+
+215
+00:09:09,460 --> 00:09:10,890
+then my second thought was Ok.
+
+216
+00:09:10,900 --> 00:09:14,200
+So they scan the, they scan the Japanese portion of the internet,
+
+217
+00:09:14,809 --> 00:09:17,510
+they find all these devices that are, you know, insecure that.
+
+218
+00:09:17,520 --> 00:09:18,750
+What, what's step two? Right.
+
+219
+00:09:18,760 --> 00:09:20,609
+We've talked about this before with the law of large numbers.
+
+220
+00:09:20,619 --> 00:09:22,289
+Like, do you hunt them all down and tell them
+
+221
+00:09:22,530 --> 00:09:23,299
+to fix it?
+
+222
+00:09:23,530 --> 00:09:25,549
+Do you, do you block their network access?
+
+223
+00:09:25,669 --> 00:09:27,109
+So, from what I've read,
+
+224
+00:09:27,429 --> 00:09:30,590
+they're going to try to contact the device owners.
+
+225
+00:09:30,599 --> 00:09:33,299
+Now, I don't exactly know what that means and
+
+226
+00:09:33,440 --> 00:09:36,380
+I haven't actually found and I don't read Japanese.
+
+227
+00:09:36,390 --> 00:09:39,150
+So everything I'm reading is either come through Google translate,
+
+228
+00:09:39,159 --> 00:09:41,510
+which I'm sure is doing a bang up job
+
+229
+00:09:41,770 --> 00:09:43,950
+or I'm reading American
+
+230
+00:09:44,219 --> 00:09:46,710
+authors that have written news stories which again,
+
+231
+00:09:46,719 --> 00:09:49,280
+probably got their info from Google translate.
+
+232
+00:09:49,289 --> 00:09:49,979
+And so
+
+233
+00:09:50,169 --> 00:09:52,780
+I have a suspicion, there's a lot of things we don't understand.
+
+234
+00:09:52,789 --> 00:09:54,280
+But from everything I've read,
+
+235
+00:09:54,289 --> 00:09:56,950
+there seems to be a consistent message of humans are
+
+236
+00:09:56,960 --> 00:09:59,750
+going to look at this stuff which obviously humans don't scale
+
+237
+00:10:00,000 --> 00:10:02,719
+and then they're going to try to contact the owners of
+
+238
+00:10:02,729 --> 00:10:05,270
+the devices and the devices could be owned by people,
+
+239
+00:10:05,280 --> 00:10:08,469
+they could be owned by corporations, it could be owned by I SPS.
+
+240
+00:10:08,479 --> 00:10:10,359
+Like, it doesn't matter who owns it,
+
+241
+00:10:10,760 --> 00:10:13,039
+they're going to try to get a hold of them. And then
+
+242
+00:10:13,549 --> 00:10:16,130
+I don't know what step two is because it's like high,
+
+243
+00:10:16,140 --> 00:10:19,369
+high old person who can barely use the phone,
+
+244
+00:10:19,380 --> 00:10:21,609
+you have to change the password on your router.
+
+245
+00:10:21,619 --> 00:10:22,460
+Good luck.
+
+246
+00:10:22,599 --> 00:10:25,109
+And this isn't a social engineering attack.
+
+247
+00:10:25,520 --> 00:10:27,330
+Right. Exactly.
+
+248
+00:10:27,989 --> 00:10:28,609
+That's right.
+
+249
+00:10:28,619 --> 00:10:32,169
+And, uh, if you could send me some itunes gift cards, that would be great.
+
+250
+00:10:32,539 --> 00:10:35,950
+Yeah, because we've been through this before with old D MC, a takedown thing where,
+
+251
+00:10:35,960 --> 00:10:38,250
+you know, record companies and whatnot would
+
+252
+00:10:38,429 --> 00:10:40,229
+contact the I SPS and the IP S would send
+
+253
+00:10:40,239 --> 00:10:42,369
+nasty letters to people based on their IP address.
+
+254
+00:10:42,380 --> 00:10:42,599
+And
+
+255
+00:10:42,960 --> 00:10:43,419
+that
+
+256
+00:10:43,630 --> 00:10:46,119
+works except for all the cases where it didn't work where the
+
+257
+00:10:46,130 --> 00:10:48,669
+wrong IP was attached to the wrong person or the person's like,
+
+258
+00:10:48,679 --> 00:10:50,099
+oh, I have an open wi fi point.
+
+259
+00:10:50,109 --> 00:10:51,809
+Sorry, I have no idea what you're talking about.
+
+260
+00:10:52,489 --> 00:10:56,599
+Uh, I don't know what the deal in Japan is with, for example, open Wi Fi access points.
+
+261
+00:10:56,609 --> 00:10:59,229
+Hopefully it's not that bad anywhere in the world now. But,
+
+262
+00:10:59,799 --> 00:11:00,950
+yeah, fundamentally
+
+263
+00:11:01,070 --> 00:11:04,140
+given an IP address, tell me who I need to talk to,
+
+264
+00:11:04,150 --> 00:11:06,489
+to get the thing that's doing that fixed.
+
+265
+00:11:06,719 --> 00:11:11,309
+-- Yeah, that's a nontrivial problem.
+-- Well, ok, let's ignore that problem. Right.
+
+266
+00:11:11,320 --> 00:11:13,380
+Let's back it all the way up to the beginning.
+
+267
+00:11:13,419 --> 00:11:17,700
+Is it ethical to essentially hack into someone's stuff? Because let's face,
+
+268
+00:11:17,955 --> 00:11:20,125
+even if it didn't change a password, it's still,
+
+269
+00:11:20,284 --> 00:11:23,424
+well, are they hacking it or they just, they're testing the password?
+
+270
+00:11:23,434 --> 00:11:25,775
+They're not necessarily changing anything. A court.
+
+271
+00:11:25,784 --> 00:11:27,815
+Well, at least from the US perspective,
+
+272
+00:11:27,905 --> 00:11:31,434
+if I log into your device with default credentials, I'm hacking it.
+
+273
+00:11:31,445 --> 00:11:32,974
+Right. And I have a suspicion.
+
+274
+00:11:32,984 --> 00:11:35,734
+Nearly every legal jurisdiction on the planet agrees with that.
+
+275
+00:11:36,099 --> 00:11:40,440
+So, fundamentally they're hacking. Is it ethical to do what they're doing?
+
+276
+00:11:40,450 --> 00:11:43,479
+Two arguments? I would have number one and I hate to use this argument.
+
+277
+00:11:43,489 --> 00:11:46,440
+It's kind of the, what about is argument is, well, effectively,
+
+278
+00:11:46,630 --> 00:11:48,000
+the bad guys are already doing this.
+
+279
+00:11:48,010 --> 00:11:51,640
+If the good guys do this, then potentially, maybe some good can come of it
+
+280
+00:11:51,919 --> 00:11:53,549
+and we can make the situation better.
+
+281
+00:11:54,130 --> 00:11:59,049
+-- And now we're at the ends justify the means philosophical argument.
+-- Exactly.
+
+282
+00:11:59,059 --> 00:12:01,919
+And, and that's a, that's a, that's a very slippery slope.
+
+283
+00:12:02,719 --> 00:12:06,539
+It's not a slippery slip dude. It's like a drop off the face he had,
+
+284
+00:12:07,090 --> 00:12:07,530
+yeah,
+
+285
+00:12:07,840 --> 00:12:09,020
+I remember um,
+
+286
+00:12:09,159 --> 00:12:11,429
+the, the University of Washington guy that used to deal with the
+
+287
+00:12:11,640 --> 00:12:14,619
+of service attacks a lot. I apologize for not remembering your name.
+
+288
+00:12:15,070 --> 00:12:15,559
+But
+
+289
+00:12:15,770 --> 00:12:18,820
+people were asking him like, oh, these machines that are just spamming all packets,
+
+290
+00:12:18,830 --> 00:12:20,380
+why not just turn off the network access?
+
+291
+00:12:20,390 --> 00:12:22,940
+And he's like, because it might be an MRI scanning a patient.
+
+292
+00:12:23,349 --> 00:12:25,849
+It was a teaching hospital in a university and whatnot.
+
+293
+00:12:25,859 --> 00:12:29,419
+You know, we just can't turn off internet to that thing and maybe kill somebody
+
+294
+00:12:29,679 --> 00:12:30,539
+that would be bad.
+
+295
+00:12:31,580 --> 00:12:34,200
+Tm. Right. Yeah. Exactly.
+
+296
+00:12:34,380 --> 00:12:36,510
+So, I, I don't know, I mean,
+
+297
+00:12:36,929 --> 00:12:40,469
+the reality is, this is such a low level of hacking.
+
+298
+00:12:40,479 --> 00:12:43,799
+I mean, this is literally reading the manual,
+
+299
+00:12:44,309 --> 00:12:46,489
+like I've literally had to do this where I've reset a
+
+300
+00:12:46,500 --> 00:12:49,450
+network device like my PF sense firewall back when I had it
+
+301
+00:12:49,580 --> 00:12:52,880
+and I reset it and then I was like, what is the login? I have no idea.
+
+302
+00:12:52,890 --> 00:12:54,190
+So I had to like Google,
+
+303
+00:12:54,299 --> 00:12:58,809
+you know, PF sense default password. And I'm like, oh, it's, it's admin PF sense. Ok.
+
+304
+00:12:58,820 --> 00:13:02,090
+That makes sense. Type that in, I'm in, ok, reset it. Great.
+
+305
+00:13:02,179 --> 00:13:05,510
+I'm just, I'm not sure much good will come of this. That's kind of,
+
+306
+00:13:05,770 --> 00:13:07,440
+that's the second part of the argument, right?
+
+307
+00:13:07,450 --> 00:13:09,640
+Is in theory some good can come of this, but I'm not
+
+308
+00:13:09,780 --> 00:13:11,820
+sure any good will come of this. And
+
+309
+00:13:12,280 --> 00:13:14,099
+-- mostly because of scale,
+-- I
+
+310
+00:13:14,109 --> 00:13:15,260
+-- think
+-- good will come of it.
+
+311
+00:13:15,559 --> 00:13:19,299
+And the reason I think that though is convoluted and bizarre.
+
+312
+00:13:19,830 --> 00:13:20,500
+So
+
+313
+00:13:20,859 --> 00:13:23,169
+I would, I would compare this to
+
+314
+00:13:23,669 --> 00:13:26,159
+Leslie's Locke story in
+
+315
+00:13:26,260 --> 00:13:33,359
+regards of both of those are early adopter situations where the the people
+
+316
+00:13:33,369 --> 00:13:35,630
+implementing these smart locks are early adopters
+
+317
+00:13:35,640 --> 00:13:36,809
+and what they're getting is garbage.
+
+318
+00:13:36,820 --> 00:13:37,700
+And unfortunately,
+
+319
+00:13:38,320 --> 00:13:41,650
+a nontrivial number of people deploying them don't realize their garbage.
+
+320
+00:13:41,679 --> 00:13:42,260
+Well, no,
+
+321
+00:13:42,270 --> 00:13:43,799
+I think a lot of them do realize their
+
+322
+00:13:43,809 --> 00:13:45,150
+garbage and they don't care because for example,
+
+323
+00:13:45,159 --> 00:13:46,030
+the apartment company,
+
+324
+00:13:46,380 --> 00:13:49,109
+honestly, I've lived in apartments, run by big apartment companies.
+
+325
+00:13:49,219 --> 00:13:52,450
+They don't really care about their renters beyond getting the check on time.
+
+326
+00:13:52,460 --> 00:13:53,890
+That that could be too.
+
+327
+00:13:53,900 --> 00:13:56,729
+I mean, I, I don't know the answer to that but,
+
+328
+00:13:56,739 --> 00:14:00,109
+but let's assume that let's assume that the apartment company knows it's garbage.
+
+329
+00:14:00,119 --> 00:14:02,369
+Right? Does, it doesn't change the story. Now,
+
+330
+00:14:02,739 --> 00:14:04,609
+we look at the Japanese government,
+
+331
+00:14:05,080 --> 00:14:09,859
+what they're doing is going to suck. It isn't going to work.
+
+332
+00:14:10,039 --> 00:14:10,710
+But
+
+333
+00:14:10,869 --> 00:14:14,020
+what they're, they're going to gain knowledge they need
+
+334
+00:14:14,210 --> 00:14:14,979
+for,
+
+335
+00:14:15,270 --> 00:14:18,140
+we'll say acceptable change in the future.
+
+336
+00:14:18,150 --> 00:14:22,909
+One of the things we fail to understand in security a lot of times is
+
+337
+00:14:23,140 --> 00:14:25,179
+the, the pioneers get the arrows
+
+338
+00:14:25,729 --> 00:14:28,270
+and I don't mean that figuratively that's like,
+
+339
+00:14:28,280 --> 00:14:31,429
+quite literal is the first people to do things.
+
+340
+00:14:31,820 --> 00:14:34,020
+They usually have a bad time,
+
+341
+00:14:34,130 --> 00:14:36,979
+but they're the ones that are paving the way for the rest of us.
+
+342
+00:14:36,989 --> 00:14:40,539
+And now I'm not going to use that as a justification for say,
+
+343
+00:14:40,590 --> 00:14:44,255
+putting smart locks in someone's apartment because I, I don't like that.
+
+344
+00:14:44,265 --> 00:14:45,575
+And like, I know if you read,
+
+345
+00:14:45,705 --> 00:14:47,955
+we'll link to Leslie's Twitter feed,
+
+346
+00:14:47,965 --> 00:14:50,515
+but basically she's moving and I don't blame her either because
+
+347
+00:14:50,525 --> 00:14:52,375
+it's like I would not want to live like that.
+
+348
+00:14:52,385 --> 00:14:56,304
+This is one of the reasons I won't live in an apartment or even a condo anymore is
+
+349
+00:14:56,445 --> 00:14:59,775
+II, I want to have a certain level of control over my living space.
+
+350
+00:15:00,034 --> 00:15:03,974
+For example, the locks, the security of the building.
+
+351
+00:15:03,984 --> 00:15:05,934
+I don't know, man, I'm sick of fixing things.
+
+352
+00:15:06,700 --> 00:15:08,450
+Apartment sound pretty good to me right now.
+
+353
+00:15:08,559 --> 00:15:10,729
+That's because you moved into like a money whole house.
+
+354
+00:15:11,250 --> 00:15:12,820
+-- Money pit.
+-- We call that
+
+355
+00:15:12,880 --> 00:15:12,960
+money
+
+356
+00:15:13,200 --> 00:15:13,309
+pit. And
+
+357
+00:15:13,880 --> 00:15:17,929
+I think calling this a money pit is doing a disservice to money pits.
+
+358
+00:15:18,070 --> 00:15:18,880
+But yes,
+
+359
+00:15:20,539 --> 00:15:23,330
+anyway, anyway, right from my perspective, like,
+
+360
+00:15:23,590 --> 00:15:26,830
+yeah, whatever. Give me, give me smart locks, you know, leave the windows open.
+
+361
+00:15:26,840 --> 00:15:28,919
+I don't care, just as long as I'm not paying for things.
+
+362
+00:15:29,130 --> 00:15:29,289
+Yeah.
+
+363
+00:15:29,299 --> 00:15:32,080
+-- But
+-- she's moving because real and, but the problem is, I mean,
+
+364
+00:15:32,090 --> 00:15:36,940
+straight up unless she buys a house, this is a risk and II,
+
+365
+00:15:36,950 --> 00:15:39,719
+I suspect this will become more and more common.
+
+366
+00:15:39,859 --> 00:15:41,700
+Probably so.
+
+367
+00:15:41,950 --> 00:15:45,080
+Yeah, it's a, it's an ugly problem and an ugly situation.
+
+368
+00:15:45,609 --> 00:15:46,239
+Uh, right.
+
+369
+00:15:46,250 --> 00:15:50,539
+So anyway, let's focus on, on the Japanese story because I think that's depressing.
+
+370
+00:15:50,679 --> 00:15:51,229
+So,
+
+371
+00:15:51,700 --> 00:15:53,270
+so we can say that there,
+
+372
+00:15:53,280 --> 00:15:56,400
+it's ethically questionable to be doing what they're doing right
+
+373
+00:15:56,799 --> 00:16:01,390
+now. The second part of it that I, I latched on to when I read it is
+
+374
+00:16:01,679 --> 00:16:04,830
+there, there seemed to be a stress on humans doing it
+
+375
+00:16:05,159 --> 00:16:09,109
+and I don't know if that's just a weird translation problem or if that is
+
+376
+00:16:09,119 --> 00:16:12,229
+one of the things they're focusing on because I can see that in two ways.
+
+377
+00:16:12,239 --> 00:16:13,549
+Right. There's a number one,
+
+378
+00:16:13,979 --> 00:16:16,340
+you could say humans are doing it. We're not automating it.
+
+379
+00:16:16,349 --> 00:16:19,539
+So we hopefully won't crash anything because obviously if you just like,
+
+380
+00:16:19,549 --> 00:16:22,599
+set some bots for doing this, it's gonna be crazy town.
+
+381
+00:16:22,609 --> 00:16:22,919
+Right?
+
+382
+00:16:22,929 --> 00:16:26,590
+Because obviously a bot can scan the whole I PV four space in what,
+
+383
+00:16:26,599 --> 00:16:28,590
+like an hour or something now.
+
+384
+00:16:28,599 --> 00:16:31,179
+-- It's
+-- crazy. It's about 15 minutes now.
+
+385
+00:16:31,190 --> 00:16:32,080
+Right. That's
+
+386
+00:16:32,210 --> 00:16:33,940
+exactly actually funny story.
+
+387
+00:16:33,950 --> 00:16:37,150
+I'll tell you is I was recently talking to someone about showdown
+
+388
+00:16:37,659 --> 00:16:38,960
+and explaining what it does.
+
+389
+00:16:38,969 --> 00:16:42,219
+And they said, well, how, how long does it take him to scan all of the internet?
+
+390
+00:16:42,229 --> 00:16:46,799
+I said a couple hours probably they're like, what? Like they couldn't fathom.
+
+391
+00:16:46,809 --> 00:16:49,409
+Well, and, and the thing to remember is they do it a coup.
+
+392
+00:16:49,450 --> 00:16:51,280
+Like, I think they do it weekly or more.
+
+393
+00:16:51,640 --> 00:16:52,549
+-- I bet
+-- it's kind,
+
+394
+00:16:52,945 --> 00:16:52,965
+it,
+
+395
+00:16:53,065 --> 00:16:53,085
+it
+
+396
+00:16:53,284 --> 00:16:55,094
+is. Well, no, the date is up to date.
+
+397
+00:16:55,104 --> 00:16:58,765
+Like II, I used to buy access to it just for, to see what was out there.
+
+398
+00:16:58,775 --> 00:17:00,145
+And it was, it was quite shocking.
+
+399
+00:17:00,284 --> 00:17:02,755
+-- Right.
+-- Right. So, so anyway, anyway, uh
+
+400
+00:17:03,135 --> 00:17:07,614
+Japanese scanning the internet, humans are doing it. Humans don't scale
+
+401
+00:17:08,035 --> 00:17:08,685
+and
+
+402
+00:17:08,844 --> 00:17:10,483
+my suspicion
+
+403
+00:17:10,935 --> 00:17:14,005
+is what they're going to do with this is they're going to let people do it,
+
+404
+00:17:14,015 --> 00:17:15,645
+they're going to collect a whole bunch of data
+
+405
+00:17:15,915 --> 00:17:17,473
+and then they can make some,
+
+406
+00:17:17,614 --> 00:17:19,964
+we'll say informed decisions about what to do next.
+
+407
+00:17:20,410 --> 00:17:24,550
+And I think this will tie into the ethical argument at the beginning of
+
+408
+00:17:25,140 --> 00:17:27,618
+maybe it would be ok to say
+
+409
+00:17:28,500 --> 00:17:32,760
+this group who is sanctioned by the Japanese government
+
+410
+00:17:32,770 --> 00:17:36,160
+has permission to look for these kind of devices.
+
+411
+00:17:36,989 --> 00:17:38,250
+But then what's next?
+
+412
+00:17:38,260 --> 00:17:41,329
+Because obviously, ok, so you tell people to take them off the internet,
+
+413
+00:17:41,339 --> 00:17:43,650
+I bet less than 10% are going to be
+
+414
+00:17:43,660 --> 00:17:45,890
+taken off the internet or have the passwords changed.
+
+415
+00:17:45,900 --> 00:17:47,569
+And I think that might be a high estimate.
+
+416
+00:17:48,109 --> 00:17:51,430
+So in a couple of years are, you're going to say if we find your device,
+
+417
+00:17:51,439 --> 00:17:53,680
+we're just gonna shut you off.
+
+418
+00:17:53,849 --> 00:17:54,359
+Right.
+
+419
+00:17:55,069 --> 00:17:57,369
+Well, what does that mean? Right.
+
+420
+00:17:57,380 --> 00:18:00,699
+What happens when it's, like you said, if it's hooked up to, you know,
+
+421
+00:18:00,709 --> 00:18:04,890
+somebody's smart lock, they need to get into their house and it's, I don't know,
+
+422
+00:18:04,900 --> 00:18:10,380
+-- cold outside or whatever,
+-- or even more simply an IP address typically at home now
+
+423
+00:18:10,819 --> 00:18:11,770
+is matted.
+
+424
+00:18:11,880 --> 00:18:12,369
+Right.
+
+425
+00:18:12,819 --> 00:18:16,250
+You know, when I think about how many network connected devices are in my house now,
+
+426
+00:18:16,260 --> 00:18:18,050
+it's about 40 or 50.
+
+427
+00:18:18,630 --> 00:18:20,410
+And, you know, I only have one IP address
+
+428
+00:18:20,780 --> 00:18:24,170
+actually, that's not true. I think my I PV six is actually real. I PV six.
+
+429
+00:18:24,180 --> 00:18:25,209
+I have to check into that.
+
+430
+00:18:25,219 --> 00:18:26,079
+I don't think it's an adding,
+
+431
+00:18:26,089 --> 00:18:30,050
+I think it's actually proper IP S but regardless you start shutting stuff down,
+
+432
+00:18:30,060 --> 00:18:32,500
+you're not just shutting down the IP of one device.
+
+433
+00:18:32,510 --> 00:18:36,489
+You're probably going to be shutting down the IP of a house or an entire building.
+
+434
+00:18:36,849 --> 00:18:40,750
+Right. So I just pulled up my uh I have, I have a Google Wifi
+
+435
+00:18:41,229 --> 00:18:45,449
+and it says it sees 19 devices on my network at this
+
+436
+00:18:45,459 --> 00:18:48,410
+moment and I know it should be much higher than that.
+
+437
+00:18:48,510 --> 00:18:51,930
+So a bunch must have turned themselves off, which is, which is fine.
+
+438
+00:18:52,209 --> 00:18:54,550
+-- Uh
+-- Oh, mine says zero devices. Oh, it's
+
+439
+00:18:54,729 --> 00:18:54,810
+quite,
+
+440
+00:18:55,089 --> 00:18:58,760
+-- you might want to fix that.
+-- 0, 26. Here we go. 96.
+
+441
+00:18:58,939 --> 00:19:01,969
+See, that's what gets me is if we could actually properly
+
+442
+00:19:02,520 --> 00:19:06,699
+determine this IP address who to talk to, to get it fixed. Sure
+
+443
+00:19:06,910 --> 00:19:08,550
+that, you know, do that easily.
+
+444
+00:19:08,560 --> 00:19:12,219
+Maybe what action do we take that is both safe and effective.
+
+445
+00:19:12,469 --> 00:19:15,699
+And I can't think of any action that is safe and effective.
+
+446
+00:19:15,939 --> 00:19:20,469
+That doesn't suffer from some like 10% chance of really doing a lot of damage,
+
+447
+00:19:20,479 --> 00:19:24,140
+like just turning off network access or, but I think having data might be good
+
+448
+00:19:24,579 --> 00:19:25,729
+in the sense of then maybe, you know,
+
+449
+00:19:25,739 --> 00:19:29,900
+-- which manufacturers to go after and you say look, you have, I,
+-- I think data is key.
+
+450
+00:19:29,910 --> 00:19:33,939
+Like that's just, even though I don't think this is going to make any
+
+451
+00:19:34,439 --> 00:19:37,500
+real difference in any way, I think they're going to learn a lot from it,
+
+452
+00:19:37,510 --> 00:19:39,260
+which is why I totally approve of this
+
+453
+00:19:39,550 --> 00:19:43,219
+even though there are moral and ethical and all kinds of other questions here.
+
+454
+00:19:43,430 --> 00:19:48,109
+-- I, I think it's a good idea. Well,
+-- so, I mean, we have similar things here in winter
+
+455
+00:19:48,260 --> 00:19:51,530
+where you're not allowed to leave your car running with the keys in it.
+
+456
+00:19:51,540 --> 00:19:53,640
+I think there's actually specific laws against that in
+
+457
+00:19:53,650 --> 00:19:56,430
+most jurisdictions because it's kind of dangerous because,
+
+458
+00:19:56,469 --> 00:19:59,689
+you know, it's really easy to steal a car that's running and unlocked,
+
+459
+00:20:00,660 --> 00:20:01,020
+right?
+
+460
+00:20:01,750 --> 00:20:04,199
+And so the cops will occasionally go around
+
+461
+00:20:04,209 --> 00:20:05,930
+ticketing people for doing this and what they'll
+
+462
+00:20:05,939 --> 00:20:08,920
+also do sometimes is just try to open your car door and if it's unlocked,
+
+463
+00:20:08,930 --> 00:20:10,819
+they'll kind of leave you a warning note like this
+
+464
+00:20:10,829 --> 00:20:13,359
+is for cars that are not running but just unlocked.
+
+465
+00:20:13,369 --> 00:20:13,800
+Right?
+
+466
+00:20:13,989 --> 00:20:16,800
+And they'll leave you kind of not a ticket, but like a warning note saying, you know,
+
+467
+00:20:16,810 --> 00:20:18,010
+we find your cars unlocked.
+
+468
+00:20:18,020 --> 00:20:20,150
+You, please lock your car because
+
+469
+00:20:20,469 --> 00:20:23,589
+people keep complaining to us about their cars being broken into.
+
+470
+00:20:23,599 --> 00:20:25,959
+Well, now here's my question for you
+
+471
+00:20:26,530 --> 00:20:31,880
+and I'm going to, this is a, a huge leaking of sensitive information on my part.
+
+472
+00:20:32,099 --> 00:20:32,589
+But
+
+473
+00:20:33,069 --> 00:20:37,079
+in the winter, I don't lock my truck door because the locks freeze.
+
+474
+00:20:37,550 --> 00:20:38,010
+So
+
+475
+00:20:38,810 --> 00:20:42,439
+yeah, for real, like, like they freeze constantly there for whatever reason.
+
+476
+00:20:42,449 --> 00:20:44,839
+Like when Ford built this truck, now, mind you as well.
+
+477
+00:20:44,849 --> 00:20:46,920
+I don't drive it very often because I work from
+
+478
+00:20:46,930 --> 00:20:49,699
+home and I feel like selling it would be a disservice
+
+479
+00:20:49,709 --> 00:20:52,290
+to the environment because somebody who owns it might drive it
+
+480
+00:20:52,300 --> 00:20:55,969
+and the thing like consumes gas at an alarming rate.
+
+481
+00:20:56,250 --> 00:20:57,430
+But anyway, anyway,
+
+482
+00:20:57,650 --> 00:21:00,719
+I don't lock it because like literally the lock is frozen
+
+483
+00:21:00,729 --> 00:21:03,589
+shut for nearly all of the winter and it doesn't work.
+
+484
+00:21:03,869 --> 00:21:04,270
+And,
+
+485
+00:21:04,280 --> 00:21:07,349
+and so like this is an instance where the police would give me a note and I'd be like,
+
+486
+00:21:07,790 --> 00:21:08,880
+I'm not locking my door.
+
+487
+00:21:08,890 --> 00:21:12,709
+Like when I lock my door, I can't get in the last time I got locked out. I had to, like,
+
+488
+00:21:12,969 --> 00:21:15,099
+I went and got a hair dryer to melt the front
+
+489
+00:21:15,199 --> 00:21:16,000
+lock. Like
+
+490
+00:21:16,130 --> 00:21:20,030
+-- I don't, I don't
+-- care. They actually make these special electric heater things.
+
+491
+00:21:20,040 --> 00:21:22,550
+It looks like a key and it's got like an electric wire running through it.
+
+492
+00:21:22,560 --> 00:21:26,469
+So it gets hot. So you stick it in the key lock in the lock and it warms the lock up.
+
+493
+00:21:26,479 --> 00:21:27,199
+They're battery powered.
+
+494
+00:21:27,209 --> 00:21:30,989
+-- You might want to get one of those
+-- or I could just not lock my door, which is way easier.
+
+495
+00:21:31,000 --> 00:21:34,109
+Well, so the reality is there will always be some corner cases.
+
+496
+00:21:34,119 --> 00:21:38,660
+For example, if everybody that can reasonably lock their doors does. So
+
+497
+00:21:39,270 --> 00:21:42,089
+then, well, it's not gonna help crime.
+
+498
+00:21:42,099 --> 00:21:45,430
+I mean, recently in my neighborhood we had a couple of car break ins
+
+499
+00:21:45,810 --> 00:21:49,010
+and they actually broke into my neighbor's car and tried,
+
+500
+00:21:49,020 --> 00:21:51,829
+like they broke the window and tried to hotwire and luckily they couldn't.
+
+501
+00:21:51,969 --> 00:21:53,449
+But, you know, if they left the car door open,
+
+502
+00:21:53,459 --> 00:21:55,839
+maybe they would have had a bit more time and been felt a
+
+503
+00:21:55,849 --> 00:21:57,900
+bit more safe and they would have spent more time hot wiring it.
+
+504
+00:21:57,910 --> 00:21:58,239
+Right.
+
+505
+00:21:58,250 --> 00:22:02,400
+That's actually a joke I have too with my kids is I don't lock my doors,
+
+506
+00:22:02,410 --> 00:22:06,969
+so no one will break my window trying to steal the nothing I keep inside of the car.
+
+507
+00:22:07,420 --> 00:22:10,069
+No, I think we definitely need more data and I think
+
+508
+00:22:10,430 --> 00:22:11,339
+at some point
+
+509
+00:22:11,459 --> 00:22:15,260
+I'm hoping we'll see regulations that say things like for
+
+510
+00:22:15,270 --> 00:22:17,910
+this device to go on the network and fully activate.
+
+511
+00:22:17,920 --> 00:22:19,380
+It needs to be securely set up.
+
+512
+00:22:19,390 --> 00:22:19,819
+So I've had,
+
+513
+00:22:19,829 --> 00:22:23,170
+I've seen a number of devices now where you basically turn them on and
+
+514
+00:22:23,180 --> 00:22:27,229
+they have very minimal limited functionality and until you actually log in and,
+
+515
+00:22:27,260 --> 00:22:29,030
+and configure them securely,
+
+516
+00:22:29,369 --> 00:22:32,390
+they, they don't do whatever it is they're supposed to be doing. Right.
+
+517
+00:22:32,400 --> 00:22:34,609
+So until, for example, you set a secure password,
+
+518
+00:22:34,760 --> 00:22:38,109
+the device, like, for example, it's a light bulb, like it won't turn
+
+519
+00:22:38,280 --> 00:22:41,310
+on and off until you set a password on it securely
+
+520
+00:22:41,880 --> 00:22:43,829
+or you register it or whatever, you know.
+
+521
+00:22:44,479 --> 00:22:45,569
+And I think things like that
+
+522
+00:22:45,849 --> 00:22:46,989
+are the solution because
+
+523
+00:22:47,449 --> 00:22:50,989
+you make these things be secure by default and only
+
+524
+00:22:51,040 --> 00:22:54,069
+work if they're securely deployed and that solves the problem,
+
+525
+00:22:54,079 --> 00:22:54,229
+right?
+
+526
+00:22:54,239 --> 00:22:56,189
+Because if we're relying on everybody buying these
+
+527
+00:22:56,199 --> 00:22:58,010
+things to take some action to secure them
+
+528
+00:22:58,229 --> 00:23:00,180
+that will fail a certain percentage of the time
+
+529
+00:23:00,189 --> 00:23:01,380
+and by a certain percentage of the time,
+
+530
+00:23:01,390 --> 00:23:02,819
+I'm guessing somewhere between 20
+
+531
+00:23:02,959 --> 00:23:06,130
+-- 80%
+-- I bet 8080 or more
+
+532
+00:23:06,260 --> 00:23:08,109
+was the number I had in my brain.
+
+533
+00:23:08,119 --> 00:23:10,790
+-- Yeah,
+-- it's, I, I wouldn't be uncomfortable with that either.
+
+534
+00:23:11,069 --> 00:23:12,780
+Uh Let's go with between 20
+
+535
+00:23:12,939 --> 00:23:13,959
+95%
+
+536
+00:23:14,180 --> 00:23:17,530
+-- right? Because humans are bad at technology
+-- and more the
+
+537
+00:23:17,640 --> 00:23:20,650
+point how do, how do I securely deploy this stuff too? Is that in the manual?
+
+538
+00:23:20,660 --> 00:23:21,439
+-- Probably
+-- not.
+
+539
+00:23:21,449 --> 00:23:21,739
+No, you,
+
+540
+00:23:21,750 --> 00:23:26,369
+you can't expect people to do anything because even the smart people screw it up.
+
+541
+00:23:26,469 --> 00:23:31,410
+And so expecting normal people to get it right. Even 20% of the time. It's probably
+
+542
+00:23:31,540 --> 00:23:31,589
+in
+
+543
+00:23:31,750 --> 00:23:32,770
+acceptably high bar.
+
+544
+00:23:32,869 --> 00:23:35,709
+Well, and a software update might mess something up in reset settings.
+
+545
+00:23:35,719 --> 00:23:37,650
+We've had, you know, remember for example, II, I
+
+546
+00:23:37,829 --> 00:23:40,449
+had, hey Siri disabled on my phone. Remember that one time?
+
+547
+00:23:40,459 --> 00:23:42,530
+And then I said, hey Siri and my friend was like, yeah, what do you want?
+
+548
+00:23:42,540 --> 00:23:46,369
+I'm like, I what, you know, and I found out software updates, disable that.
+
+549
+00:23:46,380 --> 00:23:50,209
+-- So it's
+-- really weird and it's annoying me to no end is on my android phone.
+
+550
+00:23:50,219 --> 00:23:52,400
+It keeps disabling like the hey Google
+
+551
+00:23:52,650 --> 00:23:55,689
+and like, oh crap, my phone just did stuff. Um
+
+552
+00:23:56,729 --> 00:23:57,449
+No way.
+
+553
+00:23:57,880 --> 00:23:57,900
+Oh,
+
+554
+00:23:58,229 --> 00:23:58,770
+that's good.
+
+555
+00:24:00,170 --> 00:24:04,060
+I I've been meaning to record that myself saying it to
+
+556
+00:24:04,069 --> 00:24:06,390
+see like if I could unlock my phone doing it.
+
+557
+00:24:06,400 --> 00:24:08,369
+So I'm gonna actually process the podcast,
+
+558
+00:24:08,380 --> 00:24:10,859
+put it up and then suck the audio out and see.
+
+559
+00:24:11,010 --> 00:24:12,839
+Uh my phone does not unlock when I say the
+
+560
+00:24:12,939 --> 00:24:13,560
+words.
+
+561
+00:24:13,569 --> 00:24:16,699
+But if, if it's unlocked and obviously like, if I'm driving the car,
+
+562
+00:24:16,780 --> 00:24:18,530
+I need to send a text message to my wife.
+
+563
+00:24:18,540 --> 00:24:23,020
+Like it's a lifesaver there because I'm, I'm like crazy anti texting in the car.
+
+564
+00:24:23,030 --> 00:24:25,520
+I yell at people if they're driving, I'm like, no, like I will drive,
+
+565
+00:24:25,530 --> 00:24:27,900
+get out of the freaking driver's seat or put your stupid phone down
+
+566
+00:24:28,239 --> 00:24:29,569
+-- because I,
+-- yeah,
+
+567
+00:24:29,750 --> 00:24:32,680
+but it's pretty crazy dangerous. It's like half of all collisions. Now.
+
+568
+00:24:32,910 --> 00:24:34,449
+-- It
+-- not only that man you, like,
+
+569
+00:24:34,459 --> 00:24:36,410
+you look at people and they're just staring at their phone.
+
+570
+00:24:36,420 --> 00:24:39,300
+It's like there's a red effing light, like, come on
+
+571
+00:24:39,599 --> 00:24:42,540
+-- and they have no idea. It's, uh, it's terrifying. I hate
+-- that.
+
+572
+00:24:42,550 --> 00:24:44,339
+Wait, aren't you supposed to be stopped at a red light?
+
+573
+00:24:44,579 --> 00:24:47,859
+Now, if you're looking at your phone, it's fine then just keep going. No big deal.
+
+574
+00:24:48,290 --> 00:24:50,089
+Anyway. Anyway. Anyway.
+
+575
+00:24:50,209 --> 00:24:51,170
+So. Right. I,
+
+576
+00:24:51,310 --> 00:24:53,670
+I, like I said, I think
+
+577
+00:24:53,930 --> 00:24:55,469
+what the Japanese are doing
+
+578
+00:24:55,680 --> 00:24:59,670
+while I'm sure will be a disaster for multiple reasons.
+
+579
+00:24:59,680 --> 00:25:03,520
+It's actually going to be really funny when they break into like, uh, you know,
+
+580
+00:25:03,530 --> 00:25:06,520
+a Norwegian government server or something accidentally and
+
+581
+00:25:06,530 --> 00:25:08,680
+there's some sort of crazy diplomatic incident.
+
+582
+00:25:08,689 --> 00:25:09,719
+Oh, there's a good point. Right.
+
+583
+00:25:09,729 --> 00:25:13,623
+Because all the embassies would be in Japan on Japanese networks most likely.
+
+584
+00:25:13,633 --> 00:25:15,782
+-- And
+-- even if they're not, man,
+
+585
+00:25:15,953 --> 00:25:19,853
+how many there's IP addresses that you think should be somewhere that aren't
+
+586
+00:25:20,142 --> 00:25:23,373
+-- right. Like, that's super common actually,
+-- you know what Japan could,
+
+587
+00:25:23,873 --> 00:25:25,812
+in theory, Japan, they're an island nation.
+
+588
+00:25:25,822 --> 00:25:28,383
+They could check the latency to the IP and say, for example,
+
+589
+00:25:28,392 --> 00:25:30,133
+we're only going to do IP S that are within
+
+590
+00:25:30,142 --> 00:25:32,822
+the latency of not going through the undersea cables,
+
+591
+00:25:33,715 --> 00:25:38,836
+just have to add latency to my network and then the Japanese government can't find it
+
+592
+00:25:39,265 --> 00:25:41,336
+exactly because they think it's offshore.
+
+593
+00:25:41,436 --> 00:25:42,975
+I'm just saying like there are ways to make it
+
+594
+00:25:42,985 --> 00:25:45,475
+reasonably safe and to make a good faith effort,
+
+595
+00:25:45,546 --> 00:25:46,235
+but more to the point.
+
+596
+00:25:46,245 --> 00:25:49,316
+If you have devices that are exposed to the internet and are this fragile,
+
+597
+00:25:49,336 --> 00:25:52,946
+-- they're gonna get popped at some point anyways
+-- probably.
+
+598
+00:25:52,985 --> 00:25:54,215
+And that's,
+
+599
+00:25:54,855 --> 00:25:56,336
+well, yes and no,
+
+600
+00:25:56,819 --> 00:25:59,630
+I think they will and many of them maybe have.
+
+601
+00:25:59,640 --> 00:26:02,719
+How sad would you feel for me if I left my wallet out
+
+602
+00:26:02,729 --> 00:26:05,560
+on the street instead of bringing it into the office with me.
+
+603
+00:26:05,569 --> 00:26:07,949
+Like if I literally went to work every morning and put my wallet on
+
+604
+00:26:07,959 --> 00:26:10,589
+a park bench in front of the building and then came out at lunchtime,
+
+605
+00:26:10,599 --> 00:26:12,239
+picked up my wallet, went and bought lunch,
+
+606
+00:26:12,540 --> 00:26:15,219
+put it back on the bench, went up to my office.
+
+607
+00:26:15,229 --> 00:26:18,510
+And then when I went home, I went out, took my wallet off the bench.
+
+608
+00:26:19,050 --> 00:26:22,229
+That's not a reasonable comparison though because you know, better.
+
+609
+00:26:22,239 --> 00:26:23,959
+Well, how is putting a device on,
+
+610
+00:26:24,089 --> 00:26:27,410
+you know, the internet full of every state actor any different?
+
+611
+00:26:27,420 --> 00:26:30,550
+-- And most people don't know better. I guess I'm not saying it's
+-- right.
+
+612
+00:26:30,560 --> 00:26:32,560
+It's, and to be clear, I'm not trying to blame the victim here.
+
+613
+00:26:32,569 --> 00:26:34,089
+I'm just saying realistically, like, for example,
+
+614
+00:26:34,099 --> 00:26:35,750
+even though I typically have the right of way
+
+615
+00:26:35,760 --> 00:26:37,589
+when I cross the street at the pedestrian crosswalk,
+
+616
+00:26:37,599 --> 00:26:38,790
+I still look both ways.
+
+617
+00:26:38,800 --> 00:26:42,709
+-- I hear
+-- you, man. I don't know. Like I said, I think this is going to be a mess,
+
+618
+00:26:43,250 --> 00:26:45,219
+but I applaud them for doing it because I
+
+619
+00:26:45,229 --> 00:26:47,810
+think they're going to learn a lot of crazy things
+
+620
+00:26:48,199 --> 00:26:52,969
+and my hope is it just doesn't start like World War Three because they scan
+
+621
+00:26:53,430 --> 00:26:55,060
+the wrong country, something
+
+622
+00:26:55,390 --> 00:26:57,170
+and then, and then broke into it.
+
+623
+00:26:57,430 --> 00:26:57,439
+Uh,
+
+624
+00:26:57,770 --> 00:26:59,869
+so anyway, yeah, I, I don't know.
+
+625
+00:26:59,880 --> 00:27:05,209
+We'll see, I guess, and, and I guess on, in terms of smart locks, II, I have no doubt
+
+626
+00:27:05,310 --> 00:27:07,170
+there will be a time in the future
+
+627
+00:27:07,329 --> 00:27:10,050
+when smart locks are acceptably safe.
+
+628
+00:27:10,310 --> 00:27:13,459
+-- But it is not here yet. Cars
+-- became acceptably safe.
+
+629
+00:27:13,469 --> 00:27:16,650
+-- I mean, it took Ralph Nader in the sixties and seventies.
+-- It took
+
+630
+00:27:16,859 --> 00:27:17,439
+what,
+
+631
+00:27:17,609 --> 00:27:21,290
+100 years almost to make cars safe.
+
+632
+00:27:21,439 --> 00:27:21,810
+Yeah.
+
+633
+00:27:22,680 --> 00:27:25,819
+So we got what? 80 years to go everybody?
+
+634
+00:27:25,930 --> 00:27:27,030
+Woohoo.
+
+635
+00:27:27,219 --> 00:27:30,229
+Oh man, I, I think about that actually, that's something
+
+636
+00:27:30,599 --> 00:27:31,630
+I forget why we, oh no,
+
+637
+00:27:31,640 --> 00:27:35,949
+I was talking to my wife about Netflix and Amazon Prime and all those things and,
+
+638
+00:27:35,959 --> 00:27:37,880
+and actually, if you've never seen it, the show,
+
+639
+00:27:37,890 --> 00:27:41,430
+uh the Marvelous Mrs Maisel and on Prime video is fantastic.
+
+640
+00:27:41,439 --> 00:27:42,349
+I highly recommend it,
+
+641
+00:27:42,660 --> 00:27:45,939
+which is what we're watching and it's in like four K and it looks amazing and it,
+
+642
+00:27:45,949 --> 00:27:48,180
+it consumes an enormous amount of bandwidth.
+
+643
+00:27:48,189 --> 00:27:53,020
+My bandwidth graph is, is hilarious right now. But anyway, we're talking and like
+
+644
+00:27:53,150 --> 00:27:54,910
+you think 20 years ago,
+
+645
+00:27:54,920 --> 00:27:56,310
+if you would have told people about the
+
+646
+00:27:56,319 --> 00:27:58,479
+streaming services and all the things we have,
+
+647
+00:27:58,500 --> 00:27:59,400
+I'd have been like
+
+648
+00:27:59,640 --> 00:28:01,400
+no way, no way.
+
+649
+00:28:01,704 --> 00:28:05,214
+Oh, I remember what streaming video looked like 20 years ago. It was a postage stamp.
+
+650
+00:28:05,584 --> 00:28:08,155
+Yeah, right. It was like 100 by 100
+
+651
+00:28:08,265 --> 00:28:11,194
+it was super grainy and it was like one frame a second. Exactly.
+
+652
+00:28:11,625 --> 00:28:15,655
+And my hope though is that all of this iot garbage
+
+653
+00:28:15,885 --> 00:28:17,255
+the mess were in
+
+654
+00:28:17,505 --> 00:28:20,175
+the unsecured devices, all of it
+
+655
+00:28:20,670 --> 00:28:24,810
+in 20 years. We look back and think those were leeches and bloodletting.
+
+656
+00:28:24,819 --> 00:28:27,560
+I think the, the problem though is, is with streaming services,
+
+657
+00:28:27,569 --> 00:28:30,650
+you have to keep people happy because they pay a monthly fee.
+
+658
+00:28:30,869 --> 00:28:33,069
+Nobody wants to pay a monthly fee with their
+
+659
+00:28:33,079 --> 00:28:36,464
+locks because the mental getting over the mental hurdle
+
+660
+00:28:36,474 --> 00:28:40,405
+of why do I have to pay $10 a month to unlock and lock my front door,
+
+661
+00:28:40,415 --> 00:28:40,734
+you know,
+
+662
+00:28:40,744 --> 00:28:43,224
+ring doorbell and all these nest cameras and stuff have
+
+663
+00:28:43,234 --> 00:28:45,354
+the same problem where I have a security camera.
+
+664
+00:28:45,364 --> 00:28:46,785
+Why do I have to pay a monthly fee?
+
+665
+00:28:46,795 --> 00:28:50,994
+Oh, so you store the data for one year and make it easy? Ok. Well, maybe I'll do that but
+
+666
+00:28:51,344 --> 00:28:54,935
+no offense if you're going to sell me a door lock and you want a monthly fee out of me,
+
+667
+00:28:55,510 --> 00:28:59,589
+-- it's gonna take a lot of convincing. And
+-- that is a perfectly reasonable
+
+668
+00:28:59,770 --> 00:29:00,540
+argument
+
+669
+00:29:00,800 --> 00:29:05,050
+and it is possible we never solve that and we just always have door locks.
+
+670
+00:29:05,060 --> 00:29:07,829
+I, I guess the, the comparison perhaps is
+
+671
+00:29:08,069 --> 00:29:12,290
+I love watching Star Trek when they have their crazy futuristic glasses they use
+
+672
+00:29:12,459 --> 00:29:16,219
+yet. Yeah. Pint glass is a pint glass man and it's been a pint glass for 100 years.
+
+673
+00:29:16,229 --> 00:29:18,880
+Right. And I, I have a suspicion in 100 more years.
+
+674
+00:29:18,890 --> 00:29:21,280
+We're still gonna be using pint glasses. You know why?
+
+675
+00:29:21,290 --> 00:29:24,660
+Because it works, they hold beer, right. Which is super important
+
+676
+00:29:24,969 --> 00:29:26,339
+anyway. Anyway.
+
+677
+00:29:26,510 --> 00:29:28,869
+All right, man, I'm going to call this one. I feel like
+
+678
+00:29:29,030 --> 00:29:30,550
+I, we've answered nothing.
+
+679
+00:29:30,560 --> 00:29:35,469
+We've, we've brought up a bunch of crazy, philosophical and strange arguments
+
+680
+00:29:35,780 --> 00:29:39,109
+and I guess that's ok because I think much
+
+681
+00:29:39,119 --> 00:29:42,189
+like my suspicion about the Japanese government just discussing
+
+682
+00:29:42,199 --> 00:29:44,569
+these things and thinking about them and revisiting the
+
+683
+00:29:44,579 --> 00:29:47,709
+topics on a regular basis is very important because
+
+684
+00:29:48,229 --> 00:29:50,839
+answers to questions like this are not simple.
+
+685
+00:29:50,849 --> 00:29:55,910
+It's kind of like you, you imagine in the days of your, when philosophers and,
+
+686
+00:29:55,920 --> 00:29:58,119
+and even scientists to a degree would just sit around and
+
+687
+00:29:58,130 --> 00:30:01,079
+talk about hard problems like that's how you solve hard problems.
+
+688
+00:30:01,089 --> 00:30:03,359
+You don't solve them by whining and complaining
+
+689
+00:30:03,369 --> 00:30:05,719
+on Twitter about how dumb everyone else is.
+
+690
+00:30:06,150 --> 00:30:09,150
+It's, it's all about like this is what's happening now.
+
+691
+00:30:09,160 --> 00:30:10,790
+Let's have a reasonable discussion about it.
+
+692
+00:30:10,800 --> 00:30:11,839
+Well, one thing just,
+
+693
+00:30:11,910 --> 00:30:14,920
+I think the thing is first we need to understand these hard problems and I
+
+694
+00:30:14,930 --> 00:30:17,530
+don't think we're even there yet with these things with a lot of these,
+
+695
+00:30:17,540 --> 00:30:18,439
+that Twitter thread.
+
+696
+00:30:18,449 --> 00:30:20,430
+-- I learned a lot from that Twitter thread. Right.
+-- Yeah.
+
+697
+00:30:20,439 --> 00:30:20,609
+Go,
+
+698
+00:30:20,619 --> 00:30:22,520
+look at it but not only the other important
+
+699
+00:30:22,530 --> 00:30:23,959
+thing is there's tons of people that are like,
+
+700
+00:30:23,969 --> 00:30:24,949
+oh, this is no big deal.
+
+701
+00:30:24,959 --> 00:30:28,280
+Just do this. It's like it is a big deal. And what you're suggesting is dumb.
+
+702
+00:30:28,290 --> 00:30:31,729
+Like no read, what's happening and empathize you idiots. Right.
+
+703
+00:30:31,739 --> 00:30:33,780
+Don't solve the problem. You can't fix
+
+704
+00:30:34,074 --> 00:30:37,114
+now. Some of the suggestions for solutions just I'm like that, that absolutely
+
+705
+00:30:37,255 --> 00:30:37,305
+doesn't
+
+706
+00:30:37,425 --> 00:30:37,594
+address
+
+707
+00:30:37,944 --> 00:30:42,135
+profile at all. Seriously. Right. Like you're dumb. Go away anyway. Anyway. Right.
+
+708
+00:30:42,145 --> 00:30:44,954
+-- I'm dumb and we should go away. So. Right. I'm
+-- calling it Invest in
+
+709
+00:30:45,175 --> 00:30:45,895
+Sunglasses.
+
+710
+00:30:46,375 --> 00:30:46,405
+Right.
+
+711
+00:30:47,305 --> 00:30:48,045
+That's right.
+
+712
+00:30:48,204 --> 00:30:51,165
+Awesome. All right. Thank you, Kurt. Thank you all for listening. You can go to open
+
+713
+00:30:51,305 --> 00:30:52,494
+social security podcast.com.
+
+714
+00:30:52,505 --> 00:30:53,375
+Hit up the show notes,
+
+715
+00:30:53,385 --> 00:30:56,614
+you can use the Pound Os S podcast hashtag to hit us up on social media.
+
+716
+00:30:56,704 --> 00:31:00,045
+-- Yep, Kurt have a fantastic rest of your day.
+-- You too. Thanks
+
+717
+00:31:00,055 --> 00:31:00,564
+everybody.
+
+718
+00:31:00,744 --> 00:31:01,925
+Thanks everyone. Bye bye.

@@ -1,0 +1,3032 @@
+0
+00:00:05,320 --> 00:00:09,829
+Hello and welcome to the episode 85 of the open source security podcast with myself,
+
+1
+00:00:09,840 --> 00:00:11,500
+Kurt Siefried and my partner in crime.
+
+2
+00:00:11,510 --> 00:00:12,260
+Josh Bresser.
+
+3
+00:00:12,789 --> 00:00:14,739
+I thought I was your partner in thought crime.
+
+4
+00:00:15,090 --> 00:00:17,620
+Whoops. Yes. Thought crime. Totally not real crime.
+
+5
+00:00:19,190 --> 00:00:20,389
+Totally not.
+
+6
+00:00:20,909 --> 00:00:21,750
+That's right.
+
+7
+00:00:21,950 --> 00:00:22,639
+So
+
+8
+00:00:22,809 --> 00:00:26,299
+I'm not even sure how to come up with a clever intro to this one.
+
+9
+00:00:26,309 --> 00:00:29,479
+So let's just say uh N PM. Done fed up.
+
+10
+00:00:30,340 --> 00:00:31,229
+Oh Yeah.
+
+11
+00:00:31,690 --> 00:00:33,060
+Yeah, this is uh
+
+12
+00:00:33,389 --> 00:00:37,869
+OK. Well, let's first let's ascertain the, the sort of the facts of the matter.
+
+13
+00:00:37,880 --> 00:00:38,369
+And what happened,
+
+14
+00:00:38,540 --> 00:00:38,580
+please
+
+15
+00:00:38,880 --> 00:00:41,479
+enlighten us. So N PM, the node package manager,
+
+16
+00:00:42,360 --> 00:00:44,459
+uh the node package manager is,
+
+17
+00:00:44,650 --> 00:00:46,580
+well, it's exactly that it's the node
+
+18
+00:00:47,099 --> 00:00:48,099
+package manager.
+
+19
+00:00:48,540 --> 00:00:51,520
+Um So like every other package manager currently on the planet, you know,
+
+20
+00:00:51,529 --> 00:00:53,830
+you have a program, it does a bunch of imports.
+
+21
+00:00:53,840 --> 00:00:55,240
+You have a dependency chain, white
+
+22
+00:00:55,970 --> 00:00:56,759
+chains
+
+23
+00:00:57,069 --> 00:01:02,180
+and uh node handles all the magic and can also do clever things like you
+
+24
+00:01:02,189 --> 00:01:06,900
+can use a certain specific version of a package or use the up to date one
+
+25
+00:01:07,190 --> 00:01:07,209
+uh
+
+26
+00:01:07,379 --> 00:01:09,449
+you know, all that good stuff, right?
+
+27
+00:01:10,139 --> 00:01:12,529
+And then on servers, when you deploy an application,
+
+28
+00:01:13,150 --> 00:01:15,199
+uh assuming you have N PM installed,
+
+29
+00:01:15,209 --> 00:01:18,290
+the application goes like I need this that and the other thing and N PM goes cool.
+
+30
+00:01:18,500 --> 00:01:18,769
+B DB
+
+31
+00:01:19,180 --> 00:01:21,730
+done. Here you go. And now you can work.
+
+32
+00:01:22,540 --> 00:01:24,949
+And so that way, you know, a developer can write an application
+
+33
+00:01:25,260 --> 00:01:26,120
+and
+
+34
+00:01:26,620 --> 00:01:27,480
+they
+
+35
+00:01:27,589 --> 00:01:30,750
+basically, well, they have like a Docker file that or whatever that says, you know,
+
+36
+00:01:30,760 --> 00:01:31,400
+go
+
+37
+00:01:31,910 --> 00:01:35,190
+do this and you know NBM does it all.
+
+38
+00:01:35,879 --> 00:01:38,250
+So N PM
+
+39
+00:01:38,370 --> 00:01:41,819
+released version 5.7 0.0
+
+40
+00:01:42,669 --> 00:01:44,129
+which contained a flaw.
+
+41
+00:01:44,419 --> 00:01:47,519
+Uh Essentially if a variable wasn't
+
+42
+00:01:47,949 --> 00:01:48,489
+OK,
+
+43
+00:01:48,769 --> 00:01:50,809
+backtrack of it. N PM
+
+44
+00:01:51,269 --> 00:01:53,970
+attempts to do some clever things. Uh
+
+45
+00:01:54,160 --> 00:01:55,400
+Typically,
+
+46
+00:01:55,790 --> 00:01:57,199
+how do I phrase this nicely?
+
+47
+00:01:57,610 --> 00:01:59,209
+You as a normal user
+
+48
+00:01:59,360 --> 00:02:03,739
+use pseudo sudo to run the N PM update as route, right?
+
+49
+00:02:03,750 --> 00:02:05,730
+Because it's gonna want to scribble in various parts of the
+
+50
+00:02:05,889 --> 00:02:07,389
+world and that normal users can't,
+
+51
+00:02:08,258 --> 00:02:11,679
+which, you know, that's fair. That's normal, right? That's how that works.
+
+52
+00:02:12,759 --> 00:02:18,380
+Uh But unfortunately N PM tries to do some clever stuff where it resets
+
+53
+00:02:18,789 --> 00:02:19,940
+permissions.
+
+54
+00:02:19,949 --> 00:02:22,910
+So instead of uh doing everything as root,
+
+55
+00:02:22,919 --> 00:02:27,509
+it does stuff as root and then reset some permissions to whatever user uh you are
+
+56
+00:02:28,009 --> 00:02:29,419
+that ran pseudo and did this
+
+57
+00:02:30,050 --> 00:02:34,089
+and there was a flaw in that. And so it basically ended up child
+
+58
+00:02:34,220 --> 00:02:34,669
+owning,
+
+59
+00:02:35,179 --> 00:02:41,630
+-- was it slash etc slash user and slash something else? Slash
+-- boot? I think it was.
+
+60
+00:02:41,729 --> 00:02:42,580
+-- Oh yeah,
+-- slash boot.
+
+61
+00:02:42,699 --> 00:02:43,110
+So,
+
+62
+00:02:43,330 --> 00:02:45,619
+-- right.
+-- Basically,
+
+63
+00:02:46,240 --> 00:02:48,190
+basically the three most, well, I guess
+
+64
+00:02:48,309 --> 00:02:50,470
+it didn't touch slash bin. Thank goodness.
+
+65
+00:02:50,860 --> 00:02:51,419
+Uh,
+
+66
+00:02:51,679 --> 00:02:55,520
+but basically it touched pretty much three of the four most important
+
+67
+00:02:55,529 --> 00:02:58,830
+directories on the file system on a typical UNIX file system.
+
+68
+00:02:59,520 --> 00:03:00,149
+And,
+
+69
+00:03:00,369 --> 00:03:00,630
+you know,
+
+70
+00:03:00,639 --> 00:03:04,429
+by basically not having those directories owned by root and by having them,
+
+71
+00:03:04,440 --> 00:03:06,630
+I think it removes some set U ID bits and stuff.
+
+72
+00:03:06,639 --> 00:03:07,789
+If you reboot you,
+
+73
+00:03:08,240 --> 00:03:09,559
+you're gonna have a bad day.
+
+74
+00:03:09,580 --> 00:03:13,669
+And, well, of course that, that happened to a lot of people because a lot of people,
+
+75
+00:03:13,679 --> 00:03:14,089
+you know,
+
+76
+00:03:14,320 --> 00:03:15,550
+well, in fairness
+
+77
+00:03:15,669 --> 00:03:20,419
+5.7 0.0 not a major release and it looks like a stable release too.
+
+78
+00:03:20,429 --> 00:03:21,710
+So we'll get into that. But
+
+79
+00:03:22,210 --> 00:03:24,600
+basically the script ran his route challenge,
+
+80
+00:03:24,610 --> 00:03:29,910
+a whole pile of stuff slash boot slash E DC slash user uh to whatever user.
+
+81
+00:03:30,139 --> 00:03:33,229
+And of course, at that point, you have a very broken system and if you reboot,
+
+82
+00:03:33,240 --> 00:03:35,630
+you have a extremely broken system,
+
+83
+00:03:35,639 --> 00:03:38,910
+it sounds like things just don't come back if you reboot,
+
+84
+00:03:39,399 --> 00:03:42,339
+it depends on the cloud provider and the virtual machine and stuff.
+
+85
+00:03:42,350 --> 00:03:43,809
+But like, for example, in Amazon,
+
+86
+00:03:44,240 --> 00:03:49,179
+uh like with Amazon, if you have an EC2 uh elastic compute instance
+
+87
+00:03:49,600 --> 00:03:51,789
+that, well, basically if you end up with a, you know,
+
+88
+00:03:51,800 --> 00:03:55,740
+hit control D and type the root password for maintenance, you have a dead
+
+89
+00:03:55,910 --> 00:03:57,759
+box effectively.
+
+90
+00:03:58,300 --> 00:04:01,229
+Amazon doesn't really let you get in there to recover it.
+
+91
+00:04:01,240 --> 00:04:02,919
+You can look at the log files and it'll say, you know,
+
+92
+00:04:03,360 --> 00:04:06,630
+hit control D and type in your root password to, to fix this thing.
+
+93
+00:04:06,839 --> 00:04:09,740
+Um So if you, if you have like a physical machine that you can,
+
+94
+00:04:10,199 --> 00:04:13,820
+you know, get a console or you have like lights out management.
+
+95
+00:04:14,080 --> 00:04:16,809
+Uh Same thing, most V MS you'd be able to recover them because you know,
+
+96
+00:04:16,820 --> 00:04:17,790
+the VM lets you do this.
+
+97
+00:04:17,798 --> 00:04:20,660
+But yeah, most of the cloud or well containers,
+
+98
+00:04:20,798 --> 00:04:21,738
+it's dead,
+
+99
+00:04:22,190 --> 00:04:22,940
+it's just dead,
+
+100
+00:04:23,290 --> 00:04:23,609
+right?
+
+101
+00:04:24,709 --> 00:04:25,579
+And uh
+
+102
+00:04:26,320 --> 00:04:33,079
+so yeah, that happened and then so about 12 hours ish, about half a day ish
+
+103
+00:04:33,480 --> 00:04:37,940
+they clawed back the release and uh basically did a 5.7 0.1 that fixed
+
+104
+00:04:38,260 --> 00:04:39,140
+the stuff.
+
+105
+00:04:39,500 --> 00:04:40,149
+Um
+
+106
+00:04:40,369 --> 00:04:41,359
+It, well, here, no,
+
+107
+00:04:41,519 --> 00:04:42,619
+let me rephrase it,
+
+108
+00:04:42,779 --> 00:04:43,260
+it
+
+109
+00:04:43,480 --> 00:04:45,890
+fixed the problem. Uh but the,
+
+110
+00:04:46,350 --> 00:04:50,299
+it still does this silly stuff, in my opinion with the challenges and whatnot.
+
+111
+00:04:50,600 --> 00:04:52,140
+Uh does it a little bit safer
+
+112
+00:04:52,980 --> 00:04:54,760
+and yeah, and life goes on.
+
+113
+00:04:54,769 --> 00:04:57,359
+Uh except for those people who upgraded and well
+
+114
+00:04:57,369 --> 00:04:59,320
+life for those servers does not go on.
+
+115
+00:04:59,839 --> 00:05:03,000
+Yeah. Right. That's II I can't,
+
+116
+00:05:03,140 --> 00:05:06,720
+I, I guess I shouldn't say I can't imagine because I, I've been here before and it,
+
+117
+00:05:06,730 --> 00:05:07,950
+it sucks, it sucks hard.
+
+118
+00:05:08,929 --> 00:05:12,630
+So I was thinking le let's walk through sort of what happened and,
+
+119
+00:05:12,640 --> 00:05:17,230
+and dissect kind of what went wrong, I guess on the, on the top first level of depth.
+
+120
+00:05:17,730 --> 00:05:20,019
+So honestly, right off the bat
+
+121
+00:05:20,600 --> 00:05:22,070
+they released,
+
+122
+00:05:23,019 --> 00:05:25,750
+technically what they're classifying is a pre release,
+
+123
+00:05:25,989 --> 00:05:27,929
+but it's called 5.7 0.0.
+
+124
+00:05:28,739 --> 00:05:32,100
+Right. That 5.7 0.0 sounds to me like a very
+
+125
+00:05:32,339 --> 00:05:36,880
+like, oh, we're on 5.6 point whatever. Hey, cool. Bump to 5.7 0.0 nothing.
+
+126
+00:05:37,130 --> 00:05:39,600
+You know, they probably didn't change anything that major and it
+
+127
+00:05:39,799 --> 00:05:41,200
+sounds like it's safe to go. Right.
+
+128
+00:05:41,209 --> 00:05:44,980
+It's not 5.7 0.0 hyphen alpha or hyphen pre release.
+
+129
+00:05:45,630 --> 00:05:49,040
+It's just 5.7 0.0. And if you do look at the tags,
+
+130
+00:05:50,109 --> 00:05:51,959
+it does say pre release. But you know,
+
+131
+00:05:52,209 --> 00:05:56,329
+looking at the version number to me, 5.7 0.0 looks like it should be safe.
+
+132
+00:05:56,359 --> 00:05:58,649
+So, are they taking the old school Linux
+
+133
+00:05:58,829 --> 00:06:02,000
+way of odd numbers are testing?
+
+134
+00:06:02,459 --> 00:06:02,809
+They're,
+
+135
+00:06:03,079 --> 00:06:07,250
+but they're not doing semantic versioning like most people do, right? Where?
+
+136
+00:06:07,660 --> 00:06:11,290
+Yeah, I mean, in fact, Linux moved away from this because it was dumb,
+
+137
+00:06:11,399 --> 00:06:12,470
+right? It's
+
+138
+00:06:12,859 --> 00:06:15,170
+if you have a version,
+
+139
+00:06:15,890 --> 00:06:17,790
+well, it just, it doesn't make sense
+
+140
+00:06:18,070 --> 00:06:19,709
+with a rapid release cycle.
+
+141
+00:06:19,720 --> 00:06:23,700
+What does make sense with a rapid release cycle is like hyphen alpha hyphen beta
+
+142
+00:06:23,820 --> 00:06:24,269
+hyphen or
+
+143
+00:06:24,470 --> 00:06:26,390
+for the love of God don't use this in production.
+
+144
+00:06:26,399 --> 00:06:29,559
+We really, really don't want you to do that, but we do want you to test it,
+
+145
+00:06:30,290 --> 00:06:30,760
+right? I mean,
+
+146
+00:06:31,059 --> 00:06:31,119
+hyphen
+
+147
+00:06:31,220 --> 00:06:31,570
+RC,
+
+148
+00:06:31,809 --> 00:06:34,399
+I've never installed N PM
+
+149
+00:06:34,519 --> 00:06:38,470
+in this manner. I always just use a package that comes with my operating system,
+
+150
+00:06:38,890 --> 00:06:44,170
+but I would, I would not think twice about seeing 5.7 0.0. Right. I think
+
+151
+00:06:44,559 --> 00:06:46,559
+I'm going to install that in a way. I go,
+
+152
+00:06:47,320 --> 00:06:49,549
+yeah, they fixed a few things obviously from 5.6.
+
+153
+00:06:49,980 --> 00:06:55,489
+Although I must say also one of the, one of the old school lessons is if it ain't broke,
+
+154
+00:06:55,500 --> 00:06:56,529
+don't fix it.
+
+155
+00:06:56,850 --> 00:06:57,489
+So
+
+156
+00:06:57,730 --> 00:06:58,320
+I would,
+
+157
+00:06:58,869 --> 00:07:02,829
+once they have a running system, I do all I can to not touch it.
+
+158
+00:07:03,739 --> 00:07:04,200
+Yeah.
+
+159
+00:07:04,920 --> 00:07:07,380
+Uh, well, and you know, that's part of the thing with the Agile Devops
+
+160
+00:07:07,540 --> 00:07:08,000
+movement.
+
+161
+00:07:08,010 --> 00:07:08,019
+Uh,
+
+162
+00:07:08,029 --> 00:07:10,290
+part of it is also just kind of keeping everything
+
+163
+00:07:10,299 --> 00:07:12,549
+up to date and fixing it as the breaks.
+
+164
+00:07:12,899 --> 00:07:13,309
+So
+
+165
+00:07:13,440 --> 00:07:13,880
+do it now,
+
+166
+00:07:13,890 --> 00:07:16,059
+instead of later when you have to update and you're under a
+
+167
+00:07:16,070 --> 00:07:18,339
+time constraint because you have to update for some other reason.
+
+168
+00:07:18,350 --> 00:07:21,350
+Right. Well, this is the reason I always rebooted my servers
+
+169
+00:07:21,519 --> 00:07:25,200
+on a somewhat regular basis is because at some point I would have to reboot them,
+
+170
+00:07:25,209 --> 00:07:26,779
+like, say a kernel update
+
+171
+00:07:27,290 --> 00:07:29,850
+and then if they don't come back. Oh, God. Now, what? Right.
+
+172
+00:07:29,859 --> 00:07:33,079
+Versus doing it on a schedule when I have time to recover them.
+
+173
+00:07:33,089 --> 00:07:35,640
+And I'm, you know, I'm not stressed and I'm not pressed for time.
+
+174
+00:07:36,019 --> 00:07:36,619
+Right. Right.
+
+175
+00:07:36,630 --> 00:07:39,579
+And, well, and not only that I would not in a million years,
+
+176
+00:07:39,589 --> 00:07:44,200
+imagine updating N PM would hose the whole system.
+
+177
+00:07:44,630 --> 00:07:45,209
+I, maybe I
+
+178
+00:07:45,679 --> 00:07:46,160
+am,
+
+179
+00:07:46,290 --> 00:07:46,640
+but
+
+180
+00:07:47,829 --> 00:07:49,920
+I'm, I'm always a little nervous,
+
+181
+00:07:50,140 --> 00:07:53,130
+especially on a Mac when I run, like, things like brew or whatever,
+
+182
+00:07:53,140 --> 00:07:54,880
+like things that need to run his route.
+
+183
+00:07:54,890 --> 00:07:55,769
+I'm always a little bit.
+
+184
+00:07:56,010 --> 00:07:56,160
+So,
+
+185
+00:07:56,410 --> 00:07:58,529
+no, Brew doesn't run his route though. In fact, if,
+
+186
+00:07:59,630 --> 00:08:01,809
+if you run Pseudo Brew, actually, let's,
+
+187
+00:08:01,820 --> 00:08:04,809
+let's pick on Brew here for a minute is Brew does it right.
+
+188
+00:08:04,970 --> 00:08:08,369
+Yeah. Brew actually tells you don't ever do this. Yeah. Sorry. No.
+
+189
+00:08:08,380 --> 00:08:10,850
+Brew is the example of how to do correctly. There's the one that,
+
+190
+00:08:11,369 --> 00:08:12,850
+there's another thing I use where I just,
+
+191
+00:08:12,859 --> 00:08:15,690
+occasionally you have to run a singer's root and I'm like super,
+
+192
+00:08:15,700 --> 00:08:17,279
+it's pretty sketchy in some ways.
+
+193
+00:08:17,600 --> 00:08:18,589
+Um But yeah, no, brew.
+
+194
+00:08:18,600 --> 00:08:22,209
+If you try to run it as root, it explicitly tells you like that is a super bad idea.
+
+195
+00:08:22,220 --> 00:08:24,089
+-- Yeah. Right.
+-- It is.
+
+196
+00:08:24,429 --> 00:08:25,619
+So don't do it. Yeah.
+
+197
+00:08:26,679 --> 00:08:27,700
+Yeah, pretty much.
+
+198
+00:08:28,019 --> 00:08:30,119
+So I, I would say that was the first failure, right?
+
+199
+00:08:30,130 --> 00:08:33,679
+They released a pre release version that wasn't labeled clearly as such.
+
+200
+00:08:33,690 --> 00:08:35,599
+I mean, they would claim it is because it's in the, you know,
+
+201
+00:08:35,609 --> 00:08:39,020
+there's a pre release tag if you look at the website and stuff, you know.
+
+202
+00:08:39,880 --> 00:08:40,650
+But uh
+
+203
+00:08:40,840 --> 00:08:41,289
+yeah.
+
+204
+00:08:41,590 --> 00:08:42,140
+Um
+
+205
+00:08:43,320 --> 00:08:46,700
+-- and also you get it if you just run N PM update. Right.
+-- Right.
+
+206
+00:08:46,710 --> 00:08:49,880
+And I was just looking for the comment that talks about that.
+
+207
+00:08:49,890 --> 00:08:52,380
+But yeah, if you run update and it shows up
+
+208
+00:08:52,619 --> 00:08:53,650
+that's not pre
+
+209
+00:08:53,780 --> 00:08:55,900
+-- release guys. I, I'm sorry.
+-- Right.
+
+210
+00:08:56,010 --> 00:09:00,340
+Well, unless you've got like some explicit, like we have a stable and we have a devel
+
+211
+00:09:01,210 --> 00:09:02,580
+that's fair two things
+
+212
+00:09:03,119 --> 00:09:04,030
+Right. And then, yeah,
+
+213
+00:09:04,190 --> 00:09:04,940
+but again,
+
+214
+00:09:05,190 --> 00:09:10,500
+if I'm on a stable version and I run update, I expect to get another stable version.
+
+215
+00:09:11,260 --> 00:09:12,469
+I think that as a
+
+216
+00:09:12,630 --> 00:09:12,840
+whatever
+
+217
+00:09:13,210 --> 00:09:14,150
+expectation.
+
+218
+00:09:15,179 --> 00:09:16,330
+Yeah, exactly.
+
+219
+00:09:16,820 --> 00:09:17,280
+Um
+
+220
+00:09:18,500 --> 00:09:20,609
+So OK, then the second thing is, well,
+
+221
+00:09:20,619 --> 00:09:23,049
+the fact that this exists at all that it's basically doing stuff as
+
+222
+00:09:23,059 --> 00:09:26,799
+root and then chowing a bunch of stuff as to back to a user
+
+223
+00:09:27,280 --> 00:09:28,599
+and a bunch of other junk.
+
+224
+00:09:29,320 --> 00:09:30,219
+Like I don't
+
+225
+00:09:31,070 --> 00:09:32,409
+understand,
+
+226
+00:09:34,159 --> 00:09:34,679
+I
+
+227
+00:09:35,090 --> 00:09:36,270
+let's let's
+
+228
+00:09:36,640 --> 00:09:41,190
+ignore that and assume it has its reasons because I'm not gonna,
+
+229
+00:09:41,200 --> 00:09:44,760
+-- I'm not an expert on the N PM internals
+-- and I could do
+
+230
+00:09:44,770 --> 00:09:49,590
+something a bit easier like spawn a process as that user and then
+
+231
+00:09:50,049 --> 00:09:52,190
+just have that user do the stuff to their own stuff.
+
+232
+00:09:52,549 --> 00:09:53,640
+And I think this
+
+233
+00:09:53,770 --> 00:09:53,950
+comes
+
+234
+00:09:54,150 --> 00:09:54,169
+the
+
+235
+00:09:54,349 --> 00:09:54,830
+real stuff
+
+236
+00:09:54,940 --> 00:09:54,979
+and
+
+237
+00:09:55,429 --> 00:09:55,510
+stuff.
+
+238
+00:09:56,179 --> 00:10:00,390
+So this comes back to our discussion about authentication actually
+
+239
+00:10:00,400 --> 00:10:02,820
+and how a lot of people just don't understand this.
+
+240
+00:10:02,830 --> 00:10:03,530
+And actually
+
+241
+00:10:04,349 --> 00:10:06,750
+user I DS
+
+242
+00:10:07,119 --> 00:10:12,489
+is incredibly tricky on a unique system of how they work. You've got,
+
+243
+00:10:12,590 --> 00:10:13,309
+what is your actual U
+
+244
+00:10:13,590 --> 00:10:13,599
+I?
+
+245
+00:10:13,729 --> 00:10:16,859
+And there's effect, right? There's all these different kind of U I DS.
+
+246
+00:10:17,239 --> 00:10:20,150
+And in fact, I remember at one point this is many years ago,
+
+247
+00:10:20,590 --> 00:10:23,429
+there were, there were, there was an issue where
+
+248
+00:10:23,770 --> 00:10:27,510
+if you know, you can set like process limits for a user,
+
+249
+00:10:27,520 --> 00:10:29,580
+so user can only run 1000 processes.
+
+250
+00:10:30,229 --> 00:10:32,330
+And if it hits that
+
+251
+00:10:32,440 --> 00:10:36,530
+there was a bug in Pam I think it was that it would basically, if you ran,
+
+252
+00:10:36,539 --> 00:10:39,890
+tried to run as a user using like pseudo or something,
+
+253
+00:10:40,330 --> 00:10:41,809
+it would make you root
+
+254
+00:10:41,940 --> 00:10:44,510
+because that user couldn't do certain activities.
+
+255
+00:10:44,520 --> 00:10:46,890
+And, and I, I remember I spent like a week
+
+256
+00:10:47,049 --> 00:10:50,450
+just figuring all of this out. Like, what, what does it mean
+
+257
+00:10:50,979 --> 00:10:53,450
+with all these ideas? What does the transitions look like?
+
+258
+00:10:53,460 --> 00:10:54,659
+What is, what is all this and like,
+
+259
+00:10:54,669 --> 00:10:58,669
+nobody had done that before and it took a very long time and it wasn't
+
+260
+00:10:58,679 --> 00:11:01,270
+obvious at all how a lot of this stuff worked and then of course,
+
+261
+00:11:01,280 --> 00:11:02,669
+bugs were filed and we fixed it all.
+
+262
+00:11:02,679 --> 00:11:03,039
+But
+
+263
+00:11:03,349 --> 00:11:04,489
+it was crazy.
+
+264
+00:11:04,659 --> 00:11:09,239
+I remember that it was hard to do and I would not expect a node developer
+
+265
+00:11:09,539 --> 00:11:12,750
+to understand this in a billion years now at the same time.
+
+266
+00:11:12,760 --> 00:11:16,210
+That means like, don't mess with it guys, right? I'm not giving you a free pass here.
+
+267
+00:11:16,219 --> 00:11:17,090
+I'm just saying
+
+268
+00:11:17,219 --> 00:11:18,880
+I get why they screwed it up.
+
+269
+00:11:19,809 --> 00:11:21,650
+Oh, yeah, totally. Um
+
+270
+00:11:23,020 --> 00:11:24,250
+Yeah. No, it's
+
+271
+00:11:24,429 --> 00:11:27,020
+uh and then somebody else comment, I haven't verified this,
+
+272
+00:11:27,030 --> 00:11:29,409
+but apparently there's no unit tests with that code.
+
+273
+00:11:30,070 --> 00:11:35,590
+That is what is said and I, I poked around in the directory and I didn't see anything.
+
+274
+00:11:35,599 --> 00:11:38,770
+But again, I'm not an expert on this, this software,
+
+275
+00:11:39,250 --> 00:11:43,570
+but I think it's safe to say there are no unit tests, at least for this particular
+
+276
+00:11:44,099 --> 00:11:45,789
+edge case. Well, it's not really an edge case.
+
+277
+00:11:45,919 --> 00:11:47,890
+And part of the problem too is the unit test again,
+
+278
+00:11:50,760 --> 00:11:54,500
+like we've had flaws where like something has to return
+
+279
+00:11:54,640 --> 00:11:57,530
+some sort of error that typically almost never
+
+280
+00:11:57,539 --> 00:11:59,260
+happens except when it does happen and things.
+
+281
+00:12:00,900 --> 00:12:01,739
+And so, you know,
+
+282
+00:12:01,750 --> 00:12:05,780
+how do you build a unit test for this where it's like to trigger the failure?
+
+283
+00:12:05,789 --> 00:12:06,219
+Right?
+
+284
+00:12:06,460 --> 00:12:07,859
+No, no. Here's the thing though, man,
+
+285
+00:12:08,349 --> 00:12:10,179
+this isn't even about failure.
+
+286
+00:12:10,190 --> 00:12:12,969
+If they had like basic unit testing working where
+
+287
+00:12:12,979 --> 00:12:15,179
+you use pseudo as part of your unit test,
+
+288
+00:12:15,190 --> 00:12:18,090
+it would have found this because it would have trashed their test system.
+
+289
+00:12:18,099 --> 00:12:18,500
+Right.
+
+290
+00:12:18,929 --> 00:12:18,950
+Yeah,
+
+291
+00:12:19,559 --> 00:12:21,849
+I mean, that's the thing. They clearly weren't testing this now.
+
+292
+00:12:21,859 --> 00:12:23,250
+I would hope they start
+
+293
+00:12:23,500 --> 00:12:27,150
+and, and I can ignore certain edge cases because let's face it.
+
+294
+00:12:27,159 --> 00:12:29,590
+Unit tests are never complete and you're always going to find bugs.
+
+295
+00:12:29,599 --> 00:12:32,770
+The right answer is to add a test every time you find a bug.
+
+296
+00:12:32,809 --> 00:12:37,090
+But in this case it's clear there was no testing run as pseudo here.
+
+297
+00:12:39,229 --> 00:12:42,289
+And so, I mean, that would be sort of the, I think the next major.
+
+298
+00:12:43,150 --> 00:12:43,419
+Yeah.
+
+299
+00:12:43,590 --> 00:12:46,760
+Problem. Yeah. The, the just the whole lack of testing.
+
+300
+00:12:46,909 --> 00:12:48,479
+Well, and not even the lack of unit test,
+
+301
+00:12:48,489 --> 00:12:50,809
+but the fact did they actually try this on
+
+302
+00:12:50,820 --> 00:12:53,369
+any machines other than their own special DEV machine,
+
+303
+00:12:53,380 --> 00:12:55,229
+-- which magically somehow blessedly worked
+-- well.
+
+304
+00:12:55,239 --> 00:12:57,640
+It probably worked because they didn't run it with pseudo.
+
+305
+00:12:57,750 --> 00:13:02,140
+I mean, that my suspicion here is that the testing that was done and let's face it.
+
+306
+00:13:02,150 --> 00:13:05,109
+We know they, they did some testing just because everybody does.
+
+307
+00:13:05,429 --> 00:13:08,809
+But my guess is the testing they did didn't involve pseudo because if they ran Sua,
+
+308
+00:13:08,940 --> 00:13:11,780
+they would have trashed their machines and they would have noticed. Right.
+
+309
+00:13:12,409 --> 00:13:17,200
+And then I would actually continuing on, I reading the comments here, like
+
+310
+00:13:17,390 --> 00:13:20,539
+so many people destroy production systems with this.
+
+311
+00:13:21,299 --> 00:13:22,710
+That doesn't surprise me at all.
+
+312
+00:13:22,719 --> 00:13:28,090
+Look, we all love to talk about microservices and DEV prod and all this stuff,
+
+313
+00:13:28,099 --> 00:13:29,049
+but let's face it, man.
+
+314
+00:13:29,059 --> 00:13:29,440
+Like
+
+315
+00:13:29,750 --> 00:13:33,140
+I bet 80 plus percent of everything is, is s
+
+316
+00:13:33,419 --> 00:13:34,780
+men's monkeying with prod.
+
+317
+00:13:34,789 --> 00:13:37,559
+See what's interesting to me is when I think about the failure case for this thing.
+
+318
+00:13:37,570 --> 00:13:42,460
+So for example, if I run some sort of package update or something as a non root user,
+
+319
+00:13:42,469 --> 00:13:45,380
+then rolling it back is relatively easy.
+
+320
+00:13:45,390 --> 00:13:48,250
+Uh worst case scenario, I can just restore the backups of the system.
+
+321
+00:13:49,200 --> 00:13:51,130
+And in this case, that's kind of where you are is you,
+
+322
+00:13:51,140 --> 00:13:52,530
+you've just trashed your system,
+
+323
+00:13:52,539 --> 00:13:55,260
+you need to restore the actual backups of the system.
+
+324
+00:13:56,140 --> 00:13:57,750
+And what's interesting to me is,
+
+325
+00:13:57,950 --> 00:13:58,520
+you know,
+
+326
+00:13:59,760 --> 00:14:01,559
+I, I hope these people have backups.
+
+327
+00:14:01,580 --> 00:14:03,989
+-- Um And or enough knowledge to fix the permission.
+-- You
+
+328
+00:14:04,109 --> 00:14:08,419
+know, some of them didn't and I'm sure many of them don't know how to fix permissions.
+
+329
+00:14:08,960 --> 00:14:09,530
+It's,
+
+330
+00:14:09,650 --> 00:14:14,940
+this is something that I think you and I take for granted because of our background
+
+331
+00:14:15,049 --> 00:14:16,760
+where, where we come from some
+
+332
+00:14:17,080 --> 00:14:18,179
+-- trash
+-- systems and
+
+333
+00:14:18,729 --> 00:14:22,729
+things were messed up back in the day and, and I think a lot of people today, I mean,
+
+334
+00:14:22,739 --> 00:14:24,140
+Linux basically works,
+
+335
+00:14:24,349 --> 00:14:27,059
+which I know that, that sounds crazy to some people. But
+
+336
+00:14:27,320 --> 00:14:30,270
+look, you install it and it runs and if you're using a cloud provider,
+
+337
+00:14:30,280 --> 00:14:31,520
+you don't even install it, right.
+
+338
+00:14:31,530 --> 00:14:34,280
+You, you have some sort of image you spin up
+
+339
+00:14:34,780 --> 00:14:37,390
+and then essentially when something goes wrong,
+
+340
+00:14:37,770 --> 00:14:41,619
+you probably just blow out the old image away and install a new one
+
+341
+00:14:41,909 --> 00:14:45,099
+and, and you sep the files before you do it, right?
+
+342
+00:14:45,599 --> 00:14:46,820
+And in this instance
+
+343
+00:14:46,979 --> 00:14:48,140
+that doesn't work.
+
+344
+00:14:48,489 --> 00:14:49,919
+Uh just for our listeners,
+
+345
+00:14:49,929 --> 00:14:56,559
+one trick I typically would use is uh R sync because you can R sync basically just the,
+
+346
+00:14:57,229 --> 00:15:01,280
+well, you can basically R sync one like a cloned machine to that one
+
+347
+00:15:01,669 --> 00:15:04,109
+like and by cloned, I mean, something that's running the same OS,
+
+348
+00:15:04,119 --> 00:15:05,719
+same version basically.
+
+349
+00:15:05,919 --> 00:15:09,539
+-- And you know that way you could restore your slash boot
+-- and your slash that isn't
+
+350
+00:15:09,679 --> 00:15:11,469
+gonna work if you can't boot the machine though.
+
+351
+00:15:12,150 --> 00:15:14,900
+Right? Well, yeah, and that's why you hopefully do this before you reboot.
+
+352
+00:15:15,039 --> 00:15:17,469
+Hopefully. Yeah, I'm, I'm kind of wondering how many people notice.
+
+353
+00:15:17,479 --> 00:15:19,659
+Well, you would, if slash user goes missing,
+
+354
+00:15:19,669 --> 00:15:21,219
+then you're gonna notice that pretty quickly.
+
+355
+00:15:21,469 --> 00:15:22,450
+It sounds like a lot.
+
+356
+00:15:23,659 --> 00:15:23,849
+Here's the
+
+357
+00:15:23,950 --> 00:15:28,010
+thing from some of the things I read. It sounds like people ran this
+
+358
+00:15:28,299 --> 00:15:30,299
+and their systems stopped working, right?
+
+359
+00:15:30,309 --> 00:15:32,859
+They became unresponsive and what's the first thing you're gonna do?
+
+360
+00:15:32,869 --> 00:15:34,890
+I'll just reboot the system, right? No big deal.
+
+361
+00:15:35,190 --> 00:15:37,890
+-- And then, well,
+-- especially with the cloud image, right?
+
+362
+00:15:37,919 --> 00:15:39,409
+Because that's how you fix cloud images,
+
+363
+00:15:39,419 --> 00:15:41,559
+you reboot them and then you kill them and run a new one,
+
+364
+00:15:42,010 --> 00:15:42,809
+right? So
+
+365
+00:15:43,280 --> 00:15:45,950
+it sounds like this was like
+
+366
+00:15:46,809 --> 00:15:48,150
+the perfect storm
+
+367
+00:15:48,289 --> 00:15:49,219
+of terrible.
+
+368
+00:15:49,530 --> 00:15:50,270
+Yeah. So
+
+369
+00:15:50,539 --> 00:15:50,549
+I,
+
+370
+00:15:50,559 --> 00:15:52,789
+I think basically a lot of that boils down to is a
+
+371
+00:15:52,799 --> 00:15:56,109
+lot of people are still using the cloud as a replacement for hardware
+
+372
+00:15:56,440 --> 00:15:57,710
+as a cloud.
+
+373
+00:15:58,359 --> 00:16:01,679
+I know I'm guilty of that too. I have like my little sync server for my OM
+
+374
+00:16:01,859 --> 00:16:03,950
+focus little poor little lights, sale machine.
+
+375
+00:16:04,299 --> 00:16:07,489
+Grunting away at web dab with like a gig of memory or whatever.
+
+376
+00:16:07,760 --> 00:16:11,099
+Yeah, I, I do the same. It's just so easy though.
+
+377
+00:16:11,359 --> 00:16:14,070
+It's so much easier to be lazy. Right.
+
+378
+00:16:14,909 --> 00:16:17,429
+Yeah. Well, and in this case to re re
+
+379
+00:16:17,760 --> 00:16:20,570
+covering the machine is super trivial because it made a back.
+
+380
+00:16:22,080 --> 00:16:22,349
+Yeah.
+
+381
+00:16:22,359 --> 00:16:25,140
+And then I think the other thing too is apparently there's only, well,
+
+382
+00:16:25,150 --> 00:16:26,330
+there's basically sort of
+
+383
+00:16:26,580 --> 00:16:30,289
+really fundamentally two people in charge of N PM releases. It sounds like.
+
+384
+00:16:30,489 --> 00:16:34,080
+-- So that's not a very big bus factor.
+-- No, it's, it's not at all.
+
+385
+00:16:34,090 --> 00:16:36,969
+And it also, I suspect if it's two people,
+
+386
+00:16:37,109 --> 00:16:40,450
+they probably aren't doing a ton of testing because let's face it.
+
+387
+00:16:40,830 --> 00:16:43,619
+If, if you're trying to build software,
+
+388
+00:16:43,950 --> 00:16:44,770
+you have unit test.
+
+389
+00:16:45,130 --> 00:16:46,500
+Right. Right. Right. Well, there's
+
+390
+00:16:47,159 --> 00:16:47,830
+so no, no,
+
+391
+00:16:48,080 --> 00:16:49,380
+I think that's something important.
+
+392
+00:16:49,390 --> 00:16:51,609
+Unit testing is part of the game,
+
+393
+00:16:51,619 --> 00:16:54,479
+but you also need some sort of integration testing as well.
+
+394
+00:16:54,489 --> 00:16:57,489
+And, and here's the thing, they might have had unit tests for this,
+
+395
+00:16:57,679 --> 00:17:01,489
+but this is really an integration test failure more than a unit test failure, right?
+
+396
+00:17:02,000 --> 00:17:06,719
+Because like on windows, this won't happen. Maybe they tested it on windows, right.
+
+397
+00:17:06,729 --> 00:17:10,500
+Maybe they tested on Os X. I assume it doesn't trash Os X.
+
+398
+00:17:10,719 --> 00:17:11,858
+I don't know.
+
+399
+00:17:12,098 --> 00:17:12,510
+Right.
+
+400
+00:17:12,948 --> 00:17:17,088
+Here's the thing. I'm just looking at who commits to the project. We got
+
+401
+00:17:17,308 --> 00:17:21,167
+uh the top person with 4321 commits 445
+
+402
+00:17:21,178 --> 00:17:26,128
+446,000 lines added 288,000 lines removed next person.
+
+403
+00:17:26,138 --> 00:17:34,149
+1362 commits uh 560,000 lines or 570,000 lines added about 493,000 lines removed
+
+404
+00:17:34,578 --> 00:17:40,958
+next person. 781 commits 457,000 lines added 345,000 lines removed
+
+405
+00:17:41,359 --> 00:17:47,579
+next person. Now, 440 commits 385. Uh 386,000 lines removed. 224,000 removed.
+
+406
+00:17:47,589 --> 00:17:51,449
+And then the fifth one, it drops to 62 thousands. And so basically that,
+
+407
+00:17:52,250 --> 00:17:54,239
+that's what I'm saying, that distribution, there's basically
+
+408
+00:17:54,540 --> 00:17:55,089
+the,
+
+409
+00:17:56,140 --> 00:17:57,689
+yeah, it's like
+
+410
+00:17:57,829 --> 00:17:59,800
+out of the 483
+
+411
+00:18:00,099 --> 00:18:01,489
+483. Yeah. Uh,
+
+412
+00:18:01,670 --> 00:18:07,359
+Committers, there's like four that are like 90 something percent of us.
+
+413
+00:18:07,619 --> 00:18:09,160
+Everybody else is under a,
+
+414
+00:18:09,579 --> 00:18:11,709
+it's like one or 2000 lines changed
+
+415
+00:18:12,040 --> 00:18:13,890
+and then, oh, no, no, no, I lied. Sorry. There's
+
+416
+00:18:14,250 --> 00:18:20,410
+uh, 1234566 people with about a 1 to 2000 lines changed and then it's
+
+417
+00:18:20,829 --> 00:18:24,989
+16 commits with 100 and 97 lines and like negative 2021 lines.
+
+418
+00:18:25,189 --> 00:18:28,369
+-- So, yeah, it is a heck of a steep curve.
+-- Yeah.
+
+419
+00:18:28,689 --> 00:18:30,530
+Yeah. And, and I think this,
+
+420
+00:18:30,920 --> 00:18:35,170
+this package manager runs a significant portion of the internet.
+
+421
+00:18:35,380 --> 00:18:39,000
+Yeah. So basically those like three or four, well, four or five people really can.
+
+422
+00:18:39,760 --> 00:18:40,979
+They have a lot of influence
+
+423
+00:18:41,599 --> 00:18:45,219
+and, and they have the ability to ruin many people's days.
+
+424
+00:18:45,430 --> 00:18:45,770
+Oh, yeah,
+
+425
+00:18:45,780 --> 00:18:47,500
+that's the other thing is always things like
+
+426
+00:18:47,510 --> 00:18:49,959
+this just when you think about how many hours
+
+427
+00:18:50,089 --> 00:18:51,780
+got blown away because of
+
+428
+00:18:52,339 --> 00:18:55,459
+people having to fix their systems. And it, and it kind of makes me wonder, you know,
+
+429
+00:18:56,099 --> 00:18:57,640
+so it's a negative externality, right?
+
+430
+00:18:57,650 --> 00:19:01,540
+They broke it, it broke a whole bunch of systems, those people in turn had a bad day.
+
+431
+00:19:02,140 --> 00:19:03,400
+And this is what frustrates me about.
+
+432
+00:19:03,410 --> 00:19:05,699
+The open source model is all these sort of free riders.
+
+433
+00:19:05,709 --> 00:19:08,160
+And I get that that's a fundamental benefit of the system
+
+434
+00:19:08,170 --> 00:19:10,069
+too is we have a whole pile of free riders,
+
+435
+00:19:10,079 --> 00:19:10,199
+right?
+
+436
+00:19:10,209 --> 00:19:12,459
+We have basically the whole internet now because
+
+437
+00:19:12,469 --> 00:19:14,180
+of all these free riders that can like,
+
+438
+00:19:14,209 --> 00:19:16,410
+oh, I want to spin up a super complicated web services
+
+439
+00:19:16,920 --> 00:19:21,150
+and like, you know, 20 minutes later of N PM or of Pearl back in the day or whatever.
+
+440
+00:19:21,160 --> 00:19:24,079
+And boom, you, you know, you've got something running. Right. That's awesome.
+
+441
+00:19:24,890 --> 00:19:25,369
+But
+
+442
+00:19:25,589 --> 00:19:28,030
+at the same time I can't help but wonder economically, you know, like,
+
+443
+00:19:28,040 --> 00:19:31,050
+probably hundreds of thousands of hours were spent fixing these systems.
+
+444
+00:19:31,119 --> 00:19:33,670
+Do you think those people are going to donate a few bucks to the project?
+
+445
+00:19:33,869 --> 00:19:34,880
+They probably won't be.
+
+446
+00:19:35,630 --> 00:19:36,800
+But that's
+
+447
+00:19:37,270 --> 00:19:38,670
+at the same time. So here's,
+
+448
+00:19:39,109 --> 00:19:42,270
+there's um and there's like so many layers of
+
+449
+00:19:42,430 --> 00:19:45,890
+stuff you just said. So. All right, let me start here. First of all,
+
+450
+00:19:46,020 --> 00:19:50,290
+you can use the term free rider to describe users of open source.
+
+451
+00:19:50,300 --> 00:19:54,369
+But I think that's just part of the nature of open source and open source developers.
+
+452
+00:19:54,380 --> 00:19:56,209
+Understand that is something that happens.
+
+453
+00:19:56,219 --> 00:19:58,589
+You make something people are going to use it.
+
+454
+00:19:59,189 --> 00:20:02,369
+I would bet you 95 plus percent of them
+
+455
+00:20:02,599 --> 00:20:06,290
+-- will never contact you or tell you anything.
+-- The same thing with CV,
+
+456
+00:20:07,079 --> 00:20:11,609
+right? 99.9% of CV users are free riders and that's how it is. And that's,
+
+457
+00:20:12,510 --> 00:20:12,560
+I
+
+458
+00:20:12,670 --> 00:20:12,739
+don't,
+
+459
+00:20:13,500 --> 00:20:15,969
+I feel like free rider gives it a negative connotation.
+
+460
+00:20:17,140 --> 00:20:19,869
+Well, but ok, I don't mean free rider
+
+461
+00:20:20,109 --> 00:20:21,709
+as a negative thing. I'm just using it in the echo
+
+462
+00:20:22,280 --> 00:20:23,959
+-- and that's fair.
+-- It's, it's not,
+
+463
+00:20:24,719 --> 00:20:25,189
+well,
+
+464
+00:20:25,650 --> 00:20:29,310
+I don't see it necessarily as a negative because for example,
+
+465
+00:20:29,319 --> 00:20:31,270
+standards don't work unless people adopt them.
+
+466
+00:20:31,300 --> 00:20:32,540
+-- Right. Right.
+-- Right.
+
+467
+00:20:32,859 --> 00:20:35,310
+And, and I, I think there is also
+
+468
+00:20:35,790 --> 00:20:37,579
+the angle of
+
+469
+00:20:37,790 --> 00:20:39,680
+it's easy to call someone a free rider.
+
+470
+00:20:39,689 --> 00:20:43,459
+But like, I, I mean, we're great examples of, we consume,
+
+471
+00:20:43,469 --> 00:20:47,680
+say a Linux distribution that we may not get back to, but we're doing work on,
+
+472
+00:20:47,689 --> 00:20:49,780
+say CV E or something else.
+
+473
+00:20:49,790 --> 00:20:50,459
+And so
+
+474
+00:20:50,579 --> 00:20:52,900
+it's just part of an ecosystem. So anyway, I
+
+475
+00:20:53,430 --> 00:20:56,780
+OK, so good. I'm glad you were using Free Rider as a negative.
+
+476
+00:20:56,910 --> 00:20:57,619
+Yeah. No, no, no.
+
+477
+00:20:57,709 --> 00:21:02,000
+But my point more is that these people that were negatively impacted.
+
+478
+00:21:02,199 --> 00:21:02,219
+I,
+
+479
+00:21:02,229 --> 00:21:04,180
+I wonder if they're going to take action
+
+480
+00:21:04,189 --> 00:21:06,459
+to reduce the likelihood of that negative impact,
+
+481
+00:21:06,469 --> 00:21:07,000
+for example,
+
+482
+00:21:07,010 --> 00:21:11,579
+by maybe deploying on DEV next time or giving money to the project or giving,
+
+483
+00:21:11,589 --> 00:21:13,459
+you know, work and effort to the project.
+
+484
+00:21:14,469 --> 00:21:17,650
+Sending me the great example of giving effort to the project that would have helped
+
+485
+00:21:17,660 --> 00:21:20,910
+is like somebody running this like the minute it drops and then going well,
+
+486
+00:21:20,920 --> 00:21:24,699
+it totally mucked up my system, file an issue, contact the DEV,
+
+487
+00:21:24,709 --> 00:21:26,609
+let's fix this before it gets widespread.
+
+488
+00:21:26,709 --> 00:21:28,420
+That would have been a valuable thing, right?
+
+489
+00:21:29,040 --> 00:21:29,689
+And, and
+
+490
+00:21:30,349 --> 00:21:33,689
+it wouldn't surprise me if the person who filed the first issue,
+
+491
+00:21:33,859 --> 00:21:36,969
+I, I wonder if that was their first N PM issue they filed. Uh
+
+492
+00:21:37,489 --> 00:21:40,150
+But anyway, there's, there's also but here's the other half of it.
+
+493
+00:21:40,160 --> 00:21:42,760
+So you say, how many hours did these people lose?
+
+494
+00:21:43,280 --> 00:21:45,040
+Which is valid?
+
+495
+00:21:45,050 --> 00:21:46,989
+But at the same time, by using open source,
+
+496
+00:21:47,000 --> 00:21:48,949
+they also have saved probably millions of man
+
+497
+00:21:48,959 --> 00:21:50,780
+hours not building all this other stuff.
+
+498
+00:21:50,790 --> 00:21:54,489
+-- So
+-- it's, oh, yeah. No, I mean, the, the number of times I've had open source dip
+
+499
+00:21:54,640 --> 00:21:55,569
+something and, and
+
+500
+00:21:55,849 --> 00:21:59,780
+kill something and just make my life miserable is vastly outweighed by the
+
+501
+00:22:00,739 --> 00:22:01,449
+extracted from open
+
+502
+00:22:01,689 --> 00:22:01,739
+source.
+
+503
+00:22:02,140 --> 00:22:02,979
+Like it's,
+
+504
+00:22:03,410 --> 00:22:03,780
+yeah,
+
+505
+00:22:04,130 --> 00:22:06,099
+but at the same time, you know, maybe we can do better,
+
+506
+00:22:06,439 --> 00:22:07,939
+we can always do better.
+
+507
+00:22:08,150 --> 00:22:08,650
+That's,
+
+508
+00:22:09,170 --> 00:22:09,349
+that
+
+509
+00:22:09,530 --> 00:22:10,619
+can be our new motto.
+
+510
+00:22:11,300 --> 00:22:14,790
+-- And I guess part of the question too is how do we do
+-- better? That is the question.
+
+511
+00:22:14,800 --> 00:22:17,579
+And I think in this instance, there's some pretty low hanging fruit, right?
+
+512
+00:22:17,589 --> 00:22:19,709
+Like write some freaking tests. That's,
+
+513
+00:22:20,050 --> 00:22:20,880
+that's step one.
+
+514
+00:22:20,890 --> 00:22:21,489
+And in fact,
+
+515
+00:22:21,500 --> 00:22:25,270
+this is a great example though too of I can sit here and say write some freaking tests
+
+516
+00:22:25,540 --> 00:22:28,369
+and their response is probably patch is welcome
+
+517
+00:22:28,829 --> 00:22:30,530
+and they're not wrong, right?
+
+518
+00:22:30,540 --> 00:22:32,489
+Like in fact, I remember I I've done this on,
+
+519
+00:22:32,500 --> 00:22:34,979
+on more than one project I used to be involved with is
+
+520
+00:22:35,160 --> 00:22:39,439
+I was like, there's no test and they said write some and I said, OK, and I did
+
+521
+00:22:39,910 --> 00:22:40,410
+and
+
+522
+00:22:40,839 --> 00:22:42,300
+yeah, it it makes a huge difference.
+
+523
+00:22:42,310 --> 00:22:45,079
+So having, having unit tests for things like this and, and I,
+
+524
+00:22:45,089 --> 00:22:48,579
+I hope somebody steps up and, and helps out with this.
+
+525
+00:22:48,790 --> 00:22:51,300
+And in fact, funny enough, if you're ever looking to get involved in a project,
+
+526
+00:22:51,310 --> 00:22:52,359
+anybody listening,
+
+527
+00:22:52,550 --> 00:22:55,380
+like, writing unit tests is highly valuable.
+
+528
+00:22:55,630 --> 00:22:58,180
+Your patches will almost certainly be accepted and
+
+529
+00:22:58,189 --> 00:22:59,859
+you're going to learn the code base very,
+
+530
+00:22:59,869 --> 00:23:01,209
+very quickly if you do it.
+
+531
+00:23:01,430 --> 00:23:03,380
+So, yeah, like plus one there.
+
+532
+00:23:03,550 --> 00:23:03,719
+Yeah,
+
+533
+00:23:03,729 --> 00:23:06,130
+I think it's almost actually more valuable to
+
+534
+00:23:06,140 --> 00:23:08,420
+have external people write the unit test because
+
+535
+00:23:08,810 --> 00:23:09,910
+they're not
+
+536
+00:23:10,069 --> 00:23:11,229
+sort of blinded to
+
+537
+00:23:11,449 --> 00:23:12,339
+thinking that
+
+538
+00:23:12,579 --> 00:23:13,780
+-- you
+-- write tests,
+
+539
+00:23:13,900 --> 00:23:16,630
+then you write the code. That is how you do it.
+
+540
+00:23:17,109 --> 00:23:20,150
+Yeah. Well, that, yeah, in a perfect world of spherical cows.
+
+541
+00:23:20,160 --> 00:23:22,500
+But what I'm trying to get it is the people who write the code
+
+542
+00:23:22,510 --> 00:23:25,239
+are often not the people you want writing the test after the fact,
+
+543
+00:23:25,250 --> 00:23:25,390
+right?
+
+544
+00:23:25,400 --> 00:23:26,060
+Because they're,
+
+545
+00:23:26,660 --> 00:23:28,630
+they're kind of blinded to how they wrote the code
+
+546
+00:23:28,640 --> 00:23:30,949
+and what they think reality should look like and like,
+
+547
+00:23:31,719 --> 00:23:34,180
+hey, reality doesn't run this on a Windows box except,
+
+548
+00:23:34,589 --> 00:23:37,680
+-- and
+-- this is also integration testing and having like ac I
+
+549
+00:23:37,689 --> 00:23:40,619
+system makes all the difference in the world because you can,
+
+550
+00:23:40,630 --> 00:23:43,949
+you can do things like test it on Windows, tested on Fedora, tested on de
+
+551
+00:23:44,119 --> 00:23:44,750
+and tested on a
+
+552
+00:23:45,030 --> 00:23:48,060
+right. You test it on like everything you can get your hands on
+
+553
+00:23:48,589 --> 00:23:49,979
+just to see what happens.
+
+554
+00:23:50,380 --> 00:23:53,099
+I wonder if this Yeah, this would have happened even in a container.
+
+555
+00:23:53,400 --> 00:23:56,770
+Uh it, it would, well, it depends how your containers are configured though.
+
+556
+00:23:56,780 --> 00:23:58,420
+If you're doing containers correctly,
+
+557
+00:23:58,670 --> 00:24:02,349
+as soon as you shut down the container, it blows away all the changes. Right.
+
+558
+00:24:03,109 --> 00:24:03,420
+No, no, no.
+
+559
+00:24:03,430 --> 00:24:07,680
+But what I mean is if you, if you ran this, not in a VM, but actually you had a container
+
+560
+00:24:08,099 --> 00:24:09,339
+-- up
+-- during, like the docker build, you
+
+561
+00:24:09,349 --> 00:24:09,449
+made
+
+562
+00:24:10,229 --> 00:24:11,020
+you, you know.
+
+563
+00:24:11,489 --> 00:24:12,550
+Yeah, like a docker.
+
+564
+00:24:12,560 --> 00:24:16,380
+And you did pseudo, then this probably actually would have been caught even.
+
+565
+00:24:16,390 --> 00:24:16,949
+So it's,
+
+566
+00:24:17,989 --> 00:24:22,140
+-- yeah, I guess the moral of the story is if you're using PSEUDO to run stuff
+-- because
+
+567
+00:24:22,270 --> 00:24:26,150
+container builds happen as root, right?
+
+568
+00:24:26,900 --> 00:24:27,699
+It, it won't.
+
+569
+00:24:27,880 --> 00:24:33,109
+Well, so this problem only exhibits itself if you're using pseudo specifically.
+
+570
+00:24:33,239 --> 00:24:34,510
+If you were root,
+
+571
+00:24:34,969 --> 00:24:35,900
+it wouldn't happen.
+
+572
+00:24:37,339 --> 00:24:38,569
+Well, that was my second thing.
+
+573
+00:24:38,579 --> 00:24:41,199
+My, my point is if you're going, if you're going to support
+
+574
+00:24:41,510 --> 00:24:44,949
+or document and tell people to use PSEUDO to run certain commands,
+
+575
+00:24:45,050 --> 00:24:49,469
+then I, I think you kind of have an obligation to, to test that because pseudo isn't.
+
+576
+00:24:49,479 --> 00:24:50,959
+-- Well, it's root. It's
+-- incredibly and
+
+577
+00:24:51,099 --> 00:24:52,800
+Pudo does some wonky stuff too.
+
+578
+00:24:52,810 --> 00:24:53,000
+It's,
+
+579
+00:24:53,010 --> 00:24:55,310
+it's one of those things like test it out because it does
+
+580
+00:24:55,319 --> 00:24:59,510
+some weird path things and it does some tt I tt Y things
+
+581
+00:25:00,010 --> 00:25:01,920
+between Mac and Linux
+
+582
+00:25:02,339 --> 00:25:03,339
+and uh
+
+583
+00:25:04,170 --> 00:25:06,310
+before I see it, is it
+
+584
+00:25:07,819 --> 00:25:10,329
+Yeah, on windows now. So yeah. Oh
+
+585
+00:25:10,670 --> 00:25:11,880
+wait, there is no,
+
+586
+00:25:11,989 --> 00:25:13,930
+-- you get pseudo if you install the Linux
+-- subs
+
+587
+00:25:14,050 --> 00:25:18,560
+but it's in their command. I think it's in their command line. Uh Yep.
+
+588
+00:25:18,569 --> 00:25:21,000
+So, Windows has pseudo for real.
+
+589
+00:25:21,189 --> 00:25:24,859
+-- Well, the windows has a bash
+-- shell. It's wonky. But, yeah, they have
+
+590
+00:25:24,869 --> 00:25:25,849
+one. I don't,
+
+591
+00:25:26,069 --> 00:25:27,719
+anyways, it doesn't seem, well,
+
+592
+00:25:27,729 --> 00:25:30,569
+I can't find for sure if it has Pseudo or not in their bath shell.
+
+593
+00:25:30,579 --> 00:25:34,449
+But regardless we have Pseudo on Mac Os and a K jillion different linuxes.
+
+594
+00:25:34,459 --> 00:25:36,550
+So, test at least like two of those, please.
+
+595
+00:25:36,829 --> 00:25:37,479
+Right.
+
+596
+00:25:38,219 --> 00:25:38,939
+Right.
+
+597
+00:25:39,469 --> 00:25:40,250
+That's fair.
+
+598
+00:25:41,030 --> 00:25:41,979
+And, you know,
+
+599
+00:25:42,390 --> 00:25:43,910
+it's, yeah, because, I mean,
+
+600
+00:25:43,920 --> 00:25:45,599
+I've interacted enough with Pseudo to know that
+
+601
+00:25:45,670 --> 00:25:48,459
+things can go really horribly wrong fast.
+
+602
+00:25:48,750 --> 00:25:52,540
+-- It's
+-- better than it used to be. But I remember back in the day Pseudo was dicey.
+
+603
+00:25:52,579 --> 00:25:55,660
+Well, no, no, I'm not. No, this is not even stuff Pseudo does wrong.
+
+604
+00:25:55,670 --> 00:26:00,020
+This is like where, you know, oh, let's just remove a file and you leave a space
+
+605
+00:26:00,630 --> 00:26:02,060
+or, you know what I mean? Like
+
+606
+00:26:02,959 --> 00:26:05,250
+you, you, there's a trailing dot
+
+607
+00:26:05,479 --> 00:26:07,900
+or a slash gets separated at the front,
+
+608
+00:26:08,300 --> 00:26:08,689
+you know,
+
+609
+00:26:09,400 --> 00:26:11,569
+and I remember doing stuff like that before.
+
+610
+00:26:11,579 --> 00:26:13,819
+I remember the time I accidentally typed kill one.
+
+611
+00:26:14,750 --> 00:26:16,520
+Pseudo kill one. This isn't
+
+612
+00:26:16,650 --> 00:26:19,170
+hilarious. Which let you do that and then
+
+613
+00:26:19,599 --> 00:26:21,349
+things stopped working, we'll say
+
+614
+00:26:21,839 --> 00:26:25,699
+because it was hilarious back in like 1904 or something.
+
+615
+00:26:29,260 --> 00:26:30,040
+I mean, I get that,
+
+616
+00:26:30,050 --> 00:26:33,229
+I guess technically you should let the user do whatever the user does.
+
+617
+00:26:33,239 --> 00:26:33,599
+But
+
+618
+00:26:34,489 --> 00:26:35,050
+that's,
+
+619
+00:26:35,599 --> 00:26:37,540
+it was a learning experience.
+
+620
+00:26:38,969 --> 00:26:40,859
+-- Was it fun?
+-- No.
+
+621
+00:26:41,109 --> 00:26:43,579
+Uh, in that one, I don't think
+
+622
+00:26:44,300 --> 00:26:46,800
+I'm trying to remember I think that the system came back,
+
+623
+00:26:46,810 --> 00:26:49,670
+it just took time to boot and it was a multi user system.
+
+624
+00:26:49,680 --> 00:26:51,599
+So people were, the phone started to ring
+
+625
+00:26:51,930 --> 00:26:52,359
+and,
+
+626
+00:26:52,729 --> 00:26:54,969
+yeah. Yeah. So that one, that one wasn't the end of the world. But I know
+
+627
+00:26:55,400 --> 00:26:56,869
+I've made mistakes before where,
+
+628
+00:26:56,880 --> 00:27:00,349
+where the system is coming back up and the file system wasn't clean.
+
+629
+00:27:00,439 --> 00:27:02,410
+And so it had to check it and it took like
+
+630
+00:27:02,420 --> 00:27:04,729
+a million years because this was way back in the day before
+
+631
+00:27:04,989 --> 00:27:05,790
+file systems.
+
+632
+00:27:06,000 --> 00:27:07,660
+And those file systems were terrible
+
+633
+00:27:07,780 --> 00:27:09,369
+because yeah, if you turn the power off to them,
+
+634
+00:27:09,380 --> 00:27:11,150
+they would like remember Windows back in the day, right?
+
+635
+00:27:11,160 --> 00:27:12,839
+You turn the power off and on a few times and
+
+636
+00:27:12,969 --> 00:27:15,599
+dude Windows, Windows was the worst. Although
+
+637
+00:27:15,790 --> 00:27:18,869
+yeah, anyway, I'll never forget. There was one time I was updating your computer
+
+638
+00:27:19,430 --> 00:27:23,079
+and I lost power during the update of Open SSL.
+
+639
+00:27:23,459 --> 00:27:25,209
+And it was, it,
+
+640
+00:27:25,420 --> 00:27:29,849
+I, I made it a point to bring the system back to life because I wanted to.
+
+641
+00:27:29,920 --> 00:27:33,449
+But it was uh it was challenging, we'll say because open SSL,
+
+642
+00:27:33,459 --> 00:27:35,160
+everything uses open SSL.
+
+643
+00:27:35,180 --> 00:27:38,729
+-- And
+-- that kind of actually this whole update thing really brings up AAA good,
+
+644
+00:27:38,739 --> 00:27:42,030
+longer term point of using up to date software is good,
+
+645
+00:27:42,040 --> 00:27:44,880
+but using maybe not bleeding edge software is also good.
+
+646
+00:27:44,890 --> 00:27:48,930
+So for example, the people that are using um like vendor packages of N PM,
+
+647
+00:27:49,069 --> 00:27:51,780
+I don't think anybody was really affected by this
+
+648
+00:27:51,790 --> 00:27:54,380
+because they just don't package it fast enough for,
+
+649
+00:27:54,390 --> 00:27:56,040
+you know, this to have kind of escaped
+
+650
+00:27:56,400 --> 00:27:57,630
+-- and gotten into the wild.
+-- This
+
+651
+00:27:57,760 --> 00:27:58,609
+wouldn't be a problem
+
+652
+00:27:59,800 --> 00:28:02,459
+when you're dealing with vendor packages. They aren't using pseudo,
+
+653
+00:28:02,739 --> 00:28:05,910
+they generally build this stuff as root or fake root. Right.
+
+654
+00:28:05,920 --> 00:28:08,609
+And then it does, it, it does things correctly.
+
+655
+00:28:08,780 --> 00:28:12,839
+And, um, the other thing is like, you know, it's on hacker news brought up, you know,
+
+656
+00:28:12,849 --> 00:28:15,680
+the the left pad debacle of two years ago, right,
+
+657
+00:28:15,689 --> 00:28:18,199
+where a similar sort of situation happened where
+
+658
+00:28:18,420 --> 00:28:21,479
+left pad was this widely used N PM library?
+
+659
+00:28:21,900 --> 00:28:23,150
+I think it was what, seven lines
+
+660
+00:28:24,410 --> 00:28:26,199
+literally padded text
+
+661
+00:28:26,420 --> 00:28:27,479
+to the left
+
+662
+00:28:27,619 --> 00:28:28,280
+and
+
+663
+00:28:28,400 --> 00:28:31,050
+the developer took it away long story
+
+664
+00:28:31,290 --> 00:28:34,800
+and, you know, it broke like half the internet, like straight up,
+
+665
+00:28:35,060 --> 00:28:35,280
+you know,
+
+666
+00:28:35,290 --> 00:28:37,579
+until somebody kind of hijacked the name space and
+
+667
+00:28:37,589 --> 00:28:40,219
+put something back up that was fortunately not malicious,
+
+668
+00:28:40,229 --> 00:28:43,079
+but a kind of a clone of left pad.
+
+669
+00:28:43,859 --> 00:28:44,479
+And
+
+670
+00:28:45,219 --> 00:28:46,589
+I've often wondered this, you know,
+
+671
+00:28:46,599 --> 00:28:49,310
+with the non vendor stuff where you're just grabbing, you know,
+
+672
+00:28:49,319 --> 00:28:51,439
+a bunch of bits from like Ruby gems.org or C
+
+673
+00:28:51,680 --> 00:28:52,439
+A or whatever. Because
+
+674
+00:28:53,209 --> 00:28:56,199
+I think people are under the impression that like to get code onto these sites,
+
+675
+00:28:56,209 --> 00:28:59,189
+there's like a big process and there really isn't
+
+676
+00:29:00,790 --> 00:29:00,869
+for
+
+677
+00:29:01,380 --> 00:29:02,349
+the bar is low.
+
+678
+00:29:02,359 --> 00:29:02,500
+You know,
+
+679
+00:29:02,510 --> 00:29:04,160
+it's not like somebody's going to review every line
+
+680
+00:29:04,170 --> 00:29:06,280
+of code and audit it for flaws because,
+
+681
+00:29:06,290 --> 00:29:08,599
+well, clearly if we did that we'd have really nice
+
+682
+00:29:08,959 --> 00:29:12,660
+archives or repositories of code that just works without bugs.
+
+683
+00:29:12,739 --> 00:29:18,719
+I mean, this is even true of Linux distributions. The bar isn't high to include code
+
+684
+00:29:19,199 --> 00:29:19,530
+and,
+
+685
+00:29:19,540 --> 00:29:23,410
+and this is a topic we can obviously discuss at some point in the future because I,
+
+686
+00:29:23,420 --> 00:29:24,729
+I think about it often
+
+687
+00:29:24,910 --> 00:29:28,530
+and I don't, I know we don't have time today to, to get into it. But
+
+688
+00:29:28,989 --> 00:29:29,719
+I guess
+
+689
+00:29:30,619 --> 00:29:34,810
+the, the thing I would, I would walk away with, of all this is
+
+690
+00:29:36,109 --> 00:29:37,849
+it, it's a good lesson
+
+691
+00:29:38,250 --> 00:29:39,449
+to build
+
+692
+00:29:39,630 --> 00:29:41,790
+resiliency into your systems
+
+693
+00:29:42,109 --> 00:29:46,930
+and knowing things like what if user slash us r you know, was blown away.
+
+694
+00:29:47,089 --> 00:29:50,250
+What, what does that mean for the system? You have?
+
+695
+00:29:50,589 --> 00:29:54,040
+I, I think it based, I mean, a lot of this boils down to just basic hygiene,
+
+696
+00:29:55,060 --> 00:29:57,000
+right? Have a test system or if not.
+
+697
+00:29:58,180 --> 00:30:01,099
+Exactly. That's kind of my point of, of resiliency, right is
+
+698
+00:30:01,479 --> 00:30:03,310
+have the ability to, to
+
+699
+00:30:03,479 --> 00:30:07,040
+test and recover from problems like this because here's the thing.
+
+700
+00:30:07,050 --> 00:30:10,369
+Look, the N PM guys screwed up and they don't have a very good track record right now.
+
+701
+00:30:10,380 --> 00:30:12,300
+And, and I do feel bad for them because
+
+702
+00:30:12,630 --> 00:30:16,780
+I know how thankless a lot of this work is and they're no doubt doing their best.
+
+703
+00:30:16,790 --> 00:30:17,540
+Right. I mean,
+
+704
+00:30:17,880 --> 00:30:17,920
+I,
+
+705
+00:30:18,030 --> 00:30:21,699
+I'm not going to call them malicious by any sense of the word.
+
+706
+00:30:21,709 --> 00:30:24,400
+They're, I'm sure they're good guys and they're trying their hardest.
+
+707
+00:30:24,880 --> 00:30:27,729
+Have we actually ever had an incident like this caused by
+
+708
+00:30:27,739 --> 00:30:30,609
+an actual malicious person because I can't think of anything offhand.
+
+709
+00:30:31,189 --> 00:30:34,500
+There hasn't been one yet and I'm not going to say there won't be, but,
+
+710
+00:30:34,510 --> 00:30:36,439
+but here's the thing is,
+
+711
+00:30:37,020 --> 00:30:38,520
+it's N PM today.
+
+712
+00:30:38,630 --> 00:30:40,890
+It could be Python tomorrow. Right.
+
+713
+00:30:40,900 --> 00:30:41,369
+There's,
+
+714
+00:30:41,380 --> 00:30:43,719
+there's always gonna be problems and people are
+
+715
+00:30:43,729 --> 00:30:45,880
+always gonna be making mistakes and so,
+
+716
+00:30:45,890 --> 00:30:46,800
+rather than
+
+717
+00:30:46,900 --> 00:30:48,650
+necessarily dwell on N PM,
+
+718
+00:30:48,660 --> 00:30:51,959
+like they have their own demons and they have their own things to work out now.
+
+719
+00:30:52,329 --> 00:30:54,979
+But at the same time, if, if you're,
+
+720
+00:30:55,719 --> 00:30:58,380
+if you're doing some sort of deployment or development,
+
+721
+00:30:58,510 --> 00:31:00,500
+these are the sort of things you need to keep
+
+722
+00:31:00,510 --> 00:31:03,180
+in mind because these are going to keep happening.
+
+723
+00:31:03,489 --> 00:31:07,260
+It is just the nature of the universe now. It is what it is.
+
+724
+00:31:07,609 --> 00:31:09,939
+-- Yeah.
+-- If you drive a car, you'll end up with a flat tire someday.
+
+725
+00:31:10,089 --> 00:31:12,119
+Exactly. That's exactly right.
+
+726
+00:31:12,130 --> 00:31:13,579
+And, and you just have to decide,
+
+727
+00:31:13,589 --> 00:31:17,359
+I'm either going to plan for it and be prepared or I'm just going to say, screw it.
+
+728
+00:31:17,369 --> 00:31:18,939
+Hopefully it doesn't happen
+
+729
+00:31:19,119 --> 00:31:21,510
+until I quit. Right. And, and
+
+730
+00:31:21,790 --> 00:31:23,140
+that's the way it is.
+
+731
+00:31:23,630 --> 00:31:28,609
+-- Any parting thoughts, Kurt really
+-- so much of this just comes back down to basic,
+
+732
+00:31:28,770 --> 00:31:32,770
+not even basic computer security, just basic system administration and, and
+
+733
+00:31:33,199 --> 00:31:35,329
+hygiene of computer use.
+
+734
+00:31:36,250 --> 00:31:36,719
+-- I have
+-- a
+
+735
+00:31:36,729 --> 00:31:37,329
+backup.
+
+736
+00:31:37,459 --> 00:31:38,060
+I agree
+
+737
+00:31:38,160 --> 00:31:38,300
+completely.
+
+738
+00:31:38,680 --> 00:31:41,170
+I think this is one of those beautiful intersections
+
+739
+00:31:41,439 --> 00:31:42,089
+where
+
+740
+00:31:42,199 --> 00:31:47,410
+the, the same kind of process and tenants of security apply to
+
+741
+00:31:47,569 --> 00:31:49,319
+what is a nonsecurity issue?
+
+742
+00:31:49,530 --> 00:31:50,050
+So
+
+743
+00:31:50,199 --> 00:31:50,849
+there we have it
+
+744
+00:31:51,579 --> 00:31:55,880
+back your stuff up folks and um right. So I guess, yeah, thank you, Kurt.
+
+745
+00:31:55,890 --> 00:31:57,000
+Thank you everyone for listening.
+
+746
+00:31:57,010 --> 00:31:59,569
+You can go to open source security podcast.com to grab some show
+
+747
+00:31:59,680 --> 00:32:03,400
+notes. You can use the Pound Os S podcast hashtag to get a hold of us
+
+748
+00:32:03,810 --> 00:32:06,880
+and nothing else. Kurt have a fantastic rest of your day.
+
+749
+00:32:07,119 --> 00:32:08,040
+You too. Thanks.

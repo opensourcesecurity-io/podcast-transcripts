@@ -1,0 +1,2864 @@
+0
+00:00:05,320 --> 00:00:06,190
+This is the open
+
+1
+00:00:06,349 --> 00:00:08,340
+source security podcast with myself, Kurt
+
+2
+00:00:08,640 --> 00:00:10,279
+Siefried and my partner in crime, Josh Bresser.
+
+3
+00:00:10,710 --> 00:00:11,380
+Hello.
+
+4
+00:00:11,390 --> 00:00:14,920
+So today we're going to talk about what is open source security because that
+
+5
+00:00:14,930 --> 00:00:17,719
+seems to be a topic that comes up far more often than it should.
+
+6
+00:00:18,010 --> 00:00:19,979
+And Kurt and I have been kind of buried in
+
+7
+00:00:19,989 --> 00:00:22,860
+the weeds here for longer than either of us can remember
+
+8
+00:00:23,100 --> 00:00:24,780
+doing open source security and,
+
+9
+00:00:24,790 --> 00:00:27,610
+and handling security flaws and kind of all that fun.
+
+10
+00:00:27,620 --> 00:00:29,500
+And so why don't we start with you, Kurt,
+
+11
+00:00:29,510 --> 00:00:31,680
+why don't you tell us what is open source security?
+
+12
+00:00:31,690 --> 00:00:33,819
+What does that kind of mean to the common man, we'll say.
+
+13
+00:00:34,080 --> 00:00:38,400
+So open source security really applies to sort of three main groups of people.
+
+14
+00:00:38,409 --> 00:00:41,560
+You got your researchers who are looking for security flaws,
+
+15
+00:00:41,569 --> 00:00:46,189
+you've got your developers who are dealing with the source code in some way,
+
+16
+00:00:46,200 --> 00:00:48,099
+either they're the actual upstream
+
+17
+00:00:48,319 --> 00:00:49,900
+or there's somebody consuming it.
+
+18
+00:00:50,790 --> 00:00:53,369
+And then you've got your end users, the people actually, you know,
+
+19
+00:00:53,380 --> 00:00:55,169
+getting work done with this stuff, right?
+
+20
+00:00:55,180 --> 00:00:56,720
+Because that's kind of the whole point of this.
+
+21
+00:00:57,740 --> 00:00:59,200
+And so for open source,
+
+22
+00:01:00,139 --> 00:01:04,750
+what it means is the researchers and the developers and the end users
+
+23
+00:01:05,260 --> 00:01:07,839
+at a minimum have the ability to view the code.
+
+24
+00:01:08,339 --> 00:01:10,510
+And in my opinion, more importantly,
+
+25
+00:01:10,730 --> 00:01:13,639
+they have the ability to influence and change the code. Now.
+
+26
+00:01:13,650 --> 00:01:18,800
+Like most open source projects are run by pretty reasonably sane people.
+
+27
+00:01:18,809 --> 00:01:21,849
+I mean, there's obviously there's some exceptions and we all know who they are.
+
+28
+00:01:22,360 --> 00:01:23,889
+But by and large, you know,
+
+29
+00:01:23,900 --> 00:01:28,489
+your average open source developer is a rational human being who
+
+30
+00:01:28,699 --> 00:01:31,050
+wants to ship good software.
+
+31
+00:01:31,529 --> 00:01:36,650
+And part of the beauty of that is, is about 99% of them will take good code patches,
+
+32
+00:01:36,660 --> 00:01:36,819
+right?
+
+33
+00:01:36,830 --> 00:01:38,730
+If you send somebody a code patch that says
+
+34
+00:01:38,949 --> 00:01:41,169
+it makes this improvement or fixes the spelling
+
+35
+00:01:41,180 --> 00:01:43,089
+error or it prevents the security flaw.
+
+36
+00:01:43,650 --> 00:01:45,209
+And there's no, you know, you haven't
+
+37
+00:01:46,139 --> 00:01:48,319
+significantly impacted performance or something,
+
+38
+00:01:48,370 --> 00:01:49,989
+they're going to accept that code patch.
+
+39
+00:01:50,120 --> 00:01:52,669
+And most importantly, they're gonna ship the new version
+
+40
+00:01:52,809 --> 00:01:53,540
+quickly.
+
+41
+00:01:53,629 --> 00:01:55,849
+And I think that's one of the biggest differences between open
+
+42
+00:01:55,860 --> 00:01:59,480
+source and closed source is the majority of open source software.
+
+43
+00:01:59,580 --> 00:02:04,760
+They ship updates typically on like a weekly basis or, you know, monthly.
+
+44
+00:02:04,769 --> 00:02:06,599
+Like there's very few projects I can think of that
+
+45
+00:02:06,610 --> 00:02:09,000
+are on like six month or yearly release cycles.
+
+46
+00:02:09,008 --> 00:02:13,020
+-- I,
+-- I think that is terrifying to a certain group of people and we'll,
+
+47
+00:02:13,029 --> 00:02:14,399
+we'll come back to that because
+
+48
+00:02:14,729 --> 00:02:16,679
+I think there's some important lessons in there. But
+
+49
+00:02:16,820 --> 00:02:17,710
+let's start here. Then
+
+50
+00:02:17,949 --> 00:02:19,580
+let's say I'm a researcher
+
+51
+00:02:19,860 --> 00:02:22,869
+and I've not really done a lot of work with open source before.
+
+52
+00:02:23,130 --> 00:02:24,750
+What kind of, where does it start?
+
+53
+00:02:24,759 --> 00:02:28,779
+Let's say I've got a project, um, we could pick on maybe open SSL in this case,
+
+54
+00:02:29,080 --> 00:02:31,490
+let's say I find a security flaw in open SSL.
+
+55
+00:02:31,660 --> 00:02:34,429
+What does, what do I do? Right. What, what's next?
+
+56
+00:02:35,429 --> 00:02:37,929
+Well, hopefully the open SSL guys and
+
+57
+00:02:38,119 --> 00:02:41,809
+they have, in this case, they have an email address that you can contact them on.
+
+58
+00:02:42,389 --> 00:02:46,449
+Um The majority of projects typically have an email address.
+
+59
+00:02:46,460 --> 00:02:48,410
+Sometimes it's security specific
+
+60
+00:02:48,869 --> 00:02:51,029
+and sometimes it's just more general like bug
+
+61
+00:02:51,169 --> 00:02:51,360
+zut,
+
+62
+00:02:51,710 --> 00:02:53,250
+whatever domain name
+
+63
+00:02:53,899 --> 00:02:57,270
+and you can report the issue easily. That's another big thing, right?
+
+64
+00:02:57,279 --> 00:02:59,309
+With a lot of commercial vendors reporting a
+
+65
+00:02:59,320 --> 00:03:02,179
+software issue to them is a Byzantine process.
+
+66
+00:03:02,279 --> 00:03:02,850
+It's,
+
+67
+00:03:03,259 --> 00:03:04,880
+you know, I've dealt with vendors where I,
+
+68
+00:03:04,889 --> 00:03:07,080
+I couldn't even figure out how to contact them,
+
+69
+00:03:07,089 --> 00:03:09,279
+let alone how to contact them for a security flaw.
+
+70
+00:03:09,729 --> 00:03:10,839
+And with open source,
+
+71
+00:03:10,850 --> 00:03:15,240
+typically there's gonna be an easily found email address and if there isn't,
+
+72
+00:03:15,860 --> 00:03:17,250
+you know who the developers are,
+
+73
+00:03:17,520 --> 00:03:21,720
+right, you can literally either look at the change log or look at the get blame log
+
+74
+00:03:22,139 --> 00:03:26,160
+and you can see who wrote that code or sort of who the main developer is
+
+75
+00:03:26,429 --> 00:03:29,000
+and nine times out of 10, if you email them
+
+76
+00:03:29,130 --> 00:03:31,119
+and say, hey, I have a security issue,
+
+77
+00:03:31,350 --> 00:03:32,949
+they're gonna respond to you pretty quickly.
+
+78
+00:03:33,169 --> 00:03:36,479
+Yeah, that's fair. And actually I'm gonna use this opportunity to plug
+
+79
+00:03:36,660 --> 00:03:40,369
+David Wheeler's badges program as part of the CI I initiative.
+
+80
+00:03:40,380 --> 00:03:42,869
+We'll have to see about maybe getting him on the show someday. But
+
+81
+00:03:43,199 --> 00:03:47,039
+uh I'll put a, a note, a link in the show notes as to where to find that.
+
+82
+00:03:47,050 --> 00:03:47,619
+But then actually,
+
+83
+00:03:47,630 --> 00:03:51,100
+one of one of the things specified in the badgers program is that you have
+
+84
+00:03:51,270 --> 00:03:55,809
+a way to be contacted about security issues, which is obviously super important.
+
+85
+00:03:55,820 --> 00:03:56,360
+All right. So
+
+86
+00:03:56,500 --> 00:03:59,529
+let's say you're the researcher, you do get a hold of the developer,
+
+87
+00:03:59,550 --> 00:04:00,979
+what can you expect?
+
+88
+00:04:01,389 --> 00:04:05,089
+So that depends a lot typically on the size and maturity of the project.
+
+89
+00:04:05,100 --> 00:04:08,089
+I mean, there's a lot of projects out there that are literally just one guy.
+
+90
+00:04:08,860 --> 00:04:10,479
+Uh and some of them, you know,
+
+91
+00:04:10,490 --> 00:04:12,470
+these guys are really busy uh with
+
+92
+00:04:12,479 --> 00:04:14,289
+their personal lives and their professional lives.
+
+93
+00:04:14,300 --> 00:04:14,669
+So
+
+94
+00:04:15,339 --> 00:04:18,890
+all the way up to you have major projects with a full
+
+95
+00:04:18,899 --> 00:04:22,549
+security team with half a dozen people like the Open SSL project,
+
+96
+00:04:22,570 --> 00:04:23,019
+you know.
+
+97
+00:04:23,329 --> 00:04:25,089
+So in the case of the open SSL project,
+
+98
+00:04:25,100 --> 00:04:28,059
+you're gonna get a response from basically somebody
+
+99
+00:04:28,070 --> 00:04:29,640
+who does this kind of work full time
+
+100
+00:04:30,410 --> 00:04:32,899
+or used to do it full time not too long ago.
+
+101
+00:04:33,559 --> 00:04:35,380
+Uh And in the case of a smaller project,
+
+102
+00:04:35,390 --> 00:04:37,380
+you're basically gonna get a reply from the guy
+
+103
+00:04:37,390 --> 00:04:39,519
+that wrote it and he's probably gonna ask you,
+
+104
+00:04:39,799 --> 00:04:43,299
+you know, what, what exactly is going on and do you have a code patch. And if not,
+
+105
+00:04:43,589 --> 00:04:44,589
+uh so recently,
+
+106
+00:04:44,600 --> 00:04:49,010
+we had this happen with LIB Archive where there's been a couple of uh issues found
+
+107
+00:04:49,480 --> 00:04:53,980
+and we Red Hat reported the issue to the LIB Archive guy
+
+108
+00:04:54,549 --> 00:04:57,309
+and we worked on developing patches with them and, you know,
+
+109
+00:04:57,320 --> 00:05:00,250
+he was super happy because not only did we tell him the problem,
+
+110
+00:05:00,260 --> 00:05:02,609
+but we had the beginnings of a patch,
+
+111
+00:05:02,899 --> 00:05:03,820
+but as it turned out,
+
+112
+00:05:03,829 --> 00:05:05,489
+Ashley needed quite a bit of work because we
+
+113
+00:05:05,500 --> 00:05:08,540
+found some more cases that weren't covered by it.
+
+114
+00:05:08,549 --> 00:05:09,850
+Right? And that again is part of it.
+
+115
+00:05:09,859 --> 00:05:13,850
+You know, the beauty of it is rather than just patch one specific issue
+
+116
+00:05:14,390 --> 00:05:17,130
+and then do it again the next week when somebody else looks at it, you know,
+
+117
+00:05:17,140 --> 00:05:21,970
+we actually managed to find about a half dozen cases and fix them all at the same time.
+
+118
+00:05:22,440 --> 00:05:24,670
+So in the case of LIB archive, you know,
+
+119
+00:05:24,679 --> 00:05:28,660
+he's happy because we're helping him do an update, you know,
+
+120
+00:05:28,670 --> 00:05:30,619
+it's not just him working on it on his own.
+
+121
+00:05:31,049 --> 00:05:33,700
+And that I think is one of the biggest things is a lot of people.
+
+122
+00:05:34,010 --> 00:05:36,920
+You don't often see collaboration like that because
+
+123
+00:05:37,339 --> 00:05:40,619
+the end result of it will be a code commit from one guy,
+
+124
+00:05:41,630 --> 00:05:42,089
+right?
+
+125
+00:05:42,260 --> 00:05:47,929
+But the actual code was written by uh several people. Him, some people at Red Hat
+
+126
+00:05:48,140 --> 00:05:50,970
+and some, you know, whoever else was involved as well.
+
+127
+00:05:52,049 --> 00:05:54,160
+OK. So let's keep moving up then
+
+128
+00:05:54,339 --> 00:05:59,230
+let's say I am a developer using open source code in my project?
+
+129
+00:05:59,329 --> 00:06:01,880
+What kind of expectation should I have on
+
+130
+00:06:01,890 --> 00:06:04,049
+the projects where I'm getting that code from?
+
+131
+00:06:04,059 --> 00:06:05,950
+And kind of what do I need to watch out for?
+
+132
+00:06:05,959 --> 00:06:09,359
+And, and what are some of the advantages that, that I have in this instance?
+
+133
+00:06:09,429 --> 00:06:12,160
+So the majority of these projects
+
+134
+00:06:12,350 --> 00:06:16,399
+will get a CV number for the security flaw and they'll use that CV number,
+
+135
+00:06:16,410 --> 00:06:17,200
+for example,
+
+136
+00:06:17,369 --> 00:06:17,739
+uh
+
+137
+00:06:18,170 --> 00:06:22,079
+in the change log, uh many will now get it into the code commit itself.
+
+138
+00:06:22,089 --> 00:06:23,540
+So they'll request a CV
+
+139
+00:06:23,820 --> 00:06:25,500
+in advance of actually doing the code commit.
+
+140
+00:06:25,510 --> 00:06:27,179
+So that when they do the code commit to update it,
+
+141
+00:06:27,200 --> 00:06:28,929
+they also include the CV in the change
+
+142
+00:06:29,179 --> 00:06:29,230
+in
+
+143
+00:06:29,399 --> 00:06:29,420
+the
+
+144
+00:06:29,890 --> 00:06:29,959
+commit.
+
+145
+00:06:30,700 --> 00:06:31,459
+Let's say,
+
+146
+00:06:31,720 --> 00:06:33,260
+-- I don't know what a CV
+-- E
+
+147
+00:06:33,420 --> 00:06:34,089
+uh sorry,
+
+148
+00:06:34,410 --> 00:06:35,160
+my apologies.
+
+149
+00:06:35,350 --> 00:06:40,079
+Uh CV is a common vulnerability and exposures database number and it's just
+
+150
+00:06:40,089 --> 00:06:43,420
+a fancy way of saying we assigned a number to a security flaw
+
+151
+00:06:43,829 --> 00:06:45,579
+so that we can catalog and track it.
+
+152
+00:06:46,359 --> 00:06:49,920
+Uh And the format is CD E hyphen the year.
+
+153
+00:06:49,929 --> 00:06:54,540
+So like 2016 hyphen and then a four digit or larger number.
+
+154
+00:06:56,089 --> 00:06:59,100
+And so the beauty of this basically is if you see a code commit or
+
+155
+00:06:59,109 --> 00:07:02,839
+a change log entry or an email announcement and it has a CV number in.
+
+156
+00:07:02,850 --> 00:07:06,450
+So you see CV hyphen 2016-1234
+
+157
+00:07:06,640 --> 00:07:08,149
+then, you know, pretty much
+
+158
+00:07:08,459 --> 00:07:12,010
+then, you know, pretty much for sure that, that was a security update.
+
+159
+00:07:12,630 --> 00:07:15,440
+So, what about heartbleed? Does Heartbleed? The CV ID?
+
+160
+00:07:15,540 --> 00:07:18,450
+Well, so some of these issues get a brand name.
+
+161
+00:07:18,739 --> 00:07:19,410
+Uh,
+
+162
+00:07:19,790 --> 00:07:23,850
+to be honest as we've all, as we all know, humans don't really run on numbers,
+
+163
+00:07:23,859 --> 00:07:25,170
+you know, we run on names.
+
+164
+00:07:25,470 --> 00:07:29,260
+Um, and of course a number isn't very sexy, you know, but a,
+
+165
+00:07:29,269 --> 00:07:31,760
+but a name like heartbleed or HTD
+
+166
+00:07:31,910 --> 00:07:33,130
+-- Epoxy
+-- or
+
+167
+00:07:33,320 --> 00:07:35,130
+deals the proper amount of fear. Right?
+
+168
+00:07:35,320 --> 00:07:37,239
+Well, not always because Poodle,
+
+169
+00:07:37,470 --> 00:07:41,350
+you know, some of the names are not quite as fear inducing.
+
+170
+00:07:41,589 --> 00:07:44,010
+-- You
+-- don't
+-- like dogs then. That's terrifying. Right.
+
+171
+00:07:44,369 --> 00:07:46,720
+Yeah. Yeah. I'm not a big fan of Poodles myself
+
+172
+00:07:48,600 --> 00:07:48,859
+a
+
+173
+00:07:49,299 --> 00:07:49,410
+lot.
+
+174
+00:07:49,760 --> 00:07:54,950
+Uh Let's assume at this point, people understand what a CV is and I'm a developer and
+
+175
+00:07:55,200 --> 00:07:56,359
+I'm using open
+
+176
+00:07:56,549 --> 00:07:57,320
+source code
+
+177
+00:07:57,779 --> 00:07:59,000
+and I know
+
+178
+00:07:59,200 --> 00:08:01,730
+I need to start looking for CV E I DS.
+
+179
+00:08:02,140 --> 00:08:05,429
+What do you, what's the best way to do that as,
+
+180
+00:08:05,440 --> 00:08:08,279
+as a developer that maybe isn't involved in the project itself?
+
+181
+00:08:09,369 --> 00:08:13,299
+So the simplest thing is to watch their announce
+
+182
+00:08:13,420 --> 00:08:15,709
+uh mechanism, whatever that is typically,
+
+183
+00:08:15,720 --> 00:08:18,670
+uh a lot of these projects will announce new releases via email.
+
+184
+00:08:19,260 --> 00:08:24,359
+Um or, you know, they'll basically draw up a new release with a change log.
+
+185
+00:08:24,609 --> 00:08:25,410
+And personally,
+
+186
+00:08:25,420 --> 00:08:28,720
+I've been encouraging all of these upstream upstream that I deal with
+
+187
+00:08:29,119 --> 00:08:29,839
+to
+
+188
+00:08:30,239 --> 00:08:34,859
+at a minimum, have a change log, right? So that when you release version 1.2 0.3
+
+189
+00:08:35,030 --> 00:08:37,260
+there's a change log and the change log has entries.
+
+190
+00:08:37,270 --> 00:08:38,840
+Like, you know, we fix this spelling error,
+
+191
+00:08:38,849 --> 00:08:41,409
+we fix this CV security bug and we fix this thing.
+
+192
+00:08:41,650 --> 00:08:44,309
+Uh So at a minimum, there is hopefully a change log and, you know,
+
+193
+00:08:44,320 --> 00:08:47,289
+so you should be watching your upstream for new releases because you're
+
+194
+00:08:47,299 --> 00:08:50,119
+gonna need bug fixes anyways whether or not they're security related.
+
+195
+00:08:50,940 --> 00:08:51,479
+Ideally,
+
+196
+00:08:51,489 --> 00:08:56,049
+they also have an email announcement because you get push notifications that way.
+
+197
+00:08:56,059 --> 00:08:58,719
+Right. Email is the only push notification system we have that works.
+
+198
+00:08:58,729 --> 00:08:59,520
+Unfortunately.
+
+199
+00:09:00,650 --> 00:09:04,469
+Um Some projects even, you know, they'll have a security web page
+
+200
+00:09:04,750 --> 00:09:07,909
+uh listing all the CV S currently available
+
+201
+00:09:08,200 --> 00:09:09,150
+and fixed.
+
+202
+00:09:09,859 --> 00:09:13,020
+Um And that's typically for the larger projects, you know, like,
+
+203
+00:09:13,030 --> 00:09:15,320
+say open stack elastic search that those kind of guys.
+
+204
+00:09:16,190 --> 00:09:16,320
+Um
+
+205
+00:09:16,729 --> 00:09:16,950
+Probably
+
+206
+00:09:17,119 --> 00:09:21,340
+saying too that some of those projects have not just a list of the CV E I DS,
+
+207
+00:09:21,880 --> 00:09:24,239
+but they'll have individual patches.
+
+208
+00:09:24,250 --> 00:09:27,150
+So you could just cherry pick that one security fix
+
+209
+00:09:27,159 --> 00:09:28,960
+if that's what you're looking for in your project.
+
+210
+00:09:29,609 --> 00:09:30,489
+Exactly.
+
+211
+00:09:30,969 --> 00:09:32,770
+Uh But I would say in general, you know,
+
+212
+00:09:32,780 --> 00:09:36,750
+if you're consuming open source code and you need to pay attention to it,
+
+213
+00:09:36,760 --> 00:09:38,609
+probably your best bet is to look for an announcement
+
+214
+00:09:38,619 --> 00:09:40,669
+mail list because almost all of them have this now.
+
+215
+00:09:40,679 --> 00:09:45,210
+-- And uh you know, just, well, I guess, read your email once in a while.
+-- Sure. Sure.
+
+216
+00:09:45,219 --> 00:09:45,549
+Yeah,
+
+217
+00:09:45,739 --> 00:09:46,510
+and that's fair.
+
+218
+00:09:46,679 --> 00:09:47,570
+So, all right,
+
+219
+00:09:47,789 --> 00:09:49,099
+I'm my developer
+
+220
+00:09:49,539 --> 00:09:54,549
+I found a CV E ID announced on a mailing list that I care about.
+
+221
+00:09:55,359 --> 00:09:57,140
+What would you suggest I do next.
+
+222
+00:09:57,150 --> 00:10:00,179
+-- So
+-- it depends sort of on how you consume the source code.
+
+223
+00:10:00,190 --> 00:10:03,659
+Uh Some places are into agile development so they can just, you know,
+
+224
+00:10:03,669 --> 00:10:05,809
+grab a new version and insert it
+
+225
+00:10:06,250 --> 00:10:08,090
+and run their testing suite,
+
+226
+00:10:08,190 --> 00:10:09,419
+you know, know that it works
+
+227
+00:10:09,549 --> 00:10:11,349
+and ship an update of their product.
+
+228
+00:10:11,719 --> 00:10:13,140
+Other places, you know,
+
+229
+00:10:13,150 --> 00:10:18,450
+they may have to extract the security patch and just import that code,
+
+230
+00:10:18,729 --> 00:10:20,010
+you know, because they might be
+
+231
+00:10:20,609 --> 00:10:22,909
+a good example being car manufacturers, right?
+
+232
+00:10:22,919 --> 00:10:26,549
+Like there was that recent posting by um, by Mudge showing, you know,
+
+233
+00:10:26,559 --> 00:10:29,510
+all the open source libraries that Mercedes ships and it's,
+
+234
+00:10:30,030 --> 00:10:33,109
+it's, I think about 100/100.
+
+235
+00:10:33,770 --> 00:10:35,200
+Uh and the reality is, you know,
+
+236
+00:10:35,210 --> 00:10:39,750
+car makers ship software that is relatively static and boring,
+
+237
+00:10:40,159 --> 00:10:42,349
+you know, they're not running agile development yet.
+
+238
+00:10:42,809 --> 00:10:47,940
+Uh So a company like that would most likely just extract the security related patch
+
+239
+00:10:48,419 --> 00:10:52,340
+and import that code into their, you know, system and then up and,
+
+240
+00:10:52,489 --> 00:10:53,950
+you know, and build a new version
+
+241
+00:10:54,169 --> 00:10:55,229
+-- or
+-- I suppose the,
+
+242
+00:10:55,239 --> 00:11:00,190
+the sad reality for many projects is they just never update the code ever.
+
+243
+00:11:00,539 --> 00:11:02,340
+Well, you know, unless
+
+244
+00:11:02,450 --> 00:11:05,719
+they're being actively attacked or their customers are being actively attacked.
+
+245
+00:11:05,729 --> 00:11:08,010
+Yeah, they're sadly probably not going to, um,
+
+246
+00:11:08,020 --> 00:11:11,219
+security is typically seen as a cost center by these companies
+
+247
+00:11:11,719 --> 00:11:15,969
+and they're certainly not going to do a lot of proactive work, uh,
+
+248
+00:11:15,979 --> 00:11:17,460
+unless they get caught out.
+
+249
+00:11:17,820 --> 00:11:20,169
+I mean, if you look at the state of most
+
+250
+00:11:20,830 --> 00:11:22,809
+commercial software, uh,
+
+251
+00:11:23,260 --> 00:11:24,700
+you know, you look for security updates,
+
+252
+00:11:24,710 --> 00:11:27,210
+there's very few vendors doing regular security updates
+
+253
+00:11:28,500 --> 00:11:29,169
+of the big ones.
+
+254
+00:11:29,469 --> 00:11:29,969
+Yes.
+
+255
+00:11:30,159 --> 00:11:33,010
+I, we've been saying for years that it's going to change
+
+256
+00:11:33,169 --> 00:11:34,369
+and, and someday
+
+257
+00:11:34,739 --> 00:11:35,700
+we might be. Right.
+
+258
+00:11:36,369 --> 00:11:36,489
+So,
+
+259
+00:11:36,909 --> 00:11:38,210
+we'll wait and see. Right.
+
+260
+00:11:38,359 --> 00:11:42,080
+I think part of the problem is, is uh even if we are right,
+
+261
+00:11:42,330 --> 00:11:44,719
+we have so much technical debt to deal with.
+
+262
+00:11:45,059 --> 00:11:47,690
+I would just keep getting that down the road. It, it's fine
+
+263
+00:11:47,900 --> 00:11:48,530
+next year,
+
+264
+00:11:48,750 --> 00:11:50,570
+next year, we'll fix it next year. Right.
+
+265
+00:11:51,289 --> 00:11:51,710
+That's,
+
+266
+00:11:53,219 --> 00:11:56,440
+I think, I think most of us have some interest built up on that,
+
+267
+00:11:56,450 --> 00:11:58,049
+that we don't even know what's going on.
+
+268
+00:11:58,059 --> 00:12:01,359
+But that, that's a story for another day, I think. All right.
+
+269
+00:12:01,530 --> 00:12:02,010
+So
+
+270
+00:12:02,119 --> 00:12:04,539
+I think this mostly makes sense if you're a developer,
+
+271
+00:12:04,549 --> 00:12:06,359
+but let's say you're an end user,
+
+272
+00:12:06,369 --> 00:12:09,820
+you're a guy running a piece of open source software.
+
+273
+00:12:09,830 --> 00:12:11,960
+You will probably download it off the internet.
+
+274
+00:12:12,669 --> 00:12:16,210
+What does that mean for me? Should I care about security in any way?
+
+275
+00:12:16,349 --> 00:12:19,849
+I mean, I hate to say it but it depends, um
+
+276
+00:12:20,549 --> 00:12:20,950
+I have
+
+277
+00:12:21,239 --> 00:12:21,359
+the
+
+278
+00:12:21,530 --> 00:12:25,530
+-- answer from security, right? It depends, maybe.
+-- Well, you know, and it does really?
+
+279
+00:12:25,539 --> 00:12:28,630
+Because I, for example, I have uh
+
+280
+00:12:28,919 --> 00:12:28,929
+I
+
+281
+00:12:29,109 --> 00:12:29,989
+have a perfect example.
+
+282
+00:12:30,000 --> 00:12:33,530
+I have one of those little Hutu wireless media sharing devices.
+
+283
+00:12:34,450 --> 00:12:35,299
+Uh
+
+284
+00:12:35,669 --> 00:12:37,789
+As far as I know, the vendor doesn't ship
+
+285
+00:12:38,260 --> 00:12:38,950
+updates,
+
+286
+00:12:39,260 --> 00:12:42,989
+-- let alone security updates. You own one of these two, don't you? I do,
+-- actually,
+
+287
+00:12:43,099 --> 00:12:45,750
+they do have updates. You can, they're hard to find
+
+288
+00:12:45,880 --> 00:12:49,549
+you, you have to locate them and you can install them. And in fact,
+
+289
+00:12:49,969 --> 00:12:50,869
+I was
+
+290
+00:12:51,159 --> 00:12:56,270
+somewhat annoyed at one point because the Hutu, let me tell Net into it,
+
+291
+00:12:56,280 --> 00:12:58,190
+which is totally a secure protocol, right?
+
+292
+00:12:58,440 --> 00:12:59,900
+But I could tell that in
+
+293
+00:13:00,099 --> 00:13:04,320
+and then I updated the firmware and then I couldn't tell it in anymore, which I,
+
+294
+00:13:04,419 --> 00:13:08,320
+I suspect is for the best because the only way I can
+
+295
+00:13:08,330 --> 00:13:11,820
+see that coming to a logical conclusion is me breaking the Hutu.
+
+296
+00:13:11,830 --> 00:13:13,630
+It was still one of those things that I was very
+
+297
+00:13:13,640 --> 00:13:16,820
+excited to be able to tell that into what is essentially,
+
+298
+00:13:16,830 --> 00:13:17,780
+you know, a little box.
+
+299
+00:13:18,309 --> 00:13:23,039
+But uh no, no, in that case. So let, let's go even farther away.
+
+300
+00:13:23,119 --> 00:13:25,289
+Let's say you have someone running
+
+301
+00:13:25,690 --> 00:13:26,020
+Mozilla
+
+302
+00:13:26,219 --> 00:13:28,729
+Firefox, which is an open source web browser
+
+303
+00:13:29,340 --> 00:13:31,469
+should do. They need to care about security.
+
+304
+00:13:31,640 --> 00:13:34,229
+Well, if they're browsing the web, then yes.
+
+305
+00:13:34,239 --> 00:13:36,780
+Uh the reality is especially on the modern web,
+
+306
+00:13:36,789 --> 00:13:42,229
+there's so many drive by attacks embedded in ad networks and on websites
+
+307
+00:13:42,650 --> 00:13:43,679
+that I hate to say it.
+
+308
+00:13:43,690 --> 00:13:46,650
+But if you're running an out of date web browser, you're, you're gonna get nailed.
+
+309
+00:13:46,799 --> 00:13:48,929
+Now, I think it's also worth pointing out though.
+
+310
+00:13:48,940 --> 00:13:50,429
+I mean, this, this is kind of a trick question
+
+311
+00:13:50,659 --> 00:13:51,359
+is that
+
+312
+00:13:51,580 --> 00:13:53,080
+in the case of Firefox,
+
+313
+00:13:53,320 --> 00:13:55,559
+they have automatic updates turned on
+
+314
+00:13:55,659 --> 00:13:57,239
+and you get them magically,
+
+315
+00:13:57,250 --> 00:14:00,539
+which I think is totally the right thing to do in that case because you're right.
+
+316
+00:14:00,549 --> 00:14:03,239
+If you're using an out of date web browser, you're just,
+
+317
+00:14:03,250 --> 00:14:05,349
+you're running around with scissors, right?
+
+318
+00:14:05,359 --> 00:14:08,530
+Don't do that. That's a bad idea. But I think we can look at,
+
+319
+00:14:08,859 --> 00:14:12,989
+uh let, let's pick on some, what's another pop, uh, maybe like Libra Office,
+
+320
+00:14:13,000 --> 00:14:17,309
+which seems relatively popular and I know they have an update mechanism to a degree.
+
+321
+00:14:17,570 --> 00:14:18,799
+But let's assume they,
+
+322
+00:14:20,400 --> 00:14:21,950
+you have to manually do that one. I don't,
+
+323
+00:14:22,609 --> 00:14:25,479
+it notifies you and then you have to update it
+
+324
+00:14:26,130 --> 00:14:26,250
+so
+
+325
+00:14:27,429 --> 00:14:27,710
+well.
+
+326
+00:14:27,780 --> 00:14:31,289
+And one challenge and something a lot of us conveniently ignore,
+
+327
+00:14:31,299 --> 00:14:32,809
+even with automated updates, like Mozilla
+
+328
+00:14:33,000 --> 00:14:33,650
+Firefox,
+
+329
+00:14:34,099 --> 00:14:37,070
+there's still people with bad internet.
+
+330
+00:14:37,539 --> 00:14:39,070
+You know, there's still people on dial up,
+
+331
+00:14:39,080 --> 00:14:41,270
+there's still people on satellite internet.
+
+332
+00:14:41,869 --> 00:14:45,080
+And the sad reality is modern software has gotten so big.
+
+333
+00:14:45,849 --> 00:14:48,299
+The majority of them, even if they want to be secure,
+
+334
+00:14:48,679 --> 00:14:50,659
+it's very difficult for them because, you know,
+
+335
+00:14:50,669 --> 00:14:52,270
+they have to download a half gig update.
+
+336
+00:14:52,280 --> 00:14:53,200
+Could you,
+
+337
+00:14:53,479 --> 00:14:56,789
+could you browse the internet today on dial up?
+
+338
+00:14:57,250 --> 00:14:58,179
+I mean,
+
+339
+00:14:58,559 --> 00:15:01,440
+ignoring the fact that there are probably people who are,
+
+340
+00:15:01,630 --> 00:15:05,510
+I want to try this. Can, I don't even know if I have a modem or a way to,
+
+341
+00:15:06,299 --> 00:15:06,479
+but
+
+342
+00:15:06,690 --> 00:15:06,719
+I
+
+343
+00:15:06,940 --> 00:15:07,229
+want to
+
+344
+00:15:07,950 --> 00:15:08,340
+have your Linux
+
+345
+00:15:08,450 --> 00:15:09,789
+box filter it but a
+
+346
+00:15:09,909 --> 00:15:11,700
+lot of the web pages,
+
+347
+00:15:11,929 --> 00:15:15,260
+the front page of cnn.com and youtube are all, a lot of these sites.
+
+348
+00:15:15,270 --> 00:15:16,760
+Now, the front page is a megabyte
+
+349
+00:15:16,989 --> 00:15:20,869
+-- which on dial up will take 10 minutes to download.
+-- Right. Right. Oh, my goodness.
+
+350
+00:15:20,880 --> 00:15:23,210
+That's, that's terrifying. Well, I guess it's not right.
+
+351
+00:15:23,340 --> 00:15:27,380
+This would be like people riding their horse on the interstate.
+
+352
+00:15:27,479 --> 00:15:28,900
+It's just don't do that.
+
+353
+00:15:28,909 --> 00:15:31,969
+I mean, apart from being II, I assume it's illegal, I've actually never
+
+354
+00:15:32,169 --> 00:15:32,659
+looked into that
+
+355
+00:15:34,169 --> 00:15:35,460
+as it should be.
+
+356
+00:15:35,880 --> 00:15:39,510
+But I guess dial up can be kind of seen in that, that light where it's,
+
+357
+00:15:39,929 --> 00:15:44,239
+it's not only incredibly painful. It, it's dangerous because you're right.
+
+358
+00:15:44,250 --> 00:15:47,219
+You're never gonna get updates if you're on dial up because,
+
+359
+00:15:47,390 --> 00:15:48,419
+man, I bet, I mean,
+
+360
+00:15:48,429 --> 00:15:52,239
+installing updates to my operating system with a broadband connection takes
+
+361
+00:15:52,250 --> 00:15:56,219
+long enough and I'm impatient and it annoys me every time.
+
+362
+00:15:56,419 --> 00:15:59,799
+Oh, my goodness. This is terrifying to even think about my, my brain hurts.
+
+363
+00:15:59,929 --> 00:16:01,000
+-- Sad
+-- reality.
+
+364
+00:16:01,010 --> 00:16:01,590
+I mean, it's,
+
+365
+00:16:01,599 --> 00:16:03,929
+and I think this is a reason there's still a lot
+
+366
+00:16:03,940 --> 00:16:07,520
+of insecure systems out there is for lack of bandwidth or
+
+367
+00:16:07,640 --> 00:16:07,650
+a
+
+368
+00:16:07,799 --> 00:16:11,400
+lot of, a lot of the systems don't have uh an administrator, you know,
+
+369
+00:16:11,409 --> 00:16:12,760
+they just have a guy using it
+
+370
+00:16:13,780 --> 00:16:16,750
+and he doesn't want to pay, you know, 100 bucks a month for a service contract.
+
+371
+00:16:18,000 --> 00:16:18,739
+Um,
+
+372
+00:16:20,010 --> 00:16:22,309
+you know, at least with open source, the,
+
+373
+00:16:22,320 --> 00:16:26,359
+the barrier to entry of having to pay for the updates is quite often removed, right?
+
+374
+00:16:26,369 --> 00:16:30,539
+You can just get it for free or if you want, you can choose to outsource it to somebody
+
+375
+00:16:30,729 --> 00:16:34,789
+-- who will handle a lot of it for you. You know,
+-- this would be Linux distribution.
+
+376
+00:16:34,799 --> 00:16:36,219
+Do you talk about or something else?
+
+377
+00:16:36,309 --> 00:16:40,020
+Well, I mean, the, the common case would be a Linux distribution, you know,
+
+378
+00:16:40,030 --> 00:16:43,380
+and some of them are free, some of them charge uh for support
+
+379
+00:16:43,559 --> 00:16:45,500
+and ongoing maintenance.
+
+380
+00:16:45,929 --> 00:16:46,580
+Um
+
+381
+00:16:47,010 --> 00:16:51,190
+And then there's also, you know, professional consulting firms, many of which do
+
+382
+00:16:51,539 --> 00:16:52,809
+open source work, you know,
+
+383
+00:16:52,820 --> 00:16:55,210
+for the simple reason that there's a lot of people using this stuff.
+
+384
+00:16:55,450 --> 00:16:58,070
+Uh You know, a great example being web hosting, right,
+
+385
+00:16:58,080 --> 00:17:03,099
+how many people use wordpress and don't even know that you need to update wordpress,
+
+386
+00:17:03,109 --> 00:17:03,280
+wordpress.
+
+387
+00:17:04,000 --> 00:17:05,949
+I'm supposed to be updating my wordpress install,
+
+388
+00:17:05,959 --> 00:17:08,858
+although doesn't Wordpress have an automatic update mechanism
+
+389
+00:17:09,218 --> 00:17:10,279
+have made it
+
+390
+00:17:10,448 --> 00:17:11,328
+automated
+
+391
+00:17:11,509 --> 00:17:15,048
+um for wordpress but not for the plugins
+
+392
+00:17:15,458 --> 00:17:17,628
+and some plugins will update automatically.
+
+393
+00:17:17,898 --> 00:17:18,038
+And
+
+394
+00:17:18,308 --> 00:17:21,948
+there was just an incident wasn't there with, with wordpress plugins.
+
+395
+00:17:21,958 --> 00:17:25,159
+It was, I think it was one of the major leaks that happened recently.
+
+396
+00:17:25,167 --> 00:17:26,368
+It was, they were running
+
+397
+00:17:26,828 --> 00:17:28,409
+a very outdated plug in,
+
+398
+00:17:28,759 --> 00:17:30,159
+in their, in their wordpress install
+
+399
+00:17:30,558 --> 00:17:31,269
+the
+
+400
+00:17:32,249 --> 00:17:32,379
+Fonseca,
+
+401
+00:17:34,338 --> 00:17:34,479
+the
+
+402
+00:17:34,808 --> 00:17:35,509
+Panamanian law firm.
+
+403
+00:17:35,909 --> 00:17:36,869
+Right. Right. Those guys,
+
+404
+00:17:36,989 --> 00:17:38,109
+yeah, that's fair. That's
+
+405
+00:17:38,589 --> 00:17:39,439
+interesting.
+
+406
+00:17:39,560 --> 00:17:40,689
+So I, I guess
+
+407
+00:17:41,250 --> 00:17:44,310
+what, what I'm seeing us head towards here is
+
+408
+00:17:44,459 --> 00:17:48,890
+from the end user perspective, automatic updates are key.
+
+409
+00:17:48,920 --> 00:17:52,270
+So if, if you run a project and you're listening to us,
+
+410
+00:17:52,280 --> 00:17:53,689
+you should have automatic updates.
+
+411
+00:17:53,699 --> 00:17:54,530
+And if you don't,
+
+412
+00:17:54,770 --> 00:17:57,369
+you should figure out how to do that because
+
+413
+00:17:57,579 --> 00:17:59,130
+unquestionably it's important.
+
+414
+00:17:59,819 --> 00:18:03,540
+And here we approach the sort of the emacs singularity
+
+415
+00:18:03,910 --> 00:18:07,359
+where if you look at all the major programming languages, for example,
+
+416
+00:18:07,369 --> 00:18:08,540
+like Java Pearl,
+
+417
+00:18:08,689 --> 00:18:09,180
+whatever,
+
+418
+00:18:09,250 --> 00:18:11,880
+they've all ended up having to build and engineer
+
+419
+00:18:11,890 --> 00:18:15,819
+their own update mechanisms because they're running on platforms
+
+420
+00:18:16,180 --> 00:18:18,599
+that may not have an update mechanism, you know.
+
+421
+00:18:18,810 --> 00:18:21,030
+Uh I'm biased. Of course, I run Linux
+
+422
+00:18:21,199 --> 00:18:22,839
+Red hat and Fedora especially.
+
+423
+00:18:23,400 --> 00:18:26,430
+And at the OS level, there is an update mechanism,
+
+424
+00:18:26,439 --> 00:18:29,060
+not only for the Os but for all the stuff they ship,
+
+425
+00:18:29,189 --> 00:18:31,459
+you know, and you just run yum update and hit, enter,
+
+426
+00:18:32,369 --> 00:18:32,770
+you know,
+
+427
+00:18:33,099 --> 00:18:35,119
+and everything gets updated, right?
+
+428
+00:18:35,130 --> 00:18:38,359
+Like for example, in the windows world, if I install Pearl on Windows,
+
+429
+00:18:38,589 --> 00:18:41,869
+uh I'm not really clear on how you get updates, but I know it's not automated,
+
+430
+00:18:41,880 --> 00:18:44,109
+you know, I know Microsoft doesn't ship Pearl updates.
+
+431
+00:18:44,329 --> 00:18:45,369
+Sure. Well, I mean,
+
+432
+00:18:45,599 --> 00:18:47,310
+but you can't say
+
+433
+00:18:47,689 --> 00:18:48,229
+that
+
+434
+00:18:48,459 --> 00:18:49,630
+in the Linux Universe,
+
+435
+00:18:49,640 --> 00:18:52,349
+the distributions have this figured out because let's face it.
+
+436
+00:18:52,630 --> 00:18:54,829
+If you're doing anything interesting,
+
+437
+00:18:54,849 --> 00:18:58,270
+you are almost certainly using libraries and applications
+
+438
+00:18:58,280 --> 00:19:01,869
+outside of your walled garden of the distribution.
+
+439
+00:19:02,250 --> 00:19:04,609
+And so once you exit that universe
+
+440
+00:19:04,880 --> 00:19:07,089
+updates become a huge problem.
+
+441
+00:19:08,130 --> 00:19:10,180
+And I think basically where a lot of
+
+442
+00:19:10,189 --> 00:19:13,020
+that's headed is people using continuous integration systems,
+
+443
+00:19:13,030 --> 00:19:15,069
+you know, the whole agile C I
+
+444
+00:19:15,349 --> 00:19:16,979
+landscape of,
+
+445
+00:19:17,319 --> 00:19:20,430
+you know, we do an update daily or weekly
+
+446
+00:19:21,099 --> 00:19:25,630
+so you import the code, run your C I run your tests and ship an update.
+
+447
+00:19:25,660 --> 00:19:29,319
+And I think for a lot of people that can do that, that's how they do it.
+
+448
+00:19:29,770 --> 00:19:33,979
+And then for the people simply consuming this stuff, I hate to say it. But,
+
+449
+00:19:34,089 --> 00:19:36,569
+you know, if they had the expertise to do this properly,
+
+450
+00:19:36,579 --> 00:19:40,510
+they would uh but quite often they don't have the expertise to do this properly,
+
+451
+00:19:40,520 --> 00:19:40,900
+right?
+
+452
+00:19:41,479 --> 00:19:42,119
+And
+
+453
+00:19:42,750 --> 00:19:43,750
+there, you know,
+
+454
+00:19:43,760 --> 00:19:47,439
+I think the reality is you need to look at some form of outsourcing it, you know,
+
+455
+00:19:47,449 --> 00:19:52,540
+either using a web host that like, like for example, rather than buying a VPs,
+
+456
+00:19:52,550 --> 00:19:55,170
+a virtual private server and running your own web server,
+
+457
+00:19:55,540 --> 00:19:59,349
+you know, you go to say wordpress.com and just
+
+458
+00:19:59,550 --> 00:20:02,489
+pay whatever monthly fee it is to use wordpress and they
+
+459
+00:20:02,619 --> 00:20:05,219
+handle the whole experience and update everything,
+
+460
+00:20:05,619 --> 00:20:06,219
+you know, in
+
+461
+00:20:06,430 --> 00:20:08,329
+a situation where you can't do that,
+
+462
+00:20:08,619 --> 00:20:09,729
+then I mean,
+
+463
+00:20:10,310 --> 00:20:12,410
+you have to develop some in-house expertise
+
+464
+00:20:12,689 --> 00:20:15,739
+and the good news there is, it's actually it's quite easy to do.
+
+465
+00:20:15,959 --> 00:20:17,969
+You know, there's a lot of people
+
+466
+00:20:18,250 --> 00:20:20,699
+who have used open source
+
+467
+00:20:20,949 --> 00:20:23,469
+uh both as developers and administrators,
+
+468
+00:20:23,670 --> 00:20:26,160
+you know, quite commonly, a lot of comp sci
+
+469
+00:20:26,300 --> 00:20:27,810
+grads have had
+
+470
+00:20:28,050 --> 00:20:29,290
+some exposure to this.
+
+471
+00:20:29,900 --> 00:20:34,959
+And so the reality is finding it a men who can handle this is, is not super difficult.
+
+472
+00:20:36,050 --> 00:20:36,449
+OK.
+
+473
+00:20:36,459 --> 00:20:38,989
+So they might have experience using open source,
+
+474
+00:20:39,000 --> 00:20:41,869
+but do you think they actually understand
+
+475
+00:20:42,290 --> 00:20:46,349
+this problem of keeping things updated and watching for security issues?
+
+476
+00:20:46,359 --> 00:20:47,709
+And I mean, let's even face it man,
+
+477
+00:20:48,089 --> 00:20:49,550
+in a lot of projects,
+
+478
+00:20:49,560 --> 00:20:53,900
+they're full of open source code and people don't even know what's all in there.
+
+479
+00:20:53,910 --> 00:20:59,439
+Right. True. Um The reality is you don't really have to understand this in depth.
+
+480
+00:20:59,449 --> 00:21:01,219
+You know, I still run some wordpress blogs
+
+481
+00:21:01,430 --> 00:21:02,719
+and all I do is I,
+
+482
+00:21:02,729 --> 00:21:05,790
+I hit the update button and then I go and select
+
+483
+00:21:05,800 --> 00:21:08,199
+the thing that selects all the plugins and hit update all.
+
+484
+00:21:08,290 --> 00:21:12,160
+You know, that's the extent of essentially my expertise with wordpress nowadays.
+
+485
+00:21:12,810 --> 00:21:15,290
+I, you know, if one of those plugins breaks, I'm gonna,
+
+486
+00:21:15,300 --> 00:21:17,750
+I'm just gonna roll back the version or I'm gonna, you know,
+
+487
+00:21:17,760 --> 00:21:19,569
+check the upstream to see if they're aware that it
+
+488
+00:21:19,579 --> 00:21:21,839
+broke and make sure they're gonna ship an update soon.
+
+489
+00:21:22,459 --> 00:21:25,239
+And, you know, because I honestly, I don't wanna be a Wordpress expert.
+
+490
+00:21:25,250 --> 00:21:26,739
+I just wanna have my blog run.
+
+491
+00:21:27,000 --> 00:21:27,609
+Right. Right.
+
+492
+00:21:27,910 --> 00:21:28,310
+You know, that's,
+
+493
+00:21:28,689 --> 00:21:30,030
+I, I suspect that's,
+
+494
+00:21:30,770 --> 00:21:32,430
+that's what most people want.
+
+495
+00:21:32,619 --> 00:21:37,229
+Nobody is in business to be an open source library expert.
+
+496
+00:21:37,449 --> 00:21:43,099
+They have a product or a goal in mind and open source is one of the many tools
+
+497
+00:21:43,229 --> 00:21:44,670
+that's going to help them get there.
+
+498
+00:21:45,089 --> 00:21:46,030
+And, and I think
+
+499
+00:21:46,599 --> 00:21:49,030
+that's one of the things especially like you and I forget
+
+500
+00:21:49,290 --> 00:21:53,390
+of we live in our bizarre security universe and we just
+
+501
+00:21:53,400 --> 00:21:56,979
+expect everyone else should be security experts because why not?
+
+502
+00:21:56,989 --> 00:22:00,359
+Right. Everyone I know is a security expert. I don't see why you're not.
+
+503
+00:22:00,709 --> 00:22:00,910
+Yeah.
+
+504
+00:22:01,329 --> 00:22:01,530
+No.
+
+505
+00:22:01,540 --> 00:22:04,709
+And the good news there is a lot of the more modern programming languages like, uh,
+
+506
+00:22:04,719 --> 00:22:06,520
+Rails, you know, N PM,
+
+507
+00:22:06,680 --> 00:22:09,369
+they actually have security efforts.
+
+508
+00:22:09,380 --> 00:22:13,449
+Um, so I know for Rails and N PM they both have a module you can import into your project
+
+509
+00:22:13,630 --> 00:22:18,050
+that will then look at all the modules you're using and consuming
+
+510
+00:22:18,300 --> 00:22:20,800
+and warn you when they're out of date for security issues.
+
+511
+00:22:21,130 --> 00:22:23,040
+And we will tell you which ones you wanna update to.
+
+512
+00:22:23,250 --> 00:22:24,510
+That is fantastic.
+
+513
+00:22:24,520 --> 00:22:24,959
+We should,
+
+514
+00:22:24,969 --> 00:22:29,079
+we'll put a link to that in the show notes because that is an awesome feature
+
+515
+00:22:29,420 --> 00:22:31,959
+that in all seriousness, every project should have.
+
+516
+00:22:31,969 --> 00:22:35,119
+So if you're a project owner and you don't have something like that, uh shame on you
+
+517
+00:22:35,250 --> 00:22:35,880
+work on it.
+
+518
+00:22:36,530 --> 00:22:37,069
+So
+
+519
+00:22:37,349 --> 00:22:39,829
+uh I, I think the last thing I wanna bring up is
+
+520
+00:22:40,099 --> 00:22:43,020
+there is an article I sent you from CSO online,
+
+521
+00:22:43,260 --> 00:22:46,150
+which is kind of talking about open source projects and,
+
+522
+00:22:46,160 --> 00:22:47,229
+and how people are using them.
+
+523
+00:22:47,239 --> 00:22:47,469
+And,
+
+524
+00:22:47,760 --> 00:22:52,329
+and here's the thing that I guess is my, my soapbox commentary for the day is
+
+525
+00:22:52,469 --> 00:22:54,790
+you read this article and it sounds like
+
+526
+00:22:55,260 --> 00:22:56,880
+open source is a choice
+
+527
+00:22:57,030 --> 00:22:58,199
+where you can
+
+528
+00:22:58,390 --> 00:23:02,689
+use it if you want. And the thing I, that just blows my mind still is.
+
+529
+00:23:02,699 --> 00:23:04,310
+There's all these people who,
+
+530
+00:23:04,430 --> 00:23:06,089
+who talk like this, when
+
+531
+00:23:06,310 --> 00:23:08,920
+in reality you're already using it.
+
+532
+00:23:09,119 --> 00:23:10,489
+You either know you are.
+
+533
+00:23:10,660 --> 00:23:14,599
+And so you, you have your kind of, you know, you're known, unknown so to speak
+
+534
+00:23:14,770 --> 00:23:16,640
+or you don't know
+
+535
+00:23:16,780 --> 00:23:17,819
+and you should,
+
+536
+00:23:17,959 --> 00:23:20,319
+so you really need to look around and figure that out and,
+
+537
+00:23:20,329 --> 00:23:21,689
+and that's the thing that just,
+
+538
+00:23:22,569 --> 00:23:23,079
+I don't know, it,
+
+539
+00:23:23,089 --> 00:23:27,489
+maybe it's just the universe we exist in where this is so blatantly obvious.
+
+540
+00:23:27,500 --> 00:23:27,800
+But,
+
+541
+00:23:27,930 --> 00:23:30,800
+but I sometimes feel like, you know, we're, we're, I,
+
+542
+00:23:30,939 --> 00:23:33,219
+I forget the movies but you know where it, it's,
+
+543
+00:23:33,469 --> 00:23:38,109
+everyone seems insane and there's only that one person who isn't crazy in the movie
+
+544
+00:23:38,329 --> 00:23:40,329
+and that's kind of what I feel like sometimes around this,
+
+545
+00:23:40,339 --> 00:23:42,599
+it's like this isn't a conversation anymore.
+
+546
+00:23:42,609 --> 00:23:47,750
+-- You are using open source if you don't know that. Well, that's shame on you.
+-- Right.
+
+547
+00:23:47,989 --> 00:23:49,670
+I think part of this is because of
+
+548
+00:23:49,900 --> 00:23:50,319
+open
+
+549
+00:23:50,439 --> 00:23:53,859
+source, not only one, but it's matured to the point where it's like elevators,
+
+550
+00:23:54,609 --> 00:23:56,420
+it, it's just there and it works
+
+551
+00:23:56,599 --> 00:23:57,109
+and you,
+
+552
+00:23:57,239 --> 00:23:58,709
+you don't even think about
+
+553
+00:23:58,869 --> 00:24:02,170
+stuff like elevators or revolving doors or
+
+554
+00:24:02,790 --> 00:24:06,369
+you know, your car, it just, you get in your car, you turn the key
+
+555
+00:24:06,540 --> 00:24:06,949
+and
+
+556
+00:24:07,579 --> 00:24:08,829
+it starts and you go
+
+557
+00:24:09,209 --> 00:24:11,890
+and that's fair and, and that's kind of what you could call it,
+
+558
+00:24:11,900 --> 00:24:15,589
+infrastructure or commodity or, I mean, there's various terms for that.
+
+559
+00:24:15,599 --> 00:24:15,790
+But,
+
+560
+00:24:15,979 --> 00:24:18,369
+but yeah, I, I turn on my faucet water comes out.
+
+561
+00:24:18,569 --> 00:24:21,800
+That's just the way it is. In fact, actually I had my water shut off.
+
+562
+00:24:21,810 --> 00:24:25,239
+They were doing construction outside my house about three weeks ago. Give or take.
+
+563
+00:24:25,630 --> 00:24:26,209
+And
+
+564
+00:24:26,479 --> 00:24:27,209
+it is
+
+565
+00:24:27,430 --> 00:24:30,599
+unsettling to turn the faucet on and nothing comes out
+
+566
+00:24:30,609 --> 00:24:32,839
+and I kept forgetting this was the case and,
+
+567
+00:24:32,849 --> 00:24:36,170
+you know, I, I, I'm at home and I just kept going to it and turning it on
+
+568
+00:24:36,630 --> 00:24:39,630
+and at, at first it was the, the, oh, crap, I forgot it's off.
+
+569
+00:24:39,640 --> 00:24:42,260
+And then after a while I'm like, come on, when's this coming back? Like, let's go.
+
+570
+00:24:42,270 --> 00:24:45,160
+And I kept turning it on and I guess in hindsight I should have just turned
+
+571
+00:24:45,170 --> 00:24:47,849
+it on and left it on and I would have heard the noise but for some reason
+
+572
+00:24:48,020 --> 00:24:50,729
+I felt better getting up periodically turning it on
+
+573
+00:24:51,010 --> 00:24:52,359
+and having no water come out and then
+
+574
+00:24:52,369 --> 00:24:54,890
+being disappointed and then grumbling to myself and,
+
+575
+00:24:54,900 --> 00:24:55,979
+and going back to work.
+
+576
+00:24:56,069 --> 00:24:58,089
+Well, you know, it's, I mean, during a power outage,
+
+577
+00:24:58,099 --> 00:25:00,040
+how often have you been wandering around the house?
+
+578
+00:25:00,050 --> 00:25:02,329
+And you, you walk into a room and hit a light switch
+
+579
+00:25:02,719 --> 00:25:05,290
+because that's what you do when you walk into a dark room.
+
+580
+00:25:05,709 --> 00:25:07,569
+That's true. You don't think about it. You just,
+
+581
+00:25:08,790 --> 00:25:12,010
+it's unsettling. I, I hate power outages. They bother me.
+
+582
+00:25:12,020 --> 00:25:12,229
+Well,
+
+583
+00:25:12,239 --> 00:25:14,640
+actually the worst though is an internet outage because
+
+584
+00:25:14,650 --> 00:25:16,699
+I think all I do is keep running ping
+
+585
+00:25:16,910 --> 00:25:20,329
+against hosts that that are public waiting for the internet to come back
+
+586
+00:25:20,849 --> 00:25:21,410
+and
+
+587
+00:25:21,869 --> 00:25:22,369
+it's,
+
+588
+00:25:23,250 --> 00:25:25,199
+it's a total waste of my time. But,
+
+589
+00:25:26,060 --> 00:25:27,319
+yeah, you gotta love it.
+
+590
+00:25:27,510 --> 00:25:28,609
+Well, I mean, and that's, you know,
+
+591
+00:25:28,619 --> 00:25:32,849
+that's part of the beauty of this is 99% of the stuff works so well that
+
+592
+00:25:33,170 --> 00:25:35,030
+people don't even know they're using it.
+
+593
+00:25:35,640 --> 00:25:37,319
+Uh, you know. Ok. So that's,
+
+594
+00:25:37,750 --> 00:25:40,479
+I, I think the logical conclusion, we, we're gonna take ourselves to,
+
+595
+00:25:40,489 --> 00:25:42,000
+if we start down this path and you're right
+
+596
+00:25:42,790 --> 00:25:47,560
+in, in, in the context of open source, it works well enough until it doesn't.
+
+597
+00:25:47,569 --> 00:25:50,760
+But the problem, I think from the security aspect is
+
+598
+00:25:51,130 --> 00:25:55,140
+when you're using unknown open source, when it fails,
+
+599
+00:25:55,150 --> 00:25:57,839
+it is probably going to fail spectacularly.
+
+600
+00:25:57,849 --> 00:26:00,849
+I think heartbleed is a great example of this where there were probably
+
+601
+00:26:00,859 --> 00:26:04,560
+people who didn't even know they had open SSL in their projects.
+
+602
+00:26:04,790 --> 00:26:06,540
+And then one day someone was like, hey,
+
+603
+00:26:06,609 --> 00:26:10,339
+this heartbleed scan is failing on your device or your, you know,
+
+604
+00:26:10,390 --> 00:26:12,260
+application or whatever it happened to be.
+
+605
+00:26:12,729 --> 00:26:15,810
+And I bet they were like, well, what the heck, where did that thing come from? Right.
+
+606
+00:26:16,119 --> 00:26:17,449
+Well, and I think a lot of this, I mean,
+
+607
+00:26:17,459 --> 00:26:19,520
+if you look at the software industry in general,
+
+608
+00:26:19,530 --> 00:26:21,030
+especially the commercial side of it,
+
+609
+00:26:21,550 --> 00:26:23,829
+the majority of software projects fail
+
+610
+00:26:24,239 --> 00:26:27,819
+miserably, you know, they don't deliver on budget or on time. Right?
+
+611
+00:26:28,540 --> 00:26:33,310
+And so I think part of the challenge is the software industry as a whole is still
+
+612
+00:26:34,069 --> 00:26:35,050
+not mature.
+
+613
+00:26:35,060 --> 00:26:36,380
+I mean, compared to like, you know,
+
+614
+00:26:36,390 --> 00:26:38,930
+engineering bridges where there's seven kinds of bridges.
+
+615
+00:26:38,939 --> 00:26:40,329
+End of story, you
+
+616
+00:26:40,520 --> 00:26:43,670
+pick which one you want to build and then you pick the materials and then you're done,
+
+617
+00:26:44,099 --> 00:26:44,609
+you know,
+
+618
+00:26:45,079 --> 00:26:47,459
+um, with software, you know, we,
+
+619
+00:26:48,199 --> 00:26:50,300
+I've been in this thing for 20 years now and had, like,
+
+620
+00:26:50,310 --> 00:26:53,680
+basically everything I learned up until e everything I knew
+
+621
+00:26:53,689 --> 00:26:57,060
+that's less than five years old is so laughably obsolete.
+
+622
+00:26:58,349 --> 00:26:59,209
+-- You know.
+-- That's
+
+623
+00:26:59,489 --> 00:26:59,520
+true.
+
+624
+00:26:59,650 --> 00:27:01,839
+Now, I'm gonna come back against you though here and,
+
+625
+00:27:01,849 --> 00:27:05,709
+and I agree with you that bridges are a fine example of engineering done.
+
+626
+00:27:05,719 --> 00:27:08,579
+Right. Where in general, bridges don't fall down. Ok.
+
+627
+00:27:08,750 --> 00:27:09,109
+But we've also
+
+628
+00:27:09,310 --> 00:27:09,800
+been building
+
+629
+00:27:09,939 --> 00:27:10,030
+for
+
+630
+00:27:10,219 --> 00:27:12,900
+-- 5000 years.
+-- Right. Right. Well, that's my point. Right.
+
+631
+00:27:13,180 --> 00:27:14,459
+I can build,
+
+632
+00:27:14,670 --> 00:27:15,380
+or rather
+
+633
+00:27:15,630 --> 00:27:18,329
+I can't build a bridge in my garage,
+
+634
+00:27:18,709 --> 00:27:21,300
+can build software in my garage.
+
+635
+00:27:21,469 --> 00:27:24,260
+And so I think that's one of the great challenges here is
+
+636
+00:27:24,510 --> 00:27:26,250
+when you have an industry
+
+637
+00:27:26,380 --> 00:27:27,219
+that is
+
+638
+00:27:27,699 --> 00:27:29,680
+very difficult to enter into,
+
+639
+00:27:29,689 --> 00:27:33,000
+such as building buildings or bridges or something like that.
+
+640
+00:27:33,280 --> 00:27:37,130
+The bar is already really high, but it's like my, I could teach my kid.
+
+641
+00:27:37,140 --> 00:27:40,079
+In fact, he's learning to write software because he thinks it's neat
+
+642
+00:27:40,550 --> 00:27:41,069
+and
+
+643
+00:27:41,500 --> 00:27:42,800
+he's, he's 10.
+
+644
+00:27:42,959 --> 00:27:44,839
+I mean, there's no licensing there.
+
+645
+00:27:44,849 --> 00:27:47,800
+There's, he's gonna screw it up and it's gonna be a mess and whatever.
+
+646
+00:27:47,810 --> 00:27:48,839
+I mean, it's part of learning. Right.
+
+647
+00:27:48,849 --> 00:27:51,189
+It's not unlike building a popsicle stick bridge.
+
+648
+00:27:51,430 --> 00:27:52,260
+But now
+
+649
+00:27:52,390 --> 00:27:55,469
+this would be like, I built a popsicle stick bridge and someone says, oh,
+
+650
+00:27:55,479 --> 00:27:56,109
+that's neat.
+
+651
+00:27:56,119 --> 00:27:59,890
+And they took it and they went and put it, you know, in production somewhere and,
+
+652
+00:27:59,900 --> 00:28:03,010
+and it's like, wait, no, that, that's made of popsicle sticks don't use that.
+
+653
+00:28:03,020 --> 00:28:05,810
+And that's kind of what I see a lot of this software as where,
+
+654
+00:28:05,979 --> 00:28:10,089
+where you have people that might start a hobby or a fun thing and all of a sudden,
+
+655
+00:28:10,099 --> 00:28:11,994
+you know, it's running someone's infrastructure.
+
+656
+00:28:12,005 --> 00:28:13,755
+It's like, whoa, what just happened there?
+
+657
+00:28:13,935 --> 00:28:16,435
+Well, and that, you know, that goes back to the, the,
+
+658
+00:28:16,444 --> 00:28:20,755
+the projects consuming this stuff should be aware of what they're consuming.
+
+659
+00:28:20,765 --> 00:28:23,064
+You know, that to me is just common sense. I mean,
+
+660
+00:28:23,354 --> 00:28:27,474
+if you're gonna download random code off the internet and not only run it but,
+
+661
+00:28:27,484 --> 00:28:29,704
+you know, build things that it runs,
+
+662
+00:28:30,030 --> 00:28:32,170
+you should probably know what you're like.
+
+663
+00:28:32,180 --> 00:28:35,989
+You should at a minimum have a manifest and again, going back to open source, that's,
+
+664
+00:28:36,000 --> 00:28:39,150
+that's something that's actually relatively easy to do in the open source world.
+
+665
+00:28:39,380 --> 00:28:40,729
+You know, I look at, um,
+
+666
+00:28:40,739 --> 00:28:43,689
+I've dealt with companies that have bought commercial components.
+
+667
+00:28:44,530 --> 00:28:47,709
+We have no idea what's in those things. Why is this thing? 300 megabytes?
+
+668
+00:28:47,719 --> 00:28:49,589
+It converts HTML to PDF.
+
+669
+00:28:50,119 --> 00:28:50,560
+Why
+
+670
+00:28:51,290 --> 00:28:51,410
+it's
+
+671
+00:28:51,589 --> 00:28:51,619
+fine,
+
+672
+00:28:52,469 --> 00:28:53,000
+you know,
+
+673
+00:28:53,500 --> 00:28:56,800
+-- that, yeah, try not to think too much about it because it just hurts.
+-- Right.
+
+674
+00:28:56,810 --> 00:28:59,969
+Pay no attention to the man. Behind the curtain, everything is fine.
+
+675
+00:29:00,589 --> 00:29:04,410
+So I think basically a lot of it boils down to is is maturity and you know,
+
+676
+00:29:04,420 --> 00:29:07,709
+the ability to take risk like if you're building space shuttle software,
+
+677
+00:29:07,719 --> 00:29:11,550
+uh my understanding is every line of code is fully documented.
+
+678
+00:29:11,560 --> 00:29:12,239
+They have
+
+679
+00:29:12,410 --> 00:29:15,239
+not only who put it there but why it was put there,
+
+680
+00:29:15,719 --> 00:29:19,069
+right? The majority of source code that's written in the world is like,
+
+681
+00:29:19,739 --> 00:29:21,540
+uh you're writing, you know, you're writing a,
+
+682
+00:29:21,550 --> 00:29:24,560
+a cash register application for dry cleaners.
+
+683
+00:29:24,849 --> 00:29:26,400
+You know, you're not gonna have
+
+684
+00:29:27,229 --> 00:29:30,089
+that level of software maturity because you don't need it.
+
+685
+00:29:30,260 --> 00:29:32,339
+You know, if it breaks, you just go out and fix it and they,
+
+686
+00:29:32,579 --> 00:29:36,300
+you know, they use paper for a couple hours while the cash register is down.
+
+687
+00:29:36,650 --> 00:29:37,650
+Well, except
+
+688
+00:29:38,089 --> 00:29:40,170
+we have things like cars
+
+689
+00:29:40,280 --> 00:29:42,000
+now running random open
+
+690
+00:29:42,140 --> 00:29:42,810
+source software.
+
+691
+00:29:42,819 --> 00:29:47,319
+So we're gonna hit the point where if there are bugs, people are going to die,
+
+692
+00:29:47,660 --> 00:29:48,420
+which is
+
+693
+00:29:48,709 --> 00:29:53,050
+a terrifying problem that we will speak of another day. I think it is,
+
+694
+00:29:54,140 --> 00:29:55,520
+let's end it there. All right,
+
+695
+00:29:55,689 --> 00:30:00,680
+let's say, let's say this. Let's say I'm, I'm a project. I'm a developer.
+
+696
+00:30:00,829 --> 00:30:02,319
+I've got some open source.
+
+697
+00:30:02,369 --> 00:30:06,439
+What do you think Kurt is the single most important thing I could do today
+
+698
+00:30:06,760 --> 00:30:08,760
+to make my life a better place.
+
+699
+00:30:09,130 --> 00:30:09,329
+Make
+
+700
+00:30:09,469 --> 00:30:10,660
+sure you know which open
+
+701
+00:30:10,869 --> 00:30:11,359
+source
+
+702
+00:30:11,689 --> 00:30:15,500
+projects you're using and subscribe to their announced list
+
+703
+00:30:15,650 --> 00:30:19,819
+or at least figure out where they do releases and you know, look at them once a month,
+
+704
+00:30:20,270 --> 00:30:21,160
+their web page
+
+705
+00:30:22,199 --> 00:30:23,339
+and that is great advice, Kurt.
+
+706
+00:30:23,349 --> 00:30:25,780
+And if we all did that the world would be a better place.
+
+707
+00:30:25,900 --> 00:30:26,540
+All right, folks.
+
+708
+00:30:26,550 --> 00:30:29,689
+So I'd like to thank you for listening to, to the podcast,
+
+709
+00:30:29,699 --> 00:30:30,890
+the open source security podcast.
+
+710
+00:30:30,900 --> 00:30:31,900
+And until next time,
+
+711
+00:30:32,650 --> 00:30:33,219
+take care.

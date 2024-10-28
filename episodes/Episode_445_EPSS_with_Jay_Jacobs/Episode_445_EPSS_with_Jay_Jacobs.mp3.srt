@@ -1,0 +1,3762 @@
+0
+00:00:05,440 --> 00:00:08,979
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,989 --> 00:00:10,810
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:10,819 --> 00:00:13,100
+-- Josh
+-- Pressers. All right. I'm excited today.
+
+3
+00:00:13,109 --> 00:00:16,420
+We have Jay Jacobs, one of the creators of EP Ss Ss on the show.
+
+4
+00:00:16,760 --> 00:00:18,639
+-- Jay. Welcome to the show,
+-- man.
+
+5
+00:00:18,760 --> 00:00:21,760
+Hey, thanks for having me. Glad to finally be on here with you guys.
+
+6
+00:00:21,770 --> 00:00:23,139
+It's funny because
+
+7
+00:00:23,790 --> 00:00:27,215
+epss, this is becoming like a, a very, I, I think
+
+8
+00:00:27,454 --> 00:00:30,864
+important topic and vulnerabilities and I look back, I'm like, holy crap.
+
+9
+00:00:30,875 --> 00:00:33,444
+We've almost, we've done almost nothing about it on, on here,
+
+10
+00:00:33,455 --> 00:00:34,825
+which is kind of surprising to me.
+
+11
+00:00:34,834 --> 00:00:35,095
+But
+
+12
+00:00:35,264 --> 00:00:36,095
+regardless
+
+13
+00:00:36,294 --> 00:00:39,494
+that makes me happy because you're here and you're like, you're the pro.
+
+14
+00:00:39,505 --> 00:00:43,294
+So let's start at the beginning. What does VPs SS stand for? And what is it?
+
+15
+00:00:43,729 --> 00:00:47,319
+It is the exploit prediction scoring system
+
+16
+00:00:47,520 --> 00:00:53,369
+and it does the, the best that it can trying to exactly as the name implies,
+
+17
+00:00:53,380 --> 00:00:54,209
+predicting
+
+18
+00:00:54,349 --> 00:00:59,349
+exploitation activity in the wild specifically over the next 30 days.
+
+19
+00:00:59,740 --> 00:01:01,090
+One quick clarifying question.
+
+20
+00:01:01,099 --> 00:01:06,110
+So this is exploitation by bad guys or who like pen testers.
+
+21
+00:01:06,220 --> 00:01:06,400
+Yeah,
+
+22
+00:01:06,410 --> 00:01:09,830
+that's a very important question because essentially we
+
+23
+00:01:09,839 --> 00:01:12,430
+have to start talking about the data behind epss
+
+24
+00:01:12,779 --> 00:01:17,019
+because it is I I was very clear to say exploitation activity,
+
+25
+00:01:17,269 --> 00:01:21,260
+not necessarily first uh successful exploitations because we're
+
+26
+00:01:21,269 --> 00:01:23,919
+getting honey pots that will never be exploited
+
+27
+00:01:24,080 --> 00:01:25,040
+or shouldn't be exploited.
+
+28
+00:01:25,190 --> 00:01:28,839
+And then DS IP S uh devices, you know,
+
+29
+00:01:28,849 --> 00:01:32,739
+that will typically like IP S typically will block most of the activity.
+
+30
+00:01:33,169 --> 00:01:33,830
+And
+
+31
+00:01:33,940 --> 00:01:34,870
+to your point
+
+32
+00:01:35,300 --> 00:01:37,150
+when you see a packet coming into your
+
+33
+00:01:37,160 --> 00:01:39,839
+network probing or trying to exploit something,
+
+34
+00:01:39,849 --> 00:01:40,589
+you have no idea.
+
+35
+00:01:40,599 --> 00:01:44,730
+If it's an academic researcher trying to catalog what is good and you know,
+
+36
+00:01:44,739 --> 00:01:48,069
+like that stuff or if it is a malicious thing, so you have no idea.
+
+37
+00:01:48,080 --> 00:01:48,550
+And so
+
+38
+00:01:48,849 --> 00:01:52,029
+it is just pure exploitation activity.
+
+39
+00:01:52,400 --> 00:01:56,639
+I want to ask about epss versus CV SS because I think
+
+40
+00:01:56,650 --> 00:02:00,709
+CE Ss is the kind of dominant rating system we have today.
+
+41
+00:02:00,720 --> 00:02:04,860
+And I think it is universally hated by all security people.
+
+42
+00:02:05,169 --> 00:02:06,129
+Yeah,
+
+43
+00:02:06,389 --> 00:02:10,470
+I don't know if I would say I hate it, but I, I think everybody has an opinion
+
+44
+00:02:11,080 --> 00:02:13,309
+-- about
+-- a negative opinion about,
+
+45
+00:02:13,479 --> 00:02:13,800
+can I
+
+46
+00:02:13,940 --> 00:02:14,589
+for a thought?
+
+47
+00:02:14,919 --> 00:02:15,990
+It's,
+
+48
+00:02:16,000 --> 00:02:18,779
+I think CBS has made a lot of sense when it
+
+49
+00:02:18,789 --> 00:02:22,300
+was created and for what it was created because for example,
+
+50
+00:02:22,309 --> 00:02:24,970
+as a security, especially when we worked at Red Hat,
+
+51
+00:02:25,619 --> 00:02:29,539
+99% of all I cared about is, is this network or not network
+
+52
+00:02:30,050 --> 00:02:32,160
+and authenticated or not authenticated?
+
+53
+00:02:32,309 --> 00:02:35,479
+Like I need those two questions answered for every vulnerability I'm,
+
+54
+00:02:35,490 --> 00:02:36,529
+I'm processing and
+
+55
+00:02:36,949 --> 00:02:39,080
+CV SS is actually quite useful for that.
+
+56
+00:02:39,339 --> 00:02:40,000
+And
+
+57
+00:02:40,139 --> 00:02:41,899
+same thing when I worked at I saw and I defense.
+
+58
+00:02:41,910 --> 00:02:45,729
+But I think the problem is because it's the only shoe we have.
+
+59
+00:02:45,740 --> 00:02:48,330
+Everybody ended up trying to climb Mount Everest in that shoe.
+
+60
+00:02:48,699 --> 00:02:49,649
+Totally. Yes.
+
+61
+00:02:49,789 --> 00:02:52,789
+So my, my take on it to your point, Kurt,
+
+62
+00:02:52,800 --> 00:02:56,160
+I think that the individual metrics are super useful.
+
+63
+00:02:56,169 --> 00:03:00,960
+And I would, I really hope that that maintains forever
+
+64
+00:03:01,149 --> 00:03:05,410
+to have somebody go in and say, hey, this is network accessible or hey, this is,
+
+65
+00:03:05,520 --> 00:03:08,589
+this does require some type of prerequisite or something like that.
+
+66
+00:03:08,919 --> 00:03:13,600
+Um I think that's really, really helpful, but I think where it starts to fall down is
+
+67
+00:03:13,759 --> 00:03:18,250
+except the two things, one, it produces a score and prior to version four,
+
+68
+00:03:18,259 --> 00:03:20,389
+the way that score is produced is
+
+69
+00:03:21,000 --> 00:03:22,520
+interesting. And then
+
+70
+00:03:22,679 --> 00:03:26,899
+the other challenge is that it, it is a one thing for everything.
+
+71
+00:03:27,029 --> 00:03:30,259
+Um And so people would use it and typically just the base
+
+72
+00:03:30,270 --> 00:03:33,500
+score not get into the environmental and the threat stuff and just say
+
+73
+00:03:33,649 --> 00:03:36,800
+this base score represents risk even though
+
+74
+00:03:37,029 --> 00:03:41,869
+like the, the documentation of CV SS says it's not risk, everyone uses it at risk. And
+
+75
+00:03:42,050 --> 00:03:44,179
+you know, I mean, honestly, it is risk.
+
+76
+00:03:44,190 --> 00:03:46,899
+-- I mean, that's what they're trying to measure.
+-- We don't have anything else
+
+77
+00:03:47,399 --> 00:03:48,100
+to do.
+
+78
+00:03:48,419 --> 00:03:48,979
+We don't,
+
+79
+00:03:48,990 --> 00:03:52,820
+there's no other 0 to 10 number than a manager wants on a spreadsheet to offer them
+
+80
+00:03:54,470 --> 00:03:56,339
+unless well, now there's a new one,
+
+81
+00:03:56,770 --> 00:03:57,339
+right?
+
+82
+00:03:57,470 --> 00:04:01,419
+And Epss though, specifically is exploitation activity.
+
+83
+00:04:01,429 --> 00:04:03,130
+So, like we just said, the base score,
+
+84
+00:04:03,139 --> 00:04:05,669
+no one gets into the environmental and the threat stuff.
+
+85
+00:04:05,679 --> 00:04:07,699
+Epss is just that threat side.
+
+86
+00:04:08,020 --> 00:04:12,399
+It has no idea about the context of the vulnerability, the value of the asset,
+
+87
+00:04:12,410 --> 00:04:13,639
+what's behind it, what's around it?
+
+88
+00:04:13,649 --> 00:04:17,760
+-- None of that is just the threat.
+-- Yes. And, and so let's talk about that.
+
+89
+00:04:17,769 --> 00:04:20,720
+What is like, what does that mean? What does it mean to
+
+90
+00:04:20,920 --> 00:04:23,959
+detect exploit ability? How does that process work?
+
+91
+00:04:24,320 --> 00:04:24,970
+So
+
+92
+00:04:25,380 --> 00:04:29,320
+-- you mean like the data that we're collecting or kind of
+-- the machine? Right?
+
+93
+00:04:29,329 --> 00:04:30,980
+Because you collect data and then you do stuff with
+
+94
+00:04:30,989 --> 00:04:33,019
+the data and then you output a score essentially,
+
+95
+00:04:33,029 --> 00:04:36,380
+-- but you don't output a score for every CV E
+-- no, every CV.
+
+96
+00:04:36,390 --> 00:04:37,619
+Oh It is every CV E
+
+97
+00:04:38,309 --> 00:04:42,399
+-- the initial version was not every CV E
+-- oh cool. I didn't, I didn't know that.
+
+98
+00:04:42,410 --> 00:04:43,619
+That's good. I learned something new.
+
+99
+00:04:43,720 --> 00:04:47,179
+Yeah, we're on the, we're on the third version of the Epss model.
+
+100
+00:04:47,446 --> 00:04:48,585
+Soon to be
+
+101
+00:04:48,716 --> 00:04:51,325
+3.1 or four. So I don't know, something like that.
+
+102
+00:04:51,705 --> 00:04:55,055
+Nice. All right. So anyway, explain the machine to us then what does that look like?
+
+103
+00:04:55,066 --> 00:04:55,246
+Yeah.
+
+104
+00:04:55,506 --> 00:05:01,485
+Yeah. And so we get as much data as I can possibly collect and
+
+105
+00:05:01,596 --> 00:05:05,825
+maybe it'll help actually go back to version one because there was initially a paper
+
+106
+00:05:05,996 --> 00:05:10,466
+I think it was 2019 presented at Black hat where we presented this paper
+
+107
+00:05:10,571 --> 00:05:15,351
+on the first epss version and we had CBS S in mind.
+
+108
+00:05:15,361 --> 00:05:18,231
+And so I did a bunch of data collection and we were working with,
+
+109
+00:05:18,242 --> 00:05:20,671
+I was doing work with Kenna at the time consulting and,
+
+110
+00:05:20,682 --> 00:05:23,631
+and doing some research for him and publications and
+
+111
+00:05:23,641 --> 00:05:25,552
+they had a bunch of data about vulnerabilities.
+
+112
+00:05:25,562 --> 00:05:27,471
+And we had another client that I was working with,
+
+113
+00:05:27,481 --> 00:05:29,391
+that had a bunch of exploitation activity
+
+114
+00:05:29,552 --> 00:05:30,671
+and Kenna had some of their own.
+
+115
+00:05:30,682 --> 00:05:33,631
+I was like, hey, we could bring these together and create a little prediction thing.
+
+116
+00:05:33,910 --> 00:05:34,609
+And so
+
+117
+00:05:34,920 --> 00:05:38,589
+essentially, the first time we were like, all we want people to calculate a score.
+
+118
+00:05:38,600 --> 00:05:42,820
+So we're gonna make this as the word was parsimonious as parsimonious as possible,
+
+119
+00:05:42,829 --> 00:05:43,089
+right?
+
+120
+00:05:43,269 --> 00:05:46,970
+The fewest number of variables that would create a good model.
+
+121
+00:05:46,980 --> 00:05:49,609
+And I think we had 16 variables or something
+
+122
+00:05:50,019 --> 00:05:50,450
+and
+
+123
+00:05:50,910 --> 00:05:54,450
+we created just a simple uh logistic regression which
+
+124
+00:05:54,459 --> 00:05:57,250
+is like one variable has a weight and that weight
+
+125
+00:05:57,260 --> 00:05:59,130
+can be combined in a certain way that you
+
+126
+00:05:59,140 --> 00:06:01,380
+end up with a probability between zero and one.
+
+127
+00:06:01,630 --> 00:06:02,309
+And
+
+128
+00:06:02,429 --> 00:06:05,200
+so we expected people to have a spreadsheet
+
+129
+00:06:05,309 --> 00:06:09,299
+and to implement this in the spreadsheet and go get these 16 variables,
+
+130
+00:06:09,440 --> 00:06:09,920
+right?
+
+131
+00:06:10,350 --> 00:06:11,670
+And you get the, the humor
+
+132
+00:06:11,820 --> 00:06:13,769
+right, right off the bat. And,
+
+133
+00:06:13,959 --> 00:06:17,859
+and this was problematic and so largely it was just sort of an academic exercise,
+
+134
+00:06:17,869 --> 00:06:19,089
+release this paper.
+
+135
+00:06:19,290 --> 00:06:22,790
+And then Sasa Romanoski who works at rand,
+
+136
+00:06:22,799 --> 00:06:24,790
+um him and I were talking about this and he's one of the
+
+137
+00:06:25,000 --> 00:06:26,250
+co-author on the original paper.
+
+138
+00:06:26,260 --> 00:06:27,109
+I mean, he's like, we should,
+
+139
+00:06:27,119 --> 00:06:30,589
+we should make a go of this and bring this into like first or some group and
+
+140
+00:06:30,910 --> 00:06:35,000
+stand up a group around this to really help build out what this model can do.
+
+141
+00:06:35,130 --> 00:06:38,130
+And so we did that and we started having meetings and then
+
+142
+00:06:38,230 --> 00:06:43,250
+it dawned on me that like this is no longer a spreadsheet world, right? This is
+
+143
+00:06:43,429 --> 00:06:45,859
+live api S everyone's connected.
+
+144
+00:06:45,920 --> 00:06:49,809
+Why aren't we just calculating this in one central location?
+
+145
+00:06:50,309 --> 00:06:53,790
+Uh And so we started doing that, I started producing these scores daily,
+
+146
+00:06:53,890 --> 00:06:55,640
+given these 16 variables.
+
+147
+00:06:56,190 --> 00:06:58,130
+And the first model wasn't great,
+
+148
+00:06:58,140 --> 00:07:01,489
+it was better than CV SS specifically for exploitation activity.
+
+149
+00:07:01,899 --> 00:07:02,899
+Um And so
+
+150
+00:07:03,100 --> 00:07:04,160
+that's how it started.
+
+151
+00:07:04,170 --> 00:07:05,390
+Like with these 16 variables,
+
+152
+00:07:05,399 --> 00:07:08,850
+you would get them and the model would look at the exploitation activity
+
+153
+00:07:09,029 --> 00:07:11,529
+and then all this input variable and build a model,
+
+154
+00:07:11,540 --> 00:07:14,730
+derive those weights based on the outcomes, right?
+
+155
+00:07:15,149 --> 00:07:16,910
+Um And a very simple, you know,
+
+156
+00:07:16,920 --> 00:07:20,290
+like the regression was developed 200 years ago at this point.
+
+157
+00:07:20,579 --> 00:07:23,850
+Um So it's a 200 year old technique that we're doing in vulnerabilities.
+
+158
+00:07:24,100 --> 00:07:24,750
+And,
+
+159
+00:07:24,890 --> 00:07:28,609
+and that worked, I mean, like it was pretty good, it wasn't great,
+
+160
+00:07:28,619 --> 00:07:32,000
+uh really easy to find all these examples where Epss was terrible.
+
+161
+00:07:32,500 --> 00:07:35,059
+And so fast forward though, we started to centralize it.
+
+162
+00:07:35,170 --> 00:07:36,959
+And then I was like now that we're centralizing it.
+
+163
+00:07:36,970 --> 00:07:39,179
+Nobody is going to do this in a spreadsheet.
+
+164
+00:07:39,609 --> 00:07:42,130
+We can go crazy, right? We can
+
+165
+00:07:42,399 --> 00:07:46,070
+drop the whole regression simple model. Go to a much more complex model.
+
+166
+00:07:46,079 --> 00:07:47,010
+We can start to include
+
+167
+00:07:47,230 --> 00:07:48,190
+every variable,
+
+168
+00:07:48,200 --> 00:07:49,989
+every piece of data we can get our hands on because no
+
+169
+00:07:50,000 --> 00:07:52,450
+longer do we have to ask people to go get this data?
+
+170
+00:07:52,739 --> 00:07:55,089
+Right? They don't have to go look up if something hasn't met us white.
+
+171
+00:07:55,320 --> 00:07:58,390
+Um We're doing all of that for them and that's what it is now.
+
+172
+00:07:58,399 --> 00:08:01,850
+So the version two went to it was a I believe,
+
+173
+00:08:02,279 --> 00:08:04,100
+oh it was a GLM net um
+
+174
+00:08:04,570 --> 00:08:04,790
+Reg
+
+175
+00:08:05,079 --> 00:08:07,190
+and Lasso um thing.
+
+176
+00:08:07,329 --> 00:08:08,029
+Anyway,
+
+177
+00:08:08,220 --> 00:08:11,350
+so that had like 1000 variables in version two
+
+178
+00:08:11,480 --> 00:08:13,149
+and then version three,
+
+179
+00:08:13,160 --> 00:08:18,519
+we went to uh an X two boost model which has a iterative cycle to it.
+
+180
+00:08:18,529 --> 00:08:23,250
+And so one of the challenges is in version three,
+
+181
+00:08:23,260 --> 00:08:26,269
+a variable no longer has a single weight.
+
+182
+00:08:26,760 --> 00:08:30,570
+Um And so people say like, hey, what's the contribution of something being in meta
+
+183
+00:08:30,750 --> 00:08:33,570
+flight? And you're like, well, it depends on all the other variables.
+
+184
+00:08:34,210 --> 00:08:35,340
+Yeah, sure, sure.
+
+185
+00:08:35,349 --> 00:08:38,770
+Well, as it should I, that's one thing that's always drive me nuts is
+
+186
+00:08:39,760 --> 00:08:41,609
+like, it's this, it's this
+
+187
+00:08:41,710 --> 00:08:46,900
+really tightly linked in ecosystem of stuff with human actors
+
+188
+00:08:47,309 --> 00:08:47,739
+and
+
+189
+00:08:48,150 --> 00:08:51,419
+like there's humans making decisions like II I literally
+
+190
+00:08:51,530 --> 00:08:52,820
+their process for picking, you know,
+
+191
+00:08:52,830 --> 00:08:55,500
+what do we write an exploit for was literally like,
+
+192
+00:08:55,510 --> 00:08:58,130
+three people and then taking a smoke break and hashing it out.
+
+193
+00:08:58,349 --> 00:08:58,780
+Right.
+
+194
+00:08:59,500 --> 00:08:59,969
+Yeah.
+
+195
+00:09:00,099 --> 00:09:02,799
+But I mean, because, and people think there's like, some
+
+196
+00:09:02,989 --> 00:09:06,960
+big statistical, like, no, it's just like three guys in a room.
+
+197
+00:09:07,289 --> 00:09:09,380
+-- And
+-- I think that is the case everywhere. By the way,
+
+198
+00:09:09,419 --> 00:09:09,440
+I
+
+199
+00:09:10,190 --> 00:09:12,460
+don't imagine how it would be anything but that, because, like,
+
+200
+00:09:13,599 --> 00:09:13,830
+yeah,
+
+201
+00:09:14,380 --> 00:09:16,770
+and I mean, like, what's interesting is something like
+
+202
+00:09:17,229 --> 00:09:18,640
+metas so a lot of the
+
+203
+00:09:18,770 --> 00:09:20,590
+threat intel type sources like metas
+
+204
+00:09:20,690 --> 00:09:22,150
+point where you've got humans
+
+205
+00:09:22,260 --> 00:09:25,099
+making a judgment about what to go watch for or to
+
+206
+00:09:25,109 --> 00:09:27,549
+write exploit for or to scan for anything like that.
+
+207
+00:09:27,559 --> 00:09:29,280
+A lot of the pen testing tools are this way,
+
+208
+00:09:29,640 --> 00:09:30,960
+they are highly efficient.
+
+209
+00:09:30,969 --> 00:09:33,619
+In other words, like a lot of what they choose,
+
+210
+00:09:33,630 --> 00:09:35,809
+we actually see exploitation activity in the case of metas
+
+211
+00:09:36,109 --> 00:09:37,179
+that might be causal.
+
+212
+00:09:37,690 --> 00:09:38,570
+Uh But
+
+213
+00:09:38,679 --> 00:09:40,760
+for, you know, like a pen testing tool
+
+214
+00:09:40,890 --> 00:09:42,219
+that is purely correlation.
+
+215
+00:09:42,469 --> 00:09:43,940
+And so, but their,
+
+216
+00:09:43,950 --> 00:09:47,619
+their decision to go look at or include this in their tooling or
+
+217
+00:09:47,630 --> 00:09:50,900
+something is a really good indicator that there's probably going to be activity,
+
+218
+00:09:51,419 --> 00:09:55,859
+but it's also like only a small fraction of what's actually being exploited.
+
+219
+00:09:56,340 --> 00:09:59,049
+Um So they're really efficient but they don't have really good coverage.
+
+220
+00:09:59,059 --> 00:10:02,630
+And these are terms that we talk about in A PSS, the efficiency and coverage
+
+221
+00:10:02,840 --> 00:10:05,030
+as we try to measure how good it's working.
+
+222
+00:10:05,409 --> 00:10:07,179
+And so, but back to the model,
+
+223
+00:10:07,289 --> 00:10:10,580
+um how it actually works. So that's this is how we're training it.
+
+224
+00:10:10,590 --> 00:10:12,919
+Now, we have all of this exploitation activity.
+
+225
+00:10:13,090 --> 00:10:15,590
+And the other thing is when we talk about exploitation activity,
+
+226
+00:10:15,599 --> 00:10:17,520
+we need that temporal aspect.
+
+227
+00:10:17,739 --> 00:10:20,239
+We need to know there was exploitation activity
+
+228
+00:10:20,340 --> 00:10:21,520
+last Sunday.
+
+229
+00:10:21,859 --> 00:10:25,320
+Uh And then was it on Saturday as well? The day before that?
+
+230
+00:10:25,330 --> 00:10:27,520
+And how did that look for the last two years?
+
+231
+00:10:28,000 --> 00:10:30,280
+And we need to know that whereas something like,
+
+232
+00:10:30,530 --> 00:10:33,000
+you know, you look at the Kev list and it says,
+
+233
+00:10:33,289 --> 00:10:33,919
+yep,
+
+234
+00:10:34,809 --> 00:10:35,659
+that's all you get.
+
+235
+00:10:37,150 --> 00:10:37,500
+Yes,
+
+236
+00:10:37,809 --> 00:10:39,719
+exploitation equals yes.
+
+237
+00:10:39,840 --> 00:10:42,119
+And that isn't helpful because
+
+238
+00:10:42,330 --> 00:10:45,729
+you know, I just released some research for the Epss A
+
+239
+00:10:45,919 --> 00:10:47,619
+saying that you know, what was it like?
+
+240
+00:10:47,630 --> 00:10:51,859
+50% of things marked as exploited were exploited in the last week,
+
+241
+00:10:51,869 --> 00:10:52,869
+we had evidence of this.
+
+242
+00:10:53,340 --> 00:10:56,849
+But then before that, we see roughly like 25%.
+
+243
+00:10:57,179 --> 00:10:59,479
+Can't remember the exact step, like 25%
+
+244
+00:10:59,739 --> 00:11:02,080
+were not seen exploited in like the last year.
+
+245
+00:11:02,390 --> 00:11:04,520
+So a quarter of the things that we saw
+
+246
+00:11:04,530 --> 00:11:07,979
+exploitation activity for out of like 14,000 CV ES,
+
+247
+00:11:07,989 --> 00:11:09,950
+we had evidence of exploitation activity.
+
+248
+00:11:10,030 --> 00:11:14,250
+25% were not seen exploited in the last year. So when somebody says, yes,
+
+249
+00:11:14,489 --> 00:11:17,289
+I want to say like still is it still exploited?
+
+250
+00:11:17,700 --> 00:11:20,090
+Let me make sure I understand what you just said because
+
+251
+00:11:20,250 --> 00:11:21,669
+I'm not real smart. So that feels like
+
+252
+00:11:21,890 --> 00:11:22,859
+over my head a little bit.
+
+253
+00:11:22,869 --> 00:11:24,330
+So you're saying if you look at all
+
+254
+00:11:24,340 --> 00:11:28,739
+of the vulnerabilities that we have exploitation data about
+
+255
+00:11:29,250 --> 00:11:31,719
+once they become, let's say, a year old,
+
+256
+00:11:31,729 --> 00:11:37,849
+75% kind of fall off the radar and are no longer being exploited by threat actors.
+
+257
+00:11:37,869 --> 00:11:38,659
+Well,
+
+258
+00:11:39,039 --> 00:11:42,880
+you got it, it's, it's way more complicated than that, unfortunately.
+
+259
+00:11:43,130 --> 00:11:44,380
+So that is not what you said
+
+260
+00:11:44,489 --> 00:11:44,820
+it.
+
+261
+00:11:44,960 --> 00:11:47,090
+Right. It's, it's pretty close though.
+
+262
+00:11:47,099 --> 00:11:49,340
+I mean, like I could say, yeah, that's, that works.
+
+263
+00:11:49,549 --> 00:11:50,020
+Um
+
+264
+00:11:51,039 --> 00:11:54,440
+Well, my one question because, OK, so like I know if you stand up a web server,
+
+265
+00:11:54,450 --> 00:11:57,309
+you'll see people still trying to hit front page.
+
+266
+00:11:57,630 --> 00:11:59,809
+Microsoft front page stopped existing,
+
+267
+00:12:00,380 --> 00:12:02,159
+I don't know, a decade or two ago
+
+268
+00:12:02,690 --> 00:12:03,119
+and
+
+269
+00:12:03,390 --> 00:12:05,330
+obviously there must still be installs of it
+
+270
+00:12:05,340 --> 00:12:06,770
+because people keep trying to s swack it.
+
+271
+00:12:06,780 --> 00:12:09,229
+Um But I'm assuming that there's like a lot of web software
+
+272
+00:12:09,239 --> 00:12:12,489
+that people just kind of give up on or stop trying,
+
+273
+00:12:12,500 --> 00:12:14,880
+which is weird to me because like, if I was an attacker,
+
+274
+00:12:14,890 --> 00:12:16,150
+I would just shock on that sucker.
+
+275
+00:12:16,349 --> 00:12:16,830
+Like,
+
+276
+00:12:17,059 --> 00:12:18,409
+right, because what's the downside?
+
+277
+00:12:18,989 --> 00:12:20,719
+And I guess one of my questions would be, is
+
+278
+00:12:21,340 --> 00:12:27,000
+these things that stop being, you stop seeing exploit activity for?
+
+279
+00:12:27,340 --> 00:12:27,840
+Is it
+
+280
+00:12:28,200 --> 00:12:31,070
+like, do they actually go away? Like are they gone?
+
+281
+00:12:32,669 --> 00:12:33,270
+Uh
+
+282
+00:12:34,559 --> 00:12:35,299
+I don't know,
+
+283
+00:12:36,020 --> 00:12:38,820
+you mean like the technologies go away or the exploits?
+
+284
+00:12:39,239 --> 00:12:39,820
+Yeah, like,
+
+285
+00:12:39,830 --> 00:12:42,780
+like are people not trying to break into Mazda cars anymore because there's no
+
+286
+00:12:42,789 --> 00:12:45,750
+more Mazda cars or is we're actually not seeing that kind of thing,
+
+287
+00:12:45,760 --> 00:12:46,179
+right?
+
+288
+00:12:46,190 --> 00:12:46,239
+I mean,
+
+289
+00:12:46,369 --> 00:12:51,179
+you got to remember like the the actors who are doing this have, you know,
+
+290
+00:12:51,190 --> 00:12:53,609
+cost versus benefit calculations, right?
+
+291
+00:12:53,619 --> 00:12:54,179
+And so
+
+292
+00:12:54,380 --> 00:12:56,770
+one of the things that we do notice is after
+
+293
+00:12:57,075 --> 00:13:00,645
+a vulnerability is published, like in the first month of any,
+
+294
+00:13:00,655 --> 00:13:02,075
+any vulnerabilities life.
+
+295
+00:13:02,335 --> 00:13:05,664
+Um If you actually, if you look at the first month of all the vulnerabilities
+
+296
+00:13:05,854 --> 00:13:08,445
+and you have that sliding window whenever it was published,
+
+297
+00:13:08,715 --> 00:13:11,044
+there's a lot of variation.
+
+298
+00:13:11,054 --> 00:13:14,505
+There's a lot of trial and error that we see in exploitation activity,
+
+299
+00:13:14,854 --> 00:13:17,924
+we see people sort of trying something. There's, you know, like, I don't know.
+
+300
+00:13:18,440 --> 00:13:21,640
+Um So many of these have exploitation activity and they
+
+301
+00:13:21,650 --> 00:13:24,640
+sort of die out after a couple of months or,
+
+302
+00:13:24,780 --> 00:13:24,989
+you know,
+
+303
+00:13:25,000 --> 00:13:27,229
+maybe they start a year after it was published and
+
+304
+00:13:27,239 --> 00:13:28,780
+they try a couple of things and they're like,
+
+305
+00:13:28,789 --> 00:13:30,390
+hey, we're not getting a lot of hits on this,
+
+306
+00:13:30,400 --> 00:13:32,229
+let's try something else or something like that.
+
+307
+00:13:32,510 --> 00:13:32,890
+So,
+
+308
+00:13:33,140 --> 00:13:34,400
+and to clarify, when you say trying,
+
+309
+00:13:34,609 --> 00:13:37,419
+I'm assuming that they actually have a working exploit that they're
+
+310
+00:13:37,429 --> 00:13:39,869
+then trying to see if there's enough people to make it worth
+
+311
+00:13:40,049 --> 00:13:43,140
+using, like they're not trying to make a working exploit.
+
+312
+00:13:43,280 --> 00:13:44,309
+That's a theory.
+
+313
+00:13:44,710 --> 00:13:44,940
+Yeah.
+
+314
+00:13:46,090 --> 00:13:46,359
+Yeah.
+
+315
+00:13:46,369 --> 00:13:46,890
+So it's,
+
+316
+00:13:46,900 --> 00:13:48,650
+it's hard to know exactly what they're doing because
+
+317
+00:13:48,659 --> 00:13:50,669
+all we're getting is that the signature got triggered
+
+318
+00:13:51,010 --> 00:13:55,099
+generally. So getting motivation behind that is kind of hard. But yeah, I mean,
+
+319
+00:13:55,250 --> 00:13:57,630
+so we do see, like, activity
+
+320
+00:13:57,830 --> 00:14:00,450
+sort of sporadic at the beginning, a lot of variation.
+
+321
+00:14:00,460 --> 00:14:02,349
+But after, you know, like a year or two,
+
+322
+00:14:02,359 --> 00:14:05,059
+after publication it all sort of settles down.
+
+323
+00:14:05,070 --> 00:14:05,789
+And so, like,
+
+324
+00:14:05,880 --> 00:14:07,909
+week after week you're seeing the same things being
+
+325
+00:14:07,919 --> 00:14:10,590
+exploited for stuff that's more than two years old.
+
+326
+00:14:10,719 --> 00:14:14,090
+-- But you're
+-- seeing more exploits for things two years
+
+327
+00:14:14,622 --> 00:14:16,372
+-- again. Like I, I wish I could say.
+-- Yes.
+
+328
+00:14:16,603 --> 00:14:17,692
+That's fine. That's fine.
+
+329
+00:14:17,942 --> 00:14:22,052
+Well, I, I just heard we should only run software between one and two years old.
+
+330
+00:14:22,062 --> 00:14:22,453
+Right.
+
+331
+00:14:23,062 --> 00:14:27,252
+Well, I'm also wondering like, how much of this is Survivor bias of the data, right?
+
+332
+00:14:27,263 --> 00:14:27,742
+Because
+
+333
+00:14:27,942 --> 00:14:30,333
+I guess one could make the argument like log for Jay,
+
+334
+00:14:30,502 --> 00:14:33,132
+you know, cloud Fleer came out that post saying, oh, actually,
+
+335
+00:14:33,263 --> 00:14:37,916
+whoops, we saw this like, what, eight days or 11 days in advance or like over a week.
+
+336
+00:14:38,245 --> 00:14:38,895
+Um
+
+337
+00:14:39,205 --> 00:14:40,976
+And I'm kind of wondering because like,
+
+338
+00:14:40,986 --> 00:14:43,085
+they're not going to look for every single exploit to
+
+339
+00:14:43,096 --> 00:14:45,116
+see how many days in advance of it being public.
+
+340
+00:14:45,125 --> 00:14:46,236
+Was it exploited? Because
+
+341
+00:14:46,526 --> 00:14:48,476
+-- that would be a lot of work?
+-- Yeah.
+
+342
+00:14:48,726 --> 00:14:52,036
+So this, that you're touching on some something that is
+
+343
+00:14:52,296 --> 00:14:52,306
+a
+
+344
+00:14:52,445 --> 00:14:55,205
+really interesting topic that the Survivor bias.
+
+345
+00:14:55,435 --> 00:14:56,245
+In other words, like
+
+346
+00:14:56,486 --> 00:15:00,306
+we're seeing, are, are we seeing exploitation for the ones that we're looking for?
+
+347
+00:15:00,929 --> 00:15:01,179
+Right.
+
+348
+00:15:01,190 --> 00:15:05,650
+Because clearly, clearly with 240,000 CV ES right now,
+
+349
+00:15:05,659 --> 00:15:07,809
+we do not have a signature for all of them,
+
+350
+00:15:08,130 --> 00:15:12,859
+right? And we've got a signature. I think it's like 10 15% of those have a signature
+
+351
+00:15:13,070 --> 00:15:14,049
+for detection.
+
+352
+00:15:14,229 --> 00:15:18,049
+And so the question is like, what about the other 90% is that being exploited?
+
+353
+00:15:18,159 --> 00:15:22,489
+And the way we get around that is that there's nothing in epss
+
+354
+00:15:22,979 --> 00:15:27,510
+that says this particular vulnerability has been exploited in the past
+
+355
+00:15:28,299 --> 00:15:31,469
+if that makes sense. So we don't have that's a auto
+
+356
+00:15:31,619 --> 00:15:33,500
+aggressive feature saying like,
+
+357
+00:15:33,840 --> 00:15:36,599
+so like we know log for shell example is a great example,
+
+358
+00:15:36,609 --> 00:15:38,380
+like it would be great if we had a model set,
+
+359
+00:15:38,390 --> 00:15:41,929
+this is was exploited yesterday and the day before and the day before,
+
+360
+00:15:42,080 --> 00:15:43,960
+we're gonna expect it to be exploited tomorrow.
+
+361
+00:15:44,260 --> 00:15:48,320
+But epss does not do that specifically for this reason.
+
+362
+00:15:48,659 --> 00:15:52,479
+It basically says, hey, this is a vulnerability that has these attributes.
+
+363
+00:15:52,489 --> 00:15:56,489
+We know that exploit code is published here. It's got exploit code here.
+
+364
+00:15:56,500 --> 00:15:59,520
+It's this type of vulnerability CV SSS all these metrics
+
+365
+00:15:59,789 --> 00:16:01,080
+and we have all these attributes.
+
+366
+00:16:01,090 --> 00:16:03,809
+And then, and then the model says, hey, this looks like
+
+367
+00:16:04,109 --> 00:16:07,849
+a vulnerability that we see with exploitation activity
+
+368
+00:16:08,140 --> 00:16:09,359
+over on this side.
+
+369
+00:16:09,570 --> 00:16:12,969
+So even if something doesn't have a signature,
+
+370
+00:16:13,109 --> 00:16:16,200
+there's a really high, there's a chance that it may be rated highly
+
+371
+00:16:16,520 --> 00:16:20,609
+because we don't have that feedback loop directly in the scoring system.
+
+372
+00:16:20,969 --> 00:16:21,299
+Well,
+
+373
+00:16:21,309 --> 00:16:23,179
+because I was gonna ask like it from what I
+
+374
+00:16:23,190 --> 00:16:25,479
+read the paper and it doesn't sound like for example,
+
+375
+00:16:25,489 --> 00:16:28,500
+you're using the CIA known exploded vulnerabilities catalog
+
+376
+00:16:28,599 --> 00:16:30,780
+to kind of back feed into like OK,
+
+377
+00:16:30,789 --> 00:16:34,669
+like this was a good prediction because Kev saw it and I I'm also
+
+378
+00:16:34,679 --> 00:16:37,940
+guessing part of that is because the Kev didn't really exist when you started,
+
+379
+00:16:38,429 --> 00:16:39,500
+like it only literally,
+
+380
+00:16:39,510 --> 00:16:40,880
+it's only in what the last three months or
+
+381
+00:16:40,890 --> 00:16:43,400
+four months that they've actually been publishing data publicly.
+
+382
+00:16:44,099 --> 00:16:46,080
+And I'm curious now that they are doing that however,
+
+383
+00:16:46,090 --> 00:16:47,349
+and being a bit more gung ho on it,
+
+384
+00:16:47,359 --> 00:16:49,090
+is that something you're looking to maybe use as a
+
+385
+00:16:49,099 --> 00:16:51,190
+data source now that it is kind of useful.
+
+386
+00:16:51,289 --> 00:16:53,580
+It's in version 30 OK.
+
+387
+00:16:53,669 --> 00:16:56,700
+And what's interesting as I was talking about Epss
+
+388
+00:16:56,710 --> 00:16:59,239
+needs that temporal aspect and Kev doesn't have it.
+
+389
+00:16:59,539 --> 00:17:02,760
+Sorry, what do you mean exactly by that? Because that's something I think.
+
+390
+00:17:02,969 --> 00:17:06,260
+Yeah, first of all, what is temporal score mean in CV SS terms?
+
+391
+00:17:06,530 --> 00:17:08,579
+Yeah, ignore the CBS S temporal.
+
+392
+00:17:08,589 --> 00:17:11,329
+I'm just talking about a time aspect to exploitation activity.
+
+393
+00:17:11,800 --> 00:17:17,598
+So Kev like just says, it says here, I'm putting the CV E on the Kev list on this date.
+
+394
+00:17:17,819 --> 00:17:18,819
+And that's all you know,
+
+395
+00:17:19,140 --> 00:17:20,900
+and they're saying this is known to be exploited.
+
+396
+00:17:20,910 --> 00:17:22,500
+They're saying it's binary like there's
+
+397
+00:17:22,510 --> 00:17:24,339
+either exploitation activity or there isn't
+
+398
+00:17:24,979 --> 00:17:28,599
+right. And that's not the real world. I mean like the real world is we have super
+
+399
+00:17:28,910 --> 00:17:29,719
+bursts. We have
+
+400
+00:17:29,939 --> 00:17:31,920
+like I said, some are no longer exploited,
+
+401
+00:17:31,930 --> 00:17:34,750
+some are exploited like unbelievably everywhere.
+
+402
+00:17:34,760 --> 00:17:39,670
+Most of the time, all the time. And so it's, it's not a, it's not a yes or no thing.
+
+403
+00:17:39,680 --> 00:17:44,689
+And so Kev Kev is an Epss version three, but it is not an outcome variable.
+
+404
+00:17:44,699 --> 00:17:45,660
+Is, it is an indication.
+
+405
+00:17:46,253 --> 00:17:47,902
+We use it as an indicator.
+
+406
+00:17:48,042 --> 00:17:48,863
+In other words like a
+
+407
+00:17:49,022 --> 00:17:54,522
+CV E. So there's things on the Kev list that we do not see exploitation activity for.
+
+408
+00:17:54,723 --> 00:17:55,892
+-- Oh, interesting.
+-- Yeah.
+
+409
+00:17:56,152 --> 00:17:56,172
+Yeah.
+
+410
+00:17:56,182 --> 00:17:57,713
+And that's one thing I was wondering because I,
+
+411
+00:17:57,723 --> 00:18:00,133
+I assumed Kev kept their data close to the vest because they, you know,
+
+412
+00:18:00,142 --> 00:18:01,052
+the whole classic
+
+413
+00:18:01,233 --> 00:18:04,652
+uh what's the term uh sources and ways and means of collection, right?
+
+414
+00:18:04,662 --> 00:18:07,326
+Because they don't want to be like, oh yeah, this Kev was exploited,
+
+415
+00:18:07,336 --> 00:18:09,005
+Raytheon on this system one
+
+416
+00:18:09,345 --> 00:18:10,796
+versus this other one, you know, log
+
+417
+00:18:11,105 --> 00:18:13,145
+which like obviously being exploited.
+
+418
+00:18:13,666 --> 00:18:14,406
+And so,
+
+419
+00:18:14,566 --> 00:18:14,845
+right?
+
+420
+00:18:14,855 --> 00:18:17,735
+And that's the problem I've always wondered about these data sets is like, yeah,
+
+421
+00:18:17,745 --> 00:18:22,475
+it literally Stuxnet would be one in, you know, that would be no exploited versus
+
+422
+00:18:22,916 --> 00:18:24,105
+obviously they're not going to, you know,
+
+423
+00:18:24,115 --> 00:18:27,265
+probably put that on the list and they're certainly not going to give details about
+
+424
+00:18:27,586 --> 00:18:27,725
+it.
+
+425
+00:18:28,156 --> 00:18:28,566
+Yeah.
+
+426
+00:18:28,796 --> 00:18:31,485
+Yeah. And so that's the challenge, right?
+
+427
+00:18:31,595 --> 00:18:35,755
+Um We don't know if this was exploited once at one location or everywhere,
+
+428
+00:18:35,765 --> 00:18:36,286
+all the time.
+
+429
+00:18:36,800 --> 00:18:39,979
+Um And so when Epss uses it, it says, hey,
+
+430
+00:18:40,199 --> 00:18:43,260
+I've got this signal just like what analysts say,
+
+431
+00:18:43,420 --> 00:18:45,989
+hey, I've got this signal, something was added on the Kev.
+
+432
+00:18:46,119 --> 00:18:47,449
+Should I care about it
+
+433
+00:18:47,739 --> 00:18:48,500
+next month,
+
+434
+00:18:48,880 --> 00:18:52,800
+you know, or like it was added six months ago and this just popped up on my network.
+
+435
+00:18:52,810 --> 00:18:53,989
+Should I still care about it?
+
+436
+00:18:54,859 --> 00:18:56,310
+And that's what epss is doing.
+
+437
+00:18:56,489 --> 00:19:00,760
+So you keep talking Jay about kind of the signal and the data you're looking at.
+
+438
+00:19:01,069 --> 00:19:04,109
+Where does this all come from? The feedback loop?
+
+439
+00:19:04,119 --> 00:19:08,270
+No, no, I mean, you're collecting like data on if something has been exploited,
+
+440
+00:19:08,290 --> 00:19:09,689
+where are you getting that from?
+
+441
+00:19:09,699 --> 00:19:11,609
+Because that's hard data to find
+
+442
+00:19:13,040 --> 00:19:15,180
+that is extremely hard data to find.
+
+443
+00:19:15,510 --> 00:19:17,640
+So a couple of sources, the big one is Fort
+
+444
+00:19:18,680 --> 00:19:18,959
+Fort,
+
+445
+00:19:19,209 --> 00:19:22,349
+you know, they've got 100,000 devices or something. Um
+
+446
+00:19:22,880 --> 00:19:23,579
+And they were,
+
+447
+00:19:23,589 --> 00:19:26,219
+they were an early partner and we've done a lot of consulting with them,
+
+448
+00:19:26,229 --> 00:19:28,939
+doing a lot of helping out with some of their research and stuff like that.
+
+449
+00:19:29,329 --> 00:19:31,260
+Um And so they were an early partner and
+
+450
+00:19:31,459 --> 00:19:32,099
+the way,
+
+451
+00:19:32,479 --> 00:19:36,329
+unfortunately, the way epss has traditionally gotten data is like for, for
+
+452
+00:19:36,599 --> 00:19:39,609
+that, I would send an email to the guy. I'm working with the for
+
+453
+00:19:39,800 --> 00:19:40,819
+and be like, hey, can
+
+454
+00:19:41,160 --> 00:19:43,709
+early on I was like, I'm building this new thing called epss.
+
+455
+00:19:43,719 --> 00:19:46,819
+Can I use your data to help train it? And I got an email back saying sure
+
+456
+00:19:47,010 --> 00:19:50,369
+because I had the date already, right? So this is the data sharing agreement
+
+457
+00:19:50,800 --> 00:19:53,150
+uh that we have in place, but we're working on, you know,
+
+458
+00:19:53,160 --> 00:19:55,130
+making that more official and things like that.
+
+459
+00:19:55,630 --> 00:19:56,400
+So we've got, fortunate
+
+460
+00:19:56,800 --> 00:20:01,300
+we've got Alien Vault, their, their OTX system behind the scenes reporting on,
+
+461
+00:20:01,310 --> 00:20:02,660
+on stuff that they're seeing.
+
+462
+00:20:02,979 --> 00:20:04,979
+We've got shadow server.
+
+463
+00:20:04,989 --> 00:20:07,579
+These are all on the website and I'm trying to do off the top of my head.
+
+464
+00:20:07,770 --> 00:20:09,119
+That's ok. I don't remember either.
+
+465
+00:20:09,280 --> 00:20:11,650
+But you, you have these data sources, right.
+
+466
+00:20:12,290 --> 00:20:16,540
+Yeah, they are not public except for shadow server. Um, gray noises in there
+
+467
+00:20:16,780 --> 00:20:19,935
+which I know some people complain about here and there, but I,
+
+468
+00:20:20,045 --> 00:20:22,675
+I'm OK with it. I think this is hard to find.
+
+469
+00:20:22,685 --> 00:20:25,755
+And if there's organizations willing to contribute, that's a pretty big deal.
+
+470
+00:20:25,765 --> 00:20:26,295
+I think.
+
+471
+00:20:26,724 --> 00:20:29,415
+I mean, I worked in this industry that data sells for a lot of money.
+
+472
+00:20:29,425 --> 00:20:30,755
+They're not going to give it away for free
+
+473
+00:20:32,204 --> 00:20:32,655
+because that's
+
+474
+00:20:32,805 --> 00:20:33,535
+literally
+
+475
+00:20:33,685 --> 00:20:36,265
+their business model is to not give it away for free.
+
+476
+00:20:36,405 --> 00:20:38,275
+So I could totally see them maybe letting you use it.
+
+477
+00:20:38,285 --> 00:20:38,474
+But yeah,
+
+478
+00:20:38,484 --> 00:20:41,234
+there's no way you're going to get to republish it because that would be insane,
+
+479
+00:20:41,405 --> 00:20:41,905
+right?
+
+480
+00:20:42,084 --> 00:20:44,525
+And that's one of the things like people always say, you know,
+
+481
+00:20:44,535 --> 00:20:46,635
+you know what's exploited, why don't you just tell us, I'm like,
+
+482
+00:20:46,645 --> 00:20:49,354
+I can't like we're using this data to try and
+
+483
+00:20:49,750 --> 00:20:52,569
+create something more than what's in the data. So,
+
+484
+00:20:52,859 --> 00:20:55,209
+-- um yeah,
+-- so one question I have is
+
+485
+00:20:56,189 --> 00:20:59,630
+and maybe, you know, maybe you don't know, but the data you're collecting,
+
+486
+00:20:59,640 --> 00:21:01,010
+it sounds like would be
+
+487
+00:21:01,270 --> 00:21:04,449
+mostly dealing with sort of widespread
+
+488
+00:21:04,459 --> 00:21:07,530
+exploitation versus highly targeted attacks.
+
+489
+00:21:07,890 --> 00:21:08,599
+Would that,
+
+490
+00:21:08,760 --> 00:21:09,949
+is that fair to say?
+
+491
+00:21:09,959 --> 00:21:14,750
+-- Or or are you actually also catching indicators of highly targeted attacks?
+-- So
+
+492
+00:21:15,069 --> 00:21:19,750
+one of the interesting things in a recent report that we released is we found,
+
+493
+00:21:19,760 --> 00:21:21,859
+I think it was like 75%
+
+494
+00:21:22,209 --> 00:21:22,989
+of
+
+495
+00:21:23,199 --> 00:21:25,459
+the exploitation activity that we captured
+
+496
+00:21:25,770 --> 00:21:31,069
+-- were seen at less than one in 10,000 devices.
+-- Oh, wow.
+
+497
+00:21:31,369 --> 00:21:32,089
+So like
+
+498
+00:21:32,369 --> 00:21:34,000
+tiny, tiny fraction,
+
+499
+00:21:34,199 --> 00:21:37,510
+sorry, 75% at less than one in 10,000.
+
+500
+00:21:37,699 --> 00:21:38,479
+Yeah. So
+
+501
+00:21:39,069 --> 00:21:42,189
+three out of four vulnerabilities that we have exploitation activity for.
+
+502
+00:21:42,280 --> 00:21:44,020
+We're super sparse.
+
+503
+00:21:44,310 --> 00:21:47,060
+Yeah, I don't know what to say to that. I'm literally speechless
+
+504
+00:21:47,599 --> 00:21:48,699
+on the other side.
+
+505
+00:21:48,800 --> 00:21:49,310
+So I mean,
+
+506
+00:21:49,319 --> 00:21:52,739
+we're talking about 14,000 vulnerabilities here
+
+507
+00:21:52,750 --> 00:21:54,849
+that we have exploitation activity for.
+
+508
+00:21:54,869 --> 00:21:56,849
+And so it's really sparse.
+
+509
+00:21:56,859 --> 00:22:02,260
+And so if you, if you take that into account and then go back to our kev conversation
+
+510
+00:22:02,790 --> 00:22:06,420
+and they're saying this is being exploited and I'm not seeing anything
+
+511
+00:22:06,670 --> 00:22:07,939
+that may not be weird,
+
+512
+00:22:08,310 --> 00:22:09,560
+you know, like if
+
+513
+00:22:09,869 --> 00:22:12,020
+like if Attackers go after something,
+
+514
+00:22:12,449 --> 00:22:16,000
+they prob I mean, if they're really going after some value,
+
+515
+00:22:16,010 --> 00:22:18,420
+they're not gonna spray the internet, right?
+
+516
+00:22:18,430 --> 00:22:21,479
+They're probably gonna do some reconnaissance or something, you know.
+
+517
+00:22:21,800 --> 00:22:26,219
+And so you were not going to see, we're gonna see, what do we say? Like,
+
+518
+00:22:26,420 --> 00:22:27,599
+I don't know, 10
+
+519
+00:22:27,890 --> 00:22:30,199
+I wish I had the, the stat up in front of me, but
+
+520
+00:22:30,380 --> 00:22:33,359
+like some small portion of cbes are actually seeing
+
+521
+00:22:33,369 --> 00:22:35,900
+it more than like one in 100 you know,
+
+522
+00:22:35,910 --> 00:22:37,640
+like 5 10% something like that.
+
+523
+00:22:37,650 --> 00:22:38,800
+Like some tiny,
+
+524
+00:22:38,810 --> 00:22:42,300
+tiny amount of actually exploited vulnerabilities are seen widespread.
+
+525
+00:22:42,310 --> 00:22:45,780
+Let's, let's build off that point because I think that's kind of the,
+
+526
+00:22:46,420 --> 00:22:50,199
+that is the thing. I mean, as much as I love being in the weeds here, I think that
+
+527
+00:22:50,500 --> 00:22:54,569
+we have right now 250,000 plus CD ES in existence.
+
+528
+00:22:54,579 --> 00:22:58,199
+But it's a very, very small number that actually matter, right?
+
+529
+00:22:58,500 --> 00:23:01,180
+And I think if we look back, you know, 1015,
+
+530
+00:23:01,189 --> 00:23:05,619
+20 years ago when things like CV SS were being, you know, created and, and all of that,
+
+531
+00:23:05,979 --> 00:23:08,280
+the number of vulnerabilities we had to care about was small.
+
+532
+00:23:08,750 --> 00:23:11,910
+And now the number is an avalanche that no one can deal with.
+
+533
+00:23:11,920 --> 00:23:16,250
+And this, I think is the key to Epss, right? Epss is going to give us
+
+534
+00:23:16,469 --> 00:23:21,380
+the ability to prioritize this list in a way that is meaningful. Versus
+
+535
+00:23:21,640 --> 00:23:23,180
+when we try to use CV S SS today,
+
+536
+00:23:23,189 --> 00:23:27,020
+we just end up with this huge pile of criticals and people are like, holy crap.
+
+537
+00:23:27,030 --> 00:23:28,069
+What do I even do here?
+
+538
+00:23:28,459 --> 00:23:28,880
+Yeah.
+
+539
+00:23:28,890 --> 00:23:29,589
+And you know,
+
+540
+00:23:29,599 --> 00:23:31,859
+looking at CV S si think it was like over half
+
+541
+00:23:31,869 --> 00:23:34,800
+of them are marked as high and critical over 70 Yeah.
+
+542
+00:23:34,810 --> 00:23:36,589
+It's, it's crazy. Yeah.
+
+543
+00:23:36,760 --> 00:23:42,630
+And with Epss, another, a huge challenge for Epss is that the distribution is not
+
+544
+00:23:42,920 --> 00:23:45,439
+anywhere intuitive So like
+
+545
+00:23:45,550 --> 00:23:51,160
+uh some large percent, like, I don't know, 85% are under a 2% probability.
+
+546
+00:23:51,500 --> 00:23:55,000
+So like most of the CV ES are really, really low chance of exploitation,
+
+547
+00:23:55,010 --> 00:23:56,599
+which is actually intuitive.
+
+548
+00:23:56,880 --> 00:24:00,569
+But when people look at the score, they're like, why don't I see a bell curve?
+
+549
+00:24:00,579 --> 00:24:01,079
+You know,
+
+550
+00:24:01,290 --> 00:24:02,800
+I want a bell curve on this day,
+
+551
+00:24:02,810 --> 00:24:06,530
+I want all the scores to be pretty and symmetrical and it's like, no, no, no,
+
+552
+00:24:06,540 --> 00:24:08,459
+they're way over on the left
+
+553
+00:24:08,800 --> 00:24:10,905
+and, and you have that graphic if,
+
+554
+00:24:10,915 --> 00:24:13,944
+if you can send it to me or I'll try to take it up where you show that,
+
+555
+00:24:13,954 --> 00:24:15,614
+that curve over time
+
+556
+00:24:15,895 --> 00:24:18,984
+and it really tightens up and yeah, it shifts really left
+
+557
+00:24:19,334 --> 00:24:23,944
+as, as Epss progresses and your data collection becomes better and all that.
+
+558
+00:24:23,954 --> 00:24:25,775
+-- It's super cool.
+-- Yeah.
+
+559
+00:24:25,925 --> 00:24:29,145
+Yeah, I'm trying to bring it up so I can get it to you guys while we're talking
+
+560
+00:24:29,640 --> 00:24:33,280
+so well. And obviously, so how do I phrase this?
+
+561
+00:24:33,430 --> 00:24:37,250
+There's kind of the elephant in the room here of you're only dealing with CV ES,
+
+562
+00:24:37,680 --> 00:24:43,140
+which makes sense because as any of our show listeners may or may not know
+
+563
+00:24:43,150 --> 00:24:46,540
+if you try and track down a vulnerability that does not have a CV E
+
+564
+00:24:46,819 --> 00:24:50,380
+like you might be able to track down the original issue or whatever in github,
+
+565
+00:24:50,520 --> 00:24:53,540
+but then trying to find any discussion of it
+
+566
+00:24:53,869 --> 00:24:55,810
+is basically impossible, right?
+
+567
+00:24:55,819 --> 00:24:58,310
+You're, you're doing tons of Google searches and good luck with that.
+
+568
+00:24:58,410 --> 00:24:59,219
+And so
+
+569
+00:24:59,329 --> 00:25:05,130
+like, is epss ever looking to cover outside of CV or is it just so much of a chore?
+
+570
+00:25:05,160 --> 00:25:08,819
+Like, how do you match signatures and names to stuff? Right. Without CV.
+
+571
+00:25:08,829 --> 00:25:09,989
+It's impossible.
+
+572
+00:25:10,150 --> 00:25:12,599
+So, I'm, I'm guessing that Epss is just like
+
+573
+00:25:12,880 --> 00:25:14,839
+there's just not enough good data there for us
+
+574
+00:25:14,849 --> 00:25:17,630
+to even try or is that something you're looking at
+
+575
+00:25:17,739 --> 00:25:18,300
+long term?
+
+576
+00:25:18,420 --> 00:25:22,680
+It is clearly, uh I don't know if I would call it like a weakness of epss.
+
+577
+00:25:22,689 --> 00:25:24,000
+It's a weakness of the industry.
+
+578
+00:25:24,180 --> 00:25:26,170
+That was gonna be my follow up question actually was,
+
+579
+00:25:26,180 --> 00:25:28,800
+is this again like this whole sort of we fix
+
+580
+00:25:28,810 --> 00:25:31,979
+CV ES because we don't have any other fixes,
+
+581
+00:25:32,150 --> 00:25:33,300
+right? Like literal. No, no.
+
+582
+00:25:33,310 --> 00:25:35,939
+Like literally, like when we worked at Red Hat, Josh, we did,
+
+583
+00:25:35,949 --> 00:25:39,069
+we ever ship a security update that did not have a CV attached to it.
+
+584
+00:25:39,170 --> 00:25:41,709
+-- We would have gotten one if it didn't.
+-- Exactly.
+
+585
+00:25:41,969 --> 00:25:45,760
+And, and so I think kind of by definition people fix CV. S because,
+
+586
+00:25:46,180 --> 00:25:49,189
+well, that's, that's the only patches my vendor provides me.
+
+587
+00:25:49,489 --> 00:25:49,939
+Yeah.
+
+588
+00:25:50,170 --> 00:25:50,750
+And
+
+589
+00:25:50,959 --> 00:25:54,670
+you know, as we talked about, I think I'm collecting like 30 different data sources,
+
+590
+00:25:54,680 --> 00:25:56,060
+30 disparate
+
+591
+00:25:56,380 --> 00:25:57,670
+data sources.
+
+592
+00:25:57,910 --> 00:25:59,060
+And to your point, Kurt
+
+593
+00:25:59,479 --> 00:26:02,869
+trying to say if somebody calls it, you know, barking spider.
+
+594
+00:26:02,880 --> 00:26:08,030
+And the other one is, you know, crawling ants like you don't, they the same thing.
+
+595
+00:26:08,040 --> 00:26:09,989
+There's no way programmatically
+
+596
+00:26:10,714 --> 00:26:11,635
+do this. If you want to do it.
+
+597
+00:26:11,645 --> 00:26:13,364
+You have to go through a manual and there's no way
+
+598
+00:26:13,375 --> 00:26:16,025
+for every vulnerability to go through every data source and say,
+
+599
+00:26:16,035 --> 00:26:18,655
+ah I see how this is mapping like that just doesn't work.
+
+600
+00:26:18,665 --> 00:26:19,135
+But
+
+601
+00:26:19,275 --> 00:26:24,364
+I think, you know, going back to some of our other discussions offline is what about,
+
+602
+00:26:24,375 --> 00:26:25,375
+you know, using like the
+
+603
+00:26:25,635 --> 00:26:28,895
+github advisory uh number or the Red Hat advisory?
+
+604
+00:26:28,905 --> 00:26:30,314
+They have their own numbers, right? And they,
+
+605
+00:26:30,739 --> 00:26:33,199
+um, OS V has their own numbering system.
+
+606
+00:26:33,209 --> 00:26:38,260
+Can these start to be used to, to get more data behind? Just CV ES?
+
+607
+00:26:38,270 --> 00:26:41,479
+And I think the answer is yes, but that's going to have to be
+
+608
+00:26:41,839 --> 00:26:44,930
+a, a concerted effort by people collecting data.
+
+609
+00:26:45,050 --> 00:26:47,170
+You have to have some type of identifier
+
+610
+00:26:47,280 --> 00:26:49,229
+and it can't be your own internal one and that's it.
+
+611
+00:26:49,589 --> 00:26:53,599
+Well, something like, I don't think I've ever seen anybody discussing a ghsa,
+
+612
+00:26:53,609 --> 00:26:53,900
+a github
+
+613
+00:26:54,030 --> 00:27:01,089
+-- security advisory ID by the GHS A number ever in my whole life.
+-- It's possible though
+
+614
+00:27:01,890 --> 00:27:03,250
+it could happen somewhere.
+
+615
+00:27:03,709 --> 00:27:04,709
+Yeah, it certainly.
+
+616
+00:27:04,800 --> 00:27:07,560
+But I, I, like I've only ever seen people refer to CV S and again,
+
+617
+00:27:07,569 --> 00:27:10,780
+Survivor buys like everything I buy at the store has a barcode on it because
+
+618
+00:27:11,310 --> 00:27:13,339
+Powells would, they put it on a shelf and sell it?
+
+619
+00:27:13,560 --> 00:27:17,780
+-- Well,
+-- and I, I think what we see happening like this happens in, in the GHS.
+
+620
+00:27:17,790 --> 00:27:20,930
+A universe is if something becomes important enough, we need to talk about it.
+
+621
+00:27:20,939 --> 00:27:22,954
+Someone just goes in gets ac be for it. Right.
+
+622
+00:27:22,964 --> 00:27:26,685
+It's very survivor bias in that regard where it's just event driven.
+
+623
+00:27:27,084 --> 00:27:29,935
+And I think we see that across every vulnerability
+
+624
+00:27:29,944 --> 00:27:32,194
+ecosystem is there might be a ton of stuff
+
+625
+00:27:32,204 --> 00:27:36,785
+that doesn't have a CV E but I also suspect if it had an EP SS S score,
+
+626
+00:27:36,795 --> 00:27:41,435
+the EPSS score would be incredibly low because if it was high,
+
+627
+00:27:42,045 --> 00:27:45,604
+someone's going to get a CV E for it, that way we can track it and do something about it.
+
+628
+00:27:45,844 --> 00:27:46,204
+Yeah.
+
+629
+00:27:46,719 --> 00:27:47,060
+Yeah.
+
+630
+00:27:47,359 --> 00:27:52,270
+-- OK.
+-- Jay, I want to ask you kind of and I know we're kind of coming towards the end here.
+
+631
+00:27:52,280 --> 00:27:56,069
+So I wanna, I wanna focus in on, on kind of Epss and, and how it's used,
+
+632
+00:27:56,359 --> 00:27:59,060
+I think the best and, and I, I will,
+
+633
+00:27:59,189 --> 00:28:00,930
+I can't wait to see what you think of this.
+
+634
+00:28:00,939 --> 00:28:04,890
+But I think the best example I've heard of, of how to apply epss.
+
+635
+00:28:04,900 --> 00:28:05,089
+Well,
+
+636
+00:28:05,099 --> 00:28:09,069
+the best example that my tiny brain can comprehend will say is
+
+637
+00:28:09,079 --> 00:28:12,189
+take the CBS S score multiply it by the Epss score.
+
+638
+00:28:12,199 --> 00:28:14,604
+And now you have something approaching like a
+
+639
+00:28:14,614 --> 00:28:17,035
+way to actually assess what you're dealing with.
+
+640
+00:28:17,275 --> 00:28:18,005
+I
+
+641
+00:28:18,214 --> 00:28:23,484
+want to make a pleasant response but that is I get a very official reaction to this.
+
+642
+00:28:23,494 --> 00:28:27,165
+-- This is, this is
+-- so you hate this. OK. Now I'm even more interested.
+
+643
+00:28:27,275 --> 00:28:29,444
+That is a terrible approach.
+
+644
+00:28:29,614 --> 00:28:30,425
+That is
+
+645
+00:28:30,854 --> 00:28:32,155
+that is I,
+
+646
+00:28:32,734 --> 00:28:37,354
+yeah, I, I want to throw more cold for words in there to really stress how bad that is
+
+647
+00:28:37,675 --> 00:28:39,885
+the beeper when I add it, go for it.
+
+648
+00:28:40,969 --> 00:28:44,750
+So you could just like, hold down the beeper during this whole phrase and just like,
+
+649
+00:28:44,760 --> 00:28:46,189
+just the whole thing is a beep.
+
+650
+00:28:47,589 --> 00:28:52,739
+Yeah, it is. It's, I, I can't, you know, it's like what's, what's in, in physics?
+
+651
+00:28:52,750 --> 00:28:54,619
+And I'm not that great at physics but, you know,
+
+652
+00:28:54,630 --> 00:28:57,060
+when you measure a particle or something, you've got the,
+
+653
+00:28:57,069 --> 00:28:59,060
+the direction and the speed
+
+654
+00:28:59,410 --> 00:29:00,819
+and someone says, well, I want to rank them.
+
+655
+00:29:00,829 --> 00:29:03,030
+So you take the direction of speed and you multiply them
+
+656
+00:29:03,300 --> 00:29:04,439
+like you never do that.
+
+657
+00:29:04,449 --> 00:29:07,030
+That is not a thing when you describe this, you've got the,
+
+658
+00:29:07,040 --> 00:29:08,520
+the direction and the speed, right?
+
+659
+00:29:08,699 --> 00:29:11,209
+It's CV, SS and epss are
+
+660
+00:29:11,910 --> 00:29:13,520
+different. I mean, they're, they're
+
+661
+00:29:14,040 --> 00:29:18,650
+like to first epss is 0 to 1 and CV SS is 0 to 10. So you
+
+662
+00:29:19,050 --> 00:29:21,000
+at least get them on the same scale.
+
+663
+00:29:21,099 --> 00:29:24,660
+But then like if you just multiply them, you've got, you know, up to 10,
+
+664
+00:29:24,670 --> 00:29:28,640
+multiplying against whatever, up to one and CV SS is gonna wait,
+
+665
+00:29:28,869 --> 00:29:32,800
+you know, 90% of that score for sure. Um, 99 anyway.
+
+666
+00:29:33,170 --> 00:29:37,000
+But so like, it's just, it's a terrible idea because here's,
+
+667
+00:29:37,010 --> 00:29:38,660
+here's why it's a terrible idea.
+
+668
+00:29:38,829 --> 00:29:42,300
+One. What is CV SS actually measuring?
+
+669
+00:29:43,130 --> 00:29:46,760
+And this is like an open question and people are going to say, oh, it's not risk,
+
+670
+00:29:46,770 --> 00:29:47,979
+it's severity.
+
+671
+00:29:49,150 --> 00:29:50,670
+What is severity,
+
+672
+00:29:51,280 --> 00:29:51,619
+you know,
+
+673
+00:29:51,630 --> 00:29:57,050
+like that in all of my studying of risk analysis and risk models that is not a term used
+
+674
+00:29:57,439 --> 00:29:58,630
+in these risk models.
+
+675
+00:29:58,640 --> 00:29:59,359
+You've got, you know,
+
+676
+00:29:59,369 --> 00:30:02,760
+threat and likelihood or probability and consequences impact.
+
+677
+00:30:03,040 --> 00:30:06,310
+No one says severity, they might say it for an impact. So, is this measuring impact?
+
+678
+00:30:06,319 --> 00:30:06,859
+No, no, no, no, no.
+
+679
+00:30:06,869 --> 00:30:11,219
+-- This
+-- is, there is one threat model that does consider severity and it's the, uh,
+
+680
+00:30:11,229 --> 00:30:12,239
+the chemical
+
+681
+00:30:12,400 --> 00:30:16,339
+engineers one for things like that because then things go boom.
+
+682
+00:30:16,390 --> 00:30:18,454
+Is that the severity of the impact?
+
+683
+00:30:18,645 --> 00:30:20,734
+-- Yes. Right.
+-- So that makes sense.
+
+684
+00:30:20,895 --> 00:30:23,655
+Like do basically, and it boils down to will people die,
+
+685
+00:30:23,805 --> 00:30:24,194
+right?
+
+686
+00:30:24,505 --> 00:30:26,515
+And so that's the only time I've ever seen that though.
+
+687
+00:30:26,525 --> 00:30:30,415
+-- So
+-- typically, you know, and fair, the fair model did a great thing where they
+
+688
+00:30:30,584 --> 00:30:32,354
+had this whole taxonomy, but
+
+689
+00:30:32,474 --> 00:30:36,675
+then they got it right. I mean, like you've got some pressure, which is the threat,
+
+690
+00:30:36,805 --> 00:30:40,795
+applying some force and then you've got your ability to resist that
+
+691
+00:30:41,084 --> 00:30:44,224
+or lack of resistance and then you've got some outcome
+
+692
+00:30:44,949 --> 00:30:46,780
+and this is another problem where you're getting like
+
+693
+00:30:46,790 --> 00:30:49,290
+when you have the probability of some event happening
+
+694
+00:30:49,640 --> 00:30:50,569
+and then the outcome,
+
+695
+00:30:50,579 --> 00:30:53,910
+those are another thing that you never multiply together yet people do.
+
+696
+00:30:53,920 --> 00:30:54,510
+Right?
+
+697
+00:30:54,890 --> 00:30:57,469
+Um And so when you take CV SS, which is,
+
+698
+00:30:57,780 --> 00:31:00,650
+it is measuring, it's trying to be a risk score
+
+699
+00:31:00,930 --> 00:31:02,750
+even though they, it's not in there,
+
+700
+00:31:02,859 --> 00:31:06,630
+they try to be a score and then you take epss which is just measuring the threat
+
+701
+00:31:06,790 --> 00:31:09,760
+and you're multiplying that together. Like, what, what are you multiplying?
+
+702
+00:31:09,770 --> 00:31:10,339
+It's like, you know,
+
+703
+00:31:10,349 --> 00:31:12,609
+I've got apples and then I've got a car in
+
+704
+00:31:12,619 --> 00:31:14,189
+the driveway and I want to bring them together.
+
+705
+00:31:14,199 --> 00:31:16,290
+You know, it's like, wait, no, no, no, these are totally different.
+
+706
+00:31:16,300 --> 00:31:16,689
+But I,
+
+707
+00:31:16,699 --> 00:31:19,810
+I get a number on the other side and people like
+
+708
+00:31:19,819 --> 00:31:22,500
+numbers because then I can order them in my spreadsheet.
+
+709
+00:31:22,790 --> 00:31:23,189
+Yeah,
+
+710
+00:31:23,339 --> 00:31:26,010
+the logic to me always seems struck me as like, ok,
+
+711
+00:31:26,020 --> 00:31:28,329
+the chances of us getting broken into our 50%.
+
+712
+00:31:28,469 --> 00:31:32,930
+So like we're going to put locks on 50% of the doors to meet that 50% threat.
+
+713
+00:31:33,619 --> 00:31:33,849
+Right.
+
+714
+00:31:33,859 --> 00:31:35,979
+That's literally like, or, or we're gonna, you know,
+
+715
+00:31:35,989 --> 00:31:38,709
+get the cheap lock instead of the expensive lock.
+
+716
+00:31:38,719 --> 00:31:39,130
+Yeah,
+
+717
+00:31:39,579 --> 00:31:42,689
+or another thing is like, you know, taking the CS is people,
+
+718
+00:31:42,699 --> 00:31:46,719
+people learn about the annualized annualized loss expectancy where you take
+
+719
+00:31:47,109 --> 00:31:47,119
+a,
+
+720
+00:31:47,339 --> 00:31:52,650
+you know, you have one event that has $100 impact and then it only happens once a year.
+
+721
+00:31:52,660 --> 00:31:54,739
+So every year you lose $10
+
+722
+00:31:55,180 --> 00:31:56,229
+and that's not the case.
+
+723
+00:31:56,239 --> 00:31:59,089
+Like you're gonna have one year while you lose it all and, you know,
+
+724
+00:31:59,099 --> 00:32:00,949
+it's not $100 it's $10 million.
+
+725
+00:32:00,959 --> 00:32:01,290
+So, like,
+
+726
+00:32:01,819 --> 00:32:05,400
+you might be able to afford, you know, that annualized loss every year,
+
+727
+00:32:05,410 --> 00:32:08,920
+but when it hits once and it's $10 million you can absorb that,
+
+728
+00:32:09,219 --> 00:32:10,780
+you know, that is totally different.
+
+729
+00:32:10,819 --> 00:32:14,359
+I think a big part of the problem is a lot of this kind of thinking about
+
+730
+00:32:14,369 --> 00:32:17,109
+risk came from the physical world where we
+
+731
+00:32:17,119 --> 00:32:19,810
+do kind of have large numbers and statistics and
+
+732
+00:32:20,219 --> 00:32:23,810
+we can sort of box, like if you rob a bank, the,
+
+733
+00:32:23,819 --> 00:32:27,000
+the most amount of money they can lose is how much of money the bank holds.
+
+734
+00:32:27,010 --> 00:32:27,449
+Right.
+
+735
+00:32:27,560 --> 00:32:28,069
+Right.
+
+736
+00:32:28,280 --> 00:32:29,040
+Ignoring costs.
+
+737
+00:32:29,050 --> 00:32:31,760
+Like, you know, everybody gets killed or the bank gets blown up or something,
+
+738
+00:32:31,770 --> 00:32:33,530
+which generally doesn't happen thankfully.
+
+739
+00:32:33,670 --> 00:32:35,599
+But, yeah, with a cyber event, you know, we're seeing
+
+740
+00:32:35,819 --> 00:32:37,020
+events where, oh,
+
+741
+00:32:37,500 --> 00:32:40,719
+nobody can get their prescription medication in like half the US for like, what,
+
+742
+00:32:40,729 --> 00:32:41,819
+two weeks or something.
+
+743
+00:32:42,410 --> 00:32:44,420
+Oops. So, back to your question, jos,
+
+744
+00:32:44,819 --> 00:32:49,290
+how do you combine these two or how would you use it in practice? Right.
+
+745
+00:32:49,300 --> 00:32:51,390
+That's sort of your, your ultimate question.
+
+746
+00:32:51,770 --> 00:32:54,670
+Yeah. And, and that's, that's like that, that is the final question, right?
+
+747
+00:32:54,680 --> 00:32:56,959
+So, we've got epss, we have this number
+
+748
+00:32:57,300 --> 00:32:57,959
+and
+
+749
+00:32:58,459 --> 00:32:59,500
+what do we do with it?
+
+750
+00:32:59,510 --> 00:33:03,020
+And I know that in all of my readings and the things you've written and said,
+
+751
+00:33:03,030 --> 00:33:06,030
+and in just the Epss universe in general is
+
+752
+00:33:06,250 --> 00:33:07,780
+there seems to be,
+
+753
+00:33:07,989 --> 00:33:09,119
+we'll say, uh, a
+
+754
+00:33:09,560 --> 00:33:15,069
+desire to not rank them in order. Right. That's not the goal here.
+
+755
+00:33:15,359 --> 00:33:19,339
+I mean, Epss is just measuring threats. So you can absolutely rank them
+
+756
+00:33:19,680 --> 00:33:21,400
+in order of threat likelihood.
+
+757
+00:33:21,839 --> 00:33:23,739
+Right. So you can, you can rank that
+
+758
+00:33:24,170 --> 00:33:25,550
+Um And you do,
+
+759
+00:33:25,560 --> 00:33:27,890
+I think the resistance that we have in epss that
+
+760
+00:33:27,900 --> 00:33:30,790
+I personally have is to bin them to say like,
+
+761
+00:33:30,989 --> 00:33:34,900
+hey, an epss score of 50% or higher is a critical
+
+762
+00:33:35,790 --> 00:33:35,989
+and
+
+763
+00:33:36,189 --> 00:33:38,420
+20 to 50% is a high, whatever it is,
+
+764
+00:33:38,430 --> 00:33:41,780
+wherever those thresholds lie for a central body to bend it.
+
+765
+00:33:41,790 --> 00:33:45,300
+Like that is super egotistical like,
+
+766
+00:33:45,640 --> 00:33:49,170
+hey, I understand everybody's risk and everybody's risk, risk is the same.
+
+767
+00:33:49,180 --> 00:33:50,510
+So everyone should have this threshold,
+
+768
+00:33:50,520 --> 00:33:52,900
+everyone should call this critical like that is not the case at all.
+
+769
+00:33:52,910 --> 00:33:55,619
+-- Plus
+-- 60 percent of the time works every time, right?
+
+770
+00:33:56,890 --> 00:33:59,329
+So, but how, how to use it. So
+
+771
+00:33:59,550 --> 00:34:04,280
+one of the things that I've been very adamant about is keeping epss
+
+772
+00:34:04,420 --> 00:34:07,750
+simple. It is just a score, it is a probability
+
+773
+00:34:07,859 --> 00:34:11,429
+and there's a whole characteristics of probability that we can exploit here
+
+774
+00:34:11,560 --> 00:34:12,510
+to combine
+
+775
+00:34:12,750 --> 00:34:13,909
+multiple things.
+
+776
+00:34:14,239 --> 00:34:14,949
+And then,
+
+777
+00:34:15,389 --> 00:34:18,110
+and that's all it is and specifically about
+
+778
+00:34:18,120 --> 00:34:21,790
+exploitation activity expected over the next 30 days.
+
+779
+00:34:22,340 --> 00:34:23,129
+And so
+
+780
+00:34:23,250 --> 00:34:25,449
+in whatever risk model you have,
+
+781
+00:34:25,719 --> 00:34:28,050
+that is a very nice neat component.
+
+782
+00:34:28,060 --> 00:34:31,000
+You know, it fits into one of the boxes in the fair model,
+
+783
+00:34:31,188 --> 00:34:36,168
+it fits into, you know, threat times vulnerability equals impact, it fits in there
+
+784
+00:34:36,340 --> 00:34:38,770
+and it's only one component. And so
+
+785
+00:34:39,050 --> 00:34:44,050
+as a consumer, you have to figure out the other boxes in your model and
+
+786
+00:34:44,260 --> 00:34:47,250
+some people have to figure out what those boxes should be in the first place.
+
+787
+00:34:47,260 --> 00:34:49,580
+And just from my experience, like there are
+
+788
+00:34:49,879 --> 00:34:51,280
+for, for everybody doing right,
+
+789
+00:34:51,395 --> 00:34:54,955
+management. There are just as many, if not more models. Yes,
+
+790
+00:34:55,205 --> 00:34:56,135
+in Cyber,
+
+791
+00:34:56,254 --> 00:35:00,334
+in Cyber. So that's part of the challenge. So, back to the whole quick thing though.
+
+792
+00:35:00,344 --> 00:35:03,774
+So like if you think CV SS is truly
+
+793
+00:35:03,784 --> 00:35:06,455
+valuable and you've built your entire program around it,
+
+794
+00:35:06,834 --> 00:35:09,504
+the they have a threat metric in there
+
+795
+00:35:09,625 --> 00:35:12,854
+and it doesn't quite fit perfectly because it's like
+
+796
+00:35:13,245 --> 00:35:15,324
+exploit, yes or no or something like that.
+
+797
+00:35:15,334 --> 00:35:17,054
+I, I can't remember depending on the version.
+
+798
+00:35:17,350 --> 00:35:18,389
+So it doesn't fit perfectly.
+
+799
+00:35:18,399 --> 00:35:22,790
+But that's where it should fit is in that threat aspect of CV SS.
+
+800
+00:35:22,800 --> 00:35:24,370
+If you want to combine the two,
+
+801
+00:35:24,600 --> 00:35:27,570
+I think, and you believed in CV SS has value,
+
+802
+00:35:27,949 --> 00:35:28,969
+that's where it should go
+
+803
+00:35:29,199 --> 00:35:29,409
+well.
+
+804
+00:35:29,419 --> 00:35:30,590
+And I think that's again,
+
+805
+00:35:30,600 --> 00:35:32,689
+that's why when you kept using the word temporal
+
+806
+00:35:32,699 --> 00:35:35,370
+because it's part of the temporal score in CV SS
+
+807
+00:35:35,689 --> 00:35:36,969
+which always struck me as a very
+
+808
+00:35:37,070 --> 00:35:37,969
+poor word to use.
+
+809
+00:35:38,149 --> 00:35:41,209
+But yeah, they've exploit and then they have quotes, code,
+
+810
+00:35:41,419 --> 00:35:45,100
+maturity renamed to exploit, maturity. E with clear values.
+
+811
+00:35:45,850 --> 00:35:48,010
+I was being part of the big step up for four.
+
+812
+00:35:48,189 --> 00:35:48,570
+Yeah.
+
+813
+00:35:48,939 --> 00:35:52,469
+Can I I want to bash one more thing about CBS S if I could please,
+
+814
+00:35:52,540 --> 00:35:56,570
+they made the assumption they've always had this assumption to assume the worst
+
+815
+00:35:57,429 --> 00:35:58,840
+and this is why we've got
+
+816
+00:35:59,010 --> 00:36:00,760
+over half or high and critical.
+
+817
+00:36:01,040 --> 00:36:05,239
+But if you look at the, what the data is saying, you know, for all of the data,
+
+818
+00:36:05,250 --> 00:36:07,370
+I've managed to collect about exploitation activity.
+
+819
+00:36:07,379 --> 00:36:08,189
+We're still seeing,
+
+820
+00:36:08,199 --> 00:36:13,250
+I think around 6% of the published CV ES have exploitation activity, 6%.
+
+821
+00:36:14,129 --> 00:36:14,939
+So
+
+822
+00:36:15,570 --> 00:36:19,080
+what that's saying is like out of that 6% we're going to assume the worst.
+
+823
+00:36:19,370 --> 00:36:22,250
+So 94% of the time they are incorrect,
+
+824
+00:36:23,179 --> 00:36:27,500
+right? It is not the worst. It is, there's nothing happening, there is a zero threat.
+
+825
+00:36:27,889 --> 00:36:28,540
+So
+
+826
+00:36:28,750 --> 00:36:30,629
+there's no other impact, right?
+
+827
+00:36:30,939 --> 00:36:33,989
+Um So why, why not assume the best?
+
+828
+00:36:34,250 --> 00:36:36,590
+And you're right, 94% of the time,
+
+829
+00:36:37,110 --> 00:36:40,689
+then you're not creating all of this extra work and stuff like that. And
+
+830
+00:36:40,840 --> 00:36:42,729
+hopefully you can get more data to bring it around.
+
+831
+00:36:42,860 --> 00:36:46,370
+-- I can
+-- answer that. It's because the people assigning CV SS had missed
+
+832
+00:36:46,590 --> 00:36:48,879
+work for the government and they have to assign a
+
+833
+00:36:48,889 --> 00:36:52,000
+worst case scenario because otherwise they'll get nailed for it.
+
+834
+00:36:52,010 --> 00:36:55,129
+You didn't rate this badly enough, you missed it and there's,
+
+835
+00:36:55,149 --> 00:36:58,719
+and it's an externality for them like it basically it's alarm fatigue, right?
+
+836
+00:36:58,729 --> 00:37:01,360
+It's an advanced form of alarm fatigue where, yeah,
+
+837
+00:37:01,370 --> 00:37:02,469
+everything's high and critical.
+
+838
+00:37:02,479 --> 00:37:03,689
+So like you better patch now
+
+839
+00:37:03,979 --> 00:37:08,044
+and, and like you said, very little of it is being actively exploited or used,
+
+840
+00:37:08,205 --> 00:37:09,314
+it's justified,
+
+841
+00:37:09,425 --> 00:37:10,155
+but it's wrong.
+
+842
+00:37:10,385 --> 00:37:11,504
+Well, exactly. And I,
+
+843
+00:37:11,685 --> 00:37:12,754
+and again, like it's,
+
+844
+00:37:13,044 --> 00:37:17,754
+but this is how we got here. This is how reality is currently working and set up and
+
+845
+00:37:18,245 --> 00:37:21,354
+yeah, like if we I don't know what the answer to this is.
+
+846
+00:37:21,364 --> 00:37:24,314
+Um I, and that's part of what I tried to do with the CV
+
+847
+00:37:24,524 --> 00:37:24,554
+E
+
+848
+00:37:24,754 --> 00:37:28,264
+JSON data was to have it, people be able to set their own CV SS score.
+
+849
+00:37:28,274 --> 00:37:30,185
+So that Red Hat could say one, this other,
+
+850
+00:37:30,195 --> 00:37:32,405
+you know Sousa has a slightly different flavor of samba.
+
+851
+00:37:32,415 --> 00:37:33,475
+So it's different
+
+852
+00:37:33,760 --> 00:37:34,840
+and of course, that never happened.
+
+853
+00:37:34,850 --> 00:37:37,580
+They just want the one true score which is provided by N.
+
+854
+00:37:37,649 --> 00:37:39,439
+So that's the one everybody uses. And I think
+
+855
+00:37:39,949 --> 00:37:41,699
+that's I think is the biggest,
+
+856
+00:37:41,709 --> 00:37:44,429
+one of the biggest problems our industry has is like with epss,
+
+857
+00:37:44,439 --> 00:37:45,899
+why do we use epss so much?
+
+858
+00:37:45,909 --> 00:37:48,090
+Because we, we don't have anything else at all,
+
+859
+00:37:48,209 --> 00:37:50,800
+but we don't use epss so much. Not yet,
+
+860
+00:37:50,969 --> 00:37:51,449
+not yet.
+
+861
+00:37:51,560 --> 00:37:54,340
+I mean, it's, it's definitely getting attention
+
+862
+00:37:54,709 --> 00:37:57,719
+but I do think one of the challenges to adoption is going to be like, so,
+
+863
+00:37:57,729 --> 00:38:01,300
+so this whole discussion we've had for the last, you know, like 30 plus minutes
+
+864
+00:38:01,600 --> 00:38:03,459
+has really been around the fact that
+
+865
+00:38:03,899 --> 00:38:06,620
+this is an input to a larger machine
+
+866
+00:38:07,110 --> 00:38:08,989
+and we don't have that larger machine.
+
+867
+00:38:09,000 --> 00:38:13,179
+And today, if you look at, you know, you go by something like the fair framework,
+
+868
+00:38:13,489 --> 00:38:16,919
+it's very unique to each organization and most organizations
+
+869
+00:38:16,929 --> 00:38:19,780
+lack the maturity or know how to apply that.
+
+870
+00:38:20,110 --> 00:38:20,570
+Yeah,
+
+871
+00:38:21,129 --> 00:38:23,419
+well, or to have an inventory of their systems.
+
+872
+00:38:24,330 --> 00:38:25,629
+-- That's a whole another
+-- story.
+
+873
+00:38:25,639 --> 00:38:28,540
+-- I mean, so
+-- well, but I mean, on the maturity model like this is,
+
+874
+00:38:28,550 --> 00:38:31,709
+this is like flying when they're barely crawling.
+
+875
+00:38:31,719 --> 00:38:32,629
+-- Right. Right.
+-- Right.
+
+876
+00:38:32,870 --> 00:38:35,419
+OK. Jay. So let's, I'm gonna give you the final word.
+
+877
+00:38:35,429 --> 00:38:39,229
+Just kind of close this out is, is Phyllis with hope and optimism here.
+
+878
+00:38:39,919 --> 00:38:41,290
+-- I
+-- so,
+
+879
+00:38:41,610 --> 00:38:45,030
+I mean, if you, if we talk about what the,
+
+880
+00:38:45,040 --> 00:38:48,770
+the logic and the processes that are behind epss,
+
+881
+00:38:48,919 --> 00:38:52,550
+why can't that be applied to asset importance,
+
+882
+00:38:52,560 --> 00:38:54,780
+try and measure some of the consequence of exploitation?
+
+883
+00:38:54,790 --> 00:38:56,350
+Why can't it be measuring
+
+884
+00:38:56,590 --> 00:38:57,820
+control strengths,
+
+885
+00:38:57,959 --> 00:39:02,030
+you know, our ability to resist exploitation activity in the first place or,
+
+886
+00:39:02,290 --> 00:39:06,879
+you know, let's apply it to any sort of thing and posture management or um you know,
+
+887
+00:39:06,889 --> 00:39:08,030
+tax service management.
+
+888
+00:39:08,040 --> 00:39:08,810
+Let's talk about
+
+889
+00:39:09,090 --> 00:39:12,629
+default passwords. What is the effect of that? Well, what is our feedback loop?
+
+890
+00:39:12,639 --> 00:39:15,260
+You know, and that's all EP SS S is doing, it's just
+
+891
+00:39:15,550 --> 00:39:18,550
+finding the feedback and closing that loop.
+
+892
+00:39:18,959 --> 00:39:20,669
+So let's do that elsewhere.
+
+893
+00:39:20,919 --> 00:39:26,750
+So the final word in my mind is like, this is super hopeful. Epss is not done,
+
+894
+00:39:27,149 --> 00:39:27,780
+right?
+
+895
+00:39:28,000 --> 00:39:31,540
+You know, like we, we didn't like create epss and we're like celebrating, hey,
+
+896
+00:39:31,550 --> 00:39:32,219
+we're done.
+
+897
+00:39:32,229 --> 00:39:32,760
+No, no, no.
+
+898
+00:39:32,770 --> 00:39:35,860
+We're like we were working on the next version and
+
+899
+00:39:35,919 --> 00:39:39,659
+where epss and whatever this is going to lead to,
+
+900
+00:39:39,669 --> 00:39:41,719
+it's going to be very different than where we are now.
+
+901
+00:39:41,909 --> 00:39:45,020
+Like we can't just sit back like for sure we're not done
+
+902
+00:39:45,419 --> 00:39:48,370
+and hopefully we can get to NON CV es we can get to
+
+903
+00:39:48,879 --> 00:39:52,830
+other aspects and talk about these feedback loops and close those loops.
+
+904
+00:39:53,219 --> 00:39:55,899
+You just mentioned sort of applying EPSS style
+
+905
+00:39:56,370 --> 00:39:59,429
+analysis to other forms of data, you know,
+
+906
+00:39:59,810 --> 00:40:02,979
+are there any such projects underway that you know, of?
+
+907
+00:40:03,209 --> 00:40:03,949
+Uh
+
+908
+00:40:04,350 --> 00:40:05,030
+no,
+
+909
+00:40:05,560 --> 00:40:06,229
+do you?
+
+910
+00:40:06,830 --> 00:40:11,530
+Oh, no, like, I mean, well, the CS A does it with star a little bit but not,
+
+911
+00:40:11,540 --> 00:40:12,580
+there's no numbers involved.
+
+912
+00:40:12,590 --> 00:40:13,659
+It's just yes or no.
+
+913
+00:40:14,149 --> 00:40:19,929
+I mean, you'll see a lot in academic papers where they try to do this and
+
+914
+00:40:20,159 --> 00:40:23,169
+I mean, this isn't eps didn't invent this.
+
+915
+00:40:23,179 --> 00:40:25,290
+This isn't something I was like, oh, this is a great idea.
+
+916
+00:40:25,300 --> 00:40:27,899
+Now, this is like basic statistics you need, you know,
+
+917
+00:40:27,909 --> 00:40:29,169
+when you talk about machine learning,
+
+918
+00:40:29,179 --> 00:40:32,760
+you've got unsupervised and supervised and supervised has a feedback loop.
+
+919
+00:40:33,270 --> 00:40:35,469
+That's what we're doing like, yeah, that's it.
+
+920
+00:40:35,479 --> 00:40:37,590
+There's no magic, there's no brilliance.
+
+921
+00:40:37,600 --> 00:40:39,360
+It's just taking stuff other people have done and
+
+922
+00:40:39,370 --> 00:40:41,169
+we're going to stand on the shoulders of giants.
+
+923
+00:40:41,479 --> 00:40:41,969
+I love it.
+
+924
+00:40:42,080 --> 00:40:44,290
+All right. All right. Thank you, Jay. Thank you, Kurt.
+
+925
+00:40:44,300 --> 00:40:47,250
+Thank you everyone for listening. Go to its our security podcast.com.
+
+926
+00:40:47,260 --> 00:40:49,989
+Hit up the show if I'll put links to all the stuff Jay's talked about today and,
+
+927
+00:40:50,000 --> 00:40:52,419
+and all the fun stuff going on in Epss Land.
+
+928
+00:40:52,429 --> 00:40:54,000
+So go hit it up and you Pound
+
+929
+00:40:54,110 --> 00:40:59,209
+Os S podcast. Hashtag on Mastodon. Kurt and Jay have marvelous. Rest of your days.
+
+930
+00:40:59,219 --> 00:40:59,889
+Thank you.
+
+931
+00:41:00,219 --> 00:41:01,129
+Thanks everybody.
+
+932
+00:41:01,260 --> 00:41:03,100
+Thanks everyone. Bye. Bye.

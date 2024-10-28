@@ -1,0 +1,3318 @@
+0
+00:00:05,670 --> 00:00:08,939
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,949 --> 00:00:11,920
+Kurt Siefried and my partner are not really understanding how the web works.
+
+2
+00:00:11,930 --> 00:00:12,739
+Josh Bresser.
+
+3
+00:00:13,079 --> 00:00:17,409
+That's right. But luckily we have an expert with us today, Daniel Stenberg, the,
+
+4
+00:00:17,530 --> 00:00:20,399
+I guess the, the creator of curl. Would that be accurate?
+
+5
+00:00:20,559 --> 00:00:22,450
+I would say that is correct. Yeah.
+
+6
+00:00:22,889 --> 00:00:26,399
+All right. That's fair. Daniel. Welcome, man. We're so excited to have you here.
+
+7
+00:00:26,450 --> 00:00:29,399
+-- It's good to be here. Good to meet
+-- you. All right.
+
+8
+00:00:29,409 --> 00:00:33,900
+So I'm just gonna start with the one question everyone has on their minds.
+
+9
+00:00:33,950 --> 00:00:36,520
+Why don't you just rewrite Curl and Rust in a weekend
+
+10
+00:00:37,599 --> 00:00:38,400
+in three days?
+
+11
+00:00:40,319 --> 00:00:43,900
+So I get this question a lot about rewriting curl. Of course.
+
+12
+00:00:44,139 --> 00:00:46,700
+And, and for some reason, it's always rust.
+
+13
+00:00:46,849 --> 00:00:47,619
+But, but
+
+14
+00:00:47,889 --> 00:00:49,700
+that's such a big question.
+
+15
+00:00:49,709 --> 00:00:51,610
+But, but of course, first,
+
+16
+00:00:51,619 --> 00:00:55,389
+we created Curl a very long time before rust even existed or
+
+17
+00:00:55,490 --> 00:00:57,139
+there weren't really any
+
+18
+00:00:57,439 --> 00:01:00,799
+good options for the first few decades.
+
+19
+00:01:01,369 --> 00:01:02,000
+And
+
+20
+00:01:02,319 --> 00:01:03,580
+by now then it's,
+
+21
+00:01:03,590 --> 00:01:08,080
+it's a pretty big vehicle and everything works and it's quite
+
+22
+00:01:08,089 --> 00:01:11,540
+a big job to just consider a rewrite into anything.
+
+23
+00:01:11,860 --> 00:01:13,919
+And I also consider that one of the
+
+24
+00:01:14,389 --> 00:01:18,819
+one of the big good things with curly is that it runs and exists everywhere.
+
+25
+00:01:18,830 --> 00:01:19,279
+It sort of,
+
+26
+00:01:19,290 --> 00:01:21,819
+it sells it to the next platform and the next platform
+
+27
+00:01:21,830 --> 00:01:24,580
+so you can use the same API on pretty much anything.
+
+28
+00:01:25,059 --> 00:01:26,489
+And that's, I think that's a
+
+29
+00:01:26,830 --> 00:01:30,209
+-- good pitch for,
+-- for. No, you're right. It's kind of like V I in that.
+
+30
+00:01:30,459 --> 00:01:34,029
+-- It's always there and it works.
+-- Yeah. And even the library is like that.
+
+31
+00:01:34,040 --> 00:01:38,120
+So even if you write your application today on with the API in one platform, right?
+
+32
+00:01:38,129 --> 00:01:42,129
+And you can switch to another tomorrow and it's the same API is there big systems,
+
+33
+00:01:42,139 --> 00:01:43,000
+small systems?
+
+34
+00:01:43,080 --> 00:01:44,819
+So it's having that
+
+35
+00:01:45,209 --> 00:01:46,389
+you, so that it's
+
+36
+00:01:46,510 --> 00:01:50,540
+actually exists everywhere has been a huge benefit for all users.
+
+37
+00:01:50,720 --> 00:01:51,339
+And that
+
+38
+00:01:51,800 --> 00:01:55,220
+has been a pretty big factories that is written in c
+
+39
+00:01:55,349 --> 00:01:56,970
+the most portable thing.
+
+40
+00:01:57,059 --> 00:02:01,930
+So it has been a sort of a success factor but of course in the backside and yeah,
+
+41
+00:02:01,940 --> 00:02:02,970
+it's not memory safe.
+
+42
+00:02:02,980 --> 00:02:07,889
+So there is we have this bus load of unfortunate problems coming with it.
+
+43
+00:02:08,258 --> 00:02:10,139
+So sure, I, so the
+
+44
+00:02:10,240 --> 00:02:14,820
+I could imagine introducing more memory safe languages going forward,
+
+45
+00:02:14,830 --> 00:02:18,660
+but I'm not going to do that as one single rewrite take.
+
+46
+00:02:18,669 --> 00:02:18,919
+But
+
+47
+00:02:19,080 --> 00:02:23,240
+I could possibly consider, you know, replacing components and
+
+48
+00:02:23,529 --> 00:02:26,509
+using more third party libraries that are written in
+
+49
+00:02:26,520 --> 00:02:29,119
+rust rather than written in C if they exist.
+
+50
+00:02:29,130 --> 00:02:32,750
+And if they're good enough and if that is sort of what the
+
+51
+00:02:33,089 --> 00:02:33,550
+uh
+
+52
+00:02:33,729 --> 00:02:35,740
+the user community wants to go.
+
+53
+00:02:36,020 --> 00:02:38,729
+Uh A lot of people are sort of begging asking
+
+54
+00:02:38,740 --> 00:02:41,690
+saying we should all go to those libraries and,
+
+55
+00:02:41,830 --> 00:02:42,500
+but
+
+56
+00:02:42,690 --> 00:02:47,279
+um looking where the users are going today, they are not going with those choices,
+
+57
+00:02:47,289 --> 00:02:47,539
+right?
+
+58
+00:02:47,550 --> 00:02:50,910
+They exist and they're out there, they've been here now for years,
+
+59
+00:02:50,919 --> 00:02:54,669
+but that's not why I see where I see users going,
+
+60
+00:02:54,889 --> 00:02:57,630
+even if they, even when they exist as sort of
+
+61
+00:02:57,919 --> 00:02:58,750
+at least semi
+
+62
+00:02:58,940 --> 00:03:02,979
+decent alternatives like the TLS libraries and other things,
+
+63
+00:03:03,279 --> 00:03:05,699
+I want to, I want to pull that thread
+
+64
+00:03:06,070 --> 00:03:10,350
+because you have one of the most widely used applications on the
+
+65
+00:03:10,360 --> 00:03:12,830
+planet and off the planet for that matter because I mean,
+
+66
+00:03:12,839 --> 00:03:14,800
+curl is running literally everywhere
+
+67
+00:03:15,070 --> 00:03:16,029
+in space.
+
+68
+00:03:16,619 --> 00:03:17,190
+And
+
+69
+00:03:17,759 --> 00:03:21,669
+you mentioned about the users aren't going there with these various
+
+70
+00:03:21,800 --> 00:03:25,389
+memory safe libraries and languages in, in all this stuff. And
+
+71
+00:03:25,809 --> 00:03:28,139
+I think if you look at curl,
+
+72
+00:03:28,339 --> 00:03:29,039
+the
+
+73
+00:03:29,289 --> 00:03:31,600
+kind of user experience of it
+
+74
+00:03:32,039 --> 00:03:32,759
+has
+
+75
+00:03:33,050 --> 00:03:34,279
+it, it's phenomenal, right?
+
+76
+00:03:34,289 --> 00:03:36,979
+I mean, there's a command line application but it works very well.
+
+77
+00:03:36,990 --> 00:03:38,639
+The library is very easy to use
+
+78
+00:03:39,080 --> 00:03:41,080
+and I'm, I'm curious your thoughts on,
+
+79
+00:03:41,089 --> 00:03:45,240
+on how did you end up in a place where you
+
+80
+00:03:45,250 --> 00:03:50,779
+basically built an extremely user friendly command line application and library.
+
+81
+00:03:52,059 --> 00:03:53,509
+Suddenly
+
+82
+00:03:54,880 --> 00:03:59,470
+I've never considered myself sort of user friendly in that
+
+83
+00:03:59,520 --> 00:04:02,500
+I don't sort of work very much with users.
+
+84
+00:04:02,509 --> 00:04:03,279
+So it's,
+
+85
+00:04:03,889 --> 00:04:06,309
+I wouldn't say that it's by accident maybe. But
+
+86
+00:04:06,449 --> 00:04:07,699
+I think I had
+
+87
+00:04:07,899 --> 00:04:11,794
+a little bit of a fortunate or luck when I decided that
+
+88
+00:04:11,945 --> 00:04:14,994
+it would be oriented around URL S the way it is so that
+
+89
+00:04:15,005 --> 00:04:17,964
+you could sort of put different URL S and it doesn't really matter.
+
+90
+00:04:17,975 --> 00:04:19,454
+So you don't have to think about it. And
+
+91
+00:04:19,725 --> 00:04:20,774
+-- sorry,
+-- stupid question.
+
+92
+00:04:20,785 --> 00:04:24,595
+But if you're writing a web library that gets stuff from the web,
+
+93
+00:04:25,149 --> 00:04:28,950
+how would you do it any other way than oriented around URL
+
+94
+00:04:29,480 --> 00:04:29,579
+S?
+
+95
+00:04:29,760 --> 00:04:29,920
+So
+
+96
+00:04:30,239 --> 00:04:30,820
+it just, it seems
+
+97
+00:04:30,929 --> 00:04:31,179
+to me
+
+98
+00:04:32,119 --> 00:04:33,959
+that that's a very good question. But um
+
+99
+00:04:34,269 --> 00:04:34,279
+uh
+
+100
+00:04:34,519 --> 00:04:37,230
+originally when I started making libraries, right,
+
+101
+00:04:37,239 --> 00:04:41,220
+the other libraries that existed, they were not really oriented around URL S,
+
+102
+00:04:41,239 --> 00:04:44,769
+they were more, you do an HTP oriented thing.
+
+103
+00:04:45,019 --> 00:04:48,070
+So you would sort of create it around the, the more
+
+104
+00:04:48,359 --> 00:04:51,250
+mechanics to the components within the HTP.
+
+105
+00:04:51,309 --> 00:04:54,410
+I'm just trying to remember having a flashback to like 25 years ago.
+
+106
+00:04:55,170 --> 00:05:00,279
+-- It was FTP. Kurt, it was all
+-- FTP. No, but no, you're, you're, you're right in thought.
+
+107
+00:05:00,290 --> 00:05:01,040
+It was
+
+108
+00:05:01,190 --> 00:05:02,390
+essentially, yeah,
+
+109
+00:05:02,589 --> 00:05:05,950
+-- you had to construct the request yourself.
+-- Exactly.
+
+110
+00:05:05,959 --> 00:05:08,579
+So they were more low level and more you would have to
+
+111
+00:05:08,589 --> 00:05:12,119
+understand or sort of at least work with the protocol more.
+
+112
+00:05:12,130 --> 00:05:13,100
+And I wanted to
+
+113
+00:05:13,230 --> 00:05:17,600
+avoid the use of having to know a lot about the protocol, but more talk about
+
+114
+00:05:18,119 --> 00:05:19,070
+uh well,
+
+115
+00:05:19,079 --> 00:05:22,070
+the end point and then sort of magically fix things for you
+
+116
+00:05:22,079 --> 00:05:26,890
+so that you could do different protocols pretty much without understanding the.
+
+117
+00:05:27,010 --> 00:05:31,609
+So then you could do an FTP URL and an HTP URL and it would get the data the same way,
+
+118
+00:05:31,619 --> 00:05:34,660
+even though you, the protocols are completely different underneath.
+
+119
+00:05:35,769 --> 00:05:36,429
+That's fair.
+
+120
+00:05:36,679 --> 00:05:37,269
+That's a good point.
+
+121
+00:05:38,089 --> 00:05:40,200
+So then, and then, and then my pretty early,
+
+122
+00:05:40,209 --> 00:05:44,470
+very early on realized that people really do not want things to change, right?
+
+123
+00:05:44,480 --> 00:05:46,149
+If you write a script today, you
+
+124
+00:05:46,839 --> 00:05:51,239
+don't want Carl to sort of, no, we changed a few options or change things.
+
+125
+00:05:51,250 --> 00:05:55,910
+So everything would break down the road, right? So we very quickly figured out
+
+126
+00:05:56,059 --> 00:06:00,480
+-- we should just stick with everything, whatever we ship, keep it like that
+-- forever.
+
+127
+00:06:00,500 --> 00:06:03,799
+I think it boils down to like Linna says, do not break user space.
+
+128
+00:06:04,670 --> 00:06:05,160
+Exactly.
+
+129
+00:06:05,500 --> 00:06:07,239
+Yeah. No, I, I really respect that.
+
+130
+00:06:07,339 --> 00:06:08,940
+One thing that drives me nuts is I wish
+
+131
+00:06:09,290 --> 00:06:10,649
+there was like more of a standard dash
+
+132
+00:06:10,790 --> 00:06:14,359
+I dash hole for input output files and stuff. But I get like once you pick something
+
+133
+00:06:15,190 --> 00:06:17,649
+that's it like it's, it has to stay that way.
+
+134
+00:06:17,869 --> 00:06:18,890
+-- Yeah.
+-- Exactly.
+
+135
+00:06:18,899 --> 00:06:20,130
+Because then you get a trade off,
+
+136
+00:06:20,140 --> 00:06:24,690
+you sure you want to be compatible with other tools that also use the same kind of,
+
+137
+00:06:24,700 --> 00:06:27,820
+but you want to be compatible with yourself from the past as well.
+
+138
+00:06:27,829 --> 00:06:30,410
+So you have that weird situation. So
+
+139
+00:06:30,549 --> 00:06:34,760
+sure you want to be like the others, but you also don't want to break your other users.
+
+140
+00:06:34,769 --> 00:06:35,029
+So
+
+141
+00:06:35,420 --> 00:06:36,609
+mm and I,
+
+142
+00:06:37,420 --> 00:06:38,950
+when you've been around for a long time.
+
+143
+00:06:38,959 --> 00:06:41,970
+I decided all those early options very early.
+
+144
+00:06:41,980 --> 00:06:45,549
+That was, you know, basically 1997 times. So,
+
+145
+00:06:45,649 --> 00:06:47,709
+maybe a few of them were not very cleverly
+
+146
+00:06:47,720 --> 00:06:49,679
+chosen and maybe I should have done it differently.
+
+147
+00:06:49,690 --> 00:06:50,029
+But
+
+148
+00:06:50,369 --> 00:06:52,720
+-- that's long gone now. Right. So, it's too late.
+-- The
+
+149
+00:06:53,230 --> 00:06:55,239
+thing is, I mean, in reality though,
+
+150
+00:06:55,250 --> 00:07:00,380
+you can't optimize a problem until you've solved it and used it for a while.
+
+151
+00:07:00,739 --> 00:07:02,440
+Like that's one thing I keep running into with
+
+152
+00:07:02,690 --> 00:07:07,000
+kind of, a lot of these tools is and their options is just, oh, we didn't, we,
+
+153
+00:07:07,010 --> 00:07:08,440
+it's not that we didn't know any better.
+
+154
+00:07:08,450 --> 00:07:10,200
+We could not have known any better.
+
+155
+00:07:10,209 --> 00:07:11,029
+Like, for example,
+
+156
+00:07:11,040 --> 00:07:14,250
+you're going to have options you're gonna need in five years with H TB version.
+
+157
+00:07:14,260 --> 00:07:16,880
+What is it now? Three or two, no, three quick.
+
+158
+00:07:16,929 --> 00:07:20,350
+Like, there's gonna be new stuff that you can even predict 10 years ago.
+
+159
+00:07:20,579 --> 00:07:21,269
+Exactly.
+
+160
+00:07:21,279 --> 00:07:23,630
+And a lot of those we did add back in
+
+161
+00:07:23,640 --> 00:07:26,130
+the days we don't need anymore because that's sort of,
+
+162
+00:07:26,140 --> 00:07:27,869
+that's how we did the internet 20 years ago.
+
+163
+00:07:27,880 --> 00:07:29,869
+Right. So now we have short options for things.
+
+164
+00:07:29,880 --> 00:07:33,049
+No one ever is going to use totally wasted. But we,
+
+165
+00:07:33,149 --> 00:07:36,170
+but yeah, that's exactly how it just turns out that way.
+
+166
+00:07:36,589 --> 00:07:39,880
+All right, I'm gonna steer this bus into the security lane because that's,
+
+167
+00:07:39,890 --> 00:07:41,299
+that's why we're here after all.
+
+168
+00:07:41,730 --> 00:07:43,450
+So, I'm curious, your thoughts,
+
+169
+00:07:43,459 --> 00:07:47,070
+Daniel on all of the security people complain nonstop.
+
+170
+00:07:47,079 --> 00:07:51,399
+How curl pipe to bash is like the most insecure thing ever in the history of the world
+
+171
+00:07:51,619 --> 00:07:56,660
+yet. It is probably the most popular way to install software ever. Yeah,
+
+172
+00:07:57,660 --> 00:08:01,279
+I would, I would, I mean, it amuses me to no end that everyone complains.
+
+173
+00:08:01,290 --> 00:08:02,250
+Everyone still uses it.
+
+174
+00:08:02,260 --> 00:08:04,329
+I'm, I'm curious your thoughts on this, just like,
+
+175
+00:08:04,339 --> 00:08:07,890
+when you hear security people complaining and whining that it's a horrible thing.
+
+176
+00:08:07,899 --> 00:08:11,600
+-- Yes.
+-- I, in my view it's not that horrible.
+
+177
+00:08:11,609 --> 00:08:14,929
+I mean, it, it's not the best thing because it's sure
+
+178
+00:08:15,040 --> 00:08:17,380
+trusting something and you're just piping it to your,
+
+179
+00:08:17,579 --> 00:08:18,640
+to your shell.
+
+180
+00:08:18,829 --> 00:08:19,739
+I mean,
+
+181
+00:08:19,890 --> 00:08:23,089
+in the worst case as a pseudo and your shell like that,
+
+182
+00:08:23,350 --> 00:08:28,989
+but in most cases people are actually, I mean, there's some kind of trust to the site.
+
+183
+00:08:29,000 --> 00:08:31,359
+You're, you're downloading that content from anyway, like,
+
+184
+00:08:31,369 --> 00:08:32,489
+when you're installing,
+
+185
+00:08:32,739 --> 00:08:33,938
+I don't know, I know
+
+186
+00:08:34,049 --> 00:08:37,578
+Homebrew or r they have that as documented ways to install it,
+
+187
+00:08:37,587 --> 00:08:40,948
+but you're downloading it from their official websites.
+
+188
+00:08:40,957 --> 00:08:41,518
+Right. You're,
+
+189
+00:08:42,087 --> 00:08:45,508
+you're there already. You're viewing the site, you trust it.
+
+190
+00:08:45,689 --> 00:08:46,078
+So
+
+191
+00:08:46,318 --> 00:08:48,828
+the difference from downloading that script and
+
+192
+00:08:48,838 --> 00:08:51,598
+running it or running it immediately,
+
+193
+00:08:52,179 --> 00:08:58,169
+it's a very subtle difference. Sure, you can do it in better ways. I agree. But
+
+194
+00:08:58,359 --> 00:09:01,799
+I often think that people actually are overreacting to that thing.
+
+195
+00:09:01,969 --> 00:09:05,799
+But of course, if you go with just a random site somewhere on the internet,
+
+196
+00:09:05,809 --> 00:09:08,780
+you can just run it then, yes, that's totally insecure.
+
+197
+00:09:08,849 --> 00:09:09,039
+But
+
+198
+00:09:09,150 --> 00:09:11,650
+that's rarely what people are doing when they do this.
+
+199
+00:09:11,659 --> 00:09:15,130
+That's also true of all those old shareware sites that were like, not two cows,
+
+200
+00:09:15,140 --> 00:09:15,460
+right?
+
+201
+00:09:15,469 --> 00:09:15,890
+Like,
+
+202
+00:09:16,179 --> 00:09:18,409
+you know, we download dot exes from
+
+203
+00:09:18,559 --> 00:09:19,489
+wherever.
+
+204
+00:09:19,500 --> 00:09:19,830
+Like I,
+
+205
+00:09:19,840 --> 00:09:22,159
+I literally bought a web camera and it said to get the
+
+206
+00:09:22,169 --> 00:09:25,340
+drivers go to this IP address slash something slash dot exe.
+
+207
+00:09:25,349 --> 00:09:26,090
+And I'm like,
+
+208
+00:09:26,520 --> 00:09:29,289
+I, I put it through virus total and it scanned clean and I'm like, ok,
+
+209
+00:09:29,609 --> 00:09:33,450
+but I, my only complaint about curl pipe to bash would be
+
+210
+00:09:33,900 --> 00:09:36,159
+you might get an error so it might not work. Right.
+
+211
+00:09:36,169 --> 00:09:38,549
+I, I can't like easily download it and keep it.
+
+212
+00:09:38,940 --> 00:09:42,840
+And number two is like, there's no versioning or what am I getting? Right?
+
+213
+00:09:42,849 --> 00:09:44,820
+And it's almost always the latest.
+
+214
+00:09:45,179 --> 00:09:48,960
+And I, so for me, I personally don't like it from a reliability perspective.
+
+215
+00:09:49,369 --> 00:09:51,500
+I don't, honestly, from a security perspective, I mean,
+
+216
+00:09:51,510 --> 00:09:53,280
+I'm downloading software from
+
+217
+00:09:54,260 --> 00:09:57,070
+repositories and II, I don't inspect it like
+
+218
+00:09:57,270 --> 00:09:58,210
+I don't have time for that.
+
+219
+00:09:58,729 --> 00:09:58,989
+Yeah.
+
+220
+00:09:59,770 --> 00:10:00,479
+So, yeah.
+
+221
+00:10:01,520 --> 00:10:02,289
+Yeah.
+
+222
+00:10:02,450 --> 00:10:05,969
+As long as it's http si mean, if it's not http S then obviously
+
+223
+00:10:06,210 --> 00:10:06,849
+that's bad.
+
+224
+00:10:07,030 --> 00:10:07,770
+That's
+
+225
+00:10:07,940 --> 00:10:10,609
+exactly as long as it's htps
+
+226
+00:10:10,729 --> 00:10:14,130
+and you're downloading it from, from a place that you actually trust.
+
+227
+00:10:14,140 --> 00:10:14,409
+I mean,
+
+228
+00:10:14,419 --> 00:10:16,840
+it's one of those sites you actually want to not
+
+229
+00:10:16,849 --> 00:10:19,880
+just a random thing with a lot of digits somewhere.
+
+230
+00:10:19,890 --> 00:10:21,369
+Someone told you to download
+
+231
+00:10:24,890 --> 00:10:27,909
+it always amuses me when I see like the,
+
+232
+00:10:28,099 --> 00:10:31,359
+the, the old retro computer enthusiasts that are, like,
+
+233
+00:10:31,369 --> 00:10:34,760
+I found this executable on this website and it had the drivers for the thing.
+
+234
+00:10:34,770 --> 00:10:37,710
+And I'm like, oh, my goodness, like, this is my nightmare.
+
+235
+00:10:38,700 --> 00:10:41,770
+-- That
+-- guy that wrote that made that USB card for TRS eighties
+
+236
+00:10:41,780 --> 00:10:44,140
+and got some drivers off of an old B BS mirror from,
+
+237
+00:10:44,150 --> 00:10:44,609
+like,
+
+238
+00:10:44,859 --> 00:10:46,200
+and it's just like that,
+
+239
+00:10:47,039 --> 00:10:49,239
+that's actually how we used to do this. Like, you'd go to a,
+
+240
+00:10:49,549 --> 00:10:54,270
+-- yeah, you just download stuff and make it work and security
+-- for a very long time.
+
+241
+00:10:54,280 --> 00:10:56,500
+Exactly. We did that for a very long time.
+
+242
+00:10:56,510 --> 00:10:59,030
+I mean, I guess a lot of people are still doing it. So, yes,
+
+243
+00:10:59,559 --> 00:11:02,270
+-- I would
+-- assume if I buy a smart fridge, that's what it's doing.
+
+244
+00:11:02,969 --> 00:11:04,309
+Yeah. Right. Right.
+
+245
+00:11:05,830 --> 00:11:07,159
+Oh, my goodness.
+
+246
+00:11:07,539 --> 00:11:10,859
+Ok. Let's talk about memory safety for a little bit because
+
+247
+00:11:11,030 --> 00:11:15,520
+you mentioned a little while ago how Curl isn't written in a memory safe language.
+
+248
+00:11:15,530 --> 00:11:18,599
+But I do want to comment for as widely used as Curl is
+
+249
+00:11:18,609 --> 00:11:22,750
+and no doubt as much attention as it receives from security researchers.
+
+250
+00:11:22,940 --> 00:11:26,130
+I feel like there are not very many security vulnerabilities
+
+251
+00:11:26,280 --> 00:11:26,369
+in
+
+252
+00:11:26,469 --> 00:11:28,010
+Curl. Like, is this
+
+253
+00:11:28,179 --> 00:11:32,109
+an accident? Is it on purpose? Are you mindful of the, the way it's written?
+
+254
+00:11:32,390 --> 00:11:32,890
+I
+
+255
+00:11:33,369 --> 00:11:34,690
+it is not, it's,
+
+256
+00:11:34,969 --> 00:11:37,750
+we're, we're doing a lot of work and making sure that we,
+
+257
+00:11:38,020 --> 00:11:40,849
+that we limit and, and limit down and,
+
+258
+00:11:40,859 --> 00:11:43,630
+and reduce the amount of security problems that we suffer from.
+
+259
+00:11:43,640 --> 00:11:45,330
+But sure we have our share of it.
+
+260
+00:11:45,799 --> 00:11:49,969
+Uh So yeah, we do everything we can to make sure that we, we do it as good as possible.
+
+261
+00:11:49,979 --> 00:11:52,809
+You know, all the tools and all the analyzers and fuzzing and
+
+262
+00:11:53,219 --> 00:11:55,270
+uh nonstop and we have a bag bounty.
+
+263
+00:11:55,280 --> 00:11:59,599
+So we pay researchers cash for the report security problems.
+
+264
+00:12:00,770 --> 00:12:02,179
+So that's um,
+
+265
+00:12:03,309 --> 00:12:07,000
+yeah, so I think we're doing pretty much as from an engineering
+
+266
+00:12:07,159 --> 00:12:09,239
+point of view. we're doing everything that we can.
+
+267
+00:12:09,250 --> 00:12:11,960
+There, there are really no silver bullets on how to do it, right.
+
+268
+00:12:11,969 --> 00:12:14,320
+You just have to do everything and, and then
+
+269
+00:12:14,469 --> 00:12:15,320
+do everything
+
+270
+00:12:15,489 --> 00:12:19,539
+slightly better all the time and maybe learn from your mistakes and do
+
+271
+00:12:19,549 --> 00:12:22,460
+-- it a little better next time when you've done a mistake once
+-- so.
+
+272
+00:12:22,469 --> 00:12:26,239
+Well, my one suspicion was always and maybe this is wrong or right, but
+
+273
+00:12:26,739 --> 00:12:30,599
+curl talks to everything straight up everything, right? So
+
+274
+00:12:30,729 --> 00:12:31,950
+for it to work,
+
+275
+00:12:31,960 --> 00:12:34,679
+you have to basically support every corner case
+
+276
+00:12:34,690 --> 00:12:38,479
+and every bit of weirdness and every little strangeness
+
+277
+00:12:39,000 --> 00:12:40,919
+and I can't help but think that that essentially
+
+278
+00:12:40,929 --> 00:12:43,609
+forces you to write very robust code because you,
+
+279
+00:12:43,770 --> 00:12:46,059
+you can't make, basically you cannot make assumptions,
+
+280
+00:12:46,070 --> 00:12:47,760
+any assumption would be unsafe because there's
+
+281
+00:12:47,770 --> 00:12:49,000
+definitely a web developer out there.
+
+282
+00:12:49,010 --> 00:12:51,479
+That was like, no, I think that's a bad idea. I'm going to do it this way,
+
+283
+00:12:51,809 --> 00:12:52,380
+you know, and I,
+
+284
+00:12:52,669 --> 00:12:54,479
+is that the case?
+
+285
+00:12:55,080 --> 00:12:55,190
+Uh
+
+286
+00:12:55,510 --> 00:12:56,239
+um
+
+287
+00:12:56,789 --> 00:12:58,599
+Yes and no, I think,
+
+288
+00:12:59,229 --> 00:13:04,200
+I mean, yeah, that goes as far as you get all those corner cases from the valid,
+
+289
+00:13:04,750 --> 00:13:07,489
+uh, situations. Right. That could happen. I think
+
+290
+00:13:07,640 --> 00:13:12,010
+that's the tricky part is still when there's a malicious intent somewhere,
+
+291
+00:13:12,020 --> 00:13:12,719
+that sort of, you know,
+
+292
+00:13:12,729 --> 00:13:15,929
+finds that weird thing that nobody actually ever implemented
+
+293
+00:13:15,940 --> 00:13:17,669
+it this way because it would be crazy.
+
+294
+00:13:17,760 --> 00:13:21,549
+But, but when you do it, but someone can figure that out and, oh,
+
+295
+00:13:21,559 --> 00:13:25,260
+you could also have this really strange value into a
+
+296
+00:13:25,270 --> 00:13:28,640
+field somewhere and then we would treat it badly,
+
+297
+00:13:28,650 --> 00:13:29,000
+right?
+
+298
+00:13:29,190 --> 00:13:29,469
+Uh
+
+299
+00:13:29,869 --> 00:13:30,299
+So,
+
+300
+00:13:30,659 --> 00:13:34,330
+so yeah, sure it gets pretty good when we, we're,
+
+301
+00:13:34,340 --> 00:13:36,260
+we're working with all the edge cases, but
+
+302
+00:13:36,659 --> 00:13:38,530
+then we still have to
+
+303
+00:13:38,840 --> 00:13:42,419
+just apply a lot of common sense, read code review. And
+
+304
+00:13:42,570 --> 00:13:43,659
+of course, um
+
+305
+00:13:43,840 --> 00:13:47,219
+I would say just try to write code in a sensible way. That's
+
+306
+00:13:47,380 --> 00:13:51,650
+easy to understand, easy to debug and easy to spot those problems, you know,
+
+307
+00:13:51,659 --> 00:13:53,000
+the memory
+
+308
+00:13:53,500 --> 00:13:56,489
+overflows, the how to handle buffers and everything.
+
+309
+00:13:56,760 --> 00:13:58,200
+And over over there,
+
+310
+00:13:58,429 --> 00:14:00,260
+I would say maybe four or five
+
+311
+00:14:00,510 --> 00:14:01,849
+last year. So we've
+
+312
+00:14:02,099 --> 00:14:07,059
+also made an effort in a while ago. II, I guess it was maybe 566 years ago.
+
+313
+00:14:07,070 --> 00:14:07,179
+I,
+
+314
+00:14:07,190 --> 00:14:13,270
+I spotted that we had several security problems in a sort of related kind of code and I
+
+315
+00:14:13,400 --> 00:14:16,909
+figure out that I should really reduce this kind of thing so
+
+316
+00:14:16,919 --> 00:14:20,380
+that we don't accidentally slip in more of these kinds of problems.
+
+317
+00:14:20,390 --> 00:14:21,539
+So I sort of try to
+
+318
+00:14:21,640 --> 00:14:25,479
+introduce more helper functions into curl that we could use than to
+
+319
+00:14:25,489 --> 00:14:29,289
+reduce the sort of the risk that we would introduce this problem.
+
+320
+00:14:29,299 --> 00:14:29,940
+Again,
+
+321
+00:14:30,210 --> 00:14:33,330
+one of those things and one of those
+
+322
+00:14:33,549 --> 00:14:37,789
+I would say theoretical problems is that it's an integer overflow,
+
+323
+00:14:37,799 --> 00:14:40,330
+which is very common in like in C when you,
+
+324
+00:14:40,640 --> 00:14:41,609
+you do, for,
+
+325
+00:14:41,960 --> 00:14:47,080
+for example, you have a length of data and you add a number and then you malo
+
+326
+00:14:47,250 --> 00:14:49,229
+that size to get the data, right?
+
+327
+00:14:49,559 --> 00:14:50,030
+And then
+
+328
+00:14:50,150 --> 00:14:52,880
+we had several of those problems when someone figured out.
+
+329
+00:14:52,890 --> 00:14:54,690
+Oh, well, on a 32 bit system,
+
+330
+00:14:54,700 --> 00:14:58,109
+if you have this huge buffer and you enter that and we take,
+
+331
+00:14:58,119 --> 00:15:02,500
+you know the buffer multiply it by four and add something sure it could wrap
+
+332
+00:15:03,039 --> 00:15:04,869
+uh in memory and you would get a mao
+
+333
+00:15:05,179 --> 00:15:09,260
+of three bytes and copy four gigabytes and that would be bad, right?
+
+334
+00:15:09,799 --> 00:15:11,020
+So, but
+
+335
+00:15:11,289 --> 00:15:15,859
+OK, really, really, really hard to actually execute in in, in real world.
+
+336
+00:15:15,869 --> 00:15:18,880
+But maybe in some cases you could. So it was a security problem. But
+
+337
+00:15:19,000 --> 00:15:21,840
+like that, we make sure that we basically everywhere.
+
+338
+00:15:21,849 --> 00:15:26,429
+Nowadays we limit the maximum string size you can pass into the library.
+
+339
+00:15:26,479 --> 00:15:32,984
+Why be why accept half a gigabyte when maybe eight megabytes? It's crazy big anyway.
+
+340
+00:15:32,994 --> 00:15:38,125
+So just limit it to that and things like that sort of put some artificial, well,
+
+341
+00:15:38,135 --> 00:15:41,205
+not artificial but some limits here and there to limit
+
+342
+00:15:41,215 --> 00:15:44,044
+the the the risk of us doing those mistakes.
+
+343
+00:15:44,054 --> 00:15:45,125
+Again, totally.
+
+344
+00:15:45,135 --> 00:15:48,395
+So that way, I think we slowly gradually actually improve or,
+
+345
+00:15:48,405 --> 00:15:51,405
+or we reduce the risk of introducing those same things trying
+
+346
+00:15:51,414 --> 00:15:54,044
+to learn from past mistakes and and not do them again.
+
+347
+00:15:54,520 --> 00:16:00,380
+Uh 11 question, do you like, do you share test cases with other web clients? Like
+
+348
+00:16:00,599 --> 00:16:02,340
+I was just looking at your test suite director and there's
+
+349
+00:16:02,349 --> 00:16:05,159
+like a bunch of profiles and a bunch of micro servers,
+
+350
+00:16:05,169 --> 00:16:05,739
+blah, blah blah.
+
+351
+00:16:06,049 --> 00:16:10,929
+But for example, do you and w get for the sake of argument, like say, you know,
+
+352
+00:16:10,940 --> 00:16:12,580
+here's a test case, here's a new one
+
+353
+00:16:13,270 --> 00:16:16,330
+and share them or is that a thing in the industry at all?
+
+354
+00:16:16,909 --> 00:16:18,210
+It's not.
+
+355
+00:16:18,429 --> 00:16:23,179
+Um I mean, it, it would be good. I mean, I think we could all benefit from that.
+
+356
+00:16:23,299 --> 00:16:25,390
+I, there are some
+
+357
+00:16:25,630 --> 00:16:29,659
+other projects that are reusing our test suites and,
+
+358
+00:16:29,669 --> 00:16:33,429
+and I know a proxy that is testing their stuff with our test suites.
+
+359
+00:16:33,440 --> 00:16:34,380
+So I think it's good.
+
+360
+00:16:34,750 --> 00:16:38,500
+Otherwise I think our test suite is very, very much crafted for,
+
+361
+00:16:38,599 --> 00:16:42,280
+for curl for our purposes and, and for our use, it's
+
+362
+00:16:43,000 --> 00:16:47,859
+might be a bit bit of work to, to generalize it, to be useful for others.
+
+363
+00:16:47,869 --> 00:16:48,380
+Of course, it,
+
+364
+00:16:48,390 --> 00:16:50,250
+it would have been good if we would have been
+
+365
+00:16:50,260 --> 00:16:53,780
+even more people to sort of help out and contribute to
+
+366
+00:16:53,979 --> 00:16:56,820
+um a common test suite. But that, that's not the case here.
+
+367
+00:16:57,940 --> 00:17:02,119
+Totally. All right. All right, let's, let's keep going down this road
+
+368
+00:17:02,330 --> 00:17:03,640
+you recently
+
+369
+00:17:03,849 --> 00:17:08,560
+got, I'll say a bit of attention for some CV E incidents
+
+370
+00:17:08,848 --> 00:17:10,810
+that you're quite vocal about. I'm,
+
+371
+00:17:10,930 --> 00:17:13,160
+and in fact, we did a whole show on this. I mean,
+
+372
+00:17:13,500 --> 00:17:14,329
+it was,
+
+373
+00:17:14,630 --> 00:17:16,949
+you, you're here, like, tell us your story.
+
+374
+00:17:17,140 --> 00:17:20,410
+Oh, yeah, there's been so much CBE recently, so, yeah. So,
+
+375
+00:17:21,719 --> 00:17:22,380
+yeah.
+
+376
+00:17:24,569 --> 00:17:24,920
+Yeah. Yeah.
+
+377
+00:17:25,650 --> 00:17:26,880
+Where to start.
+
+378
+00:17:27,050 --> 00:17:27,910
+Of course.
+
+379
+00:17:30,199 --> 00:17:33,479
+Yeah, I started the venture, of course, by complaining, uh,
+
+380
+00:17:33,489 --> 00:17:38,760
+the NVD always sort of inflating our, uh CV ES whenever they can
+
+381
+00:17:39,170 --> 00:17:41,199
+or, and, and they think that's a good thing.
+
+382
+00:17:41,420 --> 00:17:43,239
+So they tend to sort of
+
+383
+00:17:43,489 --> 00:17:47,160
+host our CV with a very high scores.
+
+384
+00:17:47,170 --> 00:17:51,589
+When, when I think that's completely wrong, I think it doesn't help anyone.
+
+385
+00:17:51,599 --> 00:17:52,319
+I think they're
+
+386
+00:17:52,640 --> 00:17:55,089
+scaremongering and,
+
+387
+00:17:55,920 --> 00:17:59,290
+and, and the effect of that since they sort of inflate everything
+
+388
+00:18:00,250 --> 00:18:00,849
+nowadays,
+
+389
+00:18:00,859 --> 00:18:03,930
+a lot of people seem to be using these scanners or
+
+390
+00:18:03,939 --> 00:18:07,199
+scanning for software and they use those scores for CBS.
+
+391
+00:18:07,209 --> 00:18:10,130
+So now suddenly I get a lot of feedback from users saying,
+
+392
+00:18:10,260 --> 00:18:12,510
+hey, I found these CV s in,
+
+393
+00:18:12,890 --> 00:18:15,569
+there's always on windows nowadays so they found a
+
+394
+00:18:15,719 --> 00:18:21,109
+curl on windows. It's vulnerable for this CB, you know, scored high as
+
+395
+00:18:21,270 --> 00:18:22,599
+a whatever,
+
+396
+00:18:22,760 --> 00:18:23,609
+what should I do?
+
+397
+00:18:23,800 --> 00:18:26,630
+And I tried to argue that, no, no, it's not that bad.
+
+398
+00:18:26,640 --> 00:18:30,469
+It's just, you know, it's just a medium or a low security problem because blah, blah,
+
+399
+00:18:30,479 --> 00:18:30,709
+blah,
+
+400
+00:18:30,890 --> 00:18:32,869
+but that's not what their scanners say.
+
+401
+00:18:33,800 --> 00:18:36,630
+And a lot of people now have these contracts when they say they're
+
+402
+00:18:36,880 --> 00:18:42,300
+obligated to fix their uh scanning warnings within these number of days.
+
+403
+00:18:42,699 --> 00:18:44,130
+So, what do they do?
+
+404
+00:18:44,969 --> 00:18:48,859
+-- Well, they, they email me and cry about it, but I can't do much about it so
+-- well.
+
+405
+00:18:49,099 --> 00:18:53,010
+Ok. So first comment because this is something that comes up a lot. Uh So
+
+406
+00:18:53,199 --> 00:18:55,569
+just so viewers know the NVD is the
+
+407
+00:18:55,579 --> 00:18:58,329
+national vulnerability database and it is funded by
+
+408
+00:18:58,569 --> 00:19:02,010
+and run by the US government for the US government.
+
+409
+00:19:02,060 --> 00:19:04,790
+And what a lot of people forget is that these CV SS scores
+
+410
+00:19:05,109 --> 00:19:06,349
+are for the US government.
+
+411
+00:19:06,359 --> 00:19:06,780
+Now,
+
+412
+00:19:06,790 --> 00:19:08,930
+the problem is everybody else uses them because there's
+
+413
+00:19:08,939 --> 00:19:11,489
+no other freely available source of CV SS scores,
+
+414
+00:19:11,890 --> 00:19:12,140
+right?
+
+415
+00:19:12,150 --> 00:19:15,020
+And so the US government makes this like worst case assumption of like, well,
+
+416
+00:19:15,030 --> 00:19:18,400
+somebody could be using this curl thing in a stupid, crazy way
+
+417
+00:19:18,770 --> 00:19:19,640
+as root,
+
+418
+00:19:20,140 --> 00:19:22,449
+root, like grabbing random stuff from God knows where.
+
+419
+00:19:22,839 --> 00:19:27,300
+So that's the first comment is that the CV S scoring is wrong in the
+
+420
+00:19:27,310 --> 00:19:31,189
+sense of people are using it wrong because they're not the US government probably.
+
+421
+00:19:31,540 --> 00:19:33,619
+But the second thing I don't understand is
+
+422
+00:19:33,729 --> 00:19:35,329
+they're scanning their software,
+
+423
+00:19:35,339 --> 00:19:40,380
+they're finding a curl version that is out of date with a vulnerability.
+
+424
+00:19:41,099 --> 00:19:45,010
+Why are they talking to you? Like you already released the patch? No, I, I like I'm
+
+425
+00:19:45,130 --> 00:19:46,079
+serious. Like, what are you supposed to do?
+
+426
+00:19:46,089 --> 00:19:49,119
+It's like, well, here's the patch, like here's the new version we,
+
+427
+00:19:49,250 --> 00:19:51,750
+-- we did.
+-- Yeah, exactly. Yeah.
+
+428
+00:19:51,760 --> 00:19:56,630
+But then there's this huge disconnect from the world who is using, they're using
+
+429
+00:19:56,864 --> 00:19:59,255
+but they have no idea how to actually get that
+
+430
+00:19:59,375 --> 00:20:02,875
+fix into their machines. So, yeah, why are they emailing me?
+
+431
+00:20:02,885 --> 00:20:06,655
+Because they find out that I'm behind curl.
+
+432
+00:20:06,665 --> 00:20:09,555
+Do you just send them the latest tar ball of curl and be like, here you go.
+
+433
+00:20:09,974 --> 00:20:12,064
+No, because what else are you like?
+
+434
+00:20:12,989 --> 00:20:13,439
+Yeah.
+
+435
+00:20:13,560 --> 00:20:15,760
+Well, yeah, what else can I do? I,
+
+436
+00:20:15,880 --> 00:20:17,160
+I really can't do anything.
+
+437
+00:20:17,170 --> 00:20:18,810
+And in, in the case of windows,
+
+438
+00:20:18,819 --> 00:20:22,270
+I can't do anything at all because you have to fix it with windows itself,
+
+439
+00:20:22,280 --> 00:20:23,930
+you have to do it with windows update.
+
+440
+00:20:23,939 --> 00:20:25,760
+Otherwise you break windows update.
+
+441
+00:20:26,969 --> 00:20:27,640
+So,
+
+442
+00:20:27,819 --> 00:20:29,479
+so what I can just say you,
+
+443
+00:20:29,489 --> 00:20:33,359
+you need to contact Microsoft about that or just wait until they fix it.
+
+444
+00:20:34,020 --> 00:20:34,500
+Um,
+
+445
+00:20:34,750 --> 00:20:37,609
+and that's not a really good message. No one likes that.
+
+446
+00:20:37,619 --> 00:20:39,930
+-- Ah,
+-- this is so amusing and, and I don't,
+
+447
+00:20:39,939 --> 00:20:43,660
+do you still get the emails from people complaining about their cars?
+
+448
+00:20:43,979 --> 00:20:47,579
+I recall because your email was in like the back of car manuals.
+
+449
+00:20:47,589 --> 00:20:52,010
+-- People were emailing you about their cars. Yeah,
+-- I get car questions every now
+
+450
+00:20:52,140 --> 00:20:52,439
+and then
+
+451
+00:20:53,489 --> 00:20:53,510
+I
+
+452
+00:20:53,800 --> 00:20:56,949
+actually get questions about pretty much everything
+
+453
+00:20:56,959 --> 00:20:59,189
+because people find my email address in,
+
+454
+00:20:59,199 --> 00:21:00,430
+in everything.
+
+455
+00:21:00,439 --> 00:21:03,430
+I sort of get that because by definition, these people, like,
+
+456
+00:21:03,459 --> 00:21:06,689
+they're flailing around and they find a name and an email address and so they hit it,
+
+457
+00:21:06,699 --> 00:21:06,869
+right.
+
+458
+00:21:06,880 --> 00:21:07,189
+Like,
+
+459
+00:21:07,380 --> 00:21:09,180
+we used to run an answer column
+
+460
+00:21:09,290 --> 00:21:12,989
+at the, at the, uh, security portal.com. This is like pre 2000.
+
+461
+00:21:13,250 --> 00:21:13,750
+And,
+
+462
+00:21:14,209 --> 00:21:15,560
+yeah, we would get people
+
+463
+00:21:15,800 --> 00:21:18,949
+with like crazy stories saying I need help.
+
+464
+00:21:18,959 --> 00:21:21,310
+My computer's been hacked, blah, blah, blah. And we're like, yeah, we can't help.
+
+465
+00:21:21,319 --> 00:21:23,109
+We're not gonna help, like, take it to a computer store.
+
+466
+00:21:23,359 --> 00:21:23,709
+Yeah.
+
+467
+00:21:23,719 --> 00:21:26,969
+And I'm pretty sure that in many times my
+
+468
+00:21:26,979 --> 00:21:29,290
+email sticks out because it's the current license.
+
+469
+00:21:29,300 --> 00:21:29,900
+So, so
+
+470
+00:21:30,150 --> 00:21:31,780
+do these open source collections.
+
+471
+00:21:31,900 --> 00:21:32,959
+That's my, my,
+
+472
+00:21:32,979 --> 00:21:36,150
+and I think in many other cases they don't have the email and the licenses.
+
+473
+00:21:36,160 --> 00:21:36,369
+So, you know,
+
+474
+00:21:36,380 --> 00:21:38,729
+we have to scroll through that list of 100 and 50
+
+475
+00:21:38,739 --> 00:21:42,000
+licenses and then somewhere in there that's an email address.
+
+476
+00:21:42,010 --> 00:21:46,949
+I'm gonna mail that guy and ask about my GPS problem and he's going to fix it for me.
+
+477
+00:21:47,430 --> 00:21:48,849
+Oh, my goodness.
+
+478
+00:21:49,020 --> 00:21:52,969
+Ok. How much, like random, weird email like that do you get?
+
+479
+00:21:53,280 --> 00:21:54,800
+It's got to be ridiculous.
+
+480
+00:21:55,060 --> 00:21:55,719
+Well,
+
+481
+00:21:56,989 --> 00:22:02,119
+how much? Yeah, I, suddenly, every week I get some kind of email about,
+
+482
+00:22:02,300 --> 00:22:02,650
+there's,
+
+483
+00:22:02,660 --> 00:22:07,160
+they're often also about games because it seems to be fairly popular in games.
+
+484
+00:22:07,619 --> 00:22:10,209
+So I get a lot of games questions, you know, fixing
+
+485
+00:22:10,410 --> 00:22:15,849
+people's problems in how to solve games and game accounts and stuff like that.
+
+486
+00:22:16,839 --> 00:22:19,609
+Yeah, I get a lot of V PM questions.
+
+487
+00:22:19,920 --> 00:22:24,069
+It goes in waves suddenly sometimes, you know, when some app
+
+488
+00:22:24,189 --> 00:22:28,569
+in particular has a problem doing a particular phase or some bugs or whatever.
+
+489
+00:22:28,579 --> 00:22:31,420
+I can get a huge amount of emails for some particular product,
+
+490
+00:22:31,599 --> 00:22:32,790
+you know, out of the blues.
+
+491
+00:22:32,920 --> 00:22:34,609
+I have no idea what they're talking about,
+
+492
+00:22:34,619 --> 00:22:37,520
+but suddenly I get a sort of a flood of emails
+
+493
+00:22:37,530 --> 00:22:39,449
+and then they might go away or come back and,
+
+494
+00:22:39,459 --> 00:22:39,750
+yeah,
+
+495
+00:22:41,380 --> 00:22:43,319
+it's funny because it's not me.
+
+496
+00:22:45,609 --> 00:22:50,000
+I actually find it kind of curious in many times because it sort of reveals, oh,
+
+497
+00:22:50,130 --> 00:22:53,839
+curl is used by this little thing that they were emailing me about.
+
+498
+00:22:53,849 --> 00:22:58,020
+Oh, in that kitchen thing in that car, in that fridge, in that printer, you know,
+
+499
+00:22:58,449 --> 00:23:01,859
+but, but what else would they use? Like if I have to go get something from the web,
+
+500
+00:23:02,449 --> 00:23:02,930
+I'm
+
+501
+00:23:03,290 --> 00:23:05,140
+everybody knows curl like
+
+502
+00:23:05,949 --> 00:23:06,250
+yeah,
+
+503
+00:23:06,609 --> 00:23:09,660
+like literally there's curl and w get, what else would there be
+
+504
+00:23:09,839 --> 00:23:12,780
+like? I can't even think of anything off the top of my head,
+
+505
+00:23:13,280 --> 00:23:13,630
+right?
+
+506
+00:23:13,640 --> 00:23:17,439
+But if you would write an application on, on a, on a device somewhere,
+
+507
+00:23:17,449 --> 00:23:20,910
+there are alternatives and in particularly if you would do it on a mobile phone,
+
+508
+00:23:20,920 --> 00:23:21,430
+for example,
+
+509
+00:23:21,439 --> 00:23:23,689
+there are Android solutions that would do it or
+
+510
+00:23:23,719 --> 00:23:25,640
+I OS solutions that would do it differently.
+
+511
+00:23:25,650 --> 00:23:26,219
+So there are
+
+512
+00:23:26,449 --> 00:23:29,819
+definitely competitors and alternatives to use
+
+513
+00:23:29,920 --> 00:23:33,500
+because just back to the Microsoft thing, I've just actually ran curl and so yeah,
+
+514
+00:23:33,510 --> 00:23:38,939
+curls installed by default on windows since whatever version some long time ago.
+
+515
+00:23:39,280 --> 00:23:41,890
+But what's interesting is the hyphen version hyphen hyphen version.
+
+516
+00:23:41,900 --> 00:23:42,920
+None of that stuff works.
+
+517
+00:23:42,930 --> 00:23:45,699
+Like I'm trying to figure out what version of Curl do I actually have installed?
+
+518
+00:23:45,709 --> 00:23:46,500
+And I'm like,
+
+519
+00:23:48,550 --> 00:23:51,579
+I'll tell you why because you're not running Curl. When you type that,
+
+520
+00:23:51,750 --> 00:23:52,979
+it's an alias thing.
+
+521
+00:23:54,780 --> 00:23:55,000
+Yeah,
+
+522
+00:23:55,770 --> 00:23:58,689
+that's another sore point here. So you,
+
+523
+00:23:59,079 --> 00:24:00,619
+you stepped right into it.
+
+524
+00:24:01,199 --> 00:24:05,339
+Sorry. What, so what am I when I run Curl in powershell? What is it?
+
+525
+00:24:05,349 --> 00:24:09,739
+-- What is it actually
+-- running? That's an alias for another powershell command.
+
+526
+00:24:10,510 --> 00:24:12,890
+So yeah, they did that before. They had the real curl.
+
+527
+00:24:12,900 --> 00:24:17,180
+They introduced an alias for another thing that's totally not curl at all.
+
+528
+00:24:17,229 --> 00:24:18,689
+Oh Invoke web request. OK.
+
+529
+00:24:18,699 --> 00:24:21,859
+Yeah, because I was like this does not look at all like curl or behave like curl.
+
+530
+00:24:21,869 --> 00:24:25,800
+-- So
+-- if you, if you invoke it as curl dot xe, you get the
+
+531
+00:24:26,000 --> 00:24:26,079
+curl,
+
+532
+00:24:26,250 --> 00:24:27,250
+the real curl.
+
+533
+00:24:28,839 --> 00:24:33,170
+So I'm hearing Microsoft rewrote curl in a weekend. That's what I just heard.
+
+534
+00:24:34,040 --> 00:24:37,469
+Yeah. No, it just, it, it runs something called invoke web request,
+
+535
+00:24:37,660 --> 00:24:39,819
+which is a Powershell thing I'm assuming.
+
+536
+00:24:40,079 --> 00:24:42,410
+Lovely. I'm sure that doesn't break everything. Right.
+
+537
+00:24:42,699 --> 00:24:44,020
+-- Yeah,
+-- exactly. So
+
+538
+00:24:44,180 --> 00:24:46,260
+-- we get questions about that too.
+-- Yeah.
+
+539
+00:24:46,400 --> 00:24:49,099
+Yeah. Like because yeah, because when I ran it, I was like, what
+
+540
+00:24:49,349 --> 00:24:50,020
+some weird,
+
+541
+00:24:50,619 --> 00:24:51,579
+yeah, I've actually never
+
+542
+00:24:52,310 --> 00:24:53,420
+on windows before I realized
+
+543
+00:24:53,550 --> 00:24:54,630
+like never in my life.
+
+544
+00:24:55,750 --> 00:24:56,339
+Well, I have Linux
+
+545
+00:24:56,500 --> 00:24:56,930
+like
+
+546
+00:24:57,640 --> 00:24:59,119
+I'm not gonna run this on windows
+
+547
+00:24:59,380 --> 00:25:04,500
+until now. All right. All right. So let's back to the CV. E topic.
+
+548
+00:25:04,589 --> 00:25:08,180
+So you had all these difficulties with CV E and
+
+549
+00:25:08,479 --> 00:25:11,010
+your solution was to become AC N A
+
+550
+00:25:11,469 --> 00:25:14,189
+and I'm curious your thoughts on that whole
+
+551
+00:25:14,300 --> 00:25:15,079
+thing.
+
+552
+00:25:15,089 --> 00:25:16,180
+-- So,
+-- ok, so,
+
+553
+00:25:16,189 --> 00:25:20,219
+so when I got this most recent bogus CV E that
+
+554
+00:25:20,229 --> 00:25:25,560
+someone filed against Carl 2020 19 909 or whatever it is,
+
+555
+00:25:26,089 --> 00:25:28,849
+which was clearly not a
+
+556
+00:25:29,010 --> 00:25:33,469
+security problem at all, whatever might recess about it.
+
+557
+00:25:33,739 --> 00:25:34,189
+Um,
+
+558
+00:25:35,050 --> 00:25:37,280
+because they, of course says that it is
+
+559
+00:25:37,430 --> 00:25:40,530
+-- well,
+-- and again, I mean, I was on a CV board,
+
+560
+00:25:40,670 --> 00:25:41,170
+they don't
+
+561
+00:25:41,400 --> 00:25:42,959
+validate anything. They can't, right.
+
+562
+00:25:42,969 --> 00:25:45,500
+Like there's close source CV S like, I don't have a copy of
+
+563
+00:25:46,510 --> 00:25:48,119
+-- Hai's nuclear power plant controls
+-- often.
+
+564
+00:25:48,349 --> 00:25:52,560
+But in this case, I, I submitted a rejection to them with a full motivation,
+
+565
+00:25:52,569 --> 00:25:54,339
+including all my information
+
+566
+00:25:54,444 --> 00:25:58,324
+about it, you know, source code links to the patches, everything and said
+
+567
+00:25:58,574 --> 00:26:00,175
+this is not a security problem.
+
+568
+00:26:00,185 --> 00:26:02,734
+Look at the patches, here's the explanation, but they,
+
+569
+00:26:02,744 --> 00:26:05,875
+but they still insist that now it could have a security impact
+
+570
+00:26:06,214 --> 00:26:10,935
+without, you know, without going into how or why or anything. And it's just some
+
+571
+00:26:11,104 --> 00:26:12,734
+group email saying that
+
+572
+00:26:12,854 --> 00:26:14,055
+end of discussion.
+
+573
+00:26:14,390 --> 00:26:18,089
+So, ok, so they think it's a security problem but it's not.
+
+574
+00:26:18,260 --> 00:26:20,630
+And because they think it, it's a security problem,
+
+575
+00:26:20,640 --> 00:26:22,849
+it remains a CV E and then it remains.
+
+576
+00:26:22,859 --> 00:26:24,189
+And by uh NV DS
+
+577
+00:26:24,339 --> 00:26:26,209
+keeps it hosted and they,
+
+578
+00:26:26,660 --> 00:26:30,550
+but it's OK. My secondary thing was then to complain to NVD and say,
+
+579
+00:26:31,050 --> 00:26:32,930
+how can you score this as
+
+580
+00:26:33,160 --> 00:26:34,780
+whatever they scored it? Um
+
+581
+00:26:35,319 --> 00:26:38,459
+And you should just, yeah, they scored it 9.8 and then I,
+
+582
+00:26:38,469 --> 00:26:42,050
+I complained to them and it ended up as a 3.3 after my complaint
+
+583
+00:26:42,400 --> 00:26:46,260
+and again, back to NVD. Sure they, they do a worst case scenario.
+
+584
+00:26:46,369 --> 00:26:50,599
+But when the, the only information they have says, integrate overflow,
+
+585
+00:26:50,630 --> 00:26:52,199
+what is the worst case?
+
+586
+00:26:52,209 --> 00:26:53,689
+Probably pretty bad
+
+587
+00:26:53,859 --> 00:26:57,229
+because what kind of input do you do in integra overflow?
+
+588
+00:26:57,239 --> 00:27:02,660
+That could be really, really bad or it could be nothing. But anyway, so since II, I
+
+589
+00:27:03,329 --> 00:27:05,780
+don't like the situation, I think there's so many
+
+590
+00:27:06,180 --> 00:27:07,489
+bad steps along this way,
+
+591
+00:27:07,500 --> 00:27:11,979
+I think one of the ways I can limit the damage here is to
+
+592
+00:27:11,989 --> 00:27:15,339
+actually register as AC N A because then I can get a better say about
+
+593
+00:27:15,459 --> 00:27:19,079
+uh future CV S that concerns products that I am sort of
+
+594
+00:27:19,349 --> 00:27:23,569
+in my scope as AC N A which then becomes curl products, curl and lib
+
+595
+00:27:23,869 --> 00:27:27,900
+-- pretty much
+-- well and again to history for the viewers. So
+
+596
+00:27:28,670 --> 00:27:32,770
+how do I put this nicely? The CV program was a great thing 25 years ago.
+
+597
+00:27:33,489 --> 00:27:37,369
+And unfortunately, it's still basically the same thing and
+
+598
+00:27:37,589 --> 00:27:38,810
+the world has changed.
+
+599
+00:27:39,160 --> 00:27:41,349
+And number two is even as a board member,
+
+600
+00:27:41,359 --> 00:27:45,579
+like I kind of tried to find out how CV E actually works within Miter
+
+601
+00:27:46,170 --> 00:27:47,380
+and I was unable to
+
+602
+00:27:47,569 --> 00:27:51,109
+like for example, who is doing that work,
+
+603
+00:27:51,119 --> 00:27:53,410
+like the actual names of the human beings doing that work.
+
+604
+00:27:53,510 --> 00:27:54,689
+II, I don't know.
+
+605
+00:27:55,849 --> 00:27:58,949
+Right. And I was a board member for what, like, 67 years, something like that.
+
+606
+00:27:59,430 --> 00:28:00,369
+Um, so
+
+607
+00:28:02,569 --> 00:28:03,770
+-- that's all I got.
+-- So,
+
+608
+00:28:03,989 --> 00:28:06,349
+I guess your frustration is totally expected
+
+609
+00:28:06,530 --> 00:28:08,270
+-- and, and no one knows what to do
+-- and,
+
+610
+00:28:08,280 --> 00:28:09,739
+and the solution of you have to become
+
+611
+00:28:09,750 --> 00:28:11,589
+a CV numbering authority and jump through those hoops
+
+612
+00:28:11,599 --> 00:28:14,920
+so that you can have that sort of first rate of refusal is in my opinion,
+
+613
+00:28:14,930 --> 00:28:17,310
+utterly, utterly ridiculous because
+
+614
+00:28:18,189 --> 00:28:19,250
+like I get that
+
+615
+00:28:19,420 --> 00:28:20,920
+it just doesn't scale.
+
+616
+00:28:21,229 --> 00:28:23,040
+No, it's totally ridiculous.
+
+617
+00:28:23,050 --> 00:28:26,599
+And I also feel a little bit selfish for doing this because
+
+618
+00:28:26,729 --> 00:28:31,609
+we can, everyone can't do this. It's not, it doesn't scale. It's a crazy thing.
+
+619
+00:28:32,030 --> 00:28:36,829
+So I, I understand that it's really not a long term solution for anyone.
+
+620
+00:28:36,839 --> 00:28:39,619
+It's rather a short term solution for me,
+
+621
+00:28:40,150 --> 00:28:41,170
+but that's also
+
+622
+00:28:41,760 --> 00:28:42,380
+sure.
+
+623
+00:28:42,430 --> 00:28:45,540
+So, but yeah, I'm doing it anyway and it seems to,
+
+624
+00:28:45,550 --> 00:28:47,619
+I'm actually not accepted there yet.
+
+625
+00:28:47,630 --> 00:28:49,689
+So sort of we're in the process. So we,
+
+626
+00:28:50,119 --> 00:28:53,520
+we're a few weeks off here because I've had all the interviews.
+
+627
+00:28:53,530 --> 00:28:54,140
+I've done all the things.
+
+628
+00:28:54,239 --> 00:28:57,650
+So it's just a few more steps in the dance to become accepted there.
+
+629
+00:28:57,699 --> 00:29:00,869
+But it seems to be a rather low administration for us.
+
+630
+00:29:00,880 --> 00:29:05,979
+So I think it's not going to be a big hurdle for us. It's very limited to only our CV ES.
+
+631
+00:29:06,609 --> 00:29:06,630
+Yeah.
+
+632
+00:29:06,770 --> 00:29:10,959
+Well, I mean, and the dirty, the dirty secret is, there's a lot of CNAs that have, uh,
+
+633
+00:29:10,969 --> 00:29:11,849
+one of my favorite ones.
+
+634
+00:29:11,859 --> 00:29:13,640
+They've done six CV ES over the course of their
+
+635
+00:29:13,650 --> 00:29:16,339
+entire career and they all point at marketing pages now.
+
+636
+00:29:17,530 --> 00:29:21,449
+Right. So, there's like, there's a lot of CNAs that shouldn't be CNAs and there's,
+
+637
+00:29:21,910 --> 00:29:24,329
+well, I mean, I think we can all agree if, like,
+
+638
+00:29:24,339 --> 00:29:27,880
+something like curl should be somehow involved in this process better.
+
+639
+00:29:28,260 --> 00:29:30,349
+You know, there's a lot of software like that, like,
+
+640
+00:29:31,060 --> 00:29:31,540
+yeah.
+
+641
+00:29:32,040 --> 00:29:32,900
+Yeah. I don't know.
+
+642
+00:29:33,079 --> 00:29:34,060
+I don't know what to say.
+
+643
+00:29:34,250 --> 00:29:35,849
+That's one of the reasons I quit the board.
+
+644
+00:29:36,030 --> 00:29:36,989
+Exactly.
+
+645
+00:29:37,170 --> 00:29:39,420
+I don't know what to say. That's a sort of a comment.
+
+646
+00:29:41,189 --> 00:29:42,180
+All right. All right.
+
+647
+00:29:42,189 --> 00:29:47,390
+So, I wanna, I wanna bring this one home with the kind of community angle to curl.
+
+648
+00:29:47,400 --> 00:29:50,739
+I, I just looked on Mastodon and a couple of days ago you had
+
+649
+00:29:50,949 --> 00:29:54,790
+you, every time you have a new committer to curl you, like, put a little blur.
+
+650
+00:29:54,859 --> 00:29:59,060
+But, which I think is phenomenal. Like, that's amazing. And it was number what, 1209
+
+651
+00:30:00,189 --> 00:30:03,329
+1000, 209 contributors to Curl, which is
+
+652
+00:30:03,849 --> 00:30:07,619
+bananas and, and I'm sure it's more than that by now, probably.
+
+653
+00:30:07,630 --> 00:30:09,959
+And by the time this comes out it'll be far more.
+
+654
+00:30:09,969 --> 00:30:14,959
+-- It's actually,
+-- exactly by the time this comes out, but it's actually 1209. Exactly.
+
+655
+00:30:14,969 --> 00:30:15,439
+Right now.
+
+656
+00:30:17,160 --> 00:30:18,880
+Well, you said that two days ago. So,
+
+657
+00:30:20,449 --> 00:30:21,530
+so, so
+
+658
+00:30:21,989 --> 00:30:24,520
+I think it cannot be understated
+
+659
+00:30:25,040 --> 00:30:29,859
+that the community of people you have constructed around this tool
+
+660
+00:30:30,020 --> 00:30:33,699
+is phenomenal and gigantic and without question,
+
+661
+00:30:33,709 --> 00:30:35,420
+contributes to part of that success.
+
+662
+00:30:35,430 --> 00:30:38,069
+And so the question I have is obviously on one hand,
+
+663
+00:30:38,079 --> 00:30:40,560
+there's like managing a community and building a community.
+
+664
+00:30:41,010 --> 00:30:42,430
+But then also I feel like
+
+665
+00:30:42,670 --> 00:30:45,449
+how do you get all this done in a day?
+
+666
+00:30:45,599 --> 00:30:48,170
+You, I mean, you're, you're all over the place, right?
+
+667
+00:30:48,180 --> 00:30:50,890
+You're managing a community, you're building an application, you're,
+
+668
+00:30:50,900 --> 00:30:52,949
+you're doing security work with,
+
+669
+00:30:52,959 --> 00:30:55,599
+with CV E and miter and every and it's just like
+
+670
+00:30:55,609 --> 00:30:58,050
+I look at you and I feel like I am pathetic.
+
+671
+00:31:00,630 --> 00:31:03,780
+Well, what can I say? Iii I do my best.
+
+672
+00:31:03,790 --> 00:31:09,130
+I try to, to, to be effective at doing the things I do and I need to do and of course,
+
+673
+00:31:09,140 --> 00:31:13,079
+when it comes to the sort of the community and a lot of contributors around it,
+
+674
+00:31:13,469 --> 00:31:13,969
+it's
+
+675
+00:31:15,099 --> 00:31:16,630
+I try to just keep,
+
+676
+00:31:16,640 --> 00:31:19,839
+uh treat everyone fair in the same way and just make
+
+677
+00:31:19,849 --> 00:31:23,170
+sure that I thank everyone and accept their contributions and I,
+
+678
+00:31:23,540 --> 00:31:25,790
+you know, put the feedback cycle back
+
+679
+00:31:25,910 --> 00:31:29,550
+the way I would have wanted it to be. And I think the way it,
+
+680
+00:31:29,670 --> 00:31:34,079
+the more curl is used and the better it has succeeded and the more it's used,
+
+681
+00:31:34,089 --> 00:31:35,290
+it sort of it feeds back.
+
+682
+00:31:35,300 --> 00:31:37,290
+So more people are actually interested in fixing
+
+683
+00:31:37,300 --> 00:31:38,800
+things because more people are using it.
+
+684
+00:31:38,810 --> 00:31:41,359
+So it's a positive spin in that regard
+
+685
+00:31:42,099 --> 00:31:42,560
+and
+
+686
+00:31:42,810 --> 00:31:43,910
+then how to do it.
+
+687
+00:31:43,920 --> 00:31:46,810
+I, I have a lot of people helping out uh I mean,
+
+688
+00:31:46,819 --> 00:31:50,359
+more and then just providing uh pull request as well.
+
+689
+00:31:50,369 --> 00:31:52,719
+So we're, we're a whole team these days
+
+690
+00:31:52,969 --> 00:31:53,650
+and we
+
+691
+00:31:53,989 --> 00:31:57,250
+just try to do the best we can to make sure things are
+
+692
+00:31:57,640 --> 00:31:59,719
+progressing as it as they should.
+
+693
+00:31:59,969 --> 00:32:02,459
+Now you work for wolf SSL. Right.
+
+694
+00:32:02,680 --> 00:32:03,189
+Yes.
+
+695
+00:32:03,670 --> 00:32:04,339
+So
+
+696
+00:32:04,520 --> 00:32:09,349
+how many like staff do they have? Like essentially maintaining curl?
+
+697
+00:32:10,300 --> 00:32:13,109
+-- That's basically me.
+-- OK. OK.
+
+698
+00:32:13,380 --> 00:32:14,750
+Which is, I mean, that's amazing.
+
+699
+00:32:14,760 --> 00:32:18,040
+Still like the fact that they're willing to invest in that I think is phenomenal.
+
+700
+00:32:18,050 --> 00:32:20,709
+I think that's actually healthier in some ways because it's
+
+701
+00:32:20,719 --> 00:32:23,050
+more sustainable to have the community actually supporting it.
+
+702
+00:32:23,060 --> 00:32:23,369
+And
+
+703
+00:32:23,839 --> 00:32:25,239
+I think this is one of the cases like the
+
+704
+00:32:25,369 --> 00:32:26,310
+kernel where like
+
+705
+00:32:26,939 --> 00:32:29,510
+the community should be able to do this because this is a slightly,
+
+706
+00:32:29,520 --> 00:32:31,510
+somewhat widely used piece of software.
+
+707
+00:32:31,920 --> 00:32:33,140
+Like, no, really. Like
+
+708
+00:32:33,819 --> 00:32:35,510
+this isn't some niche thing,
+
+709
+00:32:36,459 --> 00:32:38,010
+you know, and I, that, yeah,
+
+710
+00:32:38,020 --> 00:32:39,619
+that was always my concern with Red Hat when
+
+711
+00:32:39,630 --> 00:32:41,280
+Red Hat had all the developers working on it,
+
+712
+00:32:41,290 --> 00:32:43,599
+paying them and if Red Hat decides not to do it anymore.
+
+713
+00:32:43,609 --> 00:32:44,849
+-- Poof.
+-- Yeah.
+
+714
+00:32:45,150 --> 00:32:45,560
+Right.
+
+715
+00:32:45,719 --> 00:32:50,189
+-- So that's the, that's the question I always get then what happens when I stop?
+-- Yeah.
+
+716
+00:32:50,369 --> 00:32:52,689
+-- Like I would be sad if curl stopped working. Like,
+-- yeah,
+
+717
+00:32:52,699 --> 00:32:53,239
+very,
+
+718
+00:32:53,530 --> 00:32:54,680
+very sad.
+
+719
+00:32:55,930 --> 00:32:59,770
+Well, I, I, even if I would stop. I don't think it would stop working. You know,
+
+720
+00:33:00,439 --> 00:33:01,530
+I don't plan to
+
+721
+00:33:01,660 --> 00:33:04,630
+and I don't plan to stop at working at curl anytime soon anyway.
+
+722
+00:33:04,640 --> 00:33:06,630
+So I, I plan on continuing this.
+
+723
+00:33:06,739 --> 00:33:07,589
+But I also,
+
+724
+00:33:08,119 --> 00:33:14,069
+I get this question quite a lot, so I'm not alone here and I also always make a really
+
+725
+00:33:14,300 --> 00:33:16,109
+strong effort to make sure that everything
+
+726
+00:33:16,219 --> 00:33:17,880
+we do is completely open.
+
+727
+00:33:17,890 --> 00:33:20,420
+You know, all the processes, all the code, everything is there.
+
+728
+00:33:20,599 --> 00:33:24,069
+So even if I would go on an extended vacation tomorrow, um,
+
+729
+00:33:24,079 --> 00:33:26,180
+it wouldn't really stop anything.
+
+730
+00:33:26,189 --> 00:33:28,959
+It wouldn't possibly make a little dent in the speed on
+
+731
+00:33:28,969 --> 00:33:31,300
+how to do things because I do quite a lot.
+
+732
+00:33:31,589 --> 00:33:32,000
+But
+
+733
+00:33:32,369 --> 00:33:33,739
+it's, it wouldn't be a,
+
+734
+00:33:33,989 --> 00:33:36,729
+it wouldn't stop anything. It wouldn't be that big of a
+
+735
+00:33:36,839 --> 00:33:37,589
+problem
+
+736
+00:33:37,790 --> 00:33:38,560
+over time.
+
+737
+00:33:38,930 --> 00:33:41,250
+Awesome. Awesome. I mean, that's the dream, right?
+
+738
+00:33:41,280 --> 00:33:42,109
+You've, you've got,
+
+739
+00:33:42,119 --> 00:33:45,550
+you build your community and then the community becomes its own thing.
+
+740
+00:33:45,800 --> 00:33:47,939
+Oh, yeah. It's, it's certainly the dream. I mean,
+
+741
+00:33:48,239 --> 00:33:50,010
+I, I'm already living the dream here.
+
+742
+00:33:50,020 --> 00:33:52,910
+I'm, I'm working with my spare time project full time. Yeah. So.
+
+743
+00:33:54,609 --> 00:33:55,479
+Oh man.
+
+744
+00:33:55,729 --> 00:33:58,199
+So, ok. So let's end on that note.
+
+745
+00:33:58,209 --> 00:34:00,280
+Then you said working on my spare time project full time.
+
+746
+00:34:00,290 --> 00:34:04,680
+Obviously, you started doing curl part time in the nineties, obviously.
+
+747
+00:34:04,849 --> 00:34:08,820
+At what point did you realize? Like this is it, I'm, this is my job now.
+
+748
+00:34:08,830 --> 00:34:09,840
+This is what I'm doing.
+
+749
+00:34:10,300 --> 00:34:13,379
+Well, it took forever. I, I, um,
+
+750
+00:34:13,840 --> 00:34:17,590
+I started working with curl full time in 2019.
+
+751
+00:34:17,909 --> 00:34:18,708
+So, the 1st
+
+752
+00:34:18,969 --> 00:34:22,060
+21 years or so I did it on my spare time.
+
+753
+00:34:22,469 --> 00:34:28,938
+-- So, yeah, it took a long time until I actually got it to become my job.
+-- Holy cow.
+
+754
+00:34:28,949 --> 00:34:30,389
+I didn't realize it was. That,
+
+755
+00:34:30,728 --> 00:34:34,860
+that, that's like, I guess late. Oh, my goodness. 2019.
+
+756
+00:34:35,070 --> 00:34:40,219
+Yeah. Yeah. Yeah, exactly. I'm soon celebrating my fifth year as full time curl.
+
+757
+00:34:40,228 --> 00:34:40,870
+Yeah. Wow.
+
+758
+00:34:41,478 --> 00:34:45,780
+-- Amazing. Holy cow.
+-- It was also partly because it's, it's a difficult step.
+
+759
+00:34:45,790 --> 00:34:47,040
+How do you actually sort of
+
+760
+00:34:47,697 --> 00:34:50,248
+how do you, how do you make money from something like this?
+
+761
+00:34:50,259 --> 00:34:53,958
+And how do you do that from day one or? It's hard to ramp up and it's
+
+762
+00:34:54,178 --> 00:34:56,799
+me. Right. And where's the money? And blah, blah, blah.
+
+763
+00:34:56,868 --> 00:34:58,789
+There's a lot of things that have to sort of,
+
+764
+00:34:59,108 --> 00:35:02,759
+I have a lot of ducks that have to be in a row to this to work. So
+
+765
+00:35:03,159 --> 00:35:08,310
+it was a sort of, yeah, and that particular moment in time I just had the opportunity.
+
+766
+00:35:08,320 --> 00:35:09,780
+I took it and then I
+
+767
+00:35:09,889 --> 00:35:10,709
+worked with Wolf as
+
+768
+00:35:10,889 --> 00:35:14,459
+Os and they sort of believed in this and signed me up for this. So,
+
+769
+00:35:15,010 --> 00:35:15,300
+yeah,
+
+770
+00:35:15,520 --> 00:35:16,659
+just worked out fine.
+
+771
+00:35:16,989 --> 00:35:18,020
+That's fantastic.
+
+772
+00:35:18,510 --> 00:35:20,620
+Awesome. Awesome. Alright.
+
+773
+00:35:21,110 --> 00:35:24,520
+Alright, we come to the end, Daniel, I'll give you the last word on this one.
+
+774
+00:35:24,530 --> 00:35:25,860
+What do you want everyone to know
+
+775
+00:35:26,520 --> 00:35:28,040
+reduce Carl Moore?
+
+776
+00:35:29,860 --> 00:35:30,620
+You know what
+
+777
+00:35:30,750 --> 00:35:36,810
+I agree because I've seen people write their own Janky or use weird niche
+
+778
+00:35:36,989 --> 00:35:41,250
+web clients and it does not end well and well, no
+
+779
+00:35:41,830 --> 00:35:44,040
+ignoring security that just stuff breaks.
+
+780
+00:35:44,379 --> 00:35:46,120
+That's a good point. Exactly.
+
+781
+00:35:46,399 --> 00:35:48,939
+They don't have the expertise to be like, oh, this
+
+782
+00:35:49,159 --> 00:35:52,040
+niche server that now is 6 million servers or,
+
+783
+00:35:52,050 --> 00:35:56,300
+or like Yahoo picks it and all of a sudden, like, 30% of the web is using this thing.
+
+784
+00:35:56,459 --> 00:35:59,090
+Like, that's the thing I keep running into with all these web clients is like,
+
+785
+00:35:59,209 --> 00:36:01,679
+yeah, like just stuff breaks.
+
+786
+00:36:01,850 --> 00:36:05,409
+You mentioned, you mentioned what else you would use instead of curl.
+
+787
+00:36:05,419 --> 00:36:09,590
+And I think exactly what you're mentioning, that's some often my main
+
+788
+00:36:09,770 --> 00:36:13,159
+biggest competitor, especially when I talked to uh companies who are you
+
+789
+00:36:13,399 --> 00:36:14,689
+smaller systems?
+
+790
+00:36:14,719 --> 00:36:19,469
+Because from a lot of uh development board providers, they might ship their own.
+
+791
+00:36:19,479 --> 00:36:21,870
+Here's a Sa Mle HDP client and, you know,
+
+792
+00:36:22,030 --> 00:36:26,379
+that's 45 lines and you don't, it's very small and you can just, you know,
+
+793
+00:36:26,620 --> 00:36:30,070
+you don't need that big old curl. It's too big and, you know, complicated.
+
+794
+00:36:30,080 --> 00:36:34,330
+Here's a little tiny thing and it also works. But then, then I have to have it.
+
+795
+00:36:34,340 --> 00:36:35,110
+Yeah, sure.
+
+796
+00:36:35,120 --> 00:36:39,719
+It might work for that particular use case for a short while while you try this out,
+
+797
+00:36:39,729 --> 00:36:41,100
+but it's not really, you know.
+
+798
+00:36:41,520 --> 00:36:41,870
+Yeah.
+
+799
+00:36:42,350 --> 00:36:43,310
+So you don't work in the lab.
+
+800
+00:36:43,919 --> 00:36:46,189
+Yeah, for a while maybe. Yeah.
+
+801
+00:36:46,510 --> 00:36:49,060
+And as much as I hate to see a software monoculture,
+
+802
+00:36:49,070 --> 00:36:53,209
+at least I'd rather see a well maintained healthy monoculture versus like,
+
+803
+00:36:53,820 --> 00:36:55,189
+yeah, a 45 line.
+
+804
+00:36:56,870 --> 00:36:59,080
+Yeah, like in my head, I'm just like, thinking, like,
+
+805
+00:36:59,090 --> 00:37:02,100
+can I even fit all the status code handling in 45 lines?
+
+806
+00:37:03,000 --> 00:37:03,919
+Usually not.
+
+807
+00:37:03,929 --> 00:37:07,649
+And usually you have to do a lot of weird assumptions or Presumptions or, you know,
+
+808
+00:37:07,659 --> 00:37:09,419
+crazy things for that to work.
+
+809
+00:37:09,429 --> 00:37:10,979
+-- You only need
+-- two of those. It's fine.
+
+810
+00:37:12,840 --> 00:37:15,699
+-- 200 everything else.
+-- That's right
+
+811
+00:37:16,419 --> 00:37:19,100
+that you happened to see just now when you tried it out. Yeah.
+
+812
+00:37:20,550 --> 00:37:23,550
+Oh my goodness. This has been, this has been an absolute treat, Daniel.
+
+813
+00:37:23,560 --> 00:37:26,449
+I want to thank you so much for joining us today.
+
+814
+00:37:26,780 --> 00:37:28,840
+Thanks for inviting me. Well, this was fun.
+
+815
+00:37:29,139 --> 00:37:32,290
+-- Fantastic.
+-- All right. Thank you everyone for listening.
+
+816
+00:37:32,300 --> 00:37:34,939
+Go to open source security, podcast.com. Head up the show. Not Suzy Pound
+
+817
+00:37:35,149 --> 00:37:37,439
+O says podcast. Hashtag on Mastodon,
+
+818
+00:37:37,550 --> 00:37:41,370
+-- Kurt and Daniel have marvelous rest of your days. You too.
+-- Thanks everybody.
+
+819
+00:37:41,379 --> 00:37:44,209
+Thank you. Awesome. Thanks everyone. Bye bye.

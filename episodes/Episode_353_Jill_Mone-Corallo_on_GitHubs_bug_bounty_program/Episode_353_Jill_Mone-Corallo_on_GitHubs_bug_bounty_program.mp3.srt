@@ -1,0 +1,2179 @@
+0
+00:00:05,340 --> 00:00:08,579
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,590 --> 00:00:10,859
+Kurt Siefried and my partner in writing bad code.
+
+2
+00:00:10,869 --> 00:00:11,229
+Josh
+
+3
+00:00:11,550 --> 00:00:11,880
+Reser.
+
+4
+00:00:13,119 --> 00:00:16,909
+Yes. And I don't mean I don't know about that intro for today. We have a guest today.
+
+5
+00:00:16,920 --> 00:00:17,620
+Actually, we have
+
+6
+00:00:17,739 --> 00:00:18,270
+Jill
+
+7
+00:00:18,389 --> 00:00:22,079
+Monet Correo, Director of product Security Engineering Response at
+
+8
+00:00:22,370 --> 00:00:26,469
+github, which I guess is kind of a fancy way of saying you run the github bug bounty.
+
+9
+00:00:26,479 --> 00:00:29,850
+So, Jill, welcome to the show. We're really excited for you to be here.
+
+10
+00:00:30,139 --> 00:00:33,330
+-- Thank you so much for having me. I'm excited to be here.
+-- Fantastic.
+
+11
+00:00:33,340 --> 00:00:35,369
+So, so tell us, tell us what you do
+
+12
+00:00:35,520 --> 00:00:37,590
+and, and kind of what's going on.
+
+13
+00:00:38,330 --> 00:00:41,790
+So I guess the short version is I organize chaos.
+
+14
+00:00:42,009 --> 00:00:43,229
+Um But
+
+15
+00:00:43,479 --> 00:00:47,119
+what I really do is I manage the teams,
+
+16
+00:00:47,159 --> 00:00:52,459
+the product security incident response team as well as our bug bounty in that,
+
+17
+00:00:52,680 --> 00:00:55,060
+just like I said, organizing chaos. It's a,
+
+18
+00:00:55,189 --> 00:00:56,180
+it was a fun time
+
+19
+00:00:56,389 --> 00:00:57,290
+doing what I do
+
+20
+00:00:57,419 --> 00:00:58,669
+setting the stage for everyone.
+
+21
+00:00:58,680 --> 00:01:02,650
+Kurt and I spent a very long time at Red Hat doing product security work.
+
+22
+00:01:02,659 --> 00:01:04,319
+I mean, this was back before it even had a name.
+
+23
+00:01:04,330 --> 00:01:07,919
+I remember we what do we call it originally? It wasn't product security, it was
+
+24
+00:01:08,589 --> 00:01:09,769
+security response,
+
+25
+00:01:10,300 --> 00:01:11,930
+whatever doesn't matter, doesn't matter a long time ago.
+
+26
+00:01:12,180 --> 00:01:13,879
+So we're very excited for you to be here
+
+27
+00:01:14,040 --> 00:01:16,959
+and, and I guess I want to start out with the bug bunny because
+
+28
+00:01:17,089 --> 00:01:19,669
+Github has a pretty big bug bunny.
+
+29
+00:01:19,860 --> 00:01:22,339
+And I would just love you to explain
+
+30
+00:01:22,589 --> 00:01:24,830
+what is a bug bunny because we're gonna have people
+
+31
+00:01:24,839 --> 00:01:26,750
+listening that think they know what a bug bunny is.
+
+32
+00:01:26,760 --> 00:01:29,559
+But I think as anyone who's ever managed a bug bunny,
+
+33
+00:01:29,569 --> 00:01:33,279
+what we think it is and what it really is are two very different things generally.
+
+34
+00:01:33,730 --> 00:01:34,480
+Very true.
+
+35
+00:01:34,790 --> 00:01:38,610
+Um So a bug bounty is an open forum for
+
+36
+00:01:38,620 --> 00:01:44,050
+folks of all abilities to report vulnerabilities to a company.
+
+37
+00:01:44,059 --> 00:01:46,410
+So for us, we are looking for
+
+38
+00:01:46,529 --> 00:01:49,489
+any and all walks of life to send us a report in on
+
+39
+00:01:49,500 --> 00:01:53,790
+something that they think doesn't quite fit their expectation of our product.
+
+40
+00:01:53,800 --> 00:01:57,599
+Whether that ends up being a valid report or not, we'll
+
+41
+00:01:57,705 --> 00:02:02,394
+interact with that person, coach them maybe in the right way to get a valid report.
+
+42
+00:02:02,404 --> 00:02:05,214
+And then at the end, we'll reward you with some money,
+
+43
+00:02:05,224 --> 00:02:10,524
+maybe some new fun non monetary rewards that we're launching soon
+
+44
+00:02:10,684 --> 00:02:12,505
+in the case where it's not a valid report.
+
+45
+00:02:12,514 --> 00:02:14,324
+We'll go ahead and coach you for the next time.
+
+46
+00:02:14,544 --> 00:02:17,324
+-- That
+-- is definitely not something we really did when we were at Red Hat.
+
+47
+00:02:17,335 --> 00:02:20,524
+When you say coaching. No, I'm actually really intrigued now. So
+
+48
+00:02:21,059 --> 00:02:21,220
+in,
+
+49
+00:02:21,649 --> 00:02:22,339
+because again,
+
+50
+00:02:22,350 --> 00:02:25,919
+my traditional view of bug bounties and eating security reports is like,
+
+51
+00:02:25,929 --> 00:02:27,369
+that's not about go away.
+
+52
+00:02:27,380 --> 00:02:29,919
+I have work to do. So, you're talking about coaching them.
+
+53
+00:02:29,929 --> 00:02:31,360
+So, what does that involve?
+
+54
+00:02:31,490 --> 00:02:31,750
+Yeah.
+
+55
+00:02:31,759 --> 00:02:36,649
+So especially in the last few years with the state of the world, we've seen a lot of
+
+56
+00:02:36,800 --> 00:02:37,910
+folks coming to
+
+57
+00:02:38,024 --> 00:02:41,815
+bug bounty to kind of test their skills, test the waters.
+
+58
+00:02:42,104 --> 00:02:45,244
+So we see a lot of folks who are reporting their
+
+59
+00:02:45,434 --> 00:02:47,925
+first vulnerability in that
+
+60
+00:02:48,115 --> 00:02:50,714
+we might get a report that doesn't quite meet our scope,
+
+61
+00:02:50,725 --> 00:02:55,205
+even though we have a pretty broad scope, pretty much no holds barred there.
+
+62
+00:02:55,554 --> 00:02:59,445
+But if they don't meet the scope or if they're
+
+63
+00:02:59,695 --> 00:03:04,384
+kind of going down the path and maybe we can give them some documentation to
+
+64
+00:03:04,610 --> 00:03:07,910
+push them further so that they're able to be successful
+
+65
+00:03:08,029 --> 00:03:10,619
+and then we can celebrate their first win with them.
+
+66
+00:03:10,679 --> 00:03:13,960
+We want to see people be successful. We want to keep the doors open.
+
+67
+00:03:13,970 --> 00:03:16,789
+We want you to report your first vulnerability to us.
+
+68
+00:03:16,800 --> 00:03:19,509
+We think it's so special to have that community
+
+69
+00:03:19,880 --> 00:03:21,720
+come to us and report things.
+
+70
+00:03:21,740 --> 00:03:22,350
+All right, Jill,
+
+71
+00:03:22,360 --> 00:03:26,350
+I'm going to ask you to clarify what you mean by scope because there's a link,
+
+72
+00:03:26,360 --> 00:03:28,949
+I'll put a link in the show notes, you have a scope on the website,
+
+73
+00:03:28,960 --> 00:03:31,550
+but I would like you to explain that.
+
+74
+00:03:32,050 --> 00:03:36,490
+Yes. So for anyone who has not participated in a bug bounty. It
+
+75
+00:03:36,710 --> 00:03:40,419
+is not free and open fields on every product.
+
+76
+00:03:41,429 --> 00:03:47,100
+Every bug bounty has some bounds, there is a little bit of a fence to keep the cows in.
+
+77
+00:03:47,110 --> 00:03:47,699
+You want to,
+
+78
+00:03:47,804 --> 00:03:51,574
+you check that out for each individual product. So for us,
+
+79
+00:03:51,735 --> 00:03:54,104
+uh, we want you to focus in
+
+80
+00:03:54,235 --> 00:03:56,664
+on our heavy hitters. So
+
+81
+00:03:56,794 --> 00:03:57,785
+github.com,
+
+82
+00:03:57,794 --> 00:03:59,574
+come on and take a look if you're
+
+83
+00:03:59,585 --> 00:04:03,384
+seeing repo permissions or something that just doesn't
+
+84
+00:04:04,054 --> 00:04:07,945
+smell right spidey sense. However you want to equate it to you.
+
+85
+00:04:08,320 --> 00:04:10,759
+Um, go ahead and look at our scope,
+
+86
+00:04:10,770 --> 00:04:14,029
+see if it falls within the bounds and then send it over.
+
+87
+00:04:14,039 --> 00:04:14,589
+Now,
+
+88
+00:04:14,710 --> 00:04:18,190
+like I said, we want you to report your first vulnerability to us. So
+
+89
+00:04:18,450 --> 00:04:21,510
+even if you're not sure send it over, there's no
+
+90
+00:04:21,709 --> 00:04:23,470
+harm in sending it over to us.
+
+91
+00:04:23,589 --> 00:04:26,540
+I noticed you explicitly have a like a safe harbor.
+
+92
+00:04:27,109 --> 00:04:29,709
+I don't want to say agreement necessarily like, because I guess,
+
+93
+00:04:29,940 --> 00:04:32,619
+well, it's not really a click through, but it's just you've stated that, you know,
+
+94
+00:04:32,630 --> 00:04:34,049
+basically boils down to
+
+95
+00:04:34,260 --> 00:04:37,660
+you're not going to sue them if they report security flaws to you. Which
+
+96
+00:04:38,149 --> 00:04:41,489
+as we, I we did this years ago with the auto industry announcing that we're like,
+
+97
+00:04:41,500 --> 00:04:45,440
+that is actually a massive step forward for large companies to officially say that.
+
+98
+00:04:45,579 --> 00:04:48,410
+Yeah, and we, we do have to reiterate it at times,
+
+99
+00:04:48,420 --> 00:04:52,410
+but we do want to make sure that everyone is aware of that case.
+
+100
+00:04:52,420 --> 00:04:52,730
+And,
+
+101
+00:04:53,059 --> 00:04:54,200
+you know, just
+
+102
+00:04:54,600 --> 00:04:59,269
+be a good human report, things be actively involved in the community.
+
+103
+00:04:59,429 --> 00:05:01,910
+So, one thing I'm curious about is I'm actually just looking at your bug
+
+104
+00:05:02,100 --> 00:05:02,679
+man results.
+
+105
+00:05:02,899 --> 00:05:03,540
+Number one,
+
+106
+00:05:03,549 --> 00:05:06,109
+I love that your top leader board person has tried
+
+107
+00:05:06,119 --> 00:05:09,480
+to put a javascript um escape into his user.
+
+108
+00:05:10,829 --> 00:05:12,720
+But one thing I'm curious about is so
+
+109
+00:05:12,880 --> 00:05:16,899
+a lot of the bug reports are undisclosed. And
+
+110
+00:05:17,049 --> 00:05:20,959
+like, I guess one thing I've noticed is like we have, there tends to be, I find,
+
+111
+00:05:20,970 --> 00:05:23,230
+especially in the web space weirdly not so much the software space,
+
+112
+00:05:23,239 --> 00:05:24,049
+but in the web space,
+
+113
+00:05:24,170 --> 00:05:25,170
+like there'll be
+
+114
+00:05:26,390 --> 00:05:29,600
+like trends, I guess would be the word I'm looking for. Like somebody reports a bug
+
+115
+00:05:29,970 --> 00:05:33,000
+and then like six more people report the exact same bug. And it's kind of like,
+
+116
+00:05:33,260 --> 00:05:36,440
+like, is it the same person, like what is going on? Right. And
+
+117
+00:05:36,950 --> 00:05:38,420
+I'm wondering, do you, does github
+
+118
+00:05:38,600 --> 00:05:39,450
+also see that
+
+119
+00:05:39,750 --> 00:05:43,619
+-- we
+-- do, um usually the trends that we see tend to be the same
+
+120
+00:05:43,940 --> 00:05:47,619
+hacker or researcher pulling on the same thread. Now,
+
+121
+00:05:47,799 --> 00:05:50,480
+sometimes if they're a little more involved in the community,
+
+122
+00:05:50,489 --> 00:05:54,660
+they're actively participating or engaging with other researchers,
+
+123
+00:05:54,670 --> 00:05:58,140
+we'll see a group of them kind of hit the same spot because,
+
+124
+00:05:58,260 --> 00:06:00,940
+you know, they're chatting in whatever forum saying, hey,
+
+125
+00:06:01,040 --> 00:06:02,700
+yeah, I found something here.
+
+126
+00:06:02,829 --> 00:06:04,359
+They may team up together,
+
+127
+00:06:04,489 --> 00:06:08,230
+uh they may individually attack and at times, you know,
+
+128
+00:06:08,239 --> 00:06:13,000
+that causes collisions where they may report the same thing, duplicate reports.
+
+129
+00:06:13,309 --> 00:06:14,959
+But for the most part,
+
+130
+00:06:15,079 --> 00:06:18,059
+usually it's one individual researcher pulling on the,
+
+131
+00:06:18,519 --> 00:06:20,779
+-- the same thread. All right.
+-- So
+
+132
+00:06:21,029 --> 00:06:22,950
+you just said something,
+
+133
+00:06:22,959 --> 00:06:26,410
+I think that not everyone recognizes or I guess understands about
+
+134
+00:06:26,420 --> 00:06:30,859
+bug bunnies is when two researchers report the same thing,
+
+135
+00:06:30,869 --> 00:06:33,059
+what happens in that situation.
+
+136
+00:06:33,160 --> 00:06:36,019
+-- It really
+-- depends, it depends on the program.
+
+137
+00:06:36,029 --> 00:06:38,940
+It depends on the team that's managing it.
+
+138
+00:06:38,950 --> 00:06:39,420
+Usually,
+
+139
+00:06:39,429 --> 00:06:45,470
+if there's a duplicate report with a mitigation or a fix in play at that point,
+
+140
+00:06:45,510 --> 00:06:48,519
+we will inform you that, hey, this is a
+
+141
+00:06:48,739 --> 00:06:49,910
+duplicate report.
+
+142
+00:06:49,920 --> 00:06:54,970
+We're already engaged in a fix, engaged in the response activity.
+
+143
+00:06:55,200 --> 00:06:56,380
+Um So it may not
+
+144
+00:06:56,529 --> 00:07:01,450
+qualify at that point for a reward. We may give you a thank you reward.
+
+145
+00:07:01,459 --> 00:07:06,440
+We're quite known to be generous in that regard of, hey, thanks, we appreciate it.
+
+146
+00:07:06,450 --> 00:07:11,059
+And then on the other end, if it's before we've even gotten a chance to
+
+147
+00:07:11,429 --> 00:07:14,829
+maybe triage validate the vulnerability to
+
+148
+00:07:14,980 --> 00:07:19,049
+start a mitigation at that point, we may duplicate the report
+
+149
+00:07:19,260 --> 00:07:22,250
+and then go ahead and reward both parties for what it is.
+
+150
+00:07:23,380 --> 00:07:25,290
+And, and I guess we should also clarify,
+
+151
+00:07:25,540 --> 00:07:28,829
+you use hacker one to manage your bug bounty program, right?
+
+152
+00:07:29,179 --> 00:07:29,559
+Yes,
+
+153
+00:07:29,709 --> 00:07:34,380
+we originally did not. We started doing it homegrown and then a few
+
+154
+00:07:34,494 --> 00:07:37,994
+years back, we went ahead and joined the hacker one platform.
+
+155
+00:07:38,295 --> 00:07:38,734
+I just,
+
+156
+00:07:38,744 --> 00:07:42,725
+I can't even imagine like the tax implications of trying to pay people and like,
+
+157
+00:07:42,734 --> 00:07:44,524
+do you even know where they are half the time, right?
+
+158
+00:07:44,535 --> 00:07:49,234
+-- And I just, yeah,
+-- I actually have some experience with that. Um So before I joined
+
+159
+00:07:49,765 --> 00:07:53,674
+github, I was part of starting up the Apple Bug Bounty.
+
+160
+00:07:53,684 --> 00:07:55,674
+I was on the team that maintained that
+
+161
+00:07:55,924 --> 00:07:57,575
+and we did that homegrown and
+
+162
+00:07:57,765 --> 00:08:01,434
+that was definitely a struggle of tax and
+
+163
+00:08:01,565 --> 00:08:02,915
+all that craziness.
+
+164
+00:08:03,309 --> 00:08:06,029
+OK? I want, I want to clarify what this means because
+
+165
+00:08:06,220 --> 00:08:10,529
+I also went through this, I started the bug bunny program at Elastic and
+
+166
+00:08:10,929 --> 00:08:13,440
+every that I feel like there's this bug bunny journey,
+
+167
+00:08:13,450 --> 00:08:17,170
+you could document of this like just sinusoidal wave of ups and downs.
+
+168
+00:08:17,179 --> 00:08:20,950
+And one of the stages is always we could do this ourselves.
+
+169
+00:08:21,160 --> 00:08:23,989
+But when you are a United States company,
+
+170
+00:08:24,140 --> 00:08:27,959
+there are places you necessarily can't engage
+
+171
+00:08:28,204 --> 00:08:29,114
+with people
+
+172
+00:08:29,244 --> 00:08:30,255
+and send them money.
+
+173
+00:08:30,265 --> 00:08:31,475
+For example, like there's,
+
+174
+00:08:31,484 --> 00:08:35,815
+there's a list of countries that are banned and so explain kind of that piece of
+
+175
+00:08:35,825 --> 00:08:38,094
+it because you've obviously participated in two huge
+
+176
+00:08:38,104 --> 00:08:39,683
+bug monies and started one up and,
+
+177
+00:08:39,695 --> 00:08:40,034
+and
+
+178
+00:08:40,145 --> 00:08:42,244
+I don't think everyone recognizes
+
+179
+00:08:42,354 --> 00:08:45,195
+just kind of the legal implications of paying people.
+
+180
+00:08:45,940 --> 00:08:49,650
+Yeah, I mean, I'm no lawyer, so I'm not going to go too far into that topic.
+
+181
+00:08:50,000 --> 00:08:52,590
+If you're getting legal advice from this podcast, we have
+
+182
+00:08:52,859 --> 00:08:53,919
+bigger problems
+
+183
+00:08:55,159 --> 00:08:57,400
+in that case. It really kind of depends on
+
+184
+00:08:57,919 --> 00:09:02,289
+world events, a company's feelings, it's very individual, you know,
+
+185
+00:09:02,299 --> 00:09:05,780
+it may be restricted to the country and what's going on at the time.
+
+186
+00:09:05,789 --> 00:09:06,239
+But,
+
+187
+00:09:06,570 --> 00:09:07,409
+you know, we,
+
+188
+00:09:07,789 --> 00:09:12,739
+at least in my experience we do our best to reward people for what they're finding.
+
+189
+00:09:13,530 --> 00:09:15,159
+Well, I think one thing people forget is
+
+190
+00:09:15,739 --> 00:09:18,820
+there's a big difference between running like a bug bounty for a website
+
+191
+00:09:19,030 --> 00:09:22,140
+that whatever, you know, gets 10 or 100 reports a year
+
+192
+00:09:22,330 --> 00:09:24,070
+versus something like what, you know, github
+
+193
+00:09:24,289 --> 00:09:27,789
+or Red Hat or Apple are doing because, and so just for context, uh again,
+
+194
+00:09:27,799 --> 00:09:30,039
+because I was like Google stalking your bug band program
+
+195
+00:09:30,330 --> 00:09:33,500
+and you know, your total payouts are over $3 million.
+
+196
+00:09:33,770 --> 00:09:35,119
+Like, you know, there's,
+
+197
+00:09:35,130 --> 00:09:39,200
+and I'm looking at the page of like listing all the payouts for like the last,
+
+198
+00:09:39,489 --> 00:09:43,510
+you know, 23 months. It's a, it's a lot of reports and
+
+199
+00:09:43,739 --> 00:09:43,789
+I,
+
+200
+00:09:44,030 --> 00:09:47,510
+I guess one of my questions is how do we get across to people that like,
+
+201
+00:09:48,280 --> 00:09:49,580
+it's different at scale,
+
+202
+00:09:50,080 --> 00:09:52,900
+right? There's a big difference between 10, 100 and 1000 a year.
+
+203
+00:09:52,909 --> 00:09:55,099
+And like, because I, I'm assuming that github
+
+204
+00:09:55,250 --> 00:09:58,580
+is, you're in the roughly 100 to 1000 category for bug,
+
+205
+00:09:59,140 --> 00:09:59,840
+you know, which
+
+206
+00:10:00,669 --> 00:10:05,080
+like, how do you do that? Like, like team wise and process wise?
+
+207
+00:10:05,090 --> 00:10:06,739
+What, what do you do to make that work?
+
+208
+00:10:06,869 --> 00:10:09,900
+Yeah. So we take a very human approach to it.
+
+209
+00:10:09,909 --> 00:10:14,969
+We know that there are bounds to what we're able to do within a work day, work week,
+
+210
+00:10:14,979 --> 00:10:15,539
+et cetera.
+
+211
+00:10:15,549 --> 00:10:16,500
+And we just
+
+212
+00:10:16,679 --> 00:10:20,049
+take empathy into factor which is,
+
+213
+00:10:20,059 --> 00:10:22,479
+there's a human on the other side of the screen and
+
+214
+00:10:22,489 --> 00:10:24,539
+we're also a human on this side of the screen.
+
+215
+00:10:24,770 --> 00:10:28,559
+So the best that we can do is communicate and say,
+
+216
+00:10:29,059 --> 00:10:33,590
+hey, we're running behind or hey, we are looking at this or,
+
+217
+00:10:34,090 --> 00:10:35,659
+you know, in the times of the holidays,
+
+218
+00:10:35,669 --> 00:10:39,789
+we're taking some time to regenerate and let us
+
+219
+00:10:40,190 --> 00:10:44,950
+get back to you when we can. Here's a realistic time frame for us to get back to you.
+
+220
+00:10:44,960 --> 00:10:46,109
+You know, obviously
+
+221
+00:10:46,570 --> 00:10:50,109
+there's someone in every communication that doesn't feel
+
+222
+00:10:50,119 --> 00:10:52,630
+great about that situation and we just try and
+
+223
+00:10:53,250 --> 00:10:56,080
+manage expectations as best as possible.
+
+224
+00:10:57,650 --> 00:10:59,909
+Oh, I remember these conversations.
+
+225
+00:11:00,570 --> 00:11:03,869
+It's always a treat but, but no, I do agree with you.
+
+226
+00:11:03,880 --> 00:11:07,150
+I think the human angle is hugely important and I feel like
+
+227
+00:11:07,309 --> 00:11:08,989
+the hacker, one community
+
+228
+00:11:09,140 --> 00:11:14,190
+has done a nice job of fostering that attitude amongst the hackers, which is great.
+
+229
+00:11:14,200 --> 00:11:19,780
+I, I give them a lot of credit for that. So, so let me, let me ask you, you manage a bug
+
+230
+00:11:20,049 --> 00:11:21,979
+but you also handle product security.
+
+231
+00:11:22,200 --> 00:11:27,659
+So what is your kind of weighted average of, of percentage coming of, of,
+
+232
+00:11:27,669 --> 00:11:31,489
+I guess work coming in by, by a bug bounty versus
+
+233
+00:11:31,679 --> 00:11:36,179
+internal discovery and, and fixing? And I'm, I'm, I'd love to know,
+
+234
+00:11:36,369 --> 00:11:40,369
+-- I don't have a good percentage on that. You can
+-- guess wildly we're fine with that.
+
+235
+00:11:40,830 --> 00:11:41,869
+It's a, it's a good,
+
+236
+00:11:42,380 --> 00:11:45,409
+I would say for the product security incident response team,
+
+237
+00:11:45,419 --> 00:11:48,309
+we are seeing a lot of bounty reports as
+
+238
+00:11:48,320 --> 00:11:51,989
+well as internal reports and probably around 5050.
+
+239
+00:11:52,210 --> 00:11:54,979
+Wow, that's awesome. I mean, that means you have a pretty solid team.
+
+240
+00:11:54,989 --> 00:11:56,090
+That means which is cool.
+
+241
+00:11:56,099 --> 00:12:01,400
+So, ok, this, I want to now lead this into the inevitable discussion
+
+242
+00:12:01,500 --> 00:12:04,250
+that comes up when bug bounties and product security
+
+243
+00:12:04,539 --> 00:12:06,400
+are kind of tied together
+
+244
+00:12:06,539 --> 00:12:07,299
+is
+
+245
+00:12:07,460 --> 00:12:09,090
+I often hear
+
+246
+00:12:09,369 --> 00:12:11,559
+people in public that
+
+247
+00:12:11,780 --> 00:12:16,640
+are claiming a bug bounty can be your product security.
+
+248
+00:12:16,650 --> 00:12:20,590
+You don't need an internal team necessarily doing this sort of work.
+
+249
+00:12:20,619 --> 00:12:23,559
+Whereas we can we have a bug bounty we're covered.
+
+250
+00:12:24,140 --> 00:12:26,679
+I would love to hear your hot take on that
+
+251
+00:12:26,809 --> 00:12:32,039
+-- as
+-- someone who has homegrown the bug bounty team here at
+
+252
+00:12:32,500 --> 00:12:37,320
+github actual physical team, we started that about two years ago at this point.
+
+253
+00:12:37,330 --> 00:12:43,239
+And so we were managing it through our product security team and it was working.
+
+254
+00:12:43,250 --> 00:12:48,489
+But for any program to mature, I think having dedicated resources is people who
+
+255
+00:12:48,640 --> 00:12:53,919
+understand the workflow and don't have to split their time or feel guilty that
+
+256
+00:12:54,099 --> 00:12:56,210
+something takes more priority.
+
+257
+00:12:56,219 --> 00:13:01,169
+It allows us to lean into that human aspect as well is getting people who truly care
+
+258
+00:13:01,320 --> 00:13:02,969
+about our program.
+
+259
+00:13:02,979 --> 00:13:08,080
+I've got one report who I always say is the golden retriever of our team.
+
+260
+00:13:08,090 --> 00:13:10,890
+He loves everything bounty
+
+261
+00:13:11,140 --> 00:13:14,840
+and he is wonderful and it shows in the work that he does
+
+262
+00:13:15,099 --> 00:13:17,799
+and having someone have to split their time.
+
+263
+00:13:18,179 --> 00:13:22,039
+You see things where there are difficulties in communication,
+
+264
+00:13:22,049 --> 00:13:25,280
+people get frustrated with the program, slow response times.
+
+265
+00:13:25,289 --> 00:13:28,460
+So I think it's really important to have those dedicated resources.
+
+266
+00:13:28,770 --> 00:13:30,299
+And also one thing you just mentioned that
+
+267
+00:13:30,309 --> 00:13:32,280
+I've never considered about hacker one was that
+
+268
+00:13:32,729 --> 00:13:32,969
+like,
+
+269
+00:13:32,979 --> 00:13:34,280
+not only are you getting them to deal with
+
+270
+00:13:34,289 --> 00:13:36,450
+the hassles of like taxes and payments and like,
+
+271
+00:13:36,489 --> 00:13:39,260
+like, because I, I've done cross border payments and with some countries,
+
+272
+00:13:39,270 --> 00:13:40,500
+it's just, it's ridiculous.
+
+273
+00:13:40,510 --> 00:13:41,260
+I don't understand.
+
+274
+00:13:41,380 --> 00:13:42,760
+You'd mentioned that essentially
+
+275
+00:13:43,090 --> 00:13:43,799
+between
+
+276
+00:13:44,119 --> 00:13:44,760
+like github,
+
+277
+00:13:44,900 --> 00:13:46,669
+actively coaching the people that come to github,
+
+278
+00:13:46,809 --> 00:13:50,940
+but in general, hacker one also fostering that community and sort of, well,
+
+279
+00:13:50,950 --> 00:13:54,099
+it sounds like kind of teaching them how to behave and how to be,
+
+280
+00:13:54,250 --> 00:13:54,320
+I
+
+281
+00:13:54,780 --> 00:13:57,799
+don't want to say responsible, not the word responsible, but maybe effective.
+
+282
+00:13:57,809 --> 00:13:59,309
+And like that, that seems to be,
+
+283
+00:13:59,320 --> 00:14:02,159
+I think maybe one thing that I've been missing in the value of hacker one and,
+
+284
+00:14:02,369 --> 00:14:05,030
+and the maturity piece of bug bounties in general
+
+285
+00:14:05,479 --> 00:14:07,929
+because again, at scale, right, you're not dealing with one or two reports,
+
+286
+00:14:07,940 --> 00:14:09,109
+you're dealing with hundreds.
+
+287
+00:14:09,119 --> 00:14:10,039
+And so I'm curious, like,
+
+288
+00:14:10,049 --> 00:14:13,500
+have you seen the industry mature or the researchers mature?
+
+289
+00:14:13,510 --> 00:14:14,020
+I should say,
+
+290
+00:14:14,200 --> 00:14:17,840
+definitely over my time, I've seen the researchers mature.
+
+291
+00:14:17,849 --> 00:14:22,000
+I think one thing that was really impactful for our team in this last year is
+
+292
+00:14:22,010 --> 00:14:27,789
+we did our first solo focused live hacking event with hacker one back in June.
+
+293
+00:14:28,159 --> 00:14:29,950
+And so we got to
+
+294
+00:14:30,289 --> 00:14:34,309
+hang out with our researchers see how they interact with other researchers.
+
+295
+00:14:34,320 --> 00:14:39,859
+And you saw these friendships form this elevation of reports, people showing, hey,
+
+296
+00:14:39,869 --> 00:14:40,270
+you know,
+
+297
+00:14:40,520 --> 00:14:44,619
+I always submit a video proof of concept versus
+
+298
+00:14:44,630 --> 00:14:47,590
+someone who may be extremely detailed in their writing.
+
+299
+00:14:47,809 --> 00:14:51,179
+And then you see those researchers band together and
+
+300
+00:14:51,190 --> 00:14:53,909
+create this wonderful report which is magical for us.
+
+301
+00:14:53,919 --> 00:14:54,109
+You know,
+
+302
+00:14:54,119 --> 00:14:56,109
+anything that can shave some time off the
+
+303
+00:14:56,119 --> 00:14:59,130
+top by communicating more effectively is great.
+
+304
+00:14:59,140 --> 00:14:59,549
+So
+
+305
+00:14:59,950 --> 00:15:03,900
+I think events like that events like hacker 1702,
+
+306
+00:15:03,909 --> 00:15:07,520
+the Vegas event where there's multiple customers as the target.
+
+307
+00:15:07,960 --> 00:15:12,210
+-- It just brings that community together and fosters better
+-- work.
+
+308
+00:15:12,510 --> 00:15:16,059
+I'm going to ask you to explain what a live hacking event
+
+309
+00:15:16,070 --> 00:15:20,369
+is like because I have attended live hacking events from hacker one
+
+310
+00:15:20,539 --> 00:15:21,599
+and they are
+
+311
+00:15:21,909 --> 00:15:25,890
+incredibly interesting and just intense and amazing.
+
+312
+00:15:26,039 --> 00:15:27,010
+And my favorite
+
+313
+00:15:27,280 --> 00:15:30,580
+is every time they're like, oh, well, you should go meet the, the
+
+314
+00:15:30,700 --> 00:15:32,179
+the employees in the,
+
+315
+00:15:32,190 --> 00:15:36,059
+in the war room and you open the door and they just look at you with like get out now.
+
+316
+00:15:36,390 --> 00:15:39,039
+They're so busy and it's, it's so cool.
+
+317
+00:15:39,049 --> 00:15:42,369
+So please like, I would love it if you could explain more for the people who have no,
+
+318
+00:15:42,469 --> 00:15:43,539
+no idea what that even means.
+
+319
+00:15:43,880 --> 00:15:44,200
+Yeah.
+
+320
+00:15:44,210 --> 00:15:50,179
+So a live hacking event is a group of folks that are dedicated towards invited,
+
+321
+00:15:50,190 --> 00:15:50,640
+right?
+
+322
+00:15:50,739 --> 00:15:53,030
+Yes, this was an invite only event.
+
+323
+00:15:53,039 --> 00:15:57,570
+So invitation for our researchers to come join us in person
+
+324
+00:15:57,820 --> 00:16:00,919
+or remotely because that's our world now.
+
+325
+00:16:00,929 --> 00:16:06,760
+And so we met up in Austin, but the two weeks before we opened the floodgates, we said,
+
+326
+00:16:06,770 --> 00:16:08,909
+hey, start hacking on our product.
+
+327
+00:16:09,219 --> 00:16:12,559
+And so we started getting a flood of reports in.
+
+328
+00:16:12,880 --> 00:16:14,099
+And thankfully,
+
+329
+00:16:14,169 --> 00:16:16,750
+we had a little bit of a blocker of a day where we
+
+330
+00:16:16,760 --> 00:16:19,880
+could travel into Austin and not feel like we were running behind.
+
+331
+00:16:20,229 --> 00:16:22,849
+But the team hit the ground running.
+
+332
+00:16:22,859 --> 00:16:28,289
+We went into a ballroom and we're all furiously, you know, hoods up, heads down,
+
+333
+00:16:28,489 --> 00:16:29,530
+hacking away at
+
+334
+00:16:29,690 --> 00:16:34,780
+what everyone was sending us in. And then as you mentioned, it just got chaos.
+
+335
+00:16:35,010 --> 00:16:37,989
+I mean, it, you got a lot of reports in our case,
+
+336
+00:16:38,000 --> 00:16:40,539
+a small team and we were just trying to get through
+
+337
+00:16:40,549 --> 00:16:43,609
+everything and make sure that the day of the event,
+
+338
+00:16:43,669 --> 00:16:45,119
+we were able to
+
+339
+00:16:45,255 --> 00:16:46,224
+adjudicate everything,
+
+340
+00:16:46,234 --> 00:16:50,094
+get everything a number to it so that the leader boards were accurate.
+
+341
+00:16:50,104 --> 00:16:51,575
+Now at these events,
+
+342
+00:16:51,585 --> 00:16:53,424
+there's a leader board that shows how much money you're
+
+343
+00:16:53,434 --> 00:16:56,794
+getting reputation points in the case of hacker one.
+
+344
+00:16:56,804 --> 00:16:58,635
+And at the end, we're able to
+
+345
+00:16:58,835 --> 00:17:00,195
+give a rating.
+
+346
+00:17:00,205 --> 00:17:06,155
+So most valuable hacker, some other rewards, uh, best report, things like that,
+
+347
+00:17:06,364 --> 00:17:10,155
+I think covered most of the event without going too rambling on it.
+
+348
+00:17:11,189 --> 00:17:11,640
+Well, and,
+
+349
+00:17:11,650 --> 00:17:16,010
+and I want to clarify because this is the thing that I think was most bizarre to me
+
+350
+00:17:16,189 --> 00:17:18,819
+is there are two groups,
+
+351
+00:17:18,969 --> 00:17:23,060
+there are the hackers and there are your people doing the triage work
+
+352
+00:17:23,310 --> 00:17:26,079
+and they're not necessarily talking to each other,
+
+353
+00:17:26,089 --> 00:17:30,869
+but they're both physically present at the event, which I, I find amazing.
+
+354
+00:17:31,550 --> 00:17:31,569
+Yeah.
+
+355
+00:17:31,810 --> 00:17:32,550
+So
+
+356
+00:17:33,310 --> 00:17:35,849
+we really wanted to focus on
+
+357
+00:17:35,949 --> 00:17:40,469
+the valuable community aspect of getting everyone in the same space,
+
+358
+00:17:40,479 --> 00:17:45,599
+especially after, you know, two years of not being able to see people in person and,
+
+359
+00:17:45,609 --> 00:17:48,020
+and break bread and just get to know someone.
+
+360
+00:17:48,030 --> 00:17:51,770
+So while we were hacking away in the other room,
+
+361
+00:17:51,780 --> 00:17:54,390
+we were making sure to send somebody out
+
+362
+00:17:54,660 --> 00:17:58,459
+one at a time to go interact or if we had questions
+
+363
+00:17:58,589 --> 00:18:00,619
+pop over to the other room and try and
+
+364
+00:18:00,869 --> 00:18:02,890
+discuss with the researcher because
+
+365
+00:18:03,520 --> 00:18:05,579
+it was valuable. We didn't have to send them a message.
+
+366
+00:18:05,589 --> 00:18:09,569
+We didn't have to wait 24 hours of time zone or whatever the case may be
+
+367
+00:18:09,699 --> 00:18:11,020
+to get their answer.
+
+368
+00:18:11,229 --> 00:18:12,439
+And so, um
+
+369
+00:18:12,780 --> 00:18:16,890
+in some cases, we had this renewed energy from researchers because they were like,
+
+370
+00:18:16,900 --> 00:18:20,250
+wow, you actually took the time to come chat with me and that's
+
+371
+00:18:20,479 --> 00:18:21,550
+so important to
+
+372
+00:18:21,650 --> 00:18:21,920
+us.
+
+373
+00:18:23,660 --> 00:18:24,359
+There's so much fun.
+
+374
+00:18:24,454 --> 00:18:28,805
+If anyone listening ever has a chance to attend one of the live hacking events,
+
+375
+00:18:28,964 --> 00:18:30,785
+-- they're so much fun. You would not
+-- regret it.
+
+376
+00:18:30,795 --> 00:18:32,795
+I Well, part of me honestly, like if there was,
+
+377
+00:18:32,805 --> 00:18:35,714
+if one of those happened close enough to me and like allowed an audience,
+
+378
+00:18:35,935 --> 00:18:38,285
+like, you know, it's like going to Bliss con and watching Starcraft.
+
+379
+00:18:38,295 --> 00:18:40,474
+Two professionals play Right. Like, no, seriously, I would
+
+380
+00:18:40,724 --> 00:18:45,314
+like, I know I'm a minor subset of weirdos but, like, I would go watch.
+
+381
+00:18:45,959 --> 00:18:46,430
+But
+
+382
+00:18:46,619 --> 00:18:48,329
+that leads to my big question. So,
+
+383
+00:18:48,430 --> 00:18:49,819
+as I've understood it, the,
+
+384
+00:18:49,829 --> 00:18:52,020
+the premise of a bug bounty always is you
+
+385
+00:18:52,030 --> 00:18:54,180
+get security researchers coming into you reporting bugs,
+
+386
+00:18:54,189 --> 00:18:56,219
+you fix them, your product is more secure.
+
+387
+00:18:57,069 --> 00:18:59,310
+Are you actually finding that to be the case?
+
+388
+00:18:59,319 --> 00:19:02,930
+Like, are you finding that there are less sort of in, I guess with github,
+
+389
+00:19:03,000 --> 00:19:05,079
+it's a little different because it's not like apple phones where, you know,
+
+390
+00:19:05,089 --> 00:19:08,739
+they're finding zero days in the wild because bad people are trying to break into,
+
+391
+00:19:08,750 --> 00:19:10,020
+you know, journalist phones.
+
+392
+00:19:10,400 --> 00:19:11,270
+But with github,
+
+393
+00:19:11,459 --> 00:19:12,900
+are you finding that,
+
+394
+00:19:13,189 --> 00:19:15,140
+you know, well, for example,
+
+395
+00:19:15,400 --> 00:19:17,280
+Attackers are trying to exploit flaws and you're like,
+
+396
+00:19:17,290 --> 00:19:18,869
+ha ha we fixed that three months ago, you know,
+
+397
+00:19:18,880 --> 00:19:22,810
+because this nice person reported it to us properly, like, is it actually
+
+398
+00:19:23,810 --> 00:19:25,869
+impacting your security in a measurable way?
+
+399
+00:19:26,500 --> 00:19:27,530
+Oh, definitely.
+
+400
+00:19:27,540 --> 00:19:32,380
+I mean, we have, I believe over 94 million developers on our platform.
+
+401
+00:19:32,390 --> 00:19:37,410
+So being able to fix something ahead of time and fix something
+
+402
+00:19:37,420 --> 00:19:41,189
+that hasn't been exploited yet is so incredibly valuable to us.
+
+403
+00:19:41,199 --> 00:19:45,560
+You know, it protects us, it protects our users. You know, we run github
+
+404
+00:19:45,800 --> 00:19:46,349
+off of github,
+
+405
+00:19:46,660 --> 00:19:50,270
+so we definitely are the affected party there too.
+
+406
+00:19:50,560 --> 00:19:51,229
+That's awesome.
+
+407
+00:19:51,359 --> 00:19:55,349
+Your bug bounty is against the live sites.
+
+408
+00:19:55,359 --> 00:19:57,550
+You don't have like a secondary infrastructure
+
+409
+00:19:57,560 --> 00:19:58,979
+that you're asking people to mess with,
+
+410
+00:19:58,989 --> 00:20:04,109
+like, you've got people actually attacking github.com and all of that stuff.
+
+411
+00:20:04,569 --> 00:20:09,140
+Yep, especially at 2 a.m. or Friday at five. You know, those are my favorite.
+
+412
+00:20:10,880 --> 00:20:12,300
+Oh, yes, I bet.
+
+413
+00:20:12,650 --> 00:20:14,890
+-- What
+-- is it with the Friday 5 p.m. security reports?
+
+414
+00:20:14,900 --> 00:20:16,959
+Like, like why are they always the worst?
+
+415
+00:20:17,459 --> 00:20:20,699
+I don't know, there have been some weeks where I felt like tweeting out.
+
+416
+00:20:20,709 --> 00:20:24,660
+Please stop sending Friday at five vulnerabilities. But, you know, I can't do that.
+
+417
+00:20:24,670 --> 00:20:25,020
+So
+
+418
+00:20:25,349 --> 00:20:29,369
+don't stop sending them in my team's around. We'll take care of it.
+
+419
+00:20:30,469 --> 00:20:31,979
+Oh, yes, yes.
+
+420
+00:20:31,989 --> 00:20:36,469
+I mean, but at the same time, you've also got what the, the infosec folks that are,
+
+421
+00:20:37,109 --> 00:20:39,170
+you know, seeing all these attacks, I guess.
+
+422
+00:20:39,180 --> 00:20:42,300
+Ok, so this is a good question and this is something that I've,
+
+423
+00:20:42,310 --> 00:20:44,260
+it's a very difficult answer.
+
+424
+00:20:44,270 --> 00:20:49,880
+So you have the bug bounty people obviously doing their thing
+
+425
+00:20:49,989 --> 00:20:50,729
+and you,
+
+426
+00:20:51,119 --> 00:20:55,699
+I imagine have some sort of like information security team that's doing like
+
+427
+00:20:55,709 --> 00:20:59,050
+event monitoring and you have a SIM and all of that jazz.
+
+428
+00:20:59,239 --> 00:21:03,180
+So how does your internal security team, I guess.
+
+429
+00:21:03,459 --> 00:21:04,670
+How do they delineate?
+
+430
+00:21:04,680 --> 00:21:07,689
+What is an actual attack action needs to be taken on versus
+
+431
+00:21:07,699 --> 00:21:11,300
+what is probably the bug bunny people doing the bug bunny thing?
+
+432
+00:21:12,530 --> 00:21:15,349
+Yeah, we have a pretty good grasp.
+
+433
+00:21:15,359 --> 00:21:19,229
+I wouldn't say, you know, lock proof on that, but we do know
+
+434
+00:21:19,339 --> 00:21:23,410
+the handles of most of our, our researchers, you know, coming to the platform.
+
+435
+00:21:23,420 --> 00:21:24,469
+So, you know,
+
+436
+00:21:24,599 --> 00:21:28,050
+we're always keeping an eye and we're always vigilant on those things.
+
+437
+00:21:28,060 --> 00:21:30,989
+So whether it is a bounty reporter or
+
+438
+00:21:31,250 --> 00:21:34,310
+potential malicious act activity, we're going to act the same way.
+
+439
+00:21:34,319 --> 00:21:34,770
+Now,
+
+440
+00:21:34,780 --> 00:21:38,040
+the communication may be different if we are very sure
+
+441
+00:21:38,050 --> 00:21:40,540
+that it's a researcher in our bug bounty program,
+
+442
+00:21:40,550 --> 00:21:42,280
+we may just confirm things, but
+
+443
+00:21:42,420 --> 00:21:46,260
+we're going to take the same action. We, we see there is something going on.
+
+444
+00:21:46,270 --> 00:21:47,329
+We're going to take care of it.
+
+445
+00:21:47,680 --> 00:21:50,839
+So that's interesting because it actually had not occurred to me that well,
+
+446
+00:21:50,849 --> 00:21:54,030
+to be blunt, if I was going to test get.com, I would not use my account,
+
+447
+00:21:54,229 --> 00:21:56,760
+right? Because I don't want my account getting booted off or locked out or,
+
+448
+00:21:56,939 --> 00:21:57,790
+I mean, fun fact.
+
+449
+00:21:57,800 --> 00:22:02,229
+I actually ran an ill behaved w get script once that I got my IP block from Cloudflare,
+
+450
+00:22:02,489 --> 00:22:04,729
+which meant I had to like reset my Mac address and
+
+451
+00:22:04,739 --> 00:22:07,219
+get a new IP and stop testing stuff from home.
+
+452
+00:22:07,239 --> 00:22:09,189
+You actually have researchers that are like
+
+453
+00:22:09,359 --> 00:22:12,630
+doing their bug bounty activities like from their main account,
+
+454
+00:22:12,880 --> 00:22:13,650
+like live
+
+455
+00:22:13,819 --> 00:22:17,550
+a little bit of both, but usually that's communicated very well.
+
+456
+00:22:17,560 --> 00:22:20,270
+They're very forthright with that information typically. So
+
+457
+00:22:20,469 --> 00:22:21,949
+-- yeah,
+-- because I just for me,
+
+458
+00:22:22,550 --> 00:22:26,099
+like I said, it would have never occurred to me to use my actual real persona account,
+
+459
+00:22:26,109 --> 00:22:26,880
+whatever you want to call it
+
+460
+00:22:27,170 --> 00:22:27,449
+to,
+
+461
+00:22:27,459 --> 00:22:28,969
+to do this kind of testing because I just
+
+462
+00:22:28,979 --> 00:22:31,069
+assume at some point I'm gonna get blocked out or
+
+463
+00:22:31,209 --> 00:22:35,189
+-- whatever.
+-- We should probably also clarify that when you use hacker one,
+
+464
+00:22:35,380 --> 00:22:37,579
+they have a special domain called we are,
+
+465
+00:22:37,689 --> 00:22:39,689
+is, is it we are, we are hacker one.com, right?
+
+466
+00:22:40,170 --> 00:22:40,319
+One.
+
+467
+00:22:40,540 --> 00:22:40,849
+Yeah.
+
+468
+00:22:41,319 --> 00:22:45,790
+Where it's expected that the researchers will create like an email address.
+
+469
+00:22:45,880 --> 00:22:48,390
+You know what like Kurt at, we are hacker one.com
+
+470
+00:22:48,530 --> 00:22:49,229
+and then
+
+471
+00:22:49,410 --> 00:22:50,819
+register that
+
+472
+00:22:50,939 --> 00:22:54,069
+almost certainly as a separate account and then use that.
+
+473
+00:22:54,079 --> 00:22:56,510
+And that also is a way to signal
+
+474
+00:22:56,979 --> 00:23:01,449
+to whoever is on the receiving end of this, that I am a researcher, you know,
+
+475
+00:23:01,459 --> 00:23:02,369
+with good intent.
+
+476
+00:23:02,380 --> 00:23:04,069
+I'm not a bad guy from somewhere,
+
+477
+00:23:04,079 --> 00:23:06,630
+although I'm sure there's bad guys that do this too because they know it's,
+
+478
+00:23:06,640 --> 00:23:09,969
+it's camouflage, but that's a whole another conversation, I imagine.
+
+479
+00:23:10,599 --> 00:23:10,630
+Yeah,
+
+480
+00:23:10,979 --> 00:23:11,680
+definitely.
+
+481
+00:23:14,449 --> 00:23:17,479
+Oh, my goodness. Yes. Yes. That's so cool.
+
+482
+00:23:17,609 --> 00:23:22,819
+Ok. All right. So I, I guess I have one kind of last question
+
+483
+00:23:22,989 --> 00:23:24,790
+that, that's rattling around in my mind
+
+484
+00:23:25,099 --> 00:23:25,800
+is
+
+485
+00:23:26,000 --> 00:23:29,819
+you have a page on hacker one
+
+486
+00:23:30,319 --> 00:23:33,300
+that lists your bounty amounts
+
+487
+00:23:33,599 --> 00:23:34,300
+and
+
+488
+00:23:34,680 --> 00:23:38,489
+the low on the low end it's 2000, medium is 10,000,
+
+489
+00:23:38,500 --> 00:23:40,829
+high is 20,000 and critical is 30,000.
+
+490
+00:23:40,839 --> 00:23:41,329
+And like
+
+491
+00:23:41,469 --> 00:23:44,859
+those are pretty solid amounts to be handing out.
+
+492
+00:23:44,869 --> 00:23:46,569
+And, and do you know off the top of your head?
+
+493
+00:23:46,579 --> 00:23:50,699
+Like what is, what kind of distribution do you see on those values? Is it,
+
+494
+00:23:50,920 --> 00:23:52,770
+are you mostly on the lower end?
+
+495
+00:23:52,780 --> 00:23:55,979
+Do you see a lot of reports do you get a lot of good criticals? I'm I'm curious,
+
+496
+00:23:56,290 --> 00:23:59,819
+-- I'd say
+-- we have a pretty good smattering across the board. Um
+
+497
+00:24:00,175 --> 00:24:05,165
+This past year we actually awarded our highest bounty ever, which was 50,000.
+
+498
+00:24:05,474 --> 00:24:10,675
+There is a lovely blog post on our blog about that report.
+
+499
+00:24:10,875 --> 00:24:13,314
+Can you sum it up for us by chance,
+
+500
+00:24:13,444 --> 00:24:15,915
+October of last year,
+
+501
+00:24:15,925 --> 00:24:21,474
+we discovered that there was a vulnerability that an attacker
+
+502
+00:24:21,484 --> 00:24:24,704
+could publish new versions of any M PM package.
+
+503
+00:24:24,964 --> 00:24:25,555
+Um
+
+504
+00:24:26,140 --> 00:24:28,250
+And so it allowed an attacker
+
+505
+00:24:28,430 --> 00:24:31,869
+to publish anything without proper authorization.
+
+506
+00:24:31,880 --> 00:24:35,189
+So we quickly validated that in good old bounty fashion,
+
+507
+00:24:35,199 --> 00:24:39,369
+our researchers went ahead and pulled on the strings there and were able to,
+
+508
+00:24:39,900 --> 00:24:41,189
+you know, get some other
+
+509
+00:24:41,410 --> 00:24:43,390
+vulnerabilities in the space
+
+510
+00:24:44,439 --> 00:24:45,719
+and we should clarify.
+
+511
+00:24:46,130 --> 00:24:46,439
+Github
+
+512
+00:24:46,640 --> 00:24:48,819
+is kind of responsible for N PM, right?
+
+513
+00:24:48,989 --> 00:24:49,359
+Yes,
+
+514
+00:24:49,520 --> 00:24:49,630
+github
+
+515
+00:24:49,800 --> 00:24:51,109
+is responsible for N PM.
+
+516
+00:24:52,140 --> 00:24:54,800
+You have like all the stuff. I love it.
+
+517
+00:24:55,140 --> 00:25:00,520
+Yeah, I mean, we're very busy but it makes the days go by fast and it's a lot of fun.
+
+518
+00:25:00,609 --> 00:25:02,359
+We've run ourselves out of time and Jill,
+
+519
+00:25:02,369 --> 00:25:04,540
+this has been an absolutely amazing conversation,
+
+520
+00:25:04,550 --> 00:25:06,630
+but I kind of want to give you the floor to
+
+521
+00:25:06,819 --> 00:25:09,040
+take us home. You know, what is
+
+522
+00:25:09,459 --> 00:25:11,920
+whatever you want to let the audience know or
+
+523
+00:25:11,930 --> 00:25:14,160
+what you think the takeaway should be or whatever.
+
+524
+00:25:14,170 --> 00:25:15,319
+It's all yours.
+
+525
+00:25:15,790 --> 00:25:21,750
+Yeah. So my biggest thing is if you're even considering bug bounty,
+
+526
+00:25:22,260 --> 00:25:27,469
+send us ad M on Twitter, send us your first report, poke around at our product.
+
+527
+00:25:27,479 --> 00:25:30,219
+We are more than happy to take the time to
+
+528
+00:25:30,500 --> 00:25:35,359
+go ahead and coach you into this wonderful mystical world of bug bounty.
+
+529
+00:25:35,369 --> 00:25:39,439
+We want to expand our community. We want to get more folks invited to
+
+530
+00:25:39,739 --> 00:25:41,800
+live hacking events in the future.
+
+531
+00:25:41,819 --> 00:25:47,359
+We really want to be able to encourage you to take your place in the space of security.
+
+532
+00:25:47,369 --> 00:25:47,880
+So
+
+533
+00:25:48,430 --> 00:25:51,609
+I'm available on Twitter, the team, you know, github
+
+534
+00:25:51,819 --> 00:25:55,140
+security on Twitter, whatever you'd like to do, um, bounty at
+
+535
+00:25:55,270 --> 00:25:59,930
+-- github.com or hacker one. Feel free to reach out to us.
+-- Amazing.
+
+536
+00:25:59,939 --> 00:26:01,890
+Thank you so much, Jill. It has been
+
+537
+00:26:02,140 --> 00:26:04,449
+an absolute treat talking to you today.
+
+538
+00:26:04,619 --> 00:26:08,130
+-- Thank you so much for having me. It was wonderful getting to meet you both.
+-- Thank you.
+
+539
+00:26:08,140 --> 00:26:09,859
+Thanks everyone. Bye bye
+
+540
+00:26:14,449 --> 00:26:14,540
+the

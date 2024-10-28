@@ -1,0 +1,3147 @@
+0
+00:00:06,059 --> 00:00:08,279
+Hello and welcome to the open source security podcast
+
+1
+00:00:08,289 --> 00:00:11,939
+episode 140 with myself and this other guy.
+
+2
+00:00:12,189 --> 00:00:12,960
+What, now,
+
+3
+00:00:13,170 --> 00:00:15,840
+what's the deal with that intro? Who are you?
+
+4
+00:00:15,850 --> 00:00:18,760
+I wonder that a lot prove to me that you're Josh
+
+5
+00:00:19,110 --> 00:00:20,940
+Reser. Uh How about you? Prove to me you're Kurt
+
+6
+00:00:21,170 --> 00:00:21,229
+Siefried.
+
+7
+00:00:21,530 --> 00:00:22,239
+I can't,
+
+8
+00:00:22,629 --> 00:00:24,280
+I, you know, you want to know a funny thing.
+
+9
+00:00:24,600 --> 00:00:26,540
+I, I can't spell your last name still.
+
+10
+00:00:26,549 --> 00:00:29,950
+We've been doing this podcast for how many years and I still have to look up how
+
+11
+00:00:29,959 --> 00:00:33,919
+to spell your last name just to give you an idea of how a difficult identity is.
+
+12
+00:00:33,930 --> 00:00:38,180
+Well, in fairness, I, I do have to check if your last name has that last s or not.
+
+13
+00:00:38,189 --> 00:00:42,259
+It does. And I am quite often referred to as Josh Bresser,
+
+14
+00:00:42,509 --> 00:00:43,319
+which is what
+
+15
+00:00:43,459 --> 00:00:43,470
+I
+
+16
+00:00:43,590 --> 00:00:43,720
+called
+
+17
+00:00:44,689 --> 00:00:45,330
+anyway.
+
+18
+00:00:45,340 --> 00:00:47,659
+Anyway, so for those of you listening,
+
+19
+00:00:47,669 --> 00:00:51,979
+we're going to spend some time talking about identity today
+
+20
+00:00:52,349 --> 00:00:57,490
+and we're also going to kind of use it in the context of good enough security.
+
+21
+00:00:57,700 --> 00:00:58,330
+And
+
+22
+00:00:58,520 --> 00:00:59,810
+I'm gonna, I'll, I'll kind of
+
+23
+00:01:00,110 --> 00:01:04,610
+think of a sliding scale in your mind where there's no security on one end.
+
+24
+00:01:04,910 --> 00:01:07,610
+There's perfect security on the other end. Perfect security.
+
+25
+00:01:07,620 --> 00:01:10,370
+It basically just wraps around no security because it's impossible.
+
+26
+00:01:10,540 --> 00:01:13,209
+And then there's, we'll say a security theater and there's
+
+27
+00:01:13,449 --> 00:01:14,489
+enough security.
+
+28
+00:01:14,959 --> 00:01:19,010
+Maybe security is on a sliding scale. But it's like a Mobius strip.
+
+29
+00:01:19,160 --> 00:01:21,419
+It's a Mobius strip. I like that. Yes.
+
+30
+00:01:21,809 --> 00:01:24,379
+That's right. That's right. It, it, man, that,
+
+31
+00:01:24,639 --> 00:01:26,449
+no, I'm not going to go down that red hole,
+
+32
+00:01:26,459 --> 00:01:29,069
+but I don't think you're wrong anyway anyway.
+
+33
+00:01:29,290 --> 00:01:31,589
+And, and the kind of the, the thinking being
+
+34
+00:01:31,779 --> 00:01:32,309
+that the,
+
+35
+00:01:32,319 --> 00:01:34,720
+the reason this all comes up is Kurt and I
+
+36
+00:01:34,730 --> 00:01:38,830
+talk a lot about just security in general and obviously there
+
+37
+00:01:38,839 --> 00:01:41,269
+is the kind of traditional way of looking at security
+
+38
+00:01:41,279 --> 00:01:43,010
+of it has to be perfect if it's not perfect,
+
+39
+00:01:43,019 --> 00:01:45,510
+you might as well not do it, which means you just don't do it usually.
+
+40
+00:01:46,300 --> 00:01:49,269
+And you look at many of the things happening today
+
+41
+00:01:49,750 --> 00:01:50,330
+and
+
+42
+00:01:50,500 --> 00:01:50,970
+there's,
+
+43
+00:01:50,980 --> 00:01:52,879
+there's kind of a level I'd call good enough
+
+44
+00:01:52,889 --> 00:01:54,529
+and in some places we're getting better at that.
+
+45
+00:01:54,540 --> 00:01:57,089
+Like, I think password security is getting there where you look at the N
+
+46
+00:01:57,230 --> 00:01:59,669
+Guidance and I think it's approaching good enough
+
+47
+00:01:59,680 --> 00:02:01,930
+versus it was just like crazy before.
+
+48
+00:02:01,940 --> 00:02:02,489
+Right.
+
+49
+00:02:02,500 --> 00:02:02,639
+Well, I,
+
+50
+00:02:02,650 --> 00:02:04,000
+I think a better example of good enough
+
+51
+00:02:04,010 --> 00:02:06,849
+security are mechanical locks on like your house.
+
+52
+00:02:07,059 --> 00:02:09,380
+Yeah, that's a perfect example actually because
+
+53
+00:02:09,585 --> 00:02:13,604
+like the lock picking lawyer can get through those in about 10 seconds, 20 seconds.
+
+54
+00:02:13,664 --> 00:02:16,324
+Anyone who's ever picked a lock before can get
+
+55
+00:02:16,335 --> 00:02:18,115
+through most of those in less than a minute.
+
+56
+00:02:18,255 --> 00:02:21,565
+The locks on our houses are terrible.
+
+57
+00:02:21,574 --> 00:02:23,494
+This is one of the reasons I got a ring doorbell is at
+
+58
+00:02:23,505 --> 00:02:26,554
+least now I have video to show the police and my insurance adjuster
+
+59
+00:02:26,815 --> 00:02:29,285
+that, that is fair. That's true.
+
+60
+00:02:29,720 --> 00:02:31,139
+And, and again though, that's,
+
+61
+00:02:31,350 --> 00:02:35,000
+I would say, you know, from kind of just the context of security,
+
+62
+00:02:35,009 --> 00:02:37,080
+that's what we'd call a compensating control.
+
+63
+00:02:37,089 --> 00:02:40,440
+Right. You know, that you have this other security control that is
+
+64
+00:02:40,550 --> 00:02:41,660
+insufficient,
+
+65
+00:02:42,020 --> 00:02:43,979
+but you have a secondary thing
+
+66
+00:02:44,210 --> 00:02:45,089
+that will
+
+67
+00:02:45,369 --> 00:02:50,070
+not so much fix the first one, but at least make your life easier in the event.
+
+68
+00:02:50,080 --> 00:02:51,660
+The first one fails. Right.
+
+69
+00:02:52,699 --> 00:02:56,039
+Well, it's a classic case of, I've chosen to accept the risk. I'm insured.
+
+70
+00:02:56,059 --> 00:02:57,360
+You know, I have house insurance
+
+71
+00:02:57,649 --> 00:02:58,389
+like most people
+
+72
+00:02:58,809 --> 00:02:59,639
+and, um,
+
+73
+00:02:59,889 --> 00:03:01,190
+because realistically
+
+74
+00:03:01,449 --> 00:03:04,759
+I could put on, you know, a $500 door lock on my door.
+
+75
+00:03:04,770 --> 00:03:08,050
+Um, but then I'd have to like what break over all my windows.
+
+76
+00:03:08,460 --> 00:03:11,970
+It, exactly. Exactly. It, for what it's worth.
+
+77
+00:03:11,979 --> 00:03:14,250
+It's kind of one of those situations where just having
+
+78
+00:03:14,259 --> 00:03:15,949
+a regular door lock is going to be good and,
+
+79
+00:03:16,679 --> 00:03:20,600
+and it's going to stop the vast majority of just simple opportunistic crime.
+
+80
+00:03:20,660 --> 00:03:22,000
+And what was surprising to me is I was,
+
+81
+00:03:22,009 --> 00:03:26,360
+I was binge watching some firefighting videos on forced entry into buildings
+
+82
+00:03:26,490 --> 00:03:29,679
+and there was a really fascinating set on forced entry through walls.
+
+83
+00:03:29,770 --> 00:03:32,149
+So, like where you just go through a wall
+
+84
+00:03:32,539 --> 00:03:34,270
+and the techniques to go through different kinds of
+
+85
+00:03:34,279 --> 00:03:38,270
+walls and things like how you avoid cutting power lines
+
+86
+00:03:38,649 --> 00:03:41,009
+because, you know, walls contain power lines,
+
+87
+00:03:41,429 --> 00:03:42,789
+right. Yep, wiring and stuff.
+
+88
+00:03:42,919 --> 00:03:46,119
+And, and, but more to the point like with manual tools,
+
+89
+00:03:46,130 --> 00:03:48,720
+so not even with like air tools or pneumatic tools,
+
+90
+00:03:48,729 --> 00:03:51,789
+these guys were like bashing their way through walls in under five minutes.
+
+91
+00:03:51,960 --> 00:03:53,350
+I totally believe that,
+
+92
+00:03:53,559 --> 00:03:53,830
+you know,
+
+93
+00:03:53,839 --> 00:03:56,350
+and how many industrial areas and whatnot have places where
+
+94
+00:03:56,360 --> 00:03:57,919
+you can make a ruckus at two in the morning
+
+95
+00:03:57,929 --> 00:04:00,649
+and nobody will notice or care physical security cracks because
+
+96
+00:04:00,660 --> 00:04:02,990
+fundamentally somebody with a sledgehammer can get into the building.
+
+97
+00:04:03,639 --> 00:04:04,539
+Right. Right.
+
+98
+00:04:04,880 --> 00:04:07,589
+Yeah. I mean, and you think most houses
+
+99
+00:04:07,839 --> 00:04:09,259
+in North America
+
+100
+00:04:09,520 --> 00:04:10,539
+are built with,
+
+101
+00:04:10,550 --> 00:04:14,589
+with wood and plywood and they don't even use plywood on some of them anymore,
+
+102
+00:04:14,600 --> 00:04:15,779
+at least in the US.
+
+103
+00:04:16,269 --> 00:04:17,720
+Yeah. They, it's, it's really shady.
+
+104
+00:04:17,730 --> 00:04:21,579
+They use like a, it's a, like an insulation board kind of, and it's,
+
+105
+00:04:21,589 --> 00:04:23,920
+you could easily get through it with a hammer.
+
+106
+00:04:23,929 --> 00:04:25,640
+00, that synthetic stuff.
+
+107
+00:04:25,820 --> 00:04:27,000
+Yeah. Right. Right.
+
+108
+00:04:27,010 --> 00:04:30,279
+And so what happens is if you wanted to get in, I bet, like,
+
+109
+00:04:30,290 --> 00:04:33,869
+34 whack with a sledgehammer and there's a hole or just bring your
+
+110
+00:04:33,880 --> 00:04:36,839
+saws all which by the way is my second favorite tool in the world
+
+111
+00:04:37,799 --> 00:04:39,950
+because it saws everything just like it says.
+
+112
+00:04:39,959 --> 00:04:43,670
+What's your, what's your first favorite tool in the world my crowbar. Ok.
+
+113
+00:04:43,679 --> 00:04:44,339
+That's fair
+
+114
+00:04:44,500 --> 00:04:46,750
+because honestly trying to do something that needs
+
+115
+00:04:46,760 --> 00:04:48,429
+a crowbar without a crowbar is impossible.
+
+116
+00:04:48,440 --> 00:04:51,029
+And a crowbar makes it easy. That is true.
+
+117
+00:04:51,170 --> 00:04:53,709
+And it's just such a great, simple tool, like leverage.
+
+118
+00:04:53,839 --> 00:04:57,309
+Right. Who knew physics class was? Right. Right. Half life too.
+
+119
+00:04:57,320 --> 00:05:01,070
+And you can bash your head crab in with it. So. Exactly. Right.
+
+120
+00:05:01,079 --> 00:05:04,429
+It's good for everybody and they're cheap and they never break,
+
+121
+00:05:04,440 --> 00:05:05,700
+they never run out of battery.
+
+122
+00:05:06,040 --> 00:05:06,899
+It just works
+
+123
+00:05:08,359 --> 00:05:12,239
+right now. Think about it. Right. It is true. It's a great tool.
+
+124
+00:05:12,859 --> 00:05:14,440
+Can you imagine life before crowbars,
+
+125
+00:05:14,549 --> 00:05:17,579
+I would bet you crowbars were probably the second
+
+126
+00:05:17,589 --> 00:05:21,059
+or third tool ever created after a rock,
+
+127
+00:05:21,070 --> 00:05:23,019
+used to bang things.
+
+128
+00:05:23,350 --> 00:05:25,250
+Well, crowbar is much better than stick.
+
+129
+00:05:25,859 --> 00:05:29,440
+But anyway, back to good enough security and identity. So,
+
+130
+00:05:30,399 --> 00:05:33,299
+yeah, because I, I've had this thought before is like, how,
+
+131
+00:05:33,980 --> 00:05:35,100
+how do I prove?
+
+132
+00:05:35,109 --> 00:05:39,109
+I'm me and outside of, I think some very constrained cases, like, for example,
+
+133
+00:05:39,119 --> 00:05:43,920
+I just flew to the US and back and I have a nexus and to get my nexus, I had to go to
+
+134
+00:05:44,059 --> 00:05:46,140
+not the TS A, the, the DH S
+
+135
+00:05:46,290 --> 00:05:48,000
+office here at the airport.
+
+136
+00:05:48,010 --> 00:05:49,170
+On the Canadian side,
+
+137
+00:05:49,179 --> 00:05:53,200
+you get a retinal scan and on the US side they take your fingerprints,
+
+138
+00:05:53,640 --> 00:05:57,380
+all five fingers on one of your hands or both hands. I thought
+
+139
+00:05:57,589 --> 00:06:01,089
+I, I seem to remember doing both hands. Did they do? They might have done both.
+
+140
+00:06:01,100 --> 00:06:04,619
+I, I had to get it done when I got my TS a precheck. And
+
+141
+00:06:04,829 --> 00:06:08,260
+yeah, I think they did do both hands now that you say that I'm remembering
+
+142
+00:06:08,660 --> 00:06:12,170
+not just that, but I also had to bring photo ID, you know, passport blah, blah, blah.
+
+143
+00:06:12,410 --> 00:06:13,989
+And I was just thinking like outside of a
+
+144
+00:06:14,000 --> 00:06:16,739
+situation where like a border agent has access to those
+
+145
+00:06:16,750 --> 00:06:18,809
+back end systems to actually make sure my fingerprints
+
+146
+00:06:18,820 --> 00:06:20,940
+and or retinal scan match up with this record.
+
+147
+00:06:20,950 --> 00:06:23,420
+And you know, I look like me the photo in the thing
+
+148
+00:06:23,649 --> 00:06:25,579
+outside of that very specific case,
+
+149
+00:06:26,209 --> 00:06:29,510
+it's very hard for somebody who's like checking my documents or whatever
+
+150
+00:06:29,519 --> 00:06:33,369
+to actually with 100% guaranteed certainty know that I am me.
+
+151
+00:06:34,309 --> 00:06:37,299
+I have a hilarious story for you about this.
+
+152
+00:06:37,309 --> 00:06:41,350
+So a long time ago, my wife worked for a company
+
+153
+00:06:41,619 --> 00:06:42,980
+that employed
+
+154
+00:06:43,510 --> 00:06:47,000
+it. Kind of anyone they could get to work in a warehouse, right?
+
+155
+00:06:47,350 --> 00:06:48,500
+And as part of that,
+
+156
+00:06:48,510 --> 00:06:52,579
+they would always photocopy the I DS that people brought into them.
+
+157
+00:06:52,589 --> 00:06:53,109
+Oh Lord.
+
+158
+00:06:53,390 --> 00:06:57,700
+And one day they photocopy an ID and it has a void written all over it.
+
+159
+00:06:57,709 --> 00:06:59,290
+They're like, what is this?
+
+160
+00:07:00,140 --> 00:07:00,790
+And
+
+161
+00:07:01,119 --> 00:07:04,320
+one of the other managers looked at it and said, oh, that's a real one.
+
+162
+00:07:04,380 --> 00:07:05,559
+And they said, wait, what?
+
+163
+00:07:05,570 --> 00:07:08,609
+He's like, yeah, the ones that don't say void, those are all fake I DS.
+
+164
+00:07:08,890 --> 00:07:10,399
+So they're like what?
+
+165
+00:07:11,049 --> 00:07:15,519
+And they were basically were these driver's licenses. A government ID, right.
+
+166
+00:07:15,529 --> 00:07:18,079
+Which is meant to prove citizenship. So you could get paid.
+
+167
+00:07:18,510 --> 00:07:21,959
+And so it was clear these were essentially illegal.
+
+168
+00:07:21,970 --> 00:07:26,869
+You know, people had, had fake I DS and were using it to get jobs and
+
+169
+00:07:27,910 --> 00:07:31,959
+it's like, holy cow. That is crazy because that's one thing in Canada.
+
+170
+00:07:31,970 --> 00:07:32,690
+It's interesting to me is,
+
+171
+00:07:32,700 --> 00:07:35,760
+is we have basically really two choices for identification
+
+172
+00:07:35,899 --> 00:07:39,170
+day to day. It's, you get a driver's license and if you can't get a driver's license,
+
+173
+00:07:39,420 --> 00:07:42,584
+you can get uh like a, a citizen ID card.
+
+174
+00:07:42,665 --> 00:07:44,445
+And what's interesting is you can't have both.
+
+175
+00:07:44,575 --> 00:07:47,454
+If you have a driver's license, you're not allowed to get a citizen ID.
+
+176
+00:07:47,464 --> 00:07:52,045
+That seems fair though because that way you only have one ID card at a time.
+
+177
+00:07:52,255 --> 00:07:55,105
+Yeah, I guess I don't really see the point of that
+
+178
+00:07:55,214 --> 00:07:57,674
+because here's the thing, whenever I renew my license,
+
+179
+00:07:57,684 --> 00:07:59,334
+I get that wonky piece of you get like a
+
+180
+00:07:59,345 --> 00:08:01,434
+little strip of paper with your name printed on it
+
+181
+00:08:01,644 --> 00:08:03,244
+saying that this is now your ID.
+
+182
+00:08:03,880 --> 00:08:08,329
+It's like literally like, it's, it's a tear off sheet from an 8.5 by 11 sheet form.
+
+183
+00:08:08,339 --> 00:08:10,859
+And it's only good for like a month and then they
+
+184
+00:08:10,869 --> 00:08:13,859
+send you a real card and then that's what you use.
+
+185
+00:08:14,339 --> 00:08:15,040
+And, but here,
+
+186
+00:08:15,049 --> 00:08:18,619
+so here's where we need to bring this back to the concept of good enough security,
+
+187
+00:08:18,630 --> 00:08:20,579
+especially in the context of identity
+
+188
+00:08:20,859 --> 00:08:22,799
+is if you have one of those cards,
+
+189
+00:08:22,809 --> 00:08:26,570
+the bar is fairly high and in most instances you're ok
+
+190
+00:08:26,790 --> 00:08:28,299
+and you're, you know what I mean?
+
+191
+00:08:28,660 --> 00:08:31,640
+It's good enough. The problem I found is that
+
+192
+00:08:31,820 --> 00:08:36,308
+how do I validate an Alberta driver's license? Let alone, how do I validate?
+
+193
+00:08:36,320 --> 00:08:37,630
+Um, you're in Wisconsin,
+
+194
+00:08:37,760 --> 00:08:38,210
+right.
+
+195
+00:08:38,599 --> 00:08:40,320
+I can't, I can't even spell Wisconsin.
+
+196
+00:08:40,780 --> 00:08:42,510
+So if you presented me a fake ID,
+
+197
+00:08:43,239 --> 00:08:47,239
+I, I would have to like double check that the state name is spelled correctly.
+
+198
+00:08:47,468 --> 00:08:51,458
+And here's the question for you though is what do you need it for?
+
+199
+00:08:51,828 --> 00:08:53,979
+Right? Why, why do you need my ID?
+
+200
+00:08:54,088 --> 00:08:55,638
+Well, for example,
+
+201
+00:08:55,648 --> 00:08:58,098
+I'm now getting involved in a thing where we're essentially
+
+202
+00:08:58,109 --> 00:09:01,648
+providing some identity management to people so that they can
+
+203
+00:09:02,049 --> 00:09:04,028
+associate and claim
+
+204
+00:09:04,499 --> 00:09:08,169
+certifications and activities with their identity with their name.
+
+205
+00:09:09,458 --> 00:09:12,258
+And so what we found is interesting is
+
+206
+00:09:13,070 --> 00:09:15,039
+identity is essentially a story,
+
+207
+00:09:15,450 --> 00:09:20,090
+right? You're born, you live, you die. And throughout that time period,
+
+208
+00:09:20,750 --> 00:09:23,450
+um things happen to your identity, for example,
+
+209
+00:09:23,460 --> 00:09:25,729
+maybe you get married and your name changes or maybe
+
+210
+00:09:25,739 --> 00:09:27,590
+you legally change your name because you don't like it
+
+211
+00:09:27,869 --> 00:09:28,729
+or
+
+212
+00:09:29,210 --> 00:09:32,849
+you decide, for example, I don't have my middle name on any of my ID,
+
+213
+00:09:33,690 --> 00:09:34,570
+right? I just,
+
+214
+00:09:35,140 --> 00:09:37,780
+I never really kind of understood what middle names were for.
+
+215
+00:09:37,789 --> 00:09:39,869
+I was like, is it a spare in case I
+
+216
+00:09:40,280 --> 00:09:41,549
+lose my first name?
+
+217
+00:09:41,729 --> 00:09:42,989
+I don't really get it either.
+
+218
+00:09:43,200 --> 00:09:44,229
+It's very strange.
+
+219
+00:09:44,520 --> 00:09:45,890
+Ok, so I'm not the only one. Yeah.
+
+220
+00:09:45,900 --> 00:09:47,750
+And then some people have multiple middle names and
+
+221
+00:09:47,760 --> 00:09:49,270
+some people don't have a middle name and,
+
+222
+00:09:49,280 --> 00:09:50,780
+yeah, like Elvis Dumbledore.
+
+223
+00:09:50,919 --> 00:09:55,950
+What? Uh, so in, in Harry Potter, Elvis Dumbledore's name is extremely long.
+
+224
+00:09:56,450 --> 00:09:57,570
+His middle name, he has like,
+
+225
+00:09:57,580 --> 00:10:00,140
+six middle names and I don't remember them all at the top of my head.
+
+226
+00:10:00,150 --> 00:10:00,419
+Which,
+
+227
+00:10:00,429 --> 00:10:04,460
+which I'm shameful for not remembering as I've read those books like 100 times.
+
+228
+00:10:04,469 --> 00:10:04,739
+But
+
+229
+00:10:05,440 --> 00:10:05,640
+uh
+
+230
+00:10:05,789 --> 00:10:06,190
+yeah,
+
+231
+00:10:06,530 --> 00:10:10,859
+it's, it's very cool and I know a handful of people with, with multiple middle names.
+
+232
+00:10:11,229 --> 00:10:11,580
+Yeah.
+
+233
+00:10:11,590 --> 00:10:14,530
+Well, and there are people with no first name, no, last name,
+
+234
+00:10:14,539 --> 00:10:17,239
+people who are a single letter, all sorts of shenanigans,
+
+235
+00:10:17,400 --> 00:10:19,780
+the artist formerly known as Prince.
+
+236
+00:10:20,020 --> 00:10:23,960
+Yeah. Or the, what was it? The ANC symbol I believe, I don't know.
+
+237
+00:10:24,039 --> 00:10:28,919
+And there's also things where, for example, my Reddit account or my
+
+238
+00:10:29,190 --> 00:10:33,440
+email address is that part of my identity? Uh Yes, it is now.
+
+239
+00:10:33,770 --> 00:10:36,700
+Well, it's part of my identity at that time, but for example,
+
+240
+00:10:37,085 --> 00:10:40,094
+I used to work for Red Hat and I was KC free at Red hat.com.
+
+241
+00:10:40,364 --> 00:10:43,315
+Well, what happens when they hire, hire Carl Siefried?
+
+242
+00:10:43,325 --> 00:10:46,585
+That's a great question and give him KC free at Red hat.com.
+
+243
+00:10:46,804 --> 00:10:48,835
+So I, I don't know what they do for that.
+
+244
+00:10:48,844 --> 00:10:49,054
+Well,
+
+245
+00:10:49,065 --> 00:10:50,994
+let's assume that they recycle email addresses
+
+246
+00:10:51,005 --> 00:10:52,414
+and that's something to point out is that
+
+247
+00:10:52,724 --> 00:10:53,275
+I,
+
+248
+00:10:54,125 --> 00:10:57,385
+we, we always, it's funny that we always make the assumption that like your name.
+
+249
+00:10:57,395 --> 00:10:59,755
+John Smith is not necessarily unique
+
+250
+00:11:00,234 --> 00:11:02,424
+and that even your name and date of birth
+
+251
+00:11:02,434 --> 00:11:05,645
+and place of birth may not be necessarily unique.
+
+252
+00:11:05,900 --> 00:11:06,359
+You know,
+
+253
+00:11:06,570 --> 00:11:08,510
+I'm guessing at some point in history,
+
+254
+00:11:08,520 --> 00:11:12,250
+two John Smiths were both born on the same day in New York City or some other big city.
+
+255
+00:11:12,260 --> 00:11:16,840
+I would be shocked if they weren't. So actually funny enough, you say this is when,
+
+256
+00:11:17,090 --> 00:11:18,789
+when, when I worked at Red Hat is
+
+257
+00:11:19,090 --> 00:11:21,200
+there were two people named Matt Smith,
+
+258
+00:11:21,210 --> 00:11:24,210
+I would have to talk to on a regular basis and I remember one of them
+
+259
+00:11:24,369 --> 00:11:25,760
+jokingly told me one day was,
+
+260
+00:11:25,770 --> 00:11:28,919
+he said this is the first company I've worked at where there were only two Matt Smith.
+
+261
+00:11:31,090 --> 00:11:31,500
+That's
+
+262
+00:11:31,719 --> 00:11:32,320
+terrible.
+
+263
+00:11:33,400 --> 00:11:34,909
+But I get it. I mean,
+
+264
+00:11:35,125 --> 00:11:35,655
+it's how it is.
+
+265
+00:11:35,664 --> 00:11:35,854
+I mean,
+
+266
+00:11:35,864 --> 00:11:38,635
+that's where I think you and I are spoiled because I think
+
+267
+00:11:38,645 --> 00:11:41,304
+we're the only people with our names that we know of.
+
+268
+00:11:41,354 --> 00:11:42,315
+No, there's another Kurtz
+
+269
+00:11:42,424 --> 00:11:45,804
+seafood. There are four curtsy foods in the world and we all work in it.
+
+270
+00:11:45,875 --> 00:11:49,265
+Oh, that's great. I guess you're the only one I ever run across then.
+
+271
+00:11:49,434 --> 00:11:51,104
+And we all roughly
+
+272
+00:11:51,414 --> 00:11:52,385
+look like
+
+273
+00:11:52,729 --> 00:11:57,400
+the same basically. Are you the same person? Are you just doing seven jobs?
+
+274
+00:11:57,409 --> 00:11:58,989
+And no one of them is German,
+
+275
+00:11:59,000 --> 00:12:02,429
+one of them is in America and the other one is also in America.
+
+276
+00:12:02,780 --> 00:12:04,000
+So I see. I see.
+
+277
+00:12:04,010 --> 00:12:05,630
+Well, then lucky for me,
+
+278
+00:12:05,640 --> 00:12:08,599
+I'm pretty sure I'm the only person named Josh Bresser on the planet,
+
+279
+00:12:08,609 --> 00:12:09,549
+which is convenient.
+
+280
+00:12:09,640 --> 00:12:12,059
+So that's, that's a great example of, you know,
+
+281
+00:12:12,070 --> 00:12:15,710
+things that are part of my identity and a very personal part of my identity,
+
+282
+00:12:15,719 --> 00:12:16,940
+like my email address kit
+
+283
+00:12:17,150 --> 00:12:17,609
+cre.org
+
+284
+00:12:17,969 --> 00:12:20,520
+that may not necessarily be me in five or 10 years. Uh
+
+285
+00:12:20,650 --> 00:12:22,909
+It's possible this is actually something that concerns
+
+286
+00:12:22,919 --> 00:12:25,710
+me always is I obviously own the Domain breast.net
+
+287
+00:12:26,159 --> 00:12:30,659
+and my email address has been Joshua breast.net for like freaking 20 years now.
+
+288
+00:12:30,919 --> 00:12:33,510
+And I keep telling my son I'm like,
+
+289
+00:12:33,520 --> 00:12:36,849
+pretty soon I'm going to need to make you an administrator on this just in case,
+
+290
+00:12:36,859 --> 00:12:39,390
+like I kick the bucket one day so you don't lose the domain
+
+291
+00:12:40,659 --> 00:12:43,150
+because let's face it, it's a good domain
+
+292
+00:12:43,510 --> 00:12:45,440
+and since it's, it's not widely used,
+
+293
+00:12:45,450 --> 00:12:49,210
+like my kids have email addresses that are normal, it's not like, you know,
+
+294
+00:12:49,229 --> 00:12:53,890
+something, something 123795 at gmail.com, which is what all their friends have.
+
+295
+00:12:53,900 --> 00:12:55,280
+I actually know a
+
+296
+00:12:55,469 --> 00:12:58,489
+lady. Uh I'm not gonna, well, her last name was Smith.
+
+297
+00:12:58,500 --> 00:13:00,739
+Her first name is very common and she actually had her first name,
+
+298
+00:13:00,750 --> 00:13:04,890
+last name at hotmail.com and at gmail.com, she was early enough, right?
+
+299
+00:13:04,900 --> 00:13:08,750
+That's when, you know, you're an early adopter. That's, that's a unicorn.
+
+300
+00:13:08,960 --> 00:13:10,489
+Well, and you know, it's, you know,
+
+301
+00:13:10,500 --> 00:13:14,309
+it's kind of funny about this to actually just kind of to bring it all together is
+
+302
+00:13:14,469 --> 00:13:16,580
+from the, like the topic of identity is,
+
+303
+00:13:16,780 --> 00:13:20,530
+you know, we, we own the domain open source security dot IO
+
+304
+00:13:20,919 --> 00:13:23,809
+and there's a block there, there's not a lot on it.
+
+305
+00:13:23,979 --> 00:13:28,039
+But anyway, any time I run across an instance to claim the name,
+
+306
+00:13:28,049 --> 00:13:29,059
+open source security,
+
+307
+00:13:29,070 --> 00:13:31,900
+I often will just for our nefarious purposes and
+
+308
+00:13:31,909 --> 00:13:33,710
+I don't want someone else like squatting on it.
+
+309
+00:13:33,789 --> 00:13:36,289
+And, and I mean, I think identity is kind of part of that, right?
+
+310
+00:13:36,299 --> 00:13:36,979
+Is if,
+
+311
+00:13:36,989 --> 00:13:39,010
+if you know there are other people with your name
+
+312
+00:13:39,020 --> 00:13:41,440
+and you have an opportunity to grab your user name,
+
+313
+00:13:41,940 --> 00:13:43,479
+do it, you know.
+
+314
+00:13:44,239 --> 00:13:48,989
+So and that's part of what we realized is that identity is kind of like a,
+
+315
+00:13:49,000 --> 00:13:50,719
+it's like a bundle of things, right?
+
+316
+00:13:50,729 --> 00:13:53,500
+It's your name, it's your date of birth, it's your social security number
+
+317
+00:13:53,609 --> 00:13:54,919
+now to be clear at
+
+318
+00:13:55,239 --> 00:13:56,099
+the cloud security lines.
+
+319
+00:13:56,109 --> 00:13:59,729
+We we don't want any of that because that, that's just a GDPR nightmare,
+
+320
+00:13:59,950 --> 00:14:00,340
+right?
+
+321
+00:14:00,590 --> 00:14:01,150
+So,
+
+322
+00:14:01,609 --> 00:14:03,299
+and what we realize too is we don't
+
+323
+00:14:03,520 --> 00:14:06,289
+actually need your information, right? We just need
+
+324
+00:14:06,859 --> 00:14:09,909
+your information temporarily to maybe validate it and then provide
+
+325
+00:14:09,919 --> 00:14:12,020
+you with a validation record that we keep and,
+
+326
+00:14:12,030 --> 00:14:15,210
+and we do like a zero knowledge proof type of thing with a validation record because
+
+327
+00:14:15,479 --> 00:14:19,760
+it's ask me what my data security strategy is for personal data in our,
+
+328
+00:14:20,039 --> 00:14:21,229
+in our Blockchain products.
+
+329
+00:14:21,619 --> 00:14:23,400
+You don't store any of it.
+
+330
+00:14:23,674 --> 00:14:25,905
+Exactly. But I know because you've told me,
+
+331
+00:14:26,034 --> 00:14:27,304
+yeah, and, and even better than that,
+
+332
+00:14:27,315 --> 00:14:29,815
+we can prove we don't store any of it because
+
+333
+00:14:29,825 --> 00:14:31,905
+of the way we do hashing and nonsense and stuff.
+
+334
+00:14:31,914 --> 00:14:33,484
+So we actually mathematically,
+
+335
+00:14:33,494 --> 00:14:36,755
+even if you try to get your personal information into our Blockchain,
+
+336
+00:14:36,895 --> 00:14:40,015
+we can mathematically prove that it isn't, you can't,
+
+337
+00:14:40,840 --> 00:14:42,690
+you know, because we do some transformations on it.
+
+338
+00:14:43,250 --> 00:14:44,590
+What's interesting then is that
+
+339
+00:14:44,719 --> 00:14:46,450
+uh and we're working on a wallet client.
+
+340
+00:14:46,460 --> 00:14:49,729
+So what this wallet client will allow you to do, for example, is to say things like
+
+341
+00:14:50,090 --> 00:14:50,739
+I am Kurt
+
+342
+00:14:50,969 --> 00:14:51,000
+at
+
+343
+00:14:51,239 --> 00:14:51,520
+Siefried.
+
+344
+00:14:51,690 --> 00:14:52,460
+OK, great.
+
+345
+00:14:52,960 --> 00:14:56,619
+Or I'm Kurt at siefried. And here's a notarized record of somebody who checked my ID.
+
+346
+00:14:56,630 --> 00:15:00,010
+Maybe because I it really matters because maybe I want to go work for
+
+347
+00:15:00,179 --> 00:15:03,979
+some company that really cares deeply about, you know, validating my photo ID.
+
+348
+00:15:04,539 --> 00:15:05,830
+Conversely, I'm Kurt
+
+349
+00:15:05,940 --> 00:15:05,969
+at
+
+350
+00:15:06,179 --> 00:15:07,159
+siefried.org and you know,
+
+351
+00:15:07,169 --> 00:15:11,460
+we validated that you had control of that email address and we were talking earlier
+
+352
+00:15:11,619 --> 00:15:12,520
+and you mentioned
+
+353
+00:15:13,489 --> 00:15:18,090
+the magic word, which is control. The reason this came up actually is my, I,
+
+354
+00:15:18,200 --> 00:15:22,450
+I have a Mac that I got from work and the disk died.
+
+355
+00:15:22,460 --> 00:15:26,140
+I had ac file system and bad things were happening. And so I had to reinstall
+
+356
+00:15:26,400 --> 00:15:28,500
+and as part of that I had to reinstall key base
+
+357
+00:15:28,690 --> 00:15:32,140
+and I didn't have like any backups of key base or extra devices or anything.
+
+358
+00:15:32,150 --> 00:15:37,260
+And key base basically flipped out and I had to like recreate my account which is
+
+359
+00:15:37,270 --> 00:15:39,419
+taking a sledgehammer to it and deleting pretty
+
+360
+00:15:39,429 --> 00:15:41,500
+much everything that was associated with it.
+
+361
+00:15:41,510 --> 00:15:44,900
+I, I have the same user name but then I, I had to verify it again.
+
+362
+00:15:45,330 --> 00:15:50,179
+And it's like I, I was thinking that the verification key base uses is
+
+363
+00:15:50,570 --> 00:15:53,299
+in a way it's kind of silly because for example, I created Gist on
+
+364
+00:15:53,580 --> 00:15:55,650
+github. And what does that prove? Does it prove? It's me.
+
+365
+00:15:55,659 --> 00:15:58,320
+Well, no, it just proves I have access to that github account.
+
+366
+00:15:58,330 --> 00:16:01,109
+Well, it proves you have control of that github
+
+367
+00:16:01,219 --> 00:16:01,719
+account.
+
+368
+00:16:02,090 --> 00:16:04,659
+And see this is what's really interesting is when you think about it,
+
+369
+00:16:04,940 --> 00:16:09,190
+that could be the account owner or somebody at github could choose to do that,
+
+370
+00:16:09,200 --> 00:16:10,880
+they totally have control over that.
+
+371
+00:16:10,890 --> 00:16:13,739
+And that's fair. I mean, in those instances now, of course, I'm sure
+
+372
+00:16:14,059 --> 00:16:14,190
+K
+
+373
+00:16:14,320 --> 00:16:16,950
+Ace will tell me, well, you should just do this on multiple places,
+
+374
+00:16:16,960 --> 00:16:18,099
+use Twitter and github
+
+375
+00:16:18,340 --> 00:16:21,260
+and, and I don't even know what else they support. And it's,
+
+376
+00:16:22,609 --> 00:16:23,719
+but at the same time, kind of,
+
+377
+00:16:23,729 --> 00:16:27,479
+one of the things I keep thinking of is if you have access to someone's email address,
+
+378
+00:16:27,530 --> 00:16:27,909
+you're,
+
+379
+00:16:28,010 --> 00:16:32,450
+you're pretty much home free at that point for these services. Yeah.
+
+380
+00:16:32,739 --> 00:16:35,570
+And see that's, and that's what we realized is for example,
+
+381
+00:16:35,580 --> 00:16:37,000
+control of an email address.
+
+382
+00:16:37,010 --> 00:16:38,330
+Yeah, I mean, that means you have control it.
+
+383
+00:16:38,340 --> 00:16:40,989
+Well, it's kind of like doing domain verification for SSL certificates.
+
+384
+00:16:41,000 --> 00:16:45,815
+Like if you control all the email addresses, like host master root at whatever,
+
+385
+00:16:45,905 --> 00:16:48,885
+or you control the DNS for that domain or you are
+
+386
+00:16:48,895 --> 00:16:50,885
+able to do whatever you want on the web server.
+
+387
+00:16:50,895 --> 00:16:52,445
+I, I can't really
+
+388
+00:16:52,614 --> 00:16:54,125
+disprove it because
+
+389
+00:16:54,405 --> 00:16:58,905
+you have, you have such a deep level of access as a potential attacker that I just,
+
+390
+00:16:58,914 --> 00:17:00,994
+what can I reasonably do to actually
+
+391
+00:17:01,395 --> 00:17:03,664
+make you do something that would prove you're not an attacker
+
+392
+00:17:03,674 --> 00:17:05,844
+and that you are legitimately the owner of that domain.
+
+393
+00:17:06,208 --> 00:17:09,308
+And so, and that goes to the good enough piece of, you know,
+
+394
+00:17:09,318 --> 00:17:11,348
+realistically if you control
+
+395
+00:17:11,538 --> 00:17:12,858
+cre.org, you control courtesy
+
+396
+00:17:12,979 --> 00:17:13,509
+free.org.
+
+397
+00:17:14,029 --> 00:17:16,948
+Right. You could be sending and receiving emails me and I wouldn't know.
+
+398
+00:17:17,138 --> 00:17:18,068
+Yeah. Right. Right.
+
+399
+00:17:18,078 --> 00:17:19,608
+And this is where I think I,
+
+400
+00:17:19,618 --> 00:17:21,638
+I kind of chuckle sometimes because people
+
+401
+00:17:21,648 --> 00:17:23,468
+will complain about let's encrypt and say,
+
+402
+00:17:23,479 --> 00:17:23,898
+oh, you know,
+
+403
+00:17:23,909 --> 00:17:26,029
+anyone can get TLS certificates and now they're not
+
+404
+00:17:26,038 --> 00:17:28,328
+secure and it's like they weren't secure before.
+
+405
+00:17:28,338 --> 00:17:28,909
+I mean,
+
+406
+00:17:29,400 --> 00:17:34,619
+if an attacker has that level of access into your infrastructure you've lost.
+
+407
+00:17:34,709 --> 00:17:37,280
+Right. They, they could have already gotten certificates as you.
+
+408
+00:17:37,290 --> 00:17:39,619
+It was just honestly, it was slightly more work,
+
+409
+00:17:39,790 --> 00:17:43,900
+but now your life is 100 times easier too. Well, it cost a bit of money,
+
+410
+00:17:44,040 --> 00:17:45,819
+which was really annoying
+
+411
+00:17:46,229 --> 00:17:47,540
+and funny story.
+
+412
+00:17:47,550 --> 00:17:50,400
+It looks like I won't be able to recover my key base dot IO because I
+
+413
+00:17:50,410 --> 00:17:53,020
+used a GP G key a long time ago that I think I got rid of,
+
+414
+00:17:53,280 --> 00:17:56,020
+uh, you don't need to do you still can you log in,
+
+415
+00:17:56,449 --> 00:18:01,270
+you can just like si can log in but it says, OK, a situation is special.
+
+416
+00:18:01,280 --> 00:18:02,550
+Oh, how exciting.
+
+417
+00:18:03,319 --> 00:18:03,589
+Oh, well,
+
+418
+00:18:03,689 --> 00:18:04,229
+yeah,
+
+419
+00:18:04,510 --> 00:18:07,229
+you chose to manage your P GP private keys yourself. Nice.
+
+420
+00:18:07,239 --> 00:18:09,020
+And you don't have any key bases devices yet.
+
+421
+00:18:09,439 --> 00:18:11,949
+I see to prove your first install is really yours.
+
+422
+00:18:11,959 --> 00:18:13,760
+You must use a computer one that has GP G installed
+
+423
+00:18:13,770 --> 00:18:15,310
+and two has access to your private key key base.
+
+424
+00:18:15,319 --> 00:18:17,459
+We'll ask GP G to sign its first device key.
+
+425
+00:18:17,680 --> 00:18:20,000
+If you lost your GP G private key or would rather not use that key,
+
+426
+00:18:20,010 --> 00:18:21,530
+you can reset your account, however, you will need to
+
+427
+00:18:21,689 --> 00:18:22,880
+your social identities again.
+
+428
+00:18:23,050 --> 00:18:26,160
+Oh, so I could just reset my account and just be done with it. Oh, that's easy.
+
+429
+00:18:26,170 --> 00:18:28,349
+Oh, I'm doing that. Oh, right. Yeah.
+
+430
+00:18:28,489 --> 00:18:31,589
+Yeah. And that's what I had to do too is I had to reset my account
+
+431
+00:18:31,780 --> 00:18:36,839
+and I don't, I don't think I tied my GP G key to key base because I don't care.
+
+432
+00:18:36,849 --> 00:18:40,020
+And GP G sucks. And I don't want anyone to ever send me anything with GP G.
+
+433
+00:18:40,430 --> 00:18:42,660
+So that's, that's another story though.
+
+434
+00:18:42,770 --> 00:18:49,430
+But someday I could, we could do a whole episode on how I used to protect my GP G key.
+
+435
+00:18:49,689 --> 00:18:54,920
+It's still pretty bonkers but it's, it's more sane than it used to be these days.
+
+436
+00:18:55,670 --> 00:18:55,739
+But
+
+437
+00:18:56,339 --> 00:18:58,030
+anyway, anyway,
+
+438
+00:18:58,199 --> 00:19:01,819
+so good enough security and, and this is the thing I keep thinking about,
+
+439
+00:19:01,829 --> 00:19:06,030
+especially in the context of identity and passwords and what key base is doing
+
+440
+00:19:06,520 --> 00:19:06,989
+and
+
+441
+00:19:07,910 --> 00:19:09,729
+where do we draw our lines?
+
+442
+00:19:09,739 --> 00:19:13,770
+I mean, like, one of my favorite examples is when I log into one of my banks,
+
+443
+00:19:14,050 --> 00:19:16,810
+they have this thing that I log in and it shows a picture
+
+444
+00:19:17,060 --> 00:19:19,959
+and says, I have like, I forget what it even says,
+
+445
+00:19:19,969 --> 00:19:22,890
+but it's a stupid picture and it's some little phrase I made up and they're like,
+
+446
+00:19:23,199 --> 00:19:25,199
+you know, click here to verify it's you.
+
+447
+00:19:25,209 --> 00:19:27,979
+And I'm like, oh my goodness, what does this even accomplish?
+
+448
+00:19:27,989 --> 00:19:30,459
+This is the dumbest thing in the world.
+
+449
+00:19:30,510 --> 00:19:30,750
+Well,
+
+450
+00:19:30,760 --> 00:19:32,630
+basically it allows them on the one hand to say
+
+451
+00:19:32,640 --> 00:19:35,060
+they have multi factor authentication and notice I said,
+
+452
+00:19:35,069 --> 00:19:37,300
+multi factor authentication and not.
+
+453
+00:19:37,310 --> 00:19:39,319
+Yes. Stupid is one of the factors, right?
+
+454
+00:19:39,900 --> 00:19:41,630
+Yeah. Well, it's, it's multi
+
+455
+00:19:41,770 --> 00:19:44,310
+or it's, it's basically, it's two factor authentication,
+
+456
+00:19:44,319 --> 00:19:45,719
+but they're identical factors.
+
+457
+00:19:45,729 --> 00:19:47,719
+They're both still a password basically.
+
+458
+00:19:48,339 --> 00:19:51,699
+And the other thing is that in theory it's supposed to prevent,
+
+459
+00:19:51,709 --> 00:19:53,709
+there were some certain malwares that this
+
+460
+00:19:53,719 --> 00:19:56,560
+helps prevent from hijacking your connection.
+
+461
+00:19:57,380 --> 00:19:59,599
+But I'm guessing that those guys have moved on
+
+462
+00:20:01,260 --> 00:20:02,270
+and here's part of the problem,
+
+463
+00:20:02,520 --> 00:20:04,630
+you can do all the identity
+
+464
+00:20:05,069 --> 00:20:07,209
+management security you want.
+
+465
+00:20:07,280 --> 00:20:10,239
+It doesn't matter if a bank will be like, oh, you say you're Josh B
+
+466
+00:20:10,489 --> 00:20:13,520
+Sure, here's a home loan. See, that's part of the problem is that there's,
+
+467
+00:20:13,770 --> 00:20:16,890
+it goes back to my story about you know the whole, how do I prove?
+
+468
+00:20:16,900 --> 00:20:20,189
+I me and I can really only prove, I mean to a very small set of people
+
+469
+00:20:20,449 --> 00:20:23,449
+provably who have access to these like retinal database scans and stuff
+
+470
+00:20:23,459 --> 00:20:26,640
+because I can't like you could give me your driver's license,
+
+471
+00:20:26,650 --> 00:20:27,890
+your passport, your sin.
+
+472
+00:20:27,900 --> 00:20:31,800
+Uh What is it in the US? Si social insurance number. Social security number.
+
+473
+00:20:31,810 --> 00:20:35,319
+No social security number. SSN. Sorry SSN is America?
+
+474
+00:20:35,930 --> 00:20:39,040
+You could give me all of that. Your fingerprints pictures of your retina
+
+475
+00:20:39,520 --> 00:20:42,349
+and what would I do with it? How would I validate that? That's you.
+
+476
+00:20:42,359 --> 00:20:46,060
+But, but why do you even really need it either? I mean, right. Let's face it.
+
+477
+00:20:46,069 --> 00:20:50,790
+The purpose of providing identification in most instances is really about
+
+478
+00:20:51,310 --> 00:20:54,880
+having some minimal level of risk. You're taking out a home loan.
+
+479
+00:20:54,969 --> 00:20:59,270
+When you do that, they're going to ask for a variety of I DS which are,
+
+480
+00:20:59,280 --> 00:21:00,540
+you can totally copy them.
+
+481
+00:21:00,550 --> 00:21:04,719
+But at the same time, banks have insurance to protect against fraud.
+
+482
+00:21:04,729 --> 00:21:09,920
+And if it happens to me, I have the ability to submit claims against
+
+483
+00:21:10,160 --> 00:21:14,239
+my credit score saying this isn't me and we need to take it off.
+
+484
+00:21:14,640 --> 00:21:17,459
+So there there's kind of avenues and this is one of those places,
+
+485
+00:21:17,469 --> 00:21:20,969
+let's say the bank needed my retinal scan to like really prove.
+
+486
+00:21:20,979 --> 00:21:21,650
+It's me.
+
+487
+00:21:21,900 --> 00:21:27,000
+The cost of verifying me is now 10 times more expensive for them.
+
+488
+00:21:27,010 --> 00:21:31,140
+And I'm betting that it would have a minimal difference in the amount of fraud.
+
+489
+00:21:31,150 --> 00:21:33,869
+They see there's actually a couple of use
+
+490
+00:21:33,880 --> 00:21:36,680
+cases where that actually works really well.
+
+491
+00:21:36,750 --> 00:21:37,339
+So,
+
+492
+00:21:37,439 --> 00:21:39,020
+back to the certification thing,
+
+493
+00:21:39,630 --> 00:21:41,130
+certifications are worth money. Right.
+
+494
+00:21:41,140 --> 00:21:43,930
+Like, there are certain certifications where you get them and,
+
+495
+00:21:43,939 --> 00:21:47,599
+and you can easily earn 1020 30 grand more a year.
+
+496
+00:21:47,609 --> 00:21:49,369
+Sure. Sure. From when you didn't.
+
+497
+00:21:49,750 --> 00:21:50,410
+So
+
+498
+00:21:50,800 --> 00:21:53,689
+how do you get a certification if you're not able to get a certification?
+
+499
+00:21:53,699 --> 00:21:55,119
+Well, you can pay a test taker,
+
+500
+00:21:55,369 --> 00:21:55,680
+right?
+
+501
+00:21:55,689 --> 00:21:58,760
+You can pay a professional test taker to get some fake ID and show
+
+502
+00:21:58,770 --> 00:22:00,689
+up as you and take the test and get it in your name.
+
+503
+00:22:00,890 --> 00:22:05,170
+So what's happened is some of the higher end certifications now take a biometric
+
+504
+00:22:05,750 --> 00:22:08,880
+fingerprint or retinal scan of the people taking the test.
+
+505
+00:22:09,069 --> 00:22:11,569
+And it's the similar reason as a lot of the
+
+506
+00:22:11,579 --> 00:22:14,229
+of the DM of the driver's license place is doing this
+
+507
+00:22:14,349 --> 00:22:16,170
+and it's to ensure one per customer,
+
+508
+00:22:16,469 --> 00:22:19,069
+right? It's not about identity and it's not about
+
+509
+00:22:19,189 --> 00:22:21,119
+who are you? It's about ensuring
+
+510
+00:22:21,239 --> 00:22:23,229
+this guy with this set of eyeballs
+
+511
+00:22:23,449 --> 00:22:24,910
+only took the test once,
+
+512
+00:22:25,079 --> 00:22:25,530
+right?
+
+513
+00:22:25,560 --> 00:22:28,060
+That you can't be a professional test taker or for example,
+
+514
+00:22:28,069 --> 00:22:30,910
+with driver's licenses when they now that they take, you know, the face,
+
+515
+00:22:30,920 --> 00:22:32,410
+the the fingerprint, whatever
+
+516
+00:22:32,900 --> 00:22:34,530
+people are unable.
+
+517
+00:22:34,540 --> 00:22:37,109
+Like they, they did this in Australia where they started taking,
+
+518
+00:22:37,119 --> 00:22:38,449
+I think it was fingerprints and also
+
+519
+00:22:38,839 --> 00:22:41,540
+the uh the doing the the face,
+
+520
+00:22:41,550 --> 00:22:43,930
+the facial recognition stuff and having humans review it,
+
+521
+00:22:44,140 --> 00:22:46,530
+you know, and they were finding people with seven or eight passports,
+
+522
+00:22:47,260 --> 00:22:50,469
+all different names and they're like, yeah, that's, that's kind of a problem,
+
+523
+00:22:51,300 --> 00:22:51,630
+right.
+
+524
+00:22:51,640 --> 00:22:51,989
+So that's,
+
+525
+00:22:52,000 --> 00:22:54,369
+that's one case actually where this is really interesting is where
+
+526
+00:22:54,380 --> 00:22:56,319
+we now we have this sort of Venn diagram of,
+
+527
+00:22:56,329 --> 00:22:57,209
+we have identity
+
+528
+00:22:57,859 --> 00:23:01,280
+and we have an overlapping circle that's, it's identity related.
+
+529
+00:23:01,439 --> 00:23:01,910
+But
+
+530
+00:23:02,459 --> 00:23:03,089
+in some ways,
+
+531
+00:23:03,099 --> 00:23:06,319
+we care less about who you are and we care more about properties like saying,
+
+532
+00:23:07,410 --> 00:23:10,349
+you can only take this test once and if you try to take it again,
+
+533
+00:23:10,359 --> 00:23:12,459
+we'll know that you already took it and failed or passed.
+
+534
+00:23:12,890 --> 00:23:14,670
+Sure. Sure. You know,
+
+535
+00:23:14,780 --> 00:23:15,369
+I mean
+
+536
+00:23:15,790 --> 00:23:16,680
+that,
+
+537
+00:23:17,290 --> 00:23:19,550
+so part of me says that makes perfect sense.
+
+538
+00:23:19,560 --> 00:23:23,829
+And part of me wonders if that's technically necessary. Is it that big of a problem?
+
+539
+00:23:24,390 --> 00:23:24,750
+Yes.
+
+540
+00:23:24,910 --> 00:23:27,489
+Yeah. For some of these certifications there, there has been
+
+541
+00:23:27,780 --> 00:23:31,170
+some of these certifications are worth a lot of money and, and I would point out,
+
+542
+00:23:31,180 --> 00:23:33,630
+for example, the Berlin Airport
+
+543
+00:23:33,910 --> 00:23:36,380
+is a couple billion dollars behind and
+
+544
+00:23:36,390 --> 00:23:38,579
+years behind schedule because the quote unquote
+
+545
+00:23:38,790 --> 00:23:42,119
+engineer that designed the fire control system
+
+546
+00:23:42,369 --> 00:23:43,910
+uh turns out he's not an engineer.
+
+547
+00:23:43,920 --> 00:23:44,890
+Yeah, I heard about that,
+
+548
+00:23:44,900 --> 00:23:47,030
+which makes me sad because the current airport in
+
+549
+00:23:47,040 --> 00:23:49,119
+Berlin is the worst airport in the world.
+
+550
+00:23:49,130 --> 00:23:53,560
+Like they need a new one. So bad dude. They built it in like 1920
+
+551
+00:23:53,849 --> 00:23:54,089
+but
+
+552
+00:23:54,369 --> 00:23:58,260
+even worse than that, just Google, Google C TV, building collapse in New Zealand,
+
+553
+00:23:58,270 --> 00:24:01,209
+the last earthquake they had the C TV building, the, the
+
+554
+00:24:01,500 --> 00:24:03,680
+television building collapsed and it shouldn't have
+
+555
+00:24:04,180 --> 00:24:05,839
+turns out the engineer that designed, it
+
+556
+00:24:06,079 --> 00:24:07,079
+wasn't an engineer.
+
+557
+00:24:07,089 --> 00:24:11,920
+And what he had done is actually stolen the identity of a retired British engineer
+
+558
+00:24:12,859 --> 00:24:16,609
+so that he could practice as an engineer and make a lot of money. Interesting.
+
+559
+00:24:16,729 --> 00:24:18,750
+There's some real world examples where, you know,
+
+560
+00:24:18,760 --> 00:24:21,859
+we're talking about costs in the tens of hundreds
+
+561
+00:24:21,959 --> 00:24:25,469
+of millions of dollars and in some case, potentially over a billion euros
+
+562
+00:24:25,699 --> 00:24:28,560
+between delays and extra costs for the Berlin Airport.
+
+563
+00:24:28,880 --> 00:24:33,359
+So some of these certifications, like, are you an engineer or not really do matter?
+
+564
+00:24:33,369 --> 00:24:34,880
+Oh, totally. Yep. Yep.
+
+565
+00:24:35,060 --> 00:24:36,880
+And what we found was interesting is number one,
+
+566
+00:24:36,890 --> 00:24:38,770
+it's really hard for me to prove my certification.
+
+567
+00:24:38,780 --> 00:24:42,479
+And number two, it's basically almost impossible for anybody to validate it
+
+568
+00:24:44,130 --> 00:24:45,839
+because that's, that's the dirty secret.
+
+569
+00:24:45,849 --> 00:24:48,880
+How, you know, you claim to have a university degree. Correct?
+
+570
+00:24:49,229 --> 00:24:50,079
+Yes.
+
+571
+00:24:50,449 --> 00:24:51,520
+How do I validate that?
+
+572
+00:24:52,250 --> 00:24:54,459
+Some random phone number, register's office and ask
+
+573
+00:24:54,619 --> 00:24:57,199
+you can. Yes, I've, I have,
+
+574
+00:24:57,569 --> 00:25:01,239
+I'm trying to remember. I don't know if I've ever sent my,
+
+575
+00:25:01,910 --> 00:25:06,000
+my diploma into anybody. I know I have transcripts
+
+576
+00:25:06,300 --> 00:25:07,579
+that, why have I ever,
+
+577
+00:25:07,589 --> 00:25:12,020
+I needed those for something too because I have two copies of them in my files
+
+578
+00:25:12,750 --> 00:25:14,420
+and I don't know why I needed two,
+
+579
+00:25:14,670 --> 00:25:16,219
+but I know I needed two
+
+580
+00:25:16,489 --> 00:25:17,099
+and
+
+581
+00:25:17,369 --> 00:25:19,500
+huh. That's, it's interesting, you say that.
+
+582
+00:25:19,719 --> 00:25:20,150
+So,
+
+583
+00:25:20,290 --> 00:25:21,459
+and what's interesting is there's,
+
+584
+00:25:21,469 --> 00:25:24,449
+there's those online universities that will provide you with a fake degree and
+
+585
+00:25:24,459 --> 00:25:26,579
+they have a phone number that they will answer and be like.
+
+586
+00:25:26,589 --> 00:25:30,040
+Yeah. No, Josh totally has a degree in, uh, you know, nuclear physics.
+
+587
+00:25:30,050 --> 00:25:30,569
+Well,
+
+588
+00:25:30,579 --> 00:25:36,510
+I remember when I was in college there was one of the guys I went to school with had a,
+
+589
+00:25:36,859 --> 00:25:38,280
+and, like, doctored in,
+
+590
+00:25:38,290 --> 00:25:43,890
+in something that he sent $10 into an online program and he made us call him doctor,
+
+591
+00:25:44,030 --> 00:25:45,719
+which was really funny.
+
+592
+00:25:46,270 --> 00:25:47,119
+But it's,
+
+593
+00:25:47,550 --> 00:25:49,160
+yeah, I mean, that, that's a really good question.
+
+594
+00:25:49,170 --> 00:25:52,079
+Actually I'm trying to think and yeah, there's, there's no really good way.
+
+595
+00:25:52,089 --> 00:25:52,520
+And in fact,
+
+596
+00:25:52,530 --> 00:25:55,000
+I know I've heard of instances where like politicians
+
+597
+00:25:55,010 --> 00:25:57,199
+and celebrities and other people caught where they say,
+
+598
+00:25:57,209 --> 00:25:59,199
+oh, I graduated from the University of blah, blah, blah.
+
+599
+00:25:59,430 --> 00:26:01,689
+And the university says, no, you didn't.
+
+600
+00:26:01,699 --> 00:26:06,329
+You went here for two years, do we booted you out? And now, you know,
+
+601
+00:26:06,510 --> 00:26:10,459
+so that's, that's what we found to be a really interesting problem. Is, is not only
+
+602
+00:26:10,619 --> 00:26:14,920
+can you, is it very difficult for you to prove who or what you are and what you have?
+
+603
+00:26:15,589 --> 00:26:17,819
+But even if you have a good system to prove it, it's,
+
+604
+00:26:17,829 --> 00:26:20,530
+it's commonly very hard for people to validate it.
+
+605
+00:26:20,540 --> 00:26:23,160
+You know, a great example is we've tried very hard with the CCS KV,
+
+606
+00:26:23,170 --> 00:26:26,489
+the certificate of cloud security knowledge where you take your exam,
+
+607
+00:26:26,500 --> 00:26:30,229
+you get a nice PDF and on that PDF, it has your email address and a validation number.
+
+608
+00:26:30,430 --> 00:26:31,609
+You can go to the website,
+
+609
+00:26:31,709 --> 00:26:33,810
+you plug in like Courtesy for.org and you plug
+
+610
+00:26:33,819 --> 00:26:35,260
+in my validation number and it says yes,
+
+611
+00:26:35,270 --> 00:26:38,489
+courtesy.org got, you know, the CCS K
+
+612
+00:26:38,719 --> 00:26:39,719
+A earned it back in.
+
+613
+00:26:39,880 --> 00:26:41,349
+It was like 2012 or something.
+
+614
+00:26:41,459 --> 00:26:43,050
+And that's great except
+
+615
+00:26:43,560 --> 00:26:45,260
+people's email address changes.
+
+616
+00:26:45,560 --> 00:26:45,839
+Yes,
+
+617
+00:26:46,020 --> 00:26:48,609
+that is true. People move to different countries.
+
+618
+00:26:48,619 --> 00:26:52,069
+Uh, companies, their name changes because they get married, they get divorced.
+
+619
+00:26:52,260 --> 00:26:53,959
+You know, I remember that was one of the biggest things.
+
+620
+00:26:54,099 --> 00:26:55,469
+Uh not to bring up redhead again.
+
+621
+00:26:55,479 --> 00:26:56,589
+But remember Red Hat,
+
+622
+00:26:56,599 --> 00:26:59,270
+they couldn't change your login name and that drove people crazy who, like,
+
+623
+00:26:59,280 --> 00:27:02,030
+spent a lot of money in the divorce and then had to type in that
+
+624
+00:27:02,469 --> 00:27:05,099
+name they didn't care for anymore every morning.
+
+625
+00:27:05,229 --> 00:27:05,900
+Yeah. Right.
+
+626
+00:27:05,910 --> 00:27:10,829
+Or I know this is a problem with, like, transgender folks where obviously they,
+
+627
+00:27:10,839 --> 00:27:15,849
+they want to abandon their, their old name and in an instance like this, they can't.
+
+628
+00:27:15,859 --> 00:27:18,359
+And in fact, I know this was actually, I don't remember, I,
+
+629
+00:27:18,369 --> 00:27:19,859
+I read an article about this where there,
+
+630
+00:27:19,869 --> 00:27:22,209
+there was a company that actually it was not trivial
+
+631
+00:27:22,219 --> 00:27:23,780
+for them to be able to do this for people.
+
+632
+00:27:23,790 --> 00:27:25,819
+But obviously it was really important for them. So they did.
+
+633
+00:27:26,709 --> 00:27:33,239
+And well, even simpler example, I, I had a friend who uh he's from China
+
+634
+00:27:33,449 --> 00:27:37,790
+and his daughter, he introduced me to her as, like, Jennifer or whatever,
+
+635
+00:27:38,130 --> 00:27:41,300
+uh, one day and then, like, you know, I didn't see her for like, a year or two
+
+636
+00:27:41,810 --> 00:27:44,680
+and then he shows up with this
+
+637
+00:27:44,939 --> 00:27:46,880
+other daughter whose name is Cynthia.
+
+638
+00:27:46,890 --> 00:27:48,869
+And I'm like, oh, I thought you only had one daughter. He's like, yeah.
+
+639
+00:27:48,880 --> 00:27:50,199
+No, I only have one daughter.
+
+640
+00:27:50,209 --> 00:27:53,760
+I'm like, but wait, Jennifer, Cynthia, he's like, oh, she's trying out a new name
+
+641
+00:27:54,239 --> 00:27:56,280
+because she had a traditional Chinese name,
+
+642
+00:27:56,890 --> 00:28:02,540
+which was, you know, like, yeah, that's just not going to work so well. So she was
+
+643
+00:28:02,900 --> 00:28:04,500
+trying on different names.
+
+644
+00:28:05,609 --> 00:28:08,199
+I thought, you know what, why not? Like what you shouldn't?
+
+645
+00:28:08,410 --> 00:28:10,640
+People are allowed to pick nicknames. Well, why not?
+
+646
+00:28:10,650 --> 00:28:13,979
+I mean, legally under documentation issues, whatever or if you're unlucky,
+
+647
+00:28:13,989 --> 00:28:15,420
+you don't get to pick your nickname.
+
+648
+00:28:15,430 --> 00:28:16,329
+We just did a show be
+
+649
+00:28:16,530 --> 00:28:16,810
+o'rourke
+
+650
+00:28:17,130 --> 00:28:20,030
+and I'm like, that sounds like a really funky first name like,
+
+651
+00:28:20,140 --> 00:28:23,550
+you know, and I Google it and it's Robert Francis o'rourke, you know, like, yeah,
+
+652
+00:28:23,560 --> 00:28:25,719
+so actually I talked to my wife about this.
+
+653
+00:28:25,729 --> 00:28:27,079
+She uh
+
+654
+00:28:27,500 --> 00:28:30,640
+apparently if you're named Robert in
+
+655
+00:28:31,109 --> 00:28:33,729
+most will say uh Latin American countries,
+
+656
+00:28:33,739 --> 00:28:36,910
+it would not be uncommon for Bedo to be your like
+
+657
+00:28:36,920 --> 00:28:39,479
+nickname the shortening because like obviously what you call me,
+
+658
+00:28:39,489 --> 00:28:41,300
+Josh, but my real name is Joshua
+
+659
+00:28:41,660 --> 00:28:43,239
+and like, but you told me to call you
+
+660
+00:28:43,550 --> 00:28:44,790
+and I don't care for Joshua.
+
+661
+00:28:45,260 --> 00:28:47,510
+The only time I hear that is when I'm in trouble.
+
+662
+00:28:47,520 --> 00:28:51,439
+So if I hear Joshua, I'm like, uh, oh, I look around to see what I've done.
+
+663
+00:28:51,449 --> 00:28:52,329
+What happens when you hear.
+
+664
+00:28:52,630 --> 00:28:54,729
+Yeah, when you hear your full, like, you know,
+
+665
+00:28:55,250 --> 00:28:55,589
+sri
+
+666
+00:28:56,359 --> 00:28:57,319
+time to run,
+
+667
+00:28:57,859 --> 00:28:59,599
+like, don't even look, just go.
+
+668
+00:29:00,420 --> 00:29:03,430
+Yeah. So, ok, I, I did. Yeah, I guess Roberto be,
+
+669
+00:29:05,010 --> 00:29:08,250
+yeah, I guess, I mean, who's to say right? It's kind of like
+
+670
+00:29:08,400 --> 00:29:13,040
+you call people named Richard Dick or people named John are often called Jack.
+
+671
+00:29:13,050 --> 00:29:16,439
+So I used to, I worked for a guy called Richard and I did not,
+
+672
+00:29:16,614 --> 00:29:19,915
+that dick was the common nickname for Richard. And so people
+
+673
+00:29:20,064 --> 00:29:21,785
+essentially thought I was
+
+674
+00:29:21,905 --> 00:29:21,915
+a
+
+675
+00:29:22,125 --> 00:29:25,344
+moron or something because they would ask me where's Richard?
+
+676
+00:29:25,354 --> 00:29:28,775
+And he would like, literally be in the next room and they'd ask you where's dick?
+
+677
+00:29:29,055 --> 00:29:31,425
+Yeah, sorry, where's dick? And I'd be like, I don't know who dick is.
+
+678
+00:29:31,435 --> 00:29:32,505
+I don't know where dick is
+
+679
+00:29:33,140 --> 00:29:34,849
+and they'd be like, but, you know, like,
+
+680
+00:29:35,739 --> 00:29:37,729
+yeah, so that wasn't covered in school.
+
+681
+00:29:37,739 --> 00:29:39,689
+I feel like they should have covered these calls.
+
+682
+00:29:39,910 --> 00:29:40,319
+Like,
+
+683
+00:29:40,510 --> 00:29:42,839
+like, ok, what's the deal with William? And Bill?
+
+684
+00:29:43,520 --> 00:29:44,650
+Who knows?
+
+685
+00:29:44,660 --> 00:29:47,949
+It probably has some 300 year old reasoning behind it that
+
+686
+00:29:47,959 --> 00:29:50,849
+nobody understands and that's how most of these names work,
+
+687
+00:29:50,859 --> 00:29:51,119
+right?
+
+688
+00:29:51,130 --> 00:29:53,489
+It's, it's from some like English King in,
+
+689
+00:29:53,500 --> 00:29:58,530
+in 1024 decided that he wanted to be called this and now everybody does it,
+
+690
+00:29:59,069 --> 00:30:01,089
+it's like, you know, what I always think of is, you know,
+
+691
+00:30:01,099 --> 00:30:04,089
+when you wear a suit coat and you have your buttons like you always,
+
+692
+00:30:04,099 --> 00:30:04,869
+but in the top button,
+
+693
+00:30:04,880 --> 00:30:07,489
+you sometimes but in the middle button and you never button the bottom button.
+
+694
+00:30:07,500 --> 00:30:09,189
+Do you know why you never button the bottom button?
+
+695
+00:30:09,339 --> 00:30:11,920
+Because King Henry was too fat to button it.
+
+696
+00:30:11,930 --> 00:30:17,290
+And so that became the style like for real, like what the WTF but that's,
+
+697
+00:30:17,300 --> 00:30:18,609
+that's the world we live in.
+
+698
+00:30:18,880 --> 00:30:22,560
+Yeah. So, and that's something. So that's one of the reasons when
+
+699
+00:30:22,810 --> 00:30:25,839
+in, in architecting all of the identity stuff, I've been working on.
+
+700
+00:30:26,099 --> 00:30:28,900
+I want to let people claim what they want.
+
+701
+00:30:29,119 --> 00:30:30,579
+Yeah, I, I like that.
+
+702
+00:30:30,670 --> 00:30:33,619
+It's, it's not up to me to decide that you're Bill or William or whatever
+
+703
+00:30:33,739 --> 00:30:37,400
+and more to the point depending on the jurisdiction or the culture you come from.
+
+704
+00:30:37,430 --> 00:30:39,410
+I have no idea what the rules are
+
+705
+00:30:39,949 --> 00:30:43,300
+and I don't want to. And, but more to the point, I don't want to know what the rules are.
+
+706
+00:30:43,349 --> 00:30:44,729
+And so we leave it up to the user,
+
+707
+00:30:44,900 --> 00:30:45,930
+you claim what you want,
+
+708
+00:30:46,219 --> 00:30:49,569
+you deal with the people you deal with, you provide them the proof that they require.
+
+709
+00:30:50,329 --> 00:30:50,510
+Yeah.
+
+710
+00:30:51,319 --> 00:30:55,089
+And I think this is where, I mean, just kind of to bring it all home now is
+
+711
+00:30:55,420 --> 00:30:57,030
+this is where you go from.
+
+712
+00:30:57,040 --> 00:31:01,439
+Essentially perfect security, which is impossible to what's good enough.
+
+713
+00:31:01,449 --> 00:31:03,390
+And I'm sure if what you're doing today
+
+714
+00:31:03,689 --> 00:31:06,920
+we talked about that, say 10 or 15 years ago,
+
+715
+00:31:07,030 --> 00:31:08,770
+people would say that's idiotic.
+
+716
+00:31:08,910 --> 00:31:12,810
+It's not perfect. Right. When you're dealing with identity, it's got to be perfect.
+
+717
+00:31:12,819 --> 00:31:14,750
+One more important aspect, which is
+
+718
+00:31:15,520 --> 00:31:18,680
+we need to let users dial up and down their security because some
+
+719
+00:31:18,689 --> 00:31:22,400
+users will want more security and some users will actually want less security,
+
+720
+00:31:22,410 --> 00:31:23,150
+more convenience.
+
+721
+00:31:23,329 --> 00:31:27,069
+And that's totally fair. It's kind of the way I always look at this is
+
+722
+00:31:27,339 --> 00:31:31,079
+if you work for, say the intelligence community,
+
+723
+00:31:31,420 --> 00:31:35,829
+the kind of opsec you need on your computers is much
+
+724
+00:31:35,839 --> 00:31:39,209
+different than the opsec my parents need on their computers,
+
+725
+00:31:39,219 --> 00:31:39,579
+right?
+
+726
+00:31:39,790 --> 00:31:43,579
+Because you have very different adversaries coming after you. And I think
+
+727
+00:31:44,010 --> 00:31:47,869
+that's one of the things where good enough is also a big deal is there,
+
+728
+00:31:47,880 --> 00:31:50,469
+there's a lot of people that need just barely good enough
+
+729
+00:31:50,479 --> 00:31:52,670
+and there's a lot of people that need really good,
+
+730
+00:31:52,680 --> 00:31:53,900
+good enough, right?
+
+731
+00:31:53,910 --> 00:31:57,869
+And we historically just put everyone in the same bucket and it doesn't work.
+
+732
+00:31:57,880 --> 00:32:00,949
+I mean, I think that's part of our just complete failure in
+
+733
+00:32:01,449 --> 00:32:05,199
+a perfect example of this. The Windows 10 gaming PC I got for my kids
+
+734
+00:32:06,030 --> 00:32:08,229
+uh to log in, you log in.
+
+735
+00:32:08,369 --> 00:32:11,319
+Well, it wants you ideally to log in with like your Windows live account, right?
+
+736
+00:32:11,329 --> 00:32:13,979
+Which I've set them with really long passwords
+
+737
+00:32:14,229 --> 00:32:15,219
+because they never use the manager.
+
+738
+00:32:16,099 --> 00:32:18,689
+So, and I also looked, you can set a pin number with letters.
+
+739
+00:32:18,699 --> 00:32:22,119
+So you can basically set a classic password and I'm like, still kind of annoying.
+
+740
+00:32:22,619 --> 00:32:24,949
+Did some research Windows? Hello, you log in with your face.
+
+741
+00:32:24,959 --> 00:32:29,010
+So I'm like, ok, I bought the little webcam for it and now, but here's the cool thing,
+
+742
+00:32:29,219 --> 00:32:30,989
+you basically sit down in front of the computer
+
+743
+00:32:31,560 --> 00:32:32,739
+and it, the,
+
+744
+00:32:32,939 --> 00:32:35,030
+the, it unlocks the desktop to your desktop. It's awesome.
+
+745
+00:32:35,310 --> 00:32:38,280
+And I'm pretty sure I could print out a good quality picture and fool it.
+
+746
+00:32:38,290 --> 00:32:39,739
+But you know what this is for my kids play Minecraft
+
+747
+00:32:40,589 --> 00:32:42,349
+and now they don't have to remember a password.
+
+748
+00:32:42,359 --> 00:32:44,459
+They don't even have to type anything like this is,
+
+749
+00:32:44,560 --> 00:32:46,819
+this is great. Exactly. That's exactly right.
+
+750
+00:32:46,829 --> 00:32:50,339
+I mean, when you put it in context it's, it's good enough even more.
+
+751
+00:32:50,349 --> 00:32:54,140
+We get the convenience of you sit down and you get your desktop. I love it.
+
+752
+00:32:54,224 --> 00:32:57,285
+It just works. That's really cool. I should, I should look into that for my kids.
+
+753
+00:32:57,395 --> 00:32:57,685
+They,
+
+754
+00:32:57,694 --> 00:33:00,244
+they have a windows gaming PC downstairs and
+
+755
+00:33:00,255 --> 00:33:02,244
+it's like 80 bucks for the cheapest webcam.
+
+756
+00:33:02,255 --> 00:33:07,324
+It's the, that's the one where I had to download that dot R from that dodgy IP address.
+
+757
+00:33:07,334 --> 00:33:07,444
+Oh,
+
+758
+00:33:07,555 --> 00:33:09,984
+yeah, I saw that on Twitter. That's awesome.
+
+759
+00:33:10,104 --> 00:33:10,545
+Yeah,
+
+760
+00:33:10,844 --> 00:33:13,525
+it was, but it was, it was just the real tech driver.
+
+761
+00:33:13,535 --> 00:33:16,785
+So they just took a copy of the real tech driver and put it on some random
+
+762
+00:33:17,255 --> 00:33:19,344
+laptop. It was a really slow download. It's
+
+763
+00:33:19,515 --> 00:33:19,714
+awesome.
+
+764
+00:33:19,915 --> 00:33:20,334
+I love it
+
+765
+00:33:20,454 --> 00:33:21,035
+anyway.
+
+766
+00:33:21,515 --> 00:33:22,015
+But it works
+
+767
+00:33:23,000 --> 00:33:23,890
+all right. No, I love it.
+
+768
+00:33:24,239 --> 00:33:24,689
+It's good.
+
+769
+00:33:25,010 --> 00:33:28,020
+It's good enough that, that should be like the new motto of security.
+
+770
+00:33:28,030 --> 00:33:29,020
+It's good enough.
+
+771
+00:33:29,170 --> 00:33:32,619
+Which sounds like I've given, we've ever done
+
+772
+00:33:33,119 --> 00:33:33,650
+better.
+
+773
+00:33:34,329 --> 00:33:37,890
+Good enough is, well, it sounds like a low bar in the security world.
+
+774
+00:33:37,900 --> 00:33:40,449
+It's a pretty freaking high bar right now. Well,
+
+775
+00:33:40,839 --> 00:33:43,859
+you know, I look at how I've been ped and the guy has how many records now?
+
+776
+00:33:46,180 --> 00:33:50,010
+It's, it's billions. Billions. It's like mcdonald's hamburgers, right?
+
+777
+00:33:50,020 --> 00:33:51,430
+Billions and billions.
+
+778
+00:33:51,619 --> 00:33:52,079
+We just,
+
+779
+00:33:52,380 --> 00:33:54,219
+yeah, we took the, we took the numbers down.
+
+780
+00:33:54,369 --> 00:33:57,689
+Indeed. All right, I'm calling this one. So thank you, Kurt.
+
+781
+00:33:57,699 --> 00:33:59,010
+Thank you everyone for listening.
+
+782
+00:33:59,020 --> 00:34:01,209
+You can go to open source security podcast.com,
+
+783
+00:34:01,219 --> 00:34:02,569
+hit up the show notes so you can use the
+
+784
+00:34:02,579 --> 00:34:05,640
+Pound Os S Podcast hashtag to hit us up on Twitter
+
+785
+00:34:05,869 --> 00:34:10,379
+and yeah, Kurt have a fantastic rest of your day. You too. Thanks everybody.
+
+786
+00:34:10,500 --> 00:34:11,800
+Thanks everyone. Bye bye.

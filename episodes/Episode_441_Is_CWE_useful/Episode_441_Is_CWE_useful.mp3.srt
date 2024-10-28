@@ -1,0 +1,3186 @@
+0
+00:00:05,530 --> 00:00:09,130
+Hello and welcome to the open source security podcast with myself, Kurt
+
+1
+00:00:09,239 --> 00:00:12,159
+Seyfried and my partner in identifying things. Josh Bresser,
+
+2
+00:00:12,680 --> 00:00:15,189
+I guess I identify things.
+
+3
+00:00:15,199 --> 00:00:19,479
+We had to assign Cwes to all the bugs and Red Hat Bugzilla security bugs.
+
+4
+00:00:19,489 --> 00:00:22,420
+-- Anyways, did we
+-- assign CWE? Si? Don't remember if we
+
+5
+00:00:22,430 --> 00:00:22,840
+did,
+
+6
+00:00:23,329 --> 00:00:24,069
+we did
+
+7
+00:00:24,500 --> 00:00:26,319
+-- YCWE equals.
+-- It's been
+
+8
+00:00:26,450 --> 00:00:27,270
+so long.
+
+9
+00:00:28,739 --> 00:00:28,760
+Yeah.
+
+10
+00:00:29,379 --> 00:00:31,069
+And, and this brings up so, ok,
+
+11
+00:00:31,180 --> 00:00:34,090
+because I've been thinking about this a lot. The last two weeks is what is
+
+12
+00:00:34,279 --> 00:00:36,240
+CWE good for and
+
+13
+00:00:36,669 --> 00:00:39,029
+first of all, what is CWE? Right?
+
+14
+00:00:39,169 --> 00:00:39,229
+I
+
+15
+00:00:39,330 --> 00:00:44,959
+-- was going to say probably start there.
+-- Ok. So CWE is similar to CV E,
+
+16
+00:00:44,970 --> 00:00:46,279
+I have a fun fact.
+
+17
+00:00:46,290 --> 00:00:49,599
+We used to work with a bunch of people in the Czech Republic
+
+18
+00:00:49,740 --> 00:00:54,360
+and then obviously the Eastern European languages like V and W sound the same.
+
+19
+00:00:54,569 --> 00:00:56,720
+Well, also German, it was always confused
+
+20
+00:00:57,000 --> 00:01:01,240
+-- whether it's like, are we talking about CV E or CWE?
+-- Yeah, and like in German, V
+
+21
+00:01:01,419 --> 00:01:01,590
+and F
+
+22
+00:01:02,209 --> 00:01:03,669
+-- Yeah. Right. Exactly.
+-- So,
+
+23
+00:01:03,680 --> 00:01:03,860
+ok.
+
+24
+00:01:03,869 --> 00:01:08,779
+So CW, well, let's just say so CV E is common vulnerabilities
+
+25
+00:01:08,940 --> 00:01:09,919
+and exposures
+
+26
+00:01:10,099 --> 00:01:14,129
+and CWE is common weakness in numeration,
+
+27
+00:01:14,319 --> 00:01:14,849
+right?
+
+28
+00:01:14,980 --> 00:01:18,730
+And so the idea of cwe is that,
+
+29
+00:01:19,110 --> 00:01:22,209
+what's the difference between a buffer overflow and a buffer underflow or an
+
+30
+00:01:22,480 --> 00:01:23,349
+overflow
+
+31
+00:01:23,779 --> 00:01:26,620
+or an integer overread or blah, blah, blah, blah blah.
+
+32
+00:01:26,940 --> 00:01:30,949
+And so the idea was to identify and categorize all of these
+
+33
+00:01:31,139 --> 00:01:32,430
+because to put it bluntly,
+
+34
+00:01:32,440 --> 00:01:34,800
+if you're going to talk about a security vulnerability and
+
+35
+00:01:34,809 --> 00:01:37,029
+you don't have an agreed upon term for it,
+
+36
+00:01:37,190 --> 00:01:41,050
+you know, if you go to the doctor and say my Flis blang hurts, he's gonna be like a huh,
+
+37
+00:01:41,199 --> 00:01:42,809
+I'm gonna need a real name for that.
+
+38
+00:01:43,279 --> 00:01:47,580
+And you know, they're going to want like your arm, your leg or specific muscles. And
+
+39
+00:01:47,750 --> 00:01:48,019
+the
+
+40
+00:01:48,129 --> 00:01:51,550
+the other thing is CWE has, for example, well,
+
+41
+00:01:51,559 --> 00:01:54,900
+examples of that flaw in different languages,
+
+42
+00:01:55,099 --> 00:01:58,309
+how to fix it, how to address it and so on and so forth
+
+43
+00:01:58,599 --> 00:01:58,949
+and
+
+44
+00:01:59,449 --> 00:02:03,430
+it was quite useful. I think in the past for two reasons.
+
+45
+00:02:03,440 --> 00:02:03,730
+One,
+
+46
+00:02:03,739 --> 00:02:07,510
+it allowed the infosec industry to start talking about things
+
+47
+00:02:07,519 --> 00:02:10,690
+using the same terminology kind of before we had these
+
+48
+00:02:10,820 --> 00:02:13,669
+larger consensus mechanisms that we have now like
+
+49
+00:02:13,779 --> 00:02:15,139
+God, forgive me for saying this.
+
+50
+00:02:15,149 --> 00:02:19,240
+But things like Twitter and X where if enough people say hashtag log for J,
+
+51
+00:02:19,429 --> 00:02:20,440
+that's what it's called.
+
+52
+00:02:20,889 --> 00:02:22,289
+I think it
+
+53
+00:02:22,529 --> 00:02:26,660
+so we, we need to, I think discuss a little more about how it works first, but I,
+
+54
+00:02:26,669 --> 00:02:28,229
+I will give you my hot take.
+
+55
+00:02:28,250 --> 00:02:31,770
+I think CWE is as useless now as it always has been,
+
+56
+00:02:31,779 --> 00:02:33,850
+which is unfortunate because I think it has the
+
+57
+00:02:33,860 --> 00:02:37,559
+potential to make enormous difference in the industry.
+
+58
+00:02:37,570 --> 00:02:39,220
+There's one thing it used to do
+
+59
+00:02:39,899 --> 00:02:41,360
+that was magic, which is
+
+60
+00:02:42,190 --> 00:02:43,669
+closed source vendors
+
+61
+00:02:43,820 --> 00:02:45,990
+would announce a security vulnerability and
+
+62
+00:02:46,000 --> 00:02:47,820
+they wouldn't really give much information.
+
+63
+00:02:48,149 --> 00:02:49,740
+But if they gave ac we,
+
+64
+00:02:50,059 --> 00:02:52,770
+you had a pretty good chance at guessing how bad it was.
+
+65
+00:02:52,779 --> 00:02:56,899
+Because for example, if internet information server running on NT four
+
+66
+00:02:57,309 --> 00:03:01,139
+has CWE 79 cross site scripting. you're like, OK, that's bad. But
+
+67
+00:03:01,559 --> 00:03:02,899
+I, I can live with that.
+
+68
+00:03:03,100 --> 00:03:07,259
+But if it had CWE for like a buffer overflow, you knew you had to patch now.
+
+69
+00:03:07,270 --> 00:03:10,860
+And that's the one thing it was for a time good for.
+
+70
+00:03:11,029 --> 00:03:11,610
+And
+
+71
+00:03:12,110 --> 00:03:13,119
+however, since then,
+
+72
+00:03:13,130 --> 00:03:16,570
+most of these close source vendors have actually not all of them obviously,
+
+73
+00:03:16,580 --> 00:03:21,520
+but a lot of them have actually gotten better at giving like CV SS data and other
+
+74
+00:03:21,740 --> 00:03:25,110
+useful information so that, you know, if you need to patch or not, right?
+
+75
+00:03:25,119 --> 00:03:28,550
+Whereas in the past, we had to guess, like, especially I'm gonna say oracle,
+
+76
+00:03:28,830 --> 00:03:32,520
+you know, they'd be like my favorite was always like this score is a 9.9 but like,
+
+77
+00:03:32,529 --> 00:03:33,639
+don't worry about patching it.
+
+78
+00:03:33,649 --> 00:03:35,440
+And we're all like, what are you talking about?
+
+79
+00:03:35,449 --> 00:03:39,320
+Or my favorite would be like, they'd be like, this is an update you need to patch now.
+
+80
+00:03:39,759 --> 00:03:41,119
+And we're like, is it a security update?
+
+81
+00:03:41,130 --> 00:03:43,970
+-- They're like, we're not saying just patch now, like you have to patch now.
+-- Oh,
+
+82
+00:03:44,190 --> 00:03:47,979
+-- those were the worst. Yeah, I remember those sort of things
+-- and we're like, but
+
+83
+00:03:48,160 --> 00:03:52,740
+is it secure? Like, do I need to panic? Like, just patch now? Like right now
+
+84
+00:03:53,199 --> 00:03:53,270
+now
+
+85
+00:03:53,460 --> 00:03:56,190
+-- don't ask questions, do what you're told and
+-- then you're on the,
+
+86
+00:03:56,279 --> 00:03:58,139
+that would come out that it was like a remote pre
+
+87
+00:03:58,270 --> 00:03:58,429
+ath
+
+88
+00:03:58,820 --> 00:04:00,100
+buffer overflow
+
+89
+00:04:00,509 --> 00:04:01,619
+or some goofiness.
+
+90
+00:04:01,630 --> 00:04:07,059
+And so cwe was for a brief period of a few years useful in assigning.
+
+91
+00:04:07,259 --> 00:04:08,589
+How bad is this vulnerable?
+
+92
+00:04:09,307 --> 00:04:09,317
+I,
+
+93
+00:04:09,326 --> 00:04:11,746
+I think you have a skewed view because you
+
+94
+00:04:11,757 --> 00:04:14,427
+worked for a company that would try to unwind
+
+95
+00:04:14,567 --> 00:04:17,986
+the vulnerability landscape and then sell it to other people.
+
+96
+00:04:18,446 --> 00:04:22,486
+I can tell you as when I was a Cis Edmund doing that sort of work.
+
+97
+00:04:22,497 --> 00:04:24,397
+And in the early days of Red Hat,
+
+98
+00:04:24,696 --> 00:04:28,147
+I found Cwes to be virtually useless.
+
+99
+00:04:28,446 --> 00:04:29,516
+Well, it was just one,
+
+100
+00:04:29,527 --> 00:04:33,596
+it was one of the few clues we had quite often with these vendors but by and large.
+
+101
+00:04:33,606 --> 00:04:33,927
+So
+
+102
+00:04:34,316 --> 00:04:37,337
+how it in theory could be useful is
+
+103
+00:04:37,553 --> 00:04:38,194
+ironically
+
+104
+00:04:38,493 --> 00:04:38,604
+on
+
+105
+00:04:38,773 --> 00:04:38,824
+NA na,
+
+106
+00:04:39,053 --> 00:04:39,114
+na,
+
+107
+00:04:39,384 --> 00:04:41,963
+I want to talk about how they categorize and arrange
+
+108
+00:04:41,973 --> 00:04:44,773
+all this because there's actually some clever things they've done
+
+109
+00:04:45,164 --> 00:04:49,134
+-- that I think is a very good idea. For example, they
+-- have and some terrible things.
+
+110
+00:04:49,294 --> 00:04:51,174
+-- Well,
+-- there are terrible things as well
+
+111
+00:04:51,503 --> 00:04:55,584
+-- like CWE 1003,
+-- I don't even, I don't know what 1003 is. What's 1000.
+
+112
+00:04:55,704 --> 00:04:59,933
+That's the simplified view of CWE that people use without telling us.
+
+113
+00:05:00,213 --> 00:05:01,014
+-- Oh, that
+-- thing.
+
+114
+00:05:01,153 --> 00:05:02,084
+Yeah, we'll get to that.
+
+115
+00:05:02,334 --> 00:05:06,123
+That's NVD. I thought everyone, well, I don't know how I knew this.
+
+116
+00:05:06,450 --> 00:05:08,110
+I did not know this until two weeks ago.
+
+117
+00:05:08,281 --> 00:05:10,911
+-- I
+-- literally, anyway, we'll talk about that in a little while.
+
+118
+00:05:11,121 --> 00:05:11,520
+But
+
+119
+00:05:11,980 --> 00:05:14,430
+the one thing cwe did that I think is very
+
+120
+00:05:14,441 --> 00:05:19,351
+clever is they've created like this hierarchy of vulnerability types.
+
+121
+00:05:19,371 --> 00:05:22,851
+And so for example, you can have things like input validation, right?
+
+122
+00:05:22,860 --> 00:05:24,790
+Input validation can mean a lot of things.
+
+123
+00:05:25,080 --> 00:05:26,031
+Well, it's everything,
+
+124
+00:05:26,240 --> 00:05:26,871
+well,
+
+125
+00:05:27,001 --> 00:05:27,270
+not
+
+126
+00:05:27,871 --> 00:05:28,110
+real.
+
+127
+00:05:28,121 --> 00:05:29,191
+I mean, it kind of is,
+
+128
+00:05:29,200 --> 00:05:32,990
+-- that's
+-- my hated thing is CWE 20 input validation because technically,
+
+129
+00:05:33,240 --> 00:05:35,230
+well, everything is input at some point
+
+130
+00:05:36,000 --> 00:05:36,500
+like, I
+
+131
+00:05:36,600 --> 00:05:39,429
+mean, not, not necessarily like for example,
+
+132
+00:05:39,440 --> 00:05:42,730
+I'm actually looking at 121 which is stacked buffer overflow
+
+133
+00:05:43,010 --> 00:05:45,260
+and it's a child of
+
+134
+00:05:45,510 --> 00:05:50,380
+access memory location after end of buffer in a child of out of bounds, right?
+
+135
+00:05:50,640 --> 00:05:54,380
+And so there's like these, it kind of builds on itself where you can
+
+136
+00:05:54,529 --> 00:05:58,059
+go simpler or you can get more complicated, which is nice.
+
+137
+00:05:58,070 --> 00:06:01,079
+-- I think you
+-- can go simpler or more complicated
+
+138
+00:06:01,480 --> 00:06:03,589
+depending on what CWE has.
+
+139
+00:06:03,709 --> 00:06:06,769
+And the dirty secret is, cwe has stalled out
+
+140
+00:06:07,179 --> 00:06:09,690
+like 10 years ago for a long time
+
+141
+00:06:09,829 --> 00:06:10,450
+and
+
+142
+00:06:10,619 --> 00:06:13,350
+has not had a lot of updates like they're fast
+
+143
+00:06:13,359 --> 00:06:16,149
+tracking some A IC WES for maybe the summer.
+
+144
+00:06:16,160 --> 00:06:17,489
+I mean, well, it's like look, it,
+
+145
+00:06:17,500 --> 00:06:20,649
+it suffers from the same problem CD E does where you have a giant
+
+146
+00:06:20,660 --> 00:06:25,760
+defense contractor running a program at the speed of the old US government.
+
+147
+00:06:26,299 --> 00:06:29,130
+The new US government is actually quite agile and impressive.
+
+148
+00:06:29,140 --> 00:06:31,850
+The old US government was a laughing stock of it.
+
+149
+00:06:32,630 --> 00:06:32,869
+Well,
+
+150
+00:06:33,440 --> 00:06:35,940
+you know, given what they were working with and what they were supposed to do.
+
+151
+00:06:36,049 --> 00:06:41,260
+Right. Right. Yes. Here you have a potato in two forks. Like you have to have a web page
+
+152
+00:06:41,540 --> 00:06:42,380
+and you're not allowed to
+
+153
+00:06:42,809 --> 00:06:44,190
+use them after 5 p.m.
+
+154
+00:06:44,350 --> 00:06:46,320
+That's right. Exactly. Right. Right.
+
+155
+00:06:46,549 --> 00:06:49,450
+And oh, and there's a government shutdown. So now you can't look at the potato.
+
+156
+00:06:50,989 --> 00:06:52,420
+-- Yeah.
+-- Anyway,
+
+157
+00:06:52,510 --> 00:06:54,899
+the thing that's interesting to me about CW is in theory
+
+158
+00:06:55,000 --> 00:06:58,959
+it could be a comprehensive list of kind of all,
+
+159
+00:06:59,160 --> 00:06:59,929
+not just
+
+160
+00:07:00,140 --> 00:07:01,510
+well, the weaknesses
+
+161
+00:07:01,660 --> 00:07:02,089
+but
+
+162
+00:07:02,239 --> 00:07:06,920
+examples of them in different languages or how to fix them, how to detect them.
+
+163
+00:07:06,929 --> 00:07:07,380
+There's,
+
+164
+00:07:07,390 --> 00:07:09,470
+there's one other thing we forgot to talk about
+
+165
+00:07:09,480 --> 00:07:11,500
+that I think is very important and very cool.
+
+166
+00:07:11,510 --> 00:07:13,459
+So we mentioned they have like the hierarchy.
+
+167
+00:07:13,700 --> 00:07:16,459
+They also have this concept called chaining, right? Where you can,
+
+168
+00:07:16,559 --> 00:07:17,089
+you have like
+
+169
+00:07:17,279 --> 00:07:18,029
+input in
+
+170
+00:07:18,149 --> 00:07:22,200
+like invalid input then leads to a stack buffer overflow.
+
+171
+00:07:22,230 --> 00:07:26,190
+And this goes to the classic kill chain, which I know is a terrible phrase to use.
+
+172
+00:07:26,200 --> 00:07:28,980
+Nowadays, I forget what politically correct phrase you're supposed to use.
+
+173
+00:07:29,170 --> 00:07:31,899
+But this idea of a kill chain and military terminology of like, OK,
+
+174
+00:07:31,910 --> 00:07:35,660
+see the person call in an artillery strike, kill them like this chain of events,
+
+175
+00:07:35,670 --> 00:07:38,019
+this chain of things that happens to affect something
+
+176
+00:07:38,399 --> 00:07:39,309
+and yeah, so like
+
+177
+00:07:39,429 --> 00:07:39,709
+a P
+
+178
+00:07:39,850 --> 00:07:40,790
+to own, you know, at Cans
+
+179
+00:07:40,980 --> 00:07:41,470
+West.
+
+180
+00:07:41,609 --> 00:07:41,829
+Yeah.
+
+181
+00:07:41,839 --> 00:07:44,109
+Now it's famous for like, oh, I, you know,
+
+182
+00:07:44,119 --> 00:07:47,339
+I have this like $100,000 bounty bug in Chrome
+
+183
+00:07:47,350 --> 00:07:50,660
+and it's like actually 16 things in a chain.
+
+184
+00:07:51,079 --> 00:07:52,470
+Right. Right. Exactly.
+
+185
+00:07:52,690 --> 00:07:54,869
+You know, because like chrome is no longer,
+
+186
+00:07:54,880 --> 00:07:56,790
+like chrome is secure enough and Firefox
+
+187
+00:07:56,799 --> 00:07:58,350
+and most browsers are secure enough now that
+
+188
+00:07:58,869 --> 00:07:58,929
+yeah,
+
+189
+00:07:58,940 --> 00:08:04,170
+-- you need to find a bunch of vulnerabilities in a row to like get somewhere
+-- useful.
+
+190
+00:08:04,179 --> 00:08:04,540
+That's right.
+
+191
+00:08:04,549 --> 00:08:07,369
+First, we have to get around these six mitigations,
+
+192
+00:08:07,380 --> 00:08:09,769
+then deliver our payload and then do these
+
+193
+00:08:09,779 --> 00:08:12,279
+-- other things to execute the payload
+-- and well,
+
+194
+00:08:12,290 --> 00:08:15,850
+and that's for example, where the CWE is also weaknesses,
+
+195
+00:08:15,859 --> 00:08:20,339
+like it's things like exposing the address and memory, which on its own,
+
+196
+00:08:20,350 --> 00:08:22,250
+an attacker can't do anything with.
+
+197
+00:08:22,260 --> 00:08:25,690
+But if you've got a buffer overflow and you don't know your address and memory,
+
+198
+00:08:25,700 --> 00:08:26,209
+it's tricky
+
+199
+00:08:26,309 --> 00:08:26,950
+to exploit.
+
+200
+00:08:27,130 --> 00:08:29,609
+But if you know the address in memory all of a sudden, it's a lot easier.
+
+201
+00:08:29,619 --> 00:08:31,910
+And so that's the other thing to keep in mind is the common weakness.
+
+202
+00:08:31,920 --> 00:08:34,270
+Enumeration is not just like buffer overflow,
+
+203
+00:08:34,280 --> 00:08:37,169
+it's also things like just exposures of information or
+
+204
+00:08:37,179 --> 00:08:40,130
+it could be also patterns like generating random numbers,
+
+205
+00:08:40,140 --> 00:08:42,989
+not cryptographically randomly secure enough,
+
+206
+00:08:43,260 --> 00:08:47,580
+like they're technically random but not like cryptographically secure random,
+
+207
+00:08:47,590 --> 00:08:47,770
+right.
+
+208
+00:08:47,780 --> 00:08:50,039
+-- We can put a link to that show from back in the day.
+-- I
+
+209
+00:08:50,049 --> 00:08:50,659
+-- know.
+-- Right.
+
+210
+00:08:50,900 --> 00:08:55,409
+Actually fun fact for anyone who doesn't maybe follow this kind of geeky thing,
+
+211
+00:08:55,419 --> 00:08:57,770
+the go random number generator,
+
+212
+00:08:57,780 --> 00:09:01,820
+the default one was cryptographically weak and the documentation of course said,
+
+213
+00:09:01,830 --> 00:09:02,989
+like, never use this.
+
+214
+00:09:03,369 --> 00:09:06,010
+And it's like, then why did you idiots put it in here like this?
+
+215
+00:09:06,020 --> 00:09:07,539
+Because no one reads the docs
+
+216
+00:09:07,880 --> 00:09:12,010
+but they fixed it. It's fixed like they have a proper random number generator.
+
+217
+00:09:12,020 --> 00:09:15,270
+-- Now,
+-- 20 years ago, I could totally excuse having a
+
+218
+00:09:15,500 --> 00:09:17,469
+air quotes random number generator and
+
+219
+00:09:17,479 --> 00:09:21,090
+the computationally expensive cryptographically secure random
+
+220
+00:09:21,299 --> 00:09:24,210
+generator 20 years ago. Sure. But in the modern world
+
+221
+00:09:24,630 --> 00:09:25,690
+there's no excuse for that.
+
+222
+00:09:25,700 --> 00:09:28,270
+Every random number generator should be cryptographically
+
+223
+00:09:28,280 --> 00:09:30,080
+secure by default and we should just not
+
+224
+00:09:30,289 --> 00:09:31,900
+have insecure ones because like
+
+225
+00:09:32,260 --> 00:09:33,609
+just get it from the kernel.
+
+226
+00:09:33,849 --> 00:09:36,330
+Every kernel on the planet has secure rng.
+
+227
+00:09:36,340 --> 00:09:38,369
+-- Now,
+-- simple example,
+
+228
+00:09:38,380 --> 00:09:42,130
+all hot dogs are precooked now because we realized if you don't precook them,
+
+229
+00:09:42,140 --> 00:09:42,900
+people don't cook them.
+
+230
+00:09:42,909 --> 00:09:45,130
+-- Right? And then they get food poisoning.
+-- I believe that.
+
+231
+00:09:45,140 --> 00:09:45,489
+Right.
+
+232
+00:09:45,500 --> 00:09:48,530
+-- Like it's that simple.
+-- I don't think I've ever had an uncooked hot dog.
+
+233
+00:09:48,630 --> 00:09:49,690
+-- They
+-- used to exist.
+
+234
+00:09:49,809 --> 00:09:51,830
+-- I bet they were good
+-- except they cause food
+
+235
+00:09:52,099 --> 00:09:53,729
+once in a while, minor detail and
+
+236
+00:09:54,000 --> 00:09:54,539
+people would die.
+
+237
+00:09:55,030 --> 00:09:56,080
+So, and that's the thing, right?
+
+238
+00:09:56,090 --> 00:09:58,849
+Like I and oh, encrypting stuff used to be again,
+
+239
+00:09:58,859 --> 00:10:04,289
+computationally expensive except now every chip has a S 256 built in and like
+
+240
+00:10:04,530 --> 00:10:05,169
+you can just do it.
+
+241
+00:10:05,330 --> 00:10:08,679
+And this is part of where CWE also has not just fallen
+
+242
+00:10:08,690 --> 00:10:11,059
+behind in terms of coverage like it has no Blockchain coverage.
+
+243
+00:10:11,070 --> 00:10:12,909
+It, well, no, it has like three things from the Blockchain.
+
+244
+00:10:12,919 --> 00:10:15,969
+It has like three things for A I. That's it. Right now. I have a list of
+
+245
+00:10:16,070 --> 00:10:17,549
+over 100 A I things.
+
+246
+00:10:17,719 --> 00:10:21,479
+-- I don't, I don't want to dwell on all the shortcomings, but
+-- it's,
+
+247
+00:10:21,510 --> 00:10:24,229
+it's important because the thing is it went from being
+
+248
+00:10:24,239 --> 00:10:26,989
+useful to now being out of date so much like
+
+249
+00:10:27,150 --> 00:10:29,849
+checking on CWE 1003 or whatever it is.
+
+250
+00:10:29,859 --> 00:10:34,140
+I did not know this until two weeks ago where I found an NVD entry with an in
+
+251
+00:10:34,359 --> 00:10:35,690
+correct CWE.
+
+252
+00:10:35,880 --> 00:10:40,500
+And so I contacted them and said, you know, this CWE is wrong. Can you please use CWE?
+
+253
+00:10:40,510 --> 00:10:43,409
+What is it like 204 or something like that?
+
+254
+00:10:43,650 --> 00:10:45,109
+And they're like, no, we can't,
+
+255
+00:10:45,260 --> 00:10:47,429
+we're gonna use 203 and I'm like, what? What?
+
+256
+00:10:47,500 --> 00:10:51,190
+But, and they're like, we used the simplified CWE view. So it's,
+
+257
+00:10:51,700 --> 00:10:53,530
+-- and that's from 2015.
+-- Is
+
+258
+00:10:53,539 --> 00:10:55,179
+-- it
+-- that old? I didn't know how old it was.
+
+259
+00:10:55,419 --> 00:10:56,710
+-- Yes,
+-- it is that old.
+
+260
+00:10:56,919 --> 00:10:59,359
+Well, it also has 100 and 30.
+
+261
+00:10:59,770 --> 00:11:00,039
+It's
+
+262
+00:11:00,390 --> 00:11:00,919
+versus
+
+263
+00:11:01,099 --> 00:11:05,869
+-- 1300. So it's missing about 1000 CW
+-- es. Well, and that's the other thing.
+
+264
+00:11:05,880 --> 00:11:11,080
+All, not all Cwesrcwes MC WS are what are called views like the Os top 10
+
+265
+00:11:11,500 --> 00:11:11,869
+or
+
+266
+00:11:12,020 --> 00:11:12,989
+the simplified views,
+
+267
+00:11:14,070 --> 00:11:15,770
+which I wish they hadn't done that but whatever.
+
+268
+00:11:15,780 --> 00:11:22,159
+-- Oh,
+-- oh, it says here there's 938 weaknesses, there's 374 categories and 50 views.
+
+269
+00:11:22,609 --> 00:11:23,840
+So there the numbers are.
+
+270
+00:11:24,070 --> 00:11:25,659
+So here's Kurt.
+
+271
+00:11:26,090 --> 00:11:27,890
+So this is actually funny because Kurt started
+
+272
+00:11:27,900 --> 00:11:29,469
+complaining to me on signal about this.
+
+273
+00:11:29,479 --> 00:11:35,609
+-- I'm like, I thought everyone knew NVD. Use CWE 1003.
+-- I bet almost nobody does.
+
+274
+00:11:35,640 --> 00:11:38,229
+And I, I literally have no idea how I knew this.
+
+275
+00:11:38,239 --> 00:11:39,400
+I, I don't know,
+
+276
+00:11:39,409 --> 00:11:41,679
+it probably came up because I probably emailed them at
+
+277
+00:11:41,690 --> 00:11:43,530
+some point and they sent me the exact same answer.
+
+278
+00:11:43,539 --> 00:11:47,989
+You got it like we only use this particular view. Now, here is my comment on this.
+
+279
+00:11:48,000 --> 00:11:49,989
+NBD has an impossibly hard job.
+
+280
+00:11:50,000 --> 00:11:52,580
+There are, let's say 1000 Cwes,
+
+281
+00:11:52,590 --> 00:11:54,380
+I'm just going to use a number of 1000 because
+
+282
+00:11:54,390 --> 00:11:56,340
+I'm a monkey with 10 fingers and I like it.
+
+283
+00:11:56,590 --> 00:11:58,429
+So 1000 Cwes,
+
+284
+00:11:58,440 --> 00:12:01,289
+these NBD analysts are already under intense
+
+285
+00:12:01,299 --> 00:12:05,099
+pressure to understand and categorize these vulnerabilities,
+
+286
+00:12:05,140 --> 00:12:09,059
+I think unless you tightly constrained the number of I DS
+
+287
+00:12:09,070 --> 00:12:12,250
+they can use and figure out because here's the thing,
+
+288
+00:12:12,280 --> 00:12:13,710
+100 and 30 I DS.
+
+289
+00:12:13,719 --> 00:12:16,250
+If you do this kind of work all day, every day,
+
+290
+00:12:16,260 --> 00:12:18,969
+you're going to keep all 130 of those in your head,
+
+291
+00:12:19,340 --> 00:12:22,570
+right? So you're going to be able to like, you know, crank these things out like that.
+
+292
+00:12:22,580 --> 00:12:24,849
+But if you expect someone to deal with 1000.
+
+293
+00:12:25,090 --> 00:12:25,640
+It is
+
+294
+00:12:25,742 --> 00:12:29,361
+unrealistic and they're probably gonna make a ton of stupid mistakes.
+
+295
+00:12:29,372 --> 00:12:35,341
+A lot of those 1000 are obsolete or like, they're like.net specific or something.
+
+296
+00:12:35,351 --> 00:12:37,192
+But they're like, so hyper specific.
+
+297
+00:12:37,202 --> 00:12:37,601
+Well,
+
+298
+00:12:37,611 --> 00:12:41,461
+what's interesting is they wouldn't actually meet the current standard to be ac we,
+
+299
+00:12:41,471 --> 00:12:42,861
+because they're specific.
+
+300
+00:12:43,091 --> 00:12:46,911
+No, II, I brought this up on a board meeting. It's not a, maybe it's
+
+301
+00:12:47,562 --> 00:12:51,062
+a, I discussed this on a board meeting with them. I'm on the CWE board so
+
+302
+00:12:51,192 --> 00:12:54,721
+I can actually speak from authority here. I know it's not the best thing to do, but
+
+303
+00:12:54,924 --> 00:12:55,973
+in this case, it's true.
+
+304
+00:12:56,124 --> 00:12:56,914
+I will say this,
+
+305
+00:12:56,953 --> 00:13:02,374
+I just ran across there is nvd.n.gov/phone/categories and they say NV DC,
+
+306
+00:13:02,383 --> 00:13:04,023
+we slice the common weakness.
+
+307
+00:13:04,033 --> 00:13:06,513
+Enumeration specification provides a common blah, blah, blah, blah blah,
+
+308
+00:13:06,843 --> 00:13:11,283
+all individual cwenvd integrates CWE into the scoring of CV vulnerabilities
+
+309
+00:13:11,294 --> 00:13:13,943
+by providing a cross section of the overall CWE structure.
+
+310
+00:13:14,153 --> 00:13:17,703
+So they say technically that they're using a
+
+311
+00:13:17,804 --> 00:13:21,864
+subset of it, but they never used the word subset or reduced or CWE 1003.
+
+312
+00:13:21,874 --> 00:13:23,963
+Like they never explicitly say, were you,
+
+313
+00:13:24,995 --> 00:13:27,806
+they say here's the 133 that we're using
+
+314
+00:13:27,995 --> 00:13:31,406
+and they give a list, but they don't like explicitly say
+
+315
+00:13:31,526 --> 00:13:35,385
+like you would have to scroll through this page and realize it's kind of short
+
+316
+00:13:35,596 --> 00:13:36,426
+at this point.
+
+317
+00:13:36,435 --> 00:13:40,625
+It's clear that NV D's ability to communicate is like they rolled a
+
+318
+00:13:40,635 --> 00:13:44,106
+zero when it was time to fill in that particular entry on the,
+
+319
+00:13:44,116 --> 00:13:44,306
+on the,
+
+320
+00:13:45,226 --> 00:13:45,325
+so
+
+321
+00:13:45,556 --> 00:13:46,755
+they did
+
+322
+00:13:48,036 --> 00:13:50,815
+the die, fell off the table and they're like, it must be
+
+323
+00:13:51,325 --> 00:13:51,676
+-- with
+-- it.
+
+324
+00:13:52,116 --> 00:13:53,026
+Right.
+
+325
+00:13:53,349 --> 00:13:53,729
+Yeah.
+
+326
+00:13:53,739 --> 00:13:55,750
+So, like, I'm looking at this and like,
+
+327
+00:13:55,780 --> 00:13:58,809
+I've been dealing with the NVD for 20 years and I didn't know this,
+
+328
+00:13:58,989 --> 00:14:02,869
+-- you know,
+-- anyway, we're like, halfway ish through this episode.
+
+329
+00:14:02,880 --> 00:14:07,020
+I want to talk about what CWE should be because I
+
+330
+00:14:07,030 --> 00:14:10,869
+think that is vastly more interesting than complaining about that.
+
+331
+00:14:10,880 --> 00:14:14,369
+-- It sucks.
+-- Let's use the Linux kernel as a perfect example where
+
+332
+00:14:14,500 --> 00:14:17,414
+there's a um I forget his name at the Linux kernel, but basically,
+
+333
+00:14:17,424 --> 00:14:19,575
+he's trying to get the Linux kernel to be more secure.
+
+334
+00:14:19,705 --> 00:14:22,965
+And one of the things that really helps him is when he can look
+
+335
+00:14:22,974 --> 00:14:28,094
+at a piece of code and say this code is generally vulnerable to CWEX.
+
+336
+00:14:28,674 --> 00:14:33,465
+And here's a pile of CV es like actual vulnerabilities of
+
+337
+00:14:33,474 --> 00:14:36,375
+that type because he's dealing with developers who are busy.
+
+338
+00:14:37,195 --> 00:14:39,455
+If you go to a developer and say, please
+
+339
+00:14:39,864 --> 00:14:41,335
+rewrite a bunch of your code
+
+340
+00:14:42,039 --> 00:14:45,570
+to use this more secure memory structure thing that we now provide.
+
+341
+00:14:45,619 --> 00:14:49,369
+It's gonna take you a few days or weeks, but it'll be air quotes more secure.
+
+342
+00:14:49,380 --> 00:14:52,299
+They're like cool. I have a lot of work to do. No, thank you.
+
+343
+00:14:52,309 --> 00:14:53,619
+But if you come to them with data
+
+344
+00:14:53,799 --> 00:14:54,469
+and you say, hey,
+
+345
+00:14:54,479 --> 00:14:58,940
+look when this memory structure that you're using like it we keep assigning
+
+346
+00:14:58,950 --> 00:15:02,820
+security vulnerabilities to it because it keeps being exploited by the bad guys.
+
+347
+00:15:02,830 --> 00:15:03,179
+Right.
+
+348
+00:15:03,330 --> 00:15:03,659
+So,
+
+349
+00:15:03,669 --> 00:15:07,640
+like here's some actual data showing how bad it is most developers are going to go.
+
+350
+00:15:07,650 --> 00:15:09,195
+-- Oh, yeah. Ok. Right. Yeah, I should probably,
+-- I
+
+351
+00:15:09,666 --> 00:15:11,515
+think you're on the right path,
+
+352
+00:15:11,526 --> 00:15:14,255
+but I'm going to steer us in a slightly different direction.
+
+353
+00:15:14,265 --> 00:15:15,315
+I'm going to point at the
+
+354
+00:15:15,705 --> 00:15:17,435
+-- WASP top
+-- 10, which top 10,
+
+355
+00:15:17,546 --> 00:15:22,296
+-- they have multiple top tens, the top
+-- 10, like the top 10, not any of the other ones,
+
+356
+00:15:22,306 --> 00:15:23,435
+-- like the top
+-- 10,
+
+357
+00:15:23,726 --> 00:15:23,955
+the O A
+
+358
+00:15:24,166 --> 00:15:24,596
+top 10,
+
+359
+00:15:25,056 --> 00:15:27,926
+I was listening to a podcast maybe a month ago and I
+
+360
+00:15:27,935 --> 00:15:30,236
+don't remember which one this was for the life of me,
+
+361
+00:15:30,245 --> 00:15:31,435
+but they were discussing O Wasp
+
+362
+00:15:32,406 --> 00:15:32,986
+and
+
+363
+00:15:33,125 --> 00:15:35,995
+like its structure and how it works and everything. And I have
+
+364
+00:15:36,312 --> 00:15:37,132
+explained
+
+365
+00:15:37,331 --> 00:15:38,791
+at length in public
+
+366
+00:15:38,942 --> 00:15:39,432
+that the O
+
+367
+00:15:39,711 --> 00:15:39,721
+A
+
+368
+00:15:39,822 --> 00:15:42,331
+top 10 list is the most disappointing thing
+
+369
+00:15:42,562 --> 00:15:44,111
+I've ever experienced.
+
+370
+00:15:44,271 --> 00:15:45,341
+And the reason being O
+
+371
+00:15:45,682 --> 00:15:51,081
+Wasp had an opportunity to take the top 10 list and try to like,
+
+372
+00:15:51,262 --> 00:15:53,861
+let's eliminate the top thing on the list.
+
+373
+00:15:53,872 --> 00:15:57,122
+Like let's just literally make it not exist anymore as a vulnerability.
+
+374
+00:15:57,132 --> 00:16:00,211
+And all they ever do is shuffle the list around every couple of years.
+
+375
+00:16:00,221 --> 00:16:02,671
+The reason this is I found out is because
+
+376
+00:16:03,171 --> 00:16:03,361
+WASP
+
+377
+00:16:03,718 --> 00:16:06,408
+is run by consultants.
+
+378
+00:16:06,668 --> 00:16:08,867
+Consultants don't want to eliminate
+
+379
+00:16:08,877 --> 00:16:11,107
+classes of vulnerabilities because they're making
+
+380
+00:16:11,117 --> 00:16:14,388
+all of their money advising and dealing with this stuff.
+
+381
+00:16:14,437 --> 00:16:15,937
+And I heard this and I'm like,
+
+382
+00:16:16,107 --> 00:16:20,638
+I cannot argue with what was just said because my observation of O
+
+383
+00:16:20,848 --> 00:16:20,857
+A
+
+384
+00:16:21,047 --> 00:16:24,107
+100% backs that up.
+
+385
+00:16:24,328 --> 00:16:24,638
+-- I
+-- mean,
+
+386
+00:16:24,648 --> 00:16:26,588
+you did that presentation where you basically boiled down the
+
+387
+00:16:26,598 --> 00:16:29,268
+list to three things which was use a framework,
+
+388
+00:16:29,468 --> 00:16:30,507
+use encryption.
+
+389
+00:16:30,953 --> 00:16:32,484
+I can't remember the other one now
+
+390
+00:16:32,924 --> 00:16:35,934
+-- use authentication, something
+-- like that. I think single Cyon
+
+391
+00:16:36,093 --> 00:16:37,223
+was probably one of them.
+
+392
+00:16:37,314 --> 00:16:40,383
+-- But
+-- like looking at this sensitive data exposure,
+
+393
+00:16:40,393 --> 00:16:44,443
+broken authentication injection, XML, external entities broken, you know,
+
+394
+00:16:44,773 --> 00:16:47,314
+like, and then, yeah, they literally get shuffled around.
+
+395
+00:16:47,323 --> 00:16:48,843
+-- Here's
+-- my, my,
+
+396
+00:16:48,854 --> 00:16:52,473
+like my big to do CWE is 100% in the
+
+397
+00:16:52,484 --> 00:16:57,604
+same list if we were serious about solving security problems.
+
+398
+00:16:58,219 --> 00:17:02,349
+And I know we all say we are, but it's kind of one of those things of like, oh, do you,
+
+399
+00:17:02,359 --> 00:17:04,358
+you know, do you want to cure homelessness?
+
+400
+00:17:04,368 --> 00:17:05,810
+And we're all like, of course we do and they're like,
+
+401
+00:17:05,819 --> 00:17:07,969
+we're gonna raise your taxes 1% and they're like,
+
+402
+00:17:07,989 --> 00:17:09,910
+uh maybe people like sleeping outside,
+
+403
+00:17:10,270 --> 00:17:12,930
+you know, and that's, this is a very similar problem.
+
+404
+00:17:12,939 --> 00:17:17,400
+I think what CWE should do is every vulnerability
+
+405
+00:17:17,598 --> 00:17:20,280
+should get ac we and then you as an
+
+406
+00:17:20,290 --> 00:17:24,493
+organization should look at every CWE you have dealt with
+
+407
+00:17:24,503 --> 00:17:28,693
+in the last 12 months and then you should say we're going to pick this one in our,
+
+408
+00:17:28,703 --> 00:17:31,673
+say top 10 list, our personal top 10 list
+
+409
+00:17:32,144 --> 00:17:36,144
+and we're going to make sure we never see this vulnerability again
+
+410
+00:17:36,274 --> 00:17:37,213
+or defang it,
+
+411
+00:17:37,374 --> 00:17:38,413
+-- you know.
+-- Sure.
+
+412
+00:17:38,764 --> 00:17:43,614
+And the reality is we cannot do that today with our tools and our process,
+
+413
+00:17:43,624 --> 00:17:45,083
+it just can't be done.
+
+414
+00:17:45,663 --> 00:17:48,453
+And I think part of it is I'm getting to the point where
+
+415
+00:17:48,693 --> 00:17:49,524
+things
+
+416
+00:17:49,869 --> 00:17:52,969
+here's how I view software you need to do and write as
+
+417
+00:17:52,979 --> 00:17:57,010
+little software as possible unless you can write truly good software.
+
+418
+00:17:57,020 --> 00:17:58,130
+And so by that, I mean,
+
+419
+00:17:58,140 --> 00:18:02,160
+you need to use as much open source software that is good as possible.
+
+420
+00:18:02,170 --> 00:18:04,650
+And then you do kind of as little as possible
+
+421
+00:18:04,770 --> 00:18:07,930
+because then you actually have a chance to do it right to get it right.
+
+422
+00:18:08,479 --> 00:18:11,589
+Because like, for example, no people used to write web servers
+
+423
+00:18:11,770 --> 00:18:15,819
+and some people still do. And I'm like, that's insane. That's fair, right?
+
+424
+00:18:15,920 --> 00:18:18,500
+And so I think basically what it boils down to is like industrialization.
+
+425
+00:18:18,510 --> 00:18:20,859
+I don't make my own screws anymore. I go to Home Depot and buy them.
+
+426
+00:18:20,869 --> 00:18:24,339
+What I would really love to see is where frameworks like Django,
+
+427
+00:18:24,349 --> 00:18:27,650
+like what there's even entire languages like Python where it's like,
+
+428
+00:18:27,829 --> 00:18:30,859
+yeah, that kind of cwe just can't really happen.
+
+429
+00:18:30,869 --> 00:18:34,180
+And if it does it's in the core language and we will fix it very quickly.
+
+430
+00:18:34,489 --> 00:18:37,140
+And I think it's that kind of thinking of industrialization
+
+431
+00:18:37,623 --> 00:18:40,282
+that needs to start happening because I think this idea of,
+
+432
+00:18:40,292 --> 00:18:43,442
+oh we're gonna like fix all the buffer overflows in the software we wrote.
+
+433
+00:18:43,453 --> 00:18:46,642
+No, no, you're not like open BS D can't even do that.
+
+434
+00:18:46,652 --> 00:18:51,203
+And Open BS D hyper aggressively finds a flaw and goes, oh,
+
+435
+00:18:51,213 --> 00:18:53,243
+let's eliminate all the ones like that.
+
+436
+00:18:53,392 --> 00:18:56,182
+Yeah. They're literally the best security developers on the planet.
+
+437
+00:18:56,192 --> 00:18:58,473
+Like the people who write open SSH and they still
+
+438
+00:18:58,483 --> 00:19:00,723
+make mistakes for sure if they can't get it right.
+
+439
+00:19:00,733 --> 00:19:02,963
+There's zero hope for people like Curt and myself.
+
+440
+00:19:02,973 --> 00:19:06,162
+-- But
+-- then they do stuff like the virtual temp stuff and it's like, oh,
+
+441
+00:19:06,245 --> 00:19:07,375
+so like all the temp bugs
+
+442
+00:19:07,515 --> 00:19:07,875
+done
+
+443
+00:19:08,026 --> 00:19:08,066
+gone.
+
+444
+00:19:08,235 --> 00:19:08,416
+Poof.
+
+445
+00:19:08,906 --> 00:19:13,946
+-- No more
+-- temp file vulnerabilities are a great example because what, 1015,
+
+446
+00:19:13,956 --> 00:19:18,265
+20 years ago, temporary file vulnerabilities were a, an actual legitimate,
+
+447
+00:19:18,276 --> 00:19:18,985
+real problem.
+
+448
+00:19:18,995 --> 00:19:20,215
+-- They're gone
+-- and
+
+449
+00:19:20,316 --> 00:19:21,946
+the biggest part of the solution,
+
+450
+00:19:22,076 --> 00:19:23,465
+no more multiuser systems
+
+451
+00:19:24,556 --> 00:19:27,215
+in the sense of like you're in a container, you're not all
+
+452
+00:19:27,375 --> 00:19:29,005
+glommed into the same room.
+
+453
+00:19:29,765 --> 00:19:30,385
+Exactly.
+
+454
+00:19:30,436 --> 00:19:31,916
+And so that's a perfect example of like, oh,
+
+455
+00:19:31,926 --> 00:19:34,656
+you want to get rid of temp vulnerability is actually 100% for real.
+
+456
+00:19:34,666 --> 00:19:35,135
+Yeah. Just
+
+457
+00:19:35,489 --> 00:19:37,229
+like use containers and that'll
+
+458
+00:19:37,410 --> 00:19:38,449
+solve most of it.
+
+459
+00:19:39,300 --> 00:19:39,800
+Yes.
+
+460
+00:19:40,140 --> 00:19:40,560
+Yes.
+
+461
+00:19:41,119 --> 00:19:41,449
+Yeah.
+
+462
+00:19:41,650 --> 00:19:44,969
+And so I think that's part of the other part is it's
+
+463
+00:19:44,979 --> 00:19:48,300
+not just using CW to start squashing vulnerabilities and getting better results.
+
+464
+00:19:48,310 --> 00:19:52,189
+But using it to think at a sort of more industrial academic
+
+465
+00:19:52,540 --> 00:19:56,319
+scientific scale because if your plan is to go through your
+
+466
+00:19:56,329 --> 00:19:59,030
+code and fix all of the vulnerability of type X.
+
+467
+00:19:59,040 --> 00:20:00,079
+No, no,
+
+468
+00:20:00,186 --> 00:20:04,725
+I have, I have a great example of this that we talked about the, was it not the NSA?
+
+469
+00:20:04,826 --> 00:20:06,946
+I think it was the NSA and CIA release the, oh,
+
+470
+00:20:06,956 --> 00:20:09,225
+you should use memory safe languages documents.
+
+471
+00:20:09,855 --> 00:20:12,365
+I'm certain we did an episode on it a long time ago.
+
+472
+00:20:12,615 --> 00:20:15,755
+I'm sure we did. I'll be completely shocked if we did not.
+
+473
+00:20:15,816 --> 00:20:19,265
+-- I will look and put it in the show notes. I vaguely
+-- remember this news item.
+
+474
+00:20:19,536 --> 00:20:19,755
+But
+
+475
+00:20:20,005 --> 00:20:20,026
+yeah,
+
+476
+00:20:20,215 --> 00:20:21,391
+but anyway, the point, yes,
+
+477
+00:20:21,771 --> 00:20:23,332
+how many Cwes
+
+478
+00:20:23,712 --> 00:20:27,362
+can you completely eliminate by using Rust or,
+
+479
+00:20:27,371 --> 00:20:30,661
+or any memory safe language as opposed to C or C++?
+
+480
+00:20:30,891 --> 00:20:34,082
+-- I literally have no idea
+-- even better than that. It's not just that you can
+
+481
+00:20:34,371 --> 00:20:36,021
+eliminate a couple dozen,
+
+482
+00:20:36,131 --> 00:20:38,521
+but it's often a couple dozen of the really
+
+483
+00:20:38,732 --> 00:20:40,281
+impactful ones
+
+484
+00:20:40,592 --> 00:20:42,041
+because to put it bluntly again,
+
+485
+00:20:42,790 --> 00:20:43,939
+cross site scripting.
+
+486
+00:20:43,949 --> 00:20:47,699
+Yeah, that's not great but whatever we'll deal with it versus buffer overflow.
+
+487
+00:20:47,839 --> 00:20:50,760
+I mean, it's catastrophic if you're a web service. Uh cross
+
+488
+00:20:50,880 --> 00:20:53,699
+a scripting is a buffer overflow of web services.
+
+489
+00:20:53,709 --> 00:20:57,699
+It's sort of, it depends if is it reflected or stored blah, blah, blah,
+
+490
+00:20:58,229 --> 00:21:00,739
+just like buffer overflows. There's 100 kinds of them.
+
+491
+00:21:00,750 --> 00:21:03,030
+And this is a perfect example of where
+
+492
+00:21:03,140 --> 00:21:08,500
+knowing CWE really helps because I'm looking at A I stuff and A is are now spitting out
+
+493
+00:21:08,640 --> 00:21:11,619
+json to feed into API S and others.
+
+494
+00:21:12,439 --> 00:21:12,469
+In
+
+495
+00:21:12,680 --> 00:21:13,770
+this situation.
+
+496
+00:21:13,780 --> 00:21:15,329
+A cross site scripting goes from, oh,
+
+497
+00:21:15,339 --> 00:21:17,349
+you can display something annoying in a web page
+
+498
+00:21:17,479 --> 00:21:17,949
+to
+
+499
+00:21:18,489 --> 00:21:21,130
+oh, now it can cause code execution in another system.
+
+500
+00:21:22,060 --> 00:21:25,140
+And so knowing what a cross site scripting vulnerability is,
+
+501
+00:21:25,250 --> 00:21:28,349
+it's funny because I was like looking at this in the context of A I early on, I'm like,
+
+502
+00:21:28,359 --> 00:21:29,219
+whatever, it'll be bad.
+
+503
+00:21:29,229 --> 00:21:29,550
+But,
+
+504
+00:21:29,689 --> 00:21:34,589
+and, but now A I has this new capability of talking to API S and it's like, whoa,
+
+505
+00:21:35,160 --> 00:21:39,719
+this is a problem and this is the kind of thing where CW is very important because
+
+506
+00:21:39,959 --> 00:21:41,689
+the answer to that is not
+
+507
+00:21:42,140 --> 00:21:47,040
+to, for me to try and fix it. It's for like the framework and the A I vendor to fix it,
+
+508
+00:21:47,430 --> 00:21:48,310
+right? You know,
+
+509
+00:21:48,449 --> 00:21:52,699
+like we don't ask everybody to figure out how to make safe water.
+
+510
+00:21:52,709 --> 00:21:57,069
+-- We, we deliver that as a service.
+-- That's a good point actually. And, and I think
+
+511
+00:21:57,180 --> 00:21:59,280
+the whole SASS universe now
+
+512
+00:21:59,560 --> 00:22:03,280
+has made it more obvious where I think in the past if you got a development
+
+513
+00:22:03,290 --> 00:22:05,560
+environment for someone like Microsoft or Redhead or
+
+514
+00:22:05,569 --> 00:22:07,719
+whoever you'd use it and you'd be like,
+
+515
+00:22:07,729 --> 00:22:09,949
+oh I added another buffer overflow to my code.
+
+516
+00:22:10,089 --> 00:22:10,880
+It must be dumb.
+
+517
+00:22:11,020 --> 00:22:11,989
+In reality, it was like,
+
+518
+00:22:12,060 --> 00:22:15,479
+why is this development environment even allowing us to do this crap?
+
+519
+00:22:15,609 --> 00:22:16,709
+Like this is stupid.
+
+520
+00:22:17,109 --> 00:22:17,280
+Yeah.
+
+521
+00:22:17,709 --> 00:22:20,040
+And so, but, but in the SAS world, it's,
+
+522
+00:22:20,050 --> 00:22:23,439
+I think more obvious of like if your service has a cross site scripting flaw,
+
+523
+00:22:23,449 --> 00:22:25,229
+it is not my problem to fix.
+
+524
+00:22:25,239 --> 00:22:26,729
+You need to go fix it.
+
+525
+00:22:26,959 --> 00:22:29,199
+Which speaking of that we should talk about Sass bomb at
+
+526
+00:22:29,209 --> 00:22:31,140
+some point because that's like the S bombs for SAS.
+
+527
+00:22:31,189 --> 00:22:32,229
+But anyway, back to
+
+528
+00:22:32,369 --> 00:22:33,030
+CWC.
+
+529
+00:22:33,290 --> 00:22:37,890
+-- We, but
+-- this is a good example of where CW can be valuable because there's this,
+
+530
+00:22:38,400 --> 00:22:40,569
+there's, there's a whole bunch of new A I vulnerabilities.
+
+531
+00:22:40,579 --> 00:22:45,420
+I've, I have like a list of over 100 of them, but there's also a list of really old,
+
+532
+00:22:45,430 --> 00:22:47,449
+like 20 to, like, they're old enough to vote
+
+533
+00:22:47,729 --> 00:22:50,270
+vulnerabilities that are actually
+
+534
+00:22:50,459 --> 00:22:50,910
+like
+
+535
+00:22:51,119 --> 00:22:54,310
+really terrifying in an A I context now that A I has
+
+536
+00:22:54,319 --> 00:22:57,900
+gained certain capabilities of like talking to API S and stuff.
+
+537
+00:22:58,000 --> 00:23:01,800
+And if people are not aware of this, like it's going to end badly, I mean,
+
+538
+00:23:01,810 --> 00:23:06,550
+most people aren't and I don't think CWE is going to make it obvious to them either.
+
+539
+00:23:06,560 --> 00:23:09,060
+I don't think CWE as a vehicle for
+
+540
+00:23:09,069 --> 00:23:12,310
+conveying information to other people is necessarily valuable.
+
+541
+00:23:12,569 --> 00:23:14,630
+-- No,
+-- it's terrible. But for example, it is the
+
+542
+00:23:14,733 --> 00:23:15,512
+head end
+
+543
+00:23:15,662 --> 00:23:18,192
+of a lot of code scanning tools that go
+
+544
+00:23:18,713 --> 00:23:21,012
+well, what do we code scan for?
+
+545
+00:23:21,022 --> 00:23:21,792
+Well, the answer is you,
+
+546
+00:23:21,802 --> 00:23:26,532
+you kind of go through CWE like uh brakeman for Ruby essentially goes through
+
+547
+00:23:26,542 --> 00:23:29,333
+and looks for a bunch of stuff in CWE that applies to Ruby.
+
+548
+00:23:29,343 --> 00:23:31,083
+So like obviously not really buffer overflows but things
+
+549
+00:23:31,093 --> 00:23:32,512
+like cross eye scripting and blah blah blah.
+
+550
+00:23:32,642 --> 00:23:35,692
+And that is actually really useful because asking somebody to
+
+551
+00:23:35,703 --> 00:23:38,463
+write a code scanner and oh as a side project.
+
+552
+00:23:38,473 --> 00:23:41,633
+Just re invent the universe of security vulnerabilities. Very easy.
+
+553
+00:23:41,855 --> 00:23:43,026
+Yeah, super easy.
+
+554
+00:23:43,135 --> 00:23:46,206
+But if we actually have this nice thick catalog of, like,
+
+555
+00:23:46,215 --> 00:23:48,786
+here's all the bugs and how they look and what they look like.
+
+556
+00:23:48,796 --> 00:23:50,676
+E even if it's not in your language,
+
+557
+00:23:50,765 --> 00:23:53,456
+like you look at the Python example to the go example or the C example.
+
+558
+00:23:53,465 --> 00:23:54,916
+And you're like, oh, ok. I get it now
+
+559
+00:23:55,156 --> 00:23:57,686
+and that's where it could be very useful, but it's
+
+560
+00:23:57,885 --> 00:23:59,515
+so slow to update that. It's,
+
+561
+00:23:59,715 --> 00:24:02,836
+yeah, sorry, I've, I've pushed for various things to speed it up.
+
+562
+00:24:02,845 --> 00:24:04,796
+And cwe was averaging point, what was it?
+
+563
+00:24:04,806 --> 00:24:08,336
+0.9 of ac we per month for the last 2, 2.5 years.
+
+564
+00:24:08,739 --> 00:24:12,479
+Well, look, I, I have the same complaints about this as I do about CV E and it's,
+
+565
+00:24:12,489 --> 00:24:15,678
+the reality is like we exist in a world now where the, the,
+
+566
+00:24:15,688 --> 00:24:18,759
+the way open source works needs to be applied to things like this
+
+567
+00:24:18,769 --> 00:24:22,288
+and these sort of projects need to exist in like independent foundations.
+
+568
+00:24:22,529 --> 00:24:23,458
+-- No,
+-- it's not gonna happen.
+
+569
+00:24:23,468 --> 00:24:27,279
+Miter gets 30 million to pay to fund this and they're not going to give that up.
+
+570
+00:24:27,288 --> 00:24:28,519
+-- It's
+-- cash money. Right.
+
+571
+00:24:28,538 --> 00:24:31,958
+Imagine what a foundation could do with $30 million you know.
+
+572
+00:24:32,098 --> 00:24:35,318
+Yeah, I think, was it 34 point something, whatever. Anyway, a big number,
+
+573
+00:24:35,932 --> 00:24:38,052
+it doesn't matter. It's not going to get fixed,
+
+574
+00:24:38,291 --> 00:24:38,741
+but
+
+575
+00:24:39,021 --> 00:24:44,092
+we can even ignore CWE we can say, oh, yeah. If it's in a foundation it would get fixed.
+
+576
+00:24:44,102 --> 00:24:46,092
+But like the Os top 10 is a foundation
+
+577
+00:24:46,102 --> 00:24:48,161
+and they're clearly not doing anything with it either.
+
+578
+00:24:48,171 --> 00:24:49,482
+So, like, I don't know,
+
+579
+00:24:49,531 --> 00:24:54,602
+-- it's
+-- kind of a disappointing because the Os top 10 could be like, it is well known, but
+
+580
+00:24:54,972 --> 00:24:59,511
+-- it's completely well known,
+-- but it kind of does, it actually result in really,
+
+581
+00:24:59,521 --> 00:25:01,621
+truly actionable good outcomes.
+
+582
+00:25:01,991 --> 00:25:02,482
+Well, it does
+
+583
+00:25:02,744 --> 00:25:02,964
+the
+
+584
+00:25:03,255 --> 00:25:07,584
+consultants that are using it to sell product and services.
+
+585
+00:25:07,594 --> 00:25:10,094
+-- I
+-- mean, I always kind of wonder like PC I DS S, if it didn't exist,
+
+586
+00:25:10,104 --> 00:25:12,635
+would things actually be that much worse than the answer is probably.
+
+587
+00:25:12,645 --> 00:25:13,045
+Yes.
+
+588
+00:25:13,395 --> 00:25:13,925
+Yes.
+
+589
+00:25:14,074 --> 00:25:15,244
+Yes, for sure. Yes.
+
+590
+00:25:15,574 --> 00:25:20,964
+And the reason I know this is because I worked at an ISP in 1998
+
+591
+00:25:21,084 --> 00:25:22,964
+and I wrote Pearl Code for them,
+
+592
+00:25:23,135 --> 00:25:25,704
+which that's like a blast from the past.
+
+593
+00:25:26,025 --> 00:25:29,635
+And there was a, we, we wrote a website and now this
+
+594
+00:25:29,748 --> 00:25:30,958
+was mind you when like
+
+595
+00:25:31,167 --> 00:25:34,968
+having any sort of web forms, like this was CG I bins, right?
+
+596
+00:25:34,978 --> 00:25:35,887
+-- Like way back
+-- in the
+
+597
+00:25:35,897 --> 00:25:36,338
+-- day,
+-- common
+
+598
+00:25:36,637 --> 00:25:39,608
+gateway interface for those of you that don't know what that means?
+
+599
+00:25:39,748 --> 00:25:41,378
+No one knows what that is and don't, don't look
+
+600
+00:25:41,567 --> 00:25:41,618
+it up.
+
+601
+00:25:42,267 --> 00:25:42,508
+But
+
+602
+00:25:42,667 --> 00:25:43,057
+no, it's
+
+603
+00:25:43,348 --> 00:25:46,258
+-- technology. It's like knowing how to crank start a car.
+-- Right.
+
+604
+00:25:46,267 --> 00:25:51,098
+Anyway, the point is we had to collect credit card numbers for some like
+
+605
+00:25:51,317 --> 00:25:52,307
+it was a marathon.
+
+606
+00:25:52,317 --> 00:25:53,478
+People were registering for,
+
+607
+00:25:53,488 --> 00:25:56,647
+this was back when like registering for anything online was basically
+
+608
+00:25:56,750 --> 00:25:57,250
+magic.
+
+609
+00:25:57,260 --> 00:25:59,510
+We were just collecting everyone's credit
+
+610
+00:25:59,520 --> 00:26:02,750
+card information over an unencrypted website.
+
+611
+00:26:02,760 --> 00:26:03,890
+Http
+
+612
+00:26:04,360 --> 00:26:08,590
+and we were writing them to a sequel database completely unencrypted.
+
+613
+00:26:08,701 --> 00:26:10,630
+And then we were emailing
+
+614
+00:26:10,791 --> 00:26:15,610
+the contents of the SQL database to someone at the end of every day.
+
+615
+00:26:15,620 --> 00:26:18,750
+So they could manually charge the credit cards.
+
+616
+00:26:18,941 --> 00:26:19,380
+Like,
+
+617
+00:26:19,610 --> 00:26:23,651
+yeah, in into the PC I world. That would be like a hilarious number of
+
+618
+00:26:23,943 --> 00:26:25,154
+now, rightly.
+
+619
+00:26:25,163 --> 00:26:29,854
+-- So
+-- look at physical bank security compare now compared to what it was 100 years ago.
+
+620
+00:26:29,864 --> 00:26:32,213
+Right. Like, they have the cash machine vaults.
+
+621
+00:26:32,223 --> 00:26:36,254
+They don't have tellers with drawers full of cash. Right? They've, they've,
+
+622
+00:26:36,364 --> 00:26:39,473
+they've done a lot of things now that, you know, would, like, basically,
+
+623
+00:26:39,484 --> 00:26:42,933
+if you try to run a bank from 50 years ago in today's world,
+
+624
+00:26:42,943 --> 00:26:44,854
+it would basically be illegal.
+
+625
+00:26:45,043 --> 00:26:47,614
+I would hope so. Like, it would be so insecure.
+
+626
+00:26:48,703 --> 00:26:50,654
+Yeah, the cops would probably show up and shut you down.
+
+627
+00:26:51,390 --> 00:26:52,790
+No. Really? Right. Like having,
+
+628
+00:26:53,020 --> 00:26:56,010
+you know, drawers full of tens of thousands of dollars of cash.
+
+629
+00:26:56,020 --> 00:26:57,989
+I imagine the cops will not be happy about that because they know
+
+630
+00:26:58,000 --> 00:26:59,770
+you're gonna get robbed and they're gonna have to deal with it.
+
+631
+00:26:59,780 --> 00:27:01,540
+This is a great example.
+
+632
+00:27:01,550 --> 00:27:06,250
+Actually, Kurt using banks and the way they've from PC I DS s to
+
+633
+00:27:06,380 --> 00:27:10,670
+the way bank robberies and everything used to work. This was an example where
+
+634
+00:27:10,849 --> 00:27:12,199
+the risk was
+
+635
+00:27:12,739 --> 00:27:13,800
+understood
+
+636
+00:27:14,229 --> 00:27:18,160
+and then they took efforts to reduce and eliminate those risks.
+
+637
+00:27:18,170 --> 00:27:22,829
+Now, in the context of banks, they have literal, actual money on the line
+
+638
+00:27:23,010 --> 00:27:24,810
+and literal, actual money is like,
+
+639
+00:27:24,819 --> 00:27:29,880
+the one thing you can guarantee capitalism cares about everything else is a detail.
+
+640
+00:27:29,890 --> 00:27:31,439
+Well, it's also, you can measure it.
+
+641
+00:27:31,630 --> 00:27:33,880
+That's true. It's a number, number goes up.
+
+642
+00:27:34,089 --> 00:27:35,020
+Everyone's happy.
+
+643
+00:27:35,239 --> 00:27:37,849
+Like, remember when everybody thought, oh, company getting hacked,
+
+644
+00:27:37,859 --> 00:27:38,949
+it's gonna take their stock price.
+
+645
+00:27:38,959 --> 00:27:41,709
+So they're not gonna want to get hacked. Yeah, it turns out it doesn't matter,
+
+646
+00:27:42,160 --> 00:27:43,380
+doesn't, doesn't matter.
+
+647
+00:27:43,390 --> 00:27:47,829
+Like it, every study of every major breach is like their stock did tank for like a day,
+
+648
+00:27:47,839 --> 00:27:48,750
+like 3%
+
+649
+00:27:49,040 --> 00:27:49,750
+or something.
+
+650
+00:27:50,040 --> 00:27:51,050
+But nobody cares.
+
+651
+00:27:51,089 --> 00:27:55,319
+The other thing too is a lot of this is dependent on newer technology existing and,
+
+652
+00:27:55,739 --> 00:27:56,420
+and in it,
+
+653
+00:27:56,430 --> 00:27:57,770
+we really don't have an excuse there
+
+654
+00:27:57,780 --> 00:28:00,719
+because we're constantly inventing new cool technology
+
+655
+00:28:00,939 --> 00:28:01,609
+and then
+
+656
+00:28:01,790 --> 00:28:03,010
+not using it
+
+657
+00:28:03,189 --> 00:28:04,489
+like frameworks. Like
+
+658
+00:28:04,739 --> 00:28:07,699
+there are so many good frameworks that when I see somebody, like,
+
+659
+00:28:07,709 --> 00:28:10,900
+I see a lot of people writing stuff and I'm like, why there's like a,
+
+660
+00:28:10,910 --> 00:28:12,949
+there's a really good framework for that or like,
+
+661
+00:28:12,959 --> 00:28:16,839
+there's a really good thing that like curl like, but be blunt,
+
+662
+00:28:16,849 --> 00:28:19,310
+if you want to talk and get something off of
+
+663
+00:28:19,319 --> 00:28:22,530
+like any remote site and you're not using curl.
+
+664
+00:28:23,000 --> 00:28:24,910
+I, you better have a good excuse.
+
+665
+00:28:24,920 --> 00:28:27,819
+-- So
+-- actually I have a fun fact for you, Daniel put, uh, I'll,
+
+666
+00:28:27,829 --> 00:28:29,310
+I'll try to dig up the blog post.
+
+667
+00:28:29,319 --> 00:28:32,630
+24% of games on Steam and Bed Curl.
+
+668
+00:28:32,640 --> 00:28:35,349
+You know what I thought when I read that I'm like, only 24 percent
+
+669
+00:28:35,689 --> 00:28:36,530
+don't like
+
+670
+00:28:37,150 --> 00:28:39,770
+because like, literally if you, if you said to me, Kurt,
+
+671
+00:28:39,780 --> 00:28:42,839
+we need to talk to something on the internet, I'd be like, yeah, use curl.
+
+672
+00:28:43,689 --> 00:28:44,810
+What else would you use?
+
+673
+00:28:45,180 --> 00:28:49,329
+-- And like, they would have to have some really corner case weirdness to justify
+-- it.
+
+674
+00:28:49,400 --> 00:28:52,569
+Yeah, I, I don't even know what else there is. But anyway, OK.
+
+675
+00:28:52,579 --> 00:28:53,810
+OK, we got to bring this one home.
+
+676
+00:28:53,819 --> 00:28:55,930
+I feel like, so, so let's,
+
+677
+00:28:55,939 --> 00:28:59,079
+let's close it on your point about using frameworks because there's a lot of web
+
+678
+00:28:59,089 --> 00:29:03,420
+frameworks and a whole bunch of them do a lot of things to make it,
+
+679
+00:29:03,430 --> 00:29:03,839
+for example,
+
+680
+00:29:03,949 --> 00:29:07,089
+very hard to create cross a scripting vulnerabilities well,
+
+681
+00:29:07,099 --> 00:29:10,719
+or they just magic all the authentication so that that's done and
+
+682
+00:29:10,869 --> 00:29:12,339
+there's, there's a lot of that,
+
+683
+00:29:12,349 --> 00:29:14,050
+but I think that might be a good
+
+684
+00:29:14,060 --> 00:29:19,859
+example of we probably don't understand like which frameworks
+
+685
+00:29:20,180 --> 00:29:23,579
+eliminate which vulnerabilities, which frameworks have made it.
+
+686
+00:29:23,589 --> 00:29:28,849
+So like you literally can't do it at all or it's really hard to screw it up for or?
+
+687
+00:29:28,859 --> 00:29:30,650
+Yeah, like you're gonna, you're gonna blow your foot
+
+688
+00:29:30,760 --> 00:29:33,060
+off if you're not careful type, you know what I mean?
+
+689
+00:29:33,069 --> 00:29:36,199
+And there's like these varying levels of what
+
+690
+00:29:36,209 --> 00:29:39,849
+are the things that we're eliminating or not eliminating
+
+691
+00:29:40,300 --> 00:29:45,390
+and like something like cwe should be ripe to help us categorize these things.
+
+692
+00:29:45,400 --> 00:29:48,500
+And II, I don't, I don't know of a single source of that if someone knows, like,
+
+693
+00:29:48,510 --> 00:29:52,329
+let me know because I would love to read this sort of analysis.
+
+694
+00:29:52,560 --> 00:29:55,000
+I've seen people do academic analysis like this,
+
+695
+00:29:55,010 --> 00:29:57,449
+but I've never seen like a kind of an ongoing thing,
+
+696
+00:29:57,949 --> 00:30:00,780
+right? Like it's always an academic point in time snapshot.
+
+697
+00:30:00,800 --> 00:30:03,380
+They get their thesis and then they go to industry and move on.
+
+698
+00:30:03,780 --> 00:30:05,729
+-- And
+-- again, this is something I think like ow
+
+699
+00:30:05,900 --> 00:30:09,660
+would be perfect for of saying like here's the top 10 list,
+
+700
+00:30:09,829 --> 00:30:12,699
+here's how the framework compares to the top 10 list.
+
+701
+00:30:12,989 --> 00:30:16,969
+And you could be like, oh this framework fixes seven of the 10,
+
+702
+00:30:16,979 --> 00:30:19,209
+this framework fixes negative four of them.
+
+703
+00:30:19,219 --> 00:30:20,630
+So let's not use that one,
+
+704
+00:30:20,900 --> 00:30:24,130
+which I mean, some of the older frameworks are definitely terrible like that.
+
+705
+00:30:24,390 --> 00:30:27,660
+Well, and also bolt on things like mod security for Apache, right?
+
+706
+00:30:27,670 --> 00:30:31,000
+Like I I wanted to use that to help prevent cross site scripting
+
+707
+00:30:31,260 --> 00:30:34,520
+by sanitizing input and output, right?
+
+708
+00:30:34,640 --> 00:30:36,150
+How can mod security sanitize cross
+
+709
+00:30:36,310 --> 00:30:38,069
+a scripting and like the output is cross
+
+710
+00:30:38,219 --> 00:30:42,849
+-- a scripting on most web apps
+-- because it can take actions based on previous things.
+
+711
+00:30:43,290 --> 00:30:44,420
+Just trust me, it's
+
+712
+00:30:44,560 --> 00:30:44,880
+it's,
+
+713
+00:30:45,150 --> 00:30:45,469
+it's
+
+714
+00:30:45,670 --> 00:30:48,209
+I'm not talking about just like reading the output and being like her
+
+715
+00:30:48,810 --> 00:30:48,969
+walking.
+
+716
+00:30:49,079 --> 00:30:49,199
+I know
+
+717
+00:30:49,459 --> 00:30:49,630
+very
+
+718
+00:30:49,780 --> 00:30:50,699
+little about it. It's
+
+719
+00:30:51,010 --> 00:30:53,319
+mod security has got some very interesting hooks and a
+
+720
+00:30:53,329 --> 00:30:55,739
+perfect example is like the CS A for example,
+
+721
+00:30:55,750 --> 00:30:56,180
+has
+
+722
+00:30:56,290 --> 00:30:58,390
+this ancient PHP app that I keep trying to kill.
+
+723
+00:30:58,400 --> 00:31:03,030
+And it's like a read only app of just some data with like a kind of a visual interface
+
+724
+00:31:03,400 --> 00:31:05,699
+that was written by somebody in a Yahoo framework that
+
+725
+00:31:05,709 --> 00:31:08,510
+like is no longer supported like 10 years ago.
+
+726
+00:31:08,750 --> 00:31:11,739
+And every time I've turned this thing off, research yells at me and tell us,
+
+727
+00:31:11,750 --> 00:31:13,130
+turn it back on because people love it.
+
+728
+00:31:13,140 --> 00:31:14,260
+And I'm like, oh, I hate this thing.
+
+729
+00:31:14,359 --> 00:31:17,630
+And I finally realized, you know what I did, I just blocked ankle brackets,
+
+730
+00:31:18,530 --> 00:31:22,109
+right? Because there's no need for angle brackets to go into this app, right?
+
+731
+00:31:22,119 --> 00:31:23,189
+Because it's just literally like you're
+
+732
+00:31:23,199 --> 00:31:24,739
+clicking on this little interface and looking
+
+733
+00:31:24,750 --> 00:31:28,349
+-- at stuff with this little visual interface
+-- that is not 100% effective.
+
+734
+00:31:28,359 --> 00:31:30,109
+There's other ways to get around that.
+
+735
+00:31:30,119 --> 00:31:32,900
+-- But
+-- this thing doesn't do authentication, it just displays data.
+
+736
+00:31:33,599 --> 00:31:36,060
+And so one thing we kept coming was people like, oh, this crossing
+
+737
+00:31:36,550 --> 00:31:37,670
+flaw in it because you can do this.
+
+738
+00:31:37,680 --> 00:31:40,260
+And I'm like, yeah, but it like it doesn't take authentication,
+
+739
+00:31:40,270 --> 00:31:41,310
+it doesn't talk to any systems.
+
+740
+00:31:41,319 --> 00:31:43,390
+It's just a little visualizer of some data.
+
+741
+00:31:43,550 --> 00:31:45,969
+And so I just blocked angle brackets and like done,
+
+742
+00:31:47,380 --> 00:31:47,459
+not
+
+743
+00:31:47,599 --> 00:31:47,900
+done
+
+744
+00:31:49,410 --> 00:31:50,150
+anyway.
+
+745
+00:31:50,510 --> 00:31:52,310
+But that's the thing like I solved the problem.
+
+746
+00:31:52,319 --> 00:31:54,949
+Like is the application technically still vulnerable. Yes.
+
+747
+00:31:54,959 --> 00:31:57,280
+But even if you get cross site scripting in it, you
+
+748
+00:31:57,390 --> 00:31:59,180
+can't really do anything other than use it,
+
+749
+00:31:59,189 --> 00:32:02,589
+I guess with social engineering to be like, hey, this is a CS, a login, like,
+
+750
+00:32:02,599 --> 00:32:04,930
+please give us your password and credit card number or something.
+
+751
+00:32:04,939 --> 00:32:05,709
+Right? And then like,
+
+752
+00:32:06,000 --> 00:32:07,390
+the person would have to enter that.
+
+753
+00:32:07,400 --> 00:32:10,869
+Do you, do you run it on the CS A domain or if you created like some,
+
+754
+00:32:11,020 --> 00:32:11,270
+it's
+
+755
+00:32:11,530 --> 00:32:12,579
+on a subdomain.
+
+756
+00:32:12,589 --> 00:32:15,910
+But anyway, so, but I, but I fixed it by blocking angle brackets because I'm like,
+
+757
+00:32:16,209 --> 00:32:21,520
+if you block angle brackets or present whatever the two F or F, whatever it is,
+
+758
+00:32:21,640 --> 00:32:24,959
+I'm excited for all the people who are gonna message you on Mastodon
+
+759
+00:32:24,969 --> 00:32:29,910
+about ways around to just blocking angle brackets as uh a mitigation mechanism.
+
+760
+00:32:30,199 --> 00:32:35,579
+If you can inject, see like, yes, I know you can do CS S without angle brackets,
+
+761
+00:32:35,689 --> 00:32:35,910
+but
+
+762
+00:32:36,030 --> 00:32:36,449
+it's
+
+763
+00:32:36,810 --> 00:32:37,890
+nobody's going to bother.
+
+764
+00:32:38,040 --> 00:32:40,589
+I think there's other ways to inject the characters
+
+765
+00:32:40,599 --> 00:32:42,969
+depending upon how your decoding is being done.
+
+766
+00:32:42,979 --> 00:32:44,569
+And I don't remember all the details,
+
+767
+00:32:44,760 --> 00:32:48,319
+-- but I do it at the cloud flare level where it normalizes it.
+-- That could be,
+
+768
+00:32:48,449 --> 00:32:50,989
+I don't know. Anyway. All right, we should end this episode.
+
+769
+00:32:51,109 --> 00:32:51,589
+All right.
+
+770
+00:32:51,760 --> 00:32:55,589
+Message everyone. Message Kurt, I can't wait to see what he learns from you,
+
+771
+00:32:55,800 --> 00:32:59,550
+-- but it's a good enough solution for
+-- now until someone pones you.
+
+772
+00:33:01,170 --> 00:33:01,699
+So
+
+773
+00:33:01,849 --> 00:33:03,890
+thank you, Kurt. Thank you all for listening. Go to put
+
+774
+00:33:04,000 --> 00:33:06,030
+our security podcast.com. Head up the show, not Susie Pounds
+
+775
+00:33:06,310 --> 00:33:08,130
+says podcast. Hashtag on Mastodon.
+
+776
+00:33:08,300 --> 00:33:10,099
+Kurt have a marvelous. Rest of your day.
+
+777
+00:33:10,250 --> 00:33:11,540
+You too. Thanks everybody.
+
+778
+00:33:11,750 --> 00:33:13,810
+-- Thanks
+-- everyone. Bye bye.

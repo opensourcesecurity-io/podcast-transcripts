@@ -1,0 +1,2698 @@
+0
+00:00:05,300 --> 00:00:09,500
+Hello and welcome to episode 88 of the open source security podcast with myself,
+
+1
+00:00:09,510 --> 00:00:11,239
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:11,250 --> 00:00:11,970
+Josh Bresser.
+
+3
+00:00:12,390 --> 00:00:14,640
+Hello, Kurt, we have a guest today.
+
+4
+00:00:14,649 --> 00:00:19,129
+We have Chris Rosen from IBM, who's going to talk to us about container security.
+
+5
+00:00:19,139 --> 00:00:23,049
+-- Can you say hi, Chris?
+-- Hello, everyone. And thanks for having me on Josh and Kurt.
+
+6
+00:00:23,059 --> 00:00:24,129
+Real excited to be here.
+
+7
+00:00:24,690 --> 00:00:25,979
+Yeah. Awesome. No, thank you.
+
+8
+00:00:25,989 --> 00:00:29,110
+I guess I'll give you a few minutes to just kind of explain
+
+9
+00:00:29,120 --> 00:00:32,270
+what you do and why you're here and then we'll jump right in.
+
+10
+00:00:32,279 --> 00:00:33,630
+-- How about
+-- sounds good.
+
+11
+00:00:33,639 --> 00:00:33,810
+So,
+
+12
+00:00:33,819 --> 00:00:39,110
+I'm a program director of offering management within IBM cloud and focused
+
+13
+00:00:39,119 --> 00:00:43,990
+on our container service and container registry and our microservices fabric.
+
+14
+00:00:44,369 --> 00:00:48,389
+So everything related to containers is near and dear to my heart.
+
+15
+00:00:48,400 --> 00:00:52,209
+So I'm here to talk about some of the things that we're doing within IBM cloud,
+
+16
+00:00:52,220 --> 00:00:54,459
+as well as some of the things that we're doing out
+
+17
+00:00:54,470 --> 00:00:57,770
+in the open community on a number of various projects.
+
+18
+00:00:57,990 --> 00:00:59,650
+Awesome. That's very exciting.
+
+19
+00:00:59,659 --> 00:01:02,229
+Kurt and I have done many shows
+
+20
+00:01:02,240 --> 00:01:04,720
+about containers and especially container security,
+
+21
+00:01:04,730 --> 00:01:06,830
+which, which I will say these days.
+
+22
+00:01:06,839 --> 00:01:10,510
+Is becoming much less exciting than it used to be, which I think is a very good thing.
+
+23
+00:01:10,519 --> 00:01:10,830
+Right.
+
+24
+00:01:11,110 --> 00:01:13,769
+Absolutely. And I think it's really
+
+25
+00:01:13,970 --> 00:01:18,160
+mainly around education and as users start to understand what
+
+26
+00:01:18,169 --> 00:01:21,150
+these new technologies are and how they actually work,
+
+27
+00:01:21,160 --> 00:01:22,650
+they're becoming more comfortable with it.
+
+28
+00:01:22,660 --> 00:01:26,610
+And like you said, therefore less exciting than in the past.
+
+29
+00:01:28,419 --> 00:01:32,389
+Yes. Yes, indeed. So, I guess let's start at the beginning. Right? Is
+
+30
+00:01:32,620 --> 00:01:35,349
+what do we consider container security these days?
+
+31
+00:01:35,360 --> 00:01:38,199
+Because I know this has kind of been evolving a little bit over the last
+
+32
+00:01:38,209 --> 00:01:42,519
+probably year to two years since we first really started paying attention to this.
+
+33
+00:01:42,730 --> 00:01:44,269
+So security is really
+
+34
+00:01:44,385 --> 00:01:47,364
+a multifaceted approach that
+
+35
+00:01:47,574 --> 00:01:51,614
+and what's important is that security is not just some rubber stamp
+
+36
+00:01:51,625 --> 00:01:55,525
+at the end of your delivery pipeline or your new project,
+
+37
+00:01:55,535 --> 00:01:59,525
+your new future enhancement where you say, OK, yes, you're secure.
+
+38
+00:01:59,535 --> 00:02:00,245
+Move on
+
+39
+00:02:00,559 --> 00:02:04,680
+security is really everyone's responsibility and the term devs
+
+40
+00:02:05,199 --> 00:02:07,169
+ops, some people like it, some don't.
+
+41
+00:02:07,389 --> 00:02:12,110
+But to me, the reason I like it is because security is everyone's responsibility.
+
+42
+00:02:12,119 --> 00:02:12,940
+Whether
+
+43
+00:02:13,089 --> 00:02:17,020
+you're a developer or an operator at the end, security is important to us.
+
+44
+00:02:17,029 --> 00:02:18,710
+So that being said, you know,
+
+45
+00:02:18,720 --> 00:02:22,460
+I think there's kind of the Linux side of security which
+
+46
+00:02:22,520 --> 00:02:25,720
+gave us things like name spaces and C groups and set
+
+47
+00:02:26,100 --> 00:02:26,380
+camp and
+
+48
+00:02:26,630 --> 00:02:29,690
+user name spaces that give that isolation
+
+49
+00:02:29,919 --> 00:02:33,449
+to containers and then the processes within them.
+
+50
+00:02:33,710 --> 00:02:34,399
+And that's,
+
+51
+00:02:34,440 --> 00:02:38,649
+I think that's pretty foundational and that's been around for quite some time
+
+52
+00:02:39,610 --> 00:02:44,110
+then as we move up the stack, we think of security as far as you know,
+
+53
+00:02:44,119 --> 00:02:49,339
+how do I ensure isolation of my cluster, my resources running in the cloud?
+
+54
+00:02:49,389 --> 00:02:51,910
+How do I minimize the attack surface?
+
+55
+00:02:52,059 --> 00:02:55,770
+How do I store my Docker images in a secure manner?
+
+56
+00:02:55,779 --> 00:03:00,050
+So it's really the end to end of how we're thinking about container security today.
+
+57
+00:03:00,350 --> 00:03:04,949
+-- So
+-- I love the end to end approach because this is something that
+
+58
+00:03:04,960 --> 00:03:08,660
+Kurt and I have been kind of railing on for years now is
+
+59
+00:03:09,240 --> 00:03:11,630
+in, in the good old days, it was very much
+
+60
+00:03:11,820 --> 00:03:14,679
+security was a step in a long process.
+
+61
+00:03:14,690 --> 00:03:17,679
+And of course, nobody liked the security people because they ruined everything.
+
+62
+00:03:18,050 --> 00:03:18,479
+And,
+
+63
+00:03:18,490 --> 00:03:22,960
+and I kind of love your attitude of security is everyone's job because I feel like
+
+64
+00:03:23,220 --> 00:03:25,800
+it is insane to expect
+
+65
+00:03:25,949 --> 00:03:27,130
+one group
+
+66
+00:03:27,360 --> 00:03:30,509
+at the very end to maybe hold the keys to
+
+67
+00:03:30,520 --> 00:03:33,229
+the kingdom as to whether your project leaves the door.
+
+68
+00:03:33,240 --> 00:03:33,559
+Right.
+
+69
+00:03:34,490 --> 00:03:36,190
+Exactly. And
+
+70
+00:03:36,470 --> 00:03:37,789
+when I talk to users,
+
+71
+00:03:37,800 --> 00:03:39,990
+it's not that they hate security and they don't
+
+72
+00:03:40,000 --> 00:03:43,070
+want to comply with their csos regulations and rules,
+
+73
+00:03:43,080 --> 00:03:43,399
+but
+
+74
+00:03:43,529 --> 00:03:44,509
+it's hard.
+
+75
+00:03:44,520 --> 00:03:47,190
+So a lot of times they just kind of push
+
+76
+00:03:47,199 --> 00:03:49,929
+it on the back burner because of the challenges.
+
+77
+00:03:49,940 --> 00:03:51,199
+So what we're trying to do
+
+78
+00:03:51,380 --> 00:03:55,509
+is make it easy and intuitive inherent to the platform to make
+
+79
+00:03:55,520 --> 00:03:59,130
+it easier for our developers to comply with our security rules.
+
+80
+00:03:59,139 --> 00:03:59,910
+And regulations.
+
+81
+00:04:00,179 --> 00:04:05,110
+So, one thing I'm wondering about is I've seen a general movement towards this.
+
+82
+00:04:05,119 --> 00:04:05,809
+Yeah, this Dev
+
+83
+00:04:06,050 --> 00:04:08,750
+Sec ops, if you will, what would you define Dev
+
+84
+00:04:09,259 --> 00:04:09,960
+Ops as?
+
+85
+00:04:10,300 --> 00:04:12,160
+So the way that we do it?
+
+86
+00:04:12,479 --> 00:04:14,440
+And I'm guessing we'll get two different answers
+
+87
+00:04:15,110 --> 00:04:16,649
+at least. Right.
+
+88
+00:04:16,959 --> 00:04:19,519
+We may, yeah. Yeah, I was going to say we may get more
+
+89
+00:04:19,640 --> 00:04:25,529
+from my point of view. It's really about when we look at our ownership within IBM.
+
+90
+00:04:25,540 --> 00:04:29,559
+So we break down our offerings to different teams that will own
+
+91
+00:04:29,570 --> 00:04:33,839
+a microservice through the entire life cycle of that given component.
+
+92
+00:04:33,850 --> 00:04:39,420
+So we sit down together with offering management development and design and we
+
+93
+00:04:39,429 --> 00:04:41,140
+go through design thinking and think about
+
+94
+00:04:41,149 --> 00:04:43,140
+how we're going to actually build something
+
+95
+00:04:43,410 --> 00:04:47,589
+and then that team owns it all the way through rolling it into production.
+
+96
+00:04:47,600 --> 00:04:49,739
+So they are the ones that will get paged out at
+
+97
+00:04:49,750 --> 00:04:53,579
+2 a.m. on a weekend if something breaks for their component.
+
+98
+00:04:54,019 --> 00:04:54,630
+So it's,
+
+99
+00:04:54,980 --> 00:04:57,079
+it's about life cycle ownership.
+
+100
+00:04:57,089 --> 00:05:01,549
+And then also of course, most important here is the security of that
+
+101
+00:05:01,649 --> 00:05:05,290
+and building that in all the way from step one at the design
+
+102
+00:05:05,299 --> 00:05:08,489
+thinking workshop to running it in production
+
+103
+00:05:08,500 --> 00:05:10,040
+and going through obviously within IBM,
+
+104
+00:05:10,049 --> 00:05:12,920
+we've got a number of regulations that we have
+
+105
+00:05:12,929 --> 00:05:16,089
+to adhere to before any component can go live,
+
+106
+00:05:16,100 --> 00:05:17,869
+which is running out in public cloud.
+
+107
+00:05:17,880 --> 00:05:20,329
+So they are responsible for that end to end.
+
+108
+00:05:20,660 --> 00:05:20,820
+Yeah,
+
+109
+00:05:20,829 --> 00:05:25,519
+because one thing I've I'm really noticing is that security in general is getting
+
+110
+00:05:25,899 --> 00:05:29,000
+much easier as the software teams mature,
+
+111
+00:05:29,730 --> 00:05:29,970
+you know,
+
+112
+00:05:29,980 --> 00:05:33,950
+because I literally remember time when people using source code control was like,
+
+113
+00:05:34,230 --> 00:05:35,429
+that was magic,
+
+114
+00:05:35,720 --> 00:05:38,010
+you know. No, like seriously, like, remember what was it?
+
+115
+00:05:38,019 --> 00:05:39,399
+Uh Joel Spolsky on software.
+
+116
+00:05:39,410 --> 00:05:41,170
+One of his, I think it was he that wrote, you know,
+
+117
+00:05:41,179 --> 00:05:42,829
+essentially when you're interviewing for a job,
+
+118
+00:05:42,839 --> 00:05:45,350
+ask them if they use source control and if they don't run away,
+
+119
+00:05:46,019 --> 00:05:46,670
+you know, and of course,
+
+120
+00:05:46,679 --> 00:05:49,140
+nowadays that would be unthinkable to not use source control.
+
+121
+00:05:49,149 --> 00:05:53,049
+Although there are apparently projects that still don't use source control.
+
+122
+00:05:53,170 --> 00:05:56,299
+And I'm, I'm just wondering how much of this security is becoming
+
+123
+00:05:56,760 --> 00:05:59,679
+just more possible due to the maturity model,
+
+124
+00:06:00,040 --> 00:06:03,519
+you know, being able to do change management when you have.
+
+125
+00:06:03,529 --> 00:06:07,320
+I mean, I'm curious, how big of, of projects are we talking here? Because I've seen,
+
+126
+00:06:07,670 --> 00:06:07,890
+you know,
+
+127
+00:06:07,899 --> 00:06:09,750
+some that are two or three containers and I've seen
+
+128
+00:06:09,760 --> 00:06:12,329
+some products now that are 20 or 30 different containers.
+
+129
+00:06:12,339 --> 00:06:17,049
+Exactly. So I think the key point that you made is that it's really about
+
+130
+00:06:17,649 --> 00:06:20,779
+automating everything and defining everything as code.
+
+131
+00:06:20,790 --> 00:06:22,850
+So that way we've got repeatable
+
+132
+00:06:23,230 --> 00:06:27,980
+um auditable processes when we're going through this delivery
+
+133
+00:06:27,989 --> 00:06:30,690
+of some new capability or some new component.
+
+134
+00:06:30,989 --> 00:06:34,850
+And even though we may be using different tools, we've got,
+
+135
+00:06:34,899 --> 00:06:39,149
+I don't even know how many number of different source code tools or build tools,
+
+136
+00:06:39,160 --> 00:06:42,100
+but ultimately, they are all driven by a common CIC
+
+137
+00:06:42,399 --> 00:06:43,410
+D pipeline
+
+138
+00:06:43,950 --> 00:06:45,410
+to build at the end.
+
+139
+00:06:45,420 --> 00:06:49,690
+So giving that automation, that insight, I think is extremely important.
+
+140
+00:06:49,820 --> 00:06:52,920
+And then as far as the scale, like you said,
+
+141
+00:06:52,929 --> 00:06:56,029
+there is really a broad range today that we are seeing from,
+
+142
+00:06:56,119 --> 00:07:01,480
+I've got some capability that I'm enhancing and it's one or two containers
+
+143
+00:07:01,769 --> 00:07:05,790
+up to some very large and complex microservice
+
+144
+00:07:05,799 --> 00:07:10,890
+architectures that could have 75 different microservice components.
+
+145
+00:07:11,010 --> 00:07:13,140
+And then each of those of course are scaled out.
+
+146
+00:07:13,149 --> 00:07:16,779
+So we are talking hundreds of containers within this architecture.
+
+147
+00:07:17,640 --> 00:07:22,779
+That is awesome. I I think back to the days when containers started
+
+148
+00:07:22,890 --> 00:07:24,440
+and the the idea of being able to
+
+149
+00:07:24,450 --> 00:07:28,119
+run and manage hundreds of containers simultaneously was
+
+150
+00:07:28,420 --> 00:07:29,540
+probably crazy.
+
+151
+00:07:29,929 --> 00:07:34,209
+So I I guess you mentioned C I CD and this is something that is,
+
+152
+00:07:34,220 --> 00:07:37,829
+is always near and dear to my heart, especially when it comes to security is
+
+153
+00:07:38,000 --> 00:07:42,250
+explain to me how you guys are tackling the issue of needing to kind
+
+154
+00:07:42,260 --> 00:07:46,500
+of continuously refresh and update your containers in a manner that also doesn't,
+
+155
+00:07:46,649 --> 00:07:50,790
+you know, overburden your poor ops team who has to keep the lights on,
+
+156
+00:07:51,174 --> 00:07:51,394
+right.
+
+157
+00:07:51,404 --> 00:07:56,515
+So again, back to automation when what we have in IBM cloud,
+
+158
+00:07:56,524 --> 00:07:58,795
+we have a component called vulnerability advisor
+
+159
+00:07:58,804 --> 00:08:01,524
+which will introspect every layer and every
+
+160
+00:08:01,535 --> 00:08:04,295
+image for not only known vulnerabilities but
+
+161
+00:08:04,304 --> 00:08:07,075
+then also policy violations based on ISO
+
+162
+00:08:07,244 --> 00:08:08,255
+27,000.
+
+163
+00:08:08,265 --> 00:08:12,334
+So do you have remote logins enabled and weak passwords and things like that.
+
+164
+00:08:12,864 --> 00:08:15,315
+There's other tools out there that we partner with,
+
+165
+00:08:15,325 --> 00:08:20,484
+whether it's twist lock or Aqua or SISIG or probably, you know, 20 others.
+
+166
+00:08:20,809 --> 00:08:22,869
+So the point is there's a lot of ways that you can
+
+167
+00:08:22,880 --> 00:08:27,160
+build in this kind of security and this checking into that CIC
+
+168
+00:08:27,559 --> 00:08:28,260
+pipeline.
+
+169
+00:08:28,429 --> 00:08:32,400
+So in our process, we actually do a vulnerability scan.
+
+170
+00:08:32,409 --> 00:08:35,140
+So before we instantiate a live container,
+
+171
+00:08:35,280 --> 00:08:38,729
+we introspect that image for these vulnerabilities.
+
+172
+00:08:38,739 --> 00:08:41,530
+And if it fails, then we manually stop, well,
+
+173
+00:08:41,539 --> 00:08:44,770
+we automatically stop that production train.
+
+174
+00:08:44,780 --> 00:08:45,590
+So that way something can
+
+175
+00:08:45,755 --> 00:08:47,275
+get deployed. Now, if
+
+176
+00:08:47,414 --> 00:08:51,304
+it passes, then it continues to progress through
+
+177
+00:08:51,515 --> 00:08:53,844
+in the way our pipeline works internally is
+
+178
+00:08:53,854 --> 00:08:56,825
+that we can automatically deploy to different environments
+
+179
+00:08:56,974 --> 00:09:01,315
+once it goes out to production, which again is our public cloud.
+
+180
+00:09:01,385 --> 00:09:04,554
+There is a manual gate and it has to go through and then be
+
+181
+00:09:04,565 --> 00:09:08,205
+approved to ensure that we've got the right things in place like automated,
+
+182
+00:09:08,215 --> 00:09:10,304
+run books and things like that.
+
+183
+00:09:11,200 --> 00:09:14,869
+OK. So, so you keep mentioning your public cloud and I'm curious
+
+184
+00:09:14,979 --> 00:09:15,840
+what is,
+
+185
+00:09:16,150 --> 00:09:17,700
+what are you talking about here?
+
+186
+00:09:17,710 --> 00:09:19,969
+Is this IB M's cloud and what is the,
+
+187
+00:09:19,979 --> 00:09:22,210
+are the other containers you're deploying running the cloud
+
+188
+00:09:22,219 --> 00:09:24,400
+or are they projects running in the cloud?
+
+189
+00:09:24,650 --> 00:09:27,760
+All of the above? So IBM cloud is our,
+
+190
+00:09:28,469 --> 00:09:28,799
+it's,
+
+191
+00:09:28,809 --> 00:09:32,859
+it's really the umbrella for our platform running
+
+192
+00:09:32,869 --> 00:09:35,820
+from formally known as IBM blue mix,
+
+193
+00:09:35,830 --> 00:09:39,380
+which was a platform as a service cloud foundry only offering.
+
+194
+00:09:39,710 --> 00:09:41,809
+Since then, it's evolved,
+
+195
+00:09:41,820 --> 00:09:45,960
+we also acquired softlayer a number of years ago to provide our
+
+196
+00:09:45,969 --> 00:09:49,580
+infrastructure as a service and networks and storage and net layer.
+
+197
+00:09:49,750 --> 00:09:52,210
+So now bloom mix and soft layer
+
+198
+00:09:52,330 --> 00:09:55,200
+are combined to one under IBM cloud.
+
+199
+00:09:55,289 --> 00:09:56,270
+In IBM cloud,
+
+200
+00:09:56,280 --> 00:10:02,000
+we've got 170 services IBM provided as well as third party and open source tools.
+
+201
+00:10:02,010 --> 00:10:05,359
+So things like Watson or weatherdata or IOT
+
+202
+00:10:05,789 --> 00:10:09,000
+and when our customers come to IBM cloud,
+
+203
+00:10:09,030 --> 00:10:12,229
+they can use what we call the IBM cloud container service
+
+204
+00:10:12,429 --> 00:10:14,429
+to create single tenant Kubernetes
+
+205
+00:10:14,679 --> 00:10:18,340
+clusters to deploy and run containerized workloads.
+
+206
+00:10:18,530 --> 00:10:20,549
+We also the other side of that
+
+207
+00:10:20,719 --> 00:10:25,469
+is that a number of our internal teams are reformatting to
+
+208
+00:10:25,479 --> 00:10:29,659
+run as containers and microservices and run at the IBM cloud.
+
+209
+00:10:29,669 --> 00:10:31,729
+So our largest is really
+
+210
+00:10:32,000 --> 00:10:34,400
+Watson. So hopefully everyone has heard about Watson.
+
+211
+00:10:34,549 --> 00:10:39,789
+It started out as a way to compete on Jeopardy, but now it's actually doing real work.
+
+212
+00:10:39,799 --> 00:10:43,679
+So we've got Watson helping education and government
+
+213
+00:10:43,830 --> 00:10:48,710
+and users in business on how to solve things and create chat bots.
+
+214
+00:10:48,940 --> 00:10:52,250
+They're all running on containers via our Kernes
+
+215
+00:10:52,799 --> 00:10:53,630
+container service.
+
+216
+00:10:53,640 --> 00:10:58,070
+And I guess you also spiked my interest by mentioning Kubernetes. So
+
+217
+00:10:58,440 --> 00:11:03,010
+Kubernetes is obviously a very open source project
+
+218
+00:11:03,359 --> 00:11:04,020
+and
+
+219
+00:11:04,190 --> 00:11:08,700
+it it's kind of become the container orchestration standard. Now, I I guess and
+
+220
+00:11:08,909 --> 00:11:11,809
+I would you mind speaking for a moment on kind of
+
+221
+00:11:11,820 --> 00:11:14,820
+how Kubernetes fits into all this and and what what it does
+
+222
+00:11:14,969 --> 00:11:16,539
+as well as you know, let,
+
+223
+00:11:16,549 --> 00:11:18,400
+let's give it kind of that security angle
+
+224
+00:11:18,409 --> 00:11:21,429
+of why is this level of orchestration important,
+
+225
+00:11:21,440 --> 00:11:22,940
+especially for security?
+
+226
+00:11:23,289 --> 00:11:24,010
+Certainly.
+
+227
+00:11:24,020 --> 00:11:25,630
+So when you think about kind of the
+
+228
+00:11:25,640 --> 00:11:29,400
+container ecosystem and we've got the foundation building blocks
+
+229
+00:11:29,590 --> 00:11:32,210
+that everyone thinks and hears Docker,
+
+230
+00:11:32,359 --> 00:11:35,570
+but we really mean open container initiative standards.
+
+231
+00:11:35,580 --> 00:11:40,559
+So if you're building on that engine, that image format, that registry format,
+
+232
+00:11:40,570 --> 00:11:43,429
+that's what I consider the foundational level.
+
+233
+00:11:43,440 --> 00:11:45,429
+And as you get started with containers,
+
+234
+00:11:45,440 --> 00:11:48,520
+Docker has made it very easy to install on your laptop,
+
+235
+00:11:48,530 --> 00:11:52,549
+whether you're running Mac Linux or Windows and get started very quickly.
+
+236
+00:11:53,030 --> 00:11:56,380
+The reality is you start to increase that complexity.
+
+237
+00:11:56,500 --> 00:11:59,460
+You need some way to kind of orchestrate not
+
+238
+00:11:59,469 --> 00:12:01,969
+only that day one deployment of your workloads,
+
+239
+00:12:01,979 --> 00:12:06,679
+but ongoing management and maintenance and scalability and all these things.
+
+240
+00:12:06,900 --> 00:12:11,140
+So then comes in kind of this container orchestration layer. And you're right
+
+241
+00:12:11,270 --> 00:12:15,479
+before there were several options. You had Dockers Swarm, you had
+
+242
+00:12:15,650 --> 00:12:15,770
+Kernes,
+
+243
+00:12:16,130 --> 00:12:16,809
+you had
+
+244
+00:12:17,070 --> 00:12:19,770
+marathon and several others.
+
+245
+00:12:20,330 --> 00:12:20,590
+Kubernetes
+
+246
+00:12:20,809 --> 00:12:24,809
+seems to have won the day from a popularity perspective.
+
+247
+00:12:24,820 --> 00:12:27,599
+IBM invested 100% in Kubernetes.
+
+248
+00:12:27,700 --> 00:12:30,719
+We contribute not only upstream in the communities,
+
+249
+00:12:30,729 --> 00:12:35,159
+but we also build our offerings using that upstream version of Kubernetes.
+
+250
+00:12:35,219 --> 00:12:35,770
+Now,
+
+251
+00:12:36,479 --> 00:12:40,530
+when you as a user in IBM cloud, you deploy that cluster, like I said,
+
+252
+00:12:40,539 --> 00:12:42,690
+they're all single tenant and dedicated to you.
+
+253
+00:12:42,700 --> 00:12:47,409
+So you've got your own isolated compute network and storage to run kubernetes
+
+254
+00:12:48,159 --> 00:12:48,780
+and
+
+255
+00:12:49,099 --> 00:12:50,739
+all of the communication
+
+256
+00:12:51,159 --> 00:12:53,119
+in our case from the master node,
+
+257
+00:12:53,130 --> 00:12:55,539
+which is essentially the brains of your cluster to
+
+258
+00:12:55,549 --> 00:12:58,909
+your worker nodes where your containerized apps are running.
+
+259
+00:12:58,919 --> 00:13:02,169
+It's all done via encrypted VPN tunnel.
+
+260
+00:13:02,520 --> 00:13:06,989
+So we're really ensuring that security, like I said, is baked in end to end.
+
+261
+00:13:07,000 --> 00:13:08,780
+So we secure that communication,
+
+262
+00:13:08,789 --> 00:13:12,900
+we secure the isolation users control which
+
+263
+00:13:12,909 --> 00:13:17,270
+microservices have outbound connectivity because the reality is
+
+264
+00:13:17,280 --> 00:13:19,820
+the majority will ever only need to communicate
+
+265
+00:13:19,830 --> 00:13:22,619
+via some private non routed IP space,
+
+266
+00:13:22,630 --> 00:13:24,590
+not out over the public internet.
+
+267
+00:13:24,770 --> 00:13:27,260
+That's, that's huge. I mean, and there was just like the mem
+
+268
+00:13:27,690 --> 00:13:30,840
+cash D stuff where there was essentially a huge dos
+
+269
+00:13:31,159 --> 00:13:31,619
+attack
+
+270
+00:13:32,219 --> 00:13:32,299
+ddos
+
+271
+00:13:32,770 --> 00:13:35,320
+because people had services available to the
+
+272
+00:13:35,330 --> 00:13:37,280
+internet that had no business being there.
+
+273
+00:13:37,489 --> 00:13:40,309
+And so this is that, that, that's really exciting and,
+
+274
+00:13:40,320 --> 00:13:42,909
+and I applaud you guys for kind of taking that approach
+
+275
+00:13:43,010 --> 00:13:46,820
+because I think less is more in, in this case, right? Sorry.
+
+276
+00:13:46,830 --> 00:13:47,900
+The thing that just gets me is we're
+
+277
+00:13:47,909 --> 00:13:50,039
+finally practicing what we've been preaching for.
+
+278
+00:13:50,049 --> 00:13:52,830
+What is it now? 60 years of, you know, minimized privilege,
+
+279
+00:13:53,080 --> 00:13:54,250
+like straight up. Right. And,
+
+280
+00:13:54,400 --> 00:13:57,750
+but the thing is until now there's been no real way to do this at scale.
+
+281
+00:13:58,059 --> 00:14:02,030
+You know, it's all been manually tweaked conf figs and hopefully everybody got it.
+
+282
+00:14:02,039 --> 00:14:02,440
+Right.
+
+283
+00:14:02,640 --> 00:14:06,280
+Exactly. And so you bring up a great point in that
+
+284
+00:14:06,469 --> 00:14:09,179
+we've been preaching this, but the reality was,
+
+285
+00:14:09,190 --> 00:14:15,119
+it wasn't easy to do before container technology came to the forefront because now
+
+286
+00:14:15,539 --> 00:14:19,440
+it includes all of these kind of security capabilities out of the box.
+
+287
+00:14:19,450 --> 00:14:21,559
+So I as an end user don't need to learn
+
+288
+00:14:21,729 --> 00:14:22,989
+100 new things.
+
+289
+00:14:23,000 --> 00:14:26,700
+I'm just using some new container technology because it allows me to package my
+
+290
+00:14:26,710 --> 00:14:30,700
+app and all my dependencies and move it from my environment to yours.
+
+291
+00:14:30,799 --> 00:14:33,840
+It will eliminate the whole problem of, you know, it works here.
+
+292
+00:14:33,849 --> 00:14:38,340
+I don't know, doesn't work in your environment clearly. That's your problem. So
+
+293
+00:14:38,559 --> 00:14:39,820
+we get that benefit.
+
+294
+00:14:39,830 --> 00:14:44,400
+But then we're also pulling along all of these inherent security benefits as well.
+
+295
+00:14:44,409 --> 00:14:45,820
+Yeah, totally. Totally. And
+
+296
+00:14:45,950 --> 00:14:47,219
+the story,
+
+297
+00:14:47,229 --> 00:14:50,130
+I'll tell you just because you're from IBM is
+
+298
+00:14:50,140 --> 00:14:53,049
+I was an ax administrator like 10,000 years ago
+
+299
+00:14:53,409 --> 00:14:58,299
+and I remember the attitude was how much crap can we run in this one machine? Right?
+
+300
+00:14:58,309 --> 00:14:59,099
+Which was,
+
+301
+00:14:59,289 --> 00:15:01,900
+which is totally the way it was done in hindsight.
+
+302
+00:15:02,169 --> 00:15:02,869
+Thank goodness,
+
+303
+00:15:02,880 --> 00:15:05,869
+everything was much smaller and you didn't worry as much about security,
+
+304
+00:15:05,880 --> 00:15:08,270
+but like it was a total train wreck, right where there were,
+
+305
+00:15:08,280 --> 00:15:10,590
+there were like 20 plus services running and,
+
+306
+00:15:10,880 --> 00:15:14,409
+and, and I look at this kind of the attitude now with microservices and,
+
+307
+00:15:14,419 --> 00:15:16,429
+oh my goodness, it's so much nicer.
+
+308
+00:15:17,280 --> 00:15:17,739
+Yeah.
+
+309
+00:15:17,750 --> 00:15:19,409
+And what's great is, you know,
+
+310
+00:15:19,419 --> 00:15:23,369
+obviously we still have a huge customer base that are running on
+
+311
+00:15:23,559 --> 00:15:25,849
+the P Linux servers and Z. Linux
+
+312
+00:15:25,950 --> 00:15:27,869
+mainframes are not dead.
+
+313
+00:15:28,030 --> 00:15:30,469
+So we've got those customers that are modernizing
+
+314
+00:15:30,479 --> 00:15:33,849
+their applications are developing new cloud native applications
+
+315
+00:15:33,979 --> 00:15:35,159
+using Docker Tech
+
+316
+00:15:35,700 --> 00:15:37,849
+on those existing platforms.
+
+317
+00:15:37,859 --> 00:15:41,010
+-- So
+-- how does that work if you're kind of trying
+
+318
+00:15:41,020 --> 00:15:44,039
+to use a container on say a non standard Linux?
+
+319
+00:15:44,090 --> 00:15:48,450
+So some some of those packages will actually run
+
+320
+00:15:48,710 --> 00:15:53,159
+the same consistently on X or P or Z.
+
+321
+00:15:53,409 --> 00:15:54,229
+However,
+
+322
+00:15:54,239 --> 00:15:58,780
+there are others that have dependencies down kind of the architecture level.
+
+323
+00:15:58,809 --> 00:16:04,169
+If you're thinking about P and Z, there's Indian ness that may be associated with A,
+
+324
+00:16:04,200 --> 00:16:04,739
+we should,
+
+325
+00:16:04,750 --> 00:16:08,190
+we should actually clarify because my suspicion is much of the audience
+
+326
+00:16:08,200 --> 00:16:11,229
+has no idea what you're talking about when you say P and Z
+
+327
+00:16:11,349 --> 00:16:13,500
+I have thankfully never had to deal with these.
+
+328
+00:16:16,270 --> 00:16:19,390
+All right. So let's back up and give a quick intro.
+
+329
+00:16:19,400 --> 00:16:24,010
+So IBM has been a long time hardware manufacturer.
+
+330
+00:16:24,020 --> 00:16:26,119
+So we've got different architecture types,
+
+331
+00:16:26,340 --> 00:16:29,219
+we're familiar with kind of the X or the intel A
+
+332
+00:16:29,369 --> 00:16:30,890
+T based hardware.
+
+333
+00:16:31,140 --> 00:16:35,650
+Um But we also have these things that are called power. So we shorten it to P
+
+334
+00:16:36,219 --> 00:16:38,000
+which used to run A
+
+335
+00:16:38,780 --> 00:16:42,619
+and now it runs P Linux or power Linux or open power.
+
+336
+00:16:43,239 --> 00:16:46,780
+And then we've got formerly the mainframes which are now
+
+337
+00:16:47,510 --> 00:16:47,960
+Zlin
+
+338
+00:16:48,289 --> 00:16:51,489
+and they run just a Z architecture base.
+
+339
+00:16:51,500 --> 00:16:52,890
+And the premise being that, you know,
+
+340
+00:16:52,900 --> 00:16:56,349
+they're building in security and scalability and things to their
+
+341
+00:16:56,465 --> 00:16:57,114
+texture.
+
+342
+00:16:57,255 --> 00:16:58,515
+And at a time,
+
+343
+00:16:58,525 --> 00:17:04,814
+we really ran a majority of private data centers and large financial institutions
+
+344
+00:17:05,025 --> 00:17:08,714
+-- and that hardware is still around despite a lot of movement to the
+-- cloud.
+
+345
+00:17:08,723 --> 00:17:09,135
+Yeah, I mean,
+
+346
+00:17:09,145 --> 00:17:11,035
+my understanding of the Z series is that
+
+347
+00:17:11,125 --> 00:17:14,324
+you have hot swappable ram and hot swappable CPU
+
+348
+00:17:14,785 --> 00:17:16,795
+-- It was crazy.
+-- Like
+
+349
+00:17:17,088 --> 00:17:21,259
+-- I can't even imagine what that requires from an engineering point of
+-- view.
+
+350
+00:17:21,568 --> 00:17:24,328
+Yeah, there was definitely a lot of, you know,
+
+351
+00:17:24,479 --> 00:17:28,869
+engineering feats accomplished with that hardware and it still runs, like I said,
+
+352
+00:17:28,879 --> 00:17:32,909
+in a lot of data centers for a lot of our customers and now they're
+
+353
+00:17:33,270 --> 00:17:35,479
+with that investment that they already have,
+
+354
+00:17:35,489 --> 00:17:37,829
+they're looking to enhance and modernize and
+
+355
+00:17:37,839 --> 00:17:40,890
+build new with containers and microservices,
+
+356
+00:17:40,900 --> 00:17:42,369
+-- which is,
+-- which is really cool.
+
+357
+00:17:42,380 --> 00:17:47,239
+And I applaud IBM for kind of thinking ahead versus taking the attitude of, you know,
+
+358
+00:17:47,250 --> 00:17:49,459
+we got you, now you'll do what we tell you to do.
+
+359
+00:17:49,469 --> 00:17:51,209
+Well, I'm curious, do you find customers,
+
+360
+00:17:51,219 --> 00:17:55,459
+do they really want to switch to containers or are they switching to containers?
+
+361
+00:17:55,469 --> 00:17:56,729
+Because essentially like,
+
+362
+00:17:56,869 --> 00:17:57,079
+you know,
+
+363
+00:17:57,089 --> 00:18:00,270
+that's where the talent in the market is going and that's becoming the new normal.
+
+364
+00:18:00,880 --> 00:18:03,359
+It's probably a combination of both because
+
+365
+00:18:03,489 --> 00:18:06,020
+you're right, a lot of the new developers,
+
+366
+00:18:06,030 --> 00:18:09,449
+that's what they're focusing on in some new modern languages.
+
+367
+00:18:09,459 --> 00:18:13,430
+They are not, you know, programming and Cobalt and all these other things anymore.
+
+368
+00:18:13,560 --> 00:18:14,140
+So
+
+369
+00:18:14,380 --> 00:18:15,900
+there's that part of it,
+
+370
+00:18:15,910 --> 00:18:18,500
+but then there's also the part of the inherent
+
+371
+00:18:18,510 --> 00:18:21,439
+benefits that you get from a microservices architecture.
+
+372
+00:18:21,449 --> 00:18:22,099
+So I can
+
+373
+00:18:22,420 --> 00:18:25,060
+scale out different components based on
+
+374
+00:18:25,069 --> 00:18:27,689
+their utilization and their workload requirements
+
+375
+00:18:27,930 --> 00:18:31,640
+or I can roll out new versions of a given component
+
+376
+00:18:31,650 --> 00:18:35,900
+of my architecture without adversely affecting the rest of the architecture.
+
+377
+00:18:35,910 --> 00:18:38,540
+So gone are the days of ok.
+
+378
+00:18:38,550 --> 00:18:43,420
+Well, we've got this upgrade, I need to shut the entire application down.
+
+379
+00:18:43,739 --> 00:18:46,540
+I hope that it upgrades successfully and then I
+
+380
+00:18:46,550 --> 00:18:49,239
+hope that it comes back online and actually works.
+
+381
+00:18:49,250 --> 00:18:52,880
+So now we're kind of breaking down the architecture and making
+
+382
+00:18:52,890 --> 00:18:56,849
+those upgrades and those scaling points much more fine grained.
+
+383
+00:18:56,859 --> 00:18:56,989
+Well,
+
+384
+00:18:57,000 --> 00:18:58,640
+the other big capability I've seen especially with
+
+385
+00:18:58,650 --> 00:19:00,760
+containers is the ability to roll back,
+
+386
+00:19:00,930 --> 00:19:03,030
+you know, to a known good version and state,
+
+387
+00:19:03,040 --> 00:19:05,630
+which is not always so easy with a monolithic app.
+
+388
+00:19:06,140 --> 00:19:10,890
+Absolutely, because we are just dealing with new versions of Docker images.
+
+389
+00:19:11,020 --> 00:19:16,439
+So as we build some new capability or add some fix, we have the new version,
+
+390
+00:19:16,449 --> 00:19:19,359
+but we also have the existing known good version.
+
+391
+00:19:19,449 --> 00:19:21,969
+So we can set a policy to roll out
+
+392
+00:19:22,219 --> 00:19:24,530
+at any rate and pace that we define.
+
+393
+00:19:24,699 --> 00:19:28,930
+And if it works great, let's pull out and roll out the rest of it.
+
+394
+00:19:28,959 --> 00:19:32,000
+But if something fails, then we just roll back to that
+
+395
+00:19:32,510 --> 00:19:33,640
+known good because
+
+396
+00:19:33,810 --> 00:19:38,260
+not only are we adding new capabilities in this manner, but we're also
+
+397
+00:19:38,369 --> 00:19:41,489
+that's how we roll out our security fixes and updates
+
+398
+00:19:41,829 --> 00:19:43,939
+in a container in microservices world.
+
+399
+00:19:43,949 --> 00:19:46,579
+We're not patching live containers anymore.
+
+400
+00:19:46,589 --> 00:19:49,020
+We're remediating the base images that they
+
+401
+00:19:49,030 --> 00:19:52,020
+were deployed from and redeploying that workload.
+
+402
+00:19:52,030 --> 00:19:55,150
+So it really changes kind of the paradigm
+
+403
+00:19:55,160 --> 00:19:58,319
+around how we maintain security in this architecture.
+
+404
+00:19:58,550 --> 00:20:02,500
+So can I ask when you're deploying, say a security fix in this manner,
+
+405
+00:20:02,510 --> 00:20:06,280
+do you guys just deploy, say like 10% of the fleet and then
+
+406
+00:20:06,390 --> 00:20:10,530
+wait and see for a little while to make sure it doesn't explode or do you just go all in?
+
+407
+00:20:10,979 --> 00:20:14,800
+We definitely go in a staged approach
+
+408
+00:20:15,005 --> 00:20:16,405
+because we want to minimize
+
+409
+00:20:16,834 --> 00:20:18,444
+that blast radius.
+
+410
+00:20:18,454 --> 00:20:24,275
+If something goes wrong and we get a patch that at scale does not perform or operate,
+
+411
+00:20:24,285 --> 00:20:27,425
+then we want to ensure that again, we are kind of minimizing
+
+412
+00:20:27,905 --> 00:20:28,415
+our
+
+413
+00:20:29,005 --> 00:20:31,344
+effect that could be felt by our user. So
+
+414
+00:20:32,030 --> 00:20:35,869
+Kubernetes has some of this capability baked into it already
+
+415
+00:20:35,880 --> 00:20:38,239
+to allow you these kind of roll out plans.
+
+416
+00:20:38,439 --> 00:20:40,829
+But one of the areas where we are contributing
+
+417
+00:20:40,839 --> 00:20:43,060
+to the open source is a project called is
+
+418
+00:20:43,469 --> 00:20:43,739
+O
+
+419
+00:20:43,959 --> 00:20:50,670
+and this was announced jointly with IBM Google and Lyft back in April of 2017.
+
+420
+00:20:50,969 --> 00:20:55,380
+And what Isio does, it basically sits on top of her orchestrator.
+
+421
+00:20:55,390 --> 00:20:56,880
+So in this case, Kubernetes
+
+422
+00:20:57,160 --> 00:20:59,630
+and gives you more control over,
+
+423
+00:20:59,640 --> 00:21:03,869
+rolling out new versions and new updates to your microservice architecture
+
+424
+00:21:04,040 --> 00:21:07,979
+and giving you that in depth telemetry and reporting and
+
+425
+00:21:08,189 --> 00:21:09,589
+what's failing where
+
+426
+00:21:09,699 --> 00:21:12,719
+latencies giving you insight to what is
+
+427
+00:21:12,729 --> 00:21:16,000
+really a very complex microservice architecture.
+
+428
+00:21:16,300 --> 00:21:19,199
+Well, and that's one thing you, you mentioned earlier was this whole concept.
+
+429
+00:21:19,209 --> 00:21:23,640
+And I've heard this term quite a few times is this microservices fabric?
+
+430
+00:21:23,900 --> 00:21:25,839
+And can you maybe unpack that for us a bit?
+
+431
+00:21:25,849 --> 00:21:28,280
+Because I've, I've heard it used a couple of different ways now.
+
+432
+00:21:29,119 --> 00:21:30,380
+Certainly. So
+
+433
+00:21:30,739 --> 00:21:34,050
+when you think about container use cases,
+
+434
+00:21:34,060 --> 00:21:38,500
+it doesn't have to be some new cloud native microservices based architecture.
+
+435
+00:21:38,510 --> 00:21:39,819
+Obviously, that's great.
+
+436
+00:21:39,829 --> 00:21:41,900
+It's a great use case for containers,
+
+437
+00:21:41,910 --> 00:21:46,099
+but we're also seeing a lot of kind of lift and modernize your existing apps.
+
+438
+00:21:46,400 --> 00:21:46,869
+So there's
+
+439
+00:21:46,989 --> 00:21:48,689
+those two main use cases.
+
+440
+00:21:48,699 --> 00:21:52,410
+If you are going down the path of a microservices by either
+
+441
+00:21:52,420 --> 00:21:58,180
+refactoring some existing monolithic app or developing some new cloud native app.
+
+442
+00:21:58,189 --> 00:22:00,660
+Then you need this microservices mesh,
+
+443
+00:22:00,670 --> 00:22:04,699
+which basically gives you the insight to a complex world.
+
+444
+00:22:04,709 --> 00:22:05,589
+So when you think about is
+
+445
+00:22:05,869 --> 00:22:07,530
+and there's a number of things out there,
+
+446
+00:22:08,042 --> 00:22:08,922
+the Netflix
+
+447
+00:22:09,442 --> 00:22:09,483
+Oss
+
+448
+00:22:09,953 --> 00:22:10,812
+stack
+
+449
+00:22:11,282 --> 00:22:13,692
+in others that provide similar things,
+
+450
+00:22:13,703 --> 00:22:15,873
+but we thought there were some capabilities
+
+451
+00:22:15,883 --> 00:22:18,743
+missing and that's why we jointly went into
+
+452
+00:22:19,062 --> 00:22:21,042
+Isdo here with Google and Lyft. And so what is
+
+453
+00:22:21,292 --> 00:22:22,072
+will do
+
+454
+00:22:22,203 --> 00:22:23,113
+is provide.
+
+455
+00:22:23,322 --> 00:22:25,192
+So there's four main tenants.
+
+456
+00:22:25,203 --> 00:22:28,792
+The first is around intelligent routing and load balancing. So that's what allows
+
+457
+00:22:28,906 --> 00:22:33,666
+to roll out new versions in a controlled manner and say either,
+
+458
+00:22:33,926 --> 00:22:39,895
+you know, 30% of this component gets rolled out to a new version or you know,
+
+459
+00:22:39,906 --> 00:22:44,086
+Josh is my guinea pig when you log in, you're going to see the new version.
+
+460
+00:22:44,105 --> 00:22:46,186
+So it gives you a lot of control in that
+
+461
+00:22:46,196 --> 00:22:50,076
+manner and roll out or roll back if something fails.
+
+462
+00:22:50,329 --> 00:22:54,030
+The second thing is around resiliency across languages and platforms.
+
+463
+00:22:54,040 --> 00:22:59,040
+So it's really meant to be infrastructure and language and platform agnostic.
+
+464
+00:22:59,050 --> 00:22:59,660
+So you can take
+
+465
+00:23:00,069 --> 00:23:01,550
+SDO, we'd love you to run it
+
+466
+00:23:01,719 --> 00:23:03,099
+in IBM cloud,
+
+467
+00:23:03,510 --> 00:23:05,630
+but you can run it on Prem, you can run it
+
+468
+00:23:05,930 --> 00:23:08,459
+in Aws Microsoft Google. It really doesn't matter.
+
+469
+00:23:08,469 --> 00:23:10,339
+You can use it consistently and your
+
+470
+00:23:10,349 --> 00:23:12,839
+developers don't need to change their language.
+
+471
+00:23:12,849 --> 00:23:16,750
+So if they're developing in go or you know, whatever they develop in
+
+472
+00:23:16,920 --> 00:23:18,449
+that doesn't change with ST
+
+473
+00:23:19,099 --> 00:23:21,770
+the third thing is around fleet wide policy enforcement.
+
+474
+00:23:21,780 --> 00:23:25,839
+So this is important, you can install a certificate, authority
+
+475
+00:23:26,140 --> 00:23:31,310
+and control and determine which components can talk to each other because
+
+476
+00:23:31,439 --> 00:23:35,400
+maybe A can talk to B but A can't talk to C so is
+
+477
+00:23:35,670 --> 00:23:38,709
+gives you that enforcement. And then the fourth thing which I mentioned was
+
+478
+00:23:38,839 --> 00:23:41,900
+that in depth telemetry and reporting because
+
+479
+00:23:42,459 --> 00:23:46,400
+as the complexity increases, you need to figure out where latencies,
+
+480
+00:23:46,410 --> 00:23:48,479
+what's actually causing the issue.
+
+481
+00:23:48,660 --> 00:23:52,599
+Um If I have different time outs from one microservice to another,
+
+482
+00:23:52,609 --> 00:23:54,880
+where is the breakdown actually happening?
+
+483
+00:23:54,920 --> 00:23:57,880
+-- So
+-- you, you piqued my interest when you said
+
+484
+00:23:58,180 --> 00:24:03,109
+you can set policies so say A can't talk to C but it can talk to B
+
+485
+00:24:03,560 --> 00:24:04,760
+and that sounds
+
+486
+00:24:05,170 --> 00:24:06,859
+immensely powerful.
+
+487
+00:24:06,869 --> 00:24:07,599
+And, and I'm curious,
+
+488
+00:24:07,609 --> 00:24:10,069
+is sto controlling that on the on the network
+
+489
+00:24:10,079 --> 00:24:12,459
+layer or is there something else going on here?
+
+490
+00:24:13,260 --> 00:24:17,079
+Exactly. So it's at the network layer, you can define
+
+491
+00:24:17,239 --> 00:24:18,939
+who can actually communicate it
+
+492
+00:24:19,670 --> 00:24:23,489
+similar to a containerized firewall. Essentially, you can think of it like that.
+
+493
+00:24:23,500 --> 00:24:24,250
+So the way
+
+494
+00:24:24,739 --> 00:24:30,910
+envoy deploys, which is a via sidecar, then you can define that policy from the ISTE
+
+495
+00:24:31,300 --> 00:24:34,130
+pilot, which is essentially the brains of
+
+496
+00:24:34,520 --> 00:24:34,839
+iso
+
+497
+00:24:35,069 --> 00:24:38,349
+and define who can communicate with each other.
+
+498
+00:24:38,359 --> 00:24:41,890
+So again, it just minimizes the attack surface within your architecture.
+
+499
+00:24:41,939 --> 00:24:43,079
+That's amazing.
+
+500
+00:24:43,199 --> 00:24:44,250
+I mean, look anyone
+
+501
+00:24:44,355 --> 00:24:48,755
+done any security work before knows that lateral movement is where it's at, right?
+
+502
+00:24:48,765 --> 00:24:50,865
+You just got to get in and then you're good to go.
+
+503
+00:24:50,875 --> 00:24:51,895
+But obviously this,
+
+504
+00:24:51,906 --> 00:24:55,656
+this sounds like it totally negates the concept of lateral movement.
+
+505
+00:24:55,946 --> 00:24:56,676
+Absolutely.
+
+506
+00:24:56,686 --> 00:24:57,276
+So I mean,
+
+507
+00:24:57,286 --> 00:25:03,076
+you're spot on because you think a lot of North South traffic and we have rules there
+
+508
+00:25:03,086 --> 00:25:07,546
+to limit who can get in and out and ports and ips and things like that.
+
+509
+00:25:07,556 --> 00:25:08,936
+But that East West traffic
+
+510
+00:25:09,222 --> 00:25:15,781
+is very important as well because we see a lot of attacks where you come in and then
+
+511
+00:25:15,891 --> 00:25:19,161
+you jump from one container to another or you
+
+512
+00:25:19,281 --> 00:25:23,182
+kill the first container that you came in on to try and hide your track.
+
+513
+00:25:23,192 --> 00:25:24,921
+So it's very important to limit
+
+514
+00:25:25,112 --> 00:25:28,541
+the connectivity inside the architecture as well.
+
+515
+00:25:28,761 --> 00:25:32,911
+There was a really good CCC talk about exploiting containers and using things,
+
+516
+00:25:32,921 --> 00:25:33,661
+for example, like
+
+517
+00:25:33,910 --> 00:25:37,410
+generating logs or generating like events and activities
+
+518
+00:25:37,420 --> 00:25:39,510
+within Amazon web services that would then,
+
+519
+00:25:39,520 --> 00:25:43,180
+you know, sort of leak out publicly, you know, even though that specific container,
+
+520
+00:25:43,189 --> 00:25:44,810
+for example, couldn't talk to the internet,
+
+521
+00:25:44,819 --> 00:25:48,329
+it could talk to other systems that ultimately were attached to the internet.
+
+522
+00:25:48,540 --> 00:25:49,390
+Exactly.
+
+523
+00:25:49,400 --> 00:25:51,300
+And so there's a lot of,
+
+524
+00:25:51,310 --> 00:25:55,449
+there's a lot of vendors out there providing that kind of real time assessment
+
+525
+00:25:55,810 --> 00:25:59,829
+and, you know, I don't want to use machine learning because it's very overused,
+
+526
+00:25:59,839 --> 00:26:04,170
+but basically building these real time policies
+
+527
+00:26:04,199 --> 00:26:07,459
+and detecting anomalies in your architecture.
+
+528
+00:26:07,469 --> 00:26:11,540
+So if something like that is happening, that is not how you expect it,
+
+529
+00:26:11,550 --> 00:26:15,439
+it will flag you and then you'll either be able to block it or say yes, yes,
+
+530
+00:26:15,449 --> 00:26:16,729
+that's fine and allow it.
+
+531
+00:26:17,099 --> 00:26:17,949
+So let me ask,
+
+532
+00:26:17,959 --> 00:26:21,569
+then you mentioned machine learning and like you guys literally have an A I, right?
+
+533
+00:26:21,579 --> 00:26:24,420
+You're one of the few companies that can claim to actually have an A I.
+
+534
+00:26:24,760 --> 00:26:28,859
+No. Are you, are you leveraging Watson in any way to do any of this clever stuff?
+
+535
+00:26:28,949 --> 00:26:29,969
+Yeah, definitely.
+
+536
+00:26:29,979 --> 00:26:33,890
+So we're like you said, we're very fortunate to have our friends at Watson, you know,
+
+537
+00:26:33,900 --> 00:26:35,300
+right down the hall from us.
+
+538
+00:26:35,310 --> 00:26:37,380
+So we work with them to build in
+
+539
+00:26:37,560 --> 00:26:39,739
+these cognitive solutions. So it's
+
+540
+00:26:40,020 --> 00:26:45,670
+not only at kind of the container live container running perspective of, you know,
+
+541
+00:26:45,680 --> 00:26:48,770
+who is speaking to whom and is that allowed?
+
+542
+00:26:48,780 --> 00:26:49,660
+And is there,
+
+543
+00:26:49,859 --> 00:26:50,920
+you know, some,
+
+544
+00:26:50,939 --> 00:26:55,920
+some spike in resources or something that we're not really expecting to happen.
+
+545
+00:26:56,180 --> 00:26:57,959
+So we've got that built in.
+
+546
+00:26:57,969 --> 00:27:01,930
+We also use Watson in a lot of other ways in our platform from, you know,
+
+547
+00:27:01,939 --> 00:27:05,469
+cognitive chat bots or extending your applications
+
+548
+00:27:05,479 --> 00:27:08,920
+using the breadth of Watson capabilities.
+
+549
+00:27:08,930 --> 00:27:11,479
+So we're definitely fortunate to have them with us.
+
+550
+00:27:11,489 --> 00:27:15,239
+-- So
+-- you're saying we should welcome our new A I overlords in the cloud.
+
+551
+00:27:16,910 --> 00:27:19,790
+They're, they're very powerful and it can be very helpful to us.
+
+552
+00:27:19,810 --> 00:27:22,589
+-- So, yeah, and we know
+-- they can beat us at Jeopardy. Right.
+
+553
+00:27:22,599 --> 00:27:25,099
+Absolutely. And chess,
+
+554
+00:27:25,640 --> 00:27:28,000
+-- one
+-- last thing you'd mentioned and I just saw on the
+
+555
+00:27:28,219 --> 00:27:29,260
+website while looking at it,
+
+556
+00:27:29,380 --> 00:27:30,969
+you'd mentioned about,
+
+557
+00:27:31,180 --> 00:27:35,250
+you know, faults and fault management. And I'm actually looking at this page about
+
+558
+00:27:35,469 --> 00:27:36,250
+Isio and it mentions
+
+559
+00:27:36,420 --> 00:27:38,849
+it has the capability of fault injection. And
+
+560
+00:27:39,150 --> 00:27:43,650
+I'm just, I'm curious what drove you guys to, to include that like,
+
+561
+00:27:43,660 --> 00:27:46,729
+is this like the chaos gorilla and chaos monkey that Netflix uses?
+
+562
+00:27:47,650 --> 00:27:50,660
+Yes, you are exactly right by injecting
+
+563
+00:27:50,819 --> 00:27:53,920
+some fault or some chaos or some failure?
+
+564
+00:27:54,219 --> 00:27:55,949
+It forces you to think about your
+
+565
+00:27:55,959 --> 00:27:59,719
+architecture and where potential breaking points are
+
+566
+00:27:59,890 --> 00:28:01,180
+when I talk to customers.
+
+567
+00:28:01,189 --> 00:28:04,550
+And I tell them that, you know, containers are very powerful,
+
+568
+00:28:04,560 --> 00:28:08,030
+but they can also allow you to make poor decisions
+
+569
+00:28:08,040 --> 00:28:11,790
+by using injecting fault and issues into your architecture.
+
+570
+00:28:11,800 --> 00:28:16,410
+You will be able to identify and create more highly available applications
+
+571
+00:28:16,890 --> 00:28:17,030
+for
+
+572
+00:28:17,142 --> 00:28:18,883
+all the way at the data center level,
+
+573
+00:28:18,892 --> 00:28:22,072
+all the way down to the actual application components.
+
+574
+00:28:22,162 --> 00:28:22,863
+So I'm curious,
+
+575
+00:28:22,873 --> 00:28:26,883
+is this something you can actually like build into your sort of live system?
+
+576
+00:28:26,892 --> 00:28:28,203
+Saying, for example, you know,
+
+577
+00:28:28,473 --> 00:28:31,213
+I want 1% of my systems to fail daily.
+
+578
+00:28:31,402 --> 00:28:31,843
+Yes.
+
+579
+00:28:31,853 --> 00:28:35,623
+So you can define kind of how granular or how
+
+580
+00:28:35,633 --> 00:28:39,652
+chaotic you want a particular fault injection to be.
+
+581
+00:28:39,733 --> 00:28:44,392
+And we actually do this, we call it fire drill Friday internally where
+
+582
+00:28:44,593 --> 00:28:46,522
+a particular microservice team
+
+583
+00:28:46,635 --> 00:28:48,076
+will go through this.
+
+584
+00:28:48,086 --> 00:28:54,026
+And it's basically a way to test how resilient their component is for failure.
+
+585
+00:28:54,066 --> 00:28:55,755
+And so that the SRE team,
+
+586
+00:28:55,765 --> 00:29:00,176
+the site reliable engineering team will inject failure and figure
+
+587
+00:29:00,186 --> 00:29:02,715
+out what the breaking point is for their component.
+
+588
+00:29:02,845 --> 00:29:03,776
+Wow, nice.
+
+589
+00:29:03,786 --> 00:29:05,776
+Because one thing I'm seeing increasingly is, you know,
+
+590
+00:29:05,786 --> 00:29:09,105
+the teams that do do this also end up at a state where, you know,
+
+591
+00:29:09,255 --> 00:29:11,166
+they're just having such a high baseline of
+
+592
+00:29:11,176 --> 00:29:13,005
+failure when there's an actual real failure.
+
+593
+00:29:13,015 --> 00:29:16,036
+They're like, yeah, that's like barely a statistical blip now.
+
+594
+00:29:16,959 --> 00:29:17,640
+Exactly.
+
+595
+00:29:17,650 --> 00:29:20,599
+And it's important because of that ownership from the
+
+596
+00:29:20,609 --> 00:29:22,920
+end to end for those teams to see that.
+
+597
+00:29:22,930 --> 00:29:27,219
+So it's no longer I as a developer, I write something. It's, it's awesome.
+
+598
+00:29:27,229 --> 00:29:29,359
+I throw it over the fence. Good luck.
+
+599
+00:29:29,369 --> 00:29:33,280
+-- So now I need to think about that entire breadth of that
+-- man.
+
+600
+00:29:33,290 --> 00:29:34,900
+Those were the good old days. Right.
+
+601
+00:29:35,300 --> 00:29:36,349
+Exactly.
+
+602
+00:29:36,890 --> 00:29:38,569
+I do not miss them at all.
+
+603
+00:29:38,810 --> 00:29:40,229
+No, no, I know. I know.
+
+604
+00:29:40,239 --> 00:29:44,430
+I do remember that when or my favorite was you'd give the operations,
+
+605
+00:29:44,439 --> 00:29:46,680
+people instructions that were wrong
+
+606
+00:29:46,939 --> 00:29:47,420
+and they
+
+607
+00:29:47,660 --> 00:29:50,609
+beat their heads on their desk for days because
+
+608
+00:29:50,619 --> 00:29:52,400
+they didn't want to ask you too many questions.
+
+609
+00:29:53,020 --> 00:29:56,079
+It was. Oh, man, it's a miracle. Anything worked. Right.
+
+610
+00:29:56,310 --> 00:29:56,920
+Yeah, I just,
+
+611
+00:29:56,930 --> 00:29:59,469
+I remember like literally all the time we
+
+612
+00:29:59,479 --> 00:30:02,829
+spent getting standing PHP applications up with dependencies.
+
+613
+00:30:03,099 --> 00:30:07,790
+-- Like seriously, how many tens of hundreds of hours did we spend doing that?
+-- Too many?
+
+614
+00:30:07,800 --> 00:30:08,520
+Too many?
+
+615
+00:30:08,550 --> 00:30:11,040
+Only to find out the developer was running some other version of
+
+616
+00:30:11,050 --> 00:30:13,550
+Linux with a different version of the package that you could get
+
+617
+00:30:14,750 --> 00:30:15,890
+seriously.
+
+618
+00:30:16,469 --> 00:30:20,109
+Alright. Alright. So I I think it's probably time to start taking this one home.
+
+619
+00:30:20,119 --> 00:30:20,790
+So I guess
+
+620
+00:30:21,020 --> 00:30:23,479
+Chris, do you have any any thoughts for us around?
+
+621
+00:30:23,489 --> 00:30:27,270
+Just kind of general advice for container security in in
+
+622
+00:30:27,280 --> 00:30:29,979
+the the new and exciting world we live in.
+
+623
+00:30:30,280 --> 00:30:35,619
+-- So
+-- my perspective would be that to build on and leverage open
+
+624
+00:30:35,780 --> 00:30:40,160
+source tools where you can to give you kind of that consistent user experience.
+
+625
+00:30:40,439 --> 00:30:44,030
+I've talked about how we're using open source at kind of the
+
+626
+00:30:44,040 --> 00:30:47,420
+engine level and then as we go up the stack to Kubernetes
+
+627
+00:30:47,540 --> 00:30:48,449
+and I've talked about
+
+628
+00:30:48,839 --> 00:30:49,290
+Isdo,
+
+629
+00:30:49,459 --> 00:30:53,880
+I encourage all of your listeners to go out, use it, contribute,
+
+630
+00:30:53,890 --> 00:30:55,099
+we're taking pull requests.
+
+631
+00:30:55,109 --> 00:30:57,170
+So that's, you know, we're excited about that.
+
+632
+00:30:57,469 --> 00:31:01,400
+There are other open source projects that I will briefly mention as well because
+
+633
+00:31:01,520 --> 00:31:06,109
+in line with open source, we announced a project called Graphia,
+
+634
+00:31:06,310 --> 00:31:09,819
+which is an open source project with IBM and Google.
+
+635
+00:31:10,089 --> 00:31:11,300
+And it's basically
+
+636
+00:31:11,510 --> 00:31:15,640
+the goal is to provide this centralized structured
+
+637
+00:31:15,859 --> 00:31:18,619
+knowledge base of vulnerability data.
+
+638
+00:31:18,689 --> 00:31:20,829
+So that way instead of everyone maintaining their
+
+639
+00:31:20,839 --> 00:31:24,290
+own graffias will allow this as kind of the
+
+640
+00:31:24,420 --> 00:31:29,920
+source of truth to govern your entire software supply chain.
+
+641
+00:31:30,390 --> 00:31:33,400
+And then within Graffias, there is a component called CRIS
+
+642
+00:31:33,810 --> 00:31:40,199
+which allows you again as an organization to set that Kubernetes governance policy
+
+643
+00:31:40,530 --> 00:31:43,760
+on data that's stored in the Graphia project. So
+
+644
+00:31:44,000 --> 00:31:49,030
+I think it's really important for all of us as consumers and whether you are running
+
+645
+00:31:49,040 --> 00:31:51,699
+it on IBM cloud or any other cloud
+
+646
+00:31:51,709 --> 00:31:56,079
+to build on consistent open source tools and projects
+
+647
+00:31:56,209 --> 00:31:58,359
+and then build on top of that. So
+
+648
+00:31:58,530 --> 00:31:59,140
+to me,
+
+649
+00:31:59,150 --> 00:32:01,349
+that's really our point of view from IBM
+
+650
+00:32:01,359 --> 00:32:04,400
+is to invest in these open source projects where
+
+651
+00:32:04,579 --> 00:32:05,189
+we are not only
+
+652
+00:32:05,290 --> 00:32:07,739
+using them and building offerings on top of it,
+
+653
+00:32:07,750 --> 00:32:12,609
+but we also have core contributors that are out in each of these various projects,
+
+654
+00:32:12,640 --> 00:32:16,390
+helping them, helping steer the direction of these various projects.
+
+655
+00:32:16,560 --> 00:32:19,949
+Wow, that, that sounds amazing. You just hit us with a bunch of stuff.
+
+656
+00:32:19,959 --> 00:32:21,290
+We'll put in the show notes
+
+657
+00:32:21,400 --> 00:32:24,510
+for, for the listeners and in fact, you, you spiked my interest as well.
+
+658
+00:32:24,520 --> 00:32:26,589
+So I can't, I can't wait to look this up. So
+
+659
+00:32:26,910 --> 00:32:28,550
+wonderful. Well, thank you so much Chris.
+
+660
+00:32:28,560 --> 00:32:30,579
+We really appreciate the time and we look forward
+
+661
+00:32:30,589 --> 00:32:32,189
+to having you back again in the near future.
+
+662
+00:32:32,449 --> 00:32:35,030
+So I guess thank you, Kurt. Thank you, Chris. Thank you listeners.
+
+663
+00:32:35,040 --> 00:32:38,630
+If anyone wants to see the show notes for the various things discussed today,
+
+664
+00:32:38,640 --> 00:32:39,069
+you can help
+
+665
+00:32:39,380 --> 00:32:40,780
+source security podcast.com.
+
+666
+00:32:40,790 --> 00:32:45,229
+You can use the Pound Os S podcast hashtag to get our attention on social media.
+
+667
+00:32:45,630 --> 00:32:49,459
+And if nothing else, you two gentlemen have a fabulous rest of your day.
+
+668
+00:32:49,469 --> 00:32:50,069
+Thank you, sir.
+
+669
+00:32:50,319 --> 00:32:50,599
+Thanks
+
+670
+00:32:55,650 --> 00:32:55,709
+the

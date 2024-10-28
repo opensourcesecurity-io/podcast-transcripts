@@ -1,0 +1,2713 @@
+0
+00:00:05,429 --> 00:00:08,520
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,529 --> 00:00:10,460
+Kurt Siefried and my partner in crime.
+
+2
+00:00:10,470 --> 00:00:11,210
+Josh Bresser.
+
+3
+00:00:11,390 --> 00:00:12,729
+I miss thought Crime.
+
+4
+00:00:12,949 --> 00:00:14,189
+Those are better days.
+
+5
+00:00:14,920 --> 00:00:14,930
+Uh,
+
+6
+00:00:15,510 --> 00:00:16,030
+that's what you think
+
+7
+00:00:16,530 --> 00:00:17,500
+anyway.
+
+8
+00:00:18,950 --> 00:00:19,790
+All right.
+
+9
+00:00:20,059 --> 00:00:20,629
+So,
+
+10
+00:00:20,770 --> 00:00:24,690
+-- Kurt, what is the zero day?
+-- Well, I can tell you when I see one but
+
+11
+00:00:24,979 --> 00:00:27,360
+the definition of it is basically terrible.
+
+12
+00:00:27,549 --> 00:00:30,239
+-- I don't think there is a definition of it.
+-- Well, and that's the thing, right?
+
+13
+00:00:30,250 --> 00:00:30,920
+It's, it's
+
+14
+00:00:31,049 --> 00:00:31,909
+one of those
+
+15
+00:00:32,299 --> 00:00:34,389
+colloquial language
+
+16
+00:00:34,500 --> 00:00:40,049
+things of there's no formal body to define it and even within the text scene,
+
+17
+00:00:40,060 --> 00:00:42,779
+it has different meanings within different parts of the text scene.
+
+18
+00:00:42,799 --> 00:00:47,119
+All right. Well, we should first start by, why is this a topic
+
+19
+00:00:47,340 --> 00:00:50,080
+that we're even talking about today? And there have been
+
+20
+00:00:50,369 --> 00:00:51,799
+a handful of,
+
+21
+00:00:52,040 --> 00:00:55,509
+we'll say stories and incidents in the last probably two
+
+22
+00:00:55,520 --> 00:00:58,709
+or three months where people have called the question.
+
+23
+00:00:58,720 --> 00:01:00,310
+Is that really a zero day?
+
+24
+00:01:00,319 --> 00:01:04,250
+And then this big discussion erupts of, well, what even is a zero day.
+
+25
+00:01:04,260 --> 00:01:07,349
+And of course, there's generally no agreement
+
+26
+00:01:07,919 --> 00:01:08,760
+and
+
+27
+00:01:09,449 --> 00:01:14,709
+my answer is going to be the best non answers ever, which is, who cares?
+
+28
+00:01:16,309 --> 00:01:16,839
+Well,
+
+29
+00:01:17,330 --> 00:01:18,290
+you're not.
+
+30
+00:01:18,500 --> 00:01:21,239
+Yeah. No, I, I would, I'm gonna go with, you're not entirely wrong.
+
+31
+00:01:21,250 --> 00:01:23,330
+I mean, see, to me, part of it,
+
+32
+00:01:23,769 --> 00:01:25,870
+to me, I think that the,
+
+33
+00:01:26,660 --> 00:01:30,519
+I think the biggest problem with Zero Day is it kind of goes to this
+
+34
+00:01:31,000 --> 00:01:31,839
+intent
+
+35
+00:01:31,970 --> 00:01:34,599
+as opposed to actually defining what something is, right?
+
+36
+00:01:34,610 --> 00:01:36,819
+It's not so much of an observation of something,
+
+37
+00:01:36,959 --> 00:01:39,360
+but what is the intent behind that something? Right.
+
+38
+00:01:39,370 --> 00:01:40,069
+So, I mean,
+
+39
+00:01:40,080 --> 00:01:44,000
+basically the way vulnerabilities typically work is somebody finds it and
+
+40
+00:01:44,010 --> 00:01:47,400
+then somebody either tells the world at large or they tell
+
+41
+00:01:47,860 --> 00:01:48,599
+the vendor
+
+42
+00:01:48,930 --> 00:01:53,480
+kind of or the upstream project responsible for it or maybe they sell it to bad guys,
+
+43
+00:01:53,489 --> 00:01:57,080
+but essentially it gets distributed to some degree, right?
+
+44
+00:01:57,430 --> 00:01:59,000
+And then the problem is like,
+
+45
+00:01:59,709 --> 00:02:04,239
+I think it's clearly a zero day when only one human being on the planet knows about it.
+
+46
+00:02:04,319 --> 00:02:07,370
+But as soon as it starts to be distributed,
+
+47
+00:02:07,379 --> 00:02:09,669
+part of the question is what is the intent of that distribution is
+
+48
+00:02:09,679 --> 00:02:12,309
+the intent of that distribution to fix it or to exploit it?
+
+49
+00:02:12,320 --> 00:02:15,770
+And I think traditionally zero day assumes the intent
+
+50
+00:02:15,779 --> 00:02:18,779
+to exploit is what makes it a zero day.
+
+51
+00:02:18,789 --> 00:02:19,089
+So,
+
+52
+00:02:19,100 --> 00:02:20,770
+you know what's actually funny you just reminded me of
+
+53
+00:02:20,779 --> 00:02:24,020
+also in the way you describe that is zero day.
+
+54
+00:02:24,029 --> 00:02:25,690
+Some people call O day
+
+55
+00:02:25,949 --> 00:02:26,600
+and
+
+56
+00:02:26,712 --> 00:02:30,013
+you know what I came to realize is after talking to a handful of people and,
+
+57
+00:02:30,022 --> 00:02:32,753
+and I'm doing the, the hacker history podcast now.
+
+58
+00:02:32,763 --> 00:02:34,662
+Which is one of my other side projects because
+
+59
+00:02:34,673 --> 00:02:36,533
+I have copious amounts of free time apparently.
+
+60
+00:02:36,542 --> 00:02:42,563
+And I've realized that old people say, zero day, young people say, oh day.
+
+61
+00:02:42,673 --> 00:02:45,492
+That is. I've just, there's, I don't know where the line is yet.
+
+62
+00:02:45,503 --> 00:02:46,983
+I can't wait to figure this out.
+
+63
+00:02:46,992 --> 00:02:51,873
+But that seems to be what I've ascertained is the, if you're, if you're old like us,
+
+64
+00:02:51,882 --> 00:02:52,802
+it's Zero Day.
+
+65
+00:02:52,813 --> 00:02:53,593
+But if you're young and cool,
+
+66
+00:02:53,716 --> 00:02:56,255
+it's an O day. So that's interesting.
+
+67
+00:02:56,386 --> 00:02:57,175
+But anyway, anyway,
+
+68
+00:02:57,365 --> 00:02:59,455
+I don't talk to people much recently.
+
+69
+00:03:00,065 --> 00:03:00,585
+So I
+
+70
+00:03:01,425 --> 00:03:02,526
+just, but that's a good point.
+
+71
+00:03:02,535 --> 00:03:04,145
+I'm going to pay attention because one thing I noticed
+
+72
+00:03:04,156 --> 00:03:06,755
+at the playground at some point in the last few years
+
+73
+00:03:06,906 --> 00:03:08,016
+when the kids say, ok,
+
+74
+00:03:08,026 --> 00:03:12,475
+count from 1 to 10 and then the game starts and all the kids count 1 to 10, like 1 to 10.
+
+75
+00:03:12,485 --> 00:03:12,955
+That's it.
+
+76
+00:03:13,175 --> 00:03:16,095
+-- Right. And I'm like, oh, that's clever.
+-- That's malicious compliance. I,
+
+77
+00:03:16,746 --> 00:03:19,945
+I suspect you're right because I have heard people refer to it as an old day.
+
+78
+00:03:19,955 --> 00:03:20,645
+But I never,
+
+79
+00:03:21,145 --> 00:03:21,705
+like,
+
+80
+00:03:21,835 --> 00:03:22,335
+I just
+
+81
+00:03:22,690 --> 00:03:24,779
+was kind of like, oh, that's weird. You know, nuer,
+
+82
+00:03:25,690 --> 00:03:26,750
+sure, whatever. N,
+
+83
+00:03:27,399 --> 00:03:28,750
+yeah, that's, that's the word.
+
+84
+00:03:29,699 --> 00:03:29,800
+I
+
+85
+00:03:29,949 --> 00:03:31,199
+know it's nuclear. I know.
+
+86
+00:03:31,210 --> 00:03:34,589
+I'm constantly correcting my one son because, and I'm like, there's,
+
+87
+00:03:34,600 --> 00:03:37,820
+and I'll write it out for him and I'm like, there's no, and he just, you know,
+
+88
+00:03:37,830 --> 00:03:39,789
+he's picked it up from listening to youtube and stuff.
+
+89
+00:03:39,800 --> 00:03:44,750
+Right. Right. Oh, man. Ok. So anyway, anyway, here is, I think where
+
+90
+00:03:44,852 --> 00:03:44,873
+I
+
+91
+00:03:45,123 --> 00:03:46,893
+would like to go with this and this is a
+
+92
+00:03:46,902 --> 00:03:49,763
+bigger discussion point than just zero day o day.
+
+93
+00:03:49,772 --> 00:03:51,272
+What is, what it is, what it isn't.
+
+94
+00:03:51,283 --> 00:03:53,003
+I think we exist in a place,
+
+95
+00:03:53,013 --> 00:03:57,912
+especially in the security world where we don't often have well defined terms.
+
+96
+00:03:58,522 --> 00:04:01,953
+This is kind of, one of my complaints is a lot of other
+
+97
+00:04:02,102 --> 00:04:06,912
+professions have like standards, bodies that help define a lot of these things.
+
+98
+00:04:07,016 --> 00:04:08,466
+-- And we don't always
+-- have that,
+
+99
+00:04:08,615 --> 00:04:11,416
+you know what? It's actually a lot more subtle than that.
+
+100
+00:04:11,436 --> 00:04:13,916
+It's not just that the standards bodies define the
+
+101
+00:04:13,925 --> 00:04:17,255
+language but that they use the language consistently.
+
+102
+00:04:17,526 --> 00:04:21,156
+They may not even have like a dictionary or a glossary, but the fact that they
+
+103
+00:04:21,385 --> 00:04:24,955
+use a term consistently to mean one thing and then maybe switch it up
+
+104
+00:04:24,966 --> 00:04:29,036
+later that gives it that that sort of gravitas that that's what that is.
+
+105
+00:04:29,359 --> 00:04:30,739
+You know, it's like Schrodinger's cat.
+
+106
+00:04:30,750 --> 00:04:33,769
+It's been defined because we keep looking at it and agreeing that it looks like a cat.
+
+107
+00:04:33,799 --> 00:04:33,809
+Oh
+
+108
+00:04:33,910 --> 00:04:34,549
+man, I'm not,
+
+109
+00:04:34,559 --> 00:04:36,940
+don't get me started on Schrodinger's cat because the way we
+
+110
+00:04:36,950 --> 00:04:40,019
+describe it is the opposite of what he wanted to convey.
+
+111
+00:04:40,029 --> 00:04:41,910
+I know it's the ridiculousness of bla bla bla
+
+112
+00:04:42,049 --> 00:04:46,140
+anyways. But the point is if language is what people
+
+113
+00:04:46,679 --> 00:04:47,410
+say it is
+
+114
+00:04:47,880 --> 00:04:48,230
+right in
+
+115
+00:04:48,339 --> 00:04:48,470
+the
+
+116
+00:04:48,630 --> 00:04:48,660
+whole
+
+117
+00:04:49,029 --> 00:04:51,029
+versus Cracker debate, I'm like, sorry guys that,
+
+118
+00:04:51,040 --> 00:04:53,309
+that ship sailed sank and it's gone.
+
+119
+00:04:54,200 --> 00:04:55,410
+You know what my favorite.
+
+120
+00:04:55,420 --> 00:04:59,880
+And I think that's easier to understand these days is what is, what is crypto
+
+121
+00:05:00,149 --> 00:05:00,869
+in your mind.
+
+122
+00:05:01,040 --> 00:05:03,630
+Well, it depends what part of the world you're asking me about because
+
+123
+00:05:04,029 --> 00:05:05,320
+in my Blockchain world, what is
+
+124
+00:05:05,670 --> 00:05:06,609
+the question?
+
+125
+00:05:06,959 --> 00:05:07,329
+You know,
+
+126
+00:05:07,619 --> 00:05:07,649
+cry,
+
+127
+00:05:08,109 --> 00:05:08,410
+I'm banging
+
+128
+00:05:08,660 --> 00:05:10,309
+my shoe on the desk. Answer the question.
+
+129
+00:05:10,320 --> 00:05:13,072
+So crypto to me used to be just pure cryptography. You know,
+
+130
+00:05:13,252 --> 00:05:14,433
+I don't care what it used to be.
+
+131
+00:05:14,442 --> 00:05:17,532
+-- Answer the question, what I would say
+-- if somebody said,
+
+132
+00:05:17,773 --> 00:05:19,303
+can you define what crypto is for me?
+
+133
+00:05:19,312 --> 00:05:23,013
+Now, I would basically talk about Blockchain cryptocurrencies.
+
+134
+00:05:23,023 --> 00:05:26,072
+-- And
+-- I think that's what the vast majority of people would describe it
+
+135
+00:05:26,083 --> 00:05:29,263
+as and I'm sure we have someone listening who's yelling at there.
+
+136
+00:05:29,273 --> 00:05:31,923
+No, it's B GP or GP G or whatever.
+
+137
+00:05:32,032 --> 00:05:34,532
+-- No.
+-- Well, no crypto used to stand for crypto
+
+138
+00:05:34,805 --> 00:05:34,936
+Gray
+
+139
+00:05:35,066 --> 00:05:37,406
+essentially, which was all sorts of encryption.
+
+140
+00:05:37,415 --> 00:05:40,635
+And eventually the word got co opted by the Cryptocurrency people.
+
+141
+00:05:40,645 --> 00:05:44,436
+And now when you say crypto, it basically means Cryptocurrency. And
+
+142
+00:05:44,966 --> 00:05:47,795
+like there's plenty of us that are going to die in this hill and don't get me wrong.
+
+143
+00:05:47,805 --> 00:05:51,406
+I will never use the word crypto on purpose to describe Cryptocurrency.
+
+144
+00:05:51,415 --> 00:05:53,235
+It always means cryptography in my mind.
+
+145
+00:05:53,246 --> 00:05:57,976
+But I mean, generally speaking, like society decided we lost, that's it.
+
+146
+00:05:58,395 --> 00:06:02,145
+Well, and my favorite thing is all these medical terms
+
+147
+00:06:02,395 --> 00:06:03,825
+but become insults,
+
+148
+00:06:05,109 --> 00:06:09,869
+right? Things like moron and imbecile used to have specific medical meanings.
+
+149
+00:06:09,980 --> 00:06:12,899
+So people use them to, you know, insult somebody
+
+150
+00:06:13,359 --> 00:06:16,299
+and they became insults and fell out of medical use.
+
+151
+00:06:16,350 --> 00:06:20,279
+You know what my favorite one is actually is the word Nimrod. Yeah.
+
+152
+00:06:20,510 --> 00:06:21,940
+Do you know the story behind this one?
+
+153
+00:06:22,279 --> 00:06:27,220
+-- Uh, no.
+-- So Nimrod in the Bible is a great hunter, right?
+
+154
+00:06:27,450 --> 00:06:32,359
+In a looney tunes. Cartoon bugs bunny calls Elmer Fudd. A Nimrod.
+
+155
+00:06:32,369 --> 00:06:35,339
+Not, not necessarily to make fun of him but to like, be
+
+156
+00:06:35,670 --> 00:06:36,619
+the great hunter.
+
+157
+00:06:36,630 --> 00:06:40,220
+Most people decided that Bugs bunny was making
+
+158
+00:06:40,230 --> 00:06:41,809
+fun of Elmer Fudd because let's face it.
+
+159
+00:06:41,820 --> 00:06:43,299
+That's pretty much all he ever does.
+
+160
+00:06:43,519 --> 00:06:46,700
+And so Nimrod becomes a derogatory term
+
+161
+00:06:47,339 --> 00:06:49,609
+instead of meaning Great Hunter,
+
+162
+00:06:49,820 --> 00:06:52,040
+which I think is one of my favorite. Just
+
+163
+00:06:52,160 --> 00:06:55,390
+-- strained, twisting of the language.
+-- Well, let's face it.
+
+164
+00:06:55,399 --> 00:06:56,769
+Bugs Bunny has a lot of pole.
+
+165
+00:06:57,100 --> 00:06:58,489
+I love bugs bunny man.
+
+166
+00:06:58,679 --> 00:07:01,029
+Like, you know, you want to talk about being an influencer.
+
+167
+00:07:01,040 --> 00:07:02,329
+Bugs bunny is an influencer.
+
+168
+00:07:02,339 --> 00:07:06,209
+-- I,
+-- well, he used to be, I don't think he has quite the influence. He used to,
+
+169
+00:07:06,940 --> 00:07:09,750
+man. I love the loony tunes actually on Saturday morning.
+
+170
+00:07:09,760 --> 00:07:12,959
+Now, one of the weird, like over the air TV stations because like,
+
+171
+00:07:12,970 --> 00:07:15,359
+everyone has like 100 TV stations over the air.
+
+172
+00:07:15,369 --> 00:07:18,309
+One of them started playing looney tunes on Saturday mornings.
+
+173
+00:07:18,320 --> 00:07:20,359
+And so I'm forcing my Children to watch it with me,
+
+174
+00:07:20,369 --> 00:07:23,269
+which is lovely and they're just as good as they always were.
+
+175
+00:07:23,279 --> 00:07:25,079
+At least, I think so. But anyway,
+
+176
+00:07:25,220 --> 00:07:28,589
+zero day. Right. Let's focus on Zero day. Oh, sorry.
+
+177
+00:07:28,600 --> 00:07:31,600
+We actually have eight over the air TV channels locally. I had no idea.
+
+178
+00:07:31,609 --> 00:07:32,880
+Yeah, there's like tons of them now.
+
+179
+00:07:32,890 --> 00:07:37,869
+And you can actually, I use PLEX to receive the, the signal and on my pluck server,
+
+180
+00:07:37,880 --> 00:07:40,730
+I've got a little USB TV tuner thing.
+
+181
+00:07:40,739 --> 00:07:41,730
+You can do, I plug in
+
+182
+00:07:42,000 --> 00:07:44,829
+and then you can, like, you can even view it while you're gone.
+
+183
+00:07:44,839 --> 00:07:49,510
+Like I can, I can watch local TV when I'm like three states over. It's pretty cool.
+
+184
+00:07:49,519 --> 00:07:52,510
+Anyway, anyway, zero day. So I guess here's the thing
+
+185
+00:07:52,730 --> 00:07:56,230
+I've been noticing when zero days get described.
+
+186
+00:07:56,239 --> 00:08:00,209
+The historical definition is very much a, this was completely unknown
+
+187
+00:08:00,570 --> 00:08:03,559
+and all of a sudden it's known and often
+
+188
+00:08:03,570 --> 00:08:06,230
+it became news because it was being exploited actively.
+
+189
+00:08:06,239 --> 00:08:09,559
+And I think most of the usage I see now is a
+
+190
+00:08:09,570 --> 00:08:14,250
+zero day means an exploit being exploited before there is a fix.
+
+191
+00:08:14,260 --> 00:08:14,630
+Yes.
+
+192
+00:08:14,640 --> 00:08:19,029
+And not just an exploit before a fix, but an exploit before knowledge of the exploit.
+
+193
+00:08:19,040 --> 00:08:20,989
+Like we ran into the exploit in the wild.
+
+194
+00:08:21,000 --> 00:08:23,100
+Not even knowledge, knowledge is irrelevant in this.
+
+195
+00:08:23,109 --> 00:08:27,709
+From what I've seen, I think it is if there is no fix, it is going to be called a zero day.
+
+196
+00:08:27,980 --> 00:08:30,480
+So even if they know they still consider it a zero day.
+
+197
+00:08:30,489 --> 00:08:32,020
+Yeah, I mean, there was, there's been tons of stuff, like,
+
+198
+00:08:32,030 --> 00:08:33,679
+look at that Microsoft Exchange thing.
+
+199
+00:08:33,690 --> 00:08:36,090
+-- Where that was.
+-- Well today right now, the V eight thing,
+
+200
+00:08:36,200 --> 00:08:37,119
+there's a, there's an,
+
+201
+00:08:37,130 --> 00:08:40,010
+somebody just literally dropped an exploit for V
+
+202
+00:08:40,020 --> 00:08:41,880
+eight Cloud flare had actually a really good
+
+203
+00:08:41,890 --> 00:08:45,080
+response on hacker news about how they rolled it out in like 23 hours the update.
+
+204
+00:08:45,169 --> 00:08:48,140
+But all the browsers edge and chrome have not
+
+205
+00:08:48,409 --> 00:08:49,000
+done it.
+
+206
+00:08:49,210 --> 00:08:51,710
+And I'm actually, right now, I have the Tab Open in github
+
+207
+00:08:51,859 --> 00:08:52,760
+with the
+
+208
+00:08:52,969 --> 00:08:55,320
+javascript. It's 100 and 21.
+
+209
+00:08:55,809 --> 00:08:57,770
+Actually, it's quite well written and nicely.
+
+210
+00:08:57,780 --> 00:09:01,679
+It, it's, it's good licensed under the BSD two clause, which I don't agree with.
+
+211
+00:09:01,690 --> 00:09:05,440
+-- But, but wasn't
+-- it, it was fixed in va a couple days ago though, right.
+
+212
+00:09:05,679 --> 00:09:08,390
+But that's not a zero day then, right? By the traditional definition.
+
+213
+00:09:08,400 --> 00:09:10,549
+Well, but it hasn't made it into my web browser yet.
+
+214
+00:09:10,559 --> 00:09:12,359
+So as far as I'm concerned, it's sort of
+
+215
+00:09:12,520 --> 00:09:14,119
+-- a zero day. Yes,
+-- exactly.
+
+216
+00:09:14,130 --> 00:09:16,179
+I think the traditional definition of
+
+217
+00:09:16,190 --> 00:09:18,390
+completely unknown obviously is irrelevant.
+
+218
+00:09:18,400 --> 00:09:22,770
+It got fixed someone from, from what I've gathered and I don't have any secret
+
+219
+00:09:23,090 --> 00:09:24,809
+here, but from what I've gathered, it got fixed,
+
+220
+00:09:24,820 --> 00:09:26,359
+then someone wrote an exploit for it, right?
+
+221
+00:09:26,369 --> 00:09:29,280
+Which is, which is not how zero days are supposed to work. It's supposed to be, right?
+
+222
+00:09:29,289 --> 00:09:32,690
+The exploit, exploit, the exploit and then, oh ha ha. Look, we found a zero day.
+
+223
+00:09:32,700 --> 00:09:35,000
+But anyway, it doesn't matter though, right? Because who cares?
+
+224
+00:09:35,010 --> 00:09:38,559
+You have a functioning javascript exploit that affects Chrome.
+
+225
+00:09:38,570 --> 00:09:41,210
+Now, now mind you Fran, I mean, hopefully this will be
+
+226
+00:09:41,500 --> 00:09:41,650
+and
+
+227
+00:09:41,940 --> 00:09:42,940
+that's true because edges
+
+228
+00:09:43,049 --> 00:09:45,080
+edges chromium for anyone listening,
+
+229
+00:09:45,090 --> 00:09:47,159
+this will probably be fixed by the time this gets published.
+
+230
+00:09:47,169 --> 00:09:47,440
+But
+
+231
+00:09:47,710 --> 00:09:48,359
+it does
+
+232
+00:09:50,299 --> 00:09:52,200
+doesn't let you escape the sandbox.
+
+233
+00:09:52,210 --> 00:09:55,640
+So you also need, you need to use this exploit and then a sandbox escape.
+
+234
+00:09:55,650 --> 00:09:58,140
+So you need, you need to but whatever it doesn't matter.
+
+235
+00:09:58,150 --> 00:10:01,690
+So anyway, the point is the traditional definition obviously wouldn't be zero day,
+
+236
+00:10:01,700 --> 00:10:04,289
+but I'm perfectly comfortable calling this a zero day because this
+
+237
+00:10:04,299 --> 00:10:07,760
+is an exploit without a fix and people care about that.
+
+238
+00:10:07,770 --> 00:10:11,119
+Well, without a usable fix, I mean, I've seen exploits where somebody's like, and,
+
+239
+00:10:11,130 --> 00:10:11,520
+and
+
+240
+00:10:11,650 --> 00:10:13,359
+here's a code patch and it's like great,
+
+241
+00:10:13,369 --> 00:10:17,580
+but I need the actual code patched and a binary built and shipped to me because,
+
+242
+00:10:18,080 --> 00:10:20,429
+well, like a perfect example is open SSL, right?
+
+243
+00:10:20,440 --> 00:10:24,419
+Open SSL can issue all the software updates, like source code updates they want.
+
+244
+00:10:24,429 --> 00:10:26,419
+I'm looking suspiciously at my TV.
+
+245
+00:10:27,840 --> 00:10:30,929
+-- Yeah, that hasn't seen an open SSL update in a decade.
+-- Right.
+
+246
+00:10:30,940 --> 00:10:33,039
+I don't think it'll actually my TV is dumb
+
+247
+00:10:33,049 --> 00:10:35,039
+enough that it doesn't even go on the network.
+
+248
+00:10:35,049 --> 00:10:35,369
+So
+
+249
+00:10:35,539 --> 00:10:36,500
+I,
+
+250
+00:10:36,640 --> 00:10:36,690
+I
+
+251
+00:10:37,340 --> 00:10:41,729
+it's funny my TV si buy them, I connect them into the internet.
+
+252
+00:10:41,739 --> 00:10:45,239
+I download the updates. Then I turn off all the network.
+
+253
+00:10:45,950 --> 00:10:49,530
+You never, you never need to talk to anyone ever again.
+
+254
+00:10:49,909 --> 00:10:50,590
+Well, honestly,
+
+255
+00:10:50,599 --> 00:10:53,330
+even as terrible as the experience of like a fire stick
+
+256
+00:10:53,424 --> 00:10:55,645
+now it's still better than whatever's built into a TV.
+
+257
+00:10:55,655 --> 00:11:00,195
+Oh, absolutely. 100% because I actually own, I have an LG TV, and a Samsung TV.
+
+258
+00:11:00,205 --> 00:11:03,085
+And they're, like, built in everything is terrible.
+
+259
+00:11:03,094 --> 00:11:07,445
+It is an awful experience and I know they're just spying on me constantly.
+
+260
+00:11:07,455 --> 00:11:10,044
+Well, that's the whole point of it is for them to make a few more dollars.
+
+261
+00:11:10,054 --> 00:11:10,844
+That's why those things,
+
+262
+00:11:10,854 --> 00:11:13,505
+there's a good thread on hacker news about why are there like
+
+263
+00:11:13,614 --> 00:11:15,825
+no tvs without all those crap reloaded?
+
+264
+00:11:15,835 --> 00:11:19,164
+And the answer is because preloading that crap is their profit margin.
+
+265
+00:11:20,020 --> 00:11:20,140
+Yeah.
+
+266
+00:11:20,359 --> 00:11:20,830
+Right.
+
+267
+00:11:20,960 --> 00:11:22,640
+Um, but back to the zero day thing,
+
+268
+00:11:22,650 --> 00:11:25,500
+one thing you mentioned and I think that it just tweaked for me is,
+
+269
+00:11:25,510 --> 00:11:26,979
+it's a matter of perspective
+
+270
+00:11:27,580 --> 00:11:28,419
+in the sense of
+
+271
+00:11:28,750 --> 00:11:32,229
+there are vastly different perspectives for the attacker
+
+272
+00:11:32,409 --> 00:11:35,400
+for the person who kind of owns and has to, you know,
+
+273
+00:11:35,520 --> 00:11:38,979
+update the software for the end user of the software.
+
+274
+00:11:38,989 --> 00:11:42,239
+And so I suspect part of the problem is what is
+
+275
+00:11:42,250 --> 00:11:45,859
+a zero day also depends on what your perspective is,
+
+276
+00:11:46,130 --> 00:11:49,869
+you know, and an extreme example, you know, my perspective as a guy with
+
+277
+00:11:50,109 --> 00:11:51,280
+two windows machines,
+
+278
+00:11:51,289 --> 00:11:53,950
+a couple of macs and some tablets and whatnot
+
+279
+00:11:53,960 --> 00:11:56,109
+is very different than a fortune 100 company,
+
+280
+00:11:56,260 --> 00:11:57,349
+I would hope so
+
+281
+00:11:57,479 --> 00:12:00,059
+well. But in the sense of if I have a car,
+
+282
+00:12:00,570 --> 00:12:04,549
+it doesn't matter if you have a fleet of cars or I have a single car a recall is a recall.
+
+283
+00:12:04,559 --> 00:12:05,159
+-- I
+-- mean,
+
+284
+00:12:06,219 --> 00:12:09,869
+-- yeah, I guess
+-- like that's one thing that always, I, I still,
+
+285
+00:12:09,880 --> 00:12:12,710
+I don't think I fully understand but with technology as
+
+286
+00:12:13,140 --> 00:12:16,559
+you get fundamentally different things at scale,
+
+287
+00:12:16,570 --> 00:12:19,049
+especially with numbers and diversity.
+
+288
+00:12:19,090 --> 00:12:20,359
+Yeah, without question.
+
+289
+00:12:20,369 --> 00:12:22,500
+And I think in a lot of instances,
+
+290
+00:12:22,510 --> 00:12:25,880
+the technology is very much like a monoculture
+
+291
+00:12:25,890 --> 00:12:28,239
+because you think you basically have Windows and Mac
+
+292
+00:12:28,250 --> 00:12:33,950
+and those probably account for 95% of the web browsers in use on well on computers.
+
+293
+00:12:33,960 --> 00:12:35,469
+-- I mean, a
+-- mobile
+
+294
+00:12:35,590 --> 00:12:37,380
+mobile mobile is probably slightly different.
+
+295
+00:12:37,570 --> 00:12:43,380
+So thinking about this is part of it is what is the intent of zero day? What is it trying
+
+296
+00:12:43,580 --> 00:12:45,729
+to describe or get across?
+
+297
+00:12:45,890 --> 00:12:46,690
+And in my mind,
+
+298
+00:12:46,700 --> 00:12:51,200
+it was always here is something dangerous for which we don't have a
+
+299
+00:12:51,210 --> 00:12:55,099
+way to either fix it or deal with it safely because there are,
+
+300
+00:12:55,109 --> 00:12:58,650
+I remember there are zero days that popped out and it it was simple,
+
+301
+00:12:58,659 --> 00:13:01,030
+just turn feature X off and live without it for a day
+
+302
+00:13:01,039 --> 00:13:03,820
+or two or close off this network port or you know,
+
+303
+00:13:03,830 --> 00:13:05,299
+whatever do something simple, right?
+
+304
+00:13:05,309 --> 00:13:06,700
+And it was easy to live without.
+
+305
+00:13:07,309 --> 00:13:08,109
+And then conversely,
+
+306
+00:13:08,119 --> 00:13:11,020
+there are zero days like this chrome javascript thing where it's
+
+307
+00:13:11,359 --> 00:13:14,859
+OK. Don't browse the web well, OK. My web browser is not very useful.
+
+308
+00:13:14,909 --> 00:13:16,650
+Yeah, that's not gonna fly. I
+
+309
+00:13:16,799 --> 00:13:17,260
+mean,
+
+310
+00:13:17,489 --> 00:13:21,739
+II I think the your description of calling it like this is something important.
+
+311
+00:13:21,760 --> 00:13:22,049
+That's,
+
+312
+00:13:22,059 --> 00:13:25,940
+I think that's what it really comes down to is like the true meaning is long gone
+
+313
+00:13:26,200 --> 00:13:30,159
+and it's just, if something's called a zero Day, you probably need to pay attention,
+
+314
+00:13:30,190 --> 00:13:30,659
+you know.
+
+315
+00:13:30,669 --> 00:13:35,020
+-- Yeah.
+-- I think there is value in, where is this bug in the life cycle?
+
+316
+00:13:35,030 --> 00:13:39,619
+Because I could, you know, I find the world's worst security flaw on windows 10,
+
+317
+00:13:39,630 --> 00:13:40,770
+it's remotely exploitable.
+
+318
+00:13:40,780 --> 00:13:43,219
+And I tell Microsoft, well, cool. but it's
+
+319
+00:13:43,320 --> 00:13:45,460
+going to take Microsoft more than five minutes to react.
+
+320
+00:13:45,919 --> 00:13:47,179
+Yeah, for sure.
+
+321
+00:13:47,309 --> 00:13:48,010
+And I mean,
+
+322
+00:13:48,020 --> 00:13:52,330
+that's why they have their co ordinated disclosure programs and even bug bunnies to
+
+323
+00:13:52,340 --> 00:13:55,520
+a degree because it's an easy way to say here's a couple of bucks.
+
+324
+00:13:55,530 --> 00:13:56,419
+Thanks for helping.
+
+325
+00:13:56,590 --> 00:13:57,719
+Yeah, we need like a
+
+326
+00:13:57,840 --> 00:14:00,340
+month or three to actually fix it.
+
+327
+00:14:00,659 --> 00:14:01,039
+Yeah.
+
+328
+00:14:01,190 --> 00:14:05,320
+-- Yeah. And I get that right. That's fine.
+-- We were on the receiving end of that.
+
+329
+00:14:05,330 --> 00:14:07,150
+-- How many times at Red Hat? A
+-- million?
+
+330
+00:14:07,159 --> 00:14:09,520
+I mean, and we were, we were pretty quick for sure.
+
+331
+00:14:09,530 --> 00:14:09,919
+But there were,
+
+332
+00:14:09,929 --> 00:14:13,609
+there were always things that the challenge there is always and this is, I mean,
+
+333
+00:14:13,619 --> 00:14:16,280
+this is one of the dangers with kind of zero day.
+
+334
+00:14:16,289 --> 00:14:20,859
+If you rush a fix, it's not uncommon at all to make the problem worse
+
+335
+00:14:21,539 --> 00:14:24,094
+than taking your time and doing it right.
+
+336
+00:14:24,164 --> 00:14:27,114
+Because I mean, shell shock is like the best example of this where they,
+
+337
+00:14:27,125 --> 00:14:28,875
+they rushed the wrong fix,
+
+338
+00:14:29,125 --> 00:14:30,544
+what, three times
+
+339
+00:14:30,804 --> 00:14:31,155
+and
+
+340
+00:14:31,294 --> 00:14:34,044
+then, and then it was finally like, please fix it. Right.
+
+341
+00:14:34,054 --> 00:14:36,614
+-- Well,
+-- I, I remember the same thing with the uh the qac
+
+342
+00:14:36,835 --> 00:14:37,434
+stack
+
+343
+00:14:37,695 --> 00:14:42,445
+vulnerabilities many years ago. And uh here we go, found it. And originally Kace
+
+344
+00:14:42,765 --> 00:14:46,195
+was like, oh, we can fix this real easy. It'll be a one megabyte guard page and
+
+345
+00:14:46,450 --> 00:14:50,169
+this should work. Oh, that, right. And off the surface of it. Yeah.
+
+346
+00:14:50,179 --> 00:14:53,549
+No, no, no, that was fine. And then I'm spacing out the
+
+347
+00:14:53,880 --> 00:14:54,520
+flooring.
+
+348
+00:14:55,289 --> 00:14:55,450
+Um,
+
+349
+00:14:55,580 --> 00:14:58,349
+you know, looked into it and he's like, no, uh the stack
+
+350
+00:14:58,669 --> 00:15:00,309
+guard page is gonna have to be like, what was it like?
+
+351
+00:15:00,320 --> 00:15:03,869
+-- One or two gigabytes or something? It was
+-- ridiculously large
+
+352
+00:15:04,359 --> 00:15:05,950
+and ok. Ok.
+
+353
+00:15:06,650 --> 00:15:09,789
+That's act ok. On 64 bit systems, we can live with that.
+
+354
+00:15:09,799 --> 00:15:12,590
+But on 32 bit systems, it means you can have three processes.
+
+355
+00:15:12,770 --> 00:15:14,270
+Right. Yeah, that's not going to work.
+
+356
+00:15:14,280 --> 00:15:18,109
+And I mean, this was back in the day when 32 bit binary still existed.
+
+357
+00:15:18,119 --> 00:15:23,859
+-- I mean, they're much rarer now,
+-- but I super respect Apple for killing off 32 bit.
+
+358
+00:15:24,479 --> 00:15:29,429
+I was painful as it is for people. I'm sorry, folks. It's, it's 2021.
+
+359
+00:15:29,440 --> 00:15:32,609
+I've had a 64 bit computer for the better part of two decades.
+
+360
+00:15:32,820 --> 00:15:35,190
+Thanks a MD by the way. And prior to that deck alpha.
+
+361
+00:15:35,200 --> 00:15:35,950
+But you know, like,
+
+362
+00:15:35,960 --> 00:15:40,940
+-- you know what
+-- makes this interesting though is on in the Windows Universe is games
+
+363
+00:15:41,609 --> 00:15:44,869
+because there's still 32 bit games being created,
+
+364
+00:15:44,880 --> 00:15:47,349
+but also all the old games that still run on Windows.
+
+365
+00:15:47,359 --> 00:15:49,489
+-- Those are all 32 bit in
+-- Windows.
+
+366
+00:15:49,500 --> 00:15:53,590
+10, I can still run my D OS apps cleanly and my Windows 95 apps cleanly.
+
+367
+00:15:53,599 --> 00:15:56,520
+-- So, I sure that's not a problem.
+-- What do you mean? It's not a problem.
+
+368
+00:15:56,530 --> 00:16:01,229
+-- They're running all in the 32 bit user space, but
+-- they're running in a VM. Basically.
+
+369
+00:16:01,239 --> 00:16:03,429
+-- Do they
+-- run in VMS? I don't know, I don't know how they do it.
+
+370
+00:16:03,440 --> 00:16:05,890
+-- Yeah,
+-- they're basically running in a, like that, that, what is it?
+
+371
+00:16:05,900 --> 00:16:08,580
+Windows compatibility mode or whatever it's called. It's basically a VM.
+
+372
+00:16:08,669 --> 00:16:11,679
+It, I mean, if it is, that's great because that's the right way to do it for sure.
+
+373
+00:16:11,780 --> 00:16:13,690
+When you have technology that's 20 years old.
+
+374
+00:16:13,700 --> 00:16:15,989
+It's a lot easier to run it in a VM and have it as
+
+375
+00:16:16,000 --> 00:16:18,940
+its own separate thing than it is to properly integrate it into the system.
+
+376
+00:16:18,969 --> 00:16:19,229
+I mean,
+
+377
+00:16:19,239 --> 00:16:22,219
+I agree the fact that we still have reserved device names
+
+378
+00:16:22,229 --> 00:16:24,369
+and Windows like com and PR N and stuff like that.
+
+379
+00:16:24,380 --> 00:16:26,570
+So funny, it just breaks, like
+
+380
+00:16:26,799 --> 00:16:30,049
+there are so many applications that if you try and pass it as a file name, it just,
+
+381
+00:16:30,059 --> 00:16:31,650
+it just, wow, it just,
+
+382
+00:16:32,280 --> 00:16:34,890
+there was something you could, I forget what it is.
+
+383
+00:16:34,900 --> 00:16:38,869
+Now, there was, there was like a file you could open on Windows that would like,
+
+384
+00:16:38,880 --> 00:16:40,630
+brick the disk or something.
+
+385
+00:16:40,719 --> 00:16:42,909
+Oh, the NTFS thing. Yeah and no, no, no.
+
+386
+00:16:42,919 --> 00:16:45,989
+If you have a symbolic link, it was, it was pretty recent even. Yeah.
+
+387
+00:16:46,000 --> 00:16:48,630
+If you have a symbolic link and you open it and blah, blah, blah, blah blah. Yeah,
+
+388
+00:16:48,880 --> 00:16:51,590
+ntfs is really interesting and that they actually
+
+389
+00:16:51,599 --> 00:16:53,669
+I finally found some documentation on it from
+
+390
+00:16:53,679 --> 00:16:57,659
+a disc recovery firm because I looked into it about 20 years ago when I did
+
+391
+00:16:57,830 --> 00:16:59,309
+file wiping utilities.
+
+392
+00:16:59,599 --> 00:17:02,419
+Because if a file was smaller,
+
+393
+00:17:02,789 --> 00:17:06,410
+then about four kilobytes instead of storing it on the disk,
+
+394
+00:17:06,618 --> 00:17:11,489
+like a traditional data, it's stored it in sort of any leftover space in the, in the,
+
+395
+00:17:11,500 --> 00:17:12,930
+in the master file table.
+
+396
+00:17:13,618 --> 00:17:14,368
+Right? Because,
+
+397
+00:17:15,000 --> 00:17:17,989
+well, if I think the master file table entries are like four kilobytes.
+
+398
+00:17:18,000 --> 00:17:20,420
+So if there's a bit of data in there and then why not
+
+399
+00:17:20,430 --> 00:17:23,280
+just put the file in there instead of having a second thing,
+
+400
+00:17:23,479 --> 00:17:24,170
+right?
+
+401
+00:17:24,310 --> 00:17:27,739
+But the problem is if you touch the master file table improperly, yeah,
+
+402
+00:17:27,750 --> 00:17:28,689
+you have a dead system.
+
+403
+00:17:28,699 --> 00:17:31,550
+Your, your disc is like, it's, it's gone, it's corrupt.
+
+404
+00:17:31,560 --> 00:17:34,150
+Like that's how that, like when you start corrupting your, you know,
+
+405
+00:17:34,160 --> 00:17:35,250
+your disk system,
+
+406
+00:17:35,400 --> 00:17:35,869
+well, yeah,
+
+407
+00:17:36,339 --> 00:17:37,229
+-- it
+-- breaks.
+
+408
+00:17:37,359 --> 00:17:37,750
+I mean,
+
+409
+00:17:38,060 --> 00:17:38,550
+yeah,
+
+410
+00:17:38,660 --> 00:17:39,880
+yeah, I buy that anyway.
+
+411
+00:17:40,189 --> 00:17:42,140
+And the funny thing is the response to that like in the
+
+412
+00:17:42,310 --> 00:17:43,630
+world is ok,
+
+413
+00:17:43,790 --> 00:17:45,969
+we're going to have multiple copies of these tables.
+
+414
+00:17:45,979 --> 00:17:49,430
+I mean, fat does that fat has a backup table because I know
+
+415
+00:17:49,760 --> 00:17:50,310
+in,
+
+416
+00:17:50,449 --> 00:17:51,599
+I forget what it was.
+
+417
+00:17:51,609 --> 00:17:56,829
+I had something, some, like we would call it iot now, but it was,
+
+418
+00:17:56,910 --> 00:17:59,410
+it was some device I had a long time ago that would only
+
+419
+00:17:59,420 --> 00:18:04,010
+update one of the fat tables on the like flash card it used.
+
+420
+00:18:04,020 --> 00:18:06,089
+And so every time I plugged it in windows was like
+
+421
+00:18:06,229 --> 00:18:09,109
+this disc appears to be corrupt. Do you want me to fix it? And I always click.
+
+422
+00:18:09,119 --> 00:18:12,969
+No, because if I click, yes, it trashed the disk.
+
+423
+00:18:13,109 --> 00:18:13,250
+So
+
+424
+00:18:13,479 --> 00:18:17,290
+it's like this works. I think it was a camera maybe. But anyway, anyway,
+
+425
+00:18:18,020 --> 00:18:18,479
+so
+
+426
+00:18:18,680 --> 00:18:23,890
+I think for the purposes of zero day, maybe that's the problem in that.
+
+427
+00:18:24,349 --> 00:18:25,250
+Not only is it
+
+428
+00:18:25,579 --> 00:18:31,209
+describing intent, but it's describing intent from different perspectives.
+
+429
+00:18:31,219 --> 00:18:34,829
+-- I
+-- mean, to a degree, but I think honestly if we want to,
+
+430
+00:18:34,839 --> 00:18:34,949
+well,
+
+431
+00:18:34,959 --> 00:18:36,540
+the people with different perspectives
+
+432
+00:18:36,719 --> 00:18:38,699
+aren't going to agree with each other because they don't have
+
+433
+00:18:38,709 --> 00:18:41,280
+the empathy or the intelligence to go as an attacker.
+
+434
+00:18:41,339 --> 00:18:44,530
+I'm going to look at it from the defender's point of view and vice versa. Who cares?
+
+435
+00:18:44,619 --> 00:18:45,439
+I mean, so one of the,
+
+436
+00:18:45,449 --> 00:18:48,400
+I think this is one of those places where we have to just be like
+
+437
+00:18:48,410 --> 00:18:50,160
+it doesn't matter because the right way to
+
+438
+00:18:50,170 --> 00:18:53,640
+handle security vulnerabilities isn't to call them.
+
+439
+00:18:53,650 --> 00:18:55,520
+This is the Chrome Zero Day.
+
+440
+00:18:55,530 --> 00:18:59,270
+It's to have easy to acquire identifiers and basically
+
+441
+00:18:59,280 --> 00:19:01,719
+say like this is what this thing is called.
+
+442
+00:19:01,849 --> 00:19:04,790
+Is there a fix? Yes. Is there a fix?
+
+443
+00:19:04,890 --> 00:19:05,349
+No?
+
+444
+00:19:05,520 --> 00:19:07,949
+Right. And that's when you can start making decisions.
+
+445
+00:19:07,959 --> 00:19:11,859
+Because I think the term zero day has taken on so much, so,
+
+446
+00:19:11,869 --> 00:19:14,869
+so much importance because it's all we have and
+
+447
+00:19:14,880 --> 00:19:17,189
+it's a terrible solution to a difficult problem.
+
+448
+00:19:17,199 --> 00:19:18,750
+Well, here's another thought is
+
+449
+00:19:19,000 --> 00:19:23,310
+for more mature companies that are running bug bounties and are running, you know,
+
+450
+00:19:23,319 --> 00:19:24,939
+coordinate disclosure efforts.
+
+451
+00:19:25,469 --> 00:19:30,199
+A zero day effectively implies that their system has failed like this V eight bug.
+
+452
+00:19:30,209 --> 00:19:31,000
+How come
+
+453
+00:19:31,189 --> 00:19:36,680
+the guy or the person didn't go, you know how come V eight fixed it? And Google didn't,
+
+454
+00:19:36,810 --> 00:19:38,099
+to me that looks like a failure.
+
+455
+00:19:38,290 --> 00:19:41,839
+Maybe I don't know the story behind it. So I can't say for sure.
+
+456
+00:19:41,849 --> 00:19:44,209
+I mean, look even I don't think I would call it a
+
+457
+00:19:44,369 --> 00:19:46,959
+it might be a failure, it might not be a failure.
+
+458
+00:19:46,969 --> 00:19:49,880
+I'm sitting here with a vulnerable web browser that's a failure.
+
+459
+00:19:49,890 --> 00:19:51,319
+Just don't run chrome
+
+460
+00:19:52,650 --> 00:19:53,329
+well. But,
+
+461
+00:19:53,500 --> 00:19:54,910
+and that's an option in this case.
+
+462
+00:19:54,920 --> 00:19:58,410
+But what if it was a vulnerability in Linux or Windows kernel?
+
+463
+00:19:59,489 --> 00:20:00,780
+It, it it can happen.
+
+464
+00:20:00,920 --> 00:20:04,670
+So in my mind, this zero day is an indication that the system
+
+465
+00:20:05,079 --> 00:20:05,969
+failed
+
+466
+00:20:06,089 --> 00:20:06,540
+that
+
+467
+00:20:06,760 --> 00:20:10,989
+I, I'm now vulnerable for potentially hours, days, weeks,
+
+468
+00:20:11,680 --> 00:20:17,819
+it will be days for sure. I mean, you probably can't build a new version of chrome
+
+469
+00:20:18,069 --> 00:20:19,829
+in under a couple of days because they just,
+
+470
+00:20:19,839 --> 00:20:23,089
+they do a lot of testing and there's all kinds of stuff that happens from
+
+471
+00:20:23,099 --> 00:20:27,130
+back in the day when I helped firefox out when I was at Red Hat.
+
+472
+00:20:27,140 --> 00:20:30,579
+I think it was three days was the absolute minimum
+
+473
+00:20:30,989 --> 00:20:33,729
+Mozilla needed to push a new Firefox.
+
+474
+00:20:33,930 --> 00:20:37,530
+And that was like, that was people working 24 7.
+
+475
+00:20:37,540 --> 00:20:39,109
+-- I don't buy
+-- that from Google because they
+
+476
+00:20:39,119 --> 00:20:41,670
+can massively parallelize testing of this thing.
+
+477
+00:20:41,780 --> 00:20:44,640
+They probably do and it still takes a long time.
+
+478
+00:20:44,959 --> 00:20:47,160
+Also. Chrome is their cash cow.
+
+479
+00:20:47,329 --> 00:20:47,989
+That is
+
+480
+00:20:48,219 --> 00:20:49,560
+what directly
+
+481
+00:20:49,739 --> 00:20:52,770
+accounts and well not accounts enables
+
+482
+00:20:53,170 --> 00:20:57,099
+-- a lot of their revenue. It
+-- is the hose from which we all drink.
+
+483
+00:20:57,189 --> 00:20:57,520
+Yeah.
+
+484
+00:20:58,030 --> 00:20:59,199
+So I,
+
+485
+00:20:59,500 --> 00:21:00,589
+in my mind if I,
+
+486
+00:21:00,849 --> 00:21:03,109
+you know, if it was vulnerable for minutes, sure.
+
+487
+00:21:03,449 --> 00:21:05,880
+Cool. Hours. Ok. Acceptable days.
+
+488
+00:21:07,359 --> 00:21:10,430
+-- More than a week,
+-- I mean, more than a week would be unacceptable.
+
+489
+00:21:10,439 --> 00:21:13,839
+-- But I think days is within the realm of, well, it's
+-- been almost a week now.
+
+490
+00:21:13,880 --> 00:21:14,439
+Has it.
+
+491
+00:21:14,630 --> 00:21:16,869
+That's, see, that's, that's a long time.
+
+492
+00:21:17,300 --> 00:21:19,689
+Well, and the funny thing is because it doesn't have a CV or anything.
+
+493
+00:21:19,699 --> 00:21:23,270
+-- I can't, it's a pain in the butt to, to track this down. Right.
+-- Right.
+
+494
+00:21:23,280 --> 00:21:28,229
+Which again is where, I mean, calling it, the Chrome Zero Day is ridiculous.
+
+495
+00:21:28,510 --> 00:21:32,630
+Yeah, I guess the chrome Zero day of whatever day it was actually zero date.
+
+496
+00:21:32,640 --> 00:21:35,589
+It's not a name. Right. It needs, it needs a CV ID.
+
+497
+00:21:35,599 --> 00:21:36,290
+Which of course, you know,
+
+498
+00:21:36,300 --> 00:21:39,770
+we've talked about in the couple episodes ago about why CVS busted.
+
+499
+00:21:39,780 --> 00:21:44,479
+-- But, well,
+-- the Legacy CV system project is busted. CVE, I mean, the,
+
+500
+00:21:44,680 --> 00:21:47,439
+is the barcodes work fine. It's the entity of signing the barcodes.
+
+501
+00:21:47,449 --> 00:21:49,219
+That's not being so awesome.
+
+502
+00:21:49,550 --> 00:21:50,150
+Yeah, that's,
+
+503
+00:21:50,349 --> 00:21:52,099
+that's true. They're too slow,
+
+504
+00:21:52,310 --> 00:21:55,550
+too slow, too complicated, too, too much of a whole problem. Go
+
+505
+00:21:55,650 --> 00:21:57,390
+listen to the episode, go a couple of episodes back.
+
+506
+00:21:57,670 --> 00:21:59,229
+We, we take care of that.
+
+507
+00:21:59,550 --> 00:22:00,729
+But anyway, anyway,
+
+508
+00:22:01,040 --> 00:22:06,219
+I think, ok, so we've gone to the marvelously strange place again as usual. But
+
+509
+00:22:06,589 --> 00:22:10,219
+I think fundamentally the takeaway I have from all of
+
+510
+00:22:10,229 --> 00:22:13,209
+this stuff and everything going on is that firstly,
+
+511
+00:22:13,219 --> 00:22:14,689
+language is going to evolve.
+
+512
+00:22:14,699 --> 00:22:16,459
+So what a thing used to mean,
+
+513
+00:22:16,579 --> 00:22:19,329
+it doesn't matter if it doesn't mean that anymore. Like who cares?
+
+514
+00:22:19,339 --> 00:22:20,780
+-- It's just how it works.
+-- It's
+
+515
+00:22:21,099 --> 00:22:24,050
+like the consensus mechanism for a language is
+
+516
+00:22:24,060 --> 00:22:25,890
+if X number of people believe something,
+
+517
+00:22:26,000 --> 00:22:27,180
+something, it means something.
+
+518
+00:22:27,410 --> 00:22:28,099
+Yeah, exactly.
+
+519
+00:22:28,109 --> 00:22:33,189
+Like a perfect example is in English, if I say the word shit, that is a swear word,
+
+520
+00:22:33,430 --> 00:22:36,500
+the direct French equivalent. Mad, no big deal, right?
+
+521
+00:22:36,510 --> 00:22:39,270
+It's just, and like the French have agreed that mad is not a big deal.
+
+522
+00:22:39,280 --> 00:22:40,380
+But in English, there's,
+
+523
+00:22:40,510 --> 00:22:42,729
+there are literally words I cannot say on this podcast
+
+524
+00:22:42,739 --> 00:22:45,310
+because Josh will bleep out the fact that I even mentioned
+
+525
+00:22:45,739 --> 00:22:49,430
+the substitute that we use for that word. He would bleep that out, right?
+
+526
+00:22:49,439 --> 00:22:50,609
+And, and so, and that,
+
+527
+00:22:50,619 --> 00:22:55,959
+-- and then there's other cultures where that word is is fine and
+-- I, I do detest the way
+
+528
+00:22:56,530 --> 00:22:57,069
+that
+
+529
+00:22:57,170 --> 00:22:59,079
+society treats certain words
+
+530
+00:22:59,250 --> 00:23:02,810
+because I mean, so, so the challenge is the real reason I care is
+
+531
+00:23:03,099 --> 00:23:05,550
+when you use a naughty word on a podcast,
+
+532
+00:23:05,560 --> 00:23:09,109
+you have to mark it explicit or Apple dings you
+
+533
+00:23:09,219 --> 00:23:13,670
+and once you mark one episode explicit, the whole podcast is explicit for everyone
+
+534
+00:23:14,060 --> 00:23:15,239
+and you can never undo that.
+
+535
+00:23:15,329 --> 00:23:18,689
+-- So do you think we've
+-- accidentally said a rude word in some foreign language?
+
+536
+00:23:18,699 --> 00:23:19,869
+Hopefully?
+
+537
+00:23:20,010 --> 00:23:20,569
+I mean,
+
+538
+00:23:20,729 --> 00:23:22,599
+now I kind of start slipping them in.
+
+539
+00:23:24,170 --> 00:23:26,380
+It's, it's apple, they're an American company.
+
+540
+00:23:26,390 --> 00:23:30,280
+I'm sure they don't care at all about any other language except English
+
+541
+00:23:30,650 --> 00:23:31,400
+and let's face it.
+
+542
+00:23:31,489 --> 00:23:33,839
+You know what it really comes down to and, and I think this is,
+
+543
+00:23:33,849 --> 00:23:36,410
+this is kind of part of this conversation a little bit is
+
+544
+00:23:36,530 --> 00:23:39,040
+if you use naughty words in America,
+
+545
+00:23:39,239 --> 00:23:40,050
+there is,
+
+546
+00:23:40,170 --> 00:23:42,630
+there are certain groups that will come and complain,
+
+547
+00:23:42,900 --> 00:23:46,979
+right? And they're an extreme minority, but they're really loud and annoying.
+
+548
+00:23:46,989 --> 00:23:51,079
+-- Well, not just complain, they will pitch fork and burn you down. I mean,
+-- right.
+
+549
+00:23:51,420 --> 00:23:53,300
+Like Janet Jackson Super Bowl,
+
+550
+00:23:53,709 --> 00:23:55,689
+I remember that that was a big
+
+551
+00:23:55,869 --> 00:23:57,329
+-- deal.
+-- It was marvelous.
+
+552
+00:23:57,479 --> 00:23:58,469
+But you know what I mean?
+
+553
+00:23:58,479 --> 00:24:02,609
+And, and I think you, you kind of to a degree, like, I think with crypto,
+
+554
+00:24:02,619 --> 00:24:05,479
+we sort of had this where there was a small vocal group that was like,
+
+555
+00:24:05,489 --> 00:24:07,650
+no crypto means cryptography and
+
+556
+00:24:08,040 --> 00:24:11,880
+it was just like whatever nerds, shut up. We don't care and they lost, right?
+
+557
+00:24:11,890 --> 00:24:14,310
+And it's always intriguing to me how some of
+
+558
+00:24:14,319 --> 00:24:17,260
+these groups managed to kind of carry this,
+
+559
+00:24:17,270 --> 00:24:17,780
+this,
+
+560
+00:24:17,979 --> 00:24:20,109
+this outrage around with them
+
+561
+00:24:20,209 --> 00:24:23,170
+and managed to get it somewhere. Well, hacker and cracker. Yeah.
+
+562
+00:24:23,180 --> 00:24:24,079
+But like that one, that one,
+
+563
+00:24:24,525 --> 00:24:25,314
+no one cared.
+
+564
+00:24:25,584 --> 00:24:29,594
+No people still, oh, man. Check the comments on the hacker news. People still care.
+
+565
+00:24:30,354 --> 00:24:34,015
+I'm sure some people do, but I don't think it's, I don't think it's enough to matter,
+
+566
+00:24:34,025 --> 00:24:34,484
+you know.
+
+567
+00:24:34,494 --> 00:24:36,875
+No, clearly not. I mean that ship sailed, but
+
+568
+00:24:37,045 --> 00:24:38,074
+here's the other thing is
+
+569
+00:24:38,435 --> 00:24:40,255
+people need words to describe things
+
+570
+00:24:40,599 --> 00:24:42,380
+and they're going to
+
+571
+00:24:42,739 --> 00:24:45,069
+probably take a similar word and, or co
+
+572
+00:24:45,170 --> 00:24:45,859
+opt something.
+
+573
+00:24:45,959 --> 00:24:48,709
+But what's interesting to me is that sort of laziness factor of shorting it,
+
+574
+00:24:48,719 --> 00:24:51,170
+shortening it from Cryptocurrency to just crypto.
+
+575
+00:24:51,469 --> 00:24:52,699
+Is that a common thing?
+
+576
+00:24:52,709 --> 00:24:52,989
+I don't know,
+
+577
+00:24:53,000 --> 00:24:55,319
+maybe we need to find a linguist who tracks
+
+578
+00:24:55,329 --> 00:24:57,800
+this because we have to invent new words constantly.
+
+579
+00:24:58,310 --> 00:24:59,829
+I love the German approach to it,
+
+580
+00:25:00,390 --> 00:25:03,569
+like the German approach to it. Ok. This thing, this thing flies.
+
+581
+00:25:03,579 --> 00:25:04,540
+So what do we call it?
+
+582
+00:25:04,699 --> 00:25:05,040
+Fluky,
+
+583
+00:25:05,430 --> 00:25:06,920
+literally flying thing?
+
+584
+00:25:07,072 --> 00:25:07,453
+You know,
+
+585
+00:25:07,583 --> 00:25:10,932
+this animal, this white animal with a white stripe down its back. It smells bad.
+
+586
+00:25:10,942 --> 00:25:11,713
+What do we call it? Ok.
+
+587
+00:25:11,853 --> 00:25:11,902
+Stint
+
+588
+00:25:12,233 --> 00:25:12,253
+you
+
+589
+00:25:12,542 --> 00:25:13,792
+stinky animal.
+
+590
+00:25:13,983 --> 00:25:14,692
+Actually, you know what?
+
+591
+00:25:14,703 --> 00:25:16,613
+You know what my favorite is my,
+
+592
+00:25:16,623 --> 00:25:21,453
+my daughter is learning Japanese because she wants to speak Japanese and she is 12
+
+593
+00:25:21,782 --> 00:25:25,203
+and she told me the other day that the word for penguin,
+
+594
+00:25:25,213 --> 00:25:26,642
+they don't have a word for penguin.
+
+595
+00:25:26,652 --> 00:25:28,593
+They call it business goose.
+
+596
+00:25:29,333 --> 00:25:29,562
+I'm like,
+
+597
+00:25:29,723 --> 00:25:32,233
+that is the greatest word ever.
+
+598
+00:25:32,432 --> 00:25:33,453
+Yeah. Like cobra chicken.
+
+599
+00:25:33,826 --> 00:25:37,745
+-- What's a cobra
+-- chicken? It's a goose. If there's a famous meme, some,
+
+600
+00:25:37,895 --> 00:25:40,385
+you know, farmhand is like, doesn't speak English well, and he's like,
+
+601
+00:25:40,395 --> 00:25:41,686
+I do not like the cobra goose,
+
+602
+00:25:41,926 --> 00:25:43,036
+the cobra goose.
+
+603
+00:25:44,125 --> 00:25:44,306
+No
+
+604
+00:25:44,576 --> 00:25:45,215
+chicken, you just said?
+
+605
+00:25:46,026 --> 00:25:48,826
+Yeah, I get that because geese are horrible creatures.
+
+606
+00:25:49,056 --> 00:25:53,125
+Well, I love that they are fantastically aggressive.
+
+607
+00:25:53,475 --> 00:25:54,086
+Um,
+
+608
+00:25:54,395 --> 00:25:56,385
+and also I'm just learning, there's actually,
+
+609
+00:25:56,395 --> 00:25:58,115
+I didn't realize how many different kinds of geese work
+
+610
+00:25:58,125 --> 00:25:59,906
+because I've really only ever known about Canada geese,
+
+611
+00:26:00,569 --> 00:26:02,189
+the meanest of them all.
+
+612
+00:26:02,260 --> 00:26:05,489
+But it turns out there's actually about a half dozen kinds of keys.
+
+613
+00:26:07,189 --> 00:26:07,579
+So,
+
+614
+00:26:08,219 --> 00:26:08,469
+anyway,
+
+615
+00:26:08,810 --> 00:26:10,189
+-- anyway, anyway, I think
+-- so,
+
+616
+00:26:10,199 --> 00:26:14,920
+basically zero day means you probably need to pay attention to this vulnerability.
+
+617
+00:26:14,930 --> 00:26:15,170
+Yeah.
+
+618
+00:26:15,430 --> 00:26:17,099
+People are talking about it and,
+
+619
+00:26:17,109 --> 00:26:19,020
+and that is interesting in and of itself
+
+620
+00:26:19,030 --> 00:26:21,239
+because most vulnerabilities do not get talked about.
+
+621
+00:26:21,400 --> 00:26:26,859
+Right. Right. And I think the, the way I will, I will wrap this one all up is to say that
+
+622
+00:26:27,569 --> 00:26:32,000
+language evolves and you can stand your ground and be opposed to
+
+623
+00:26:32,010 --> 00:26:35,800
+some strange new use to a word which whatever it's your decision,
+
+624
+00:26:35,810 --> 00:26:36,739
+it doesn't really matter.
+
+625
+00:26:36,750 --> 00:26:39,219
+But I think fundamentally this is one of those things
+
+626
+00:26:39,229 --> 00:26:42,359
+that if you're obsessed over the definition of zero day,
+
+627
+00:26:42,369 --> 00:26:46,819
+you are changing the conversation in an unhelpful way because no one cares what
+
+628
+00:26:46,829 --> 00:26:50,760
+the technical definition of zero day is they just want their web browser fixed.
+
+629
+00:26:51,349 --> 00:26:54,359
+And I think that's what, what one of our challenges is
+
+630
+00:26:54,560 --> 00:26:57,010
+that challenges is, that's weird. Anyway,
+
+631
+00:26:57,520 --> 00:27:02,949
+as security people, it is easy to turn the conversation into something unhelpful.
+
+632
+00:27:03,280 --> 00:27:03,900
+And this
+
+633
+00:27:04,050 --> 00:27:04,420
+is one of those
+
+634
+00:27:05,369 --> 00:27:08,439
+where these people end up arguing technical correctness instead of actually
+
+635
+00:27:08,579 --> 00:27:10,770
+trying to help fix the problem. And I see this
+
+636
+00:27:11,150 --> 00:27:12,569
+so much.
+
+637
+00:27:13,050 --> 00:27:15,430
+Yeah, like no one cares, you know what they're going to remember.
+
+638
+00:27:15,439 --> 00:27:18,099
+They're gonna remember. You weren't helpful. That's what's going to happen.
+
+639
+00:27:18,109 --> 00:27:22,270
+Well, worse. It's not that you weren't helpful. You were actively getting in the way
+
+640
+00:27:22,819 --> 00:27:23,579
+that too.
+
+641
+00:27:23,819 --> 00:27:26,869
+All right, I'll let you close this one out. Kurt. Final thoughts.
+
+642
+00:27:27,319 --> 00:27:28,540
+Language evolves.
+
+643
+00:27:29,000 --> 00:27:30,270
+We should too.
+
+644
+00:27:31,000 --> 00:27:31,839
+That's it. No, no, no.
+
+645
+00:27:31,849 --> 00:27:33,510
+And, and, and, and so does and,
+
+646
+00:27:33,520 --> 00:27:36,910
+and I also realize things like hairstyles and clothing styles evolve and
+
+647
+00:27:37,189 --> 00:27:40,689
+there's some stuff I don't, I'll be honest, I don't understand dabbing.
+
+648
+00:27:40,699 --> 00:27:42,640
+I have an irrational hatred of dabbing and I
+
+649
+00:27:42,650 --> 00:27:45,119
+know it's because I'm old and out of touch.
+
+650
+00:27:46,489 --> 00:27:46,800
+Right.
+
+651
+00:27:46,810 --> 00:27:47,140
+So,
+
+652
+00:27:47,239 --> 00:27:48,810
+but at least I'm aware of it and I just
+
+653
+00:27:48,819 --> 00:27:51,000
+choose now not to care instead of getting annoyed.
+
+654
+00:27:51,010 --> 00:27:51,400
+And
+
+655
+00:27:51,630 --> 00:27:53,569
+maybe, and that would be my advice to people is, you know,
+
+656
+00:27:53,579 --> 00:27:56,520
+-- just let it
+-- go and that's the right way.
+
+657
+00:27:56,790 --> 00:27:58,030
+That's right. Let it go.
+
+658
+00:28:00,750 --> 00:28:02,630
+Now we're going to get a copyright strike. But
+
+659
+00:28:03,719 --> 00:28:03,930
+now
+
+660
+00:28:04,619 --> 00:28:05,469
+it in, that's too good.
+
+661
+00:28:05,750 --> 00:28:06,209
+All right.
+
+662
+00:28:06,339 --> 00:28:08,170
+Thank you, Kurt. Thank you everyone for listening.
+
+663
+00:28:08,180 --> 00:28:11,069
+Go to open source security podcast.com. Hit up the show Note, Suif Pound
+
+664
+00:28:11,270 --> 00:28:13,969
+Os S podcast. Hashtag to hit us up on social media.
+
+665
+00:28:13,979 --> 00:28:17,650
+-- Kurt, you have a marvelous rest of your day. You too.
+-- Thanks everybody.
+
+666
+00:28:17,699 --> 00:28:19,079
+Thanks everyone. Bye bye.

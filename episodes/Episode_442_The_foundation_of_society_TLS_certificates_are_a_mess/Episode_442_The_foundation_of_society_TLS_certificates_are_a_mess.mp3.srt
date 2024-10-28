@@ -1,0 +1,3962 @@
+0
+00:00:05,659 --> 00:00:08,819
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,829 --> 00:00:11,159
+Kurt Siefried and my partner in wondering
+
+2
+00:00:11,170 --> 00:00:13,329
+why we even bother with certificate authorities.
+
+3
+00:00:13,340 --> 00:00:13,979
+Josh Bresser.
+
+4
+00:00:14,359 --> 00:00:17,569
+-- I don't
+-- wonder why I know why we bother with them because
+
+5
+00:00:17,579 --> 00:00:21,760
+the foundation of modern society is built upon our certificate authorities.
+
+6
+00:00:21,799 --> 00:00:25,459
+-- I know. Right.
+-- Yes. It's a very shaky, disastrous
+
+7
+00:00:25,469 --> 00:00:27,360
+foundation. Yeah. And I love that.
+
+8
+00:00:27,370 --> 00:00:30,059
+It literally every connection now is
+
+9
+00:00:30,496 --> 00:00:33,796
+-- what matters is TLS are encrypted.
+-- Basically,
+
+10
+00:00:33,925 --> 00:00:35,916
+I have a fun fact for you. Actually,
+
+11
+00:00:36,145 --> 00:00:39,316
+we're recording this right after like B sides and
+
+12
+00:00:39,326 --> 00:00:42,116
+black hat and Defcon happened in Las Vegas.
+
+13
+00:00:42,546 --> 00:00:43,855
+It's the week after
+
+14
+00:00:44,006 --> 00:00:47,546
+and I was there and I went to an event and there was a guy from let
+
+15
+00:00:47,666 --> 00:00:49,515
+encrypt. I honestly can't even remember his name.
+
+16
+00:00:49,526 --> 00:00:53,116
+So I apologize if you listen and I've forgotten your name, send me an email.
+
+17
+00:00:53,125 --> 00:00:54,276
+He said now let
+
+18
+00:00:54,386 --> 00:00:54,416
+and
+
+19
+00:00:54,881 --> 00:00:55,472
+is
+
+20
+00:00:55,692 --> 00:01:01,352
+delivering literally billions of certificates per day per day.
+
+21
+00:01:01,361 --> 00:01:04,552
+I'm like, oh my goodness, it's, I have a suspicion.
+
+22
+00:01:04,561 --> 00:01:07,141
+It's all of the other certificate authorities
+
+23
+00:01:07,311 --> 00:01:10,351
+added together and multiplied by a large number and
+
+24
+00:01:10,361 --> 00:01:12,861
+it's still more certificates and like that's a mind
+
+25
+00:01:13,101 --> 00:01:13,832
+boggling number
+
+26
+00:01:14,001 --> 00:01:16,431
+and and that actually leads to you were mentioning earlier,
+
+27
+00:01:16,442 --> 00:01:19,071
+like about certificate pinning and why nobody uses it anymore.
+
+28
+00:01:19,510 --> 00:01:20,330
+Like, OK,
+
+29
+00:01:20,500 --> 00:01:21,330
+so let, let's,
+
+30
+00:01:21,339 --> 00:01:25,629
+let's backtrack a bit and do some foundational C A stuff because I was talking,
+
+31
+00:01:25,639 --> 00:01:26,389
+you know, a lot of people.
+
+32
+00:01:26,400 --> 00:01:32,129
+OK. Number one certificates do not essentially prove who you're talking to.
+
+33
+00:01:32,319 --> 00:01:35,169
+It proves you're talking to food.com.
+
+34
+00:01:35,180 --> 00:01:37,730
+Not that you're actually talking to Food Corporation.
+
+35
+00:01:38,099 --> 00:01:40,519
+So, like you're talking to td.com
+
+36
+00:01:40,739 --> 00:01:42,830
+now, whether or not that's TD Bank, I don't
+
+37
+00:01:42,970 --> 00:01:43,050
+know.
+
+38
+00:01:43,769 --> 00:01:45,339
+Right. Right. Might be, might not be.
+
+39
+00:01:45,349 --> 00:01:46,190
+And, and in this case,
+
+40
+00:01:46,199 --> 00:01:50,120
+td.com is actually TD Bank until they forget to pay the registration, I guess.
+
+41
+00:01:50,639 --> 00:01:52,250
+Well, no, it happens. Right.
+
+42
+00:01:52,529 --> 00:01:56,449
+So that's the first thing. It's like there are, you know, and,
+
+43
+00:01:56,629 --> 00:01:58,750
+and this leads to a big thing. There's,
+
+44
+00:01:58,989 --> 00:02:01,449
+I was looking at this. So historically, there was,
+
+45
+00:02:01,800 --> 00:02:03,809
+the security people have focused on
+
+46
+00:02:04,040 --> 00:02:06,739
+Attackers are going to try and hijack
+
+47
+00:02:07,190 --> 00:02:09,119
+certificates. So you have to protect them.
+
+48
+00:02:09,130 --> 00:02:10,919
+You have to have a private key and a hardware security module.
+
+49
+00:02:10,929 --> 00:02:14,639
+It has to be double triple encrypted with a very ravenous dog tied to it
+
+50
+00:02:15,559 --> 00:02:19,320
+and no attacker cares or oh, certificate authorities are gonna, you know, they'll,
+
+51
+00:02:19,330 --> 00:02:19,940
+they'll get
+
+52
+00:02:20,070 --> 00:02:20,149
+a,
+
+53
+00:02:20,300 --> 00:02:20,320
+a
+
+54
+00:02:20,470 --> 00:02:22,580
+air quotes fake certificate, like it's a real certificate,
+
+55
+00:02:22,589 --> 00:02:23,779
+it's just not assigned to who it should
+
+56
+00:02:23,789 --> 00:02:25,710
+be and they're gonna fake out the certificate,
+
+57
+00:02:25,720 --> 00:02:27,089
+authority provider and like,
+
+58
+00:02:27,460 --> 00:02:27,860
+you know,
+
+59
+00:02:27,966 --> 00:02:30,667
+intercept traffic and like, do the response and blah, blah, blah.
+
+60
+00:02:30,677 --> 00:02:32,347
+And so like we have things like where, you know,
+
+61
+00:02:32,356 --> 00:02:35,406
+the C A request it from multiple locations to, you know,
+
+62
+00:02:35,417 --> 00:02:37,026
+make sure they're not being spoofed or anything.
+
+63
+00:02:37,417 --> 00:02:39,317
+And again, Attackers don't do that
+
+64
+00:02:39,427 --> 00:02:42,466
+because what they do do is they register Walmart
+
+65
+00:02:42,477 --> 00:02:44,826
+with the number one instead of the l.com.
+
+66
+00:02:45,276 --> 00:02:48,067
+That is exactly what happens in most cases. Yes.
+
+67
+00:02:48,197 --> 00:02:48,667
+Yeah.
+
+68
+00:02:48,716 --> 00:02:53,847
+And then number three state level actors, well, they own AC A so they don't give a crap
+
+69
+00:02:54,134 --> 00:02:55,194
+of them do. Yes.
+
+70
+00:02:55,623 --> 00:02:56,003
+Like
+
+71
+00:02:56,154 --> 00:02:58,994
+-- it's just that simple.
+-- This is the attack
+
+72
+00:02:59,373 --> 00:03:00,473
+that I think
+
+73
+00:03:00,753 --> 00:03:03,113
+a lot of people think about now is
+
+74
+00:03:03,563 --> 00:03:05,404
+there are a bunch of cas
+
+75
+00:03:06,044 --> 00:03:07,634
+with questionable owners.
+
+76
+00:03:07,643 --> 00:03:07,794
+I mean,
+
+77
+00:03:07,804 --> 00:03:10,214
+we did a whole podcast episode when like Kazakhstan
+
+78
+00:03:10,223 --> 00:03:13,824
+was going to make browsers add their root certificate,
+
+79
+00:03:13,833 --> 00:03:14,274
+right?
+
+80
+00:03:14,483 --> 00:03:17,033
+And that happens independent of whether or not they have AC A, well,
+
+81
+00:03:17,044 --> 00:03:19,123
+they have AC A and whether or not that C A is in
+
+82
+00:03:19,134 --> 00:03:22,121
+the route and obviously it's not because they're forcing people to add it.
+
+83
+00:03:22,460 --> 00:03:23,380
+Right. You know.
+
+84
+00:03:23,770 --> 00:03:26,800
+So, yeah, when the nice men with guns show up and tell you to do something, you
+
+85
+00:03:27,050 --> 00:03:31,561
+-- should maybe do it.
+-- It's the XK CD cartoon with the Wrench, right?
+
+86
+00:03:31,860 --> 00:03:33,610
+Like it's literally that, I mean, yeah,
+
+87
+00:03:33,621 --> 00:03:37,481
+if a guy shows up with a gun and tells me to do something, it's going to get done,
+
+88
+00:03:38,091 --> 00:03:39,360
+that's how it works.
+
+89
+00:03:39,410 --> 00:03:41,401
+And so, and then there's ok and let's also cover,
+
+90
+00:03:41,410 --> 00:03:44,641
+there's a couple of sort of supporting tech friends here.
+
+91
+00:03:44,651 --> 00:03:46,391
+So there's, there's DNS sec
+
+92
+00:03:46,880 --> 00:03:51,919
+and DNS security basically means that I make a DNS request to seafood.org
+
+93
+00:03:52,720 --> 00:03:55,979
+dot org replies it's signed and it can be altered
+
+94
+00:03:56,619 --> 00:03:57,279
+in transit.
+
+95
+00:03:57,289 --> 00:04:00,309
+But also one very important thing is an attacker can't spoof
+
+96
+00:04:00,320 --> 00:04:03,399
+a reply so they can't block my reply and create one,
+
+97
+00:04:03,410 --> 00:04:03,740
+like
+
+98
+00:04:03,860 --> 00:04:06,490
+see your.org points at 1.2 0.3 0.4 or whatever, right?
+
+99
+00:04:07,139 --> 00:04:07,830
+And DNS EC
+
+100
+00:04:07,949 --> 00:04:12,429
+is actually very important for certificate authority security. In that
+
+101
+00:04:12,589 --> 00:04:17,279
+the vast majority of certificate validation is now done through uh DNS checks.
+
+102
+00:04:18,048 --> 00:04:19,880
+But going back to it is,
+
+103
+00:04:20,160 --> 00:04:22,886
+but Attackers are not manage in the middle and certificate authorities,
+
+104
+00:04:22,897 --> 00:04:25,147
+they're not, you know, they're not hijacking you.
+
+105
+00:04:25,416 --> 00:04:27,316
+So honestly, if you don't have DNS C
+
+106
+00:04:27,437 --> 00:04:27,946
+in stat,
+
+107
+00:04:28,127 --> 00:04:28,717
+that's fine.
+
+108
+00:04:28,726 --> 00:04:32,437
+And then the other one is HSTS http strict transport security,
+
+109
+00:04:32,446 --> 00:04:36,916
+which mattered about 10 years ago because basically you could say only talk to me via
+
+110
+00:04:36,927 --> 00:04:42,726
+-- HTTP S except no unencrypted and
+-- don't most web browsers just default to http S now
+
+111
+00:04:42,867 --> 00:04:46,717
+they pretty much all do because a few summers ago, Google changed their seo
+
+112
+00:04:46,873 --> 00:04:48,463
+prefer http S.
+
+113
+00:04:48,473 --> 00:04:50,614
+So all the websites finally like,
+
+114
+00:04:50,623 --> 00:04:54,003
+like I keep saying I have a spreadsheet and it used to have a column.
+
+115
+00:04:54,183 --> 00:04:56,813
+Does this cloud vendor support http S
+
+116
+00:04:56,963 --> 00:04:57,313
+like
+
+117
+00:04:57,503 --> 00:04:59,394
+which is hilarious to think about now?
+
+118
+00:04:59,403 --> 00:05:02,653
+-- Like
+-- I finally deleted that column because I'm like, yeah, I know this.
+
+119
+00:05:02,664 --> 00:05:03,493
+Like if they don't.
+
+120
+00:05:03,503 --> 00:05:06,634
+-- Then obviously I'll notice because
+-- create a column for when they don't.
+
+121
+00:05:06,834 --> 00:05:10,894
+-- Well, more to the point my web browser won't let me go there.
+-- That's true.
+
+122
+00:05:11,104 --> 00:05:11,503
+Like
+
+123
+00:05:11,604 --> 00:05:13,770
+I just set up a new local server and I had to
+
+124
+00:05:13,781 --> 00:05:15,411
+go to the IP address and it doesn't have a certificate.
+
+125
+00:05:15,420 --> 00:05:18,020
+And of course, my web browser is like, I don't think you should do this.
+
+126
+00:05:18,031 --> 00:05:20,631
+I'm like, yes do it. And it's like, no, I really don't think you should do it.
+
+127
+00:05:20,640 --> 00:05:21,941
+You're gonna have to click on advanced security.
+
+128
+00:05:21,950 --> 00:05:23,950
+I click on advanced security and then it's like, I really,
+
+129
+00:05:23,960 --> 00:05:25,210
+really don't think you should do this.
+
+130
+00:05:25,221 --> 00:05:27,520
+I'm like, just, yeah, it's, it's a pain in the butt.
+
+131
+00:05:27,531 --> 00:05:30,930
+Just show me the local IP address, web page, please. For the love of God.
+
+132
+00:05:30,941 --> 00:05:32,311
+So I can configure the server.
+
+133
+00:05:33,180 --> 00:05:35,751
+So HSTS used to matter
+
+134
+00:05:36,341 --> 00:05:37,191
+and now it doesn't
+
+135
+00:05:37,690 --> 00:05:39,040
+-- really.
+-- Yeah, I agree.
+
+136
+00:05:39,649 --> 00:05:41,700
+And then the one you mentioned, certificate pinning,
+
+137
+00:05:41,709 --> 00:05:44,679
+certificate pinning was a perfect example
+
+138
+00:05:44,929 --> 00:05:47,579
+of some of the worst engineering security
+
+139
+00:05:47,589 --> 00:05:49,950
+mindsets ever because what certificate pink did?
+
+140
+00:05:49,959 --> 00:05:52,820
+And this is the stupidest thing that you could ever do
+
+141
+00:05:53,059 --> 00:05:56,799
+is you're basically saying we have a certificate with like this serial number
+
+142
+00:05:56,940 --> 00:05:59,040
+and we're going to have a DNS record that pins it
+
+143
+00:05:59,089 --> 00:06:01,079
+and if it's not that certificate with that serial number,
+
+144
+00:06:01,089 --> 00:06:02,859
+then it's not us.
+
+145
+00:06:02,869 --> 00:06:03,160
+Yes.
+
+146
+00:06:03,269 --> 00:06:03,709
+Ok.
+
+147
+00:06:03,720 --> 00:06:04,739
+So like now you need to roll
+
+148
+00:06:04,750 --> 00:06:07,260
+over certificates suddenly because something happened.
+
+149
+00:06:07,269 --> 00:06:08,570
+No one knows how to do that.
+
+150
+00:06:08,839 --> 00:06:11,940
+-- Well,
+-- and, and if you roll over the certificate and then the DNS cache
+
+151
+00:06:12,070 --> 00:06:14,850
+is everything still broken for five minutes or a week or whatever.
+
+152
+00:06:15,160 --> 00:06:15,359
+That's
+
+153
+00:06:15,529 --> 00:06:18,649
+right. It's just certificate pinning. Made life.
+
+154
+00:06:18,950 --> 00:06:20,929
+It, it, it basically made life so hard.
+
+155
+00:06:20,940 --> 00:06:22,230
+It's like that old security diagram, you know,
+
+156
+00:06:22,239 --> 00:06:23,519
+where you got that little gate in the middle of a
+
+157
+00:06:23,529 --> 00:06:25,579
+field with the tire tracks going around it in a semi
+
+158
+00:06:25,690 --> 00:06:27,989
+circle. That's exactly what certificate pinning
+
+159
+00:06:28,140 --> 00:06:28,630
+did.
+
+160
+00:06:29,000 --> 00:06:34,179
+Feels like a good idea in theory, but in practice, it was not a good idea.
+
+161
+00:06:34,190 --> 00:06:35,720
+It's a good idea. In theory.
+
+162
+00:06:35,730 --> 00:06:39,500
+-- If you've never operationally run a web server,
+-- that's fair. Yes.
+
+163
+00:06:39,510 --> 00:06:43,260
+-- Which uh most security people haven't or
+-- they haven't done it at scale.
+
+164
+00:06:43,269 --> 00:06:44,850
+And there's a big difference, you know,
+
+165
+00:06:44,859 --> 00:06:47,760
+I ran into this a lot at Red Hat where developers would be like, hey,
+
+166
+00:06:47,769 --> 00:06:48,619
+it works on my laptop.
+
+167
+00:06:48,630 --> 00:06:50,040
+It's fine and I'm like, that's great.
+
+168
+00:06:50,049 --> 00:06:54,609
+Now, what happened with 100,000 clients connecting to it and it needs to work 24 7.
+
+169
+00:06:55,100 --> 00:06:57,269
+Or else people get yelled at, oh, side note.
+
+170
+00:06:57,279 --> 00:06:58,250
+Speaking of which revenue,
+
+171
+00:06:58,260 --> 00:07:01,790
+Canada is having a scheduled web server outage this weekend
+
+172
+00:07:01,799 --> 00:07:04,989
+from like Friday close of business till Monday morning.
+
+173
+00:07:05,000 --> 00:07:10,609
+And I'm like, ok, so they're like 99% reliable now because they're taking 2.5 days.
+
+174
+00:07:10,820 --> 00:07:14,640
+I mean, 99% reliability is what, like 3.5 days per year. Yeah.
+
+175
+00:07:14,649 --> 00:07:16,709
+-- So they're taking two,
+-- they got plenty of offer.
+
+176
+00:07:16,720 --> 00:07:17,859
+Well, that, but that's the thing.
+
+177
+00:07:17,869 --> 00:07:20,350
+Like, I've, like, it's the tax people. So, like,
+
+178
+00:07:20,899 --> 00:07:24,109
+they can, they can turn their server off for 2.5 days and, well,
+
+179
+00:07:24,140 --> 00:07:27,049
+you just have to wait till Monday because you still have to pay those bills.
+
+180
+00:07:27,079 --> 00:07:28,279
+Go to their competitor,
+
+181
+00:07:28,820 --> 00:07:31,730
+switch, switch tax agencies. Good luck.
+
+182
+00:07:31,940 --> 00:07:34,290
+-- No, I need to go. Set up an Irish entity.
+-- There you go.
+
+183
+00:07:34,299 --> 00:07:36,070
+Because it's funny because companies do go
+
+184
+00:07:36,079 --> 00:07:37,820
+to their competitors which are like Ireland
+
+185
+00:07:37,829 --> 00:07:41,864
+-- and Holland and like all these weird Bahamian islands
+-- companies can do that.
+
+186
+00:07:42,195 --> 00:07:44,394
+-- Us peons cannot.
+-- No, no.
+
+187
+00:07:44,575 --> 00:07:45,165
+But so,
+
+188
+00:07:45,174 --> 00:07:48,804
+so certificate pinning was just literally the worst idea possible
+
+189
+00:07:48,815 --> 00:07:50,744
+so much so that like it's nobody does it.
+
+190
+00:07:50,755 --> 00:07:54,545
+Now there's one thing that is kind of sort of useful and that is certificate,
+
+191
+00:07:54,554 --> 00:07:56,234
+authority, authorization records
+
+192
+00:07:56,515 --> 00:07:59,785
+and what CAA records are is very simply put in your DNS. You say
+
+193
+00:08:00,084 --> 00:08:03,734
+the following certificate, authorities can issue certificates from my domain.
+
+194
+00:08:03,744 --> 00:08:06,184
+And so in my case, it's like in trust digit
+
+195
+00:08:06,845 --> 00:08:07,494
+and like
+
+196
+00:08:08,149 --> 00:08:09,510
+I want to say, maybe commodo or something,
+
+197
+00:08:09,619 --> 00:08:10,179
+basically,
+
+198
+00:08:10,190 --> 00:08:12,670
+it's whoever lets them crypt uses and like Amazon
+
+199
+00:08:12,679 --> 00:08:14,149
+and a couple of others in the group right
+
+200
+00:08:14,910 --> 00:08:16,850
+now, that is kind of useful because then
+
+201
+00:08:17,109 --> 00:08:19,690
+now if somebody goes to Turkey,
+
+202
+00:08:19,859 --> 00:08:21,239
+what see
+
+203
+00:08:21,619 --> 00:08:22,549
+in theory,
+
+204
+00:08:22,649 --> 00:08:26,140
+the certificate of authority, when they get a request, they check the CAA record.
+
+205
+00:08:26,380 --> 00:08:27,760
+OK? But the client doesn't.
+
+206
+00:08:28,339 --> 00:08:31,209
+So the problem is by definition, if you have a malicious C A,
+
+207
+00:08:31,529 --> 00:08:32,960
+they're not checking these records. So
+
+208
+00:08:33,539 --> 00:08:37,049
+CAA records are essentially kind of, they,
+
+209
+00:08:37,058 --> 00:08:39,960
+the only hole that they close is like somebody somehow got into
+
+210
+00:08:39,969 --> 00:08:43,169
+your DNS or email so that they could validate for a certificate
+
+211
+00:08:43,590 --> 00:08:46,909
+through some and then they are dumb enough to like, use
+
+212
+00:08:47,260 --> 00:08:49,640
+AC A that you don't have listed.
+
+213
+00:08:49,799 --> 00:08:52,679
+So CAA records basically don't do anything.
+
+214
+00:08:52,880 --> 00:08:53,479
+Like they don't,
+
+215
+00:08:53,489 --> 00:08:55,799
+they don't address any real world attack scenario
+
+216
+00:08:55,809 --> 00:08:57,679
+where the attacker is actually going to be
+
+217
+00:08:58,039 --> 00:08:59,289
+skimmed by it.
+
+218
+00:08:59,539 --> 00:09:04,280
+And, and again, a good example of this would be every major domain does not use them.
+
+219
+00:09:04,440 --> 00:09:06,159
+That could be, I, I honestly don't know it.
+
+220
+00:09:06,169 --> 00:09:08,159
+-- No,
+-- I, I looked at a bunch, nobody uses
+
+221
+00:09:08,169 --> 00:09:08,440
+them.
+
+222
+00:09:08,450 --> 00:09:11,530
+You know, we should also predicate this conversation even though we're what,
+
+223
+00:09:11,539 --> 00:09:13,320
+like 10 minutes and now at this point or something.
+
+224
+00:09:13,559 --> 00:09:14,020
+But
+
+225
+00:09:14,150 --> 00:09:18,460
+this is a topic, Kurt cares about a lot and this is a topic I don't know very much about.
+
+226
+00:09:18,469 --> 00:09:21,059
+And as I, I think my literal words to you where this,
+
+227
+00:09:21,070 --> 00:09:22,940
+I feel like this is my water supply.
+
+228
+00:09:22,950 --> 00:09:25,940
+I turn the tap on and water comes out and I don't care
+
+229
+00:09:26,059 --> 00:09:29,090
+because someone else's problem to figure this all out.
+
+230
+00:09:29,289 --> 00:09:31,419
+Well, and the thing is, there's very few people who care about this.
+
+231
+00:09:31,429 --> 00:09:33,900
+Like if you look at the certificate authority mailing list,
+
+232
+00:09:33,909 --> 00:09:36,349
+there's like five people being active on it.
+
+233
+00:09:36,359 --> 00:09:39,059
+And it's the same five people for 20 years. So,
+
+234
+00:09:39,385 --> 00:09:40,645
+what's interesting to me is like,
+
+235
+00:09:40,655 --> 00:09:44,044
+the vast majority of security stuff like C A pinning
+
+236
+00:09:44,054 --> 00:09:46,804
+CAA records is to put it bluntly it's security theater.
+
+237
+00:09:47,414 --> 00:09:50,924
+It doesn't matter at all. And even better example is
+
+238
+00:09:51,054 --> 00:09:52,275
+there's three kinds of certificates. Right.
+
+239
+00:09:52,284 --> 00:09:56,005
+There's domain validated, extended, validated and organizational validated.
+
+240
+00:09:56,015 --> 00:09:57,924
+-- I thought they got
+-- rid of the EV.
+
+241
+00:09:57,974 --> 00:09:59,445
+Exactly. It was security theater.
+
+242
+00:09:59,815 --> 00:10:00,905
+So they did get rid of them
+
+243
+00:10:01,215 --> 00:10:05,085
+because, like, oh, you know, I, I, actually, my bank used to use one. Weirdly,
+
+244
+00:10:05,210 --> 00:10:06,710
+Toronto Dominion used to use one.
+
+245
+00:10:06,719 --> 00:10:09,400
+-- Lots of
+-- sites, lots of big companies had them, like,
+
+246
+00:10:09,409 --> 00:10:12,989
+Amazon had one and Walmart had one and,
+
+247
+00:10:13,000 --> 00:10:16,979
+-- and
+-- nobody cared because they go to Walmart with the number one instead of the l.com.
+
+248
+00:10:17,059 --> 00:10:19,830
+I understand the theory because it turned your
+
+249
+00:10:20,039 --> 00:10:21,900
+address bar green or something.
+
+250
+00:10:21,909 --> 00:10:24,659
+-- I remember
+-- they had like a little thing instead of the walk.
+
+251
+00:10:24,669 --> 00:10:25,619
+It actually had like a little
+
+252
+00:10:26,500 --> 00:10:26,940
+green thing
+
+253
+00:10:27,359 --> 00:10:28,190
+but nobody cared.
+
+254
+00:10:28,840 --> 00:10:30,869
+And, and the thing is, I don't know,
+
+255
+00:10:31,034 --> 00:10:31,794
+the TD
+
+256
+00:10:31,905 --> 00:10:34,385
+has one. So I don't know, to look for it.
+
+257
+00:10:34,575 --> 00:10:36,885
+-- Exactly. Exactly. Right.
+-- Yes.
+
+258
+00:10:37,344 --> 00:10:40,294
+Like I know when I go to a restaurant to look at their food handling permit
+
+259
+00:10:40,465 --> 00:10:42,255
+or actually I just look them up on the,
+
+260
+00:10:42,265 --> 00:10:44,905
+the website where I can check out their records and see what they failed.
+
+261
+00:10:44,965 --> 00:10:48,775
+The number of times I've looked for that is basically zero.
+
+262
+00:10:48,784 --> 00:10:51,575
+-- You know,
+-- it's, to me every restaurant that's clean and nice.
+
+263
+00:10:51,585 --> 00:10:54,695
+They proudly display it and it's like right there when you walk in and see it.
+
+264
+00:10:55,794 --> 00:10:56,734
+Right. That's fair.
+
+265
+00:10:57,219 --> 00:11:00,440
+The best restaurants almost certainly fail their health inspection.
+
+266
+00:11:00,559 --> 00:11:01,619
+Oh, everybody fails.
+
+267
+00:11:01,630 --> 00:11:04,380
+But it's usually like you want it to be normal failure, stuff, like, oh,
+
+268
+00:11:04,390 --> 00:11:08,559
+-- there's a bit of grease on the, on the grease hoods, like, yes,
+-- that's, that's true.
+
+269
+00:11:08,570 --> 00:11:13,760
+-- Not like they found a body in the freezer
+-- or, you know, uh mouse droppings in the food,
+
+270
+00:11:14,119 --> 00:11:14,919
+right? That's fair.
+
+271
+00:11:14,929 --> 00:11:18,400
+-- That's,
+-- you know, like I'm ok with a little extra grease and like, oh, they, you know,
+
+272
+00:11:18,409 --> 00:11:20,250
+every single time the dishwasher cycle,
+
+273
+00:11:20,260 --> 00:11:23,099
+they're like the PH balance is off and they had to recalibrate it like they had to,
+
+274
+00:11:23,369 --> 00:11:26,960
+they don't use the testing strips, put enough uh blue stuff in or whatever it is.
+
+275
+00:11:26,969 --> 00:11:27,750
+I forget the color.
+
+276
+00:11:27,909 --> 00:11:28,510
+I don't know.
+
+277
+00:11:28,710 --> 00:11:29,590
+But anyway, so,
+
+278
+00:11:29,719 --> 00:11:32,080
+so what's fascinating to me is like the vast majority.
+
+279
+00:11:32,090 --> 00:11:35,969
+So though one of the few things that has actually worked for C A security is
+
+280
+00:11:35,979 --> 00:11:40,190
+the public transparency locks because it let us see how bad some of these cas were.
+
+281
+00:11:40,200 --> 00:11:43,309
+-- Sure.
+-- But how many cas have been removed
+
+282
+00:11:43,440 --> 00:11:45,969
+from the, the root store?
+
+283
+00:11:45,979 --> 00:11:47,989
+-- Uh three or four
+-- out of how many
+
+284
+00:11:48,000 --> 00:11:49,830
+and several have failed to join.
+
+285
+00:11:50,010 --> 00:11:53,059
+Uh There was that Brazilian one that wanted to join and we looked at their, I,
+
+286
+00:11:53,070 --> 00:11:55,150
+I looked at their certificate transparency logs and
+
+287
+00:11:55,159 --> 00:11:57,479
+they were issuing certificates for IP addresses,
+
+288
+00:11:57,489 --> 00:11:59,570
+which is super not allowed
+
+289
+00:12:00,109 --> 00:12:04,419
+for single names, like not a domain name like food.com dot Corp,
+
+290
+00:12:04,590 --> 00:12:05,359
+but like just
+
+291
+00:12:05,669 --> 00:12:08,219
+a word, right? Like there was hundreds
+
+292
+00:12:08,760 --> 00:12:11,900
+hundreds of misu Ands and, and so they lacked maturity to do this.
+
+293
+00:12:12,010 --> 00:12:16,010
+Oh, and they were specifically to look up email records for DNS using,
+
+294
+00:12:16,020 --> 00:12:18,190
+who is they were specifically using a website that said
+
+295
+00:12:18,200 --> 00:12:19,979
+do not use us for this kind of activity,
+
+296
+00:12:22,890 --> 00:12:23,309
+right?
+
+297
+00:12:23,700 --> 00:12:26,159
+So what this all boils down to is
+
+298
+00:12:26,260 --> 00:12:29,570
+there's really only a few things that even remotely matter.
+
+299
+00:12:29,580 --> 00:12:34,669
+And I would say one of them is the ability and, and willingness of the C A
+
+300
+00:12:34,830 --> 00:12:37,010
+to revoke certificates when they are mi
+
+301
+00:12:37,179 --> 00:12:37,599
+misis
+
+302
+00:12:37,890 --> 00:12:40,169
+issued, which that's how trusts,
+
+303
+00:12:40,179 --> 00:12:41,840
+that's one of the big things that got entrust booted
+
+304
+00:12:41,849 --> 00:12:44,179
+is because they had issued a lot of bad certificates
+
+305
+00:12:44,289 --> 00:12:45,169
+and they weren't
+
+306
+00:12:45,270 --> 00:12:46,929
+like dealing with it properly.
+
+307
+00:12:47,570 --> 00:12:50,809
+I need to explain this because I don't even understand this situation.
+
+308
+00:12:50,820 --> 00:12:54,760
+So the, the in, in trust story is what kicked off this whole,
+
+309
+00:12:54,890 --> 00:12:55,570
+I guess
+
+310
+00:12:55,760 --> 00:12:58,909
+-- line of discussion to how we got to right
+-- now.
+
+311
+00:12:58,979 --> 00:13:03,780
+So in trust behaved badly enough that they got booted out of Google and now
+
+312
+00:13:03,789 --> 00:13:07,330
+-- Mozilla's Certificate store program and in
+-- trust was
+
+313
+00:13:07,340 --> 00:13:09,260
+a root certificate or were they just,
+
+314
+00:13:09,270 --> 00:13:10,349
+uh, ac a
+
+315
+00:13:10,450 --> 00:13:11,330
+major root
+
+316
+00:13:11,440 --> 00:13:13,140
+-- certificate? They are
+-- root certificate.
+
+317
+00:13:13,359 --> 00:13:13,890
+They are,
+
+318
+00:13:14,000 --> 00:13:14,390
+um,
+
+319
+00:13:14,479 --> 00:13:16,950
+like they're one of the original kind of top five us
+
+320
+00:13:16,960 --> 00:13:19,679
+entities that have been doing this for 20 or 30 years,
+
+321
+00:13:20,489 --> 00:13:21,979
+right? They are also like for b
+
+322
+00:13:22,289 --> 00:13:26,270
+for the brand identification mark certificates. It's only in trust and dider
+
+323
+00:13:26,789 --> 00:13:30,520
+-- that do that
+-- or it was in trust or is it still in trust?
+
+324
+00:13:30,530 --> 00:13:34,039
+Well, that's a server thing with email. That's not a web browser thing? Ok.
+
+325
+00:13:34,049 --> 00:13:34,760
+So it's different.
+
+326
+00:13:35,500 --> 00:13:39,659
+So, but in trust basically behaved badly enough that Google booted them out.
+
+327
+00:13:39,669 --> 00:13:40,369
+And then of course,
+
+328
+00:13:40,380 --> 00:13:44,469
+Mozilla did because essentially once a major player like Google or Apple or, well,
+
+329
+00:13:44,479 --> 00:13:44,650
+Mozilla
+
+330
+00:13:44,820 --> 00:13:47,840
+are based and I guess Microsoft those, there's four that matter.
+
+331
+00:13:48,289 --> 00:13:50,369
+-- And
+-- it should also be noted that every
+
+332
+00:13:50,380 --> 00:13:54,080
+web browser carries their own root certificate.
+
+333
+00:13:54,630 --> 00:13:56,530
+Is it a database? I don't what you call the root cert
+
+334
+00:13:56,770 --> 00:13:59,599
+-- store,
+-- it's a store, it's called a store. Root Certificate store.
+
+335
+00:13:59,679 --> 00:14:00,340
+-- Ok.
+-- Yeah.
+
+336
+00:14:00,640 --> 00:14:05,539
+And, but they're all pretty much the same in that they're all the kind of the,
+
+337
+00:14:05,559 --> 00:14:06,869
+the cab forum one.
+
+338
+00:14:06,989 --> 00:14:10,140
+And so in trust actually, because they got booted out, like,
+
+339
+00:14:10,150 --> 00:14:11,460
+how do they keep selling certificates?
+
+340
+00:14:11,469 --> 00:14:14,530
+And the answer is they basically became an ssl.com reseller,
+
+341
+00:14:15,359 --> 00:14:18,570
+right? They, so they literally are like, you know, you'll get a
+
+342
+00:14:18,739 --> 00:14:18,809
+ru
+
+343
+00:14:18,960 --> 00:14:23,219
+branded email from ssl.com when it varies, you know, blah, blah, blah.
+
+344
+00:14:23,479 --> 00:14:25,869
+So they literally have become a glorified reseller.
+
+345
+00:14:26,219 --> 00:14:30,320
+And so because for example, their inability or unwillingness to,
+
+346
+00:14:30,330 --> 00:14:33,479
+to revoke a certificate means they're not like willing to do
+
+347
+00:14:33,820 --> 00:14:37,419
+this is the the entry level of security for a certificate authority
+
+348
+00:14:37,830 --> 00:14:40,979
+because the problem is I sell you a certificate, it has a serial number,
+
+349
+00:14:40,989 --> 00:14:42,719
+it has a digital signature.
+
+350
+00:14:43,250 --> 00:14:46,270
+Well, I can't like take it back. I can't,
+
+351
+00:14:46,380 --> 00:14:49,039
+I can't revoke it in the classical sense if
+
+352
+00:14:49,049 --> 00:14:51,169
+I actually like physically revoke it from you.
+
+353
+00:14:51,359 --> 00:14:53,659
+So how do I make people stop using it?
+
+354
+00:14:53,690 --> 00:14:58,010
+I, I actually don't know because there was what the, like the OS CP is it O CS P,
+
+355
+00:14:58,020 --> 00:14:59,340
+I forget the acronym.
+
+356
+00:14:59,349 --> 00:15:00,859
+So the original way we did it
+
+357
+00:15:01,099 --> 00:15:04,820
+was what was called certificate revocation list. And it literally was
+
+358
+00:15:05,000 --> 00:15:07,530
+every certificate authority was supposed to run a server
+
+359
+00:15:07,659 --> 00:15:08,619
+with an endpoint
+
+360
+00:15:08,880 --> 00:15:12,099
+that would have a list of certificates that had been revoked
+
+361
+00:15:12,580 --> 00:15:13,570
+and you could query it.
+
+362
+00:15:13,859 --> 00:15:14,590
+And of course,
+
+363
+00:15:14,599 --> 00:15:17,380
+none of them could run a web server good enough for this to actually work.
+
+364
+00:15:17,859 --> 00:15:20,609
+And so what happened is, do you remember for about a decade,
+
+365
+00:15:20,619 --> 00:15:22,700
+there was a period of a lot of web browser updates
+
+366
+00:15:22,869 --> 00:15:26,210
+and one of the main notes in all the web browser updates would be this certificate,
+
+367
+00:15:26,219 --> 00:15:28,010
+revocation list is being updated.
+
+368
+00:15:28,179 --> 00:15:29,140
+Yes.
+
+369
+00:15:29,200 --> 00:15:31,090
+And so literally the solution to revoking
+
+370
+00:15:31,099 --> 00:15:33,500
+certificates is we're gonna update your web
+
+371
+00:15:33,510 --> 00:15:38,380
+-- browser with a list of stuff that's been revoked
+-- and issuing 4 billion certificates
+
+372
+00:15:38,502 --> 00:15:40,322
+a day or more is
+
+373
+00:15:40,591 --> 00:15:42,361
+very reasonable.
+
+374
+00:15:42,492 --> 00:15:44,041
+Well, no, that's actually the solution.
+
+375
+00:15:44,202 --> 00:15:46,992
+-- Are they still doing that?
+-- Well, no, the solution now
+
+376
+00:15:47,271 --> 00:15:49,142
+because the problem is certificates used to have
+
+377
+00:15:49,151 --> 00:15:53,281
+long lifetimes of three or five years.
+
+378
+00:15:53,611 --> 00:15:53,981
+That's right.
+
+379
+00:15:54,132 --> 00:15:58,281
+And now Apple, because basically Apple said, no, this doesn't work for us anymore.
+
+380
+00:15:58,291 --> 00:15:59,562
+One year max.
+
+381
+00:16:00,331 --> 00:16:03,981
+Well, in and let's encrypt uses what, like 30 or 90 days or something.
+
+382
+00:16:03,992 --> 00:16:05,984
+-- I forget what it is. It's pretty short.
+-- And
+
+383
+00:16:06,354 --> 00:16:08,093
+this is the most important thing for
+
+384
+00:16:08,104 --> 00:16:10,633
+security certificate because it forces people to automate
+
+385
+00:16:11,593 --> 00:16:11,674
+that
+
+386
+00:16:12,403 --> 00:16:14,893
+and it, but it's not just automating getting a new certificate.
+
+387
+00:16:14,903 --> 00:16:20,354
+It's also by definition, if you, if let's encrypt issues a bad certificate at most,
+
+388
+00:16:20,364 --> 00:16:23,273
+it's going to be good for 30 or 60 days or whatever.
+
+389
+00:16:23,763 --> 00:16:24,054
+Right.
+
+390
+00:16:24,203 --> 00:16:27,994
+So, the amount of damage long term is, is vastly minimized, right?
+
+391
+00:16:28,004 --> 00:16:29,723
+This is the whole idea of password rotation.
+
+392
+00:16:29,734 --> 00:16:29,744
+Oh,
+
+393
+00:16:29,754 --> 00:16:31,926
+you need to rotate your password in case an attacker found out
+
+394
+00:16:31,935 --> 00:16:33,666
+and he's using it to log into your system and use it
+
+395
+00:16:34,026 --> 00:16:35,625
+and then you rotate your password and lock them out.
+
+396
+00:16:35,635 --> 00:16:36,426
+And it's like, well, that's,
+
+397
+00:16:36,435 --> 00:16:38,036
+but then they'll just get in the same way they
+
+398
+00:16:38,046 --> 00:16:40,306
+got in the first time by fishing you or whatever.
+
+399
+00:16:40,315 --> 00:16:43,435
+Probably because just add a one to the end and
+
+400
+00:16:43,926 --> 00:16:49,065
+-- it works.
+-- Yeah. So, certificate revocation. We had uh OS CP online certificate.
+
+401
+00:16:49,245 --> 00:16:53,296
+-- Oh God. The s always evades me something, protocol.
+-- No, I, I just looked it up.
+
+402
+00:16:53,306 --> 00:16:54,026
+It's called
+
+403
+00:16:54,306 --> 00:16:56,236
+online certificate status. Product
+
+404
+00:16:56,747 --> 00:16:57,617
+status.
+
+405
+00:16:57,867 --> 00:16:57,947
+O
+
+406
+00:16:58,138 --> 00:17:01,737
+CS P. I had to look it up because I couldn't even remember what the acronym was.
+
+407
+00:17:01,747 --> 00:17:04,557
+I knew it had those four letters in it, but I didn't know the order.
+
+408
+00:17:04,567 --> 00:17:06,767
+And the best thing is you tried enabling it and living
+
+409
+00:17:06,777 --> 00:17:09,047
+with it once for like what two days and then no,
+
+410
+00:17:09,057 --> 00:17:10,137
+a couple of hours
+
+411
+00:17:11,508 --> 00:17:15,098
+every, the whole internet just fell over. It was unusable.
+
+412
+00:17:15,828 --> 00:17:18,896
+And didn't we did like a show on this, didn't we? I think we did.
+
+413
+00:17:18,998 --> 00:17:20,406
+-- Yeah, we
+-- did. That was years ago.
+
+414
+00:17:20,508 --> 00:17:22,258
+And so again, that's a perfect example of
+
+415
+00:17:22,787 --> 00:17:25,088
+you cannot check
+
+416
+00:17:25,589 --> 00:17:28,530
+that every certificate you're interacting with is valid
+
+417
+00:17:28,540 --> 00:17:30,040
+every time you use it because you have
+
+418
+00:17:30,050 --> 00:17:32,670
+to check it every time you can't check it once a week or once a month,
+
+419
+00:17:32,680 --> 00:17:33,300
+it has to be checked.
+
+420
+00:17:33,310 --> 00:17:34,020
+Like every time
+
+421
+00:17:35,199 --> 00:17:35,780
+a
+
+422
+00:17:35,969 --> 00:17:40,020
+the, the, the services to provide this don't exist reliably enough. And B
+
+423
+00:17:40,239 --> 00:17:42,640
+is, there's also a huge privacy problem
+
+424
+00:17:43,060 --> 00:17:43,140
+that
+
+425
+00:17:43,400 --> 00:17:47,969
+every Os CP endpoint knows where you're going and when you're going there
+
+426
+00:17:48,189 --> 00:17:49,209
+-- O
+-- CS P,
+
+427
+00:17:49,380 --> 00:17:51,319
+-- you keep saying Os C
+-- P. Oh did I
+
+428
+00:17:51,810 --> 00:17:55,050
+-- O CS P?
+-- You know, I keep thinking of omni Consumer Corp.
+
+429
+00:17:55,750 --> 00:17:56,180
+Anyway.
+
+430
+00:17:56,930 --> 00:17:57,680
+Anyways,
+
+431
+00:17:58,380 --> 00:18:02,369
+that was a great, that was a great original film, Robocop. Anyway. Anyway,
+
+432
+00:18:02,699 --> 00:18:06,530
+so back to this. So, so like all of these things that like certificates,
+
+433
+00:18:06,900 --> 00:18:06,949
+the,
+
+434
+00:18:07,050 --> 00:18:09,680
+the cab form and everything did.
+
+435
+00:18:09,689 --> 00:18:10,040
+I mean,
+
+436
+00:18:10,050 --> 00:18:14,099
+pretty much every single thing they've done for security has turned out
+
+437
+00:18:14,109 --> 00:18:17,439
+to generally be so bad that like even Google won't do it.
+
+438
+00:18:17,449 --> 00:18:20,829
+-- Like Google tried pinning for a while and then stopped
+-- because
+
+439
+00:18:20,959 --> 00:18:23,140
+-- it had too many problems
+-- because
+
+440
+00:18:23,290 --> 00:18:24,280
+the answer
+
+441
+00:18:24,410 --> 00:18:28,319
+much like software is automation and rapid rollover.
+
+442
+00:18:28,439 --> 00:18:31,579
+Like just renewing certificates, getting certificates, like same thing with. So,
+
+443
+00:18:31,829 --> 00:18:35,300
+like being able to patch rapidly trumps pretty much every other
+
+444
+00:18:35,310 --> 00:18:37,459
+security measure because it's what you're gonna have to patch anyway.
+
+445
+00:18:37,469 --> 00:18:38,589
+So you might as well get good at
+
+446
+00:18:39,319 --> 00:18:39,420
+it.
+
+447
+00:18:39,430 --> 00:18:42,520
+What it boils down to is that the vast majority of this certificate,
+
+448
+00:18:42,530 --> 00:18:43,890
+authority stuff is security theater.
+
+449
+00:18:43,900 --> 00:18:47,750
+That doesn't matter. Or in many cases was it made things so bad that, like,
+
+450
+00:18:47,869 --> 00:18:49,780
+people tried it and then gave up
+
+451
+00:18:50,329 --> 00:18:52,849
+and then invented something new to try and make it better,
+
+452
+00:18:52,859 --> 00:18:54,329
+which turned out to be even worse.
+
+453
+00:18:54,339 --> 00:18:55,880
+And so a great example of this is digi
+
+454
+00:18:56,030 --> 00:18:56,500
+cert. So Dider
+
+455
+00:18:57,199 --> 00:18:59,150
+Misis issued some certificates.
+
+456
+00:18:59,160 --> 00:19:02,400
+Now, when I say misu, that's a, that's a loaded word in this thing,
+
+457
+00:19:02,479 --> 00:19:04,979
+they didn't give them to the wrong people, we don't think.
+
+458
+00:19:05,410 --> 00:19:06,109
+But the,
+
+459
+00:19:06,119 --> 00:19:11,189
+the way they did the issuing and the C the DNS checks was not correct
+
+460
+00:19:11,199 --> 00:19:14,430
+because they made some changes on their back end and then their one front end.
+
+461
+00:19:14,439 --> 00:19:15,420
+Is this fairly,
+
+462
+00:19:15,816 --> 00:19:17,066
+or is this the very old digit
+
+463
+00:19:17,395 --> 00:19:19,046
+probably like a week ago,
+
+464
+00:19:19,215 --> 00:19:21,105
+like a week ago or two weeks ago?
+
+465
+00:19:21,276 --> 00:19:23,086
+And one of their head people stepped down over it?
+
+466
+00:19:23,865 --> 00:19:24,306
+Yeah,
+
+467
+00:19:24,566 --> 00:19:27,605
+basically. Well, because here's the fascinating thing, did GT,
+
+468
+00:19:27,965 --> 00:19:32,946
+basically, you know, tried actually kind of responded quickly and,
+
+469
+00:19:32,956 --> 00:19:34,145
+and is like here we're, we're,
+
+470
+00:19:34,156 --> 00:19:35,576
+we're doing this to fix it and we're going to
+
+471
+00:19:35,586 --> 00:19:37,186
+do this long term and code reviews and blah,
+
+472
+00:19:37,196 --> 00:19:37,786
+blah, blah, blah blah.
+
+473
+00:19:37,885 --> 00:19:40,495
+But then a company that uses them,
+
+474
+00:19:40,722 --> 00:19:44,511
+sued them and got an injunction so that they couldn't revoke the certificates.
+
+475
+00:19:44,631 --> 00:19:45,972
+Oh, interesting.
+
+476
+00:19:46,302 --> 00:19:48,062
+What happened is there's this health care
+
+477
+00:19:48,332 --> 00:19:51,921
+adjacent cloud company that I guess does a product and you know,
+
+478
+00:19:51,932 --> 00:19:53,411
+you have a domain name and obviously need a
+
+479
+00:19:53,421 --> 00:19:54,621
+certificate for it and they get it through digit
+
+480
+00:19:55,391 --> 00:19:58,541
+and clearly they don't have any sort of automation to roll this over
+
+481
+00:19:58,552 --> 00:20:01,582
+because they literally sue Digi cert to get an injunction to like,
+
+482
+00:20:01,592 --> 00:20:03,222
+stop them revoking all these certificates.
+
+483
+00:20:03,352 --> 00:20:04,271
+Now, this puts Digic
+
+484
+00:20:04,411 --> 00:20:05,812
+Cert in a bit of a pickle
+
+485
+00:20:06,170 --> 00:20:08,640
+because if they don't revoke these certificates in a timely manner,
+
+486
+00:20:08,650 --> 00:20:10,069
+like basically 24 hours,
+
+487
+00:20:10,329 --> 00:20:12,650
+they might end up getting killed, like in trust.
+
+488
+00:20:12,859 --> 00:20:13,709
+Interesting.
+
+489
+00:20:13,839 --> 00:20:15,770
+-- But a judge said you can't.
+-- Ok.
+
+490
+00:20:15,780 --> 00:20:16,709
+And what was like,
+
+491
+00:20:16,719 --> 00:20:20,380
+what was wrong with these certificates that they were used by a business?
+
+492
+00:20:20,439 --> 00:20:24,829
+The way they did the DNS checks to validate them wasn't secure. It.
+
+493
+00:20:24,839 --> 00:20:26,750
+It had a technical glitch basically,
+
+494
+00:20:26,760 --> 00:20:29,380
+which meant an attacker could potentially actually get
+
+495
+00:20:29,589 --> 00:20:32,875
+-- certificates relatively easily.
+-- I see.
+
+496
+00:20:32,885 --> 00:20:38,974
+So they didn't know if Attackers had maybe issued certificates for this company.
+
+497
+00:20:39,185 --> 00:20:41,094
+-- Well,
+-- the attacker request the certificate digit
+
+498
+00:20:41,385 --> 00:20:42,045
+would issue it.
+
+499
+00:20:42,265 --> 00:20:43,035
+Right. Right.
+
+500
+00:20:43,045 --> 00:20:44,295
+So the, the digit certs,
+
+501
+00:20:44,305 --> 00:20:47,214
+like we're just going to revoke them all and you'll have to re, you have to redo it,
+
+502
+00:20:48,405 --> 00:20:51,694
+-- which is the, that's the correct answer. I
+-- mean, yeah, that, I agree.
+
+503
+00:20:51,704 --> 00:20:55,295
+-- That would be the right thing to do. And if
+-- it's automated, guess what? It's easy,
+
+504
+00:20:55,805 --> 00:20:57,354
+it would just magic.
+
+505
+00:20:57,625 --> 00:20:58,494
+Yeah, exactly.
+
+506
+00:20:59,310 --> 00:21:02,160
+But like I said, they got an injunction and they were prevented from doing this.
+
+507
+00:21:02,170 --> 00:21:04,880
+And so they went kind of, then even a little bit further.
+
+508
+00:21:04,890 --> 00:21:08,989
+And I think that's why that head guy stepped down is because they, they, they like,
+
+509
+00:21:09,000 --> 00:21:13,219
+in trust don't want to get delisted and become an ssl.com reseller, right?
+
+510
+00:21:13,229 --> 00:21:13,719
+Because
+
+511
+00:21:14,359 --> 00:21:18,229
+it used to be actually, I'm gonna say this and I'm not using air quotes.
+
+512
+00:21:18,239 --> 00:21:19,300
+It used to be easy
+
+513
+00:21:19,520 --> 00:21:22,300
+to become a root certificate authority and get into the root store
+
+514
+00:21:22,959 --> 00:21:27,020
+because the process was fail open. It was essentially you went
+
+515
+00:21:27,439 --> 00:21:29,839
+and you applied to Mozilla and there was one person
+
+516
+00:21:29,849 --> 00:21:31,739
+who I'm not gonna name because she does great work.
+
+517
+00:21:31,750 --> 00:21:35,459
+And she's like one of those load bearing internet pillars,
+
+518
+00:21:35,770 --> 00:21:39,439
+the foundation of the entire internet in modern society,
+
+519
+00:21:39,750 --> 00:21:40,380
+right?
+
+520
+00:21:40,729 --> 00:21:41,020
+So
+
+521
+00:21:41,140 --> 00:21:41,150
+I
+
+522
+00:21:41,260 --> 00:21:43,089
+to be clear, like she's doing great work. But
+
+523
+00:21:43,420 --> 00:21:46,160
+the process and because we came from a simpler time, we were all, you know,
+
+524
+00:21:46,170 --> 00:21:49,369
+-- things were innocent and lovely
+-- and everyone probably knew each other.
+
+525
+00:21:49,410 --> 00:21:49,859
+Yes.
+
+526
+00:21:49,869 --> 00:21:50,310
+But well,
+
+527
+00:21:50,319 --> 00:21:54,819
+more to the point is we weren't like if you basically stood up what looked like a
+
+528
+00:21:54,829 --> 00:21:57,800
+root certificate authority got your audit report from
+
+529
+00:21:57,810 --> 00:21:59,760
+some auditor and like some of these audit reports
+
+530
+00:21:59,900 --> 00:22:04,000
+as far as I can tell were a s, a company that is a single individual.
+
+531
+00:22:04,010 --> 00:22:07,349
+Now, if you look at the audit reports for like Verisign and well,
+
+532
+00:22:07,359 --> 00:22:09,060
+in trust and did you're certain all these people,
+
+533
+00:22:09,069 --> 00:22:11,780
+you're going to see accounting firms with names you recognize?
+
+534
+00:22:12,030 --> 00:22:12,579
+Ok.
+
+535
+00:22:12,670 --> 00:22:14,900
+And then you look at some of the dodgier ones and you're gonna see
+
+536
+00:22:14,910 --> 00:22:17,380
+company names that you look them up and it's like a single person.
+
+537
+00:22:17,390 --> 00:22:20,339
+So you're beginning to see there's a bit of shenanigans maybe going on.
+
+538
+00:22:20,660 --> 00:22:20,989
+You know,
+
+539
+00:22:21,000 --> 00:22:24,130
+it's like I got a sock two report like let me put it this way if somebody said to you,
+
+540
+00:22:24,140 --> 00:22:27,219
+hey, Josh, here's my sock two report and you saw it was signed by Kurt siefried.
+
+541
+00:22:27,229 --> 00:22:29,949
+-- Like, would you trust
+-- it? I wouldn't untrust it.
+
+542
+00:22:29,959 --> 00:22:34,819
+I think there is, there are circumstances where a single person
+
+543
+00:22:35,250 --> 00:22:38,920
+company is just fine. I mean, I think for a root C A
+
+544
+00:22:39,609 --> 00:22:41,640
+the bar should be a bit higher
+
+545
+00:22:42,369 --> 00:22:42,719
+but,
+
+546
+00:22:42,880 --> 00:22:46,810
+but there's, I'm not, I'm not discounting like single person audit companies.
+
+547
+00:22:46,819 --> 00:22:48,920
+They are legit and some of them are very, very good
+
+548
+00:22:49,199 --> 00:22:51,180
+and, but, and some of them, for example,
+
+549
+00:22:51,189 --> 00:22:54,479
+-- were delisted by the Canadian Auditors Society and
+-- blah, blah, blah.
+
+550
+00:22:54,489 --> 00:22:54,880
+Yeah. Well,
+
+551
+00:22:55,270 --> 00:22:58,479
+and there's, I, I remember there was some story I heard I can't, I, I just, I,
+
+552
+00:22:58,530 --> 00:23:02,010
+I'm certain I won't be able to find the details, but I'll try, but there was like
+
+553
+00:23:02,189 --> 00:23:03,479
+there was basically some,
+
+554
+00:23:03,750 --> 00:23:05,290
+a business auditor was using,
+
+555
+00:23:05,300 --> 00:23:07,880
+like their cousin that was running like a one person company.
+
+556
+00:23:07,890 --> 00:23:10,770
+And when they got, like, actually audited by the state, they were like, oh,
+
+557
+00:23:10,780 --> 00:23:12,890
+this person hasn't even done any like this.
+
+558
+00:23:12,900 --> 00:23:14,650
+You haven't been audited at all.
+
+559
+00:23:15,060 --> 00:23:16,729
+And yeah, it was their cousin, like,
+
+560
+00:23:16,739 --> 00:23:18,729
+was just rubber stamping whatever they were given.
+
+561
+00:23:18,780 --> 00:23:21,400
+-- That's actually a pretty common thing.
+-- It probably is,
+
+562
+00:23:21,989 --> 00:23:22,819
+that kind of shenanigans
+
+563
+00:23:22,920 --> 00:23:22,979
+happen.
+
+564
+00:23:23,189 --> 00:23:24,130
+So, back to this.
+
+565
+00:23:24,235 --> 00:23:27,755
+So digits are kind of fell on their sword and is trying to do the right thing. And
+
+566
+00:23:28,076 --> 00:23:29,225
+what's fascinating to me is, yeah,
+
+567
+00:23:29,235 --> 00:23:31,735
+the vast majority of people don't care and don't know.
+
+568
+00:23:31,755 --> 00:23:32,536
+And they don't have to.
+
+569
+00:23:32,696 --> 00:23:33,816
+Yeah, like, I had no idea.
+
+570
+00:23:33,826 --> 00:23:35,656
+I'm literally in the industry, but I now,
+
+571
+00:23:35,666 --> 00:23:38,336
+granted I've been on the road for three weeks prior to this,
+
+572
+00:23:38,345 --> 00:23:41,615
+so I have no idea what's going on anywhere but still, yeah, I,
+
+573
+00:23:41,625 --> 00:23:43,135
+I had no idea this was happening.
+
+574
+00:23:43,206 --> 00:23:44,576
+No, I, no, no clue.
+
+575
+00:23:44,722 --> 00:23:48,702
+And if you look at the certificate, traffic, like mailing list traffic,
+
+576
+00:23:48,712 --> 00:23:50,621
+it's the same small group of people,
+
+577
+00:23:50,781 --> 00:23:54,021
+like, straight up, like, one of them is a professor from Calgary, you know,
+
+578
+00:23:54,031 --> 00:23:55,222
+south of me who, like,
+
+579
+00:23:55,232 --> 00:23:59,862
+got ac a booted out a few years ago because they were so bad and he did some research,
+
+580
+00:24:00,151 --> 00:24:00,421
+you know,
+
+581
+00:24:00,432 --> 00:24:02,312
+the Turkish one where they got broken into and
+
+582
+00:24:02,322 --> 00:24:05,041
+they didn't know for possibly a few years,
+
+583
+00:24:05,930 --> 00:24:06,250
+you know,
+
+584
+00:24:06,260 --> 00:24:07,819
+and they straight up had like public
+
+585
+00:24:07,829 --> 00:24:10,849
+facing services with like default administrative credentials.
+
+586
+00:24:11,040 --> 00:24:12,869
+Good. Right. Like,
+
+587
+00:24:13,040 --> 00:24:15,510
+and somebody found it and reported it and then was like,
+
+588
+00:24:15,650 --> 00:24:18,380
+they're like, yeah, we don't think an attacker did this and they're like, ok,
+
+589
+00:24:18,390 --> 00:24:19,910
+that's one way to answer that question.
+
+590
+00:24:20,189 --> 00:24:20,729
+So
+
+591
+00:24:20,869 --> 00:24:23,510
+fundamentally, I don't know, kind of what the,
+
+592
+00:24:23,640 --> 00:24:27,959
+the point of all this is. But looking at this, I think a big part of it is
+
+593
+00:24:28,290 --> 00:24:29,510
+security
+
+594
+00:24:29,670 --> 00:24:36,369
+needs to involve the people who actually are going to use this also at scale.
+
+595
+00:24:36,599 --> 00:24:40,089
+Yes. So it's funny you say that, that, that was a topic
+
+596
+00:24:40,229 --> 00:24:45,489
+that came up multiple times while I was in Las Vegas last week for B sides
+
+597
+00:24:45,680 --> 00:24:46,219
+where
+
+598
+00:24:46,699 --> 00:24:50,329
+specifically around S bombs and vulnerabilities
+
+599
+00:24:50,949 --> 00:24:53,750
+-- that's going to be a prom at scale.
+-- A lot of the people,
+
+600
+00:24:54,160 --> 00:24:55,560
+like we say
+
+601
+00:24:55,739 --> 00:24:57,189
+in the boat
+
+602
+00:24:57,300 --> 00:24:59,800
+for S bombs and vulnerabilities
+
+603
+00:24:59,959 --> 00:25:03,680
+haven't actually been using them for years, maybe ever.
+
+604
+00:25:04,400 --> 00:25:07,140
+And they're speaking with authority and making decisions and
+
+605
+00:25:07,150 --> 00:25:10,030
+it's obvious to anyone who's actually like in the dirt
+
+606
+00:25:10,239 --> 00:25:12,469
+that like these people have no idea what they're talking about.
+
+607
+00:25:12,479 --> 00:25:14,819
+They're, they're so far removed from reality,
+
+608
+00:25:15,000 --> 00:25:16,609
+but unfortunately,
+
+609
+00:25:16,880 --> 00:25:18,979
+they are in positions sometimes where they're
+
+610
+00:25:18,989 --> 00:25:20,859
+speaking with authority and they're getting,
+
+611
+00:25:20,989 --> 00:25:22,270
+they're, they're being listened to.
+
+612
+00:25:22,550 --> 00:25:24,949
+And so it's really hard to be like,
+
+613
+00:25:25,114 --> 00:25:28,635
+hey, I'm just like a nobody down here in the mud. That guy's an idiot.
+
+614
+00:25:28,645 --> 00:25:31,645
+Well, so the problem is the infosec industry tends to like,
+
+615
+00:25:32,074 --> 00:25:33,484
+for example, I you know,
+
+616
+00:25:33,494 --> 00:25:35,814
+brought up that the cas are doing bad things and people are like, Kurt,
+
+617
+00:25:35,824 --> 00:25:36,494
+why are you doing that?
+
+618
+00:25:36,505 --> 00:25:37,415
+You're being mean to them.
+
+619
+00:25:37,425 --> 00:25:40,155
+Like, why can't you just leave them be like, they're like,
+
+620
+00:25:40,165 --> 00:25:42,425
+they're causing problems and it's like I'm trying to
+
+621
+00:25:42,435 --> 00:25:45,775
+get ac ad listed that is like objectively bad
+
+622
+00:25:46,199 --> 00:25:47,670
+and needs to be delisted.
+
+623
+00:25:47,869 --> 00:25:50,359
+Well, you see that all the time in this industry where somebody bring, like,
+
+624
+00:25:50,369 --> 00:25:51,890
+everybody shoots the messenger
+
+625
+00:25:52,579 --> 00:25:52,589
+a
+
+626
+00:25:53,229 --> 00:25:56,510
+great example, the, the two thread on Mastodon where I'm like,
+
+627
+00:25:56,520 --> 00:26:01,180
+I would love to use Firefox but like, where is my easy profile manager?
+
+628
+00:26:01,189 --> 00:26:04,790
+-- There isn't one? You have to install a plug in and it's not great.
+-- Exactly.
+
+629
+00:26:04,989 --> 00:26:07,060
+And it doesn't actually quite work the way I want it to
+
+630
+00:26:07,165 --> 00:26:07,974
+and it doesn't make it easy.
+
+631
+00:26:07,984 --> 00:26:10,165
+And all these people are kind of like, well, Kurt, you're holding it wrong,
+
+632
+00:26:10,175 --> 00:26:10,685
+you're doing it wrong.
+
+633
+00:26:10,694 --> 00:26:11,035
+And I'm like,
+
+634
+00:26:11,045 --> 00:26:13,814
+I think this is a common use case and actually a few people piped up saying
+
+635
+00:26:13,994 --> 00:26:16,055
+I too have this problem and I too would love to use for
+
+636
+00:26:16,204 --> 00:26:19,125
+ha, but I do have multiple business things and a personal thing and I need to blah,
+
+637
+00:26:19,135 --> 00:26:19,574
+blah, blah
+
+638
+00:26:19,805 --> 00:26:22,984
+and it just doesn't work. I've tried it and I've done it and like it, it's a pain.
+
+639
+00:26:23,494 --> 00:26:26,165
+Like I've been using Linux since Slack or one point. Oh,
+
+640
+00:26:26,795 --> 00:26:28,055
+I understand
+
+641
+00:26:28,474 --> 00:26:30,224
+painful software and using it
+
+642
+00:26:30,444 --> 00:26:30,885
+like,
+
+643
+00:26:31,439 --> 00:26:33,819
+well, and you're old and you complain a lot now. So there's that
+
+644
+00:26:33,959 --> 00:26:34,089
+too
+
+645
+00:26:34,510 --> 00:26:37,770
+-- because I'm also like, well, chrome did it relatively easily. Why
+-- can't?
+
+646
+00:26:37,869 --> 00:26:38,800
+Yeah, the chrome,
+
+647
+00:26:39,910 --> 00:26:42,439
+the profiles or whatever they call them. They're very good. OK.
+
+648
+00:26:42,449 --> 00:26:46,760
+II I have a question related to the topic because I don't want to go down this radical.
+
+649
+00:26:46,770 --> 00:26:53,040
+But OK, so one of the things that comes up around the, the certificate root store
+
+650
+00:26:53,209 --> 00:26:58,199
+is I do a lot of work with, we'll say us public sector,
+
+651
+00:26:58,770 --> 00:27:02,000
+which is the US government oftentimes the Department of
+
+652
+00:27:02,010 --> 00:27:03,839
+Defense and the military and things like that.
+
+653
+00:27:03,849 --> 00:27:07,160
+And they will say they have a particular sensitivity to certain countries.
+
+654
+00:27:07,369 --> 00:27:11,680
+-- Let's say China, North Korea,
+-- I wasn't going to name them. But sure those countries,
+
+655
+00:27:12,170 --> 00:27:13,959
+I had someone come to me the other day. It was like,
+
+656
+00:27:14,119 --> 00:27:16,569
+have you seen all of these Chinese cas
+
+657
+00:27:16,969 --> 00:27:18,420
+in the root certificate store?
+
+658
+00:27:18,890 --> 00:27:22,920
+And I was like, yeah, what about it? They're like, should we trust them? I'm like,
+
+659
+00:27:23,030 --> 00:27:26,520
+we don't really have a choice like they've been there forever.
+
+660
+00:27:26,530 --> 00:27:28,160
+So here's what's frustrating to me
+
+661
+00:27:28,449 --> 00:27:32,869
+is there's actually some security stuff built in where for example, I could issue,
+
+662
+00:27:32,880 --> 00:27:34,750
+you can create a root certificate
+
+663
+00:27:34,920 --> 00:27:35,359
+that
+
+664
+00:27:35,969 --> 00:27:39,729
+it has specifications on what kinds of things it can do.
+
+665
+00:27:39,739 --> 00:27:41,619
+It can sign email certificates, it can sign webs
+
+666
+00:27:41,920 --> 00:27:43,410
+can sign code certificates,
+
+667
+00:27:43,750 --> 00:27:44,119
+software,
+
+668
+00:27:44,219 --> 00:27:45,250
+software, sorry.
+
+669
+00:27:45,400 --> 00:27:45,859
+Um
+
+670
+00:27:46,010 --> 00:27:48,189
+And uh like be like the brand identification
+
+671
+00:27:48,199 --> 00:27:50,520
+soft and so typically certificates have that limitation.
+
+672
+00:27:50,530 --> 00:27:52,489
+Like this is a web service certificate. This is a
+
+673
+00:27:52,900 --> 00:27:55,630
+code uh software signing certificate. This is an email certificate.
+
+674
+00:27:56,040 --> 00:28:00,130
+You can also restrict their domain names. So you could say, for example, like, ok,
+
+675
+00:28:00,319 --> 00:28:01,250
+for the sake of argument,
+
+676
+00:28:01,260 --> 00:28:04,449
+this country's post office will be given a root certificate and
+
+677
+00:28:04,459 --> 00:28:07,410
+they can sign dot whatever the TLD for the country is
+
+678
+00:28:07,810 --> 00:28:10,209
+-- like
+-- dot CN for China, for example.
+
+679
+00:28:10,219 --> 00:28:10,890
+Exactly.
+
+680
+00:28:11,140 --> 00:28:12,680
+And in that case, then I'd be like, yeah,
+
+681
+00:28:12,689 --> 00:28:14,910
+I don't have to care about that certificate authority anymore because,
+
+682
+00:28:15,060 --> 00:28:15,739
+well, like
+
+683
+00:28:16,130 --> 00:28:18,926
+I just, you know, they, they, I only sign stuff for.cn and that,
+
+684
+00:28:18,936 --> 00:28:20,355
+that I don't really mind.
+
+685
+00:28:21,015 --> 00:28:24,755
+Fun fact. Guess how many of the root certificates in the store
+
+686
+00:28:24,956 --> 00:28:28,436
+have that sort of domain limitation enabled.
+
+687
+00:28:28,615 --> 00:28:31,706
+So I know nothing about how many root certificates are in the store.
+
+688
+00:28:31,715 --> 00:28:32,686
+-- Let's start with that
+-- question.
+
+689
+00:28:32,895 --> 00:28:38,186
+It's um over 100 hundreds. It's low, hundreds of memory serves.
+
+690
+00:28:38,651 --> 00:28:40,802
+And that's a fun thing is just getting that list is
+
+691
+00:28:40,921 --> 00:28:42,332
+kind of tricky it.
+
+692
+00:28:42,362 --> 00:28:46,062
+So the C A forum has a list of root certificates that generally speaking,
+
+693
+00:28:46,072 --> 00:28:49,671
+almost everybody kind of uses, but each C A kind of has their own thing.
+
+694
+00:28:49,682 --> 00:28:50,621
+So there's actually PK
+
+695
+00:28:50,921 --> 00:28:54,212
+ic.org/ltl, which is the list of
+
+696
+00:28:54,332 --> 00:28:59,722
+uh trust lists. And so it's like 360 Adobe Android Apple, Chrome Cisco
+
+697
+00:29:00,602 --> 00:29:02,641
+in alphabetical order, you know, a bunch, right?
+
+698
+00:29:03,371 --> 00:29:03,391
+Uh
+
+699
+00:29:03,501 --> 00:29:07,312
+Visa has a really good list. Uh I, I honestly, if you're an American entity,
+
+700
+00:29:07,829 --> 00:29:09,060
+use the Visa list.
+
+701
+00:29:09,449 --> 00:29:10,290
+That's funny.
+
+702
+00:29:10,780 --> 00:29:14,180
+I mean, I'm not surprised that they have real money on the line so they care a lot.
+
+703
+00:29:14,189 --> 00:29:14,630
+Like,
+
+704
+00:29:14,760 --> 00:29:15,760
+generally speaking,
+
+705
+00:29:15,770 --> 00:29:19,760
+the companies with actual money in the game are the ones who do the best job here.
+
+706
+00:29:19,979 --> 00:29:23,170
+If you want a US centric version of the list, go use Visas.
+
+707
+00:29:23,199 --> 00:29:26,290
+So, the, the problem though is you're thinking of root certificates as
+
+708
+00:29:26,869 --> 00:29:28,859
+root certificate companies and that's how
+
+709
+00:29:28,869 --> 00:29:30,510
+certificates gets issued and you're wrong.
+
+710
+00:29:30,790 --> 00:29:31,329
+Ok.
+
+711
+00:29:31,349 --> 00:29:33,300
+The vast majority of certificates are issued
+
+712
+00:29:33,310 --> 00:29:35,949
+by intermediate authorities like Lutz and Crypt.
+
+713
+00:29:36,310 --> 00:29:39,939
+-- Well, no certificates. Yes. No, I know that.
+-- But here's the fun part.
+
+714
+00:29:40,069 --> 00:29:41,900
+We don't know how many intermediates there are.
+
+715
+00:29:42,339 --> 00:29:43,770
+I believe that 100%.
+
+716
+00:29:43,800 --> 00:29:46,500
+Yeah, like just like we don't know how many certificates there are.
+
+717
+00:29:46,510 --> 00:29:48,060
+Well, we think there's about six.
+
+718
+00:29:48,280 --> 00:29:52,290
+The last number I saw a few years ago is we think there's about 6000 intermediates.
+
+719
+00:29:52,300 --> 00:29:54,630
+That doesn't surprise me even a little bit because the
+
+720
+00:29:54,640 --> 00:29:56,390
+prompt too is you've got some that are like,
+
+721
+00:29:57,060 --> 00:29:58,839
+are obvious, like let's encrypt
+
+722
+00:29:59,060 --> 00:30:00,469
+and some like, ok, well,
+
+723
+00:30:00,479 --> 00:30:03,239
+Amazon issued certificates for their web services and
+
+724
+00:30:03,250 --> 00:30:05,380
+they became intermediate a long time ago.
+
+725
+00:30:05,640 --> 00:30:06,300
+So they can,
+
+726
+00:30:06,430 --> 00:30:08,920
+all of the cloud providers are intermediates
+
+727
+00:30:09,130 --> 00:30:12,819
+-- pretty much. Yeah, pretty much is
+-- an intermediate or intermediary
+
+728
+00:30:13,050 --> 00:30:14,020
+intermediate
+
+729
+00:30:14,310 --> 00:30:16,849
+because basically they have a certificate
+
+730
+00:30:16,949 --> 00:30:18,560
+signed by a root certificate.
+
+731
+00:30:18,920 --> 00:30:22,300
+But without the limitation, like normally when they sign a certificate,
+
+732
+00:30:22,310 --> 00:30:24,949
+they say you also can't sign any more certificates.
+
+733
+00:30:25,800 --> 00:30:27,209
+Well, in that case, they
+
+734
+00:30:27,380 --> 00:30:29,010
+or you're constrained to a domain,
+
+735
+00:30:29,290 --> 00:30:29,410
+right?
+
+736
+00:30:29,670 --> 00:30:32,170
+Well, no domain constraints are almost never used.
+
+737
+00:30:33,660 --> 00:30:37,170
+I looked and, well, how would you constrain Amazon, right?
+
+738
+00:30:37,180 --> 00:30:38,270
+You can't constrain Amazon,
+
+739
+00:30:38,714 --> 00:30:41,805
+constrain them. But I'm saying for like you or I, for example,
+
+740
+00:30:41,925 --> 00:30:45,324
+-- no, they, well, you just get a wild card certificate in that case.
+-- OK.
+
+741
+00:30:45,364 --> 00:30:48,704
+And that's fair. And again, I, I'm way out of the game on this.
+
+742
+00:30:48,714 --> 00:30:52,265
+And that's a good example of domain constraints in theory, but in practice,
+
+743
+00:30:52,275 --> 00:30:54,864
+domain constraints don't work because now we have over 2000 Tl DS.
+
+744
+00:30:55,104 --> 00:30:55,114
+Uh
+
+745
+00:30:55,375 --> 00:30:55,775
+Yeah,
+
+746
+00:30:56,395 --> 00:30:59,305
+like minor problem even just listing them all
+
+747
+00:30:59,314 --> 00:31:01,324
+in the ticket would like it would break.
+
+748
+00:31:01,415 --> 00:31:03,135
+That's fair. Right. Well, I'm, I'm,
+
+749
+00:31:03,354 --> 00:31:05,214
+I'm guessing if you add 100
+
+750
+00:31:05,849 --> 00:31:07,859
+domain constraints to a certificate,
+
+751
+00:31:08,119 --> 00:31:10,949
+-- we're going to find out a lot of broken implementations for
+-- sure.
+
+752
+00:31:10,959 --> 00:31:12,670
+Yeah, I'm sure every, most of the,
+
+753
+00:31:12,680 --> 00:31:16,420
+-- the low end phones would probably collapse
+-- low end.
+
+754
+00:31:16,430 --> 00:31:18,199
+I, I don't know, maybe it's,
+
+755
+00:31:18,209 --> 00:31:21,880
+it's cute that you think like the high end stuff would handle it because it never,
+
+756
+00:31:21,890 --> 00:31:23,650
+well, and, and it's also funny because
+
+757
+00:31:23,810 --> 00:31:30,189
+-- the, the, the libraries that parse all this crap are like ancient sea code
+-- and worse,
+
+758
+00:31:30,660 --> 00:31:33,650
+it's all based on a SN one which is that itu the
+
+759
+00:31:33,660 --> 00:31:37,310
+International Telephony Union Standard and a SN one is not a standard.
+
+760
+00:31:37,420 --> 00:31:42,849
+-- It's a horrible format. Well,
+-- no, a SN one is like a family of documents.
+
+761
+00:31:42,859 --> 00:31:47,449
+Let's say that are sort of a standard because people use them as a standard.
+
+762
+00:31:47,500 --> 00:31:50,119
+Interesting. But if you actually look at it like
+
+763
+00:31:50,319 --> 00:31:53,020
+there's, it's kind of officially technically a standard,
+
+764
+00:31:53,030 --> 00:31:54,250
+but it's also kind of officially like,
+
+765
+00:31:54,339 --> 00:31:56,790
+here's a pile of documents that everybody sort of agrees to.
+
+766
+00:31:56,810 --> 00:32:01,160
+Perfect example, curl just issued a security update like a week or two ago
+
+767
+00:32:01,390 --> 00:32:03,270
+and it was an a sn one person problem.
+
+768
+00:32:03,380 --> 00:32:03,619
+Well,
+
+769
+00:32:03,630 --> 00:32:05,300
+and this leads to another show we need to do
+
+770
+00:32:05,310 --> 00:32:07,599
+on undefined behavior and why that's such a problem.
+
+771
+00:32:07,609 --> 00:32:10,359
+But anyways, we don't know how many there are to start.
+
+772
+00:32:10,520 --> 00:32:13,339
+Well, we know how many root certificates there are. And so here's the thing.
+
+773
+00:32:13,349 --> 00:32:14,359
+Now, I asked you to pause.
+
+774
+00:32:14,369 --> 00:32:18,069
+Now I want you to go, you're in Firefox, go into the certificate store
+
+775
+00:32:18,310 --> 00:32:20,780
+thing under security and tell me how many there are.
+
+776
+00:32:20,790 --> 00:32:22,349
+-- I have to figure
+-- out how to do this.
+
+777
+00:32:22,630 --> 00:32:27,439
+-- You want to click on settings and security
+-- certificates, view certificates.
+
+778
+00:32:27,640 --> 00:32:28,390
+There you go.
+
+779
+00:32:28,589 --> 00:32:31,510
+Uh It doesn't show me there's the list is gigantic.
+
+780
+00:32:31,520 --> 00:32:35,479
+-- Hundreds, hundreds and hundreds
+-- easily. And you can't export it easily.
+
+781
+00:32:35,489 --> 00:32:41,689
+-- Can you,
+-- I can I select all I can select all? No, I can select one. I can export one,
+
+782
+00:32:43,239 --> 00:32:45,739
+the interface to these things in the web browser.
+
+783
+00:32:45,750 --> 00:32:47,819
+Also, let's say for the sake of argument, you want to like
+
+784
+00:32:47,930 --> 00:32:52,160
+-- remove a bunch of them
+-- again, one at a time. Can I can I control click?
+
+785
+00:32:52,170 --> 00:32:55,560
+Oh I can shift click, I can export them all. I can go to the top.
+
+786
+00:32:55,719 --> 00:33:00,020
+Wait, there's a certificate named CN that seems safe. Anyway,
+
+787
+00:33:00,310 --> 00:33:01,810
+then I can click on the bottom.
+
+788
+00:33:01,819 --> 00:33:05,839
+Yes, I oh, but if I select them all, I can't, the export button is grayed up.
+
+789
+00:33:05,849 --> 00:33:08,109
+I have to select one to get the export button to
+
+790
+00:33:08,219 --> 00:33:08,339
+re
+
+791
+00:33:08,989 --> 00:33:13,469
+so or, or delete or distrust is also, I have to only
+
+792
+00:33:13,609 --> 00:33:15,920
+-- select one at a time.
+-- I don't mean to laugh but
+
+793
+00:33:16,229 --> 00:33:17,439
+it's 2024.
+
+794
+00:33:17,560 --> 00:33:17,969
+And
+
+795
+00:33:19,040 --> 00:33:22,719
+in every web browser, it is effectively impossible
+
+796
+00:33:23,089 --> 00:33:25,439
+and even better on Apple devices, Apple Mobile,
+
+797
+00:33:25,449 --> 00:33:28,540
+they stopped pretending you you can't even look.
+
+798
+00:33:28,550 --> 00:33:31,439
+I I think the point is like, I think the reason,
+
+799
+00:33:31,449 --> 00:33:34,069
+the reason I let you do this show even because honestly,
+
+800
+00:33:34,079 --> 00:33:36,780
+I think this topic is boring and no one cares.
+
+801
+00:33:37,020 --> 00:33:39,280
+Yeah, I agree. But the reason it
+
+802
+00:33:39,430 --> 00:33:39,750
+matter
+
+803
+00:33:40,650 --> 00:33:42,079
+is this is like
+
+804
+00:33:42,369 --> 00:33:45,560
+this is the foundational infrastructure of modern society.
+
+805
+00:33:45,569 --> 00:33:47,609
+-- I won't even say the internet.
+-- This is plumbing,
+
+806
+00:33:47,619 --> 00:33:48,800
+it's not even plumbing.
+
+807
+00:33:48,969 --> 00:33:53,989
+This is like this is the bedrock upon which society functions.
+
+808
+00:33:54,369 --> 00:33:56,949
+Every computer, talking to every computer on the planet
+
+809
+00:33:57,150 --> 00:33:58,040
+uses this.
+
+810
+00:33:58,229 --> 00:34:00,640
+Yes, is using this and it is
+
+811
+00:34:01,400 --> 00:34:05,589
+-- an unmitigated disaster.
+-- Oh, it gets worse though, from a browser perspective.
+
+812
+00:34:05,599 --> 00:34:08,208
+So tell me which ones you're using, which what
+
+813
+00:34:08,659 --> 00:34:12,389
+which root certificates ultimately you're actually using on a daily basis.
+
+814
+00:34:12,418 --> 00:34:15,929
+-- I assume all of them.
+-- Well, the answer is we don't really know.
+
+815
+00:34:15,938 --> 00:34:18,360
+And the best answer I came up with somebody was like, run Linux
+
+816
+00:34:18,790 --> 00:34:21,620
+and use pie notify to monitor the certificate store in
+
+817
+00:34:21,629 --> 00:34:23,969
+slash etc and see when the files are being read.
+
+818
+00:34:24,110 --> 00:34:28,620
+I see which would work for applications that use the system store
+
+819
+00:34:28,810 --> 00:34:30,770
+and have their own but not a web browser.
+
+820
+00:34:30,936 --> 00:34:34,956
+Yeah, the whole thing is like, it's wild and, and this is again,
+
+821
+00:34:34,966 --> 00:34:36,466
+I think back to that email.
+
+822
+00:34:36,476 --> 00:34:40,324
+I got not long ago where the guy was like, look at all these Chinese
+
+823
+00:34:40,706 --> 00:34:41,645
+certificate authorities
+
+824
+00:34:41,936 --> 00:34:42,864
+and it's like
+
+825
+00:34:42,996 --> 00:34:44,246
+we don't know.
+
+826
+00:34:44,335 --> 00:34:49,565
+And I love that all of these organizations make a big deal about oh Chinese
+
+827
+00:34:49,574 --> 00:34:53,324
+developed code or we don't want contributions from
+
+828
+00:34:53,335 --> 00:34:56,485
+people outside of this country or whatever.
+
+829
+00:34:56,525 --> 00:34:58,976
+And the reality is like this is one
+
+830
+00:34:58,986 --> 00:35:02,642
+of those extremely a key foundations that thank goodness
+
+831
+00:35:02,991 --> 00:35:04,852
+has basically worked.
+
+832
+00:35:04,862 --> 00:35:09,162
+No, I mean, because of a couple of people, you know, doing miracles
+
+833
+00:35:09,302 --> 00:35:11,362
+and probably what is free time.
+
+834
+00:35:11,632 --> 00:35:11,931
+Yep.
+
+835
+00:35:11,941 --> 00:35:16,941
+Well, and uh one also thing uh for example, Atos is a certificate authority, right?
+
+836
+00:35:16,951 --> 00:35:19,961
+A big one. They have multiple certificates actually in the root store.
+
+837
+00:35:20,231 --> 00:35:22,652
+A majority of creditors of Atos se have signed
+
+838
+00:35:22,662 --> 00:35:24,431
+the lock up again agreement that will see them
+
+839
+00:35:24,441 --> 00:35:27,261
+take control of the embattled French it services provider
+
+840
+00:35:27,271 --> 00:35:30,041
+following its restructuring according to a statement on Monday.
+
+841
+00:35:30,340 --> 00:35:31,679
+So the other thing to remember is like
+
+842
+00:35:31,689 --> 00:35:33,899
+if you start looking at these certificate authorities and
+
+843
+00:35:33,909 --> 00:35:35,530
+trying to track them down unless they have
+
+844
+00:35:35,540 --> 00:35:38,060
+a really obvious name like Beijing Certificate Authority,
+
+845
+00:35:38,070 --> 00:35:38,479
+which
+
+846
+00:35:38,689 --> 00:35:42,000
+literally is the name of one, then you can be reasonably sure that's a,
+
+847
+00:35:42,010 --> 00:35:44,159
+probably ac a in Beijing
+
+848
+00:35:44,520 --> 00:35:44,790
+or
+
+849
+00:35:45,040 --> 00:35:45,199
+Atos,
+
+850
+00:35:45,340 --> 00:35:49,659
+-- you know, being that big it company. I've
+-- never heard of Atos before. At this moment.
+
+851
+00:35:49,689 --> 00:35:50,840
+They're massive in Europe.
+
+852
+00:35:51,010 --> 00:35:51,080
+I,
+
+853
+00:35:51,489 --> 00:35:54,320
+I used to know people that work there. You know, they're like one of those.
+
+854
+00:35:54,330 --> 00:35:56,050
+It's like accenture if you're not an accounting. Yeah,
+
+855
+00:35:56,189 --> 00:35:56,979
+I've heard of accenture.
+
+856
+00:35:56,989 --> 00:35:58,219
+-- But if
+-- you're that name,
+
+857
+00:35:58,229 --> 00:36:01,330
+I've heard of because they sponsor some program on public television.
+
+858
+00:36:02,550 --> 00:36:02,879
+Yeah.
+
+859
+00:36:03,100 --> 00:36:03,820
+But, um,
+
+860
+00:36:04,129 --> 00:36:06,310
+if you start looking at a lot of the certificate, authorities,
+
+861
+00:36:06,320 --> 00:36:10,129
+about half of them are really hard to track down and figure out like,
+
+862
+00:36:10,139 --> 00:36:11,629
+kind of if they're legit or not.
+
+863
+00:36:11,679 --> 00:36:14,290
+And I'm sure we never take anything out of the list.
+
+864
+00:36:14,310 --> 00:36:16,219
+And the intermediates of course are,
+
+865
+00:36:16,570 --> 00:36:19,889
+-- it's a complete free for all
+-- unknowable number. Yes.
+
+866
+00:36:20,100 --> 00:36:21,889
+I, I don't know what the answer is here because the other,
+
+867
+00:36:22,040 --> 00:36:24,580
+the thing is we're, they're talking about getting rid of certificate,
+
+868
+00:36:24,590 --> 00:36:27,370
+transparency logs because of the privacy issues of like,
+
+869
+00:36:27,379 --> 00:36:30,239
+because the problem now is you stand up a server and of course you have
+
+870
+00:36:30,250 --> 00:36:33,699
+to get a certificate for it because otherwise your web browser screams at you.
+
+871
+00:36:33,929 --> 00:36:34,379
+Yes.
+
+872
+00:36:34,510 --> 00:36:38,360
+And the moment you get a certificate, it shows up in the logs
+
+873
+00:36:38,479 --> 00:36:42,010
+and the Attackers see it and your server gets hammered.
+
+874
+00:36:42,610 --> 00:36:45,530
+Now on the on the, on the other flip the flip side of that,
+
+875
+00:36:45,790 --> 00:36:46,739
+I know
+
+876
+00:36:46,899 --> 00:36:47,770
+a bunch of security
+
+877
+00:36:47,889 --> 00:36:50,120
+researchers that watch the transparency logs to
+
+878
+00:36:50,129 --> 00:36:52,419
+look for probable phishing domains where,
+
+879
+00:36:52,429 --> 00:36:57,070
+when you have a website registered that looks like walmart.com, they're like,
+
+880
+00:36:57,080 --> 00:36:58,409
+that's almost definitely phishing.
+
+881
+00:36:58,419 --> 00:37:01,229
+Let's add that to the list of places you can't go.
+
+882
+00:37:01,350 --> 00:37:01,449
+Yeah.
+
+883
+00:37:01,459 --> 00:37:03,669
+And there was that famous club floor hack incident where they
+
+884
+00:37:03,679 --> 00:37:06,409
+talked about that where they were monitoring for these domains,
+
+885
+00:37:06,419 --> 00:37:08,100
+but didn't, didn't catch it in time.
+
+886
+00:37:08,439 --> 00:37:09,209
+And yeah, so I,
+
+887
+00:37:09,239 --> 00:37:11,310
+I personally think we should keep the certificate
+
+888
+00:37:11,320 --> 00:37:13,629
+transparency logs and just make it all public because
+
+889
+00:37:13,899 --> 00:37:15,550
+trying to rely on
+
+890
+00:37:15,770 --> 00:37:18,199
+Attackers not knowing that the server exists.
+
+891
+00:37:18,449 --> 00:37:20,399
+-- It's not, I mean,
+-- yeah, that's stupid.
+
+892
+00:37:20,409 --> 00:37:22,120
+But at the same time, like if, if,
+
+893
+00:37:22,129 --> 00:37:26,830
+if there are literally billions and billions of certificates issued each day
+
+894
+00:37:27,489 --> 00:37:30,719
+like that transparency log has to be bananas.
+
+895
+00:37:30,770 --> 00:37:32,959
+And that's kind of part of why we're looking to get rid
+
+896
+00:37:32,969 --> 00:37:35,919
+of it is because like running it is expensive and not chore.
+
+897
+00:37:35,929 --> 00:37:39,820
+Oh, I'm sure, I can't imagine what it's like to even just keep the thing alive,
+
+898
+00:37:39,830 --> 00:37:41,959
+much less do anything with the data.
+
+899
+00:37:42,530 --> 00:37:42,909
+Yeah.
+
+900
+00:37:43,030 --> 00:37:43,399
+And I mean,
+
+901
+00:37:43,409 --> 00:37:45,229
+this leads to interesting things of where this actually in
+
+902
+00:37:45,239 --> 00:37:47,580
+some ways will help Attackers because if an attacker,
+
+903
+00:37:47,909 --> 00:37:51,929
+you know, if they get a certificate that lasts 5, 10 minutes, they use it,
+
+904
+00:37:51,939 --> 00:37:54,050
+they do the attack, they send out the smashes, you know,
+
+905
+00:37:54,060 --> 00:37:58,409
+the S MS s or whatever it gets used and then it's just gone kind of without a trace.
+
+906
+00:37:58,770 --> 00:38:01,810
+You know, it, it's very hard to investigate because it's, well, it's gone.
+
+907
+00:38:02,459 --> 00:38:02,919
+I mean,
+
+908
+00:38:03,219 --> 00:38:06,270
+this is, oh, man, this is such a weird problem. And
+
+909
+00:38:06,379 --> 00:38:09,639
+the answer, the one, the one answer I know it isn't,
+
+910
+00:38:09,659 --> 00:38:14,012
+is creating like some sort of governmental or UN type organ to
+
+911
+00:38:14,452 --> 00:38:16,913
+try to manage this because it would be
+
+912
+00:38:17,242 --> 00:38:18,913
+no doubt a disaster.
+
+913
+00:38:19,133 --> 00:38:22,623
+-- It, well, even if with good intentions, they would screw it up
+-- for
+
+914
+00:38:22,633 --> 00:38:22,752
+sure.
+
+915
+00:38:23,103 --> 00:38:26,623
+I think what terrifies me is the lack of sort of new people getting involved.
+
+916
+00:38:26,633 --> 00:38:26,843
+And like,
+
+917
+00:38:26,853 --> 00:38:29,083
+I've seen new people try to get involved and then they
+
+918
+00:38:29,093 --> 00:38:31,893
+kind of get booed out because they do unpopular things,
+
+919
+00:38:31,903 --> 00:38:33,433
+like point out that there's no pants.
+
+920
+00:38:33,633 --> 00:38:34,232
+Right.
+
+921
+00:38:34,343 --> 00:38:34,572
+Right.
+
+922
+00:38:34,583 --> 00:38:37,062
+Not that we're not wearing pants, there just are no pants,
+
+923
+00:38:37,083 --> 00:38:39,343
+-- that is a difficult problem for
+-- sure.
+
+924
+00:38:39,502 --> 00:38:39,952
+And we, we,
+
+925
+00:38:40,035 --> 00:38:43,125
+I see a lot of that in Infosec and I think that's kind
+
+926
+00:38:43,135 --> 00:38:46,535
+of one of the biggest problems INFOSEC has currently because especially with,
+
+927
+00:38:47,025 --> 00:38:48,656
+like, we're turning away newcomers.
+
+928
+00:38:48,716 --> 00:38:51,176
+-- I mean,
+-- well, there's some of that we also talked about like,
+
+929
+00:38:51,186 --> 00:38:52,456
+where are all the young people at open
+
+930
+00:38:52,645 --> 00:38:53,936
+source? Not very long ago?
+
+931
+00:38:53,946 --> 00:38:54,615
+And there's,
+
+932
+00:38:54,625 --> 00:38:59,196
+there's an aspect of people just don't want to get involved because quite frankly,
+
+933
+00:38:59,206 --> 00:38:59,595
+like,
+
+934
+00:38:59,726 --> 00:39:01,176
+this is a boring job.
+
+935
+00:39:01,506 --> 00:39:01,996
+I,
+
+936
+00:39:02,385 --> 00:39:04,756
+I actually got rein involved with the certificate
+
+937
+00:39:04,906 --> 00:39:05,936
+authority stuff
+
+938
+00:39:06,560 --> 00:39:09,530
+and I basically gave it about a year and then I gave up and left
+
+939
+00:39:09,729 --> 00:39:11,330
+because it's a terrible thing.
+
+940
+00:39:11,419 --> 00:39:15,310
+It feels like the sort of work you definitely have to pay people to do.
+
+941
+00:39:16,000 --> 00:39:16,070
+Yes.
+
+942
+00:39:16,510 --> 00:39:17,149
+And
+
+943
+00:39:17,409 --> 00:39:18,020
+that's
+
+944
+00:39:18,149 --> 00:39:21,300
+-- about all I have to say.
+-- It's one of those things where there's very,
+
+945
+00:39:21,520 --> 00:39:22,949
+there's almost no
+
+946
+00:39:23,379 --> 00:39:24,620
+incentive
+
+947
+00:39:25,229 --> 00:39:29,050
+to actually make the whole c a landscape more secure because, well,
+
+948
+00:39:29,060 --> 00:39:33,250
+essentially all the cas are, like, in trust are making money selling certificates.
+
+949
+00:39:33,800 --> 00:39:36,770
+They don't want to, you know, disrupt that.
+
+950
+00:39:36,780 --> 00:39:38,729
+This is like the story of security,
+
+951
+00:39:38,739 --> 00:39:40,929
+like the security that actually matters and works
+
+952
+00:39:40,939 --> 00:39:42,800
+isn't the security V CS are funding.
+
+953
+00:39:42,810 --> 00:39:45,209
+It's boring stuff that you have to pay people to do
+
+954
+00:39:45,219 --> 00:39:46,939
+because it's boring and no one wants to do it.
+
+955
+00:39:47,110 --> 00:39:50,219
+Same thing here. All right, we got to call this one, I think. But
+
+956
+00:39:50,620 --> 00:39:52,939
+yeah, I guess in summary
+
+957
+00:39:53,110 --> 00:39:55,179
+we're doomed. Maybe
+
+958
+00:39:56,469 --> 00:39:59,010
+it's, you know, it kind of runs. It's like, again, like roads,
+
+959
+00:39:59,270 --> 00:40:00,020
+potholes.
+
+960
+00:40:00,610 --> 00:40:02,570
+I wish we had better roads, but we
+
+961
+00:40:02,679 --> 00:40:02,969
+don't
+
+962
+00:40:03,419 --> 00:40:04,360
+it. Yeah.
+
+963
+00:40:04,520 --> 00:40:07,399
+Yeah. Well, we'll see, I guess we'll see what happens.
+
+964
+00:40:07,409 --> 00:40:11,520
+Thank you for enlightening me with this horrifying information. Kurt.
+
+965
+00:40:11,530 --> 00:40:13,959
+I appreciate it. And thank you, everyone for listening.
+
+966
+00:40:13,969 --> 00:40:16,969
+Go to open source security podcast.com. Hit up the show, not Su Z Pound
+
+967
+00:40:17,120 --> 00:40:22,639
+Os S podcast. Hashtag to find us on Mastodon KT. Have a marvelous rest of your day.
+
+968
+00:40:22,709 --> 00:40:25,929
+-- You too. Thanks everybody. Thanks
+-- everyone. Bye bye.

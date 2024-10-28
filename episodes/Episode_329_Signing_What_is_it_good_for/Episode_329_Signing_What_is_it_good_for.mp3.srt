@@ -1,0 +1,2888 @@
+0
+00:00:05,360 --> 00:00:08,399
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,409 --> 00:00:10,159
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:10,170 --> 00:00:12,270
+-- Josh Pressers
+-- every now and then.
+
+3
+00:00:12,500 --> 00:00:14,380
+I'm extremely grateful
+
+4
+00:00:14,779 --> 00:00:20,000
+that nobody but me has access to the free roll before we start the show.
+
+5
+00:00:20,790 --> 00:00:22,399
+And today is one of those days.
+
+6
+00:00:22,940 --> 00:00:25,180
+-- Anyway.
+-- I honestly,
+
+7
+00:00:25,590 --> 00:00:27,500
+I suspect a lot of people's heads would explode.
+
+8
+00:00:27,510 --> 00:00:30,059
+Like, I always remember 20 some years ago,
+
+9
+00:00:30,389 --> 00:00:31,409
+I, I'd written the Linux
+
+10
+00:00:31,510 --> 00:00:34,209
+Administrative Security Guide and I would be talking with
+
+11
+00:00:34,220 --> 00:00:35,459
+people and they kind of ask me like,
+
+12
+00:00:35,470 --> 00:00:36,209
+what do you think about windows?
+
+13
+00:00:36,220 --> 00:00:38,130
+And I'm like, oh, I really like NT four,
+
+14
+00:00:38,380 --> 00:00:41,930
+whatever. You know, I've got an M CS C in it and I really, I really quite like NT four.
+
+15
+00:00:41,939 --> 00:00:45,450
+-- It works really well and they'd be like, what?
+-- NT sucks. I disown you
+
+16
+00:00:45,720 --> 00:00:50,069
+-- anyway.
+-- Yeah. Well, it sucked way less than the Windows 3.11.
+
+17
+00:00:50,299 --> 00:00:50,729
+Well,
+
+18
+00:00:51,209 --> 00:00:56,389
+-- that's not a valid comparison in any universe. It
+-- was back in 1999
+
+19
+00:00:56,909 --> 00:00:59,250
+sorry Windows 95. But I like in fairness,
+
+20
+00:00:59,610 --> 00:01:02,709
+I had a Linux desktop and a Windows NT desktop. It was a good world.
+
+21
+00:01:02,840 --> 00:01:02,869
+I,
+
+22
+00:01:02,880 --> 00:01:05,559
+I won't lie back in the early days I
+
+23
+00:01:05,569 --> 00:01:09,459
+kept a Windows machine handy to play games because there
+
+24
+00:01:09,580 --> 00:01:11,589
+just weren't any games on Linux.
+
+25
+00:01:12,040 --> 00:01:12,529
+We had X
+
+26
+00:01:12,680 --> 00:01:13,029
+Lander,
+
+27
+00:01:13,199 --> 00:01:15,819
+-- man.
+-- I love that game. I forgot all about X Lander.
+
+28
+00:01:15,830 --> 00:01:17,529
+I should, I should fire that sucker up.
+
+29
+00:01:17,540 --> 00:01:19,629
+They have a really, they used to or they still have it,
+
+30
+00:01:19,639 --> 00:01:23,629
+I think at the local kids science museum, like they have X Lander,
+
+31
+00:01:24,180 --> 00:01:26,650
+but they have like a nice chunky throttle and like,
+
+32
+00:01:26,779 --> 00:01:29,449
+you know what I mean? Like, they have nice kind of controls for it,
+
+33
+00:01:30,190 --> 00:01:32,559
+you know, and of course everybody just destroys themselves,
+
+34
+00:01:32,860 --> 00:01:33,419
+which is,
+
+35
+00:01:33,660 --> 00:01:34,879
+uh, like software signing.
+
+36
+00:01:35,309 --> 00:01:35,800
+It's just,
+
+37
+00:01:36,180 --> 00:01:37,360
+you know, I love watching.
+
+38
+00:01:37,940 --> 00:01:39,169
+That was a good Twitter thread.
+
+39
+00:01:39,519 --> 00:01:42,989
+It, it's, it's probably not done yet, but it is. So
+
+40
+00:01:43,470 --> 00:01:46,010
+I'll give some background, an old friend, Mark Borstein
+
+41
+00:01:46,379 --> 00:01:50,760
+who is the CTO at Tremolo I think is what he's doing. He, he has
+
+42
+00:01:50,870 --> 00:01:52,809
+a, he's part of a company called Tremolo. They do,
+
+43
+00:01:53,110 --> 00:01:56,059
+they kind of did single sign on before a single sign on existed.
+
+44
+00:01:56,300 --> 00:01:57,010
+It was,
+
+45
+00:01:57,220 --> 00:02:01,449
+I remember way back in the early days. Oh, that's right.
+
+46
+00:02:01,940 --> 00:02:02,860
+Yeah. Right. Right.
+
+47
+00:02:02,970 --> 00:02:05,529
+The big claim to fame was you could
+
+48
+00:02:05,680 --> 00:02:10,080
+ssh into a machine without having an account on the machine. Basically. Andreola
+
+49
+00:02:10,300 --> 00:02:13,809
+did the magic on the back end, which was unheard of back in those days these days.
+
+50
+00:02:13,820 --> 00:02:18,199
+It's like, oh, whatever everyone could do that. But it was a huge deal. Anyway,
+
+51
+00:02:18,580 --> 00:02:23,229
+Mark sent a message on Twitter to us basically saying something.
+
+52
+00:02:23,240 --> 00:02:25,020
+It, it was a public message right now like ad
+
+53
+00:02:25,149 --> 00:02:27,320
+and I don't even remember. We should probably look this up.
+
+54
+00:02:27,330 --> 00:02:28,690
+-- So I don't,
+-- we'll link to it.
+
+55
+00:02:28,889 --> 00:02:31,119
+Well, we got to explain what it is.
+
+56
+00:02:31,690 --> 00:02:33,529
+We should probably read what we're talking
+
+57
+00:02:33,539 --> 00:02:35,839
+-- about
+-- and that's never stopped us before.
+
+58
+00:02:36,009 --> 00:02:36,550
+Like
+
+59
+00:02:38,020 --> 00:02:40,149
+yeah, what, what can copyright do for you?
+
+60
+00:02:40,429 --> 00:02:42,479
+Uh That one will never die.
+
+61
+00:02:42,639 --> 00:02:44,710
+-- It pleases me so good
+-- one.
+
+62
+00:02:44,940 --> 00:02:48,360
+It appears we actually learned a lesson from our mistake, which is, I think that's,
+
+63
+00:02:48,460 --> 00:02:50,929
+that's the part where most people they don't get there.
+
+64
+00:02:50,940 --> 00:02:53,880
+That's fair. That, that's another topic I think. But
+
+65
+00:02:54,059 --> 00:02:59,740
+so Mark asked us to do an episode on artifacts signing and its impact.
+
+66
+00:02:59,750 --> 00:03:00,889
+Has it helped in the past?
+
+67
+00:03:01,100 --> 00:03:03,960
+What will it protect in the future? Lots of hype any data
+
+68
+00:03:04,320 --> 00:03:06,759
+and this enormous threat ensued.
+
+69
+00:03:06,770 --> 00:03:10,229
+And my assumption was we wouldn't talk about this for a long time. And then
+
+70
+00:03:10,360 --> 00:03:11,500
+Kurt convinced me we should,
+
+71
+00:03:11,929 --> 00:03:14,990
+-- which is fair.
+-- Here's one simple thing, one very specific part of
+
+72
+00:03:15,119 --> 00:03:17,100
+any data. And the answer is no.
+
+73
+00:03:17,250 --> 00:03:17,589
+So
+
+74
+00:03:18,000 --> 00:03:21,229
+it's not like waiting is gonna, we're gonna magic up some data.
+
+75
+00:03:21,520 --> 00:03:23,509
+Well, that's exactly what we do.
+
+76
+00:03:23,520 --> 00:03:27,190
+I mean, I'm working on N PM data right now, which is fascinating by the way.
+
+77
+00:03:27,199 --> 00:03:31,550
+But like it, it, it can be done. It is hard though, I will say like it's, it's
+
+78
+00:03:31,759 --> 00:03:35,110
+the N PM work I'm doing is probably going to be three months. So like
+
+79
+00:03:35,330 --> 00:03:37,940
+signing data is if we're talking most likely
+
+80
+00:03:37,949 --> 00:03:39,350
+something in the neighborhood of a year,
+
+81
+00:03:39,360 --> 00:03:41,110
+if I can even figure out what to look for.
+
+82
+00:03:41,119 --> 00:03:41,460
+Well,
+
+83
+00:03:41,470 --> 00:03:43,429
+I was about to say the problem with signing data is you need to
+
+84
+00:03:43,440 --> 00:03:48,229
+look for incidences where it either saved people or it didn't save people.
+
+85
+00:03:48,240 --> 00:03:50,410
+So, I mean, like that's, that's exactly the point,
+
+86
+00:03:50,520 --> 00:03:51,419
+right is
+
+87
+00:03:51,919 --> 00:03:52,899
+you
+
+88
+00:03:53,009 --> 00:03:55,589
+bring up, I think that the crux of it all is
+
+89
+00:03:56,149 --> 00:03:58,880
+like, what, what is the point of signing data?
+
+90
+00:03:58,889 --> 00:04:01,929
+And I don't think if you read this enormous Twitter thread,
+
+91
+00:04:02,169 --> 00:04:06,449
+it's clear that that's not even particularly understood and it
+
+92
+00:04:06,460 --> 00:04:08,550
+feels like that should be a really easy answer,
+
+93
+00:04:08,559 --> 00:04:10,369
+-- but it's actually not when you think
+-- about
+
+94
+00:04:10,509 --> 00:04:12,130
+it. There's a good answer. I'm going to read.
+
+95
+00:04:12,139 --> 00:04:15,809
+I'm actually going to quote myself from October 23rd of 2000.
+
+96
+00:04:16,165 --> 00:04:19,613
+-- Want that meme
+-- of Obama giving Obama a medal like
+
+97
+00:04:19,625 --> 00:04:22,053
+Kurt says this is the best answer from Kurt,
+
+98
+00:04:22,065 --> 00:04:23,415
+but the thing is, here's the thing,
+
+99
+00:04:24,005 --> 00:04:24,255
+KTS
+
+100
+00:04:24,484 --> 00:04:29,054
+Free Security Advisory number two KSS A 002 History of Advisory October
+
+101
+00:04:29,065 --> 00:04:33,114
+23rd 2001 while downloading Red Hat 7.2 not Red Hat Enterprise Linux,
+
+102
+00:04:33,265 --> 00:04:35,524
+but like Red Hat 7.2.
+
+103
+00:04:35,885 --> 00:04:39,045
+Curtsy free noticed various packages were not Gnupg signed.
+
+104
+00:04:39,054 --> 00:04:40,904
+Wait, is this a real advisory
+
+105
+00:04:41,829 --> 00:04:45,200
+that that you, you name yourself in the third person in this advisory?
+
+106
+00:04:46,269 --> 00:04:46,799
+Yes, I do.
+
+107
+00:04:48,339 --> 00:04:50,079
+Anyways, Terry loves yogurt.
+
+108
+00:04:50,600 --> 00:04:53,049
+So basically, here we go. And this is why it matters.
+
+109
+00:04:53,059 --> 00:04:58,029
+Red Hat 7.2 distribution files on popular FTP sites such as ftp.ibo.org
+
+110
+00:04:58,040 --> 00:05:00,929
+and Mirrors dot HPC F dot U Pr dot Eu are not signed
+
+111
+00:05:01,250 --> 00:05:02,209
+then blah, blah, blah. Oh, yeah.
+
+112
+00:05:02,220 --> 00:05:04,790
+And here it is unlikely that this is an attack as the
+
+113
+00:05:04,799 --> 00:05:07,190
+number of sites involved make it likely someone would have to,
+
+114
+00:05:07,200 --> 00:05:08,829
+would have noticed and notified the community.
+
+115
+00:05:08,839 --> 00:05:11,230
+Either Red Hat did not sign these packages or someone subverted
+
+116
+00:05:11,239 --> 00:05:13,470
+the distribution process before the files got to various sites.
+
+117
+00:05:13,480 --> 00:05:16,160
+For Red Hat 7.1 please note that all files were correctly
+
+118
+00:05:16,170 --> 00:05:18,359
+signed with the Red Hat G and UPG security key.
+
+119
+00:05:18,420 --> 00:05:19,829
+And then basically they went, oh yeah,
+
+120
+00:05:19,839 --> 00:05:22,179
+what's somehow didn't sign these and they went and signed them.
+
+121
+00:05:22,190 --> 00:05:24,029
+And then my understanding is, you know,
+
+122
+00:05:24,040 --> 00:05:25,760
+that's one of the reasons when I worked at Red Hat.
+
+123
+00:05:25,769 --> 00:05:29,170
+Remember we had all those gates for a package going out and one of those gates was,
+
+124
+00:05:29,179 --> 00:05:30,380
+is this thing signed, signed,
+
+125
+00:05:32,190 --> 00:05:34,630
+-- this establishes two important things.
+-- There's something
+
+126
+00:05:34,779 --> 00:05:37,109
+way more important we have to touch on here first.
+
+127
+00:05:37,390 --> 00:05:37,950
+So
+
+128
+00:05:38,130 --> 00:05:39,109
+you have
+
+129
+00:05:39,630 --> 00:05:42,519
+security advisories on your website, which I did not know.
+
+130
+00:05:42,529 --> 00:05:44,750
+I've known you a long time and this is the first time finding out,
+
+131
+00:05:44,760 --> 00:05:49,690
+but I see 12345 and 10, what happened to six through nine?
+
+132
+00:05:49,989 --> 00:05:53,630
+-- Uh That's a good question. I don't know
+-- like this is bothering
+
+133
+00:05:53,880 --> 00:05:56,369
+-- me five,
+-- last updated
+
+134
+00:05:57,559 --> 00:06:03,399
+January 21st of 2002, but the copyright is Kurt siefried 2001 on the website.
+
+135
+00:06:03,410 --> 00:06:07,200
+This is intriguing to me. Um Anyway, ok, sorry, I'm not going to dwell on this.
+
+136
+00:06:07,459 --> 00:06:09,579
+This will be a topic for another day.
+
+137
+00:06:09,829 --> 00:06:13,660
+But I want to say that this establishes two very important things around signing and
+
+138
+00:06:14,040 --> 00:06:18,179
+basically number one that we've been doing software signing for over 20 years,
+
+139
+00:06:18,859 --> 00:06:19,559
+right. So
+
+140
+00:06:19,809 --> 00:06:20,859
+it's kind of one of those.
+
+141
+00:06:21,390 --> 00:06:24,839
+It's been, we've been doing it for so long. Why do we do it? We do it because we do it.
+
+142
+00:06:24,959 --> 00:06:28,799
+And number two, in this specific case, there was a good reason for software signing,
+
+143
+00:06:28,809 --> 00:06:32,140
+which is simply put Red Hat could not afford to
+
+144
+00:06:32,149 --> 00:06:34,359
+run a content distribution network back in the day.
+
+145
+00:06:34,369 --> 00:06:36,799
+Nobody could. Right? And literally
+
+146
+00:06:36,980 --> 00:06:39,239
+the majority of open source software distributed
+
+147
+00:06:39,250 --> 00:06:41,160
+around the world was done through.
+
+148
+00:06:41,170 --> 00:06:43,149
+Uh Well, one of the biggest ones was, you know,
+
+149
+00:06:43,160 --> 00:06:47,434
+a university with like a sun site or an FTP server that somebody
+
+150
+00:06:47,445 --> 00:06:50,795
+managed to convince the admin to like dedicate a couple of gigs of space
+
+151
+00:06:51,095 --> 00:06:54,315
+for mirrors of stuff or they mirrored it themselves
+
+152
+00:06:54,325 --> 00:06:56,325
+for their own stuff and just made it public.
+
+153
+00:06:56,464 --> 00:06:57,015
+Yeah. Right.
+
+154
+00:06:57,024 --> 00:07:01,915
+Like when I worked at Progeny Linux systems, we ran archive.progeny.com,
+
+155
+00:07:02,084 --> 00:07:06,154
+which was a modest sized machine. You didn't need huge machines to do all this.
+
+156
+00:07:06,165 --> 00:07:07,114
+And we had,
+
+157
+00:07:07,459 --> 00:07:10,500
+I think back then it might have been a couple 100 megabits.
+
+158
+00:07:10,510 --> 00:07:13,320
+-- Everybody's internet was so slow.
+-- Yeah. Right. Right.
+
+159
+00:07:13,329 --> 00:07:15,040
+And it was like, modem speeds.
+
+160
+00:07:15,049 --> 00:07:19,320
+And I remember we got, I don't remember the internet provider,
+
+161
+00:07:19,329 --> 00:07:20,529
+but they basically said
+
+162
+00:07:21,119 --> 00:07:22,739
+if you drop a machine,
+
+163
+00:07:22,970 --> 00:07:24,420
+we'll give you the cable.
+
+164
+00:07:24,429 --> 00:07:27,420
+And then we obviously hosted Progeny Linux,
+
+165
+00:07:27,459 --> 00:07:30,000
+which was the Linux distribution as well as we mirrored,
+
+166
+00:07:30,010 --> 00:07:32,220
+like Debian and the kernel and some other stuff.
+
+167
+00:07:32,230 --> 00:07:32,690
+And,
+
+168
+00:07:33,149 --> 00:07:35,670
+yeah. Yeah, that was perfectly normal back then.
+
+169
+00:07:35,679 --> 00:07:38,589
+Like everyone, I shouldn't say everyone, but lots of, lots of organizations,
+
+170
+00:07:38,600 --> 00:07:42,420
+lots of companies ran mirrors and, and that was like the poor man CD N, right?
+
+171
+00:07:42,609 --> 00:07:43,649
+The intent was
+
+172
+00:07:43,920 --> 00:07:46,100
+you would just run all the, these mirrors
+
+173
+00:07:46,440 --> 00:07:49,980
+and then all the software would be distributed like in the case of, for example,
+
+174
+00:07:49,989 --> 00:07:50,709
+things like
+
+175
+00:07:50,910 --> 00:07:55,309
+Debbie and Apt or Red hats back then. It was um,
+
+176
+00:07:55,670 --> 00:07:56,420
+Yum
+
+177
+00:07:56,619 --> 00:07:58,390
+Yum Yum was the first one.
+
+178
+00:07:58,630 --> 00:08:00,859
+-- It just kind of like randomly picks a
+-- mirror.
+
+179
+00:08:01,070 --> 00:08:03,089
+-- The yellow dog update manager.
+-- Yeah.
+
+180
+00:08:03,100 --> 00:08:05,839
+-- But now it's called DNF which stands for, I don't know
+-- what
+
+181
+00:08:05,980 --> 00:08:09,940
+Yum Yum stands for yellow dog update manager. Yellow dog Linux invented. Yum.
+
+182
+00:08:09,950 --> 00:08:12,940
+-- Yeah, I know. But
+-- what is now they, it's called DNF. What does that stand for?
+
+183
+00:08:12,950 --> 00:08:13,619
+I don't even know.
+
+184
+00:08:14,779 --> 00:08:16,630
+I don't know. It doesn't matter anyway.
+
+185
+00:08:16,890 --> 00:08:17,779
+Right? Ok.
+
+186
+00:08:17,809 --> 00:08:22,100
+So now there's also another piece to what you just described,
+
+187
+00:08:22,109 --> 00:08:25,670
+which is bug 998 and Fedora's Bugzilla.
+
+188
+00:08:25,679 --> 00:08:28,290
+This is emblazoned into my mind. It's closed now.
+
+189
+00:08:28,399 --> 00:08:33,369
+But fundamentally, it was the same sort of thing of how do you kind of provide trust
+
+190
+00:08:33,630 --> 00:08:35,520
+in the things that are being distributed from
+
+191
+00:08:35,530 --> 00:08:37,169
+years and functionally back in the day,
+
+192
+00:08:37,179 --> 00:08:40,369
+you couldn't, it got closed kind of accidentally?
+
+193
+00:08:40,558 --> 00:08:42,049
+-- Well,
+-- and to remember too,
+
+194
+00:08:42,960 --> 00:08:47,440
+back in 2001, a GP G signature with a detached signature file.
+
+195
+00:08:47,450 --> 00:08:51,500
+So like you had file and then file dot sig with the GP G signature in it,
+
+196
+00:08:51,710 --> 00:08:54,179
+that was considered very sophisticated.
+
+197
+00:08:54,390 --> 00:08:55,200
+Like that was,
+
+198
+00:08:55,349 --> 00:08:58,479
+you know, like open BS D did that, you know, you had like blah, blah, blah dot T
+
+199
+00:08:58,590 --> 00:09:00,369
+dot GZ and blah, blah blah dot Well,
+
+200
+00:09:00,380 --> 00:09:02,020
+the check sums or whatever and then the GP G
+
+201
+00:09:02,030 --> 00:09:03,940
+signature of the check sums or whatever it was,
+
+202
+00:09:03,950 --> 00:09:08,659
+I forget, but that was considered like, whoa you're doing real security here,
+
+203
+00:09:08,820 --> 00:09:11,554
+you know. And of course, no, it's, it's that, that's ridiculous
+
+204
+00:09:12,104 --> 00:09:15,455
+because you had to hand check signatures, you had to hand, get the keys, you had to,
+
+205
+00:09:15,465 --> 00:09:17,775
+it was really a lot of this was in your face.
+
+206
+00:09:17,784 --> 00:09:21,494
+There was no magic of it just worked, although it was starting to just work.
+
+207
+00:09:22,104 --> 00:09:26,094
+And the funny thing is like every false positive as far as I know was always, I,
+
+208
+00:09:26,104 --> 00:09:28,015
+I don't ever remember any
+
+209
+00:09:28,244 --> 00:09:32,794
+real attacks on signed software apart from like maybe two
+
+210
+00:09:32,895 --> 00:09:34,775
+that got spotted pretty quickly because
+
+211
+00:09:34,895 --> 00:09:36,445
+either it wasn't signed or
+
+212
+00:09:36,969 --> 00:09:38,630
+it was signed improperly or something.
+
+213
+00:09:38,799 --> 00:09:42,710
+The other thing that would always happen is a mirror would get hacked.
+
+214
+00:09:42,719 --> 00:09:45,190
+Someone would just replace stuff on the mirror
+
+215
+00:09:45,440 --> 00:09:46,210
+and
+
+216
+00:09:46,400 --> 00:09:50,159
+people would download it and the signature would fail and half the time you like, oh,
+
+217
+00:09:50,169 --> 00:09:51,960
+whatever, just force install anyway.
+
+218
+00:09:51,969 --> 00:09:54,710
+Or in the case of downloading like a tar ball,
+
+219
+00:09:54,719 --> 00:09:56,940
+no one ever checks those signatures even though they're.
+
+220
+00:09:57,635 --> 00:09:59,784
+And so now, now all of this. Ok.
+
+221
+00:09:59,794 --> 00:10:01,885
+So there's all this weird history that I don't want to spend
+
+222
+00:10:01,895 --> 00:10:03,955
+a ton of time on because I don't think it's as interesting.
+
+223
+00:10:03,965 --> 00:10:06,695
+-- But the question kind of becomes,
+-- here's my supposition.
+
+224
+00:10:06,784 --> 00:10:08,655
+This is why we still do software signing.
+
+225
+00:10:08,664 --> 00:10:12,155
+-- It's we haven't moved on, we haven't solved any new problems.
+-- Well, OK.
+
+226
+00:10:12,164 --> 00:10:13,984
+This is the set up to that, right?
+
+227
+00:10:13,994 --> 00:10:17,575
+Like why we do a thing because we do a thing, I think in this instance. And
+
+228
+00:10:17,900 --> 00:10:19,700
+so one of the questions in that thread
+
+229
+00:10:19,859 --> 00:10:23,380
+is so now that we have things like HTTP S virtually everywhere, right?
+
+230
+00:10:23,390 --> 00:10:25,679
+We have the ability to do cer certain verification.
+
+231
+00:10:25,690 --> 00:10:29,960
+If I have a system that reaches out to say a server on HTTP S downloads,
+
+232
+00:10:29,969 --> 00:10:32,799
+just a sha checksum for a thing
+
+233
+00:10:33,070 --> 00:10:37,460
+and checks the thing, the artifact versus the sha checksum that's been downloaded.
+
+234
+00:10:37,469 --> 00:10:39,159
+Is that any different,
+
+235
+00:10:39,609 --> 00:10:44,599
+-- then? Say signing an R PM?
+-- Yes, there is a slightly different attack path which is
+
+236
+00:10:44,770 --> 00:10:47,590
+if I'm going to attack a signed file,
+
+237
+00:10:48,000 --> 00:10:51,250
+I need and assuming people don't just like YOLO and like, oh, whatever,
+
+238
+00:10:51,260 --> 00:10:52,400
+it's a different key or their keys.
+
+239
+00:10:52,409 --> 00:10:54,070
+Not, right. And they ignore it right.
+
+240
+00:10:54,080 --> 00:10:56,539
+But assuming that they have a copy of the public key
+
+241
+00:10:56,549 --> 00:10:58,950
+and actually use that public key correctly to verify it,
+
+242
+00:10:59,179 --> 00:11:03,700
+then I have to attack the private key. Whereas with the file and check some, I
+
+243
+00:11:04,210 --> 00:11:07,719
+by getting access to, you know, ftp.pressers.org or whatever,
+
+244
+00:11:07,770 --> 00:11:09,929
+I can replace both those files.
+
+245
+00:11:09,950 --> 00:11:10,729
+Can, you,
+
+246
+00:11:11,000 --> 00:11:12,650
+here's the thing if I gain access to
+
+247
+00:11:12,809 --> 00:11:14,669
+ftp.pressers.org and you're just doing check sums,
+
+248
+00:11:14,679 --> 00:11:16,299
+I can replace the file and the check sum.
+
+249
+00:11:16,320 --> 00:11:19,830
+If I break into ftp.pressers.org and you're doing software signing,
+
+250
+00:11:19,840 --> 00:11:21,570
+I still have to go get the private key.
+
+251
+00:11:21,580 --> 00:11:24,099
+My domain is actually breast.net.
+
+252
+00:11:24,780 --> 00:11:25,320
+Oh, sorry
+
+253
+00:11:25,710 --> 00:11:28,619
+breasts.org might be owned by someone else. I don't think I own that.
+
+254
+00:11:28,780 --> 00:11:29,320
+Sorry,
+
+255
+00:11:29,520 --> 00:11:29,530
+I
+
+256
+00:11:29,690 --> 00:11:31,260
+feel bad for there to be a server.
+
+257
+00:11:31,630 --> 00:11:33,340
+-- I
+-- don't want to spam someone. So
+
+258
+00:11:33,840 --> 00:11:34,179
+yeah,
+
+259
+00:11:34,390 --> 00:11:38,460
+so, but that's the thing, right? So software signing in theory adds the
+
+260
+00:11:38,690 --> 00:11:40,640
+step of you have to get at the private key.
+
+261
+00:11:40,650 --> 00:11:43,700
+And then again, in a perfect circle cow world,
+
+262
+00:11:43,710 --> 00:11:46,140
+that private key is very strongly secured, like, you know,
+
+263
+00:11:46,150 --> 00:11:48,059
+your SSH key and its bank vault or whatever
+
+264
+00:11:48,190 --> 00:11:52,580
+you're talking about a very specific type of attack.
+
+265
+00:11:52,590 --> 00:11:54,789
+I just mean, generally speaking,
+
+266
+00:11:55,030 --> 00:11:56,039
+assuming
+
+267
+00:11:56,369 --> 00:11:59,659
+nothing is being attacked, the infrastructure is acceptable
+
+268
+00:11:59,859 --> 00:12:02,700
+is downloading a check sum
+
+269
+00:12:03,239 --> 00:12:04,780
+over http S
+
+270
+00:12:05,239 --> 00:12:07,380
+as trustworthy as having
+
+271
+00:12:07,729 --> 00:12:11,299
+a signed artifact that I also need a public key for.
+
+272
+00:12:11,309 --> 00:12:14,659
+And then you also have to obviously verify the public key and do all that stuff.
+
+273
+00:12:14,750 --> 00:12:19,219
+It is not as trustworthy. It's, uh, it's a different form of trust, right?
+
+274
+00:12:19,229 --> 00:12:20,179
+Because is it
+
+275
+00:12:20,349 --> 00:12:21,739
+in the, in the check some scenario?
+
+276
+00:12:21,750 --> 00:12:24,739
+There's no, there's no private key to be protected? There's just the,
+
+277
+00:12:24,929 --> 00:12:30,190
+-- some file and the file, but
+-- it's coming over HTTP S which is a trusted,
+
+278
+00:12:30,200 --> 00:12:30,630
+right?
+
+279
+00:12:30,640 --> 00:12:32,530
+But they have the same, it's like having
+
+280
+00:12:32,669 --> 00:12:34,309
+two passwords instead of one password.
+
+281
+00:12:34,320 --> 00:12:37,830
+They have the same failure scenario, they have the same attack path.
+
+282
+00:12:38,020 --> 00:12:41,210
+Whereas if I have a password and a one time authenticator,
+
+283
+00:12:41,400 --> 00:12:42,659
+that's a different attack path.
+
+284
+00:12:42,669 --> 00:12:44,539
+That makes it, that's the theory behind this right is
+
+285
+00:12:44,969 --> 00:12:46,190
+if I have to replace
+
+286
+00:12:46,380 --> 00:12:50,830
+one file, well, replacing two files isn't any harder than replacing one file.
+
+287
+00:12:51,179 --> 00:12:55,320
+But if I have to replace a file and get it a private key, that's a different attack.
+
+288
+00:12:55,330 --> 00:12:57,840
+That that's more work for the attacker right now.
+
+289
+00:12:57,849 --> 00:13:02,190
+Having said that there's actually a really good example of where this matters is,
+
+290
+00:13:02,299 --> 00:13:05,400
+remember there's that software that will do interception
+
+291
+00:13:05,409 --> 00:13:07,909
+of like binary downloads and like staple on a
+
+292
+00:13:08,010 --> 00:13:09,109
+software and stuff,
+
+293
+00:13:09,369 --> 00:13:09,719
+right?
+
+294
+00:13:09,890 --> 00:13:10,400
+So, yeah,
+
+295
+00:13:10,409 --> 00:13:12,210
+we definitely need stuff secured in transit
+
+296
+00:13:12,219 --> 00:13:13,900
+because there's I SPS that will literally,
+
+297
+00:13:14,099 --> 00:13:16,309
+oh, you're downloading exc let me help you with that.
+
+298
+00:13:16,320 --> 00:13:18,440
+A check sum solves that problem.
+
+299
+00:13:18,570 --> 00:13:18,789
+Yes.
+
+300
+00:13:18,929 --> 00:13:19,440
+Well,
+
+301
+00:13:19,809 --> 00:13:21,669
+it, but no, it does not because
+
+302
+00:13:21,969 --> 00:13:24,299
+they could also intercept the check sum and rewrite the check sum.
+
+303
+00:13:24,309 --> 00:13:28,390
+If, basically, if they can rewrite the software, they can rewrite the check sum,
+
+304
+00:13:28,400 --> 00:13:31,559
+-- which
+-- I don't think, but I don't think that's a practical attack anymore.
+
+305
+00:13:31,570 --> 00:13:34,580
+I think you're, you're, you're movie plotting this whole discussion at this point.
+
+306
+00:13:34,590 --> 00:13:35,619
+I think, I think
+
+307
+00:13:35,890 --> 00:13:38,190
+-- everything is hetps now.
+-- Right.
+
+308
+00:13:38,200 --> 00:13:41,070
+But what I'm pointing out is I don't care about the transit so much
+
+309
+00:13:41,469 --> 00:13:44,030
+as I care about the, the, the server
+
+310
+00:13:44,460 --> 00:13:47,710
+delivering it because people get that wrong all the time.
+
+311
+00:13:47,719 --> 00:13:51,960
+Like people break into S3 buckets and servers like that's not a movie plot threat.
+
+312
+00:13:51,969 --> 00:13:53,400
+People break into that stuff.
+
+313
+00:13:53,409 --> 00:13:56,809
+And so the idea with a private key is, yeah, you broke into my FTP server man.
+
+314
+00:13:56,820 --> 00:13:57,849
+That's kind of a bummer.
+
+315
+00:13:57,859 --> 00:14:00,280
+But hey, you can't sign my stuff because I have my key secured now.
+
+316
+00:14:00,289 --> 00:14:03,859
+-- But that doesn't matter because most people don't secure their keys.
+-- Right. Right.
+
+317
+00:14:03,869 --> 00:14:04,239
+So
+
+318
+00:14:04,770 --> 00:14:05,750
+I, I look,
+
+319
+00:14:05,979 --> 00:14:08,869
+I don't disagree with you, but I don't think your argument is,
+
+320
+00:14:08,880 --> 00:14:11,250
+is as strong as it sounds like it really is.
+
+321
+00:14:11,520 --> 00:14:14,729
+Oh, no, no, no. To be clear, I'm not arguing for or against signing.
+
+322
+00:14:15,000 --> 00:14:17,710
+I'm just trying to point out what the different attack paths are and why it,
+
+323
+00:14:17,900 --> 00:14:21,039
+why the perception is that it's harder or in theory,
+
+324
+00:14:21,049 --> 00:14:23,809
+it's harder because you have to attack the file and attack a key.
+
+325
+00:14:24,270 --> 00:14:27,340
+But I would say in fairness, most keys are not very well secured
+
+326
+00:14:27,669 --> 00:14:30,150
+-- or
+-- a lot of signatures never get checked either.
+
+327
+00:14:30,289 --> 00:14:30,669
+Yes.
+
+328
+00:14:30,770 --> 00:14:32,440
+And I've had that happen where I remember, um,
+
+329
+00:14:32,450 --> 00:14:34,559
+Sousa sent out an advisory that was mis signed
+
+330
+00:14:34,840 --> 00:14:36,219
+and I replied to them and they said it's
+
+331
+00:14:36,229 --> 00:14:38,280
+basically like two or three people asked what's up,
+
+332
+00:14:38,289 --> 00:14:39,659
+out of, you know, thousands.
+
+333
+00:14:40,010 --> 00:14:43,460
+Yeah. Nobody checked that stuff. Well, or they check it and they ignore it because
+
+334
+00:14:43,739 --> 00:14:44,179
+it's,
+
+335
+00:14:44,559 --> 00:14:45,500
+let me put it this way.
+
+336
+00:14:45,530 --> 00:14:48,530
+How many times does a person walk through a metal detector at airport security?
+
+337
+00:14:48,539 --> 00:14:51,580
+And it's actually like a bad person with a bad thing.
+
+338
+00:14:51,590 --> 00:14:55,010
+It's pretty rare versus sir, you have to take your belt off,
+
+339
+00:14:55,340 --> 00:14:55,690
+right?
+
+340
+00:14:56,039 --> 00:14:59,690
+And that's the thing like 99.9% of these signature fass
+
+341
+00:15:00,380 --> 00:15:01,109
+are
+
+342
+00:15:01,409 --> 00:15:03,789
+like a cosmic ray hit it or
+
+343
+00:15:04,530 --> 00:15:07,190
+like red hat forgot to sign packages or whatever.
+
+344
+00:15:07,200 --> 00:15:11,359
+Well, let me, let me ask you another question. How many instances
+
+345
+00:15:11,619 --> 00:15:13,030
+do you know of
+
+346
+00:15:13,429 --> 00:15:15,510
+where a successful attack
+
+347
+00:15:16,010 --> 00:15:16,989
+evaded
+
+348
+00:15:17,890 --> 00:15:21,710
+properly? Signed artifacts? Generally speaking,
+
+349
+00:15:22,090 --> 00:15:23,440
+most attacks are
+
+350
+00:15:23,799 --> 00:15:27,929
+-- solar winds would be won but
+-- solar winds that got signed.
+
+351
+00:15:28,169 --> 00:15:28,179
+Oh,
+
+352
+00:15:28,299 --> 00:15:31,270
+-- you mean sorry, you're saying evaded properly signed,
+-- right?
+
+353
+00:15:31,280 --> 00:15:32,549
+Like here's the thing,
+
+354
+00:15:32,559 --> 00:15:38,150
+the vast majority of attacks we see are happening prior to the signature stage.
+
+355
+00:15:38,500 --> 00:15:42,780
+And I think the number of times an attack happens after a signature
+
+356
+00:15:43,059 --> 00:15:47,330
+-- is very rare. Like, I don't know, I can't think of any.
+-- Well, and see,
+
+357
+00:15:47,590 --> 00:15:51,880
+I think the reason for that is because attacking the thing post signature.
+
+358
+00:15:51,909 --> 00:15:52,359
+Well,
+
+359
+00:15:52,369 --> 00:15:54,239
+you just replace the file and kind of hope the person
+
+360
+00:15:54,250 --> 00:15:56,799
+ignores the bad signature and just jams it in with,
+
+361
+00:15:56,809 --> 00:15:57,020
+you know.
+
+362
+00:15:57,030 --> 00:15:58,049
+Yeah, really force it.
+
+363
+00:15:58,059 --> 00:16:01,224
+Like, because hey, like literally solar winds told people that they're like, hey,
+
+364
+00:16:01,234 --> 00:16:02,325
+this file is not properly signed.
+
+365
+00:16:02,364 --> 00:16:05,114
+Yeah, just like smash that like button and make it work.
+
+366
+00:16:05,125 --> 00:16:09,255
+But also I would point out for the for the Attackers that are very sophisticated,
+
+367
+00:16:09,284 --> 00:16:11,835
+they just go after the signing certificates and keys, right?
+
+368
+00:16:11,844 --> 00:16:14,744
+Like if you Google stolen driver signatures, there's
+
+369
+00:16:14,974 --> 00:16:18,835
+actually way more than I expected. Like I know it happens every once in a while.
+
+370
+00:16:19,484 --> 00:16:21,414
+No, that that's very common actually.
+
+371
+00:16:22,450 --> 00:16:27,190
+But I mean, so this is a great example because what usually happens is, for example,
+
+372
+00:16:27,200 --> 00:16:28,289
+in the Windows world,
+
+373
+00:16:28,539 --> 00:16:29,489
+you have
+
+374
+00:16:29,799 --> 00:16:33,590
+some sort of, you have like obviously Microsoft owns like the root C A
+
+375
+00:16:33,700 --> 00:16:35,130
+and then they work with
+
+376
+00:16:35,320 --> 00:16:38,530
+certificate authorities be it like literally the same people doing
+
+377
+00:16:38,539 --> 00:16:42,359
+SSL certs generally where if you want your binary signed,
+
+378
+00:16:42,369 --> 00:16:43,349
+you go to them,
+
+379
+00:16:43,539 --> 00:16:49,250
+you get your key signed by their key, right? Typical C A universe stuff.
+
+380
+00:16:49,260 --> 00:16:52,205
+And then you can sign drivers and that key that gets
+
+381
+00:16:52,216 --> 00:16:56,315
+signed or you see instances where bad guys just get their
+
+382
+00:16:56,325 --> 00:16:59,276
+keys signed by AC A because the checking isn't that impressive
+
+383
+00:16:59,286 --> 00:17:03,236
+and then they can sign things using that infrastructure and then
+
+384
+00:17:03,856 --> 00:17:08,635
+basically implant malware and windows using completely official channels.
+
+385
+00:17:08,705 --> 00:17:10,605
+Well, it's, it's, it's more like
+
+386
+00:17:10,744 --> 00:17:13,964
+it's not even that so much as for example, I have a web camera here
+
+387
+00:17:14,102 --> 00:17:17,852
+and literally the documentation says go to this IP address and download the CXE.
+
+388
+00:17:17,891 --> 00:17:19,811
+Yeah, we know you, you talk about it a lot
+
+389
+00:17:20,371 --> 00:17:20,921
+and like,
+
+390
+00:17:21,281 --> 00:17:24,921
+and you know what I did because I want my web camera to work and it does,
+
+391
+00:17:25,092 --> 00:17:26,761
+you know, I'll never buy this brand again.
+
+392
+00:17:27,411 --> 00:17:27,702
+And you know,
+
+393
+00:17:27,712 --> 00:17:29,781
+I chucked it through virus total and nothing bad seems
+
+394
+00:17:29,791 --> 00:17:32,602
+to have happened and I'll never update that software and whatever
+
+395
+00:17:33,112 --> 00:17:36,151
+this actually led to the thing I brought up and nobody could really answer is
+
+396
+00:17:36,810 --> 00:17:41,349
+does signing software in some ways actually make it worse.
+
+397
+00:17:41,500 --> 00:17:43,829
+Because if the software is properly signed,
+
+398
+00:17:43,839 --> 00:17:46,989
+people just assume everything's perfectly fine and going well.
+
+399
+00:17:47,000 --> 00:17:47,270
+Well,
+
+400
+00:17:47,280 --> 00:17:48,640
+and we know for a fact that people are
+
+401
+00:17:48,650 --> 00:17:51,589
+stealing driver signing certificates in the windows world.
+
+402
+00:17:51,949 --> 00:17:52,469
+Ok.
+
+403
+00:17:52,479 --> 00:17:54,699
+I'm glad you asked that question because that was the
+
+404
+00:17:54,709 --> 00:17:57,790
+end state I was going to lead us down to is
+
+405
+00:17:58,229 --> 00:18:04,449
+what does a signed artifact prove. And I think we often confuse trust
+
+406
+00:18:05,199 --> 00:18:08,319
+signatures, it proves it was signed by someone who has the key.
+
+407
+00:18:08,329 --> 00:18:10,619
+And you're exactly right. That's literally all it does.
+
+408
+00:18:10,630 --> 00:18:13,500
+And I think sometimes we confuse that signature
+
+409
+00:18:13,630 --> 00:18:16,180
+with trust or safety in some way
+
+410
+00:18:16,319 --> 00:18:18,140
+of saying, oh, this is signed,
+
+411
+00:18:18,310 --> 00:18:19,530
+I'm ok to use it.
+
+412
+00:18:20,020 --> 00:18:23,000
+And the reality is it really just means that
+
+413
+00:18:23,010 --> 00:18:26,140
+the thing that came from this place over here
+
+414
+00:18:26,589 --> 00:18:29,089
+is the same thing you have now,
+
+415
+00:18:29,550 --> 00:18:33,569
+it doesn't mean it's safe. It doesn't mean it went through any sort of vetting.
+
+416
+00:18:33,869 --> 00:18:36,630
+It just means because in a world without
+
+417
+00:18:36,780 --> 00:18:38,050
+hetps,
+
+418
+00:18:38,619 --> 00:18:39,819
+that is a concern.
+
+419
+00:18:39,959 --> 00:18:42,599
+So, people get this conflated in the web a lot.
+
+420
+00:18:42,609 --> 00:18:42,949
+Like,
+
+421
+00:18:42,959 --> 00:18:44,949
+just because you have wall with like three
+
+422
+00:18:44,959 --> 00:18:47,140
+Ls mart.com doesn't mean you're Walmart or a
+
+423
+00:18:47,150 --> 00:18:50,869
+-- misspelling of Walmart or like Walmart dot C A doesn't mean you're Walmart dot C
+-- A.
+
+424
+00:18:50,880 --> 00:18:55,619
+No, you are walmart.com. You definitely are.
+
+425
+00:18:56,439 --> 00:18:56,780
+Yeah,
+
+426
+00:18:57,040 --> 00:18:59,859
+it means you just have control over that domain and
+
+427
+00:18:59,965 --> 00:19:02,965
+there is no way for me to determine how secure
+
+428
+00:19:02,975 --> 00:19:05,186
+is the development life cycle of this software company.
+
+429
+00:19:05,196 --> 00:19:06,666
+How secure is their key storage.
+
+430
+00:19:06,676 --> 00:19:10,355
+Like I know at Red Hat, you know, we had some pretty good controls like they had an HSM
+
+431
+00:19:10,475 --> 00:19:11,395
+doing the signing
+
+432
+00:19:11,536 --> 00:19:13,946
+and it logged everything so that, you know,
+
+433
+00:19:13,956 --> 00:19:17,186
+even if like if an attacker somehow broke into like whoever's
+
+434
+00:19:17,196 --> 00:19:20,105
+account to get something signed there be like a log.
+
+435
+00:19:20,235 --> 00:19:21,296
+So Red Hat would say
+
+436
+00:19:21,401 --> 00:19:23,082
+you'll be able to say very easily like, oh,
+
+437
+00:19:23,141 --> 00:19:25,401
+Bob's count got broken into three packages got signed.
+
+438
+00:19:25,411 --> 00:19:26,952
+Ok. We're revoking those done. Boom.
+
+439
+00:19:27,062 --> 00:19:28,661
+-- Well, ok,
+-- we couldn't revoke
+
+440
+00:19:28,812 --> 00:19:29,901
+that literally happened.
+
+441
+00:19:30,112 --> 00:19:31,222
+-- You can't
+-- revoke but
+
+442
+00:19:31,391 --> 00:19:32,161
+you know what I'm saying?
+
+443
+00:19:32,442 --> 00:19:34,062
+You would at least know about it or whatever
+
+444
+00:19:34,222 --> 00:19:36,182
+-- and
+-- open SSH got, I mean, there,
+
+445
+00:19:36,192 --> 00:19:40,952
+there's an advisory for this and someone broke in signed a copy of open SSH.
+
+446
+00:19:40,982 --> 00:19:42,732
+-- Sorry,
+-- I forgot you can't revoke.
+
+447
+00:19:43,069 --> 00:19:43,709
+That's right.
+
+448
+00:19:43,719 --> 00:19:45,819
+But we know the R PM world but, but here,
+
+449
+00:19:45,829 --> 00:19:50,069
+but here's the beauty of it because we had the logs, we knew the version
+
+450
+00:19:50,189 --> 00:19:51,689
+of the signed package.
+
+451
+00:19:51,699 --> 00:19:55,489
+So we just released a new version that was higher enough
+
+452
+00:19:55,500 --> 00:19:59,369
+that no one would ever accidentally automatically install the old one.
+
+453
+00:19:59,420 --> 00:20:01,130
+And more importantly, you know, which package
+
+454
+00:20:01,339 --> 00:20:05,739
+you, you were able to say it's just this one, not like these 17 or 1000 or whatever.
+
+455
+00:20:05,750 --> 00:20:06,689
+Now, here's something though,
+
+456
+00:20:06,699 --> 00:20:09,209
+that's the other part of that story and this is all public, by the way,
+
+457
+00:20:09,219 --> 00:20:11,410
+like I'm not leaking secrets here, by any means,
+
+458
+00:20:11,839 --> 00:20:14,420
+the Fedora keys actually got stolen.
+
+459
+00:20:14,819 --> 00:20:18,699
+So Fedora had to rev all the keys because in that case, when,
+
+460
+00:20:18,709 --> 00:20:20,619
+when the attacker has the actual key,
+
+461
+00:20:20,839 --> 00:20:22,540
+you have no idea what they can do with it.
+
+462
+00:20:22,550 --> 00:20:27,089
+And you, the only option is to basically invalidate the old key and create new keys.
+
+463
+00:20:27,099 --> 00:20:29,599
+And you can imagine in the world of a Linux distribution,
+
+464
+00:20:29,750 --> 00:20:32,660
+-- that's a huge deal.
+-- Well, those keys used to come on CD.
+
+465
+00:20:33,310 --> 00:20:35,780
+Like when you bought a copy of Red Hat Linux or whatever, that's,
+
+466
+00:20:35,790 --> 00:20:37,349
+that's how you got the keys basically.
+
+467
+00:20:37,359 --> 00:20:39,739
+Or you downloaded them from their website and hope for the best.
+
+468
+00:20:40,170 --> 00:20:45,300
+Yes, I know. I know. Well, there was no http either because it was all http.
+
+469
+00:20:45,310 --> 00:20:46,479
+So, but anyway, anyway.
+
+470
+00:20:46,900 --> 00:20:50,709
+Right. Right. And, and so the, the point of all of it though, I think
+
+471
+00:20:50,959 --> 00:20:55,250
+the when we talk about package signing and we talk about artifact signing,
+
+472
+00:20:55,260 --> 00:20:56,109
+I think in general
+
+473
+00:20:56,380 --> 00:20:58,750
+and, and really the root of all of this was also s
+
+474
+00:20:58,890 --> 00:20:59,869
+store because I think SIG
+
+475
+00:20:59,969 --> 00:21:01,709
+Store does some really cool stuff
+
+476
+00:21:02,000 --> 00:21:05,479
+in the way they, they have like their public transaction log or their,
+
+477
+00:21:05,489 --> 00:21:06,010
+what do they call it?
+
+478
+00:21:06,020 --> 00:21:08,640
+Public not registry? Um I don't remember. Anyway,
+
+479
+00:21:10,199 --> 00:21:11,040
+transparency. Thank you.
+
+480
+00:21:11,300 --> 00:21:14,040
+And like that, that's the stuff you need
+
+481
+00:21:14,319 --> 00:21:15,060
+in a
+
+482
+00:21:15,329 --> 00:21:16,880
+massively signed world.
+
+483
+00:21:16,890 --> 00:21:17,180
+And like,
+
+484
+00:21:17,189 --> 00:21:19,790
+let's encrypt does the same thing where they have all these transparency
+
+485
+00:21:19,800 --> 00:21:22,280
+blogs that show like what's getting signed by who and how,
+
+486
+00:21:22,290 --> 00:21:23,260
+and that's really the key.
+
+487
+00:21:23,270 --> 00:21:25,880
+And I think that's where when you look at like the old
+
+488
+00:21:26,030 --> 00:21:27,319
+C A model,
+
+489
+00:21:27,619 --> 00:21:29,719
+uh IC A certificate, authorities, right?
+
+490
+00:21:29,729 --> 00:21:33,479
+Where they were signing and they were, what was the, what was the super expensive?
+
+491
+00:21:33,489 --> 00:21:35,569
+Like I verified this is the real company C
+
+492
+00:21:36,050 --> 00:21:39,079
+domain validated Os V and
+
+493
+00:21:39,199 --> 00:21:39,540
+um
+
+494
+00:21:39,650 --> 00:21:39,930
+it was the
+
+495
+00:21:40,199 --> 00:21:40,420
+green,
+
+496
+00:21:41,410 --> 00:21:44,000
+I don't remember the name and it doesn't really matter.
+
+497
+00:21:44,150 --> 00:21:47,880
+But the point is we tried to build like
+
+498
+00:21:48,579 --> 00:21:50,719
+explicit trust into these systems.
+
+499
+00:21:50,869 --> 00:21:53,250
+-- Oh Eove,
+-- Vev,
+
+500
+00:21:53,339 --> 00:21:54,109
+certs
+
+501
+00:21:54,319 --> 00:21:57,119
+and extended validation and extended validation is that one where I like not.
+
+502
+00:21:57,150 --> 00:22:00,599
+This is actually like TD the bank. What's interesting though
+
+503
+00:22:01,089 --> 00:22:05,180
+is that most companies shied away from ev because essentially
+
+504
+00:22:05,319 --> 00:22:06,760
+one nobody cared
+
+505
+00:22:07,290 --> 00:22:08,219
+and two,
+
+506
+00:22:08,569 --> 00:22:09,819
+they found
+
+507
+00:22:10,000 --> 00:22:12,619
+it basically was kind of training people to make things worse.
+
+508
+00:22:12,719 --> 00:22:13,869
+And there's a reason like you,
+
+509
+00:22:14,319 --> 00:22:17,709
+like, if you can actually find an OV or the EV certificate,
+
+510
+00:22:17,910 --> 00:22:21,020
+-- like, I haven't seen one in probably a decade.
+-- Oh, they're gone now.
+
+511
+00:22:21,030 --> 00:22:22,099
+They, they ended all that,
+
+512
+00:22:22,390 --> 00:22:23,650
+none of it exists anymore.
+
+513
+00:22:23,660 --> 00:22:27,859
+The browsers took away all of the special treatment and, and whatever.
+
+514
+00:22:27,869 --> 00:22:29,739
+But the point of all of it is that
+
+515
+00:22:30,020 --> 00:22:33,880
+that universe was, I guess, secretive, I would say
+
+516
+00:22:34,000 --> 00:22:35,880
+and there wasn't a lot of transparency and
+
+517
+00:22:35,890 --> 00:22:38,770
+I think projects like Sigs Store are making
+
+518
+00:22:38,780 --> 00:22:41,410
+it obvious that the way we did signatures
+
+519
+00:22:41,420 --> 00:22:43,479
+and signing of literally everything in the past,
+
+520
+00:22:43,489 --> 00:22:44,800
+it didn't really work.
+
+521
+00:22:44,920 --> 00:22:46,959
+And I don't think anyone would disagree with that.
+
+522
+00:22:47,150 --> 00:22:49,790
+It's funny you say this, there is one
+
+523
+00:22:50,560 --> 00:22:53,949
+project that has done software signing correctly
+
+524
+00:22:54,089 --> 00:22:55,439
+for over a decade now
+
+525
+00:22:55,839 --> 00:22:57,959
+and that everybody uses and that's it.
+
+526
+00:22:58,130 --> 00:22:59,900
+And it's interesting to me that I,
+
+527
+00:22:59,910 --> 00:23:03,939
+I don't think Linus Torvalds sort of meant to make it like super secure,
+
+528
+00:23:04,300 --> 00:23:05,140
+but he did.
+
+529
+00:23:05,459 --> 00:23:08,260
+And one of the ways he made get super secure is number one,
+
+530
+00:23:08,270 --> 00:23:10,420
+there's like all the shaw signatures which helps.
+
+531
+00:23:10,430 --> 00:23:10,640
+Right?
+
+532
+00:23:10,650 --> 00:23:13,599
+And that's again, he doesn't care about security so much as like just, you know,
+
+533
+00:23:13,609 --> 00:23:14,550
+bit rotten stuff.
+
+534
+00:23:14,560 --> 00:23:17,219
+-- Like I don't want my source code getting all mangled, they're
+-- not signatures,
+
+535
+00:23:17,229 --> 00:23:17,910
+they're just checks.
+
+536
+00:23:18,640 --> 00:23:19,390
+Yeah, Troy checksum
+
+537
+00:23:19,530 --> 00:23:21,359
+is not signatures. It's a Blockchain
+
+538
+00:23:21,810 --> 00:23:22,050
+like
+
+539
+00:23:22,369 --> 00:23:25,040
+-- it is a Blockchain.
+-- It is, it literally is,
+
+540
+00:23:25,560 --> 00:23:29,729
+it also has the Blockchain property of everybody basically has
+
+541
+00:23:29,739 --> 00:23:32,140
+a copy of it of the source of truth,
+
+542
+00:23:32,189 --> 00:23:36,489
+that's not cryptographic signatures, that's just good engineering.
+
+543
+00:23:36,500 --> 00:23:39,369
+But the point is it's that transparency log piece.
+
+544
+00:23:39,380 --> 00:23:41,719
+And I think that's the key to all of this is you need
+
+545
+00:23:42,030 --> 00:23:45,180
+not just a transparency log, but you need that transparency log
+
+546
+00:23:45,420 --> 00:23:47,099
+either in a Blockchain format.
+
+547
+00:23:47,109 --> 00:23:50,489
+So that basically given the genesis record and a current record,
+
+548
+00:23:50,510 --> 00:23:54,719
+I can do validation of everything in between, right and number two.
+
+549
+00:23:54,890 --> 00:23:57,880
+But it's easy to get a copy of all that data, right?
+
+550
+00:23:57,890 --> 00:24:00,520
+-- It's not like gated through some API well,
+-- I mean, the
+
+551
+00:24:00,680 --> 00:24:03,380
+-- SAR data is in an API it's another whatever it doesn't matter,
+-- right?
+
+552
+00:24:03,390 --> 00:24:06,079
+-- But you can download all of it relatively easily.
+-- You're right.
+
+553
+00:24:06,089 --> 00:24:07,439
+It, it needs to be public.
+
+554
+00:24:07,449 --> 00:24:13,910
+And I think we are now at a point where Sig Store has created this technology
+
+555
+00:24:14,130 --> 00:24:19,550
+and process that we're still applying the old ways to using Sig Store today.
+
+556
+00:24:19,560 --> 00:24:22,479
+We're not using it in a novel new way yet. However,
+
+557
+00:24:22,829 --> 00:24:23,500
+I think
+
+558
+00:24:23,709 --> 00:24:25,900
+this is kind of that chicken and egg problem of.
+
+559
+00:24:25,910 --> 00:24:29,640
+You can't have progress until you have new tools to give you the the progress, right?
+
+560
+00:24:29,650 --> 00:24:32,339
+It's, it's how do we do this. But now SIG store exists.
+
+561
+00:24:32,349 --> 00:24:35,739
+I think it takes a lot of the right boxes. It's got really smart people working on it.
+
+562
+00:24:35,989 --> 00:24:38,859
+And so now I think we're reaching a point where we, we, I'm,
+
+563
+00:24:38,869 --> 00:24:40,900
+I'm completely confident we're going to start
+
+564
+00:24:40,910 --> 00:24:44,699
+seeing some novel uses of cryptographic signatures
+
+565
+00:24:44,969 --> 00:24:48,430
+that we haven't in the past and it's not going to look anything like it does
+
+566
+00:24:48,439 --> 00:24:52,760
+-- today because everything we do today is old and dumb and doesn't really work
+-- well.
+
+567
+00:24:52,770 --> 00:24:53,550
+Actually, there's,
+
+568
+00:24:53,560 --> 00:24:58,010
+there's one thing that's missing in all of our current software signing processes
+
+569
+00:24:58,150 --> 00:24:58,760
+which is
+
+570
+00:24:59,060 --> 00:25:03,069
+there's no feedback loop other than oh like perfect example, right?
+
+571
+00:25:03,369 --> 00:25:08,589
+I downloaded Corda node explorer version 0.12 or 12 or whatever it is from github
+
+572
+00:25:09,209 --> 00:25:11,270
+and like chrome through a bit of a 10
+
+573
+00:25:11,859 --> 00:25:15,760
+like chrome literally went, I don't want to give you access to this executable file.
+
+574
+00:25:15,770 --> 00:25:18,910
+And I'm kind of like, I've never seen this error before and I didn't screenshot it,
+
+575
+00:25:18,920 --> 00:25:19,979
+which annoys me greatly
+
+576
+00:25:20,099 --> 00:25:23,599
+because I tried it on another computer and it didn't work like anyways,
+
+577
+00:25:23,780 --> 00:25:25,010
+but like chrome straight up,
+
+578
+00:25:25,020 --> 00:25:26,739
+threw a warning saying I don't want to give you
+
+579
+00:25:26,750 --> 00:25:28,770
+access to this and it grayed out and wouldn't like,
+
+580
+00:25:28,780 --> 00:25:32,010
+let me click on it and I had to go, you know, show and folder and go to the folder.
+
+581
+00:25:32,060 --> 00:25:34,030
+I threw it through virus total and it's, you know,
+
+582
+00:25:34,040 --> 00:25:35,510
+nobody had ever virus totalled it before.
+
+583
+00:25:35,520 --> 00:25:37,650
+So I'm like, it's a little weird but whatever it stands clean
+
+584
+00:25:37,890 --> 00:25:40,810
+and I'm not running it, I'm going to go run the old version that I have
+
+585
+00:25:41,199 --> 00:25:42,719
+instead of a VM man and,
+
+586
+00:25:42,849 --> 00:25:44,589
+and I, you know, I filed an issue in github
+
+587
+00:25:44,760 --> 00:25:49,349
+and it's kind of like something maybe weird or bad has happened. I have no idea.
+
+588
+00:25:49,599 --> 00:25:53,829
+And like, here's the best information I can give you and like, OK, thanks. Bye.
+
+589
+00:25:53,949 --> 00:25:55,150
+And that's the thing, right? Like
+
+590
+00:25:55,579 --> 00:25:56,439
+when there's
+
+591
+00:25:56,560 --> 00:26:00,060
+files missing signatures, literally, I had to email Red Hat and be like, hey,
+
+592
+00:26:00,069 --> 00:26:01,750
+there's files missing signatures.
+
+593
+00:26:01,760 --> 00:26:03,030
+There's, there was no,
+
+594
+00:26:03,300 --> 00:26:05,069
+there was nothing built the tooling.
+
+595
+00:26:05,410 --> 00:26:07,800
+Like the tooling didn't go back to the server and say, hey guy,
+
+596
+00:26:07,810 --> 00:26:11,439
+like you just gave me a server that or a file that doesn't have a signature.
+
+597
+00:26:11,449 --> 00:26:14,500
+Like what's up man, like in the certificate world where you know, we're,
+
+598
+00:26:14,510 --> 00:26:16,849
+we're creating this by having like CAA records.
+
+599
+00:26:16,859 --> 00:26:20,800
+So, you know, you can say in your CAA records for like c.org
+
+600
+00:26:20,969 --> 00:26:21,420
+that, you know,
+
+601
+00:26:21,430 --> 00:26:23,390
+lets encrypt is allowed to assign certificates for it and
+
+602
+00:26:23,400 --> 00:26:25,359
+like cloud floor is allowed to assign certificates for it,
+
+603
+00:26:25,369 --> 00:26:26,989
+you know, using commode or whatever they use.
+
+604
+00:26:27,530 --> 00:26:28,689
+And anything else
+
+605
+00:26:29,270 --> 00:26:32,790
+if you assign a certificate for seafood.org and it's not one of these cas,
+
+606
+00:26:33,099 --> 00:26:35,579
+please email, you know, court at sea.org. And like,
+
+607
+00:26:35,930 --> 00:26:38,650
+so I know that somebody just grabbed a certificate in my name, right?
+
+608
+00:26:38,670 --> 00:26:41,660
+And we're finally starting to build these sort of automated feedback loops.
+
+609
+00:26:41,709 --> 00:26:46,250
+But as far as I know with the software signatures, like Windows,
+
+610
+00:26:46,430 --> 00:26:49,829
+as far as I know, like does Windows if it encounters a bad software signature,
+
+611
+00:26:49,839 --> 00:26:51,479
+does it like send a telemetry
+
+612
+00:26:51,584 --> 00:26:55,155
+-- back to Microsoft for their security people?
+-- I don't know. That's a good question.
+
+613
+00:26:55,395 --> 00:26:57,244
+-- So
+-- that, for example, they can then see,
+
+614
+00:26:57,515 --> 00:26:59,244
+maybe someone listening knows, like,
+
+615
+00:26:59,255 --> 00:27:02,244
+let us know if you know the answer because that, that's a great question.
+
+616
+00:27:02,255 --> 00:27:05,234
+II, I don't know anything about how windows really works.
+
+617
+00:27:05,305 --> 00:27:06,765
+-- Yeah,
+-- that's the kind of stuff we need.
+
+618
+00:27:06,775 --> 00:27:10,114
+It's like, or conversely, I downloaded a software. The signature was correct.
+
+619
+00:27:10,194 --> 00:27:13,805
+Can I maybe add that to, like some sort of public log that, you know,
+
+620
+00:27:14,319 --> 00:27:16,020
+this file has been here for like six
+
+621
+00:27:16,030 --> 00:27:18,989
+months and it's consistently correctly signed and good and
+
+622
+00:27:19,170 --> 00:27:21,780
+-- people are using it and you know, it seems legit,
+-- right.
+
+623
+00:27:21,790 --> 00:27:24,739
+That's what, that's what recor does in, in s
+
+624
+00:27:24,900 --> 00:27:28,739
+store land is, you can basically have that kind of information sitting out there
+
+625
+00:27:29,880 --> 00:27:32,020
+for people to see like that's its job,
+
+626
+00:27:32,199 --> 00:27:32,650
+right.
+
+627
+00:27:33,790 --> 00:27:35,339
+That's it. That's what it's supposed to do.
+
+628
+00:27:35,829 --> 00:27:37,459
+And, and, but I still think
+
+629
+00:27:37,770 --> 00:27:40,459
+the things you're talking about are rooted in the old way.
+
+630
+00:27:40,469 --> 00:27:43,780
+I don't think those are the progress we're going to see,
+
+631
+00:27:43,790 --> 00:27:48,170
+but we need these utility grade systems to build higher order behaviors on.
+
+632
+00:27:48,310 --> 00:27:48,699
+And
+
+633
+00:27:48,869 --> 00:27:52,189
+it's really hard to build a complex system when you don't have feedback loops,
+
+634
+00:27:52,199 --> 00:27:52,459
+right?
+
+635
+00:27:52,469 --> 00:27:54,459
+Any complex system, be it,
+
+636
+00:27:54,469 --> 00:27:58,579
+restaurant order flow or your human body or a nuclear power plant,
+
+637
+00:27:58,630 --> 00:28:00,619
+you need feedback loops, you need back, pressure
+
+638
+00:28:00,800 --> 00:28:03,349
+need to know like this is working or not working or this
+
+639
+00:28:03,359 --> 00:28:06,430
+is too much or too little or I'm starving or I'm too full
+
+640
+00:28:06,790 --> 00:28:08,729
+and I think that's one of the big things missing
+
+641
+00:28:08,739 --> 00:28:10,939
+from all this is there's none of these feedback loops.
+
+642
+00:28:10,989 --> 00:28:15,609
+And so, like, for example, if you issue a signed file, wouldn't it be nice to know
+
+643
+00:28:15,810 --> 00:28:16,219
+that like,
+
+644
+00:28:16,229 --> 00:28:19,619
+1% of people downloading your signed file are getting an incorrect signature.
+
+645
+00:28:19,709 --> 00:28:22,939
+Like it seems to me like that matters, but you'll never know unless they,
+
+646
+00:28:22,949 --> 00:28:23,939
+unless they email you
+
+647
+00:28:24,369 --> 00:28:25,500
+well. Right. Right.
+
+648
+00:28:25,619 --> 00:28:28,270
+And that's kind of a hard problem too in a different way.
+
+649
+00:28:28,280 --> 00:28:31,790
+I, oh man, this is bringing back some weird memories but it doesn't matter.
+
+650
+00:28:33,040 --> 00:28:35,949
+-- So,
+-- anyway, anyway, what I'm saying is I think like, yes, I'm,
+
+651
+00:28:35,959 --> 00:28:38,969
+I'm kind of rooted in the old ways because, well, I am like, that's all I know.
+
+652
+00:28:38,979 --> 00:28:40,270
+We're old like,
+
+653
+00:28:40,640 --> 00:28:42,790
+yeah, but I firmly believe we need, we need
+
+654
+00:28:42,920 --> 00:28:44,619
+these utility grade behaviors,
+
+655
+00:28:44,670 --> 00:28:46,339
+especially with feedback loops because that's one thing
+
+656
+00:28:46,349 --> 00:28:47,979
+I'm seeing with like the global Security Database.
+
+657
+00:28:48,119 --> 00:28:50,619
+There's no feedback loops for a lot of these vulnerability identifiers.
+
+658
+00:28:50,630 --> 00:28:53,969
+Like you basically email the company or email the, the vendor and kind of like,
+
+659
+00:28:53,979 --> 00:28:55,050
+hope that they reply.
+
+660
+00:28:55,209 --> 00:28:57,339
+There's no way to like publicly register a,
+
+661
+00:28:57,650 --> 00:29:00,709
+like a Yelp review of this identifier saying like, I like,
+
+662
+00:29:00,719 --> 00:29:03,839
+I think they misspelled this word or it's wrong or it's
+
+663
+00:29:04,060 --> 00:29:04,880
+whatever.
+
+664
+00:29:05,949 --> 00:29:07,530
+There's a ton of stuff on Twitter about this.
+
+665
+00:29:07,540 --> 00:29:10,520
+-- Well, that's, that's not a feedback loop. That's
+-- Twitter doesn't count.
+
+666
+00:29:10,530 --> 00:29:13,300
+Twitter is just like the garbage heap of information.
+
+667
+00:29:13,660 --> 00:29:15,920
+So, OK, we need to wrap this one up now.
+
+668
+00:29:15,930 --> 00:29:18,280
+But I, I think honestly at the end of the day,
+
+669
+00:29:18,290 --> 00:29:24,199
+my view of all of this is that the historical use of cryptographic signatures
+
+670
+00:29:24,209 --> 00:29:28,319
+I think has been oversold and under understood is under understood a word.
+
+671
+00:29:28,329 --> 00:29:30,560
+-- It is
+-- now under understood is a phrase,
+
+672
+00:29:31,660 --> 00:29:34,609
+whatever. I don't care. I'm going to hyphenate it. So it's a word.
+
+673
+00:29:35,180 --> 00:29:36,420
+-- So
+-- here you go.
+
+674
+00:29:37,229 --> 00:29:37,310
+Just
+
+675
+00:29:37,930 --> 00:29:38,199
+do whatever
+
+676
+00:29:38,329 --> 00:29:40,689
+I want. This is English. Nothing matters.
+
+677
+00:29:41,040 --> 00:29:41,489
+But
+
+678
+00:29:41,869 --> 00:29:42,410
+I,
+
+679
+00:29:42,739 --> 00:29:43,770
+you know, it's true.
+
+680
+00:29:45,930 --> 00:29:49,209
+Oh, it makes me sad that that's too much truth in that sense.
+
+681
+00:29:49,310 --> 00:29:49,969
+Anyway,
+
+682
+00:29:50,310 --> 00:29:50,319
+I,
+
+683
+00:29:50,339 --> 00:29:55,939
+I feel like we are on the precipice of amazing change and
+
+684
+00:29:55,949 --> 00:29:59,910
+I'm very excited to see where it goes because I have been
+
+685
+00:30:00,099 --> 00:30:01,969
+overinvested in
+
+686
+00:30:02,609 --> 00:30:04,829
+just the old way of doing signing and,
+
+687
+00:30:04,839 --> 00:30:09,160
+and like P GP and signing RP MS and signing data and emails and whatever.
+
+688
+00:30:09,290 --> 00:30:09,900
+And
+
+689
+00:30:10,130 --> 00:30:12,969
+it makes me sad that my knowledge from 20
+
+690
+00:30:12,979 --> 00:30:15,959
+plus years ago is basically still completely valid today.
+
+691
+00:30:16,349 --> 00:30:16,359
+I
+
+692
+00:30:16,500 --> 00:30:16,520
+know.
+
+693
+00:30:16,670 --> 00:30:18,589
+Right. And that's, that's not ok.
+
+694
+00:30:18,650 --> 00:30:20,060
+So, I mean, I'm,
+
+695
+00:30:20,069 --> 00:30:21,660
+I'm ecstatic that sig store is
+
+696
+00:30:21,670 --> 00:30:25,209
+going to invalidate decades of cryptographic knowledge
+
+697
+00:30:25,619 --> 00:30:26,189
+as it should.
+
+698
+00:30:26,739 --> 00:30:28,119
+Yes. Exactly.
+
+699
+00:30:28,270 --> 00:30:29,520
+All right. Any last words?
+
+700
+00:30:29,680 --> 00:30:30,939
+Um No,
+
+701
+00:30:31,319 --> 00:30:32,689
+great. All right.
+
+702
+00:30:33,050 --> 00:30:35,489
+That was fun. Thank you, Kurt. Thank you everyone for listening.
+
+703
+00:30:35,500 --> 00:30:37,949
+Go to open source security podcast.com. Hit up the show, not at Susy
+
+704
+00:30:38,430 --> 00:30:40,689
+Podos Podcast. Hashtag do hit us up on social media.
+
+705
+00:30:40,699 --> 00:30:44,170
+-- Kurt have a lovely rest of your day.
+-- You too. Thanks everybody.
+
+706
+00:30:44,380 --> 00:30:45,939
+-- Thanks
+-- everyone. Bye bye
+
+707
+00:30:50,680 --> 00:30:50,739
+the.

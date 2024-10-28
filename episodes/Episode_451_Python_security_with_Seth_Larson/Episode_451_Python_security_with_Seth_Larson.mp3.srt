@@ -1,0 +1,3257 @@
+0
+00:00:05,480 --> 00:00:08,869
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,880 --> 00:00:10,779
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:10,789 --> 00:00:11,529
+Josh Resor.
+
+3
+00:00:11,989 --> 00:00:14,659
+I'm very excited. We have Seth Larson here today.
+
+4
+00:00:14,670 --> 00:00:18,620
+Seth is the Security Development residence at the Python Software Foundation.
+
+5
+00:00:18,860 --> 00:00:20,420
+Seth. Welcome to the show, man.
+
+6
+00:00:20,879 --> 00:00:24,069
+Thanks for having me guys. Always excited to participate in Thought Crime.
+
+7
+00:00:24,079 --> 00:00:25,110
+I'm, I'm really excited.
+
+8
+00:00:25,120 --> 00:00:28,299
+It's funny, Seth was joking before we hit record that I think on the,
+
+9
+00:00:28,309 --> 00:00:30,530
+the wordpress episode, we jokingly said if you, you know,
+
+10
+00:00:30,540 --> 00:00:32,819
+if we talk about you on the show, you probably did something terrible.
+
+11
+00:00:32,830 --> 00:00:34,299
+And he's like, oh, I'm coming on the show.
+
+12
+00:00:34,310 --> 00:00:37,979
+It's like, then we realized if you're a guest on the show, you're probably fine.
+
+13
+00:00:38,139 --> 00:00:40,459
+But if you're not a guest on the show and we're talking about you,
+
+14
+00:00:40,584 --> 00:00:42,735
+you probably done screwed something up. But, all right.
+
+15
+00:00:42,744 --> 00:00:45,294
+-- Anyway, anyway, happy to get the invite.
+-- Yeah.
+
+16
+00:00:45,375 --> 00:00:46,444
+Right. Right.
+
+17
+00:00:46,825 --> 00:00:48,284
+So, I mean, let's just start out,
+
+18
+00:00:48,294 --> 00:00:51,014
+tell us who you are and tell us about the Python Software Foundation.
+
+19
+00:00:51,025 --> 00:00:53,845
+Seth because like, there's so much cool stuff going on right now.
+
+20
+00:00:53,994 --> 00:00:55,904
+Yeah. So I'm, I'm Seth Larson.
+
+21
+00:00:55,915 --> 00:01:00,115
+Uh I do a lot of security stuff over at the, the PSF Python Software Foundation
+
+22
+00:01:00,439 --> 00:01:04,610
+uh previously and still currently uh maintain just tons of
+
+23
+00:01:04,620 --> 00:01:07,419
+open source projects in the Python space a lot around
+
+24
+00:01:07,669 --> 00:01:11,019
+security and networking and HTP and the web and all of that
+
+25
+00:01:11,449 --> 00:01:16,709
+and the Python Software Foundation, it's a US based nonprofit that is just all about
+
+26
+00:01:16,959 --> 00:01:19,779
+making the Python program language and ecosystem
+
+27
+00:01:19,790 --> 00:01:23,139
+packages around it just better and more accessible
+
+28
+00:01:23,260 --> 00:01:26,260
+and more international work for more people.
+
+29
+00:01:26,269 --> 00:01:27,989
+I mean, that's, that's just our mission
+
+30
+00:01:28,260 --> 00:01:33,069
+-- so
+-- well in, in the the like Python, the language is under that umbrella, right?
+
+31
+00:01:33,699 --> 00:01:36,169
+Yeah. So we do like the trademark, the copyright.
+
+32
+00:01:36,180 --> 00:01:39,389
+A lot of the community hosting of infrastructure we
+
+33
+00:01:39,400 --> 00:01:42,839
+employ obviously me but other people too that uh
+
+34
+00:01:43,180 --> 00:01:47,330
+do a lot of stuff around Python uh trying to improve it and just make it better.
+
+35
+00:01:47,339 --> 00:01:49,809
+We run Python us which is the largest
+
+36
+00:01:50,194 --> 00:01:54,485
+-- gathering of Python programmers in the world. A lot of community based stuff.
+-- Nice.
+
+37
+00:01:54,845 --> 00:01:55,334
+All right.
+
+38
+00:01:55,345 --> 00:01:58,574
+I want to start out with what I think is the
+
+39
+00:01:58,584 --> 00:02:00,605
+latest news to come out of the work you're doing,
+
+40
+00:02:00,614 --> 00:02:01,415
+but it might not be.
+
+41
+00:02:01,675 --> 00:02:06,654
+And that is you are using Sig Store to sign the Python releases now, right?
+
+42
+00:02:07,370 --> 00:02:07,569
+Yeah.
+
+43
+00:02:07,580 --> 00:02:08,110
+So that,
+
+44
+00:02:08,119 --> 00:02:11,929
+that's been the Six Store stuff has been happening for a while even before I joined.
+
+45
+00:02:11,940 --> 00:02:13,410
+But I think the big thing
+
+46
+00:02:13,699 --> 00:02:16,789
+that I'm working on right now is trying to
+
+47
+00:02:17,029 --> 00:02:18,750
+move away from
+
+48
+00:02:18,860 --> 00:02:19,970
+P GP
+
+49
+00:02:20,360 --> 00:02:21,699
+and I know some people say
+
+50
+00:02:21,919 --> 00:02:24,649
+GP GP GP interchangeable, you know,
+
+51
+00:02:25,330 --> 00:02:28,089
+trying to move away from it because it has,
+
+52
+00:02:28,610 --> 00:02:31,500
+I mean, I, I don't really like to comment on the
+
+53
+00:02:31,639 --> 00:02:36,729
+security aspects of things which might be surprising as the security developer.
+
+54
+00:02:36,740 --> 00:02:37,830
+Uh, I just think that
+
+55
+00:02:38,210 --> 00:02:40,190
+there's a huge ergonomic benefit.
+
+56
+00:02:40,199 --> 00:02:44,940
+Um, Python release managers have to do this stuff for seven years minimum.
+
+57
+00:02:45,410 --> 00:02:51,100
+Um, and so like asking them to protect and maintain long lived secure keys
+
+58
+00:02:51,449 --> 00:02:55,910
+crawl that time as a volunteer, like that's a huge ask compare that to cigar
+
+59
+00:02:56,130 --> 00:02:58,990
+where you're just like, oh, off signing in a few times like
+
+60
+00:02:59,190 --> 00:03:00,320
+it's night and day. So,
+
+61
+00:03:00,639 --> 00:03:01,020
+yeah.
+
+62
+00:03:01,149 --> 00:03:04,429
+Well, this is one thing like I've been using P GP and GP G for
+
+63
+00:03:04,899 --> 00:03:08,259
+25 years I think, and I've given up on it straight up
+
+64
+00:03:08,600 --> 00:03:11,309
+and this I think really speaks to, oh, you know,
+
+65
+00:03:11,320 --> 00:03:14,970
+if we can just all get the developers to floss, everything will be fine.
+
+66
+00:03:14,979 --> 00:03:18,059
+And like flossing is easy compared to using GP G
+
+67
+00:03:18,070 --> 00:03:20,460
+consistently in like making a key and protecting it.
+
+68
+00:03:20,470 --> 00:03:24,419
+But, but also backing it up, but also protecting the backups and blah, blah, blah,
+
+69
+00:03:24,429 --> 00:03:24,860
+blah, blah.
+
+70
+00:03:25,449 --> 00:03:26,220
+And
+
+71
+00:03:26,419 --> 00:03:30,479
+yeah, I have to, I think at this point, we have to accept that sort of a third party.
+
+72
+00:03:30,490 --> 00:03:33,550
+Just magically making stuff work is the way to go because like,
+
+73
+00:03:33,559 --> 00:03:34,820
+that's why Python works, right?
+
+74
+00:03:34,830 --> 00:03:38,009
+-- Like import food. Like I'm not smart enough to write
+-- pandas Six
+
+75
+00:03:38,350 --> 00:03:40,580
+Store. The, the interesting part of six story is that
+
+76
+00:03:41,110 --> 00:03:43,029
+it externalizes
+
+77
+00:03:43,240 --> 00:03:47,500
+the operation to parties that are already doing that work
+
+78
+00:03:48,160 --> 00:03:50,320
+uh in all of the right ways, right?
+
+79
+00:03:50,330 --> 00:03:54,699
+Like running, if you're someone who's maintaining a secret key for PTP,
+
+80
+00:03:55,309 --> 00:03:58,649
+it's basically like every individual person running their own C A
+
+81
+00:03:58,850 --> 00:04:02,850
+and it's like that doesn't scale at the volunteer level.
+
+82
+00:04:02,860 --> 00:04:05,089
+Um So like, let's externalize
+
+83
+00:04:05,500 --> 00:04:07,970
+the operations costs where they are already being paid
+
+84
+00:04:08,589 --> 00:04:10,050
+and then do our little part
+
+85
+00:04:10,259 --> 00:04:11,990
+and then make sure everything's working.
+
+86
+00:04:12,139 --> 00:04:12,860
+Um
+
+87
+00:04:13,350 --> 00:04:16,850
+You know, because like these release managers already have to maintain a
+
+88
+00:04:17,320 --> 00:04:21,670
+secure access to those, to those identities to those accounts already.
+
+89
+00:04:22,459 --> 00:04:25,660
+And so they're already doing the part of the bargain that they should be doing
+
+90
+00:04:26,070 --> 00:04:27,720
+and let's externalize the rest.
+
+91
+00:04:27,809 --> 00:04:28,130
+Well, I mean,
+
+92
+00:04:28,140 --> 00:04:30,200
+this is why github won because it turns out
+
+93
+00:04:30,209 --> 00:04:32,220
+nobody actually wants to run their own kid infrastructure.
+
+94
+00:04:33,980 --> 00:04:37,779
+Ok. Ok. Hold on before we go on. I want Seth to tell us
+
+95
+00:04:37,970 --> 00:04:43,059
+what signing releases, why do we do it? And what does that mean?
+
+96
+00:04:43,209 --> 00:04:47,420
+-- Yeah.
+-- So signing releases, it doesn't matter at all unless you're verifying them,
+
+97
+00:04:48,589 --> 00:04:50,660
+you know, that's no Ashley pause.
+
+98
+00:04:50,670 --> 00:04:52,859
+That is a very good point because we've had
+
+99
+00:04:52,869 --> 00:04:56,250
+a whole bunch of signing strategies going back 30 years
+
+100
+00:04:56,359 --> 00:05:00,230
+where like, oh we put, you know, like, uh uh the, the external as key signatures,
+
+101
+00:05:00,239 --> 00:05:01,549
+like, so we have a Tar ball and externals
+
+102
+00:05:01,709 --> 00:05:04,279
+signature, you get the key on a CD, blah, blah, blah.
+
+103
+00:05:04,450 --> 00:05:07,239
+And yeah, like nobody checks those. Right. So like, what's the point?
+
+104
+00:05:07,859 --> 00:05:08,679
+100%? No, no.
+
+105
+00:05:08,690 --> 00:05:09,220
+If you're creating,
+
+106
+00:05:09,304 --> 00:05:12,315
+if you're creating verification material and it's not being checked by anyone,
+
+107
+00:05:12,325 --> 00:05:12,924
+it's basically
+
+108
+00:05:13,054 --> 00:05:13,125
+point
+
+109
+00:05:13,434 --> 00:05:13,505
+right
+
+110
+00:05:14,255 --> 00:05:16,445
+there. There's an XK CD comic
+
+111
+00:05:16,635 --> 00:05:18,934
+that says how to verify a signed email.
+
+112
+00:05:18,945 --> 00:05:22,075
+If it's like if it has this at the top, it's probably signed
+
+113
+00:05:22,295 --> 00:05:24,484
+and it's like to begin P GP text
+
+114
+00:05:24,725 --> 00:05:24,734
+a
+
+115
+00:05:24,885 --> 00:05:25,195
+regular
+
+116
+00:05:25,295 --> 00:05:25,975
+expression. I hear.
+
+117
+00:05:26,184 --> 00:05:28,565
+OK. No, I mean, that's a good point though. So,
+
+118
+00:05:28,845 --> 00:05:30,325
+so let's pretend
+
+119
+00:05:30,820 --> 00:05:34,140
+everyone is checking the signatures. So why are we doing that?
+
+120
+00:05:34,399 --> 00:05:35,260
+-- So
+-- I don't think
+
+121
+00:05:35,459 --> 00:05:35,839
+like,
+
+122
+00:05:35,850 --> 00:05:37,170
+obviously I would love to live in a
+
+123
+00:05:37,179 --> 00:05:39,279
+fantasy world where everyone checks every signature.
+
+124
+00:05:39,290 --> 00:05:40,140
+But that's not
+
+125
+00:05:40,290 --> 00:05:41,619
+like that's not, that's not real
+
+126
+00:05:41,730 --> 00:05:43,350
+reality, right? Like it's not
+
+127
+00:05:43,649 --> 00:05:48,959
+um I think that a really big part of what is interesting about
+
+128
+00:05:49,209 --> 00:05:49,920
+this verification
+
+129
+00:05:50,084 --> 00:05:52,035
+is like how it fits into
+
+130
+00:05:52,265 --> 00:05:54,484
+these downstream ecosystems that are
+
+131
+00:05:54,654 --> 00:05:56,154
+like in an automated way,
+
+132
+00:05:56,334 --> 00:05:59,364
+pulling source and building it and all of that,
+
+133
+00:05:59,375 --> 00:06:02,554
+like those are the ecosystems that are likely to be the biggest targets.
+
+134
+00:06:03,045 --> 00:06:07,304
+And so they're also likely to be the best places to actually do the verification.
+
+135
+00:06:07,315 --> 00:06:09,075
+And I think that they're also like the most
+
+136
+00:06:09,859 --> 00:06:11,829
+able to do the verification
+
+137
+00:06:12,299 --> 00:06:17,839
+uh because if they're able to kind of do that one time and then after that's done,
+
+138
+00:06:18,190 --> 00:06:20,559
+like it just automatically works, right?
+
+139
+00:06:20,570 --> 00:06:23,820
+Because if you have these release manager identities, they're valid
+
+140
+00:06:23,950 --> 00:06:25,119
+for seven years
+
+141
+00:06:25,630 --> 00:06:28,459
+and you only have to update it once every two years
+
+142
+00:06:28,880 --> 00:06:32,940
+to add like whoever the new release manager is, like, that's not that much of a,
+
+143
+00:06:32,950 --> 00:06:36,980
+of an additional cost to pay as someone who's doing this downstream.
+
+144
+00:06:36,989 --> 00:06:39,570
+And a lot of downstream verifier for like Linux distro,
+
+145
+00:06:40,089 --> 00:06:41,899
+they are already doing this with P GP.
+
+146
+00:06:42,320 --> 00:06:46,179
+And so like part of the work that I'm doing is trying to keep
+
+147
+00:06:46,920 --> 00:06:51,220
+verifiers involved in the deprecation of P GP, right?
+
+148
+00:06:51,230 --> 00:06:54,059
+Because we don't want them to just not have anything to do.
+
+149
+00:06:54,089 --> 00:06:56,420
+We don't want them to be flat footed, right?
+
+150
+00:06:56,549 --> 00:07:00,059
+We don't want them to feel like this is a surprise that is happening.
+
+151
+00:07:00,700 --> 00:07:05,640
+But there's um I like to call it like a Gordian knot of signers and verifiers, right?
+
+152
+00:07:05,649 --> 00:07:07,380
+Where if there's this existing method
+
+153
+00:07:07,799 --> 00:07:09,559
+that's out there in P GP,
+
+154
+00:07:09,700 --> 00:07:12,980
+no one wants to do work for, for no reason, especially volunteers.
+
+155
+00:07:12,989 --> 00:07:15,100
+I don't want to foist more work on the volunteers,
+
+156
+00:07:15,589 --> 00:07:18,920
+but there's like this other need of like we wanna move
+
+157
+00:07:18,929 --> 00:07:21,290
+to sig store because it's just better for us too.
+
+158
+00:07:21,970 --> 00:07:25,440
+And so it's like, how do you, how do you make this happen? Where
+
+159
+00:07:25,850 --> 00:07:28,670
+from a lot of perspectives P GP is the only
+
+160
+00:07:28,679 --> 00:07:32,839
+verification material that's being demanded that's being asked for.
+
+161
+00:07:32,850 --> 00:07:35,399
+But that's just because it's existed for so much longer.
+
+162
+00:07:35,769 --> 00:07:38,070
+Like we're not even close to like answering some of
+
+163
+00:07:38,079 --> 00:07:40,670
+these questions of like how does the Linux cro use
+
+164
+00:07:40,899 --> 00:07:43,679
+sig store verification material in their automation tooling.
+
+165
+00:07:44,109 --> 00:07:47,079
+And so like someone has to be first through the wall and
+
+166
+00:07:47,519 --> 00:07:50,350
+I think C Python has a pretty good spot
+
+167
+00:07:50,579 --> 00:07:51,649
+there. And
+
+168
+00:07:51,790 --> 00:07:53,690
+yeah, it's, it's, it's a really tough problem.
+
+169
+00:07:53,799 --> 00:07:56,380
+So just a quick thing because not all our viewers might know this.
+
+170
+00:07:56,390 --> 00:07:58,619
+But what exactly is C Python?
+
+171
+00:07:58,950 --> 00:07:58,970
+No,
+
+172
+00:07:59,109 --> 00:08:01,369
+no, because this is something when I, when I first saw,
+
+173
+00:08:01,380 --> 00:08:05,329
+when I first learned what C Python was versus, say J Python, it kind of blew my mind.
+
+174
+00:08:05,339 --> 00:08:10,089
+-- Yeah. So C
+-- Python is, it is an implementation of the Python program language.
+
+175
+00:08:10,390 --> 00:08:13,369
+Uh It's the reference implementation. A lot of people call it.
+
+176
+00:08:13,799 --> 00:08:15,290
+Um And it's primarily
+
+177
+00:08:15,440 --> 00:08:18,529
+implemented, it's like 5050 Python and C
+
+178
+00:08:19,250 --> 00:08:20,440
+and uh yeah, it's,
+
+179
+00:08:20,450 --> 00:08:22,519
+it's kind of the one that like the PSF
+
+180
+00:08:22,529 --> 00:08:26,040
+maintains the Python steering council maintains a lot of times
+
+181
+00:08:26,299 --> 00:08:27,519
+it's, it's like the,
+
+182
+00:08:28,019 --> 00:08:31,790
+the one that most people are probably talking about when they say Python
+
+183
+00:08:31,910 --> 00:08:32,880
+is, it's likely C
+
+184
+00:08:33,130 --> 00:08:33,400
+Python.
+
+185
+00:08:33,549 --> 00:08:37,799
+Yeah, for sure. All right. I want to ask about Sig store one last thing.
+
+186
+00:08:38,034 --> 00:08:41,705
+So what does signing with Sig store mean? But let's say from a, a
+
+187
+00:08:42,174 --> 00:08:48,054
+release manager perspective as well as the I am the person downloading this Python.
+
+188
+00:08:48,244 --> 00:08:51,244
+-- What does it mean if it signed with a SIG store instead of P GP?
+-- Yeah.
+
+189
+00:08:51,255 --> 00:08:53,594
+So when it's signed with Sig Store, the,
+
+190
+00:08:53,604 --> 00:08:56,815
+the interesting part about Sig store is that it uses
+
+191
+00:08:57,169 --> 00:09:00,190
+these extremely short lived keys, right?
+
+192
+00:09:00,200 --> 00:09:03,450
+From like a central certificate authority. That's like the special part.
+
+193
+00:09:03,760 --> 00:09:07,429
+The other special part is that it uses this technology called open ID connect,
+
+194
+00:09:07,440 --> 00:09:08,880
+which allows
+
+195
+00:09:09,159 --> 00:09:12,789
+third party identity providers. So like Google and github,
+
+196
+00:09:13,159 --> 00:09:17,070
+it allows them to participate in part of the process where you can bind
+
+197
+00:09:17,669 --> 00:09:20,109
+this like human readable identity.
+
+198
+00:09:20,119 --> 00:09:24,690
+So like Seth at python.org, the email address, that's a human readable identity.
+
+199
+00:09:24,700 --> 00:09:25,849
+It's not just this like
+
+200
+00:09:25,979 --> 00:09:27,809
+dump of hex characters, right?
+
+201
+00:09:27,820 --> 00:09:30,960
+-- That's like your public key uh finger press
+-- that
+
+202
+00:09:30,969 --> 00:09:33,190
+has worked out so well for the crypto industry.
+
+203
+00:09:33,500 --> 00:09:34,000
+Yeah.
+
+204
+00:09:34,479 --> 00:09:36,809
+And so it takes this human readable identity
+
+205
+00:09:37,010 --> 00:09:41,789
+and then binds that to a certificate that then can be used to sign whatever you want.
+
+206
+00:09:41,799 --> 00:09:43,369
+So like a file, for example,
+
+207
+00:09:43,890 --> 00:09:47,840
+and then that signature and certificate are totally fine to be
+
+208
+00:09:47,849 --> 00:09:51,380
+just kind of like dumped because they expire almost instantly.
+
+209
+00:09:51,390 --> 00:09:52,729
+They're not valid past a certain
+
+210
+00:09:53,159 --> 00:09:55,830
+like time frame. I think it's like 1015 minutes or something.
+
+211
+00:09:56,669 --> 00:09:59,409
+And then after those like materials are available,
+
+212
+00:09:59,419 --> 00:10:02,750
+you can still verify because it's like a certificate with a signature, right?
+
+213
+00:10:02,760 --> 00:10:04,320
+You verify it just the normal way,
+
+214
+00:10:04,549 --> 00:10:07,010
+but then you're usually using the identity
+
+215
+00:10:07,299 --> 00:10:10,929
+that is bound within the original certificate. So you can say
+
+216
+00:10:11,169 --> 00:10:12,580
+did this come from Seth at
+
+217
+00:10:12,854 --> 00:10:13,594
+python.org?
+
+218
+00:10:13,945 --> 00:10:17,414
+And you don't have to know like what my P GP key is ahead of time.
+
+219
+00:10:17,424 --> 00:10:19,075
+You just need to know that that's the
+
+220
+00:10:19,085 --> 00:10:21,455
+person that you're interested in and release managers.
+
+221
+00:10:21,724 --> 00:10:25,484
+It's this really big public ceremony of like this will be
+
+222
+00:10:25,494 --> 00:10:28,994
+the release manager for this Python version and here's their identity
+
+223
+00:10:29,284 --> 00:10:33,304
+and it's so it's a lot easier as like a downstream verifier to be like, oh yeah,
+
+224
+00:10:33,455 --> 00:10:34,914
+Hugo is the,
+
+225
+00:10:35,309 --> 00:10:37,890
+is the release manager for Python 3.14.
+
+226
+00:10:37,900 --> 00:10:40,710
+That's something that's already known ahead of time as opposed to like,
+
+227
+00:10:40,719 --> 00:10:42,630
+oh here goes the release manager.
+
+228
+00:10:42,640 --> 00:10:46,729
+What is their key? But how am I gonna find that? How am I gonna keep that up to date?
+
+229
+00:10:47,059 --> 00:10:47,650
+Um
+
+230
+00:10:47,929 --> 00:10:51,119
+Yeah, it's just, it's just a lot more ergonomic. And I think that the nice
+
+231
+00:10:51,640 --> 00:10:52,150
+thing about
+
+232
+00:10:52,289 --> 00:10:54,729
+SAR that is not really captured with P GP at all
+
+233
+00:10:55,020 --> 00:10:59,729
+is that it lends itself a lot more cleanly to like workload identities,
+
+234
+00:10:59,940 --> 00:11:01,750
+so not just human identities.
+
+235
+00:11:02,020 --> 00:11:04,289
+So things like, oh this github
+
+236
+00:11:04,570 --> 00:11:07,080
+action workflow execution.
+
+237
+00:11:07,619 --> 00:11:10,030
+So anything that I like works with open ID, connect with
+
+238
+00:11:10,260 --> 00:11:10,549
+github, github
+
+239
+00:11:10,659 --> 00:11:11,520
+actions. Does
+
+240
+00:11:12,229 --> 00:11:14,440
+it lets you use those identities too?
+
+241
+00:11:14,450 --> 00:11:17,690
+So you can actually say like this release process in
+
+242
+00:11:17,700 --> 00:11:20,250
+C I was the one that signed this file,
+
+243
+00:11:20,260 --> 00:11:21,280
+not like a human.
+
+244
+00:11:21,289 --> 00:11:22,330
+And I think that's like the
+
+245
+00:11:22,440 --> 00:11:23,809
+long term end goal,
+
+246
+00:11:24,179 --> 00:11:27,830
+but we're not quite there yet. So we're, we're kind of doing this analog of
+
+247
+00:11:28,030 --> 00:11:28,890
+identity
+
+248
+00:11:29,130 --> 00:11:33,609
+-- matching to a release manager instead of to the to the actual workload. Nice,
+-- nice.
+
+249
+00:11:33,619 --> 00:11:34,799
+Sorry, just to clarify.
+
+250
+00:11:34,809 --> 00:11:35,049
+So,
+
+251
+00:11:35,059 --> 00:11:38,375
+so you're essentially because I knew obviously people can use this to sign stuff.
+
+252
+00:11:38,474 --> 00:11:43,094
+But you're saying essentially there'll be the ability for say AC I CD job to run.
+
+253
+00:11:43,315 --> 00:11:47,424
+And that specific job would generate a certificate key, blah, blah, blah,
+
+254
+00:11:47,695 --> 00:11:52,224
+sign it. And then obviously, like you said, it's good for 1015 minutes. It goes away.
+
+255
+00:11:52,234 --> 00:11:55,465
+Obviously, it can't sign, well, if it does sign anything in the future,
+
+256
+00:11:55,474 --> 00:11:57,825
+it will be a huge red flag, it's expired key,
+
+257
+00:11:58,104 --> 00:11:59,385
+but essentially that that
+
+258
+00:12:00,010 --> 00:12:02,150
+action, not just that like workload,
+
+259
+00:12:02,159 --> 00:12:06,349
+but that specific action of that workload would have a specific unique signature.
+
+260
+00:12:06,719 --> 00:12:07,789
+And so, well,
+
+261
+00:12:07,799 --> 00:12:10,789
+I'm guessing then you could essentially have like a farm to fork model
+
+262
+00:12:10,799 --> 00:12:14,989
+of kind of where it traverses through different systems C I CD validation,
+
+263
+00:12:15,000 --> 00:12:15,630
+blah blah blah
+
+264
+00:12:16,320 --> 00:12:19,950
+and with sig store that would all be essentially that would work and be automated.
+
+265
+00:12:19,960 --> 00:12:21,159
+Whereas like I know with P GP,
+
+266
+00:12:21,169 --> 00:12:24,150
+what we do is we just shove a key in and use it to sign everything because
+
+267
+00:12:24,419 --> 00:12:25,969
+what else would we do? Right.
+
+268
+00:12:26,809 --> 00:12:29,320
+Yeah. No, it, so the identity in that,
+
+269
+00:12:29,590 --> 00:12:34,390
+in that certificate, in that signature would end up being like the repo
+
+270
+00:12:34,900 --> 00:12:36,179
+the workflow,
+
+271
+00:12:36,190 --> 00:12:40,000
+like how the definition of the workflow uh in addition to like the get
+
+272
+00:12:40,010 --> 00:12:44,390
+commit that ran and then it also includes like the run id as well.
+
+273
+00:12:44,789 --> 00:12:47,020
+So it's completely tied back to
+
+274
+00:12:47,239 --> 00:12:50,890
+the actual steps that ran to build that artifact and
+
+275
+00:12:51,150 --> 00:12:55,030
+provides providence I mean, the real end goal of like, why is this important
+
+276
+00:12:55,390 --> 00:13:00,179
+is that it makes our infrastructure less interesting to compromise. So like
+
+277
+00:13:00,469 --> 00:13:01,570
+if you're an attacker,
+
+278
+00:13:02,010 --> 00:13:03,289
+this happens.
+
+279
+00:13:05,090 --> 00:13:05,659
+Well,
+
+280
+00:13:05,950 --> 00:13:08,299
+II I believe php also, right?
+
+281
+00:13:08,309 --> 00:13:10,159
+They had an issue with their infrastructure that was
+
+282
+00:13:10,169 --> 00:13:12,880
+hosting those artifacts got compromised and injected with,
+
+283
+00:13:13,190 --> 00:13:13,940
+with stuff.
+
+284
+00:13:14,479 --> 00:13:16,799
+And like the whole point is like if you,
+
+285
+00:13:17,799 --> 00:13:21,900
+if you go to python.org/downloads and you just download some files
+
+286
+00:13:22,580 --> 00:13:25,849
+and there's like check sums on the page and they, oh look, they match out
+
+287
+00:13:26,140 --> 00:13:26,539
+like,
+
+288
+00:13:26,549 --> 00:13:28,799
+but that doesn't tell you that the infrastructure
+
+289
+00:13:28,809 --> 00:13:30,900
+that's hosting those files didn't get compromised.
+
+290
+00:13:31,130 --> 00:13:33,500
+It's like this is what's providing build provenance.
+
+291
+00:13:33,510 --> 00:13:34,289
+So it makes,
+
+292
+00:13:34,299 --> 00:13:36,609
+it's a much higher bar to have to clear
+
+293
+00:13:36,619 --> 00:13:39,150
+because then you have to like compromise or build infrastructure
+
+294
+00:13:39,289 --> 00:13:42,989
+or the source code or some account. But all of those are risks.
+
+295
+00:13:43,099 --> 00:13:44,359
+Now there's this other target.
+
+296
+00:13:44,369 --> 00:13:48,119
+You can just compromise python.org and then, and then the host files that way.
+
+297
+00:13:48,260 --> 00:13:50,479
+So it removes that from the table
+
+298
+00:13:50,650 --> 00:13:53,989
+and makes it slightly harder for Attackers to do that sort of thing.
+
+299
+00:13:54,000 --> 00:13:56,549
+Well, and I'm also guessing that there would be, you know,
+
+300
+00:13:56,559 --> 00:13:58,669
+logs of these certificates being issued,
+
+301
+00:13:58,679 --> 00:14:01,630
+which obviously should match up to somebody doing something.
+
+302
+00:14:02,489 --> 00:14:05,919
+Yeah, six store has two certificate logs. So
+
+303
+00:14:06,250 --> 00:14:07,229
+one for art. Yeah, I
+
+304
+00:14:08,169 --> 00:14:11,580
+I'm not as well versed on the like super deep technical side,
+
+305
+00:14:11,590 --> 00:14:12,979
+but I believe there's one for the
+
+306
+00:14:13,260 --> 00:14:18,340
+artifacts and then there's another one for, uh, maybe the C A itself or something.
+
+307
+00:14:18,690 --> 00:14:18,979
+So,
+
+308
+00:14:19,299 --> 00:14:22,340
+and, and it's public, right? Their transparency log is public. So it's
+
+309
+00:14:22,690 --> 00:14:27,530
+anyone can go poking into it to look for the things like set that
+
+310
+00:14:27,789 --> 00:14:29,650
+python.org has signed,
+
+311
+00:14:30,039 --> 00:14:30,309
+which is,
+
+312
+00:14:30,710 --> 00:14:32,989
+you know, I never thought about that, but with P GP,
+
+313
+00:14:33,000 --> 00:14:36,190
+like one of the benefits is you control and run it and own it and do it all yourself.
+
+314
+00:14:36,200 --> 00:14:39,750
+But also conversely, there's obviously no transparency or logging.
+
+315
+00:14:41,039 --> 00:14:42,500
+No, there just isn't right because like,
+
+316
+00:14:43,760 --> 00:14:44,150
+yeah.
+
+317
+00:14:44,760 --> 00:14:45,460
+Ok. Ok.
+
+318
+00:14:45,469 --> 00:14:49,159
+I want to stay on the provenance conversation because that was,
+
+319
+00:14:49,169 --> 00:14:51,099
+it will be a marvelous segue
+
+320
+00:14:51,609 --> 00:14:57,489
+is you've also been involved with creating S bombs for, for Python, which is I,
+
+321
+00:14:57,500 --> 00:15:00,059
+I feel like Python is living in the future.
+
+322
+00:15:00,070 --> 00:15:02,789
+We're all trying to get to sometimes, which is very cool.
+
+323
+00:15:02,929 --> 00:15:04,979
+-- I take that as a huge compliment. Thank
+-- you.
+
+324
+00:15:05,190 --> 00:15:07,700
+You should like, you've done a ton of work and it's cool.
+
+325
+00:15:07,710 --> 00:15:09,929
+Yeah, so S bombs, I mean, we've been,
+
+326
+00:15:10,039 --> 00:15:16,890
+we've been publishing S bombs uh in the SPDX format since Python 3 12.2.
+
+327
+00:15:17,539 --> 00:15:22,239
+Um And they're just a part of our release process because
+
+328
+00:15:22,500 --> 00:15:24,299
+we release all of these different artifacts.
+
+329
+00:15:24,309 --> 00:15:28,809
+So we release source code, we release like prebuilt stuff for windows. We release
+
+330
+00:15:29,270 --> 00:15:31,969
+uh like stand alone binaries for windows.
+
+331
+00:15:32,289 --> 00:15:35,679
+Um And so like all of those different artifacts have different,
+
+332
+00:15:36,409 --> 00:15:38,559
+different dependencies that get pulled in different ways
+
+333
+00:15:38,570 --> 00:15:41,440
+that get compiled and so trying to provide
+
+334
+00:15:41,750 --> 00:15:44,559
+s bomb files for all the different things. So whatever you're using,
+
+335
+00:15:45,109 --> 00:15:48,190
+you have a, a nice authoritative s bomb that uh
+
+336
+00:15:48,630 --> 00:15:50,919
+that matches with the standards. I mean, the old standards.
+
+337
+00:15:50,929 --> 00:15:53,460
+So like just today, new standards dropped,
+
+338
+00:15:53,729 --> 00:15:57,880
+um I had already looked at the draft and like know what we need to do.
+
+339
+00:15:58,409 --> 00:16:00,289
+But um yeah, so like
+
+340
+00:16:00,630 --> 00:16:02,739
+I'll be upgrading to those new standards
+
+341
+00:16:02,869 --> 00:16:03,919
+hopefully soon
+
+342
+00:16:04,070 --> 00:16:04,640
+and then
+
+343
+00:16:05,320 --> 00:16:06,960
+can continue being Conformant.
+
+344
+00:16:07,059 --> 00:16:10,479
+-- I
+-- I think you're glossing over some of the immense work.
+
+345
+00:16:10,489 --> 00:16:14,489
+This has been because I work for a company that has an S bomb scanner
+
+346
+00:16:14,710 --> 00:16:16,919
+and Python isn't the sort of thing.
+
+347
+00:16:16,929 --> 00:16:19,359
+You can just like point an S bomb scanner at and you know,
+
+348
+00:16:19,369 --> 00:16:21,179
+clap your hands and say we did it everyone.
+
+349
+00:16:21,190 --> 00:16:25,520
+Good job like this has been a ton of manual work and I know you've,
+
+350
+00:16:25,530 --> 00:16:26,989
+you've been heavily involved in it.
+
+351
+00:16:27,719 --> 00:16:30,989
+Yeah, it's, it has been a good amount of like discovery,
+
+352
+00:16:31,000 --> 00:16:34,000
+especially like going through, pouring through all of our
+
+353
+00:16:34,619 --> 00:16:37,200
+dependencies that we vendor pulling through all the
+
+354
+00:16:37,210 --> 00:16:39,640
+dependencies that we actually pull in externally,
+
+355
+00:16:39,650 --> 00:16:41,299
+going through the dependencies
+
+356
+00:16:41,460 --> 00:16:46,390
+of our sub dependencies. So like PIP is vendored alongside of C Python.
+
+357
+00:16:46,400 --> 00:16:50,049
+So then like traversing that to see what Pips dependencies are.
+
+358
+00:16:50,450 --> 00:16:51,679
+So, yeah, I think it's like,
+
+359
+00:16:51,869 --> 00:16:54,309
+I don't know if it's like 30 or 30 some
+
+360
+00:16:54,780 --> 00:16:56,979
+dependencies having all the metadata and trying
+
+361
+00:16:56,989 --> 00:16:58,919
+to make sure that there's identifiers.
+
+362
+00:16:58,929 --> 00:16:59,489
+So like
+
+363
+00:16:59,640 --> 00:17:04,358
+in the future, we, there's another dependency that we need to request AC pe for
+
+364
+00:17:04,729 --> 00:17:07,439
+because we want to be able to provide identifiers for all of our,
+
+365
+00:17:07,449 --> 00:17:08,680
+the projects that were
+
+366
+00:17:09,868 --> 00:17:09,959
+that
+
+367
+00:17:10,118 --> 00:17:10,650
+just in the ring?
+
+368
+00:17:10,989 --> 00:17:13,170
+Quick question. Can you tell us what Ac pe is?
+
+369
+00:17:13,858 --> 00:17:15,530
+Yeah. So ac pe there,
+
+370
+00:17:16,390 --> 00:17:21,839
+there's a centralized database of software identifiers um that's managed by
+
+371
+00:17:22,069 --> 00:17:23,920
+uh I don't exactly know.
+
+372
+00:17:24,260 --> 00:17:24,310
+N
+
+373
+00:17:24,939 --> 00:17:27,140
+I was gonna say that was gonna be my guess, but I wasn't,
+
+374
+00:17:27,439 --> 00:17:29,239
+I want to be authoritative here.
+
+375
+00:17:29,579 --> 00:17:33,000
+Um Yeah, so Nist manages the CP dictionary
+
+376
+00:17:33,400 --> 00:17:35,739
+and it's basically this list of software identifiers
+
+377
+00:17:35,750 --> 00:17:38,310
+that get attached to CD E records.
+
+378
+00:17:38,319 --> 00:17:40,229
+And so it's kind of this like magic
+
+379
+00:17:40,420 --> 00:17:41,349
+in between
+
+380
+00:17:41,750 --> 00:17:46,459
+linkage between like an actual software project and a version and whatever to
+
+381
+00:17:46,869 --> 00:17:48,800
+whether that's actually affected by
+
+382
+00:17:48,939 --> 00:17:50,160
+a given vulnerability,
+
+383
+00:17:51,140 --> 00:17:54,760
+-- it's not magic. They're the worst things ever.
+-- Yeah, it's I personally,
+
+384
+00:17:54,910 --> 00:17:58,319
+so the full acronym is common product enumeration. And
+
+385
+00:17:58,829 --> 00:18:01,520
+yeah, I mean, the frustrating thing for me is it was invented what,
+
+386
+00:18:01,530 --> 00:18:03,390
+like 25 years ago at the beginning of CV?
+
+387
+00:18:03,400 --> 00:18:03,619
+And it,
+
+388
+00:18:03,939 --> 00:18:04,369
+yes,
+
+389
+00:18:04,550 --> 00:18:09,050
+-- I the world has changed.
+-- It has and C pe has the C pe people
+
+390
+00:18:09,189 --> 00:18:12,050
+stuck with it. The C pe people know it has tons of problems.
+
+391
+00:18:12,060 --> 00:18:15,050
+But OK, but there's another piece to this sp,
+
+392
+00:18:15,750 --> 00:18:18,260
+there's another piece to this s bomb story though with Python.
+
+393
+00:18:18,270 --> 00:18:20,579
+And that is that C Python
+
+394
+00:18:20,709 --> 00:18:23,040
+turns C into Binaries and
+
+395
+00:18:23,219 --> 00:18:25,270
+it is really hard to like,
+
+396
+00:18:25,280 --> 00:18:30,329
+automatically identify c things that are then built into a binary.
+
+397
+00:18:30,339 --> 00:18:32,550
+But how you've done it, how did you do it?
+
+398
+00:18:33,199 --> 00:18:36,010
+Well, we did it by just knowing, knowing the source code,
+
+399
+00:18:36,020 --> 00:18:37,770
+knowing the projects ahead of time, right?
+
+400
+00:18:37,780 --> 00:18:38,650
+Like we,
+
+401
+00:18:38,660 --> 00:18:42,609
+we're in this lucky position that we are by being the suppliers
+
+402
+00:18:42,619 --> 00:18:46,920
+of the source code also know like what goes into the,
+
+403
+00:18:47,030 --> 00:18:48,729
+into the, the project itself.
+
+404
+00:18:49,030 --> 00:18:52,130
+Well, you say that, but I like, literally,
+
+405
+00:18:52,459 --> 00:18:53,390
+I'm not going to name names,
+
+406
+00:18:53,400 --> 00:18:57,170
+but I've worked for companies where we ship software and like,
+
+407
+00:18:57,180 --> 00:18:59,209
+people went spelunking into what was into it and
+
+408
+00:18:59,219 --> 00:19:01,469
+found things like MP3 is being embedded in from
+
+409
+00:19:01,890 --> 00:19:06,334
+maybe and stuff and like, we actually didn't know what was in there specifically.
+
+410
+00:19:06,344 --> 00:19:06,744
+And like,
+
+411
+00:19:06,864 --> 00:19:09,734
+I think the whole log for Jay thing, the fact that the world had to spend, you know,
+
+412
+00:19:09,905 --> 00:19:12,584
+the better part of 12 months scrambling and panicking to see.
+
+413
+00:19:12,594 --> 00:19:14,724
+Like, do, do we have log for Jay in here?
+
+414
+00:19:14,734 --> 00:19:17,604
+Like, I don't know, you know, people have like grip
+
+415
+00:19:17,954 --> 00:19:21,545
+strings and like all like there was like 40 different detection methods.
+
+416
+00:19:22,079 --> 00:19:23,849
+Yeah, like a lot of people aren't there yet.
+
+417
+00:19:24,060 --> 00:19:26,170
+So I, I would not take that for granted.
+
+418
+00:19:26,489 --> 00:19:29,189
+That's no, like that's, that's a level of maturity that
+
+419
+00:19:29,439 --> 00:19:31,810
+I think everybody should have, but clearly we don't.
+
+420
+00:19:32,079 --> 00:19:35,819
+Yeah. And actually so the, the next thing that I kind of speaking on
+
+421
+00:19:36,089 --> 00:19:38,069
+eons, the next thing that I kind of want to work on
+
+422
+00:19:38,510 --> 00:19:39,410
+is
+
+423
+00:19:39,969 --> 00:19:41,079
+how do we solve the esper
+
+424
+00:19:41,300 --> 00:19:44,650
+problem for Python packages generally?
+
+425
+00:19:45,000 --> 00:19:46,089
+-- Yeah.
+-- Yeah,
+
+426
+00:19:46,510 --> 00:19:48,969
+I was wondering about that because I just had the experience,
+
+427
+00:19:48,979 --> 00:19:53,229
+I didn't realize this but I, um, I have a, a mac laptop with brew installed as one does
+
+428
+00:19:53,339 --> 00:19:58,849
+and I, um, obviously installed Python 312 to get a specific version of something
+
+429
+00:19:59,170 --> 00:20:01,719
+and did, uh, you know, pip three install.
+
+430
+00:20:01,729 --> 00:20:04,390
+Anthropic to get the Anthropic clawed A I client
+
+431
+00:20:04,599 --> 00:20:08,709
+and it failed to run because I did not have rust installed. And I was like,
+
+432
+00:20:09,239 --> 00:20:13,770
+what the f and it turns out I need to install rust so that it can build that package.
+
+433
+00:20:13,780 --> 00:20:15,790
+And I'm like, oh boy, well, whatever YOLO
+
+434
+00:20:16,270 --> 00:20:16,800
+and like
+
+435
+00:20:17,180 --> 00:20:20,219
+my Python now pulls in rust so I can run my Anthropic thing.
+
+436
+00:20:20,459 --> 00:20:23,890
+Although it's cool that they're using rust for their Python module.
+
+437
+00:20:23,900 --> 00:20:26,209
+I, I don't want to think about it too much because it hurts my head.
+
+438
+00:20:26,219 --> 00:20:29,300
+But yeah, I mean, that's, this is not an uncommon occurrence for this to be a,
+
+439
+00:20:29,609 --> 00:20:31,959
+like, I have no idea where all this stuff is coming from.
+
+440
+00:20:32,420 --> 00:20:33,489
+Yeah, Python
+
+441
+00:20:33,609 --> 00:20:36,609
+Python is a, it's, it's, it's a glue language really.
+
+442
+00:20:36,619 --> 00:20:40,520
+I mean, like it is a huge glue language, especially in between, like,
+
+443
+00:20:40,630 --> 00:20:46,520
+providing a nice API or a nice way to use like low level C libraries
+
+444
+00:20:46,530 --> 00:20:50,890
+or A I models or like just any binary thing that you want to do.
+
+445
+00:20:50,900 --> 00:20:53,300
+With the Python, like it works really well.
+
+446
+00:20:53,550 --> 00:20:56,489
+Um But that also has like knock on effects, right?
+
+447
+00:20:56,500 --> 00:20:59,560
+Especially from a security perspective, you just were talking about
+
+448
+00:21:00,010 --> 00:21:01,510
+compiled binaries, right?
+
+449
+00:21:02,050 --> 00:21:02,790
+Um
+
+450
+00:21:03,030 --> 00:21:08,069
+So how do you create an S bomb for those things where you have tons of
+
+451
+00:21:08,270 --> 00:21:11,400
+code that is not Python that doesn't play by Python's
+
+452
+00:21:11,410 --> 00:21:15,030
+rules that's not described accurately by Python packaging metadata.
+
+453
+00:21:15,500 --> 00:21:19,650
+How do you describe, how do you tell a machine what that means
+
+454
+00:21:19,949 --> 00:21:22,089
+uh accurately and how can maintainers,
+
+455
+00:21:22,099 --> 00:21:25,229
+how can people that are maintaining these projects, like be a part of that process?
+
+456
+00:21:25,239 --> 00:21:27,930
+Because right now there's like no avenue, there's no way
+
+457
+00:21:28,099 --> 00:21:31,729
+even if they wanted to tell you what was in the project, there's no way for them to,
+
+458
+00:21:31,739 --> 00:21:32,849
+to help in that way.
+
+459
+00:21:33,260 --> 00:21:35,579
+Um Because a lot of the work that I actually do is like
+
+460
+00:21:36,219 --> 00:21:37,609
+standards work. So like
+
+461
+00:21:38,239 --> 00:21:40,510
+figuring out how we're going to do these things,
+
+462
+00:21:40,520 --> 00:21:43,140
+figuring out how these systems are gonna plug together.
+
+463
+00:21:43,420 --> 00:21:46,040
+Um I think that that's like the most impactful
+
+464
+00:21:46,050 --> 00:21:48,349
+use of my time because it's things that will
+
+465
+00:21:48,359 --> 00:21:52,939
+be useful for quite a long time to lots of people and it just feels like problems that
+
+466
+00:21:53,349 --> 00:21:58,739
+-- like full time staffing is, is especially equipped to tackle.
+-- Yes. Ok.
+
+467
+00:21:59,130 --> 00:22:02,599
+Uh Let's, let's talk about Python packages
+
+468
+00:22:03,239 --> 00:22:06,699
+to accurately set the stage for the insanity here.
+
+469
+00:22:07,099 --> 00:22:10,119
+So Python packages can contain Python
+
+470
+00:22:10,510 --> 00:22:11,719
+or binaries
+
+471
+00:22:11,849 --> 00:22:13,819
+and sometimes the binaries were built by someone else
+
+472
+00:22:13,829 --> 00:22:15,319
+and sometimes they get built on your system,
+
+473
+00:22:15,329 --> 00:22:15,680
+right?
+
+474
+00:22:15,910 --> 00:22:17,939
+-- Yeah.
+-- So like sometimes if you're
+
+475
+00:22:18,949 --> 00:22:18,969
+all,
+
+476
+00:22:19,160 --> 00:22:19,180
+I
+
+477
+00:22:19,390 --> 00:22:19,859
+was just like,
+
+478
+00:22:20,030 --> 00:22:20,050
+y
+
+479
+00:22:21,170 --> 00:22:25,410
+Yeah. Yeah. Yeah. So um basically there's this format called a wheel
+
+480
+00:22:25,869 --> 00:22:27,520
+and a wheel essentially is just,
+
+481
+00:22:27,699 --> 00:22:30,260
+it's just like a zip file that you extract
+
+482
+00:22:30,270 --> 00:22:32,920
+on your machine and that is the installation process,
+
+483
+00:22:32,930 --> 00:22:33,239
+right?
+
+484
+00:22:33,250 --> 00:22:35,380
+-- Like I,
+-- so I just, I love how everything
+
+485
+00:22:35,589 --> 00:22:37,349
+eventually devolves into like
+
+486
+00:22:37,920 --> 00:22:40,979
+uh Microsoft Word file. No, it's actually a zip file.
+
+487
+00:22:40,989 --> 00:22:43,859
+-- Like everything is ultimately a zip
+-- file. It's all zips
+
+488
+00:22:43,869 --> 00:22:44,739
+and XML.
+
+489
+00:22:46,660 --> 00:22:49,430
+Yeah. So it's a zip file that you just extract onto your machine.
+
+490
+00:22:49,489 --> 00:22:52,069
+And so the implication of that. And so that's great for like
+
+491
+00:22:52,630 --> 00:22:57,349
+because it's not running code, it means that you can actually like audit it, right?
+
+492
+00:22:57,359 --> 00:22:59,089
+So you know what it's going to do.
+
+493
+00:22:59,479 --> 00:23:00,979
+So that is a good property.
+
+494
+00:23:00,989 --> 00:23:03,030
+And the other good property is that as long
+
+495
+00:23:03,040 --> 00:23:05,810
+as there is a wheel available for your platform,
+
+496
+00:23:05,819 --> 00:23:08,910
+like your CPU architecture, all that, whatever that matrix of,
+
+497
+00:23:08,920 --> 00:23:10,349
+of different variables.
+
+498
+00:23:10,439 --> 00:23:11,849
+As long as there's a wheel available,
+
+499
+00:23:12,180 --> 00:23:17,099
+it means that you can install it super easily, really quickly and you know,
+
+500
+00:23:17,109 --> 00:23:17,890
+it's going to work
+
+501
+00:23:18,349 --> 00:23:19,959
+and like it should work and it usually doesn't.
+
+502
+00:23:20,569 --> 00:23:23,630
+And so like because Python has this,
+
+503
+00:23:24,540 --> 00:23:29,540
+I would say user base of people that are trying to solve problems that involve code,
+
+504
+00:23:29,550 --> 00:23:31,719
+but like they don't really care about the code.
+
+505
+00:23:31,729 --> 00:23:32,979
+So like scientists,
+
+506
+00:23:33,250 --> 00:23:34,119
+you know, right. Like
+
+507
+00:23:34,489 --> 00:23:35,280
+journalists,
+
+508
+00:23:35,290 --> 00:23:38,560
+there's tons of people that use Python that like if they didn't need to use Python,
+
+509
+00:23:38,569 --> 00:23:42,050
+they totally wouldn't because they're trying to get a different problem done,
+
+510
+00:23:42,060 --> 00:23:42,479
+right?
+
+511
+00:23:42,900 --> 00:23:45,630
+And so because installation of these really,
+
+512
+00:23:45,640 --> 00:23:49,109
+really powerful tools is so easy through the wheel format,
+
+513
+00:23:49,119 --> 00:23:50,439
+they are highly demanded,
+
+514
+00:23:51,000 --> 00:23:52,380
+right? Like if a project
+
+515
+00:23:52,489 --> 00:23:55,890
+is published and there's no wheels available for common architectures.
+
+516
+00:23:55,900 --> 00:23:57,069
+That's a big problem
+
+517
+00:23:57,239 --> 00:24:01,050
+for, for that project, They're likely to get requests to, hey, can we,
+
+518
+00:24:01,060 --> 00:24:03,020
+can we get a wheel file available for this platform?
+
+519
+00:24:03,030 --> 00:24:03,650
+Whatever.
+
+520
+00:24:03,660 --> 00:24:04,469
+-- I'm
+-- just thinking,
+
+521
+00:24:04,479 --> 00:24:08,319
+I don't think I've actually ever used something that I basically can't pip import.
+
+522
+00:24:08,739 --> 00:24:11,410
+Like I think there was one time, way back in the day,
+
+523
+00:24:11,420 --> 00:24:15,329
+I manually downloaded some Python source code, but we're talking like Slackware
+
+524
+00:24:15,459 --> 00:24:16,410
+days.
+
+525
+00:24:17,079 --> 00:24:18,810
+I don't think I've done that in 20 years.
+
+526
+00:24:19,780 --> 00:24:20,069
+Yeah.
+
+527
+00:24:20,079 --> 00:24:22,349
+There's lots of wheels available for these days and
+
+528
+00:24:22,359 --> 00:24:24,469
+the tooling around it has gotten so much better.
+
+529
+00:24:24,479 --> 00:24:24,869
+It's,
+
+530
+00:24:25,260 --> 00:24:26,109
+it's really, really good
+
+531
+00:24:26,810 --> 00:24:27,459
+for sure.
+
+532
+00:24:28,410 --> 00:24:29,969
+So I, I'll point out to you Kurt,
+
+533
+00:24:29,979 --> 00:24:32,569
+like I keep telling you to use poetry for your Python project.
+
+534
+00:24:32,579 --> 00:24:35,300
+Poetry can actually import a Git repo,
+
+535
+00:24:36,479 --> 00:24:38,489
+but I don't want to, I want to use Python or PP
+
+536
+00:24:38,640 --> 00:24:39,229
+because
+
+537
+00:24:39,479 --> 00:24:41,709
+there's, it's just a, you know, stuff works.
+
+538
+00:24:42,239 --> 00:24:42,829
+I don't wanna,
+
+539
+00:24:42,979 --> 00:24:46,349
+-- you know, that's it. I just Python works. That's what I wanted to do.
+-- That's fair.
+
+540
+00:24:46,719 --> 00:24:48,739
+They'll force it on you someday. It's coming.
+
+541
+00:24:49,030 --> 00:24:49,390
+But
+
+542
+00:24:51,180 --> 00:24:56,550
+OK, I I want to kind of bring this whole conversation, you know, into home now.
+
+543
+00:24:56,560 --> 00:25:00,349
+Now Seth and I think you have an important story to tell in
+
+544
+00:25:00,359 --> 00:25:04,319
+that you are a full time employee of a foundation doing security work.
+
+545
+00:25:04,530 --> 00:25:06,560
+And I know there's been a ton of information.
+
+546
+00:25:06,569 --> 00:25:09,209
+I mean, Kurt and I have talked about it like tide lift, talks about it all the time.
+
+547
+00:25:09,219 --> 00:25:11,000
+You've got the open ssf talking about it
+
+548
+00:25:11,130 --> 00:25:15,300
+about basically just pay the freaking maintainers essentially, right? Where
+
+549
+00:25:15,420 --> 00:25:16,719
+there's this whole,
+
+550
+00:25:16,959 --> 00:25:18,959
+I feel like a couple of years ago, the attitude was like,
+
+551
+00:25:18,969 --> 00:25:21,819
+oh open source developers love working for free.
+
+552
+00:25:21,829 --> 00:25:22,920
+They don't need money,
+
+553
+00:25:23,030 --> 00:25:24,979
+you know, they are getting exposure
+
+554
+00:25:25,280 --> 00:25:27,099
+and I think that Tide is starting to turn.
+
+555
+00:25:27,109 --> 00:25:27,459
+But you,
+
+556
+00:25:27,469 --> 00:25:30,540
+like you have real experience here because you're actually doing the work and,
+
+557
+00:25:30,550 --> 00:25:35,130
+and I would love to just hear your kind of stories and anecdotes and, and thoughts
+
+558
+00:25:35,290 --> 00:25:35,979
+on
+
+559
+00:25:36,290 --> 00:25:39,199
+actually being full time employee to work on open source
+
+560
+00:25:39,209 --> 00:25:42,050
+and you have so much progress to show for it,
+
+561
+00:25:42,060 --> 00:25:42,579
+I think.
+
+562
+00:25:43,619 --> 00:25:45,079
+Yeah, I mean, one of the
+
+563
+00:25:45,439 --> 00:25:48,239
+one of the personal goals for this role is like
+
+564
+00:25:48,599 --> 00:25:51,839
+just proving that you can, how much you can do
+
+565
+00:25:52,089 --> 00:25:56,520
+with full time staffing, right? Especially full time staffing that is
+
+566
+00:25:56,829 --> 00:25:59,599
+for the most part, like pretty unrestricted, right?
+
+567
+00:25:59,609 --> 00:26:00,530
+Like I obviously,
+
+568
+00:26:00,540 --> 00:26:04,119
+I have to work on security related things where Python like I have a whole
+
+569
+00:26:04,329 --> 00:26:06,000
+mission to uphold,
+
+570
+00:26:06,640 --> 00:26:07,719
+but it wasn't like,
+
+571
+00:26:07,729 --> 00:26:12,150
+oh you need to do these like three things and then like then your contract is over.
+
+572
+00:26:12,180 --> 00:26:13,599
+It's more of like a hey,
+
+573
+00:26:13,969 --> 00:26:16,729
+we want security to happen. We know all these standards are happening.
+
+574
+00:26:16,739 --> 00:26:18,910
+We know like that open source is going to need
+
+575
+00:26:18,920 --> 00:26:20,949
+to change that things are going to have to happen.
+
+576
+00:26:20,959 --> 00:26:22,479
+And we want you to go out there and figure
+
+577
+00:26:22,489 --> 00:26:25,260
+out what those things are and be as useful as possible
+
+578
+00:26:25,500 --> 00:26:26,949
+in those places. And so it's like super
+
+579
+00:26:27,056 --> 00:26:27,956
+self directed and
+
+580
+00:26:28,056 --> 00:26:29,276
+I, I love that,
+
+581
+00:26:29,566 --> 00:26:33,875
+that Alpha Omega has trusted the PSF and me with all of that, right?
+
+582
+00:26:34,235 --> 00:26:34,255
+I
+
+583
+00:26:34,456 --> 00:26:36,395
+I think the really interesting thing is that
+
+584
+00:26:36,406 --> 00:26:38,916
+like there are just so many problems out there
+
+585
+00:26:39,456 --> 00:26:41,566
+that full time staffing are,
+
+586
+00:26:41,576 --> 00:26:45,956
+is like almost necessary to get it done in the timelines that we need, right?
+
+587
+00:26:45,965 --> 00:26:48,521
+Like I have a theory which is a essentially we've solved all
+
+588
+00:26:48,531 --> 00:26:51,121
+the easy problems and we have a lot of hard problems now that
+
+589
+00:26:51,562 --> 00:26:54,281
+like even just to understand the problem is probably going to take
+
+590
+00:26:54,291 --> 00:26:58,862
+tens of hours of constructing a mental model and finding out stuff.
+
+591
+00:26:58,871 --> 00:26:59,241
+And
+
+592
+00:26:59,452 --> 00:27:00,802
+that's not something that
+
+593
+00:27:00,991 --> 00:27:04,322
+you can do in your spare time easily or if you do it's going to take six months.
+
+594
+00:27:04,651 --> 00:27:08,082
+And I don't think Python has six months or 10 years to get this fixed.
+
+595
+00:27:09,630 --> 00:27:11,280
+No, that's the thing. Like we don't
+
+596
+00:27:11,400 --> 00:27:14,890
+like open source, took 25 years to kind of get where it is.
+
+597
+00:27:15,270 --> 00:27:16,420
+And, well,
+
+598
+00:27:16,430 --> 00:27:20,540
+except now the world depends on it and we can't take another 25 years to get it.
+
+599
+00:27:20,550 --> 00:27:23,619
+Right. Like, we have a couple of years. No, it's like, what is it? Like?
+
+600
+00:27:23,630 --> 00:27:26,650
+Those numbers are 80 to 95% of everything is open source now.
+
+601
+00:27:26,810 --> 00:27:27,140
+Yeah.
+
+602
+00:27:27,349 --> 00:27:27,660
+Right.
+
+603
+00:27:27,670 --> 00:27:28,040
+Like, I,
+
+604
+00:27:28,050 --> 00:27:30,530
+I can WSL to install and then the name of
+
+605
+00:27:30,540 --> 00:27:32,729
+a Linux distribution on my Windows box like it.
+
+606
+00:27:33,579 --> 00:27:33,949
+Yeah.
+
+607
+00:27:34,800 --> 00:27:37,170
+Right. Yeah, I, I think the other side of it is like
+
+608
+00:27:37,619 --> 00:27:38,579
+there is
+
+609
+00:27:38,729 --> 00:27:43,339
+so much, like, because open source has one has dominated, right? And
+
+610
+00:27:43,459 --> 00:27:47,199
+security is so important right now, all of these regulations happening,
+
+611
+00:27:48,030 --> 00:27:48,869
+I think that a
+
+612
+00:27:49,290 --> 00:27:52,290
+really big part of my role is like trying to make it
+
+613
+00:27:52,300 --> 00:27:56,489
+so that the work that needs to happen to get those regulations implemented
+
+614
+00:27:56,790 --> 00:27:57,650
+easy
+
+615
+00:27:58,140 --> 00:28:01,000
+so that all of these projects can kind of go on with their
+
+616
+00:28:01,010 --> 00:28:04,569
+lives or keep doing for the most part what they're doing today.
+
+617
+00:28:05,040 --> 00:28:09,439
+Um And be able to say that like they're complying, right? Like that
+
+618
+00:28:09,810 --> 00:28:11,890
+is a huge goal for me. Um
+
+619
+00:28:12,250 --> 00:28:14,170
+Just because like, I don't want,
+
+620
+00:28:14,479 --> 00:28:17,339
+I don't want all of these regulations which I think are, you know,
+
+621
+00:28:17,349 --> 00:28:18,619
+mostly a really good thing
+
+622
+00:28:18,910 --> 00:28:22,339
+to kind of crush the flame of open source. Right? And
+
+623
+00:28:22,709 --> 00:28:27,699
+as if it's like, it's already a hard job, it's already a hard, like thing to do.
+
+624
+00:28:28,449 --> 00:28:31,989
+So I don't want it to, like, just get harder and So by
+
+625
+00:28:32,310 --> 00:28:36,699
+having all this like full time staffing, being able to provide that time to
+
+626
+00:28:36,989 --> 00:28:40,699
+fix those problems ahead of time ahead of like, you know,
+
+627
+00:28:40,839 --> 00:28:42,910
+when everything comes into full effect,
+
+628
+00:28:43,359 --> 00:28:48,180
+I think providing as much help there is, is a really big part of my role as well. So
+
+629
+00:28:48,349 --> 00:28:49,339
+yeah, that's why I'm focusing on like
+
+630
+00:28:49,479 --> 00:28:51,030
+bombs and lots of policy work,
+
+631
+00:28:51,040 --> 00:28:54,189
+lots of people work making systems actually fit together.
+
+632
+00:28:54,339 --> 00:28:54,859
+So
+
+633
+00:28:55,229 --> 00:28:58,890
+-- and,
+-- and what are the regulations? I suspect I know what you're talking about, but
+
+634
+00:28:59,180 --> 00:29:00,839
+we, we won't go into the details,
+
+635
+00:29:00,849 --> 00:29:03,329
+but at least we'll let people Google some names later.
+
+636
+00:29:03,380 --> 00:29:05,540
+Yeah, so it's the Cyber resilience Act,
+
+637
+00:29:05,739 --> 00:29:06,619
+the CR A
+
+638
+00:29:06,770 --> 00:29:12,469
+and also the Secure Software development framework, the SSDF from the US and,
+
+639
+00:29:12,510 --> 00:29:13,890
+and there's, there's a few other
+
+640
+00:29:14,130 --> 00:29:15,920
+regulations that are coming into effect
+
+641
+00:29:16,069 --> 00:29:18,640
+two that are formulating some various stages,
+
+642
+00:29:18,650 --> 00:29:20,829
+but those are the two big ones that are on our radar right now.
+
+643
+00:29:21,069 --> 00:29:21,359
+Yeah.
+
+644
+00:29:21,369 --> 00:29:24,030
+And yeah, there's going to be a ton more of that show up in the next couple of years.
+
+645
+00:29:24,040 --> 00:29:27,859
+For sure, for sure. I feel like you have set us all up
+
+646
+00:29:28,390 --> 00:29:30,219
+for understanding
+
+647
+00:29:30,430 --> 00:29:31,089
+that
+
+648
+00:29:31,459 --> 00:29:37,020
+paying someone to do what is functionally the we'll say boring important work.
+
+649
+00:29:37,369 --> 00:29:40,849
+And I think that's an important part of this is there are many things
+
+650
+00:29:40,859 --> 00:29:43,540
+I will not do in my free time but I will do for pay,
+
+651
+00:29:43,550 --> 00:29:44,079
+right?
+
+652
+00:29:44,089 --> 00:29:47,060
+And I think like s bombs are a really good example of that is if you go to an
+
+653
+00:29:47,300 --> 00:29:48,880
+art developer and you're like, oh, you should make s
+
+654
+00:29:49,020 --> 00:29:51,469
+bombs, they're going to be like, I don't want to because
+
+655
+00:29:51,630 --> 00:29:54,290
+why would they? Right. You know, as you're some SBO
+
+656
+00:29:54,479 --> 00:29:55,099
+weirdo
+
+657
+00:29:55,329 --> 00:29:56,709
+which you know, I am but
+
+658
+00:29:57,359 --> 00:29:58,260
+II I get it.
+
+659
+00:29:58,270 --> 00:30:03,290
+So I'm curious on your thoughts and suggestions for companies or,
+
+660
+00:30:03,300 --> 00:30:05,329
+or other foundations or kind of
+
+661
+00:30:05,500 --> 00:30:07,250
+anyone looking to
+
+662
+00:30:07,530 --> 00:30:11,949
+maybe somehow fund or hire like full time open source
+
+663
+00:30:11,959 --> 00:30:14,550
+developers to do the kind of things you're doing now.
+
+664
+00:30:14,560 --> 00:30:18,609
+Like, what, what, what went well, what maybe hasn't gone well along your path.
+
+665
+00:30:19,569 --> 00:30:20,439
+Yeah, I think that
+
+666
+00:30:20,959 --> 00:30:23,439
+the biggest thing that's gone well, has been,
+
+667
+00:30:24,469 --> 00:30:26,520
+I'm just gonna say getting paid is a
+
+668
+00:30:27,430 --> 00:30:28,140
+sorry,
+
+669
+00:30:28,800 --> 00:30:30,239
+I was maybe assuming that, that,
+
+670
+00:30:30,520 --> 00:30:32,530
+that, that was a part of the question.
+
+671
+00:30:35,250 --> 00:30:35,959
+-- No, the big,
+-- I
+
+672
+00:30:36,339 --> 00:30:38,390
+mean, and feed my family everyone.
+
+673
+00:30:38,680 --> 00:30:39,229
+Yeah. Yeah. Yeah.
+
+674
+00:30:39,239 --> 00:30:43,939
+Beside besides being paid full time to do open source, I mean, like that's the dream,
+
+675
+00:30:43,949 --> 00:30:44,349
+right.
+
+676
+00:30:44,359 --> 00:30:44,910
+Um
+
+677
+00:30:45,209 --> 00:30:48,430
+Yeah, it's, it's been, it's been a lovely time. I mean, I, I've been enjoying it.
+
+678
+00:30:48,989 --> 00:30:52,869
+Uh, no, I, I think that the biggest thing that Alpha Omega got right,
+
+679
+00:30:53,170 --> 00:30:57,619
+uh, with this role and with a lot of the roles that they do, it's not just that the PSF is
+
+680
+00:30:58,079 --> 00:30:58,660
+not,
+
+681
+00:30:58,810 --> 00:31:00,270
+not restricting
+
+682
+00:31:00,760 --> 00:31:03,500
+the staffing, not making it this, like,
+
+683
+00:31:04,229 --> 00:31:06,089
+ok, you're going to do exactly this,
+
+684
+00:31:06,280 --> 00:31:07,650
+it's going because
+
+685
+00:31:07,810 --> 00:31:10,040
+the thing about security and the thing about
+
+686
+00:31:10,189 --> 00:31:11,189
+the Real World
+
+687
+00:31:11,750 --> 00:31:13,010
+is that things change.
+
+688
+00:31:13,239 --> 00:31:14,849
+Yes, priorities change.
+
+689
+00:31:15,260 --> 00:31:19,089
+And if we're just going to be doing the exact same thing every single day,
+
+690
+00:31:19,619 --> 00:31:22,930
+it's not necessarily going to end up with that result that we want,
+
+691
+00:31:22,939 --> 00:31:25,569
+especially if this is supposed to be like a long term engagement.
+
+692
+00:31:25,579 --> 00:31:28,729
+And so I think the best thing that they got right was like putting
+
+693
+00:31:28,949 --> 00:31:30,609
+a lot of trust in
+
+694
+00:31:31,400 --> 00:31:34,729
+the PSF in the foundation that's actually going to be, you know,
+
+695
+00:31:34,739 --> 00:31:35,979
+hiring the staffing.
+
+696
+00:31:36,739 --> 00:31:38,180
+And so if you're doing that, like,
+
+697
+00:31:38,189 --> 00:31:41,819
+if you're trying to bring on a maintainer or if you're trying to, you know,
+
+698
+00:31:41,829 --> 00:31:44,250
+hire someone to do open source part time
+
+699
+00:31:44,260 --> 00:31:46,540
+or you're trying to contribute to a foundation
+
+700
+00:31:46,819 --> 00:31:49,520
+to do this sort of like foundational boring work
+
+701
+00:31:49,660 --> 00:31:50,920
+that is really important,
+
+702
+00:31:51,209 --> 00:31:52,400
+trying to
+
+703
+00:31:52,709 --> 00:31:54,319
+make sure that it's not
+
+704
+00:31:54,719 --> 00:31:55,560
+like caveat
+
+705
+00:31:55,729 --> 00:31:56,439
+or
+
+706
+00:31:56,780 --> 00:31:59,359
+like we want this list of things to happen, like,
+
+707
+00:31:59,369 --> 00:32:01,479
+obviously come to the conversation with things that you'd
+
+708
+00:32:01,489 --> 00:32:03,969
+love to see because it starts the conversation,
+
+709
+00:32:03,979 --> 00:32:04,400
+right?
+
+710
+00:32:04,670 --> 00:32:06,479
+But be open to
+
+711
+00:32:06,890 --> 00:32:10,069
+the person that you end up hiring or the foundation that you're working with,
+
+712
+00:32:10,359 --> 00:32:12,469
+like, having a different set of priorities than you.
+
+713
+00:32:12,660 --> 00:32:13,030
+So,
+
+714
+00:32:13,209 --> 00:32:13,790
+yeah, that's
+
+715
+00:32:13,900 --> 00:32:13,930
+good.
+
+716
+00:32:14,199 --> 00:32:15,000
+I think, no,
+
+717
+00:32:15,010 --> 00:32:16,989
+I think that's important because that's one thing
+
+718
+00:32:17,000 --> 00:32:19,150
+I really respected at Red Hat is like,
+
+719
+00:32:19,160 --> 00:32:20,859
+there's one person on the Red Hat product security
+
+720
+00:32:20,869 --> 00:32:23,969
+team whose primary email address is at debian.org,
+
+721
+00:32:24,770 --> 00:32:25,770
+right? Like it's,
+
+722
+00:32:26,229 --> 00:32:30,250
+and well, no, like a lot of companies if you told them that they'd be like, the what?
+
+723
+00:32:30,260 --> 00:32:33,339
+Like, no, we can't hire what? This makes no sense. Right.
+
+724
+00:32:33,349 --> 00:32:35,390
+Why is he, why are we paying him to work for Debian?
+
+725
+00:32:35,660 --> 00:32:38,520
+And I've seen that happen with, you know, these enterprises where it's like
+
+726
+00:32:38,670 --> 00:32:42,219
+they, you know, oh, we'll give you 10% time. Well, no, that's not enough.
+
+727
+00:32:42,229 --> 00:32:47,109
+That's still kind of a hobby. It needs to be full time. And then also, well,
+
+728
+00:32:47,233 --> 00:32:50,253
+they'll do some of what you want but they won't, you know, they might find,
+
+729
+00:32:50,262 --> 00:32:50,853
+they might,
+
+730
+00:32:50,963 --> 00:32:51,932
+the foundation says, hey, no,
+
+731
+00:32:51,942 --> 00:32:54,792
+this other thing we need to do is way more important than your corporate need.
+
+732
+00:32:55,062 --> 00:32:56,973
+And I feel like a lot of companies
+
+733
+00:32:57,253 --> 00:32:57,983
+are gonna,
+
+734
+00:32:58,032 --> 00:32:59,613
+I think it might be difficult for them to
+
+735
+00:32:59,623 --> 00:33:01,113
+understand that because they're just not used to this.
+
+736
+00:33:01,123 --> 00:33:02,762
+Right. They're to quote Thomas PP,
+
+737
+00:33:02,883 --> 00:33:05,542
+I am not your supplier and they're used to dealing with suppliers who can,
+
+738
+00:33:05,682 --> 00:33:07,282
+you know, do this or else I don't pay
+
+739
+00:33:07,503 --> 00:33:09,652
+and I don't know that that's going to work very well here.
+
+740
+00:33:09,796 --> 00:33:11,406
+Yeah. It, it's really tough to,
+
+741
+00:33:11,755 --> 00:33:16,245
+I guess, I don't know how else to phrase, like, just the ego part of it, right?
+
+742
+00:33:16,255 --> 00:33:20,336
+Where it's like the, like owning the work, having your brand on the work. Like, I,
+
+743
+00:33:20,615 --> 00:33:24,436
+I think that there has to be some trust that the person that's doing the work
+
+744
+00:33:24,446 --> 00:33:29,395
+is going to talk about you as a sponsor in a very positive light and that,
+
+745
+00:33:29,406 --> 00:33:32,206
+that's going to reflect, it doesn't necessarily have to,
+
+746
+00:33:33,209 --> 00:33:33,430
+you know,
+
+747
+00:33:33,439 --> 00:33:36,280
+be this top to bottom ownership for it to
+
+748
+00:33:36,290 --> 00:33:38,579
+be this huge positive thing for your organization.
+
+749
+00:33:39,599 --> 00:33:42,189
+Well, and I think some of the organizations forget too that, like
+
+750
+00:33:42,400 --> 00:33:43,560
+internally at the CS A,
+
+751
+00:33:43,569 --> 00:33:46,869
+we end up with a developer maintaining an authentication library because
+
+752
+00:33:47,069 --> 00:33:49,869
+while we were using it, it had to work and it,
+
+753
+00:33:49,949 --> 00:33:52,709
+-- that was vastly cheaper than trying to rip and replace
+-- it.
+
+754
+00:33:53,410 --> 00:33:55,939
+All right, I think we've come to the end Seth.
+
+755
+00:33:55,949 --> 00:33:58,989
+I will give you the last word, your bit of you can,
+
+756
+00:33:59,000 --> 00:34:02,060
+you can tell the audience whatever you like for this part,
+
+757
+00:34:02,219 --> 00:34:07,010
+pay the maintainers. I don't know, it works, it works. I promise like II,
+
+758
+00:34:07,290 --> 00:34:10,840
+I spend all day just proving that point and
+
+759
+00:34:11,330 --> 00:34:14,050
+it would be really, really great to see more of this happening.
+
+760
+00:34:14,060 --> 00:34:17,879
+I think it would make this huge improvement in the open source ecosystem.
+
+761
+00:34:17,889 --> 00:34:20,918
+It solves so many problems. And I think that the problem is a lot smaller
+
+762
+00:34:21,149 --> 00:34:24,629
+than people like to think. Like, how many staffing do we need?
+
+763
+00:34:25,138 --> 00:34:27,358
+I don't have the exact number, but I think it's,
+
+764
+00:34:27,549 --> 00:34:30,759
+I think you can do a lot with a little when it comes to staffing.
+
+765
+00:34:30,898 --> 00:34:32,809
+I was gonna say it's also, it's uh
+
+766
+00:34:33,878 --> 00:34:34,608
+in my experience,
+
+767
+00:34:34,618 --> 00:34:36,168
+a lot of open source projects have like a
+
+768
+00:34:36,178 --> 00:34:38,998
+core nucleus of one or two or maybe three people
+
+769
+00:34:39,009 --> 00:34:42,958
+which in the grand scheme of things is not a lot of people that's not even a bus load,
+
+770
+00:34:42,967 --> 00:34:43,467
+you know,
+
+771
+00:34:43,697 --> 00:34:45,319
+but you can put them all on a motorcycle
+
+772
+00:34:45,428 --> 00:34:46,289
+if they balance
+
+773
+00:34:46,668 --> 00:34:49,279
+and that's one thing I've consistently seen.
+
+774
+00:34:49,289 --> 00:34:52,168
+So I, I think maybe part of the messaging also would help with these.
+
+775
+00:34:52,178 --> 00:34:54,618
+I I can't help but wonder if these companies think about these open
+
+776
+00:34:54,628 --> 00:34:57,928
+source projects in staff in terms of what they do internally with like,
+
+777
+00:34:57,938 --> 00:35:00,289
+oh, we need 50 people to write this accounting subsystem
+
+778
+00:35:00,628 --> 00:35:03,049
+to have meetings and stuff versus you know, open source. You have
+
+779
+00:35:03,239 --> 00:35:05,608
+two core people and like 100 volunteers.
+
+780
+00:35:06,319 --> 00:35:10,289
+Yeah, open source has this like incredible multiplicative effect, right?
+
+781
+00:35:10,299 --> 00:35:12,089
+Like the work that happens
+
+782
+00:35:12,590 --> 00:35:16,360
+at these low like mid stack and in applications and everything,
+
+783
+00:35:16,370 --> 00:35:20,040
+it it really does have a huge impact even just having
+
+784
+00:35:20,399 --> 00:35:21,520
+one, you know,
+
+785
+00:35:21,530 --> 00:35:25,739
+one full time staff on a project can completely change the trajectory
+
+786
+00:35:25,750 --> 00:35:28,100
+of that project in terms of what it can get done,
+
+787
+00:35:28,429 --> 00:35:29,260
+for sure,
+
+788
+00:35:29,540 --> 00:35:31,459
+for sure. All right, I'm, I'm calling it.
+
+789
+00:35:31,469 --> 00:35:34,500
+Uh I'm gonna put a link in the show notes to like Seth
+
+790
+00:35:34,510 --> 00:35:38,689
+has a very nice website that has his blog and some contact details.
+
+791
+00:35:38,989 --> 00:35:40,110
+His blog is marvelous.
+
+792
+00:35:40,120 --> 00:35:43,120
+You've been traveling all over the place, giving talks about this stuff,
+
+793
+00:35:43,129 --> 00:35:44,209
+which is amazing.
+
+794
+00:35:44,219 --> 00:35:47,489
+They're all linked in his blog. So, so go watch him. But yeah, Seth.
+
+795
+00:35:47,500 --> 00:35:51,530
+-- Thank you so much, man. This has been a lovely chat
+-- Thank you so much for having me.
+
+796
+00:35:51,570 --> 00:35:53,350
+Well, I'm sure we'll have you back at some point.
+
+797
+00:35:53,360 --> 00:35:55,090
+Like just keep doing awesome work, man.
+
+798
+00:35:55,260 --> 00:35:57,330
+Alright, so thank you Seth. Thank you.
+
+799
+00:35:57,500 --> 00:35:58,699
+Thank you for listening. Go to
+
+800
+00:35:58,860 --> 00:36:01,500
+social security podcast.com. Find all of the show notes for today.
+
+801
+00:36:01,510 --> 00:36:03,360
+Well, it's probably just one show note. But um
+
+802
+00:36:04,469 --> 00:36:04,709
+and then
+
+803
+00:36:05,659 --> 00:36:05,750
+he
+
+804
+00:36:06,020 --> 00:36:07,010
+found us this podcast,
+
+805
+00:36:07,020 --> 00:36:10,679
+hashtag I Mastodon Seth and Kurt have marvelous rest of your days.
+
+806
+00:36:10,689 --> 00:36:12,449
+-- Thanks,
+-- everybody. Thanks everybody.
+
+807
+00:36:12,620 --> 00:36:14,290
+Thanks everyone. Bye bye.

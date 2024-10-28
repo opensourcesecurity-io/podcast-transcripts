@@ -1,0 +1,3386 @@
+0
+00:00:05,280 --> 00:00:09,630
+Hello and welcome to the open source security podcast episode 87 with myself,
+
+1
+00:00:09,640 --> 00:00:11,460
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:11,470 --> 00:00:14,470
+-- Josh Bresser.
+-- Kurt. I'm excited today. We have a guest.
+
+3
+00:00:14,479 --> 00:00:18,930
+We have Josh Os from Let's encrypt. Hi, happy to be here. Thanks, Josh.
+
+4
+00:00:18,940 --> 00:00:22,180
+So why don't, why don't you tell us a little bit about kind of yourself?
+
+5
+00:00:22,190 --> 00:00:25,920
+And let's encrypt, which, which I must admit, Kurt and I are huge fanboys of
+
+6
+00:00:26,729 --> 00:00:27,370
+great.
+
+7
+00:00:27,510 --> 00:00:28,879
+So my name is Josh Os.
+
+8
+00:00:29,430 --> 00:00:33,509
+I'm the executive director and a co-founder of Lots and Crypt.
+
+9
+00:00:33,930 --> 00:00:37,590
+Although lets encrypt is actually the name of a service, the company behind it,
+
+10
+00:00:37,599 --> 00:00:40,819
+the nonprofit is internet security Research Group.
+
+11
+00:00:40,830 --> 00:00:42,869
+And we started this all up in early
+
+12
+00:00:43,110 --> 00:00:48,319
+2013 mainly because I was working on uh networking security at Mozilla.
+
+13
+00:00:48,330 --> 00:00:51,069
+And it was really frustrating the slow pace
+
+14
+00:00:51,080 --> 00:00:53,790
+at which sites were transitioning to htps.
+
+15
+00:00:53,900 --> 00:00:57,470
+And from the browser side, there's not really much that we can do about it, you know,
+
+16
+00:00:57,479 --> 00:00:58,830
+sites either
+
+17
+00:00:59,150 --> 00:01:01,369
+make the switch or they don't and we just
+
+18
+00:01:01,380 --> 00:01:03,790
+have to accept whatever they do in the browser.
+
+19
+00:01:04,410 --> 00:01:07,150
+So I started thinking about with some colleagues, you know, what,
+
+20
+00:01:07,160 --> 00:01:08,559
+what needs to happen
+
+21
+00:01:08,760 --> 00:01:09,510
+to
+
+22
+00:01:09,769 --> 00:01:12,709
+help sites switch to HPS at a faster pace.
+
+23
+00:01:13,339 --> 00:01:15,089
+And we talked to a bunch of people about
+
+24
+00:01:15,680 --> 00:01:18,580
+what the hang up was and there, there are a bunch of complications.
+
+25
+00:01:18,589 --> 00:01:21,279
+But the biggest thing that we, we heard was
+
+26
+00:01:21,459 --> 00:01:24,639
+that people had a really hard time getting and managing certificates
+
+27
+00:01:25,029 --> 00:01:28,370
+that the process was really difficult. It also costs money.
+
+28
+00:01:28,489 --> 00:01:30,959
+It was hard to figure out exactly what you should be doing.
+
+29
+00:01:31,430 --> 00:01:34,000
+So we started focusing on this question of
+
+30
+00:01:34,120 --> 00:01:34,129
+a,
+
+31
+00:01:34,949 --> 00:01:38,370
+you know, how can we make getting in managing certificates easier?
+
+32
+00:01:38,940 --> 00:01:42,610
+And another way in which this really came to the fore for us was that we were
+
+33
+00:01:43,160 --> 00:01:46,599
+at the time working on standardizing HTP two.
+
+34
+00:01:47,059 --> 00:01:48,449
+And there was a big debate in
+
+35
+00:01:48,660 --> 00:01:49,370
+the U BC
+
+36
+00:01:49,510 --> 00:01:52,800
+working group about whether or not the protocol would require
+
+37
+00:01:53,050 --> 00:01:53,930
+TLS.
+
+38
+00:01:54,110 --> 00:01:55,959
+Ah Right. Right. I remember that.
+
+39
+00:01:56,699 --> 00:01:57,330
+Yeah,
+
+40
+00:01:57,540 --> 00:01:59,569
+the obvious answer on the face of it is that at,
+
+41
+00:01:59,750 --> 00:02:01,569
+at this day and age knowing what we know,
+
+42
+00:02:01,580 --> 00:02:05,400
+we should definitely not be making any new protocols that aren't secure.
+
+43
+00:02:05,839 --> 00:02:09,690
+That seems like an obvious piece of wisdom one would think.
+
+44
+00:02:10,050 --> 00:02:11,119
+But at the time,
+
+45
+00:02:11,699 --> 00:02:15,190
+there was a really great objection raised to that and I was,
+
+46
+00:02:15,199 --> 00:02:18,630
+I desperately wanted them to require CTLS.
+
+47
+00:02:19,419 --> 00:02:21,600
+But there was an objection that I just couldn't shake,
+
+48
+00:02:21,610 --> 00:02:26,059
+which is that if you require TLS, you will make htps.
+
+49
+00:02:26,360 --> 00:02:29,000
+Well, you, you'll make H TB two
+
+50
+00:02:29,509 --> 00:02:31,020
+much more difficult to deploy
+
+51
+00:02:31,389 --> 00:02:32,800
+and you'll make it pay to play,
+
+52
+00:02:32,960 --> 00:02:34,800
+meaning you will not be able to deploy
+
+53
+00:02:34,809 --> 00:02:38,000
+HB two without paying someone for a certificate
+
+54
+00:02:38,259 --> 00:02:40,330
+-- if you
+-- want to talk to the world. Yeah. No, that's
+
+55
+00:02:40,339 --> 00:02:40,979
+true. Right.
+
+56
+00:02:40,990 --> 00:02:44,309
+And you're a very unequal playing field
+
+57
+00:02:45,270 --> 00:02:46,250
+around the globe
+
+58
+00:02:46,940 --> 00:02:48,639
+in terms of access, price,
+
+59
+00:02:48,649 --> 00:02:50,669
+things like that and in terms of education
+
+60
+00:02:50,679 --> 00:02:53,460
+and knowledge about how to deploy TLS properly.
+
+61
+00:02:53,690 --> 00:02:57,919
+II, I think that's super fair and I guess for some historical context here, for,
+
+62
+00:02:57,929 --> 00:02:59,729
+for anyone who might not know is
+
+63
+00:02:59,850 --> 00:03:01,410
+prior to let's encrypt
+
+64
+00:03:01,979 --> 00:03:06,309
+getting a certificate was fairly expensive in many cases.
+
+65
+00:03:06,320 --> 00:03:07,770
+I mean, you're generally talking
+
+66
+00:03:07,940 --> 00:03:11,929
+50 to $70 a year in some cases, which
+
+67
+00:03:12,639 --> 00:03:13,300
+it doesn't,
+
+68
+00:03:13,589 --> 00:03:13,990
+right.
+
+69
+00:03:14,000 --> 00:03:16,770
+I mean, that doesn't sound like a ton of money necessarily, but I mean,
+
+70
+00:03:16,779 --> 00:03:18,949
+let's face it like when I was a broke college kid, I didn't,
+
+71
+00:03:18,960 --> 00:03:20,770
+I didn't have a TLS certificate.
+
+72
+00:03:20,779 --> 00:03:22,210
+Yeah, TLS certificate
+
+73
+00:03:22,500 --> 00:03:24,960
+just because like that was, that was beer money. Right.
+
+74
+00:03:25,529 --> 00:03:26,380
+And so in
+
+75
+00:03:26,880 --> 00:03:27,800
+and Right. Right.
+
+76
+00:03:27,809 --> 00:03:28,130
+And then I,
+
+77
+00:03:28,139 --> 00:03:29,770
+I remember when L and Crip came along
+
+78
+00:03:29,779 --> 00:03:31,169
+and you guys were talking about free certificates,
+
+79
+00:03:31,179 --> 00:03:35,500
+I thought like, how, how on earth are the, are the Cas gonna let this happen?
+
+80
+00:03:35,509 --> 00:03:40,229
+And thankfully it did because your, your service is amazing and obviously the,
+
+81
+00:03:40,240 --> 00:03:41,229
+the price is right.
+
+82
+00:03:41,369 --> 00:03:42,259
+And so
+
+83
+00:03:42,500 --> 00:03:45,910
+I guess why, why don't you tell us for, for a few moments, kind of
+
+84
+00:03:46,500 --> 00:03:49,770
+what is the fundamental model of how let's and crypt works because it,
+
+85
+00:03:49,779 --> 00:03:53,339
+it kind of deviates from the traditional universe of CAS.
+
+86
+00:03:53,350 --> 00:03:53,789
+Right.
+
+87
+00:03:54,210 --> 00:03:55,600
+Yeah. So
+
+88
+00:03:56,000 --> 00:03:57,559
+we wanna make certificates
+
+89
+00:03:57,789 --> 00:03:59,759
+easy to use primarily.
+
+90
+00:04:00,130 --> 00:04:03,600
+And although sometimes people think of us as a free C A
+
+91
+00:04:03,830 --> 00:04:09,240
+free is really in service to ease of use, the reason that RC A is free
+
+92
+00:04:09,580 --> 00:04:12,289
+has less to do about not being able to charge some
+
+93
+00:04:12,300 --> 00:04:15,250
+very small amount and more to do with the fact that
+
+94
+00:04:15,649 --> 00:04:19,358
+if we start charging people for certificates, it really complicates
+
+95
+00:04:19,769 --> 00:04:21,760
+getting and managing certificates.
+
+96
+00:04:21,950 --> 00:04:23,239
+So imagine your,
+
+97
+00:04:23,570 --> 00:04:27,489
+you know, it's just admitted a small company or let's say a huge company, right?
+
+98
+00:04:27,500 --> 00:04:30,019
+You're in a fortune 500 company and you want to set up
+
+99
+00:04:30,890 --> 00:04:34,519
+a little web server to do something that's not gonna be very important. Right?
+
+100
+00:04:34,929 --> 00:04:38,459
+But if you need to pay anything for that certificate, even if it's a penny,
+
+101
+00:04:39,140 --> 00:04:42,760
+you gotta go find a credit card, you gotta get approval from finance,
+
+102
+00:04:42,769 --> 00:04:44,359
+you gotta plug that card in.
+
+103
+00:04:44,700 --> 00:04:47,549
+You know, you're gonna have to pay attention to when that card expires.
+
+104
+00:04:47,559 --> 00:04:50,160
+So your cert doesn't stop and your site doesn't come down.
+
+105
+00:04:50,820 --> 00:04:55,760
+You've now taken what could have happened in one second with no thought whatsoever
+
+106
+00:04:55,929 --> 00:04:58,519
+and turned it into what a 30 minute
+
+107
+00:04:58,890 --> 00:05:01,059
+endeavor here if you're lucky. Right.
+
+108
+00:05:01,410 --> 00:05:02,980
+Yeah. If you're lucky. Right.
+
+109
+00:05:03,010 --> 00:05:06,309
+I can relate to this because previously with the cloud security line.
+
+110
+00:05:06,320 --> 00:05:07,559
+So I ended up actually,
+
+111
+00:05:08,329 --> 00:05:09,390
+basically it was
+
+112
+00:05:09,519 --> 00:05:12,179
+not only cheaper from the number of certificates we needed.
+
+113
+00:05:12,190 --> 00:05:14,149
+But it was way less hassle to just get one
+
+114
+00:05:14,160 --> 00:05:16,970
+wild card certificate and use that on every server which,
+
+115
+00:05:17,130 --> 00:05:19,709
+you know, from a security point of view and compartmentalization,
+
+116
+00:05:19,720 --> 00:05:21,609
+sort of least privilege is terrible.
+
+117
+00:05:21,950 --> 00:05:24,750
+But from like making my life a whole pile simpler,
+
+118
+00:05:24,760 --> 00:05:27,850
+like only having to deal with one certificate every two years,
+
+119
+00:05:28,040 --> 00:05:29,500
+you know, it was a no brainer
+
+120
+00:05:30,220 --> 00:05:32,630
+so I, I can very much relate to that pain.
+
+121
+00:05:33,000 --> 00:05:36,779
+-- Yeah,
+-- the options people had before sort of forced them to make
+
+122
+00:05:37,690 --> 00:05:39,149
+unfortunate decisions.
+
+123
+00:05:39,609 --> 00:05:40,109
+Um
+
+124
+00:05:40,549 --> 00:05:45,029
+So free is so like I was saying, free is really in, in service of ease of use here,
+
+125
+00:05:45,040 --> 00:05:45,350
+right?
+
+126
+00:05:45,359 --> 00:05:46,369
+We'd like to get
+
+127
+00:05:46,540 --> 00:05:49,429
+our goals to, to get to a point where
+
+128
+00:05:49,869 --> 00:05:54,660
+you barely even need to know that you have a cert or even what a cert is, right?
+
+129
+00:05:55,290 --> 00:05:55,910
+So
+
+130
+00:05:56,220 --> 00:05:59,899
+you should just be able to start up your web server and it gets the cert
+
+131
+00:06:00,720 --> 00:06:01,820
+installs it properly,
+
+132
+00:06:01,829 --> 00:06:03,540
+configures it properly and just handles the
+
+133
+00:06:03,549 --> 00:06:05,739
+whole thing without bothering you about anything.
+
+134
+00:06:05,829 --> 00:06:08,250
+You shouldn't even need to know that the cert exists, right?
+
+135
+00:06:09,160 --> 00:06:12,540
+-- Um
+-- I, I, I'll confirm that that's where we want to go because I'm,
+
+136
+00:06:12,549 --> 00:06:15,019
+I'm using let's encrypt on my personal web server.
+
+137
+00:06:15,059 --> 00:06:19,109
+And I actually was, I, I found some other service was,
+
+138
+00:06:19,119 --> 00:06:21,260
+was handing out very inexpensive certs
+
+139
+00:06:21,869 --> 00:06:26,529
+and I had to generate my own certificate and, and get the CS R, right? Which took me
+
+140
+00:06:26,750 --> 00:06:29,250
+longer than it should I embarrassingly admit?
+
+141
+00:06:29,559 --> 00:06:31,309
+And then, and then got it and put it in place.
+
+142
+00:06:31,320 --> 00:06:33,329
+And then once a year I had to remember how to do this.
+
+143
+00:06:33,339 --> 00:06:35,519
+And then you guys came along and I literally, I have a script,
+
+144
+00:06:35,529 --> 00:06:37,529
+I run that's running in Cron
+
+145
+00:06:37,820 --> 00:06:41,049
+and I don't, it's magic, right? Like it's amazing.
+
+146
+00:06:41,059 --> 00:06:42,970
+It's amazing what you people have done.
+
+147
+00:06:43,279 --> 00:06:43,529
+Yeah.
+
+148
+00:06:43,540 --> 00:06:45,399
+From, from an ease of use point of view,
+
+149
+00:06:45,410 --> 00:06:47,619
+even using the acronym CS R let
+
+150
+00:06:47,630 --> 00:06:50,489
+alone requiring your customers to actually generate one
+
+151
+00:06:50,899 --> 00:06:52,799
+is craziness, right?
+
+152
+00:06:53,029 --> 00:06:53,519
+Like
+
+153
+00:06:53,799 --> 00:06:56,799
+that's, that is so hostile to use of use.
+
+154
+00:06:56,980 --> 00:06:57,820
+It's, it's,
+
+155
+00:06:58,100 --> 00:07:01,980
+I guess we should also clarify CS R as a cer certificate signing request,
+
+156
+00:07:02,049 --> 00:07:06,399
+which is kind of the thing you send off to the C A and, and they sign
+
+157
+00:07:06,529 --> 00:07:09,910
+and then give back to you. And it was, it's a terrible experience.
+
+158
+00:07:10,269 --> 00:07:12,149
+-- Yeah, it's really difficult to generate
+-- that.
+
+159
+00:07:12,160 --> 00:07:15,109
+What I love is, it's so terrible that some cas
+
+160
+00:07:15,570 --> 00:07:19,589
+will let you generate the key and CS R on like via their web server
+
+161
+00:07:20,200 --> 00:07:21,160
+to make it easier.
+
+162
+00:07:21,350 --> 00:07:24,209
+And then of course, as we discussed last week with uh was it Trusco?
+
+163
+00:07:25,100 --> 00:07:26,109
+Yeah. Right. Right.
+
+164
+00:07:26,380 --> 00:07:30,070
+And the breach of 23,000 private keys, I mean,
+
+165
+00:07:30,350 --> 00:07:33,910
+yeah, this, this clearly is not a great system and not very fun.
+
+166
+00:07:34,290 --> 00:07:36,760
+Yeah, that's kind of taking it too far in the other direction.
+
+167
+00:07:36,809 --> 00:07:40,119
+You don't need to generate people's private keys for them
+
+168
+00:07:40,279 --> 00:07:42,109
+just to get rid of CS RS, right?
+
+169
+00:07:42,350 --> 00:07:46,459
+So, and one thing I'm not 100% clear on is, so what's the relationship between,
+
+170
+00:07:46,470 --> 00:07:47,450
+let's Encrypt and cbot?
+
+171
+00:07:47,640 --> 00:07:49,440
+Are they the same thing or different?
+
+172
+00:07:49,799 --> 00:07:52,000
+So initially, when lets encrypt started,
+
+173
+00:07:52,350 --> 00:07:54,959
+we had a client called Let's Encrypt
+
+174
+00:07:55,269 --> 00:07:57,440
+and we distributed that client
+
+175
+00:07:57,790 --> 00:08:00,529
+and it was developed partially with our developers,
+
+176
+00:08:00,540 --> 00:08:03,070
+but a lot of developers from eff as well.
+
+177
+00:08:03,339 --> 00:08:07,559
+And after some number of months of doing that, we realized that
+
+178
+00:08:07,910 --> 00:08:09,730
+we're never going to be able to produce
+
+179
+00:08:10,109 --> 00:08:11,170
+a client
+
+180
+00:08:11,899 --> 00:08:13,690
+that works for everyone
+
+181
+00:08:13,950 --> 00:08:15,890
+or even the vast majority of people.
+
+182
+00:08:15,899 --> 00:08:18,299
+There's software deployment environments, you know,
+
+183
+00:08:18,309 --> 00:08:20,299
+different types of web servers and web server,
+
+184
+00:08:20,309 --> 00:08:23,209
+software operating systems architectures
+
+185
+00:08:23,570 --> 00:08:26,760
+there, there's a huge diversity out there.
+
+186
+00:08:27,109 --> 00:08:30,000
+And the only way that we're gonna build clients that work for everyone is
+
+187
+00:08:30,010 --> 00:08:32,760
+to depend on our community to build the things that matter to them.
+
+188
+00:08:33,489 --> 00:08:34,080
+So
+
+189
+00:08:34,349 --> 00:08:38,340
+the second issue we have is that we wanted our client, you know,
+
+190
+00:08:38,599 --> 00:08:40,200
+lots of crypto is built around an
+
+191
+00:08:40,520 --> 00:08:41,808
+open protocol called
+
+192
+00:08:42,130 --> 00:08:42,409
+ACME
+
+193
+00:08:43,179 --> 00:08:45,158
+automated certificate management.
+
+194
+00:08:45,778 --> 00:08:49,879
+-- E stands for environment.
+-- OK. Can I interrupt for one moment and ask, is that a
+
+195
+00:08:50,109 --> 00:08:52,979
+acronym because I'm like a huge looney tunes fan. And when I saw
+
+196
+00:08:53,268 --> 00:08:54,518
+Acme, it made my day.
+
+197
+00:08:54,809 --> 00:08:58,318
+Yeah, all of our stuff is named after like a road runner.
+
+198
+00:08:58,679 --> 00:09:03,718
+So the software that we use to build our, that we used to run our C A is called Boulder.
+
+199
+00:09:04,249 --> 00:09:05,359
+It has a smaller
+
+200
+00:09:05,499 --> 00:09:07,708
+smaller cousin named Pebble.
+
+201
+00:09:08,280 --> 00:09:08,950
+Um
+
+202
+00:09:09,159 --> 00:09:11,010
+We use it a lot internally too.
+
+203
+00:09:11,200 --> 00:09:11,390
+That's
+
+204
+00:09:11,630 --> 00:09:14,270
+ok. I'm, I'm sorry to interrupt. So, so back to Acne,
+
+205
+00:09:14,630 --> 00:09:15,440
+no worries.
+
+206
+00:09:15,880 --> 00:09:19,530
+So we use this open protocol ST standardized by the ITF,
+
+207
+00:09:20,239 --> 00:09:21,979
+you know, we, we started this protocol,
+
+208
+00:09:21,989 --> 00:09:23,960
+but we moved into the standards process and our
+
+209
+00:09:23,969 --> 00:09:27,200
+hope is that many CAS will use this protocol.
+
+210
+00:09:27,250 --> 00:09:31,909
+So we want all the clients that work with Lots and Crypt to also work with other cas.
+
+211
+00:09:32,479 --> 00:09:35,210
+And the problem with having a client named Lots Encrypt
+
+212
+00:09:35,219 --> 00:09:37,460
+as you run into a bunch of trademark issues,
+
+213
+00:09:37,469 --> 00:09:38,840
+when you have a client named, that's
+
+214
+00:09:38,940 --> 00:09:42,109
+Encrypt getting certificates from AC A that's not lots encrypt.
+
+215
+00:09:42,210 --> 00:09:44,179
+That's fair. So for,
+
+216
+00:09:44,719 --> 00:09:49,500
+for two reasons, we decided to, to stop producing a client. One is that
+
+217
+00:09:49,849 --> 00:09:52,859
+we were not going to get the coverage that we wanted.
+
+218
+00:09:52,909 --> 00:09:55,380
+We wanted our community to decide what's important.
+
+219
+00:09:55,719 --> 00:09:59,460
+And also this trademark issue would require us to at least rename it anyway.
+
+220
+00:09:59,469 --> 00:10:01,260
+So given these challenges,
+
+221
+00:10:01,270 --> 00:10:03,270
+um we talked to the folks at eff who are
+
+222
+00:10:03,280 --> 00:10:06,140
+doing most of the develop development at that point anyway.
+
+223
+00:10:06,159 --> 00:10:09,059
+And we said, hey, why don't we just make this an eff project?
+
+224
+00:10:09,289 --> 00:10:11,429
+You guys take the client rename it,
+
+225
+00:10:11,659 --> 00:10:12,429
+run with it
+
+226
+00:10:12,619 --> 00:10:13,989
+and that's what we did. So
+
+227
+00:10:14,239 --> 00:10:14,530
+CBO
+
+228
+00:10:14,820 --> 00:10:16,469
+is the new name for the client
+
+229
+00:10:16,609 --> 00:10:20,909
+and it is owned by Electronic Frontier Foundation now and they do a great job with it.
+
+230
+00:10:21,229 --> 00:10:25,429
+That's awesome. That, that's very very open source. I like it.
+
+231
+00:10:25,690 --> 00:10:28,979
+Yeah, I guess my second question would be, are there any other CAS that support the
+
+232
+00:10:29,099 --> 00:10:30,150
+Acme protocol right now?
+
+233
+00:10:30,159 --> 00:10:33,359
+I have heard that some do, I don't have direct experience with it.
+
+234
+00:10:33,369 --> 00:10:37,380
+Um Often for automated certificate, certificate protocols.
+
+235
+00:10:37,760 --> 00:10:42,309
+For, for like a large commercial C A, you'll sometimes need to be a
+
+236
+00:10:42,750 --> 00:10:46,750
+enterprise customer or something with access to their API, you set up a contract,
+
+237
+00:10:46,760 --> 00:10:48,229
+get access to the API.
+
+238
+00:10:48,440 --> 00:10:51,820
+I have heard that some large CAS offer ACNE
+
+239
+00:10:52,179 --> 00:10:54,900
+as an API option. If you're an enterprise customer,
+
+240
+00:10:55,179 --> 00:10:58,000
+there's also one or two other smaller CAS that
+
+241
+00:10:58,010 --> 00:10:59,919
+have at least been talking about doing it.
+
+242
+00:10:59,929 --> 00:11:02,520
+I think, I think one actually does maybe
+
+243
+00:11:02,659 --> 00:11:05,390
+a Norwegian C A called bypass. Um
+
+244
+00:11:05,969 --> 00:11:07,830
+I'm not very sure on the details of that though.
+
+245
+00:11:08,200 --> 00:11:08,739
+Nice.
+
+246
+00:11:08,770 --> 00:11:10,190
+-- Yeah,
+-- because I was, I was wondering my,
+
+247
+00:11:10,200 --> 00:11:13,549
+my understanding of the ACNE protocols is just purely the technical side.
+
+248
+00:11:13,559 --> 00:11:17,190
+It doesn't, for example, have like payment stuff built into it.
+
+249
+00:11:17,479 --> 00:11:20,330
+It has the ability to connect to a payment system.
+
+250
+00:11:20,340 --> 00:11:22,559
+So we made sure to do that so that commercial CAS
+
+251
+00:11:22,760 --> 00:11:25,270
+could also use the protocol. So
+
+252
+00:11:25,380 --> 00:11:28,580
+commercial CCAS are a really important part of the ecosystem.
+
+253
+00:11:28,590 --> 00:11:30,479
+They provide a lot of things that we don't,
+
+254
+00:11:30,580 --> 00:11:33,390
+they're really important part of the ecosystem and we want to make sure that
+
+255
+00:11:33,679 --> 00:11:37,929
+they're also doing things in the, in the best way possible
+
+256
+00:11:38,080 --> 00:11:40,340
+and coming up with a certificate issuance
+
+257
+00:11:40,349 --> 00:11:42,200
+and management protocol is really difficult.
+
+258
+00:11:42,210 --> 00:11:44,679
+It's, it's really hard to secure those things.
+
+259
+00:11:45,299 --> 00:11:49,080
+Um, we've had a lot of industry experts. Look at our protocol.
+
+260
+00:11:49,090 --> 00:11:52,669
+We have paid for formal validation, cryptographic validation.
+
+261
+00:11:52,679 --> 00:11:57,760
+We've paid for many audits of the protocol. This protocol is, is pretty,
+
+262
+00:11:58,059 --> 00:12:01,739
+pretty well vetted about, as about as well as you can do. Right.
+
+263
+00:12:01,750 --> 00:12:04,969
+I mean, there's always a potential for a problem but it's, it's a really
+
+264
+00:12:05,400 --> 00:12:07,320
+well developped protocol and
+
+265
+00:12:07,609 --> 00:12:10,679
+it would be better for everybody if we all just used
+
+266
+00:12:10,909 --> 00:12:12,919
+Acme instead of inventing our own
+
+267
+00:12:13,359 --> 00:12:14,739
+proprietary protocol,
+
+268
+00:12:14,750 --> 00:12:17,989
+that doesn't get that kind of community review and industry review.
+
+269
+00:12:18,000 --> 00:12:18,630
+So
+
+270
+00:12:18,789 --> 00:12:22,250
+we'd like to see standardization on ACNE for security reasons.
+
+271
+00:12:22,260 --> 00:12:25,359
+But also because it makes life much easier for people who are
+
+272
+00:12:25,599 --> 00:12:27,590
+getting and managing certificates, right?
+
+273
+00:12:27,710 --> 00:12:30,739
+So if all software works with Acne Cas,
+
+274
+00:12:31,119 --> 00:12:34,580
+then you can just pick and choose whatever C A you want to get a cert from
+
+275
+00:12:34,900 --> 00:12:36,599
+aim your software at that and go.
+
+276
+00:12:37,059 --> 00:12:40,429
+So interoperability and security are really important reasons why we
+
+277
+00:12:40,440 --> 00:12:43,000
+would like the C A industry to standardize an Acne.
+
+278
+00:12:43,169 --> 00:12:44,710
+That is fantastic.
+
+279
+00:12:44,719 --> 00:12:44,820
+Now,
+
+280
+00:12:44,830 --> 00:12:46,809
+you said something that's kind of spiked my interest
+
+281
+00:12:46,820 --> 00:12:49,039
+a little bit is you mentioned about having a
+
+282
+00:12:49,330 --> 00:12:54,960
+healthy C A ecosystem with kind of traditional commercial players that exist is
+
+283
+00:12:55,400 --> 00:12:59,280
+I, I guess I don't understand some of the goals of your organization.
+
+284
+00:12:59,289 --> 00:13:03,380
+So explain to me kind of what is the vision you see in terms of of
+
+285
+00:13:03,549 --> 00:13:05,140
+the let's encrypt service
+
+286
+00:13:05,510 --> 00:13:08,969
+with, with existing, you know, kind of four pay cas.
+
+287
+00:13:09,469 --> 00:13:10,059
+Sure.
+
+288
+00:13:10,270 --> 00:13:14,520
+So our goal at let's encrypt is to provide a free certificate to
+
+289
+00:13:14,530 --> 00:13:17,500
+people anywhere in the world in a really easy to use way.
+
+290
+00:13:17,830 --> 00:13:20,979
+I think that's an essential part of moving forward with the web.
+
+291
+00:13:20,989 --> 00:13:23,809
+If you want to have 100% encrypted way web,
+
+292
+00:13:24,179 --> 00:13:27,640
+you can't require everybody on the web to pay for a certificate
+
+293
+00:13:28,409 --> 00:13:32,229
+and you can't require everybody on the web to be an expert who can, you know,
+
+294
+00:13:32,239 --> 00:13:35,130
+bre easily generate CS RS anytime they
+
+295
+00:13:35,340 --> 00:13:35,549
+want.
+
+296
+00:13:35,780 --> 00:13:37,510
+But you also need to support
+
+297
+00:13:37,780 --> 00:13:38,700
+people who, who
+
+298
+00:13:39,020 --> 00:13:40,309
+have other needs.
+
+299
+00:13:41,150 --> 00:13:42,500
+And at less encrypt, you know,
+
+300
+00:13:42,510 --> 00:13:45,599
+we work really hard to work at volume and keep things simple.
+
+301
+00:13:45,609 --> 00:13:45,960
+But
+
+302
+00:13:46,280 --> 00:13:49,250
+people have means that lots encrypt doesn't satisfy, right.
+
+303
+00:13:49,260 --> 00:13:53,080
+So for example, we have one certificate lifetime, 90 days
+
+304
+00:13:53,450 --> 00:13:55,039
+if you want another lifetime.
+
+305
+00:13:55,049 --> 00:13:58,080
+So I talked to a Fortune 500 company the other day that said
+
+306
+00:13:58,590 --> 00:14:01,840
+we would actually like lifetimes to be five weeks.
+
+307
+00:14:02,340 --> 00:14:05,799
+And at the moment, we don't support that. We're not able to
+
+308
+00:14:06,719 --> 00:14:10,179
+tailor what we do to particular individual subscribers.
+
+309
+00:14:10,580 --> 00:14:12,510
+But that company is able to go to one of
+
+310
+00:14:12,520 --> 00:14:15,380
+a number of commercial cas and say here are my needs
+
+311
+00:14:15,750 --> 00:14:17,380
+and they'll cater to them.
+
+312
+00:14:18,320 --> 00:14:24,059
+Another thing that we don't offer directly is direct support. So if you,
+
+313
+00:14:24,869 --> 00:14:27,059
+if you really want to be able to call someone up
+
+314
+00:14:27,650 --> 00:14:31,260
+two in the morning and talk about your certain issues you're having with it.
+
+315
+00:14:32,330 --> 00:14:35,059
+We're not, we're not going to be able to do that. We have,
+
+316
+00:14:35,450 --> 00:14:36,309
+you know, we,
+
+317
+00:14:36,320 --> 00:14:40,869
+we help secure something around 70 million websites and we've got a staff of
+
+318
+00:14:41,200 --> 00:14:44,359
+12 people full time. That's awesome. So,
+
+319
+00:14:44,960 --> 00:14:46,390
+support is not really
+
+320
+00:14:46,710 --> 00:14:48,950
+direct support is not really something we can do.
+
+321
+00:14:48,960 --> 00:14:50,669
+We do have great community support.
+
+322
+00:14:50,679 --> 00:14:52,460
+So we have community forums and we have a
+
+323
+00:14:52,469 --> 00:14:54,950
+huge community that does a great job answering questions
+
+324
+00:14:55,659 --> 00:14:57,510
+and that works really well. But it's not,
+
+325
+00:14:57,710 --> 00:14:59,340
+they're not people that you can call up,
+
+326
+00:14:59,890 --> 00:15:01,880
+you know, whatever you want and talk about sort,
+
+327
+00:15:02,630 --> 00:15:04,659
+whereas commercial providers
+
+328
+00:15:04,929 --> 00:15:06,299
+provide really great support
+
+329
+00:15:06,549 --> 00:15:07,799
+or many of them do.
+
+330
+00:15:08,590 --> 00:15:10,340
+So if that's something you need, you know,
+
+331
+00:15:10,349 --> 00:15:12,289
+commercial provider can make a lot of sense.
+
+332
+00:15:12,659 --> 00:15:15,890
+There's other cert types. Um Ovev,
+
+333
+00:15:16,580 --> 00:15:17,210
+we don't do that.
+
+334
+00:15:17,219 --> 00:15:18,729
+Those are, are just,
+
+335
+00:15:18,739 --> 00:15:23,090
+there's three basic kinds of certs we offer DVOV and EV are different,
+
+336
+00:15:23,549 --> 00:15:24,510
+different types of certs.
+
+337
+00:15:24,520 --> 00:15:27,729
+We don't offer those if that's what you want, commercial providers can do that.
+
+338
+00:15:28,330 --> 00:15:30,010
+The main reason we don't offer them
+
+339
+00:15:30,289 --> 00:15:31,890
+is because they can't be automated
+
+340
+00:15:32,919 --> 00:15:35,289
+so they don't scale very well. But if that's what you want,
+
+341
+00:15:35,729 --> 00:15:38,039
+commercial providers are happy to help you. So
+
+342
+00:15:38,710 --> 00:15:39,799
+there's a lot of, you know,
+
+343
+00:15:39,809 --> 00:15:42,929
+we talked a lot about diversity of deployment environments already.
+
+344
+00:15:43,059 --> 00:15:46,530
+That also means that people have different needs for CAS and, and we need
+
+345
+00:15:46,969 --> 00:15:49,239
+a number of different cas out there to fill those needs.
+
+346
+00:15:50,219 --> 00:15:51,710
+So, just a quick note for our listeners.
+
+347
+00:15:51,719 --> 00:15:52,320
+So the,
+
+348
+00:15:52,330 --> 00:15:56,880
+the three different kinds of validation are DVOV and EV and DV is domain validated,
+
+349
+00:15:56,890 --> 00:15:58,900
+which is literally a fancy way of saying,
+
+350
+00:15:59,210 --> 00:16:01,359
+you know, this site claims to be cre.org and
+
+351
+00:16:01,489 --> 00:16:02,070
+it is
+
+352
+00:16:02,359 --> 00:16:03,859
+cre.org as far as we can tell
+
+353
+00:16:04,010 --> 00:16:07,969
+OV is organizational validated and there, they're actually validating, you know,
+
+354
+00:16:07,979 --> 00:16:10,239
+the organization that's getting the
+
+355
+00:16:10,570 --> 00:16:11,559
+certificate that, you know,
+
+356
+00:16:11,570 --> 00:16:15,369
+that organization is actually Walmart or some bank or something.
+
+357
+00:16:15,570 --> 00:16:17,440
+And then EV is extended validation.
+
+358
+00:16:18,440 --> 00:16:19,340
+And, uh,
+
+359
+00:16:20,159 --> 00:16:23,940
+I'm not really clear on how it's that much different than OV, to be honest,
+
+360
+00:16:23,950 --> 00:16:24,859
+I don't know if, you know,
+
+361
+00:16:25,049 --> 00:16:25,619
+um,
+
+362
+00:16:26,130 --> 00:16:28,739
+but fundamentally for like 99% of the world,
+
+363
+00:16:29,179 --> 00:16:30,950
+we use domain validated certificates.
+
+364
+00:16:30,960 --> 00:16:33,169
+And, uh, I mean, a great example of this is Amazon,
+
+365
+00:16:33,179 --> 00:16:36,710
+like Amazon doesn't even bother to use the fancier certificates.
+
+366
+00:16:36,719 --> 00:16:39,059
+They just use a domain validated certificate.
+
+367
+00:16:39,179 --> 00:16:41,960
+And, um, so that I guess leads to my next question,
+
+368
+00:16:41,969 --> 00:16:44,840
+which was so obviously let's encrypt and, you know, CBOT
+
+369
+00:16:45,030 --> 00:16:49,409
+will work for public facing websites that have a, a public name, right?
+
+370
+00:16:50,390 --> 00:16:55,419
+Uh Is there any plan support or is there any way to get, you know,
+
+371
+00:16:55,429 --> 00:16:58,489
+free certificates for internal facing websites that,
+
+372
+00:16:58,940 --> 00:17:02,409
+you know, may not have a public name or may not even have a name at all and maybe just,
+
+373
+00:17:02,419 --> 00:17:05,250
+you know, an IP address of, you know, 10.0 0.0 0.1.
+
+374
+00:17:05,608 --> 00:17:06,530
+Yeah. So
+
+375
+00:17:07,060 --> 00:17:09,770
+there's one thing that people can do today, which is
+
+376
+00:17:10,108 --> 00:17:13,569
+we can validate your domain using DNS records.
+
+377
+00:17:13,579 --> 00:17:18,449
+So one option you have today is to create a public DNS record for your server
+
+378
+00:17:18,739 --> 00:17:22,680
+and then validate by putting the validation information in the DNS record.
+
+379
+00:17:22,969 --> 00:17:26,150
+And then we don't actually need to connect to the server to validate.
+
+380
+00:17:26,439 --> 00:17:27,040
+So
+
+381
+00:17:27,280 --> 00:17:30,709
+let me take a step back here and say that there's three ways that, well,
+
+382
+00:17:30,719 --> 00:17:33,469
+two ways that we can do domain validation right now,
+
+383
+00:17:33,780 --> 00:17:36,800
+one is that we can contact the server and
+
+384
+00:17:37,160 --> 00:17:41,069
+have the server do something special to demonstrate that the server actually,
+
+385
+00:17:41,560 --> 00:17:43,359
+you know, is controlling the domain.
+
+386
+00:17:43,939 --> 00:17:45,400
+The other way is we can
+
+387
+00:17:45,709 --> 00:17:48,810
+check your control the domain by checking DNS records.
+
+388
+00:17:49,119 --> 00:17:54,000
+So the advantage of DNS records is that we don't actually have to talk to the server.
+
+389
+00:17:54,010 --> 00:17:57,599
+So you can make a public DNS record for a server with the domain.
+
+390
+00:17:58,329 --> 00:17:58,939
+And then
+
+391
+00:17:59,270 --> 00:18:01,849
+we don't care what IP address is pointing at because
+
+392
+00:18:01,859 --> 00:18:03,510
+we don't actually need to talk to the server.
+
+393
+00:18:03,520 --> 00:18:06,790
+We have, you do special things with the DNS record itself.
+
+394
+00:18:07,040 --> 00:18:08,989
+The downside of that is that it's harder to
+
+395
+00:18:09,000 --> 00:18:11,949
+automate management of DNS than it is to automate
+
+396
+00:18:13,030 --> 00:18:15,209
+certain things about the web server itself.
+
+397
+00:18:15,800 --> 00:18:19,250
+So that's the solution that's available today is to validate
+
+398
+00:18:19,260 --> 00:18:21,890
+with a public DNS record for an internal server.
+
+399
+00:18:22,209 --> 00:18:23,150
+And we know a lot of companies
+
+400
+00:18:23,329 --> 00:18:24,010
+that do that
+
+401
+00:18:24,310 --> 00:18:26,930
+we have heard a lot of demand for
+
+402
+00:18:27,300 --> 00:18:29,109
+the space in general to make it even
+
+403
+00:18:29,119 --> 00:18:32,160
+easier for people to validate for internal servers.
+
+404
+00:18:32,439 --> 00:18:34,880
+It's a difficult problem. We are
+
+405
+00:18:35,550 --> 00:18:37,189
+thinking about it and
+
+406
+00:18:37,719 --> 00:18:39,930
+I wouldn't be surprised if it's something we
+
+407
+00:18:40,060 --> 00:18:41,729
+try to work on more in the future.
+
+408
+00:18:42,040 --> 00:18:46,170
+That, that is fantastic. In fact, I just had a conversation about this the other day
+
+409
+00:18:46,479 --> 00:18:50,650
+because one of the challenges you get when you're doing some internal TLS
+
+410
+00:18:50,979 --> 00:18:55,010
+is your options are basically give a user ac A
+
+411
+00:18:55,290 --> 00:18:57,930
+that they have to somehow import into their client,
+
+412
+00:18:58,260 --> 00:18:59,750
+which let's face it.
+
+413
+00:18:59,760 --> 00:19:02,219
+Most people just end up with like a root C A that trusts
+
+414
+00:19:02,229 --> 00:19:05,739
+star which ends up making you substantially less secure if you do that
+
+415
+00:19:06,150 --> 00:19:08,989
+or we train users to click the Yeah, everything's fine here.
+
+416
+00:19:09,000 --> 00:19:12,719
+Go away http S warning, which is also not good behavior.
+
+417
+00:19:12,729 --> 00:19:15,839
+And so this is, this is a super annoying problem, honestly.
+
+418
+00:19:15,930 --> 00:19:17,479
+Yeah, we, we talked to some,
+
+419
+00:19:17,489 --> 00:19:21,500
+some large companies about this including large financial companies and they say,
+
+420
+00:19:21,510 --> 00:19:23,640
+you know, we're really trying to secure our networks,
+
+421
+00:19:23,650 --> 00:19:27,280
+but we've got 5000 internal servers that don't use TLS.
+
+422
+00:19:28,199 --> 00:19:28,959
+And
+
+423
+00:19:29,900 --> 00:19:32,560
+that's a, you know, that's a tough problem to deal with.
+
+424
+00:19:32,880 --> 00:19:35,760
+So I'm curious, what do you think? Because uh so actually uh what is it?
+
+425
+00:19:35,770 --> 00:19:38,500
+April 30th chrome is making one change where
+
+426
+00:19:38,680 --> 00:19:41,469
+they're going to require certificates to be in the, you know,
+
+427
+00:19:41,479 --> 00:19:43,910
+in at least two of the certificate, transparency logs.
+
+428
+00:19:44,250 --> 00:19:49,910
+Uh and then Chrome uh Google has also said that in uh what is it July of 2018.
+
+429
+00:19:49,920 --> 00:19:52,359
+So this summer build 68 of chrome
+
+430
+00:19:52,689 --> 00:19:56,550
+is, you know, rather than labeling http S websites as secure,
+
+431
+00:19:56,760 --> 00:20:00,910
+it's going to start labeling http websites as insecure
+
+432
+00:20:01,439 --> 00:20:04,109
+sort of flipping the the default as it were from, you know,
+
+433
+00:20:04,339 --> 00:20:08,910
+being secure is good to being insecure or being HTTP is bad.
+
+434
+00:20:09,209 --> 00:20:11,140
+Uh So I'm curious what you think about this.
+
+435
+00:20:11,189 --> 00:20:14,430
+That's a really important step that chrome is taking to label
+
+436
+00:20:14,540 --> 00:20:17,329
+playing HTP sites is not secure.
+
+437
+00:20:18,339 --> 00:20:19,369
+When I think about,
+
+438
+00:20:19,800 --> 00:20:23,099
+you know, the biggest day to day security disasters, we have
+
+439
+00:20:24,040 --> 00:20:27,420
+one of the biggest ones is that right now when you visit a web page
+
+440
+00:20:27,780 --> 00:20:28,780
+in a web browser
+
+441
+00:20:29,099 --> 00:20:30,560
+and it's not using
+
+442
+00:20:30,939 --> 00:20:32,219
+htps,
+
+443
+00:20:32,540 --> 00:20:34,979
+the browser just acts like everything is totally fine.
+
+444
+00:20:35,390 --> 00:20:39,290
+-- That's
+-- everything is fine, right? Nothing to see here. Move along.
+
+445
+00:20:39,930 --> 00:20:40,699
+Yeah,
+
+446
+00:20:41,270 --> 00:20:43,579
+all of the web browsers are really,
+
+447
+00:20:43,839 --> 00:20:46,459
+really take security seriously, right? Like they've got
+
+448
+00:20:46,859 --> 00:20:48,900
+engineers who are constantly making security
+
+449
+00:20:48,910 --> 00:20:51,420
+fixes thinking really hard about security.
+
+450
+00:20:51,430 --> 00:20:53,189
+But then when we visit a site that's spraying
+
+451
+00:20:53,199 --> 00:20:55,839
+your information all over the web with no security,
+
+452
+00:20:56,349 --> 00:21:00,750
+the browser really just says nothing about it. Everything is fine here, you know,
+
+453
+00:21:01,229 --> 00:21:04,089
+so it's really important that browsers start seeing something about it.
+
+454
+00:21:04,349 --> 00:21:06,780
+In addition to keeping people more informed,
+
+455
+00:21:06,790 --> 00:21:09,260
+it has a it's going to have a big impact on
+
+456
+00:21:09,619 --> 00:21:11,780
+how many sites use htps,
+
+457
+00:21:12,109 --> 00:21:12,300
+you know,
+
+458
+00:21:12,310 --> 00:21:15,359
+the availability of something like lots and crypt that makes it free and easy
+
+459
+00:21:15,369 --> 00:21:17,939
+to get a certificate will motivate a bunch of people to do it.
+
+460
+00:21:17,949 --> 00:21:23,660
+Well, not just that, I mean, I think outside of motivation, if you guys didn't exist
+
+461
+00:21:24,270 --> 00:21:28,640
+Chrome and Firefox couldn't take these actions, right?
+
+462
+00:21:28,650 --> 00:21:33,180
+Just because I, I think the bar was unnecessarily high prior to let's encrypt.
+
+463
+00:21:33,560 --> 00:21:36,060
+Yeah. So the game plan all along has been
+
+464
+00:21:36,229 --> 00:21:40,250
+for us to do as much as we can to deliver the browsers,
+
+465
+00:21:40,260 --> 00:21:43,410
+the numbers that they need to make this kind of thing possible.
+
+466
+00:21:43,420 --> 00:21:46,599
+They don't want to create warning fatigue for their users.
+
+467
+00:21:46,609 --> 00:21:48,900
+So they don't want to show a warning on every single
+
+468
+00:21:48,910 --> 00:21:51,619
+web page because then people just start ignoring the warning.
+
+469
+00:21:52,229 --> 00:21:55,900
+So the warning has to be rare enough that people don't start ignoring it. Our
+
+470
+00:21:56,060 --> 00:21:57,920
+job is to give the browsers that
+
+471
+00:21:58,619 --> 00:22:01,280
+the numbers that they need to start turning in on those
+
+472
+00:22:01,290 --> 00:22:04,500
+warnings and then make them more and more severe over time.
+
+473
+00:22:04,770 --> 00:22:08,810
+Well, and one thing I noticed too with chrome was that they were going to um
+
+474
+00:22:09,050 --> 00:22:13,030
+with the uh the transparency log stuff in April. They said basically
+
+475
+00:22:13,260 --> 00:22:17,430
+the main page will if it's corrected a load and if it's, you know, not
+
+476
+00:22:17,630 --> 00:22:20,339
+corrected will you'll get a warning but be able to click through.
+
+477
+00:22:20,479 --> 00:22:21,359
+But that the
+
+478
+00:22:21,540 --> 00:22:23,859
+third party elements embedded in that page,
+
+479
+00:22:23,869 --> 00:22:27,180
+which let's face it as a fancy way of saying like ad networks and stuff
+
+480
+00:22:27,729 --> 00:22:29,150
+simply will not be loaded.
+
+481
+00:22:29,510 --> 00:22:32,310
+And that struck me as a really kind of good
+
+482
+00:22:32,510 --> 00:22:36,390
+decision because, you know, you're no longer sending an alarm to the user.
+
+483
+00:22:36,400 --> 00:22:37,349
+It's just like, you know what this,
+
+484
+00:22:37,359 --> 00:22:41,319
+this third party element that the page wants to load, it's not secure.
+
+485
+00:22:41,329 --> 00:22:43,680
+So, or it's not, you know, in the transparency logs.
+
+486
+00:22:43,689 --> 00:22:45,199
+So we're just not going to load it right?
+
+487
+00:22:45,209 --> 00:22:47,300
+We're not going to tell the user we're not going to bug the user.
+
+488
+00:22:47,699 --> 00:22:48,270
+Um
+
+489
+00:22:48,910 --> 00:22:52,810
+And I'm wondering maybe if that's part of the way forwards is, you know,
+
+490
+00:22:52,989 --> 00:22:54,130
+to essentially just
+
+491
+00:22:54,660 --> 00:22:55,239
+uh
+
+492
+00:22:55,849 --> 00:22:58,170
+not bug the user and just not load the content.
+
+493
+00:22:59,160 --> 00:23:03,290
+Yeah. So there's, there are a lot of things that can evolve and how
+
+494
+00:23:03,920 --> 00:23:07,079
+web browsers behave and display information to users.
+
+495
+00:23:07,339 --> 00:23:07,989
+I think it,
+
+496
+00:23:08,489 --> 00:23:12,270
+the more they do to not load not secure content. The better
+
+497
+00:23:12,560 --> 00:23:13,319
+I think,
+
+498
+00:23:13,609 --> 00:23:17,800
+you know, the first big step here is to label plain HTP sites
+
+499
+00:23:17,959 --> 00:23:19,150
+as not secure.
+
+500
+00:23:19,420 --> 00:23:22,219
+I think another important step that's gonna have to happen down this
+
+501
+00:23:22,229 --> 00:23:25,219
+road is that the lock icon is gonna need to go away.
+
+502
+00:23:25,760 --> 00:23:27,819
+So right now you see a lock icon
+
+503
+00:23:28,020 --> 00:23:30,099
+when a page uses H gps,
+
+504
+00:23:30,410 --> 00:23:33,880
+that lock icon really overpromise things for users.
+
+505
+00:23:33,979 --> 00:23:37,619
+So when you see that lock icon, you might think, oh, this web page is secure,
+
+506
+00:23:37,949 --> 00:23:40,819
+it doesn't mean that it's secure or safe necessarily.
+
+507
+00:23:40,949 --> 00:23:43,339
+It doesn't mean that the contents of the web page are safe.
+
+508
+00:23:43,349 --> 00:23:44,989
+It doesn't mean you're not gonna get scammed.
+
+509
+00:23:45,000 --> 00:23:47,020
+It doesn't mean you're not gonna get malware.
+
+510
+00:23:47,319 --> 00:23:48,420
+It doesn't mean that,
+
+511
+00:23:49,089 --> 00:23:51,530
+you know, the people operating the site aren't criminals.
+
+512
+00:23:51,750 --> 00:23:53,979
+It just means that you have a secure connection
+
+513
+00:23:53,989 --> 00:23:55,670
+to whoever's on the other end of the line.
+
+514
+00:23:55,839 --> 00:23:58,650
+And I think people really don't understand that point.
+
+515
+00:23:59,089 --> 00:23:59,329
+Yeah.
+
+516
+00:23:59,339 --> 00:24:04,300
+Seriously, man, I, I, that comes up all the time when I talk to non technical users.
+
+517
+00:24:04,310 --> 00:24:04,890
+Is there
+
+518
+00:24:05,050 --> 00:24:07,609
+like, oh, it has a lock, it's fine and it's like,
+
+519
+00:24:07,770 --> 00:24:09,109
+yep, sure is.
+
+520
+00:24:09,729 --> 00:24:13,670
+It's not even worth trying to explain it to them because it's so complicated and,
+
+521
+00:24:13,680 --> 00:24:14,489
+and I feel like
+
+522
+00:24:14,939 --> 00:24:17,890
+what, what you're talking about is totally correct of just,
+
+523
+00:24:18,170 --> 00:24:18,449
+yeah,
+
+524
+00:24:18,459 --> 00:24:20,810
+stop showing it to people because it provides a
+
+525
+00:24:20,819 --> 00:24:23,189
+false sense of security which is super dangerous,
+
+526
+00:24:23,199 --> 00:24:23,849
+obviously.
+
+527
+00:24:24,300 --> 00:24:28,729
+Yeah. H gps shouldn't have a lock. Htps should be the new normal, right?
+
+528
+00:24:29,520 --> 00:24:34,040
+What you see today is your browser looks normal when there's no security.
+
+529
+00:24:34,050 --> 00:24:38,479
+When there's no htps, we need the normal state to be secure
+
+530
+00:24:39,189 --> 00:24:42,829
+and get rid of the lock icon because I think it's really confusing to people.
+
+531
+00:24:43,109 --> 00:24:44,900
+I agree 100%.
+
+532
+00:24:45,199 --> 00:24:46,459
+That's, that's awesome.
+
+533
+00:24:46,650 --> 00:24:49,050
+-- It'll take some time, but I think we'll get there
+-- because I,
+
+534
+00:24:49,060 --> 00:24:52,859
+so I was looking at htps adoption and it's um from all the sources,
+
+535
+00:24:52,869 --> 00:24:54,339
+I found it's essentially
+
+536
+00:24:55,010 --> 00:24:55,020
+a
+
+537
+00:24:55,280 --> 00:24:56,250
+pretty
+
+538
+00:24:56,489 --> 00:24:59,160
+like steady line headed up, which is good,
+
+539
+00:24:59,170 --> 00:25:02,589
+but like the slope on that line is not what you would call steep.
+
+540
+00:25:03,459 --> 00:25:07,390
+And I'm wondering, um, like, what's the adoption you've seen?
+
+541
+00:25:07,400 --> 00:25:12,469
+Has it been sort of slow and steady or have there been upticks as these things change?
+
+542
+00:25:13,130 --> 00:25:15,729
+Like, are you expecting basically this summer to get hammered when you know,
+
+543
+00:25:15,739 --> 00:25:17,069
+all the site operators
+
+544
+00:25:17,199 --> 00:25:18,709
+have their users freak out on them?
+
+545
+00:25:19,550 --> 00:25:21,489
+I do expect our traffic to grow.
+
+546
+00:25:21,699 --> 00:25:25,979
+Um I, I expect it to grow pretty significantly as a result of,
+
+547
+00:25:26,010 --> 00:25:27,989
+of this change in the chrome U I.
+
+548
+00:25:28,189 --> 00:25:30,609
+Once people see their site label is not secure,
+
+549
+00:25:30,619 --> 00:25:33,109
+they're probably gonna start running around trying to figure out
+
+550
+00:25:33,219 --> 00:25:34,569
+the fastest way to get a certain.
+
+551
+00:25:34,579 --> 00:25:36,819
+And I think for a lot of people that's gonna be less encrypt.
+
+552
+00:25:37,079 --> 00:25:39,810
+I think the the really important number though is not
+
+553
+00:25:40,459 --> 00:25:42,760
+how many certs we issue because
+
+554
+00:25:43,130 --> 00:25:43,680
+that
+
+555
+00:25:43,930 --> 00:25:45,520
+doesn't have a ton of context, right?
+
+556
+00:25:45,530 --> 00:25:49,839
+It it matters for our capacity planning, but the really important numbers
+
+557
+00:25:49,939 --> 00:25:50,719
+and I think
+
+558
+00:25:51,050 --> 00:25:53,069
+these numbers are really impressive is that
+
+559
+00:25:53,609 --> 00:25:54,949
+when LUTS and crypts started
+
+560
+00:25:55,810 --> 00:25:57,430
+just under 40%
+
+561
+00:25:57,760 --> 00:25:59,349
+of page loads on the web.
+
+562
+00:25:59,390 --> 00:26:04,290
+So every time someone loads a page that's a page load, just under 40% of the time
+
+563
+00:26:04,510 --> 00:26:06,630
+page loads used H gps.
+
+564
+00:26:06,939 --> 00:26:07,750
+And that's
+
+565
+00:26:08,050 --> 00:26:09,910
+I think December 2015,
+
+566
+00:26:10,560 --> 00:26:14,270
+so late 2015 and that's 20 years of progress. So
+
+567
+00:26:14,420 --> 00:26:17,150
+SSL had been around for about 20 years at that point
+
+568
+00:26:17,609 --> 00:26:20,109
+that 20 years of progress. So on average
+
+569
+00:26:20,430 --> 00:26:21,920
+2% points a year.
+
+570
+00:26:22,099 --> 00:26:23,630
+That's how things were increasing
+
+571
+00:26:23,969 --> 00:26:26,920
+since then in the two, in, in a little over two years.
+
+572
+00:26:26,930 --> 00:26:29,349
+Since then, we're now passing 70%.
+
+573
+00:26:29,699 --> 00:26:34,550
+So we're doing around 15% per year right now
+
+574
+00:26:34,849 --> 00:26:37,979
+in increased htps usage in terms of page loads.
+
+575
+00:26:37,989 --> 00:26:41,300
+And now do you guys know what percentage of that is? You?
+
+576
+00:26:41,619 --> 00:26:42,800
+It's hard to say, right?
+
+577
+00:26:42,810 --> 00:26:47,000
+A lot of people put a lot of work into promoting a gps, you know,
+
+578
+00:26:47,010 --> 00:26:48,670
+browsers play a big role.
+
+579
+00:26:48,949 --> 00:26:51,219
+Come on, man, I just gave you a huge opportunity to take
+
+580
+00:26:51,439 --> 00:26:51,459
+up
+
+581
+00:26:51,800 --> 00:26:52,319
+here. Right.
+
+582
+00:26:52,729 --> 00:26:53,160
+Yeah,
+
+583
+00:26:53,489 --> 00:26:53,959
+I mean,
+
+584
+00:26:53,969 --> 00:26:59,069
+I think there is a big uptick in that number literally the day LS Encrypt launches.
+
+585
+00:26:59,079 --> 00:27:02,439
+So there is no question that we are a major driver of that growth.
+
+586
+00:27:03,099 --> 00:27:06,260
+Exactly how much I can take credit for, for lots encrypt,
+
+587
+00:27:06,369 --> 00:27:10,439
+you know, I, I'm not totally sure, clearly, we are a major driver of that.
+
+588
+00:27:10,790 --> 00:27:11,319
+Right. Right.
+
+589
+00:27:11,640 --> 00:27:16,349
+So we're doing about 15% improvement per year on the web. And that's crazy. I mean,
+
+590
+00:27:16,739 --> 00:27:20,229
+I, I don't think that anything else has ever changed on the web
+
+591
+00:27:20,670 --> 00:27:24,709
+at 15% per year. That was so fundamental to how the web works, right?
+
+592
+00:27:25,119 --> 00:27:27,410
+Like you're changing all the bits on the wire and
+
+593
+00:27:27,420 --> 00:27:29,609
+you're moving the web at 15% a year right now.
+
+594
+00:27:29,619 --> 00:27:30,530
+That's crazy.
+
+595
+00:27:30,869 --> 00:27:33,849
+I mean, compare that to something like I PV six, right?
+
+596
+00:27:33,859 --> 00:27:39,209
+Which is a really, another really important thing that the web needs to move towards
+
+597
+00:27:39,619 --> 00:27:41,859
+and that kind of adoption is really slow.
+
+598
+00:27:41,869 --> 00:27:44,829
+It's really hard to change the internet how it works. Right.
+
+599
+00:27:44,839 --> 00:27:46,920
+There's a lot of legacy stuff out there.
+
+600
+00:27:47,170 --> 00:27:49,390
+It's expensive to change stuff at scale,
+
+601
+00:27:49,760 --> 00:27:53,540
+15% a year is a stunning rate of change and we're doing it
+
+602
+00:27:53,750 --> 00:27:56,859
+and at this pace, you know, we're going to be almost at 100% soon.
+
+603
+00:27:56,869 --> 00:28:01,300
+I, I think I would blame the web browsers for a lot of this because I mean,
+
+604
+00:28:01,310 --> 00:28:02,660
+look at web browsers today,
+
+605
+00:28:02,670 --> 00:28:04,750
+you you install your web browser and it
+
+606
+00:28:04,760 --> 00:28:07,050
+basically just takes care of itself after that,
+
+607
+00:28:07,060 --> 00:28:07,229
+right?
+
+608
+00:28:07,239 --> 00:28:09,410
+All the care and feeding is magic and
+
+609
+00:28:09,420 --> 00:28:11,780
+users are almost always running the latest version.
+
+610
+00:28:12,280 --> 00:28:13,140
+And I mean, heck man,
+
+611
+00:28:13,150 --> 00:28:16,319
+how long did IE six hang on where sites were concerned about supporting
+
+612
+00:28:16,329 --> 00:28:18,449
+it just because so many people were using it and it was,
+
+613
+00:28:18,709 --> 00:28:19,930
+it was embarrassing,
+
+614
+00:28:20,069 --> 00:28:21,439
+right? Whereas now
+
+615
+00:28:21,550 --> 00:28:26,030
+I feel like with the way what you see with Safari, Firefox and Chrome is, you know,
+
+616
+00:28:26,040 --> 00:28:28,599
+you're along for the ride whether you want to or not.
+
+617
+00:28:28,609 --> 00:28:32,430
+So you can start doing some of these interesting things because you
+
+618
+00:28:32,439 --> 00:28:36,619
+don't worry about people being stuck on some obscenely old version anymore,
+
+619
+00:28:36,630 --> 00:28:37,060
+right?
+
+620
+00:28:37,459 --> 00:28:37,619
+Yeah.
+
+621
+00:28:37,630 --> 00:28:37,869
+Well,
+
+622
+00:28:37,880 --> 00:28:41,790
+browsers are actually a relatively easy way to move things for the
+
+623
+00:28:41,800 --> 00:28:45,540
+reason that you said they can quickly update many millions of people,
+
+624
+00:28:45,550 --> 00:28:45,979
+right?
+
+625
+00:28:46,489 --> 00:28:48,810
+The problem is when you need to take it make a change to
+
+626
+00:28:48,819 --> 00:28:53,189
+the web that requires action on behalf of people who run web servers
+
+627
+00:28:53,650 --> 00:28:57,260
+because that's not on the auto update train. Right? Like, yeah, that's fair.
+
+628
+00:28:57,270 --> 00:28:57,729
+That's fair.
+
+629
+00:28:57,739 --> 00:29:00,959
+There's tons of different kinds of web servers and web server software.
+
+630
+00:29:00,969 --> 00:29:04,609
+If you need everyone who runs a server to act, to make change on the web,
+
+631
+00:29:05,119 --> 00:29:06,739
+that is really difficult to do.
+
+632
+00:29:07,030 --> 00:29:08,989
+Well, I'm curious what's because that I've,
+
+633
+00:29:09,489 --> 00:29:11,619
+that used to be definitely 100% true.
+
+634
+00:29:11,630 --> 00:29:13,140
+But now, you know, for example,
+
+635
+00:29:13,150 --> 00:29:15,800
+with cloud flare or actually I just noticed um
+
+636
+00:29:15,810 --> 00:29:17,689
+a few months ago when Amazon web services,
+
+637
+00:29:17,699 --> 00:29:19,420
+they have the certificate manager now
+
+638
+00:29:19,699 --> 00:29:24,140
+with well effectively free certificates. A similar model is less encrypt.
+
+639
+00:29:24,150 --> 00:29:25,939
+You have to register your domain and kind of prove that
+
+640
+00:29:25,949 --> 00:29:28,310
+you own it and every what is it quarter roughly.
+
+641
+00:29:28,319 --> 00:29:29,530
+So I think it's 90 days,
+
+642
+00:29:29,770 --> 00:29:31,959
+you know, they reissue the certificates.
+
+643
+00:29:32,099 --> 00:29:36,619
+So it's definitely some of the large providers are definitely addressing this.
+
+644
+00:29:36,829 --> 00:29:38,910
+And I mean, is that a general trend
+
+645
+00:29:39,060 --> 00:29:41,630
+you're seeing in the industry or is that kind of
+
+646
+00:29:41,640 --> 00:29:43,589
+limited to a few of these large players that,
+
+647
+00:29:43,599 --> 00:29:45,689
+you know, are typically a bit ahead of everybody?
+
+648
+00:29:45,819 --> 00:29:48,199
+Yeah. So centralization in terms of
+
+649
+00:29:48,729 --> 00:29:50,369
+how web servers are managed
+
+650
+00:29:51,310 --> 00:29:53,880
+definitely makes it easier to make change, right? When,
+
+651
+00:29:54,359 --> 00:29:56,060
+when Amazon has
+
+652
+00:29:56,180 --> 00:30:00,250
+control over so many web servers, they really have the ability to promote change
+
+653
+00:30:00,540 --> 00:30:01,910
+relatively easily, right?
+
+654
+00:30:01,920 --> 00:30:04,199
+You're not talking about a million individual assist
+
+655
+00:30:04,239 --> 00:30:06,030
+admins running the server under their desk.
+
+656
+00:30:06,040 --> 00:30:08,540
+Now you're talking about everything centralized in
+
+657
+00:30:08,550 --> 00:30:10,459
+one platform where you can sort of
+
+658
+00:30:11,040 --> 00:30:13,310
+apply medicine relatively easily.
+
+659
+00:30:13,689 --> 00:30:16,060
+So, centralization in web servers, you know,
+
+660
+00:30:16,069 --> 00:30:19,569
+does have the upside of making change easier.
+
+661
+00:30:20,199 --> 00:30:20,869
+So
+
+662
+00:30:22,079 --> 00:30:24,459
+we see big uptakes, for example, when
+
+663
+00:30:24,920 --> 00:30:28,900
+a large provider like, you know, squarespace or Wix or something like that,
+
+664
+00:30:28,910 --> 00:30:33,540
+there's many millions of websites on those platforms and they have the ability to
+
+665
+00:30:33,770 --> 00:30:36,859
+push a gps on those websites relatively easily.
+
+666
+00:30:37,239 --> 00:30:40,140
+And that's great. You can get 4 million websites
+
+667
+00:30:40,339 --> 00:30:41,920
+by working with one provider.
+
+668
+00:30:42,079 --> 00:30:43,099
+That's crazy.
+
+669
+00:30:43,459 --> 00:30:48,400
+So I I just realized something that when, when Kurt mentioned a quarterly,
+
+670
+00:30:48,410 --> 00:30:49,739
+quarterly refresh is,
+
+671
+00:30:49,979 --> 00:30:51,839
+so you said that your
+
+672
+00:30:51,979 --> 00:30:56,140
+expiration is 90 days, where did 90 days come from?
+
+673
+00:30:56,400 --> 00:30:58,180
+Well, the exact number of days,
+
+674
+00:30:58,449 --> 00:31:01,560
+I don't, you know, we picked 90 seemed like a good number.
+
+675
+00:31:01,569 --> 00:31:03,400
+It's a quarter, right quarter of a year.
+
+676
+00:31:03,650 --> 00:31:04,859
+The issue is that
+
+677
+00:31:05,050 --> 00:31:09,489
+long, so long certificate, lifetimes have some problems associated with them.
+
+678
+00:31:09,910 --> 00:31:10,579
+So,
+
+679
+00:31:11,150 --> 00:31:14,520
+an important thing to understand before we get into why 90 days
+
+680
+00:31:14,790 --> 00:31:15,349
+is
+
+681
+00:31:15,680 --> 00:31:17,739
+that revocation doesn't work.
+
+682
+00:31:17,910 --> 00:31:18,750
+So there's this kind,
+
+683
+00:31:18,920 --> 00:31:21,579
+there's this concept of revocation that you can
+
+684
+00:31:21,839 --> 00:31:25,729
+revoke a certificate, so you can take a valid certificate and if something happens,
+
+685
+00:31:25,739 --> 00:31:28,900
+you can revoke it and then people will consider it not to be valid
+
+686
+00:31:29,130 --> 00:31:31,689
+that doesn't work very well at all.
+
+687
+00:31:31,819 --> 00:31:34,699
+The main reason that doesn't work is because some web
+
+688
+00:31:34,709 --> 00:31:39,099
+browsers including Chrome don't check revocation status on a normal basis
+
+689
+00:31:39,290 --> 00:31:42,949
+except for a short list of revocations for really important sites.
+
+690
+00:31:43,140 --> 00:31:44,540
+But almost certainly,
+
+691
+00:31:44,660 --> 00:31:45,219
+you know,
+
+692
+00:31:45,949 --> 00:31:49,209
+sites that you and I are running are not important enough to be on that list.
+
+693
+00:31:49,900 --> 00:31:50,550
+So
+
+694
+00:31:50,800 --> 00:31:51,439
+if,
+
+695
+00:31:51,729 --> 00:31:52,790
+if you revoke a,
+
+696
+00:31:54,099 --> 00:31:55,880
+a certificate in general
+
+697
+00:31:56,239 --> 00:31:58,839
+chrome, for example, is not gonna see that revocation,
+
+698
+00:31:58,849 --> 00:32:02,479
+it's just gonna consider the cert to be valid until the cert expires.
+
+699
+00:32:02,489 --> 00:32:02,530
+So
+
+700
+00:32:02,869 --> 00:32:05,640
+that's the first reason that revocation is broken.
+
+701
+00:32:05,650 --> 00:32:09,709
+The second reason is even if you have a browser that does check revocation status
+
+702
+00:32:09,719 --> 00:32:14,300
+using a protocol called O CS PO CS P is a fail open protocol.
+
+703
+00:32:14,310 --> 00:32:16,359
+Meaning if you get no response,
+
+704
+00:32:16,479 --> 00:32:18,420
+it's considered a good response.
+
+705
+00:32:18,630 --> 00:32:19,459
+So there
+
+706
+00:32:19,660 --> 00:32:19,770
+the
+
+707
+00:32:21,025 --> 00:32:23,944
+is not a very effective way to deal with compromise
+
+708
+00:32:24,185 --> 00:32:26,785
+once a cert is issued, the reality is
+
+709
+00:32:27,114 --> 00:32:30,064
+you're stuck with that cert being valid until it expires.
+
+710
+00:32:30,464 --> 00:32:35,255
+Now, do you remember uh this compromise, the security issue called Heartbleed?
+
+711
+00:32:35,265 --> 00:32:36,614
+I vaguely recall it,
+
+712
+00:32:39,239 --> 00:32:40,660
+right? So
+
+713
+00:32:41,050 --> 00:32:44,469
+heartbleed was a security issue in some software that leaked
+
+714
+00:32:44,770 --> 00:32:48,630
+a lot of private keys around the world. Right? Suddenly, a lot of people
+
+715
+00:32:48,890 --> 00:32:51,939
+were concerned that their SSL private keys have been leaked
+
+716
+00:32:52,660 --> 00:32:55,199
+and the action that was recommended was while everyone
+
+717
+00:32:55,209 --> 00:32:57,359
+go revoke your certificate and get a new C.
+
+718
+00:32:57,400 --> 00:32:58,000
+Right.
+
+719
+00:32:58,150 --> 00:32:58,839
+Yes. And
+
+720
+00:32:59,109 --> 00:33:01,040
+I think that is still the right thing to do.
+
+721
+00:33:01,050 --> 00:33:05,280
+But I think we need to be honest about how effective that was, which is not very much.
+
+722
+00:33:05,619 --> 00:33:06,630
+It was terrible.
+
+723
+00:33:06,640 --> 00:33:08,449
+I remember after heartbleed, I,
+
+724
+00:33:08,459 --> 00:33:13,849
+I was using Firefox and I told it to hard fail on O CS P failures.
+
+725
+00:33:14,109 --> 00:33:17,300
+And like the internet stopped working for me for the most fire.
+
+726
+00:33:17,859 --> 00:33:22,119
+I think I lasted 15 minutes before I turned it off. It was just embarrassing.
+
+727
+00:33:22,709 --> 00:33:26,920
+I looked into it and the majority of the CS running O CS P responders
+
+728
+00:33:27,339 --> 00:33:31,510
+apparently had something like less than 90 like 9 0% uptime
+
+729
+00:33:31,520 --> 00:33:34,050
+on their O CS P responders for requests or whatever.
+
+730
+00:33:34,060 --> 00:33:34,589
+Like it was
+
+731
+00:33:34,699 --> 00:33:36,689
+the failure rate. It was,
+
+732
+00:33:36,920 --> 00:33:39,369
+was just absurd. Like it's unusable at that point.
+
+733
+00:33:39,719 --> 00:33:39,930
+Yeah,
+
+734
+00:33:39,939 --> 00:33:43,650
+there used to be these horror stories about CS that had poor R CS P
+
+735
+00:33:43,660 --> 00:33:47,400
+responders because they didn't want to spend money on more ra M for the server.
+
+736
+00:33:48,150 --> 00:33:51,520
+Um It's a historically under invested thing, although
+
+737
+00:33:51,800 --> 00:33:55,839
+a lot of CASU use big C DNS now and the availability is much better.
+
+738
+00:33:55,849 --> 00:33:57,560
+But anyway, when heartbleed happened,
+
+739
+00:33:57,810 --> 00:34:00,920
+everyone rushed out to revoke their certs which didn't really do much
+
+740
+00:34:01,270 --> 00:34:05,469
+and get new certs. So if your private key did leak during heartbleed
+
+741
+00:34:05,750 --> 00:34:07,319
+and let's say you went out and
+
+742
+00:34:07,430 --> 00:34:10,958
+you know, paid a lot of money for a three year cert, right?
+
+743
+00:34:11,290 --> 00:34:12,840
+And you did that last month.
+
+744
+00:34:13,129 --> 00:34:15,020
+Now someone has your private key
+
+745
+00:34:15,520 --> 00:34:18,739
+and a cert that's valid for three years,
+
+746
+00:34:19,179 --> 00:34:19,699
+right?
+
+747
+00:34:20,310 --> 00:34:22,750
+And there's really nothing that you can do about it.
+
+748
+00:34:22,760 --> 00:34:25,219
+You're just stuck until that cert expires
+
+749
+00:34:25,739 --> 00:34:28,418
+Right. And that situation is why we,
+
+750
+00:34:28,550 --> 00:34:30,899
+we do 90 days certs. So that's encrypt
+
+751
+00:34:31,610 --> 00:34:35,918
+in a heartbleed scenario. All of our certs clear the system
+
+752
+00:34:36,139 --> 00:34:37,389
+in under 90 days.
+
+753
+00:34:37,728 --> 00:34:38,389
+So
+
+754
+00:34:38,679 --> 00:34:40,228
+if heartbleed happened again,
+
+755
+00:34:40,570 --> 00:34:44,870
+all lots and crypt certs subject to something like private key compromise
+
+756
+00:34:45,000 --> 00:34:47,668
+would clear out of the system in less than 90 days.
+
+757
+00:34:47,780 --> 00:34:51,320
+And the incident would essentially be over for those people. I think.
+
+758
+00:34:51,500 --> 00:34:51,719
+So.
+
+759
+00:34:51,728 --> 00:34:51,929
+That's,
+
+760
+00:34:51,938 --> 00:34:53,469
+that's the reason to have a shorter cert
+
+761
+00:34:53,478 --> 00:34:55,830
+lifetime in order to enable short lifetimes.
+
+762
+00:34:55,840 --> 00:35:00,310
+Right? Nobody wants to go get a cert every 60 days, which is what we recommend.
+
+763
+00:35:00,679 --> 00:35:02,449
+But the whole point here is automation,
+
+764
+00:35:02,870 --> 00:35:05,300
+you can't have ease of use of that automation.
+
+765
+00:35:05,510 --> 00:35:05,689
+Yeah,
+
+766
+00:35:05,699 --> 00:35:08,510
+I was gonna say because part one of the things I run into is by buying like
+
+767
+00:35:08,520 --> 00:35:10,260
+two year certificates is I basically have to like
+
+768
+00:35:10,270 --> 00:35:12,419
+relearn the whole process every two years because,
+
+769
+00:35:12,429 --> 00:35:14,330
+you know, I've forgotten it and, you know, having it.
+
+770
+00:35:14,340 --> 00:35:15,800
+Yeah, every 90 days either.
+
+771
+00:35:15,969 --> 00:35:16,199
+Yeah,
+
+772
+00:35:16,209 --> 00:35:19,570
+I'll automate it or I have to do it often enough that chances are I'll remember it.
+
+773
+00:35:19,580 --> 00:35:20,100
+Although,
+
+774
+00:35:20,300 --> 00:35:21,820
+hopefully, yeah, it would be automated.
+
+775
+00:35:22,189 --> 00:35:24,620
+And I think that's something really important because, yeah, these things,
+
+776
+00:35:25,379 --> 00:35:27,320
+you know, it's like people updating their
+
+777
+00:35:27,750 --> 00:35:30,080
+web browsers and antivirus, they do that regularly.
+
+778
+00:35:30,090 --> 00:35:33,040
+But how often do people update their, you know, their operating system? Right.
+
+779
+00:35:33,050 --> 00:35:34,520
+Because that only happens every
+
+780
+00:35:34,649 --> 00:35:36,669
+couple and also people forget to renew their cert
+
+781
+00:35:37,260 --> 00:35:40,070
+in two years Right. Like who makes a calendar entry for that?
+
+782
+00:35:40,080 --> 00:35:42,800
+And then suddenly your c expires and your site goes down.
+
+783
+00:35:43,270 --> 00:35:44,899
+I'm totally guilty of that.
+
+784
+00:35:46,909 --> 00:35:47,350
+Well,
+
+785
+00:35:47,459 --> 00:35:49,969
+it just happened with the Oculus Rift apparently
+
+786
+00:35:50,219 --> 00:35:51,570
+yesterday or the day before,
+
+787
+00:35:51,580 --> 00:35:54,840
+apparently all the Oculus Rifts on the planet stopped working because they,
+
+788
+00:35:55,090 --> 00:35:56,810
+and there was an expired certificate.
+
+789
+00:35:57,120 --> 00:36:00,270
+Yeah. So the answer is automation. And if your certificate
+
+790
+00:36:00,560 --> 00:36:02,969
+issuance and management is automated,
+
+791
+00:36:03,360 --> 00:36:06,169
+then it shouldn't matter to you how often it happens. Right.
+
+792
+00:36:06,939 --> 00:36:10,889
+Doing it every 60 days doesn't matter to you. If it's automated,
+
+793
+00:36:11,320 --> 00:36:13,050
+you can do it every 48 hours
+
+794
+00:36:13,399 --> 00:36:16,610
+and it doesn't matter. Right. Please don't do that though. Right.
+
+795
+00:36:18,500 --> 00:36:21,199
+I, I mean, I think we may get there someday. Right.
+
+796
+00:36:21,209 --> 00:36:25,439
+I think 48 hours is not a reasonable amount of time for a cert to last,
+
+797
+00:36:25,449 --> 00:36:29,590
+but it only works in a world where, you know, environments are very automated.
+
+798
+00:36:29,850 --> 00:36:31,429
+Right. Right. Absolutely.
+
+799
+00:36:31,750 --> 00:36:36,760
+We, that's actually a problem with, uh, some of, you know, some of our red hats,
+
+800
+00:36:36,770 --> 00:36:38,909
+cloud products, like infrastructure stuff.
+
+801
+00:36:39,179 --> 00:36:44,679
+We do want very short certificate lifespans potentially because it basically,
+
+802
+00:36:45,280 --> 00:36:45,500
+yeah,
+
+803
+00:36:45,510 --> 00:36:47,379
+basically makes a whole pile of security problems
+
+804
+00:36:47,389 --> 00:36:49,219
+either go away or become very minimal.
+
+805
+00:36:49,229 --> 00:36:53,020
+And that, yeah, if this site or host or whatever is compromised or somebody goofs up.
+
+806
+00:36:53,370 --> 00:36:55,070
+Yeah, it's valid for like, 48 hours.
+
+807
+00:36:55,199 --> 00:36:58,219
+No big deal, you know, not a year or two.
+
+808
+00:36:59,250 --> 00:37:03,120
+and so personally I do think, especially for a lot of internal stuff. It,
+
+809
+00:37:03,270 --> 00:37:06,330
+it really does make sense to have very short lifespans because,
+
+810
+00:37:06,659 --> 00:37:08,419
+well, going back to your, you know, your,
+
+811
+00:37:08,429 --> 00:37:10,979
+your fortune 500 with 5000 internal servers.
+
+812
+00:37:11,520 --> 00:37:12,310
+Stupid question.
+
+813
+00:37:12,320 --> 00:37:13,459
+But like, do they have, you know,
+
+814
+00:37:13,469 --> 00:37:15,620
+when they decommission a server is part of the process,
+
+815
+00:37:15,629 --> 00:37:17,500
+they're doing the certificate revocation, which, well,
+
+816
+00:37:17,510 --> 00:37:19,620
+as we've just discussed is basically useless.
+
+817
+00:37:19,629 --> 00:37:22,659
+You know, if your certificate is 90 days that's less of a problem.
+
+818
+00:37:22,669 --> 00:37:26,219
+And if it's 48 hours then it's, well, it's effectively not a problem at all.
+
+819
+00:37:26,429 --> 00:37:29,260
+Awesome. All right. I, I think, I think I'm gonna call it.
+
+820
+00:37:29,270 --> 00:37:32,379
+This has been a fascinating conversation, I guess Josh.
+
+821
+00:37:32,389 --> 00:37:34,060
+Do you have any closing thoughts
+
+822
+00:37:34,250 --> 00:37:35,179
+for the audience?
+
+823
+00:37:35,840 --> 00:37:38,659
+If your site is not, uh using htps,
+
+824
+00:37:39,070 --> 00:37:40,479
+make it, use htps
+
+825
+00:37:41,510 --> 00:37:43,209
+can help. We're happy to help.
+
+826
+00:37:43,550 --> 00:37:45,820
+If not, there's lots of other cas out there.
+
+827
+00:37:46,179 --> 00:37:46,919
+Awesome. Yeah, and the,
+
+828
+00:37:47,110 --> 00:37:49,969
+-- the clock's ticking.
+-- Well, thanks for having me. It was nice talking to you.
+
+829
+00:37:50,149 --> 00:37:54,709
+It was fantastic. I, I appreciate the time and yeah, definitely.
+
+830
+00:37:54,719 --> 00:37:56,639
+Anytime you want to come back, you let us know we'd,
+
+831
+00:37:56,649 --> 00:37:59,179
+we'd love to hear what you guys are up to and, and what's going on,
+
+832
+00:37:59,189 --> 00:38:01,979
+that's encrypt is definitely one of the, the good ones
+
+833
+00:38:02,090 --> 00:38:05,310
+out there. So. All right. Awesome. So, so thank you, Josh. Thank you, Kurt.
+
+834
+00:38:05,320 --> 00:38:06,979
+Thank you audience for listening.
+
+835
+00:38:06,989 --> 00:38:10,959
+You can go to open source security podcast.com and hit up any links to show notes,
+
+836
+00:38:10,969 --> 00:38:11,419
+we'll,
+
+837
+00:38:11,679 --> 00:38:14,159
+we'll link to Josh's Twitter and probably some,
+
+838
+00:38:14,169 --> 00:38:17,840
+let's encrypt things for you to check out and if you want to get a hold of us,
+
+839
+00:38:17,850 --> 00:38:19,750
+just hit us up with the Pound Os S podcast.
+
+840
+00:38:19,760 --> 00:38:23,550
+Hashtag And yeah, nothing else. Thank you guys. It was an awesome conversation.
+
+841
+00:38:23,760 --> 00:38:24,310
+-- Thank
+-- you.
+
+842
+00:38:24,520 --> 00:38:24,949
+Thanks
+
+843
+00:38:29,639 --> 00:38:29,699
+the.

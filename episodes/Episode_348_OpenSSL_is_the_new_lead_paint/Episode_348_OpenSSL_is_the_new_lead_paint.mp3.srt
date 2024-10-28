@@ -1,0 +1,3191 @@
+0
+00:00:05,329 --> 00:00:08,810
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,819 --> 00:00:12,569
+Kurt Siefried and my partner and making fun of my lumpy head Josh Pressers.
+
+2
+00:00:12,579 --> 00:00:16,389
+We are, I don't know if it'll make it into the free role. Kurt has a bump on his head.
+
+3
+00:00:16,690 --> 00:00:18,229
+He was actually mocking himself.
+
+4
+00:00:18,239 --> 00:00:22,110
+I said nothing but I think my silence conveyed more than words. So
+
+5
+00:00:22,430 --> 00:00:23,510
+it worked out.
+
+6
+00:00:24,680 --> 00:00:26,950
+Yeah, my doctor said it's ok. I didn't pass out. So
+
+7
+00:00:27,129 --> 00:00:28,120
+he's just like, that's weird.
+
+8
+00:00:28,129 --> 00:00:30,969
+I've never seen it before, which is not what you want to hear from your doctor.
+
+9
+00:00:31,120 --> 00:00:33,310
+I agree with that anyway. Ok.
+
+10
+00:00:33,720 --> 00:00:35,000
+Open SSL
+
+11
+00:00:35,529 --> 00:00:36,779
+is our lead paint.
+
+12
+00:00:36,889 --> 00:00:39,630
+We all know it's bad. We all know what we have to do.
+
+13
+00:00:39,639 --> 00:00:43,569
+-- No one really wants to do it because it's gonna be expensive and hard.
+-- The problem.
+
+14
+00:00:43,580 --> 00:00:43,939
+You know what?
+
+15
+00:00:43,950 --> 00:00:47,099
+It's not lead paint, it's asbestos because it's embedded in everything.
+
+16
+00:00:47,110 --> 00:00:49,110
+Lead paint is everywhere.
+
+17
+00:00:49,119 --> 00:00:52,659
+No, no, but like, but like lead paint, you can just sort of paint over but like,
+
+18
+00:00:52,669 --> 00:00:54,169
+asbestos is in everything.
+
+19
+00:00:54,180 --> 00:00:55,029
+Like to, to remove
+
+20
+00:00:55,159 --> 00:00:55,189
+it
+
+21
+00:00:55,360 --> 00:00:57,959
+is a massive problem. And that's where Openness cell is.
+
+22
+00:00:57,970 --> 00:01:02,169
+Like, you can't fix Openness Cell on your TV, like your TV maker has to want to do that.
+
+23
+00:01:02,180 --> 00:01:02,959
+-- You know,
+-- I can't
+
+24
+00:01:02,970 --> 00:01:04,860
+-- fix
+-- lead paint in my house.
+
+25
+00:01:04,870 --> 00:01:08,739
+Either you strip it down and repaint or, or you just paint over it.
+
+26
+00:01:08,849 --> 00:01:11,580
+Well, you paint over it. That's actually the right way.
+
+27
+00:01:11,809 --> 00:01:14,699
+And see. The problem is you can't do that with open SSL though
+
+28
+00:01:15,110 --> 00:01:15,610
+because,
+
+29
+00:01:15,779 --> 00:01:15,910
+and,
+
+30
+00:01:15,919 --> 00:01:19,000
+and I think this is a big part of the problem that people don't kind
+
+31
+00:01:19,010 --> 00:01:22,930
+of think about really consciously is if you have a network service by definition,
+
+32
+00:01:22,949 --> 00:01:26,319
+what's the first thing that gets touched nowadays?
+
+33
+00:01:26,910 --> 00:01:28,339
+And it's the TLS layer,
+
+34
+00:01:28,930 --> 00:01:29,900
+right? Oh. Right.
+
+35
+00:01:30,010 --> 00:01:32,330
+You know what I mean? And that's part of the problem is like,
+
+36
+00:01:32,510 --> 00:01:36,559
+like I can write a terrible CG I, oh God, that's how
+
+37
+00:01:36,690 --> 00:01:39,440
+II, I still think of them as CG I apps. Like a web app.
+
+38
+00:01:39,449 --> 00:01:41,370
+I can write a terrible web app but like,
+
+39
+00:01:41,379 --> 00:01:44,550
+I can stick a web server in front of it that sanitizes input.
+
+40
+00:01:44,980 --> 00:01:47,129
+But you can't do that with TLS.
+
+41
+00:01:47,489 --> 00:01:49,449
+Like whatever is handling the TLS
+
+42
+00:01:49,769 --> 00:01:54,529
+is handling the TLS unless you have another TLS proxy in front of it.
+
+43
+00:01:54,769 --> 00:01:57,830
+All right, we hold on. Ok. You're, you're, you're off in the weeds.
+
+44
+00:01:57,839 --> 00:02:00,069
+I, I think we're gonna start at the beginning.
+
+45
+00:02:00,199 --> 00:02:02,629
+-- Well, no
+-- part of the problem is there's, there's no easy remediation.
+
+46
+00:02:02,639 --> 00:02:05,059
+You either have, you have to rip it out and replace it with something better.
+
+47
+00:02:05,529 --> 00:02:08,038
+Nobody wants to do that because it's a pain in the butt
+
+48
+00:02:08,470 --> 00:02:10,979
+-- because it's expensive and it
+-- sucks.
+
+49
+00:02:11,029 --> 00:02:14,039
+But it's worse than that because what's the replacement for open SSL one?
+
+50
+00:02:14,399 --> 00:02:16,889
+Oh, it's, oh, it's open SSL three?
+
+51
+00:02:16,990 --> 00:02:17,339
+Oh,
+
+52
+00:02:17,690 --> 00:02:19,300
+no. The replacement
+
+53
+00:02:19,589 --> 00:02:21,985
+is, what is the name of that isg, the
+
+54
+00:02:22,164 --> 00:02:24,755
+-- thing we talked to Josh Os about
+-- Russell's?
+
+55
+00:02:24,764 --> 00:02:27,875
+-- Wasn't, didn't they say it was called Russell's? Russ TLS?
+-- Yeah, that sounds right.
+
+56
+00:02:28,044 --> 00:02:28,764
+I think it was Russell's.
+
+57
+00:02:28,925 --> 00:02:31,914
+Yeah, he pronounced it. Russell's, didn't he? Which I found weird, but whatever.
+
+58
+00:02:32,054 --> 00:02:34,434
+Yeah, I know. That's why it stuck in my head. That is
+
+59
+00:02:34,554 --> 00:02:36,154
+-- the
+-- answer. A new language.
+
+60
+00:02:36,164 --> 00:02:38,315
+We, we have to use
+
+61
+00:02:38,904 --> 00:02:42,154
+a memory safe TLS library and they have one.
+
+62
+00:02:42,445 --> 00:02:45,225
+Well, I mean, it's simple, right? We need modern tools.
+
+63
+00:02:45,294 --> 00:02:49,134
+But again, this is why I like lead paint is my analogy
+
+64
+00:02:49,255 --> 00:02:50,115
+because
+
+65
+00:02:50,600 --> 00:02:52,259
+there was lead in paint
+
+66
+00:02:52,759 --> 00:02:54,779
+and then we were like, that's bad. We shouldn't do it.
+
+67
+00:02:54,789 --> 00:02:56,600
+Someone made paint without lead and they were like, well,
+
+68
+00:02:56,610 --> 00:02:58,589
+that's more expensive and it sucks and we don't
+
+69
+00:02:58,600 --> 00:03:00,820
+want to use it and eventually we just had to
+
+70
+00:03:01,389 --> 00:03:01,899
+now
+
+71
+00:03:02,139 --> 00:03:04,020
+ignoring marine paint. That's a whole different thing.
+
+72
+00:03:04,080 --> 00:03:05,360
+-- What's wrong with
+-- green paint? No,
+
+73
+00:03:05,369 --> 00:03:06,649
+marine paint. Like
+
+74
+00:03:07,710 --> 00:03:10,250
+-- does, does marine paint still have lead in it
+-- because it
+
+75
+00:03:10,490 --> 00:03:11,100
+works.
+
+76
+00:03:11,279 --> 00:03:14,020
+-- And generally speaking, people aren't out there looking at,
+-- I mean,
+
+77
+00:03:14,039 --> 00:03:16,160
+but it's leaching into the ocean
+
+78
+00:03:16,520 --> 00:03:19,020
+-- like that place with the fish we eat.
+-- Yeah.
+
+79
+00:03:19,029 --> 00:03:21,490
+But if that happens in international waters, did it happen?
+
+80
+00:03:22,479 --> 00:03:23,539
+Uh anyways,
+
+81
+00:03:23,729 --> 00:03:26,779
+I lead paint is the perfect analogy because
+
+82
+00:03:27,240 --> 00:03:29,850
+if it's still in use then
+
+83
+00:03:30,589 --> 00:03:31,070
+yeah,
+
+84
+00:03:31,080 --> 00:03:33,550
+like open SSL will be used in some places forever
+
+85
+00:03:33,559 --> 00:03:35,199
+even though we know better and we shouldn't do it
+
+86
+00:03:35,369 --> 00:03:37,759
+because it's easier. Let's start at the beginning.
+
+87
+00:03:38,259 --> 00:03:44,770
+It is Tuesday, November 1st that we are recording this particular episode.
+
+88
+00:03:44,820 --> 00:03:48,369
+The Open SSL issue in question, there were actually two
+
+89
+00:03:48,470 --> 00:03:49,490
+dropped.
+
+90
+00:03:49,660 --> 00:03:54,630
+What, like not even 12 hours ago at the time of us recording this and
+
+91
+00:03:55,179 --> 00:03:56,220
+a week
+
+92
+00:03:56,339 --> 00:03:59,130
+ago exactly was the Tuesday before this
+
+93
+00:03:59,779 --> 00:04:05,179
+open SSL released an announcement saying on November 1st
+
+94
+00:04:05,350 --> 00:04:10,830
+at whatever, at some time range, I forget what it was like 1700 to 1900 UTC, I think.
+
+95
+00:04:10,839 --> 00:04:15,070
+Uh Tuesday first of November 2022 between 1317 100 UTC,
+
+96
+00:04:15,080 --> 00:04:18,540
+which is essentially morning in North America, evening in Europe.
+
+97
+00:04:18,548 --> 00:04:21,410
+And if you're in Asia, you're, you're drinking coffee and staying up late.
+
+98
+00:04:22,640 --> 00:04:23,140
+So
+
+99
+00:04:23,510 --> 00:04:27,470
+they, they say they're going to release an open SSL update
+
+100
+00:04:27,670 --> 00:04:29,630
+and it has a critical vulnerability in it
+
+101
+00:04:30,269 --> 00:04:34,140
+-- and the world lit on fire
+-- and partly too because
+
+102
+00:04:34,519 --> 00:04:35,859
+the announcement wasn't good.
+
+103
+00:04:35,869 --> 00:04:36,720
+Here's the announcement,
+
+104
+00:04:36,750 --> 00:04:38,529
+the Open SSL project team would like to announce
+
+105
+00:04:38,540 --> 00:04:40,980
+the forthcoming release of open SSL version 3.0 0.7.
+
+106
+00:04:40,989 --> 00:04:42,940
+0, ok. That's normal so far so good.
+
+107
+00:04:43,299 --> 00:04:45,200
+This release will be made available on Tuesday
+
+108
+00:04:45,209 --> 00:04:48,500
+first of November 2022 between 1317 100 UTC.
+
+109
+00:04:48,510 --> 00:04:48,959
+Hey,
+
+110
+00:04:49,140 --> 00:04:50,200
+fine, cool.
+
+111
+00:04:50,329 --> 00:04:53,910
+Well, but it's still 3.07 is a security fixed release. OK.
+
+112
+00:04:53,920 --> 00:04:56,649
+The highest severity issue fixing this release is critical. Whos
+
+113
+00:04:56,850 --> 00:04:57,700
+boom
+
+114
+00:04:57,809 --> 00:04:58,640
+end of message
+
+115
+00:05:01,079 --> 00:05:02,630
+like could we maybe have an impact?
+
+116
+00:05:02,640 --> 00:05:05,130
+Like are we talking key disclosure, remote code execution?
+
+117
+00:05:05,140 --> 00:05:08,390
+-- Is it in a default configuration? If
+-- it's critical,
+
+118
+00:05:08,559 --> 00:05:11,390
+-- it's almost definitely remote code execution
+-- or
+
+119
+00:05:11,510 --> 00:05:15,290
+-- key exposure.
+-- That's true. That could be critical in that context.
+
+120
+00:05:15,359 --> 00:05:15,529
+They,
+
+121
+00:05:15,540 --> 00:05:17,779
+they actually have a security policy with their specific threat
+
+122
+00:05:17,790 --> 00:05:20,029
+model and severity and to read it critical severity.
+
+123
+00:05:20,040 --> 00:05:21,730
+This affects common configurations
+
+124
+00:05:22,119 --> 00:05:23,910
+and which are also what
+
+125
+00:05:24,220 --> 00:05:26,320
+this affects common configurations.
+
+126
+00:05:26,589 --> 00:05:29,589
+Oh, they don't need the word and there which are also likely to be exploitable.
+
+127
+00:05:29,600 --> 00:05:33,589
+Examples include significant uh disclosure of the contents of server memory,
+
+128
+00:05:33,600 --> 00:05:35,250
+potentially revealing user details,
+
+129
+00:05:35,380 --> 00:05:37,190
+vulnerabilities which can be easily exploited
+
+130
+00:05:37,200 --> 00:05:39,649
+remotely to compromise server private keys
+
+131
+00:05:39,730 --> 00:05:42,869
+or where remote code execution is considered likely in common situations.
+
+132
+00:05:42,880 --> 00:05:44,260
+These issues will be kept private and will
+
+133
+00:05:44,269 --> 00:05:46,209
+trigger a new release of all support versions.
+
+134
+00:05:46,380 --> 00:05:48,239
+We will attempt to address these as soon as possible.
+
+135
+00:05:48,369 --> 00:05:48,549
+Yeah,
+
+136
+00:05:48,970 --> 00:05:51,679
+sure. So information disclosure, key disclosure
+
+137
+00:05:51,809 --> 00:05:52,399
+and well,
+
+138
+00:05:52,410 --> 00:05:56,920
+obviously code execution is like the the the real dark boogie monster in the closet.
+
+139
+00:05:57,059 --> 00:05:59,200
+But the problem is like, yeah, I mean, well, here's the thing,
+
+140
+00:05:59,209 --> 00:06:01,040
+what else are we supposed to do other than speculate?
+
+141
+00:06:01,779 --> 00:06:02,760
+No, I'm serious, right?
+
+142
+00:06:02,769 --> 00:06:05,839
+Because like they didn't even say explicitly that open
+
+143
+00:06:05,859 --> 00:06:08,519
+a cell one is not affected in that announcement
+
+144
+00:06:08,910 --> 00:06:10,760
+that was only done on Twitter from,
+
+145
+00:06:10,980 --> 00:06:12,619
+you know, the, the account.
+
+146
+00:06:13,059 --> 00:06:16,029
+Like that's true. And, and I was like, like,
+
+147
+00:06:16,380 --> 00:06:19,640
+well, he is, he like, he is literally Mr open his cell.
+
+148
+00:06:19,649 --> 00:06:22,079
+So I doubt that he's lying or incorrect, but
+
+149
+00:06:22,720 --> 00:06:27,010
+-- it's not in the announcement.
+-- No, no. And that was from uh Mark Cox's Twitter who?
+
+150
+00:06:27,019 --> 00:06:29,570
+Kurt and I both know Mark, he's, he's a fine person.
+
+151
+00:06:29,790 --> 00:06:31,779
+Yeah. Oh, he's a good guy does a thankless job.
+
+152
+00:06:31,820 --> 00:06:32,299
+He,
+
+153
+00:06:32,309 --> 00:06:35,809
+he does a lot of this work and he gets a lot of crap and
+
+154
+00:06:35,820 --> 00:06:38,170
+I'm sure he's not gonna be really happy with us when we're done with this,
+
+155
+00:06:38,179 --> 00:06:39,459
+but we love you, man.
+
+156
+00:06:39,470 --> 00:06:43,440
+We, we know we know you're, you're doing a thankless job. But,
+
+157
+00:06:43,820 --> 00:06:47,790
+but the reality is, I guess here's the way I think of this. Ok.
+
+158
+00:06:47,799 --> 00:06:49,420
+So we had this announcement,
+
+159
+00:06:49,649 --> 00:06:51,700
+we have a week of basically speculation.
+
+160
+00:06:51,709 --> 00:06:53,790
+But then what makes it even more bizarre is like
+
+161
+00:06:53,989 --> 00:06:56,649
+GSI, the dog is talking about the press and,
+
+162
+00:06:56,660 --> 00:07:00,209
+and companies contacting him asking him to sign NDAS to
+
+163
+00:07:00,380 --> 00:07:02,390
+look over the details and
+
+164
+00:07:03,200 --> 00:07:05,540
+that's not how disclosure works.
+
+165
+00:07:06,470 --> 00:07:07,220
+And of course,
+
+166
+00:07:07,549 --> 00:07:10,329
+Mark hears of this and is
+
+167
+00:07:10,619 --> 00:07:13,519
+-- obviously unhappy. Well,
+-- because it was on Twitter and I
+
+168
+00:07:13,790 --> 00:07:15,809
+replied and tagged him into it
+
+169
+00:07:16,239 --> 00:07:16,570
+like,
+
+170
+00:07:17,540 --> 00:07:20,200
+well, and then he said he was hearing all sorts of other weird stuff and I mean,
+
+171
+00:07:20,209 --> 00:07:22,839
+and that's part of the problem is because there's an information vacuum
+
+172
+00:07:23,170 --> 00:07:26,160
+dude. It's just, it's exactly like the Twitter
+
+173
+00:07:26,290 --> 00:07:29,000
+debacle with those, like, two guys pretending to be Twitter,
+
+174
+00:07:29,010 --> 00:07:32,399
+data analysis employees or whatever outside of Twitter saying, you know,
+
+175
+00:07:32,410 --> 00:07:35,279
+I was just fired from Twitter and they're like, a couple of reporters were like, oh,
+
+176
+00:07:35,290 --> 00:07:36,559
+let's interview you and, like,
+
+177
+00:07:36,570 --> 00:07:39,670
+actually maybe not verify that you ever worked at Twitter.
+
+178
+00:07:39,679 --> 00:07:40,959
+Oops, because, you know, we're in a rush
+
+179
+00:07:41,170 --> 00:07:41,579
+and
+
+180
+00:07:42,010 --> 00:07:43,190
+part of the problem here is
+
+181
+00:07:43,700 --> 00:07:45,809
+ok. So it's like the classic, you know,
+
+182
+00:07:46,059 --> 00:07:49,540
+um, somebody says something, the reporters try and confirm it and of course,
+
+183
+00:07:49,549 --> 00:07:52,070
+the response from the US government or whatever is like, no comment.
+
+184
+00:07:52,079 --> 00:07:54,609
+Right. Right. Well, crap. What do I do now?
+
+185
+00:07:54,619 --> 00:07:56,540
+Well, the answer is you print an article,
+
+186
+00:07:56,549 --> 00:07:59,380
+like you put an article on your website and get some clicks and ad revenue.
+
+187
+00:07:59,459 --> 00:08:02,250
+Yeah. And there were tons of news stories talking about what's going to happen.
+
+188
+00:08:02,260 --> 00:08:04,720
+There were tons of blog posts from vendors talking about what's going to
+
+189
+00:08:04,730 --> 00:08:07,255
+happen and none of them knew they were all making crap up.
+
+190
+00:08:07,265 --> 00:08:11,404
+What really actually makes me angry is that I kind of had the question of like, well,
+
+191
+00:08:11,415 --> 00:08:12,385
+who's actually shipping this?
+
+192
+00:08:12,394 --> 00:08:12,755
+Right?
+
+193
+00:08:12,885 --> 00:08:16,625
+Because I know Red Hat Nine is uh Red Hat Enterprise Linux nine. Sorry.
+
+194
+00:08:17,114 --> 00:08:21,494
+And, uh, also turns out I think, what is it? Ubuntu 20.04 or whatever,
+
+195
+00:08:21,684 --> 00:08:23,635
+-- the,
+-- the new distributions I have it
+
+196
+00:08:23,774 --> 00:08:25,125
+and, and you told me no JZ
+
+197
+00:08:25,644 --> 00:08:27,035
+-- Yeah.
+-- No, Js is a big one
+
+198
+00:08:27,045 --> 00:08:28,234
+for Sure. So basically,
+
+199
+00:08:28,524 --> 00:08:31,554
+so uh but here's the thing, rail mine dropped in May
+
+200
+00:08:32,000 --> 00:08:32,460
+and
+
+201
+00:08:32,590 --> 00:08:34,780
+rel customers are not exactly like
+
+202
+00:08:35,130 --> 00:08:37,159
+by definition, if you're using REL you're,
+
+203
+00:08:37,169 --> 00:08:39,070
+you're not a bleeding edge kind of person.
+
+204
+00:08:39,369 --> 00:08:44,219
+Right. Right. No, I agree. I think in the Linux distribution universe, the amount of
+
+205
+00:08:44,619 --> 00:08:47,090
+open SSL three use is pretty low.
+
+206
+00:08:47,229 --> 00:08:49,960
+But node, node is the thing
+
+207
+00:08:50,090 --> 00:08:53,239
+that I think you need to worry about the most just because
+
+208
+00:08:53,250 --> 00:08:56,830
+node Js is widely deployed and to make it even better,
+
+209
+00:08:56,840 --> 00:09:01,409
+node Js has open SSL three statically linked in the binary.
+
+210
+00:09:01,419 --> 00:09:06,400
+So you can't even like look for files on dis, you have to know it is affected, which is
+
+211
+00:09:06,640 --> 00:09:07,409
+a treat.
+
+212
+00:09:07,651 --> 00:09:09,481
+But I think even with no Js,
+
+213
+00:09:09,492 --> 00:09:14,151
+the majority of web stuff is now being deployed behind a proxy in general.
+
+214
+00:09:14,161 --> 00:09:15,692
+Like people use C DNS like cloud floor
+
+215
+00:09:16,111 --> 00:09:19,981
+-- A II. I,
+-- I don't think that's a fair assumption.
+
+216
+00:09:19,992 --> 00:09:20,132
+I,
+
+217
+00:09:20,142 --> 00:09:26,262
+you told me this on signal and I don't think you're wrong but I can't prove
+
+218
+00:09:26,271 --> 00:09:29,992
+-- you are or aren't
+-- well part of it too is that like Hiroko for example,
+
+219
+00:09:30,002 --> 00:09:32,254
+like stuff deployed on Heroku doesn't
+
+220
+00:09:32,624 --> 00:09:35,294
+like there's, there's a proxy element and stuff, right?
+
+221
+00:09:35,304 --> 00:09:36,604
+But anyways ignoring all that
+
+222
+00:09:36,783 --> 00:09:40,434
+part of the point is is that this isn't like affecting Windows 11,
+
+223
+00:09:40,443 --> 00:09:41,943
+like if something affects Windows 11,
+
+224
+00:09:42,174 --> 00:09:46,333
+-- it's a big deal.
+-- That's right. That's right. So here's part of the problem
+
+225
+00:09:46,473 --> 00:09:52,203
+is if open SSL had a legitimate remote code execution vulnerability that
+
+226
+00:09:52,213 --> 00:09:57,195
+affected a an enormous number versions that would be incredibly serious.
+
+227
+00:09:57,346 --> 00:10:01,806
+And because open SSL is in literally everything, I bet if you connect to
+
+228
+00:10:02,015 --> 00:10:04,635
+arbitrary ports on the internet that are open,
+
+229
+00:10:05,205 --> 00:10:08,895
+I would bet you somewhere between 30 50% have open SSL.
+
+230
+00:10:08,906 --> 00:10:09,635
+On the other side,
+
+231
+00:10:09,645 --> 00:10:13,866
+I remember auditing Red Hat for seeing like what SSL were they using?
+
+232
+00:10:13,875 --> 00:10:14,195
+Because
+
+233
+00:10:14,296 --> 00:10:16,455
+Oh yeah, it was during heartbleed. Yes. Now I remember.
+
+234
+00:10:17,630 --> 00:10:18,599
+Yeah. So
+
+235
+00:10:18,789 --> 00:10:21,539
+this is why this seems so familiar anyways.
+
+236
+00:10:21,549 --> 00:10:21,919
+Um,
+
+237
+00:10:21,929 --> 00:10:23,940
+and I remember looking for stuff that was specifically
+
+238
+00:10:23,950 --> 00:10:26,559
+using new TLS and the answer was like six.
+
+239
+00:10:26,690 --> 00:10:27,679
+It's very small.
+
+240
+00:10:27,969 --> 00:10:28,909
+Well, at one time,
+
+241
+00:10:28,919 --> 00:10:34,614
+Red Hat put significant effort into trying to port as much stuff as they could to use
+
+242
+00:10:34,734 --> 00:10:35,544
+GTLS
+
+243
+00:10:35,784 --> 00:10:36,414
+and it just
+
+244
+00:10:36,645 --> 00:10:37,604
+never happened.
+
+245
+00:10:38,034 --> 00:10:39,815
+It's, it's hard to, it's hard to move
+
+246
+00:10:40,164 --> 00:10:42,664
+-- and this is why we're still using open
+-- SSL.
+
+247
+00:10:42,674 --> 00:10:46,174
+Well, especially with something as big and complicated as open SSL.
+
+248
+00:10:46,184 --> 00:10:48,734
+Yeah, you're going to end up with a monopoly like a single
+
+249
+00:10:49,450 --> 00:10:50,469
+entity because
+
+250
+00:10:50,619 --> 00:10:56,580
+-- just recreating that code in anything else.
+-- No, it's recreated in rust. Shut up.
+
+251
+00:10:56,590 --> 00:11:00,369
+-- It's there. We just need to use it.
+-- Well, no, but what I'm saying is it's so much work.
+
+252
+00:11:00,380 --> 00:11:02,270
+Unless there's a compelling advantage and
+
+253
+00:11:02,400 --> 00:11:04,159
+rewriting open SSL
+
+254
+00:11:04,349 --> 00:11:07,210
+in C with a slightly different license is not
+
+255
+00:11:07,429 --> 00:11:10,270
+-- really all that compelling.
+-- Here's a compelling advantage.
+
+256
+00:11:10,289 --> 00:11:13,539
+Our Children are going to look back on us the way we look back at our parents
+
+257
+00:11:13,739 --> 00:11:16,710
+and be like, why did you paint everything with lead?
+
+258
+00:11:16,840 --> 00:11:18,510
+You knew it was bad
+
+259
+00:11:18,669 --> 00:11:20,010
+and you did it anyway.
+
+260
+00:11:20,309 --> 00:11:21,270
+-- But like
+-- what I'm saying is
+
+261
+00:11:21,520 --> 00:11:23,469
+GTs doesn't offer a compelling alternative.
+
+262
+00:11:23,640 --> 00:11:28,809
+-- The alternative is rust.
+-- And that, oh wow. Like, so all that memory stuff just.
+
+263
+00:11:28,820 --> 00:11:29,890
+Nope, it's fine.
+
+264
+00:11:30,099 --> 00:11:34,179
+Oh, cool. Like this is why I do Python because I'm not smart enough to manage memory.
+
+265
+00:11:34,190 --> 00:11:34,969
+I know this.
+
+266
+00:11:35,320 --> 00:11:35,469
+I'm
+
+267
+00:11:35,619 --> 00:11:38,580
+-- sure
+-- no one is smart enough to manage memory. I don't care who you are.
+
+268
+00:11:38,659 --> 00:11:39,059
+The one.
+
+269
+00:11:39,070 --> 00:11:41,820
+Openness Celtics is literally instead of greater than
+
+270
+00:11:41,830 --> 00:11:44,159
+it's greater than equal to like boom.
+
+271
+00:11:44,169 --> 00:11:44,940
+Just that one.
+
+272
+00:11:45,349 --> 00:11:45,549
+Just
+
+273
+00:11:46,159 --> 00:11:47,809
+right. Anyway. OK. OK.
+
+274
+00:11:48,299 --> 00:11:49,000
+So
+
+275
+00:11:49,219 --> 00:11:50,299
+I want to
+
+276
+00:11:50,989 --> 00:11:53,770
+this today. Anyway. OK.
+
+277
+00:11:53,919 --> 00:11:58,000
+I wanna, I wanna kind of reel this back a little bit also way back to heartbleed,
+
+278
+00:11:58,010 --> 00:11:58,400
+right?
+
+279
+00:11:58,489 --> 00:12:01,320
+Remember heartbleed. That was open ssl also
+
+280
+00:12:01,570 --> 00:12:02,760
+heartbleed happens.
+
+281
+00:12:02,940 --> 00:12:05,260
+And that was especially fun because at first it was like, oh,
+
+282
+00:12:05,270 --> 00:12:07,869
+it kind of maybe discloses a bit of memory and then it turns out like, no,
+
+283
+00:12:07,880 --> 00:12:10,099
+-- you can basically walk memory and like get it all,
+-- all
+
+284
+00:12:10,109 --> 00:12:11,000
+-- the
+-- memory, right?
+
+285
+00:12:11,049 --> 00:12:12,140
+-- So
+-- anyway, well, no,
+
+286
+00:12:12,150 --> 00:12:15,200
+but it was funny because internally our response went from this is really about to
+
+287
+00:12:15,570 --> 00:12:17,440
+oh no, let's all get a drink.
+
+288
+00:12:19,159 --> 00:12:19,380
+Yy.
+
+289
+00:12:19,780 --> 00:12:22,369
+Like I remember my stomach just dropping when, when I
+
+290
+00:12:22,780 --> 00:12:24,760
+and the funny thing about this is
+
+291
+00:12:25,059 --> 00:12:29,309
+uh I worked for Mark Cox at that time. He was on vacation.
+
+292
+00:12:29,559 --> 00:12:31,929
+I remember that it ruined his vacation
+
+293
+00:12:32,239 --> 00:12:36,239
+anyway. Anyway. So, so here's the thing. So Harple happens. There's
+
+294
+00:12:36,549 --> 00:12:39,429
+all this activity you've got like the
+
+295
+00:12:39,440 --> 00:12:42,159
+Linux Foundation launches our core infrastructure initiative.
+
+296
+00:12:42,309 --> 00:12:45,530
+You had all these companies offering to spend money.
+
+297
+00:12:45,669 --> 00:12:49,219
+Open SSL actually did get like more people in funding.
+
+298
+00:12:49,710 --> 00:12:53,099
+But then I feel like we kind of hit a wall
+
+299
+00:12:53,390 --> 00:12:54,739
+and we just stopped.
+
+300
+00:12:54,890 --> 00:12:58,169
+-- Well, budget
+-- cycles and, and that's probably part of it. Sure.
+
+301
+00:12:58,179 --> 00:13:02,000
+But the point is I think about that momentum we had and
+
+302
+00:13:02,010 --> 00:13:04,929
+then it just kind of died off and now we see it again
+
+303
+00:13:05,299 --> 00:13:05,799
+and
+
+304
+00:13:06,130 --> 00:13:09,205
+nothing will change. Now, I want, I want to be very clear.
+
+305
+00:13:09,234 --> 00:13:12,184
+This issue was not big enough to change anything.
+
+306
+00:13:12,484 --> 00:13:14,335
+We're just going to make fun of it for
+
+307
+00:13:14,344 --> 00:13:16,375
+the foreseeable future is all that's going to happen.
+
+308
+00:13:16,525 --> 00:13:18,184
+But anyway, ok, so,
+
+309
+00:13:18,364 --> 00:13:20,695
+oh my goodness, we are the worst storytellers on the planet
+
+310
+00:13:21,244 --> 00:13:23,875
+so often SSL makes this announcement,
+
+311
+00:13:24,215 --> 00:13:28,505
+everyone is whipped into this. Just panic. No one knows what's going on.
+
+312
+00:13:28,969 --> 00:13:32,270
+The thing is too, there were like some pretty highly competent,
+
+313
+00:13:32,280 --> 00:13:34,880
+intelligent people speculating quite a lot,
+
+314
+00:13:34,890 --> 00:13:37,929
+like looking at code changes and dips and, and I was like, wait,
+
+315
+00:13:37,940 --> 00:13:39,190
+but they didn't fix it yet.
+
+316
+00:13:39,200 --> 00:13:42,130
+-- Like what, what are they talking about?
+-- They were looking for hints.
+
+317
+00:13:42,500 --> 00:13:42,869
+I mean,
+
+318
+00:13:43,039 --> 00:13:46,909
+because wasn't it, there was one of the, the,
+
+319
+00:13:46,969 --> 00:13:49,960
+the TLS attacks like beast or crime or something like that.
+
+320
+00:13:50,719 --> 00:13:52,530
+I remember researchers
+
+321
+00:13:52,989 --> 00:13:55,820
+gave a little bit of info about it, like a preannouncement
+
+322
+00:13:56,130 --> 00:13:56,960
+and using that.
+
+323
+00:13:56,969 --> 00:14:00,179
+-- It was, I forget who it was if it was like, yeah,
+-- they found, they figured it out
+
+324
+00:14:00,590 --> 00:14:03,619
+like it was like, oh, well done to you.
+
+325
+00:14:03,830 --> 00:14:05,690
+And, and I mean, that's the danger, right?
+
+326
+00:14:05,700 --> 00:14:10,445
+Is if you give any details, people can usually figure that stuff out.
+
+327
+00:14:10,635 --> 00:14:12,054
+Well, here's the thing.
+
+328
+00:14:12,065 --> 00:14:12,565
+It depends,
+
+329
+00:14:12,575 --> 00:14:14,914
+like if you say the impact is remote code execution and
+
+330
+00:14:14,924 --> 00:14:16,734
+that's enough for them to figure out what the flaws.
+
+331
+00:14:16,744 --> 00:14:16,914
+They
+
+332
+00:14:17,424 --> 00:14:19,875
+probably not that they could have figured that out in the first place.
+
+333
+00:14:19,885 --> 00:14:20,965
+But if you say something like,
+
+334
+00:14:21,104 --> 00:14:23,674
+yeah, it's in like X 509 email handling,
+
+335
+00:14:23,705 --> 00:14:26,664
+then people would have definitely found this in 48 hours.
+
+336
+00:14:27,210 --> 00:14:29,809
+Yeah, maybe not. This one, maybe not. It doesn't matter anyway.
+
+337
+00:14:29,820 --> 00:14:32,489
+Ok, so we're all whipped into our frenzy
+
+338
+00:14:32,830 --> 00:14:37,510
+and then we're waiting for the announcement today on November 1st,
+
+339
+00:14:37,520 --> 00:14:40,010
+which is also the day after Halloween in the United States.
+
+340
+00:14:40,020 --> 00:14:43,010
+And so I've been eating candy for almost 24 hours to this point because
+
+341
+00:14:43,020 --> 00:14:44,719
+obviously I start eating the Halloween candy
+
+342
+00:14:44,729 --> 00:14:46,650
+long before Halloween starts in my house.
+
+343
+00:14:46,659 --> 00:14:48,530
+So they announced the
+
+344
+00:14:48,679 --> 00:14:51,960
+the issue and we're, I remember looking at it. I'm like
+
+345
+00:14:52,729 --> 00:14:56,359
+there's two high issues here like where's the critical? Because they also
+
+346
+00:14:56,489 --> 00:14:58,270
+there was the email announcement
+
+347
+00:14:58,460 --> 00:14:59,739
+which I got
+
+348
+00:15:00,010 --> 00:15:03,390
+which linked to the vulnerability page which was empty.
+
+349
+00:15:03,400 --> 00:15:04,070
+So I of course,
+
+350
+00:15:04,080 --> 00:15:06,559
+hit reload on it as fast as I could for probably
+
+351
+00:15:06,570 --> 00:15:09,869
+20 minutes until the text appeared and then when text appeared,
+
+352
+00:15:09,880 --> 00:15:11,210
+it had two high issues.
+
+353
+00:15:11,219 --> 00:15:14,020
+And I'm like, where's the critical issue guys?
+
+354
+00:15:14,409 --> 00:15:16,530
+And then so of course, I'm like,
+
+355
+00:15:16,539 --> 00:15:18,869
+I need to go on Twitter and see what Mark Cock is saying.
+
+356
+00:15:18,880 --> 00:15:20,369
+-- I go on Twitter.
+-- Oh Wait.
+
+357
+00:15:20,380 --> 00:15:23,049
+So the current page content wasn't there originally where
+
+358
+00:15:23,059 --> 00:15:24,690
+it talks about why the critical is missing.
+
+359
+00:15:24,780 --> 00:15:25,039
+-- It
+-- was
+
+360
+00:15:25,159 --> 00:15:25,380
+now,
+
+361
+00:15:25,500 --> 00:15:29,979
+but it did not say anything on that. On the vulnerability page.
+
+362
+00:15:29,989 --> 00:15:32,200
+The blog post talked about
+
+363
+00:15:32,380 --> 00:15:34,080
+why it's not critical.
+
+364
+00:15:34,330 --> 00:15:38,080
+So I'm like, where's the critical guys? What's going on?
+
+365
+00:15:38,390 --> 00:15:40,580
+And I'm of course confused.
+
+366
+00:15:40,859 --> 00:15:43,140
+I managed to find the blog post eventually and
+
+367
+00:15:43,150 --> 00:15:45,640
+this is like 30 minutes after the release drops.
+
+368
+00:15:45,650 --> 00:15:48,520
+And of course, I've got everyone at work is like, what's going on, you know,
+
+369
+00:15:48,530 --> 00:15:49,690
+is this an emergency?
+
+370
+00:15:49,700 --> 00:15:50,880
+What, what should we do?
+
+371
+00:15:51,280 --> 00:15:52,789
+It's like, I don't know yet, just hang on.
+
+372
+00:15:53,099 --> 00:15:58,080
+So I will say one thing in my old age is I become very good at at we'll say
+
+373
+00:15:58,390 --> 00:15:59,820
+slowing down
+
+374
+00:16:00,090 --> 00:16:02,380
+and being like, let's just chill out for a minute.
+
+375
+00:16:02,390 --> 00:16:05,020
+Like if we do something now or we do something in 30 minutes,
+
+376
+00:16:05,030 --> 00:16:06,770
+it really isn't going to matter.
+
+377
+00:16:06,780 --> 00:16:09,500
+And in my younger days, I would have been like, no, no, no, no, no, no, no, no, no,
+
+378
+00:16:09,510 --> 00:16:10,140
+we got to do it.
+
+379
+00:16:10,479 --> 00:16:12,979
+-- But anyway,
+-- goalkeeper stolen, right? You need the appearance of action.
+
+380
+00:16:13,260 --> 00:16:14,380
+Something must be done.
+
+381
+00:16:14,549 --> 00:16:17,580
+Well, and I'm old and I don't care anymore.
+
+382
+00:16:18,270 --> 00:16:18,419
+Yeah.
+
+383
+00:16:18,429 --> 00:16:19,799
+And now it's like, well, here's the thing,
+
+384
+00:16:19,809 --> 00:16:23,140
+I always come back to go watch videos of firefighters run to fires and they,
+
+385
+00:16:23,229 --> 00:16:24,260
+they almost never run.
+
+386
+00:16:24,270 --> 00:16:26,340
+Like it is so, so rare
+
+387
+00:16:26,440 --> 00:16:28,299
+-- because
+-- if they run, they're gonna die
+
+388
+00:16:29,020 --> 00:16:30,460
+because they're carrying, like, you know, they, we,
+
+389
+00:16:30,900 --> 00:16:32,789
+you know, they got 50 to 80 pounds of gear on,
+
+390
+00:16:32,869 --> 00:16:36,179
+-- they're
+-- running into an environment that doesn't have any oxygen in it.
+
+391
+00:16:36,190 --> 00:16:38,159
+The only oxygen they're getting is on their back.
+
+392
+00:16:38,169 --> 00:16:40,530
+If they run, they're going to use that up faster
+
+393
+00:16:40,789 --> 00:16:42,020
+anyway. OK.
+
+394
+00:16:42,390 --> 00:16:48,330
+So go to the blog post and the blog post basically says, oh we called this critical
+
+395
+00:16:48,590 --> 00:16:50,729
+and it's actually high
+
+396
+00:16:50,979 --> 00:16:53,210
+because it's a stack buffer overflow
+
+397
+00:16:53,539 --> 00:16:54,289
+and
+
+398
+00:16:54,760 --> 00:16:57,700
+-- it's probably not an issue. Oh
+-- yeah, compiler protection.
+
+399
+00:16:57,789 --> 00:17:00,280
+They basically said there will be uh here.
+
+400
+00:17:01,059 --> 00:17:03,640
+However, as open SSL is distributed as source code,
+
+401
+00:17:03,650 --> 00:17:05,479
+we have no way of knowing how every platform and
+
+402
+00:17:05,489 --> 00:17:07,670
+compiler combination has arranged the buffers on the stack.
+
+403
+00:17:07,680 --> 00:17:10,319
+And therefore a remote code execution may still be possible on some platforms.
+
+404
+00:17:10,560 --> 00:17:11,920
+But they essentially, oh sorry.
+
+405
+00:17:11,930 --> 00:17:15,089
+The the first one was firstly, we had reports that on certain Linux distributions,
+
+406
+00:17:15,098 --> 00:17:15,500
+the stack
+
+407
+00:17:15,618 --> 00:17:17,060
+layout was such that the four bytes
+
+408
+00:17:17,270 --> 00:17:19,000
+overwrote an adjacent buffer that was
+
+409
+00:17:19,160 --> 00:17:19,900
+yet to be used.
+
+410
+00:17:19,910 --> 00:17:22,848
+And therefore there was no crash or ability to cause remote code execution.
+
+411
+00:17:22,910 --> 00:17:23,560
+Secondly,
+
+412
+00:17:23,569 --> 00:17:26,979
+many modern platforms implement stack overflow protections which would migrate
+
+413
+00:17:27,199 --> 00:17:27,579
+or sorry,
+
+414
+00:17:27,589 --> 00:17:30,069
+mitigate against the risk of remote code execution
+
+415
+00:17:30,079 --> 00:17:31,609
+and usually lead to a crash instead.
+
+416
+00:17:31,650 --> 00:17:34,599
+So they're basically going on to like hopefully people compile this correctly.
+
+417
+00:17:34,609 --> 00:17:37,979
+So it doesn't like go kaboom. And that's probably mostly true.
+
+418
+00:17:38,155 --> 00:17:38,685
+I hope.
+
+419
+00:17:38,915 --> 00:17:41,214
+-- No,
+-- I, I take a ton of issue with that.
+
+420
+00:17:41,224 --> 00:17:46,775
+They should have called it high from the start because make claiming that our, our,
+
+421
+00:17:46,994 --> 00:17:50,385
+our project is distributed as source and we don't know
+
+422
+00:17:50,395 --> 00:17:52,484
+exactly how people are going to use or compile it.
+
+423
+00:17:52,594 --> 00:17:57,015
+Well, I mean, by that reasoning, every single open ssl issue is critical.
+
+424
+00:17:57,025 --> 00:17:58,694
+I mean, that's ridiculous. Come on.
+
+425
+00:17:58,864 --> 00:17:59,655
+That is
+
+426
+00:17:59,935 --> 00:18:05,614
+that is, that is like a technically correct move that I cannot approve in any way.
+
+427
+00:18:05,959 --> 00:18:06,579
+That's
+
+428
+00:18:06,750 --> 00:18:10,250
+that it whipped everyone into a panic and it made a freaking mess.
+
+429
+00:18:10,260 --> 00:18:11,479
+And now the funny thing is though,
+
+430
+00:18:11,489 --> 00:18:14,839
+I have lots of people contacting me that are like these guys are a bunch of idiots.
+
+431
+00:18:14,849 --> 00:18:15,209
+It's like
+
+432
+00:18:15,599 --> 00:18:18,020
+they're not dumb, they're not bad.
+
+433
+00:18:18,030 --> 00:18:21,819
+Like please don't think less of them, but they did screw this one up.
+
+434
+00:18:21,829 --> 00:18:22,229
+Well,
+
+435
+00:18:22,239 --> 00:18:26,300
+I think the challenge is always that if you
+
+436
+00:18:26,310 --> 00:18:30,510
+have to downgrade a severity rating after the fact,
+
+437
+00:18:30,520 --> 00:18:33,859
+it's more acceptable and it's kind of a pain
+
+438
+00:18:33,869 --> 00:18:35,280
+because you kind of have to prove a negative.
+
+439
+00:18:35,290 --> 00:18:38,040
+You have to prove this critical is not a high, right?
+
+440
+00:18:38,250 --> 00:18:40,270
+Whereas the flip side is
+
+441
+00:18:40,420 --> 00:18:42,890
+upgrading a severity later on is
+
+442
+00:18:43,530 --> 00:18:46,439
+in some ways easier because it's like, oh, we have to upgrade the severity because ha
+
+443
+00:18:46,619 --> 00:18:46,849
+you know,
+
+444
+00:18:46,859 --> 00:18:50,829
+clever person over here came up with exploit code and it really is exploitable.
+
+445
+00:18:50,839 --> 00:18:51,310
+Oops.
+
+446
+00:18:51,699 --> 00:18:56,630
+-- But politically and, and, like, culturally now you're done fed up, you
+-- mean,
+
+447
+00:18:56,640 --> 00:19:00,930
+-- going from high to critical,
+-- like, after the fact, like, remember shell shock,
+
+448
+00:19:00,939 --> 00:19:01,209
+right?
+
+449
+00:19:01,219 --> 00:19:03,300
+Like, there was just such a train wreck.
+
+450
+00:19:03,310 --> 00:19:08,290
+I mean, look, I don't think anyone would have blamed
+
+451
+00:19:08,660 --> 00:19:13,290
+open SSL for calling this high out of the gate. I mean, it's four bites
+
+452
+00:19:13,420 --> 00:19:17,280
+-- written to the stack.
+-- Well, my one thought is that it's simply put moving forward.
+
+453
+00:19:17,290 --> 00:19:21,329
+They could say, look when compiled with reasonable and sane flags,
+
+454
+00:19:21,339 --> 00:19:24,290
+like which to be blunt, everybody should be doing at this point.
+
+455
+00:19:24,300 --> 00:19:26,160
+It's 2022. Like, come on.
+
+456
+00:19:26,619 --> 00:19:26,939
+Right.
+
+457
+00:19:27,069 --> 00:19:28,760
+To be blunt. If you're like,
+
+458
+00:19:29,339 --> 00:19:30,760
+not doing this then.
+
+459
+00:19:31,089 --> 00:19:32,140
+Well, that's on you.
+
+460
+00:19:32,270 --> 00:19:35,189
+-- I like, I'm sorry. That's, that's just how that is.
+-- I agree.
+
+461
+00:19:35,489 --> 00:19:36,469
+I agree completely.
+
+462
+00:19:36,479 --> 00:19:39,390
+So, yeah, to be clear, I think I, I wish openness as hell had just gone with,
+
+463
+00:19:39,400 --> 00:19:41,849
+had gone with high across the board and been like,
+
+464
+00:19:42,369 --> 00:19:46,069
+assuming you have a same compiler and like if you have an insane compiler, well, two,
+
+465
+00:19:46,079 --> 00:19:48,020
+like you have bigger problems than this.
+
+466
+00:19:48,030 --> 00:19:50,969
+-- Right.
+-- Right. Absolutely. So anyway, it comes out
+
+467
+00:19:51,160 --> 00:19:53,020
+and it's high and then
+
+468
+00:19:53,209 --> 00:19:56,650
+the thing that amused me the most is, of course,
+
+469
+00:19:57,030 --> 00:19:57,060
+at
+
+470
+00:19:57,180 --> 00:20:01,670
+-- work we had been preparing ourselves,
+-- there's no logo. I'm so sad.
+
+471
+00:20:02,000 --> 00:20:03,949
+Well, well, so, but here's a funny thing
+
+472
+00:20:04,439 --> 00:20:05,060
+in one of
+
+473
+00:20:05,280 --> 00:20:09,319
+GSI, the dog's tweets. He claimed there was a logo and it had a good name. He said
+
+474
+00:20:10,099 --> 00:20:12,319
+I'll see if I could dig it up and find it, put in the show notes.
+
+475
+00:20:12,329 --> 00:20:14,410
+But yeah, apparently he claimed it was a good name,
+
+476
+00:20:14,420 --> 00:20:17,000
+which made me sad because internally I've been calling it
+
+477
+00:20:17,319 --> 00:20:19,920
+uh open SSL for Jay all week,
+
+478
+00:20:20,310 --> 00:20:22,900
+which amuses me to no end still.
+
+479
+00:20:23,229 --> 00:20:23,859
+But
+
+480
+00:20:24,599 --> 00:20:29,540
+anyway, and, and I would have loved an MS paint like open SSL for shell.
+
+481
+00:20:29,750 --> 00:20:30,250
+But,
+
+482
+00:20:30,609 --> 00:20:32,260
+but the point is so
+
+483
+00:20:32,939 --> 00:20:34,420
+all of this happens,
+
+484
+00:20:34,829 --> 00:20:41,130
+all of these organizations, no doubt had done a bunch of prep for a critical open SSL.
+
+485
+00:20:41,349 --> 00:20:42,260
+I know
+
+486
+00:20:42,569 --> 00:20:45,420
+a number of people I've talked to
+
+487
+00:20:45,660 --> 00:20:47,180
+who like, worked
+
+488
+00:20:47,439 --> 00:20:50,699
+in like sock, like environments like they were ready to go. Right.
+
+489
+00:20:50,709 --> 00:20:54,219
+They were ready for patches. They were ready to detection.
+
+490
+00:20:54,449 --> 00:20:56,439
+Like they'd already started looking into where
+
+491
+00:20:56,449 --> 00:20:58,310
+they had open SSL in their environments.
+
+492
+00:20:58,400 --> 00:20:58,560
+Well,
+
+493
+00:20:58,569 --> 00:21:00,689
+I feel like that stuff should have already been done like
+
+494
+00:21:00,699 --> 00:21:02,589
+-- that should be part of your posture and I
+-- mean,
+
+495
+00:21:02,599 --> 00:21:05,949
+it's getting there like it, it, it's a long road.
+
+496
+00:21:05,959 --> 00:21:06,579
+Here's the thing.
+
+497
+00:21:06,650 --> 00:21:09,310
+I live in a relatively safe part of the country where, ok,
+
+498
+00:21:09,319 --> 00:21:10,550
+we technically have tornadoes.
+
+499
+00:21:10,560 --> 00:21:12,709
+There was a big bad one like 40 years ago
+
+500
+00:21:12,869 --> 00:21:14,540
+and there have been tornadoes
+
+501
+00:21:14,760 --> 00:21:18,270
+reported in the news, like within 50 miles of the city.
+
+502
+00:21:18,609 --> 00:21:20,239
+But like, it doesn't really, like, I, basically,
+
+503
+00:21:20,250 --> 00:21:22,109
+what I'm saying is I don't have a go bag ready to go.
+
+504
+00:21:22,310 --> 00:21:24,790
+But if I lived in hurricane alley or tornado alley,
+
+505
+00:21:25,270 --> 00:21:28,020
+yeah, I should probably have a go bag ready to go because that's part of life.
+
+506
+00:21:28,030 --> 00:21:31,420
+I feel like if you are not yet at the point where
+
+507
+00:21:31,689 --> 00:21:34,449
+I will excuse people, not having a full inventory. That's hard.
+
+508
+00:21:34,770 --> 00:21:37,910
+I don't even have a full inventory. I'm confident I'm missing at least one thing.
+
+509
+00:21:38,040 --> 00:21:38,550
+But I,
+
+510
+00:21:39,000 --> 00:21:40,680
+if you don't have a full inventory
+
+511
+00:21:40,689 --> 00:21:43,599
+of like public facing revenue generating systems and
+
+512
+00:21:43,790 --> 00:21:44,530
+like what
+
+513
+00:21:44,689 --> 00:21:48,699
+stuff kind of core stuff they're using? That's negligent in today's world.
+
+514
+00:21:48,709 --> 00:21:49,880
+It's, it's 2022.
+
+515
+00:21:50,180 --> 00:21:53,349
+No, it's not. Not yet. It look, it's, it's coming a lot,
+
+516
+00:21:53,510 --> 00:21:56,709
+I think Log for Shell is what really kicked a lot
+
+517
+00:21:56,719 --> 00:21:59,260
+-- of this off
+-- and that was all about a year ago.
+
+518
+00:21:59,349 --> 00:21:59,739
+Yeah,
+
+519
+00:21:59,750 --> 00:22:03,699
+I know that it's not quite a year because I've been at Acor a year in log for Shell came,
+
+520
+00:22:03,709 --> 00:22:03,849
+saw the
+
+521
+00:22:04,520 --> 00:22:05,290
+being,
+
+522
+00:22:05,660 --> 00:22:07,099
+you're taking a
+
+523
+00:22:07,390 --> 00:22:10,439
+divisive stance on this, like everyone is working towards this,
+
+524
+00:22:10,449 --> 00:22:11,839
+but we all have limited budget.
+
+525
+00:22:11,849 --> 00:22:14,640
+We have limited resources saying everyone should be doing this now
+
+526
+00:22:14,900 --> 00:22:16,380
+is absurd.
+
+527
+00:22:16,390 --> 00:22:18,349
+-- Well,
+-- what I'm saying is if you're not doing it at this point,
+
+528
+00:22:18,359 --> 00:22:19,180
+it's just not gonna happen.
+
+529
+00:22:19,189 --> 00:22:22,479
+-- It's clearly not a priority, whatever.
+-- No, no, I think you're being a jerk.
+
+530
+00:22:22,489 --> 00:22:23,040
+I'm gonna,
+
+531
+00:22:23,319 --> 00:22:24,670
+anyway, we're moving on.
+
+532
+00:22:24,979 --> 00:22:25,670
+So
+
+533
+00:22:26,930 --> 00:22:31,949
+the issue comes out. Everyone's like, like the panic dies down.
+
+534
+00:22:32,290 --> 00:22:36,589
+There's a bunch of blog posts that are kind of lame because you could tell, like,
+
+535
+00:22:36,599 --> 00:22:38,310
+for example, in the one I wrote
+
+536
+00:22:38,540 --> 00:22:40,650
+it had a bunch of the word critical in lots of places.
+
+537
+00:22:40,660 --> 00:22:43,550
+I'm like, well, I better search for critical and make sure I take them all out.
+
+538
+00:22:45,560 --> 00:22:45,810
+But
+
+539
+00:22:46,000 --> 00:22:46,430
+it's
+
+540
+00:22:47,079 --> 00:22:53,359
+at the same time, I'm ecstatic. It, it was boring because I, right now I'm very busy.
+
+541
+00:22:53,369 --> 00:22:56,719
+I don't need another log for shell at the moment,
+
+542
+00:22:56,890 --> 00:22:57,160
+right?
+
+543
+00:22:57,170 --> 00:22:59,459
+-- It's just not something even if it
+-- had been critical,
+
+544
+00:22:59,469 --> 00:23:01,599
+remote code execution in the default configuration.
+
+545
+00:23:02,890 --> 00:23:06,500
+Yeah, it was no Js some ubuntu and red hat.
+
+546
+00:23:06,510 --> 00:23:10,780
+-- So
+-- no, no, here's the problem from my perspective is I work for a company
+
+547
+00:23:11,000 --> 00:23:15,430
+that builds software to break things open and look inside and,
+
+548
+00:23:15,439 --> 00:23:16,829
+and like build those inventories.
+
+549
+00:23:17,270 --> 00:23:19,010
+And so from our perspective,
+
+550
+00:23:19,209 --> 00:23:22,729
+we have people saying I don't think I have this anywhere,
+
+551
+00:23:22,739 --> 00:23:25,930
+but I want to make sure you're going to help me find it.
+
+552
+00:23:26,430 --> 00:23:30,010
+And so that's the difference. And in fact, one thing that's really cool is
+
+553
+00:23:30,189 --> 00:23:31,239
+uh the, the S
+
+554
+00:23:31,349 --> 00:23:33,290
+bomb scanner sift that, that
+
+555
+00:23:33,670 --> 00:23:33,849
+Acor
+
+556
+00:23:34,300 --> 00:23:37,280
+is the primary contributor to. It's an open source project.
+
+557
+00:23:37,709 --> 00:23:38,390
+And
+
+558
+00:23:39,050 --> 00:23:42,890
+one of our developers like worked all weekend long name is Chris Phillips.
+
+559
+00:23:42,900 --> 00:23:43,630
+Super cool dude,
+
+560
+00:23:43,880 --> 00:23:45,170
+worked all weekend long
+
+561
+00:23:45,510 --> 00:23:49,939
+and added the ability to start like detecting binaries on disk and figuring
+
+562
+00:23:49,949 --> 00:23:52,969
+out what well for now it's just node because that's the most important.
+
+563
+00:23:52,989 --> 00:23:54,689
+Like he, he built the structure
+
+564
+00:23:55,050 --> 00:23:56,729
+so we can start classifying binaries.
+
+565
+00:23:56,739 --> 00:24:01,290
+But then what's even more crazy is he realized that we, we're, when we're,
+
+566
+00:24:01,300 --> 00:24:04,189
+we're breaking these binaries open and like basically running strings
+
+567
+00:24:04,199 --> 00:24:06,469
+on them to do some figuring out what's going on.
+
+568
+00:24:06,880 --> 00:24:07,630
+Here's the thing,
+
+569
+00:24:07,900 --> 00:24:09,569
+there's an open SSL string.
+
+570
+00:24:09,579 --> 00:24:13,719
+You can reliably detect when someone compiles open SSL into a binary. And I'm like,
+
+571
+00:24:14,209 --> 00:24:15,630
+oh, that's exciting.
+
+572
+00:24:15,925 --> 00:24:20,714
+Anyway, I feel like putting all of these pieces together, right?
+
+573
+00:24:20,724 --> 00:24:24,655
+Like mixing it all up into the big pot and just kind of looking back at what's going on.
+
+574
+00:24:24,665 --> 00:24:26,175
+And I feel like
+
+575
+00:24:26,295 --> 00:24:30,155
+-- we have no excuse for where we are today.
+-- It's simple economics.
+
+576
+00:24:30,295 --> 00:24:34,135
+I have open to sell my product, open to sell probably version one because, well,
+
+577
+00:24:34,145 --> 00:24:36,375
+version three only came out recently, like in
+
+578
+00:24:36,760 --> 00:24:39,109
+general terms of products, not software.
+
+579
+00:24:39,250 --> 00:24:41,219
+You want me to upgrade to open SSL three. Why?
+
+580
+00:24:41,229 --> 00:24:44,869
+Because one is less than 33 is bigger than one? No, I'm serious. Like
+
+581
+00:24:45,300 --> 00:24:48,390
+literally the only reason somebody would kind of have to upgrade
+
+582
+00:24:48,400 --> 00:24:50,569
+to open SSL three is for quick support qu IC,
+
+583
+00:24:50,579 --> 00:24:51,819
+the new protocol thing that's
+
+584
+00:24:51,930 --> 00:24:53,449
+going to eventually become very important,
+
+585
+00:24:53,459 --> 00:24:56,729
+especially if they're like moving video and stuff and all that kind
+
+586
+00:24:56,739 --> 00:25:00,060
+-- of junk around whatever
+-- you need to upgrade because open SSL one,
+
+587
+00:25:00,160 --> 00:25:03,780
+-- it's going to be end of life in 2023.
+-- Yeah, that's next year's budget problem.
+
+588
+00:25:03,790 --> 00:25:07,020
+And also hear me out, we just keep using it.
+
+589
+00:25:07,189 --> 00:25:07,780
+No, that's it.
+
+590
+00:25:07,790 --> 00:25:11,310
+-- That's
+-- maybe
+-- what do you think your TV is going to get an update from Openness
+
+591
+00:25:11,430 --> 00:25:15,099
+-- L 1 to 3?
+-- My TV doesn't connect to the internet so I don't care.
+
+592
+00:25:16,150 --> 00:25:16,270
+So,
+
+593
+00:25:16,430 --> 00:25:19,380
+but no, I, I agree. I understand what you're saying.
+
+594
+00:25:19,459 --> 00:25:23,510
+I'm just saying the intent is, people should start upgrading from 1 to 3.
+
+595
+00:25:23,560 --> 00:25:25,310
+But here's what I'm telling you.
+
+596
+00:25:25,540 --> 00:25:28,800
+Here's the call to action for everyone out there
+
+597
+00:25:29,160 --> 00:25:32,750
+don't upgrade from open SSL 1 to 3.
+
+598
+00:25:32,930 --> 00:25:35,640
+Switch to the Isgs
+
+599
+00:25:35,989 --> 00:25:37,060
+Russell's
+
+600
+00:25:37,310 --> 00:25:39,839
+which is the Russ TLS library
+
+601
+00:25:40,329 --> 00:25:40,430
+-- and
+-- the
+
+602
+00:25:40,699 --> 00:25:42,619
+thing that is what we should all be doing.
+
+603
+00:25:42,630 --> 00:25:46,979
+It's probably about the same amount of work there is in theory, more risk, but
+
+604
+00:25:47,670 --> 00:25:50,729
+you're, you're eating more near term risk of like,
+
+605
+00:25:51,209 --> 00:25:52,520
+well, here, let me rephrase it.
+
+606
+00:25:52,640 --> 00:25:56,010
+There's more risk in the near term of upgrading from Openness
+
+607
+00:25:56,020 --> 00:25:59,030
+Cell one to Russell's than from Openness Cell 1 to 3
+
+608
+00:25:59,439 --> 00:26:02,910
+because like maybe Russell's doesn't support it whatever feature you need or not,
+
+609
+00:26:02,920 --> 00:26:04,930
+but that's going to be readily apparent.
+
+610
+00:26:04,939 --> 00:26:06,699
+And that's the problem with security flaws, right?
+
+611
+00:26:06,709 --> 00:26:08,260
+Is security flaws aren't apparent
+
+612
+00:26:08,540 --> 00:26:09,829
+until they are. And then
+
+613
+00:26:10,219 --> 00:26:13,170
+you got to deal with them whether you like it or not on a weekend maybe.
+
+614
+00:26:13,520 --> 00:26:17,119
+Whereas if you choose to go from Openness Cell one to Russell's,
+
+615
+00:26:17,420 --> 00:26:20,000
+oh, it doesn't work. It's missing a feature. Ok. Let's go bug them.
+
+616
+00:26:20,010 --> 00:26:21,630
+Help them whatever, get that fixed
+
+617
+00:26:21,989 --> 00:26:26,060
+and you can do that Monday to Friday, 9 to 5 and not on a weekend or over Christmas.
+
+618
+00:26:26,939 --> 00:26:29,520
+And I think that's part of what people forget, you know,
+
+619
+00:26:29,630 --> 00:26:30,479
+is that,
+
+620
+00:26:30,650 --> 00:26:33,280
+yeah, there might, even if there is more risk and more work
+
+621
+00:26:33,459 --> 00:26:37,010
+you can define when it happens, it's not an emergency response situation.
+
+622
+00:26:37,020 --> 00:26:39,420
+It's like, yeah, we can just budget that. It's gonna take six months,
+
+623
+00:26:40,449 --> 00:26:40,839
+you know,
+
+624
+00:26:41,079 --> 00:26:43,000
+and I think a lot of people forget that because
+
+625
+00:26:43,390 --> 00:26:46,359
+there is a big difference between like Josh,
+
+626
+00:26:46,369 --> 00:26:49,119
+you spend four weeks working Monday to Friday 9 to 5
+
+627
+00:26:49,130 --> 00:26:52,760
+versus spend two weeks of doing complete crazy panic response.
+
+628
+00:26:52,770 --> 00:26:55,560
+Which one do you want? Well, obviously the four weeks of 9 to 5.
+
+629
+00:26:56,829 --> 00:26:57,900
+Yes, of course.
+
+630
+00:26:58,479 --> 00:27:00,020
+And, and that's what people forget is.
+
+631
+00:27:00,400 --> 00:27:02,810
+And I don't want to say Russell's will have no security flaws.
+
+632
+00:27:02,819 --> 00:27:06,949
+Like it will absolutely have security flaws, but they won't be things like that.
+
+633
+00:27:06,959 --> 00:27:07,790
+They will,
+
+634
+00:27:07,930 --> 00:27:11,089
+it will be in some ways, I think it'll be harder because
+
+635
+00:27:11,219 --> 00:27:13,420
+all that common stuff is like gone.
+
+636
+00:27:13,430 --> 00:27:15,989
+You know, it's like when you start using a web framework and all the
+
+637
+00:27:16,380 --> 00:27:19,805
+cross site scripting and all the authentication and stuff, just poof gone,
+
+638
+00:27:20,084 --> 00:27:22,125
+you know, and some poor pent tester has to have a run at your thing.
+
+639
+00:27:22,135 --> 00:27:25,035
+And it's like, it's, it's much harder. They have to be more creative.
+
+640
+00:27:26,484 --> 00:27:27,594
+I think more importantly,
+
+641
+00:27:27,604 --> 00:27:32,005
+how do I put this nicely the kind of bugs you find in a rust application are
+
+642
+00:27:32,224 --> 00:27:33,574
+you learn from them?
+
+643
+00:27:33,925 --> 00:27:35,155
+Yeah. Whatever. That's a lie.
+
+644
+00:27:35,324 --> 00:27:40,074
+We clearly have not learned from like c memory management flaws because,
+
+645
+00:27:40,770 --> 00:27:44,290
+-- well, here we are.
+-- No, we can't learn. There's nothing to learn.
+
+646
+00:27:44,329 --> 00:27:47,420
+-- It's too complicated for humans.
+-- Whereas with,
+
+647
+00:27:47,560 --> 00:27:50,189
+you know, something like a rust based program with
+
+648
+00:27:50,449 --> 00:27:51,670
+whatever flaws they're gonna,
+
+649
+00:27:51,680 --> 00:27:53,430
+they're more likely to be in logic and in
+
+650
+00:27:53,439 --> 00:27:55,469
+other things where we can actually learn and maybe,
+
+651
+00:27:55,569 --> 00:27:57,349
+you know, build better test cases, build.
+
+652
+00:27:57,520 --> 00:27:58,869
+-- No,
+-- no, not at all.
+
+653
+00:27:59,170 --> 00:28:00,609
+They aren't more likely.
+
+654
+00:28:00,619 --> 00:28:02,140
+That's literally where the bugs will be
+
+655
+00:28:02,150 --> 00:28:04,150
+because memory management isn't the problem.
+
+656
+00:28:04,160 --> 00:28:05,349
+Like,
+
+657
+00:28:05,689 --> 00:28:07,819
+and we just can't learn. If you
+
+658
+00:28:07,939 --> 00:28:11,180
+writing an X 509 interpreter,
+
+659
+00:28:11,479 --> 00:28:12,540
+there's nothing to learn.
+
+660
+00:28:12,550 --> 00:28:15,079
+It's insanely complicated and you're going to
+
+661
+00:28:15,089 --> 00:28:16,839
+make mistakes because you're a human being
+
+662
+00:28:17,160 --> 00:28:18,400
+and there's nothing to learn.
+
+663
+00:28:18,410 --> 00:28:20,229
+You're also going to make mistakes because it's not,
+
+664
+00:28:20,239 --> 00:28:21,520
+the specification is not clear.
+
+665
+00:28:21,530 --> 00:28:22,079
+Like I, I
+
+666
+00:28:22,260 --> 00:28:24,400
+remember when, uh jeez, what was it?
+
+667
+00:28:24,489 --> 00:28:28,520
+The one, not the A sn one stuff, but whatever the last A sn one related one was.
+
+668
+00:28:28,530 --> 00:28:31,280
+And I'm like, oh, I'll just download the A sl one spec and give it a quick glance.
+
+669
+00:28:31,569 --> 00:28:35,040
+No, like it's 800 pages for the overview of the spec.
+
+670
+00:28:35,469 --> 00:28:36,989
+Yeah, they're all like that. That's normal, you
+
+671
+00:28:37,130 --> 00:28:37,189
+know,
+
+672
+00:28:37,300 --> 00:28:40,459
+because they have 30 some years of baggage attached
+
+673
+00:28:40,839 --> 00:28:43,790
+-- to that.
+-- They were designed by the International Telephony Union who
+
+674
+00:28:44,099 --> 00:28:45,650
+vastly over specs things.
+
+675
+00:28:45,719 --> 00:28:49,589
+But, but what the point is, even though you have 800 pages of specifications,
+
+676
+00:28:49,709 --> 00:28:53,650
+there's still a lot of not well defined behaviors and things in it.
+
+677
+00:28:53,750 --> 00:28:56,260
+You know, like the same thing we discovered with TCP/IP.
+
+678
+00:28:57,010 --> 00:28:59,810
+The, let's encrypt people, they get this, you know.
+
+679
+00:28:59,989 --> 00:29:00,489
+Come on,
+
+680
+00:29:01,280 --> 00:29:05,069
+I'm not anyway. All right, we're, we're kind of running ourselves out of time.
+
+681
+00:29:05,270 --> 00:29:08,520
+I want to wrap up our, our tale, which is,
+
+682
+00:29:08,719 --> 00:29:11,500
+we'll say weaved itself an interesting web
+
+683
+00:29:11,920 --> 00:29:12,550
+and
+
+684
+00:29:12,930 --> 00:29:17,819
+I, I want to kind of set the stage for the future is open.
+
+685
+00:29:17,829 --> 00:29:23,310
+SSL is going to have more memory safety issues. They may not be critical.
+
+686
+00:29:23,319 --> 00:29:26,310
+I mean, the last critical was in 2016 if you look at their vulnerability page.
+
+687
+00:29:26,319 --> 00:29:30,130
+So 2016 to 2022 is a pretty good run, especially for
+
+688
+00:29:30,339 --> 00:29:31,760
+one of the most
+
+689
+00:29:32,170 --> 00:29:36,630
+hammered and researched and just everything libraries on the internet.
+
+690
+00:29:36,810 --> 00:29:41,670
+Right. So, like they're doing all in all. I think they're doing very well. Right.
+
+691
+00:29:42,170 --> 00:29:43,900
+But the reality is,
+
+692
+00:29:44,160 --> 00:29:45,949
+it is 2022
+
+693
+00:29:46,109 --> 00:29:47,819
+C is
+
+694
+00:29:48,150 --> 00:29:48,160
+a
+
+695
+00:29:48,280 --> 00:29:49,760
+pain in the butt
+
+696
+00:29:49,880 --> 00:29:51,560
+to deal with memory management in.
+
+697
+00:29:51,790 --> 00:29:54,339
+-- Well,
+-- you provably can't do it safely.
+
+698
+00:29:54,349 --> 00:29:55,920
+Yes, absolutely.
+
+699
+00:29:56,020 --> 00:30:00,650
+-- Nobody can like open SSH can't do it. Open SSL can't do it like,
+-- absolutely correct.
+
+700
+00:30:01,040 --> 00:30:02,949
+And so the reality is
+
+701
+00:30:03,260 --> 00:30:07,709
+we need to plan to go to something else and I would love it
+
+702
+00:30:07,719 --> 00:30:09,750
+if the OPEN SSL developers were a
+
+703
+00:30:09,760 --> 00:30:13,489
+part of this transition because generally speaking,
+
+704
+00:30:13,500 --> 00:30:16,790
+what happens in open source is these projects will hang on
+
+705
+00:30:17,089 --> 00:30:19,369
+years longer than they ever should.
+
+706
+00:30:19,729 --> 00:30:23,310
+When the reality is the open SSL developers have
+
+707
+00:30:23,319 --> 00:30:27,030
+an enormous amount of knowledge around the protocol and
+
+708
+00:30:27,040 --> 00:30:31,790
+how to write libraries and how to run a project to a degree they need to work with.
+
+709
+00:30:31,800 --> 00:30:35,540
+The next thing, in my opinion, it's, is G's library.
+
+710
+00:30:35,550 --> 00:30:38,750
+Maybe it's not, maybe there's something else but it's not c
+
+711
+00:30:39,219 --> 00:30:42,270
+that is the only thing I think we can all agree on.
+
+712
+00:30:42,280 --> 00:30:44,569
+Well and more importantly, no matter what happens,
+
+713
+00:30:44,579 --> 00:30:48,469
+whatever is going to come replace open SSL has to do so economically.
+
+714
+00:30:48,479 --> 00:30:50,069
+So the more compatible it is
+
+715
+00:30:50,430 --> 00:30:51,989
+the cheaper it will be.
+
+716
+00:30:52,239 --> 00:30:52,709
+And
+
+717
+00:30:52,969 --> 00:30:54,829
+well, yeah, those are the people that would
+
+718
+00:30:55,160 --> 00:30:57,109
+be the ones to help that happen, right?
+
+719
+00:30:57,119 --> 00:31:00,930
+I would love to see a rapper around Russell's that
+
+720
+00:31:00,939 --> 00:31:05,589
+just literally mimicked open SSL like warts and all for now
+
+721
+00:31:05,689 --> 00:31:08,270
+as a drop in replacement and then
+
+722
+00:31:08,670 --> 00:31:09,890
+fix it all later.
+
+723
+00:31:09,939 --> 00:31:13,770
+Well, but the thing is that is a challenge because even opens us all three had to,
+
+724
+00:31:13,780 --> 00:31:17,800
+you know, say like this internal function no more touching it like it's, you're
+
+725
+00:31:17,900 --> 00:31:19,010
+not supposed to be doing that.
+
+726
+00:31:19,270 --> 00:31:23,829
+And so part of the problem is you can't necessarily wrap Russell's because
+
+727
+00:31:24,130 --> 00:31:27,300
+-- there's also like, but we need this like incorrect behavior,
+-- right?
+
+728
+00:31:27,310 --> 00:31:28,949
+-- No, I get that,
+-- you know,
+
+729
+00:31:29,089 --> 00:31:30,369
+but fundamentally
+
+730
+00:31:30,750 --> 00:31:33,670
+what it boils down to for me is applying more
+
+731
+00:31:33,949 --> 00:31:38,020
+effort and human engineering to a thing based on sea.
+
+732
+00:31:38,380 --> 00:31:39,579
+Yeah, you're just gonna have
+
+733
+00:31:39,800 --> 00:31:43,699
+like, you're just gonna have more memory vulnerabilities. That's it forever.
+
+734
+00:31:44,300 --> 00:31:48,410
+Whereas you start using an entirely new tool set like Rust Rust,
+
+735
+00:31:48,420 --> 00:31:51,300
+like the Linux kernel is doing and I suspect that's going to be one of
+
+736
+00:31:51,310 --> 00:31:54,449
+the things that's really gonna drive rust adoption is in one or two years.
+
+737
+00:31:54,459 --> 00:31:59,010
+People are gonna start noticing, hey, like all that Rust code in the Linux kernel,
+
+738
+00:31:59,109 --> 00:32:01,329
+uh It's not really causing any problems, is it?
+
+739
+00:32:01,420 --> 00:32:03,810
+I have a funny story for you as I was talking to someone today
+
+740
+00:32:04,229 --> 00:32:08,540
+and they made a joke that in two years, the Linux kernel will be rewritten and Rust.
+
+741
+00:32:08,550 --> 00:32:11,979
+And I was like, oh, I, I hope that is true. I truly do.
+
+742
+00:32:11,989 --> 00:32:15,969
+And they were not expecting that response to their joke.
+
+743
+00:32:16,719 --> 00:32:19,900
+Yeah, I dude, you just gave me a warm tingle because
+
+744
+00:32:20,439 --> 00:32:21,150
+seriously like
+
+745
+00:32:21,300 --> 00:32:24,339
+that would be like 90% of the security vulnerabilities would just
+
+746
+00:32:24,780 --> 00:32:28,550
+-- kind of go away.
+-- Well, no, no, that's, we can't say that
+
+747
+00:32:28,660 --> 00:32:32,510
+we have to be mindful. Rust isn't magic.
+
+748
+00:32:32,760 --> 00:32:36,030
+It just doesn't have memory safety issues.
+
+749
+00:32:36,130 --> 00:32:37,420
+That's the thing is it doesn't,
+
+750
+00:32:37,530 --> 00:32:38,900
+you have to be magic. This is like,
+
+751
+00:32:39,209 --> 00:32:42,160
+like I drive a 2015 Kia Optima. It
+
+752
+00:32:42,339 --> 00:32:44,170
+is a nice cheap four.
+
+753
+00:32:44,390 --> 00:32:46,670
+It's like the kind of car your kid would draw when they're five.
+
+754
+00:32:46,680 --> 00:32:49,150
+But compared to a model T Ford,
+
+755
+00:32:49,270 --> 00:32:51,319
+it is basically magic because Yeah,
+
+756
+00:32:51,329 --> 00:32:54,250
+it's got all these just normal safety features now and that's
+
+757
+00:32:54,260 --> 00:32:56,229
+kind of how I feel about rust and C is.
+
+758
+00:32:56,239 --> 00:32:57,329
+Yeah. C was,
+
+759
+00:32:57,479 --> 00:32:58,310
+well, you gotta remember
+
+760
+00:32:58,410 --> 00:32:59,530
+but that, that's all we like.
+
+761
+00:32:59,660 --> 00:33:03,189
+That's all we had 2030 40 years ago and worse.
+
+762
+00:33:03,199 --> 00:33:05,810
+It was a major step up though, from things like assembler.
+
+763
+00:33:06,170 --> 00:33:07,880
+It was a major step up like,
+
+764
+00:33:08,099 --> 00:33:10,630
+and also all the heavy lifting is taken away and,
+
+765
+00:33:10,640 --> 00:33:13,589
+but now we take more heavy lifting away like memory management because
+
+766
+00:33:14,060 --> 00:33:14,709
+like,
+
+767
+00:33:14,719 --> 00:33:16,790
+why would I make you do memory management when we
+
+768
+00:33:16,800 --> 00:33:19,270
+can have a framework to it or a language?
+
+769
+00:33:19,500 --> 00:33:23,180
+Because we're dealing with legacy architecture. Like, don't pretend
+
+770
+00:33:23,400 --> 00:33:27,189
+like this is some decision people made and they picked memory management.
+
+771
+00:33:27,439 --> 00:33:29,030
+This is legacy code.
+
+772
+00:33:29,089 --> 00:33:30,199
+I'm going to,
+
+773
+00:33:30,250 --> 00:33:34,699
+I'm going to end this because we're just going to end up in the weeds if I don't.
+
+774
+00:33:34,709 --> 00:33:36,630
+All right, thank you, Kurt. Thank you all for listening. Go to
+
+775
+00:33:36,770 --> 00:33:38,650
+Social security podcast.com. Hit up the show note, Susie Pounds
+
+776
+00:33:39,010 --> 00:33:42,979
+as podcast. Hashtag hit us up on social media. Kurt have a marvelous rest of your day.
+
+777
+00:33:43,000 --> 00:33:44,319
+-- You too.
+-- Thanks everybody.
+
+778
+00:33:44,329 --> 00:33:46,089
+Thanks everyone. Bye bye
+
+779
+00:33:50,859 --> 00:33:50,959
+that.

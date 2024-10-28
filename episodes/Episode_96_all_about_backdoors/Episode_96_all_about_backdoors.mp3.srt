@@ -1,0 +1,3061 @@
+0
+00:00:05,340 --> 00:00:09,619
+Hello and welcome to episode 96 of the open source security podcast with myself,
+
+1
+00:00:09,630 --> 00:00:11,289
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:11,300 --> 00:00:12,050
+Josh Bresser.
+
+3
+00:00:12,340 --> 00:00:13,460
+-- How are you
+-- doing, Kurt?
+
+4
+00:00:13,649 --> 00:00:15,800
+Good, good, summer's here. It's awesome.
+
+5
+00:00:17,629 --> 00:00:18,600
+Sweet.
+
+6
+00:00:18,879 --> 00:00:21,610
+So, I assume that just means you have less snow, right?
+
+7
+00:00:21,909 --> 00:00:24,059
+Yeah. And the grass is going from brown to green.
+
+8
+00:00:24,420 --> 00:00:25,889
+-- Wow.
+-- Fantastic.
+
+9
+00:00:26,620 --> 00:00:30,799
+-- Oh, goodness. But now you have to mow the lawn. So there's that.
+-- Yes. Yes.
+
+10
+00:00:31,530 --> 00:00:35,919
+-- I think my kids are almost old enough to do it. Maybe next
+-- mine totally are.
+
+11
+00:00:36,000 --> 00:00:37,029
+And it's awesome.
+
+12
+00:00:37,200 --> 00:00:39,669
+-- That must be lovely.
+-- It, it is. It's very nice.
+
+13
+00:00:40,490 --> 00:00:41,169
+Yes. But
+
+14
+00:00:41,340 --> 00:00:42,470
+anyway, anyway,
+
+15
+00:00:42,650 --> 00:00:43,700
+so we,
+
+16
+00:00:43,709 --> 00:00:46,069
+we had a chat after the last episode and
+
+17
+00:00:46,080 --> 00:00:50,340
+we thought it could be good to talk about backdoors
+
+18
+00:00:50,569 --> 00:00:53,330
+as, as we discussed the get cookies backdoor last time.
+
+19
+00:00:53,419 --> 00:00:58,720
+But in, in this time, do it in the context of legal backdoors.
+
+20
+00:00:59,330 --> 00:01:04,230
+Well, or even more, maybe specifically the legally mandated backdoors.
+
+21
+00:01:04,489 --> 00:01:06,510
+Right. Because I'm pretty sure,
+
+22
+00:01:08,400 --> 00:01:09,120
+yeah, I don't,
+
+23
+00:01:09,129 --> 00:01:12,480
+I don't fully understand or know what would constitute a legal
+
+24
+00:01:12,489 --> 00:01:15,180
+backdoor as far as like an end user license agreement goes.
+
+25
+00:01:16,190 --> 00:01:17,089
+Uh,
+
+26
+00:01:17,309 --> 00:01:18,239
+-- so that's
+-- that
+
+27
+00:01:18,699 --> 00:01:22,150
+I wouldn't even think of it in terms of end user licenses.
+
+28
+00:01:22,160 --> 00:01:24,050
+But we'll say, like law enforcement,
+
+29
+00:01:24,250 --> 00:01:24,260
+I
+
+30
+00:01:24,410 --> 00:01:24,540
+mean, by
+
+31
+00:01:24,660 --> 00:01:24,690
+the
+
+32
+00:01:26,120 --> 00:01:26,150
+back
+
+33
+00:01:26,400 --> 00:01:27,110
+door where it's not,
+
+34
+00:01:27,709 --> 00:01:28,250
+you,
+
+35
+00:01:28,839 --> 00:01:33,319
+you have to put this back door in or else some consequence occurs.
+
+36
+00:01:33,620 --> 00:01:36,870
+And, I mean, this is not a new topic. I actually had to look like
+
+37
+00:01:37,250 --> 00:01:41,349
+this is, this has been going on literally for decades. I mean, we have the, uh,
+
+38
+00:01:42,410 --> 00:01:45,300
+sort of the last, yeah, the last sort of major,
+
+39
+00:01:45,309 --> 00:01:48,190
+one of the last major revs of this was in 1994.
+
+40
+00:01:48,199 --> 00:01:48,940
+So that's uh
+
+41
+00:01:50,430 --> 00:01:52,089
+oh my God, that's 28 years ago.
+
+42
+00:01:53,459 --> 00:01:54,239
+Sorry. 18,
+
+43
+00:01:55,059 --> 00:01:56,440
+wait, I can't math so good.
+
+44
+00:01:56,610 --> 00:01:58,319
+Yeah, 24 years ago. Holy.
+
+45
+00:01:58,739 --> 00:01:59,910
+Wow, sorry. That's.
+
+46
+00:02:00,370 --> 00:02:02,980
+Yeah. Wow. Uh Anyways, this is this thing called ka
+
+47
+00:02:03,290 --> 00:02:06,239
+the Communications Assistance for Law Enforcement Act
+
+48
+00:02:06,809 --> 00:02:09,899
+and essentially my understanding of what triggered it is um
+
+49
+00:02:10,050 --> 00:02:11,000
+phones, OK.
+
+50
+00:02:11,008 --> 00:02:13,539
+This is going back, old timey phones were, you know,
+
+51
+00:02:13,550 --> 00:02:16,529
+like electromechanical relay switch devices
+
+52
+00:02:16,710 --> 00:02:20,639
+and like literally back in the olden days, you, you would tap a phone by literally
+
+53
+00:02:20,990 --> 00:02:23,710
+like taping a tape recorder and, you know,
+
+54
+00:02:24,220 --> 00:02:28,800
+hooking up the, not a microphone but like a, a wire with like two alligator clips
+
+55
+00:02:29,619 --> 00:02:32,039
+and like attaching that physically to somebody's phone line,
+
+56
+00:02:33,289 --> 00:02:34,169
+right? You know,
+
+57
+00:02:34,369 --> 00:02:35,539
+like straight up and,
+
+58
+00:02:35,679 --> 00:02:37,770
+and because I remember reading about how to detect
+
+59
+00:02:37,779 --> 00:02:39,339
+wiretaps back in the day and they would,
+
+60
+00:02:39,419 --> 00:02:42,779
+they would do things like, look for voltage loss, you know, like, oh, like
+
+61
+00:02:42,990 --> 00:02:46,869
+normally your phone line is like five volts. Now it's like 4.1 right?
+
+62
+00:02:46,880 --> 00:02:47,729
+Something like that.
+
+63
+00:02:48,110 --> 00:02:50,429
+And, you know, just all these things that it's like, like,
+
+64
+00:02:50,440 --> 00:02:53,630
+and I couldn't understand until it wasn't frame, you know,
+
+65
+00:02:53,639 --> 00:02:57,169
+till I put it in the frame of, oh, yeah, like really old timey technology because,
+
+66
+00:02:57,770 --> 00:03:00,710
+you know, back in the nineties everything was becoming computerized.
+
+67
+00:03:01,339 --> 00:03:01,690
+Just
+
+68
+00:03:01,880 --> 00:03:05,710
+-- it was that simple. And
+-- it's also worth noting that
+
+69
+00:03:05,850 --> 00:03:08,050
+if, if we want to go back in time, you can,
+
+70
+00:03:08,059 --> 00:03:10,289
+a telegraph is probably the easiest way
+
+71
+00:03:10,300 --> 00:03:12,429
+to describe it where a telegraph was literally
+
+72
+00:03:12,690 --> 00:03:14,589
+a wire between two places,
+
+73
+00:03:14,899 --> 00:03:15,350
+right?
+
+74
+00:03:15,770 --> 00:03:19,339
+And so obviously tapping telegraph lines was incredibly trivial.
+
+75
+00:03:19,350 --> 00:03:22,029
+And then we got the telephone network and now we had
+
+76
+00:03:22,389 --> 00:03:23,100
+a wire
+
+77
+00:03:23,860 --> 00:03:23,979
+from,
+
+78
+00:03:24,820 --> 00:03:26,330
+well, telegraphs used two wires.
+
+79
+00:03:26,729 --> 00:03:29,949
+They didn't, they used a single wire with the earth as the sink
+
+80
+00:03:30,979 --> 00:03:32,289
+because I always was wondering about that because
+
+81
+00:03:32,729 --> 00:03:34,110
+yeah, I mean, how,
+
+82
+00:03:34,669 --> 00:03:38,369
+yeah, no telegraphs crazy. Cool. A single wire magic.
+
+83
+00:03:38,970 --> 00:03:39,470
+Right. Right.
+
+84
+00:03:39,479 --> 00:03:40,160
+So anyway, but,
+
+85
+00:03:40,169 --> 00:03:45,850
+but the trick with telephones was you had a wire from your house to a central office
+
+86
+00:03:46,309 --> 00:03:49,690
+and then the central office could magically connect wires as needed.
+
+87
+00:03:49,699 --> 00:03:51,690
+But we were still basically talking about
+
+88
+00:03:51,830 --> 00:03:54,380
+like a hard connection between your phone. Like
+
+89
+00:03:54,660 --> 00:03:55,509
+-- you were talking
+-- to,
+
+90
+00:03:55,669 --> 00:03:56,729
+it was not
+
+91
+00:03:57,020 --> 00:03:58,270
+a packet based network.
+
+92
+00:03:58,279 --> 00:04:00,279
+It was a circuit based network where and it would
+
+93
+00:04:00,289 --> 00:04:03,649
+literally physically complete a circuit between you and the other party
+
+94
+00:04:04,729 --> 00:04:06,139
+Right. Right. Exactly.
+
+95
+00:04:06,720 --> 00:04:08,169
+And, and even then
+
+96
+00:04:08,520 --> 00:04:13,740
+I, I know there were wiretap laws about what law enforcement could and couldn't do
+
+97
+00:04:14,169 --> 00:04:17,579
+in terms of listening in, on conversations on telephones.
+
+98
+00:04:17,589 --> 00:04:19,200
+And this was also funny because,
+
+99
+00:04:19,329 --> 00:04:21,470
+you know, there's always like the old timey movies
+
+100
+00:04:21,678 --> 00:04:25,670
+where you've got the operator listening in and like that, that totally happened.
+
+101
+00:04:25,679 --> 00:04:27,790
+-- I mean, there's nothing that really stopped them from doing.
+-- Well.
+
+102
+00:04:27,799 --> 00:04:31,619
+You had party lines in rural areas where you literally had a single phone line
+
+103
+00:04:32,160 --> 00:04:34,059
+servicing like 10 houses
+
+104
+00:04:34,339 --> 00:04:35,779
+and you literally would pick up the phone
+
+105
+00:04:35,790 --> 00:04:37,959
+and hear other people talking and supposed to,
+
+106
+00:04:38,179 --> 00:04:40,040
+you're supposed to put it down and wait your turn,
+
+107
+00:04:40,549 --> 00:04:42,519
+right. Which is just crazy to think about.
+
+108
+00:04:42,529 --> 00:04:45,359
+I mean, could you imagine something like that today? Just,
+
+109
+00:04:46,690 --> 00:04:47,760
+um, so
+
+110
+00:04:48,200 --> 00:04:51,750
+basically what what happened is, you know, back in the day, physically,
+
+111
+00:04:51,760 --> 00:04:52,859
+wiretapping stuff was easy.
+
+112
+00:04:52,869 --> 00:04:56,809
+You basically just had law enforcement drive over to the phone company and like
+
+113
+00:04:57,230 --> 00:04:59,320
+plug in some equipment. And of course, then, you know,
+
+114
+00:04:59,660 --> 00:05:01,399
+the phone company started doing it and just
+
+115
+00:05:01,410 --> 00:05:04,119
+charging law enforcement for it because uh ultimately,
+
+116
+00:05:04,130 --> 00:05:05,980
+now the beauty is wiretapping has actually become a,
+
+117
+00:05:05,989 --> 00:05:08,910
+a profit center for a lot of phone carriers,
+
+118
+00:05:09,140 --> 00:05:12,399
+right? They, uh in one case, they accidentally sent out the bill
+
+119
+00:05:12,700 --> 00:05:15,410
+for the wiretapping also to the suspect.
+
+120
+00:05:15,709 --> 00:05:17,109
+Whoops. Yeah,
+
+121
+00:05:17,510 --> 00:05:19,040
+that happened. And um,
+
+122
+00:05:19,440 --> 00:05:21,690
+so yeah, back but the, the thing that was happening is, you know,
+
+123
+00:05:21,700 --> 00:05:24,640
+phone systems were becoming computerized and more importantly,
+
+124
+00:05:24,989 --> 00:05:29,850
+uh phone calls were, well, the last mile was still, you know, physically your wire,
+
+125
+00:05:29,859 --> 00:05:30,609
+you know, running
+
+126
+00:05:31,200 --> 00:05:33,529
+like an old tiny rotary telephone or whatever.
+
+127
+00:05:33,600 --> 00:05:37,269
+But the back end the back haul was becoming things like, you know, FDD I, the fiber,
+
+128
+00:05:37,279 --> 00:05:39,529
+what is it, fiber distributed data interface?
+
+129
+00:05:40,519 --> 00:05:41,730
+I don't know. Sure. Yeah.
+
+130
+00:05:41,790 --> 00:05:42,910
+So you basically, you know,
+
+131
+00:05:42,920 --> 00:05:46,140
+you had fiber optics connecting all the major phone exchanges, you know,
+
+132
+00:05:46,149 --> 00:05:47,630
+with computers basically packets
+
+133
+00:05:47,890 --> 00:05:48,339
+the data,
+
+134
+00:05:48,869 --> 00:05:51,329
+shoving it over this fiber loop. And you know,
+
+135
+00:05:51,609 --> 00:05:54,859
+a lot better because the local phone company actually has
+
+136
+00:05:54,869 --> 00:05:57,339
+a museum and they have a um a section of wire
+
+137
+00:05:57,519 --> 00:06:02,809
+and it's a 3600 pair of wire. So it's 3600 pairs of very small wire.
+
+138
+00:06:03,019 --> 00:06:03,809
+And like
+
+139
+00:06:04,059 --> 00:06:04,989
+literally, you know,
+
+140
+00:06:05,000 --> 00:06:07,690
+people like you think a backhoe hitting a fiber is bad
+
+141
+00:06:07,700 --> 00:06:10,630
+nowadays with like 10 or 20 or 50 fibers in that wire
+
+142
+00:06:10,890 --> 00:06:11,730
+in that cable.
+
+143
+00:06:11,989 --> 00:06:12,329
+You know,
+
+144
+00:06:12,339 --> 00:06:14,540
+they literally would have instances where like a cable with
+
+145
+00:06:14,549 --> 00:06:17,690
+3600 physical pairs of wires would get dug up.
+
+146
+00:06:18,010 --> 00:06:19,820
+Yeah. Good luck splicing that thing.
+
+147
+00:06:20,279 --> 00:06:23,070
+Some poor bugger had to go down the hole and like spend, you know,
+
+148
+00:06:23,079 --> 00:06:25,910
+-- the rest of the month splicing
+-- wire, man.
+
+149
+00:06:26,089 --> 00:06:26,570
+That's crazy
+
+150
+00:06:26,890 --> 00:06:27,790
+to think about.
+
+151
+00:06:28,010 --> 00:06:28,700
+Yeah. So
+
+152
+00:06:28,929 --> 00:06:31,350
+anyways they, so, you know, law enforcement,
+
+153
+00:06:31,660 --> 00:06:31,959
+you know,
+
+154
+00:06:31,970 --> 00:06:33,739
+they're not stupid and they saw the coming
+
+155
+00:06:33,750 --> 00:06:35,890
+computerization of it and kind of went well,
+
+156
+00:06:35,899 --> 00:06:36,380
+hey,
+
+157
+00:06:36,910 --> 00:06:39,269
+we can make this a heck of a lot more, uh,
+
+158
+00:06:40,079 --> 00:06:43,779
+easy and, you know, harder to detect by basically, you know,
+
+159
+00:06:43,790 --> 00:06:46,529
+forcing people who build this computer equipment
+
+160
+00:06:46,640 --> 00:06:47,790
+and software and whatnot
+
+161
+00:06:47,970 --> 00:06:51,839
+to put in the legally mandated back door so that we can go to the carrier and say,
+
+162
+00:06:51,850 --> 00:06:53,619
+you know, that guy over there with this phone number,
+
+163
+00:06:53,769 --> 00:06:55,720
+I want you to record
+
+164
+00:06:55,910 --> 00:06:56,970
+all the
+
+165
+00:06:57,260 --> 00:06:59,980
+conversations on that phone line out and incoming,
+
+166
+00:07:00,640 --> 00:07:02,119
+you know, and sent us that recording,
+
+167
+00:07:02,380 --> 00:07:04,510
+however, burn it to CD or whatever,
+
+168
+00:07:04,720 --> 00:07:06,690
+you know, and, and Bill of for Sweet. Right.
+
+169
+00:07:06,760 --> 00:07:08,709
+And, and that's basically what happened, you know,
+
+170
+00:07:08,720 --> 00:07:10,619
+the difference here being is that,
+
+171
+00:07:10,929 --> 00:07:14,980
+you know, there was still, the carriers were still heavily involved, right?
+
+172
+00:07:14,989 --> 00:07:17,660
+Like law enforcement didn't have like a direct line in,
+
+173
+00:07:18,190 --> 00:07:22,570
+uh, to the equipment to simply, you know, tell it to do what they want.
+
+174
+00:07:23,010 --> 00:07:25,570
+And I don't think that's really ever happened anywhere,
+
+175
+00:07:25,690 --> 00:07:27,410
+to be honest, not that I've read
+
+176
+00:07:27,679 --> 00:07:29,670
+-- what, what has happened where, well,
+-- in the sense,
+
+177
+00:07:29,679 --> 00:07:32,399
+I don't think law enforcement has ever really been given like
+
+178
+00:07:33,250 --> 00:07:37,809
+unfettered access to switching equipment to, you know, turn tapping on and off
+
+179
+00:07:38,170 --> 00:07:38,269
+documents.
+
+180
+00:07:40,299 --> 00:07:40,640
+Well,
+
+181
+00:07:40,859 --> 00:07:41,440
+-- what happened
+-- there?
+
+182
+00:07:42,059 --> 00:07:47,559
+Subtle difference. My understanding of that is that the NSA had traffic mirrored
+
+183
+00:07:48,070 --> 00:07:48,609
+to them.
+
+184
+00:07:50,170 --> 00:07:51,739
+Right. So kind of like a port span.
+
+185
+00:07:51,940 --> 00:07:54,109
+Well, basically it's, it's a, it's,
+
+186
+00:07:54,369 --> 00:07:55,970
+yeah, it's, it's a hair of a difference,
+
+187
+00:07:55,980 --> 00:07:57,399
+but essentially my understanding of that is,
+
+188
+00:07:57,410 --> 00:08:00,230
+is that they had traffic like a span mirror.
+
+189
+00:08:00,239 --> 00:08:03,000
+So, and then they basically just all the traffic coming in out of that
+
+190
+00:08:03,869 --> 00:08:08,119
+whatever device computer was then sent down a pipe, you know, to room,
+
+191
+00:08:08,130 --> 00:08:10,489
+whatever that magic room in that AT&T building was called.
+
+192
+00:08:10,500 --> 00:08:11,170
+For example,
+
+193
+00:08:11,309 --> 00:08:14,239
+where the NSA had a whole bunch of intercept equipment set up.
+
+194
+00:08:14,940 --> 00:08:17,709
+So it's, it's functionally basically the same thing. Actually. You're right.
+
+195
+00:08:18,079 --> 00:08:18,429
+Right.
+
+196
+00:08:18,940 --> 00:08:19,399
+You know, and,
+
+197
+00:08:19,410 --> 00:08:23,420
+and basically the biggest thing is this is before we even had an inkling of
+
+198
+00:08:23,630 --> 00:08:27,230
+in properly encrypted communications, especially properly encrypted,
+
+199
+00:08:27,239 --> 00:08:31,690
+end to end communications for, for lack of a better word, civilians, consumers.
+
+200
+00:08:31,920 --> 00:08:32,460
+Right.
+
+201
+00:08:32,619 --> 00:08:33,119
+Right. Right.
+
+202
+00:08:33,130 --> 00:08:33,650
+And, and in fact,
+
+203
+00:08:33,659 --> 00:08:36,830
+that's a really good point because I think in the last couple of years
+
+204
+00:08:37,489 --> 00:08:42,229
+is when end to end communications have really kind of become a big thing.
+
+205
+00:08:42,239 --> 00:08:44,708
+Whereas before that you had what, like GP G
+
+206
+00:08:44,818 --> 00:08:49,768
+and GP G was terrible to use or I guess P GP, depending upon how you want to call it.
+
+207
+00:08:49,838 --> 00:08:50,629
+-- That's true. It's
+-- not
+
+208
+00:08:50,789 --> 00:08:50,838
+like
+
+209
+00:08:50,968 --> 00:08:52,289
+I'm sorry it has.
+
+210
+00:08:53,479 --> 00:08:56,189
+And the other thing I think that's really happened, that's interesting to me is
+
+211
+00:08:56,559 --> 00:08:59,859
+literally every, like, chat program that I have
+
+212
+00:09:00,539 --> 00:09:01,960
+or not chat program rather.
+
+213
+00:09:01,969 --> 00:09:02,900
+But chat service,
+
+214
+00:09:02,909 --> 00:09:05,580
+like every chat service in the last five years has just
+
+215
+00:09:05,590 --> 00:09:08,380
+added voice and video calls as a feature like slack.
+
+216
+00:09:08,659 --> 00:09:09,510
+Right. Right.
+
+217
+00:09:09,520 --> 00:09:12,250
+One day that little phone icon thing popped up and I was going,
+
+218
+00:09:12,270 --> 00:09:13,119
+I wonder what that does.
+
+219
+00:09:13,130 --> 00:09:17,609
+Click ring, ring, ring, ring. Oh, I guess it makes, you know, I can make, uh,
+
+220
+00:09:18,020 --> 00:09:20,179
+I'm going to sound old because I'm going to say it
+
+221
+00:09:20,190 --> 00:09:22,859
+makes a phone call except it's absolutely not a phone call.
+
+222
+00:09:23,289 --> 00:09:25,400
+It has nothing to do with a phone call or, you know,
+
+223
+00:09:25,409 --> 00:09:28,440
+signal being a great example of like, well, it was
+
+224
+00:09:28,640 --> 00:09:32,080
+end to end text chat and now it does voice and video,
+
+225
+00:09:32,429 --> 00:09:33,000
+you know,
+
+226
+00:09:33,650 --> 00:09:34,440
+and so
+
+227
+00:09:34,700 --> 00:09:39,109
+we have this idea, you know, law enforcement doesn't, for some crazy reason,
+
+228
+00:09:39,119 --> 00:09:41,229
+doesn't like the idea of, you know, the bad guys having
+
+229
+00:09:41,840 --> 00:09:44,739
+communication technology that they can't at all
+
+230
+00:09:44,869 --> 00:09:45,500
+monitor,
+
+231
+00:09:46,549 --> 00:09:48,340
+right? I mean, that, that's a huge,
+
+232
+00:09:48,809 --> 00:09:52,260
+uh, intelligence gathering resource to lose potentially, right?
+
+233
+00:09:52,270 --> 00:09:54,880
+-- It,
+-- it, it goes even deeper than that even.
+
+234
+00:09:54,890 --> 00:09:58,900
+I mean, I, I imagine we'll get there, but kind of the topic of
+
+235
+00:09:59,130 --> 00:10:03,059
+the, the locked iphones keeps coming up in this context, right?
+
+236
+00:10:03,070 --> 00:10:05,359
+Where, where that you have a law enforcement agency saying we,
+
+237
+00:10:05,369 --> 00:10:08,010
+we need to unlock this iphone, you know, for reasons.
+
+238
+00:10:08,530 --> 00:10:12,510
+And of course, Apple is saying no and they're saying, you know, do it or else. And then
+
+239
+00:10:12,770 --> 00:10:16,880
+so far this like crazy Mexican standoff is, is not, has never ended
+
+240
+00:10:17,200 --> 00:10:18,210
+-- because
+-- that,
+
+241
+00:10:18,219 --> 00:10:20,989
+uh Israeli company supposedly has provided software and
+
+242
+00:10:21,000 --> 00:10:23,559
+I guess effectively zero days to unlock the,
+
+243
+00:10:23,570 --> 00:10:23,789
+um,
+
+244
+00:10:24,140 --> 00:10:24,710
+the phones.
+
+245
+00:10:25,039 --> 00:10:28,789
+Yeah. And they sell the box, the box is remarkably affordable.
+
+246
+00:10:28,799 --> 00:10:30,820
+It's like tens of thousands of dollars. It's,
+
+247
+00:10:32,710 --> 00:10:34,219
+it's not expensive,
+
+248
+00:10:34,979 --> 00:10:36,830
+but the size of a deck of cards, I guess,
+
+249
+00:10:36,840 --> 00:10:39,809
+and you basically plug in an iphone and it unlocks it
+
+250
+00:10:39,909 --> 00:10:41,979
+using some sort of security exploit.
+
+251
+00:10:41,989 --> 00:10:45,260
+But again, I think that's kind of a different conversation. Right.
+
+252
+00:10:45,270 --> 00:10:47,820
+I'm more interested in the conversation about,
+
+253
+00:10:48,229 --> 00:10:52,000
+like, what if Apple did supply law enforcement with a,
+
+254
+00:10:52,010 --> 00:10:53,659
+with a back door into the phone?
+
+255
+00:10:53,669 --> 00:10:57,000
+-- Like, what
+-- does that mean? Important distinction to make? Right. Right.
+
+256
+00:10:57,010 --> 00:10:59,820
+Now, Apple is like, no, we're not going to unlock that phone for you.
+
+257
+00:11:00,770 --> 00:11:02,549
+But what's more important is Apple is saying, no,
+
+258
+00:11:02,559 --> 00:11:06,549
+we're not going to build a service or an ability
+
+259
+00:11:06,869 --> 00:11:10,340
+to where we have like master keys that we can hand out to you
+
+260
+00:11:10,650 --> 00:11:14,020
+and there's kind of a couple of layers here, right? So
+
+261
+00:11:14,150 --> 00:11:16,880
+on one level, some of the older iphones,
+
+262
+00:11:16,890 --> 00:11:20,270
+it's believed Apple could create like an an update
+
+263
+00:11:20,799 --> 00:11:24,429
+that you could push on to the phone and it would unlock the phone, right?
+
+264
+00:11:24,909 --> 00:11:25,929
+The new phones though.
+
+265
+00:11:25,940 --> 00:11:29,400
+My understanding is they have their security enclave configured in such
+
+266
+00:11:29,409 --> 00:11:32,210
+a way they couldn't do that if they wanted to.
+
+267
+00:11:32,520 --> 00:11:34,250
+Well, the older phones don't as I understand it,
+
+268
+00:11:34,260 --> 00:11:37,239
+have the security enclave processor or whatever they have
+
+269
+00:11:37,250 --> 00:11:39,520
+is nowhere near as sophisticated as the current version.
+
+270
+00:11:39,530 --> 00:11:39,969
+Right.
+
+271
+00:11:40,169 --> 00:11:40,770
+Right.
+
+272
+00:11:41,099 --> 00:11:45,010
+So yeah, what, what Apple has done is essentially put hardware on the phone,
+
+273
+00:11:45,020 --> 00:11:49,080
+the security enclave chip where that's where the encryption and decryption
+
+274
+00:11:49,090 --> 00:11:52,599
+keys physically live and where they physically do their work.
+
+275
+00:11:53,070 --> 00:11:56,570
+And so my understanding of it, for example, is that you can still
+
+276
+00:11:56,929 --> 00:11:59,869
+one of the attacks apparently was you, you basically disassemble the phone,
+
+277
+00:11:59,880 --> 00:12:01,710
+get the security enclave chip out,
+
+278
+00:12:02,099 --> 00:12:07,609
+do a couple of attempts and then reset the chip before it kind of locks itself down.
+
+279
+00:12:08,159 --> 00:12:08,429
+Right.
+
+280
+00:12:08,440 --> 00:12:10,619
+So you can effectively brute force it, but you basically have to, you know,
+
+281
+00:12:10,630 --> 00:12:12,250
+disassemble the phone and have a lab uh
+
+282
+00:12:12,539 --> 00:12:16,049
+of equipment to, you know, do this attack, right. So it's pretty nontrivial.
+
+283
+00:12:16,219 --> 00:12:20,270
+Well, and not only that, any time you take a piece of hardware apart,
+
+284
+00:12:20,679 --> 00:12:24,460
+there's a nonzero chance that you're going to ruin it,
+
+285
+00:12:24,840 --> 00:12:29,669
+be it, you know, slip a screwdriver slips or, or something happens and,
+
+286
+00:12:29,679 --> 00:12:31,390
+and now it's dead forever.
+
+287
+00:12:32,169 --> 00:12:33,030
+And so the, you know,
+
+288
+00:12:33,039 --> 00:12:34,700
+the concern is Apple doesn't really want to
+
+289
+00:12:34,710 --> 00:12:36,909
+build something that provides a back door where
+
+290
+00:12:37,080 --> 00:12:42,109
+like I said, they hold all the master keys for example, or the fundamentally,
+
+291
+00:12:42,119 --> 00:12:42,390
+you know,
+
+292
+00:12:42,400 --> 00:12:44,419
+either Apple holds the keys or a third party
+
+293
+00:12:44,429 --> 00:12:46,799
+holds the keys or law enforcement holds the keys.
+
+294
+00:12:47,080 --> 00:12:49,030
+And you can talk about all the,
+
+295
+00:12:49,369 --> 00:12:52,830
+you know, three parties out of five have to agree crypto.
+
+296
+00:12:53,469 --> 00:12:59,130
+Like there's all sorts of possible technical means to supposedly make this secure,
+
+297
+00:12:59,140 --> 00:13:00,299
+that's with big air quotes.
+
+298
+00:13:01,950 --> 00:13:06,130
+But fundamentally, uh no matter how much technology you apply to this problem,
+
+299
+00:13:06,150 --> 00:13:07,609
+you've now built
+
+300
+00:13:07,890 --> 00:13:07,900
+a
+
+301
+00:13:08,309 --> 00:13:10,690
+massive potential flaw into the system,
+
+302
+00:13:11,929 --> 00:13:12,000
+uh
+
+303
+00:13:12,159 --> 00:13:13,369
+not potential,
+
+304
+00:13:14,570 --> 00:13:17,570
+potential in any way. It is guaranteed to fail at
+
+305
+00:13:17,700 --> 00:13:18,059
+some point
+
+306
+00:13:18,219 --> 00:13:21,280
+because at some point there will be a threat that, you know,
+
+307
+00:13:21,289 --> 00:13:23,059
+the government changes or
+
+308
+00:13:23,190 --> 00:13:25,280
+the government enacts a law that, yeah,
+
+309
+00:13:25,650 --> 00:13:26,770
+now we're, you know,
+
+310
+00:13:26,780 --> 00:13:29,659
+all those keys have to be given to law enforcement or you go to jail forever.
+
+311
+00:13:30,630 --> 00:13:33,489
+Well, in, in part of it too is which governments?
+
+312
+00:13:34,090 --> 00:13:38,010
+-- Well, exactly,
+-- of course, my government is fine so they can do it.
+
+313
+00:13:38,020 --> 00:13:40,000
+But those other governments, like, we don't like those guys
+
+314
+00:13:40,140 --> 00:13:41,479
+as a Canadian citizen. Yeah.
+
+315
+00:13:41,489 --> 00:13:45,159
+Do I want the, us being able to unlock my phone remotely while I'm in Canada to do,
+
+316
+00:13:45,169 --> 00:13:46,590
+having nothing to do with America.
+
+317
+00:13:46,599 --> 00:13:47,539
+Exactly.
+
+318
+00:13:47,840 --> 00:13:52,239
+What gets me is this, this issue keeps coming up like it just won't die.
+
+319
+00:13:52,250 --> 00:13:55,380
+And, and I don't mean even the issue of legally mandated backdoors because that,
+
+320
+00:13:55,390 --> 00:13:56,400
+that will always come up.
+
+321
+00:13:56,409 --> 00:13:59,190
+People will like, there's just people that will never let go of that one.
+
+322
+00:13:59,549 --> 00:14:01,219
+Right. And that's just how it is.
+
+323
+00:14:01,619 --> 00:14:04,909
+But the fact that there's people who are like, yeah, we can do that securely
+
+324
+00:14:05,119 --> 00:14:09,440
+with like, no risk. It's like, no, that's not how reality works.
+
+325
+00:14:09,830 --> 00:14:11,309
+Ozzie, we're looking at you.
+
+326
+00:14:11,489 --> 00:14:11,989
+Yeah.
+
+327
+00:14:12,440 --> 00:14:12,989
+Um
+
+328
+00:14:13,090 --> 00:14:16,640
+and I, I think the best quote uh on, so Bruce Schneier
+
+329
+00:14:16,799 --> 00:14:20,229
+has this on his blog right now, you know, Ray Ozzie, former Microsoft guy said,
+
+330
+00:14:20,440 --> 00:14:23,950
+yeah, we should like legally mandate backdoors into like, well,
+
+331
+00:14:24,109 --> 00:14:26,909
+and that's part of the problem. What, what defines a communication device now.
+
+332
+00:14:26,919 --> 00:14:28,190
+Well, everything,
+
+333
+00:14:28,900 --> 00:14:29,299
+my b
+
+334
+00:14:30,609 --> 00:14:32,809
+Right. Yeah. Well, like my Amazon echo,
+
+335
+00:14:34,130 --> 00:14:36,450
+right? Uh my Amazon Alexa
+
+336
+00:14:36,580 --> 00:14:37,059
+or whatever the hell
+
+337
+00:14:37,400 --> 00:14:39,109
+that one's already listening to you.
+
+338
+00:14:39,210 --> 00:14:39,840
+So,
+
+339
+00:14:39,979 --> 00:14:40,799
+no worries,
+
+340
+00:14:41,210 --> 00:14:42,090
+it's unplugged.
+
+341
+00:14:42,309 --> 00:14:43,229
+But um
+
+342
+00:14:43,650 --> 00:14:45,750
+that's a funny story for another podcast. But uh
+
+343
+00:14:46,719 --> 00:14:47,570
+so
+
+344
+00:14:47,840 --> 00:14:50,859
+one of the proposals was that if you are going to propose this,
+
+345
+00:14:50,869 --> 00:14:53,140
+you actually have to give a concrete proposal with
+
+346
+00:14:53,150 --> 00:14:55,309
+specific details and not just this hand wavy.
+
+347
+00:14:55,320 --> 00:14:57,859
+Well, you know, the the smart engineers will figure it out.
+
+348
+00:14:58,690 --> 00:15:02,330
+Yeah, because some problems are somewhat intractable.
+
+349
+00:15:04,099 --> 00:15:06,200
+You know, like there's just, there's no
+
+350
+00:15:06,820 --> 00:15:10,719
+essentially, I guess how do I put it? There's no set of engineering trade offs
+
+351
+00:15:11,510 --> 00:15:11,840
+but
+
+352
+00:15:12,510 --> 00:15:15,869
+result in you having the system that is quote unquote, totally secure,
+
+353
+00:15:15,880 --> 00:15:18,650
+but also quote unquote law enforcement gets what they want,
+
+354
+00:15:19,070 --> 00:15:22,159
+right? Those are just two opposing views of reality.
+
+355
+00:15:22,299 --> 00:15:24,500
+Let's let's break it down. Ok.
+
+356
+00:15:25,169 --> 00:15:28,150
+So we start at the beginning and we'll say
+
+357
+00:15:28,320 --> 00:15:32,309
+a device manufacturer builds a device that has a back door. Ok?
+
+358
+00:15:32,320 --> 00:15:36,229
+Ignoring the fact that we know we can't build it today. But let's just say you can
+
+359
+00:15:36,469 --> 00:15:38,630
+two problems with that. Is that back door in hardware?
+
+360
+00:15:38,640 --> 00:15:41,260
+Is it like physically there and can't be modified or
+
+361
+00:15:41,270 --> 00:15:43,000
+is it in software where it can be modified?
+
+362
+00:15:43,010 --> 00:15:43,070
+I mean,
+
+363
+00:15:43,520 --> 00:15:45,150
+can't be modified? Ok,
+
+364
+00:15:45,559 --> 00:15:48,309
+we're gonna say, can't be modified because that,
+
+365
+00:15:48,320 --> 00:15:50,130
+that simplifies the conversation.
+
+366
+00:15:50,140 --> 00:15:51,109
+So now you have,
+
+367
+00:15:51,549 --> 00:15:54,969
+you need a way to get in to the device. Ok.
+
+368
+00:15:55,099 --> 00:15:56,650
+So you kind of have two options.
+
+369
+00:15:56,659 --> 00:15:59,080
+You can have like one master key that can unlock
+
+370
+00:15:59,090 --> 00:16:02,530
+every single device or you have one key per device.
+
+371
+00:16:02,619 --> 00:16:03,090
+Ok.
+
+372
+00:16:03,659 --> 00:16:05,710
+Now you can imagine one master key
+
+373
+00:16:05,820 --> 00:16:09,210
+is much easier to deal with because you have one key.
+
+374
+00:16:09,780 --> 00:16:10,969
+But if you lose it,
+
+375
+00:16:11,140 --> 00:16:12,880
+all the devices are compromised,
+
+376
+00:16:13,260 --> 00:16:13,869
+if you have
+
+377
+00:16:14,049 --> 00:16:15,530
+one, you will,
+
+378
+00:16:15,700 --> 00:16:17,049
+that's we'll get to that.
+
+379
+00:16:17,219 --> 00:16:19,450
+You have to share it with so many people, right?
+
+380
+00:16:19,729 --> 00:16:22,309
+And, and you can also have one key per device.
+
+381
+00:16:22,320 --> 00:16:27,080
+But now in like in the case of apple, they would be managing a billion keys.
+
+382
+00:16:27,760 --> 00:16:32,030
+What do you think the odds are of handling a billion keys and not screwing it up
+
+383
+00:16:33,229 --> 00:16:34,309
+-- under zero
+-- percent.
+
+384
+00:16:34,650 --> 00:16:37,070
+The other thing is too, is, is by having this
+
+385
+00:16:37,280 --> 00:16:38,960
+legally mandated to back door.
+
+386
+00:16:38,969 --> 00:16:42,109
+Does it go over regular communication channels or is it like I can
+
+387
+00:16:42,119 --> 00:16:45,719
+-- magically talk to it over Wi Fi even if your device is disabled
+-- Wi
+
+388
+00:16:45,830 --> 00:16:47,320
+Fi? Let's ignore that stuff.
+
+389
+00:16:47,330 --> 00:16:50,700
+Let's just say you need to have physically have the device. Ok?
+
+390
+00:16:50,710 --> 00:16:53,289
+You have to plug in a cable and then send it
+
+391
+00:16:53,299 --> 00:16:56,150
+a magic command and then you can do whatever you want,
+
+392
+00:16:56,159 --> 00:16:56,549
+right?
+
+393
+00:16:56,559 --> 00:16:57,070
+Because
+
+394
+00:16:57,479 --> 00:17:00,020
+that's one of the challenges is this,
+
+395
+00:17:00,030 --> 00:17:03,630
+this conversation can get very out of hand quickly.
+
+396
+00:17:04,060 --> 00:17:05,479
+Yeah. Well, see that's one of my frustration.
+
+397
+00:17:05,489 --> 00:17:07,800
+If you physically need to have the device to unlock it,
+
+398
+00:17:07,810 --> 00:17:10,150
+then your chances are you can also physically have
+
+399
+00:17:10,160 --> 00:17:11,910
+the owner of it and you can basically,
+
+400
+00:17:12,108 --> 00:17:12,358
+um,
+
+401
+00:17:12,368 --> 00:17:15,469
+what's that law in the UK called where basically if you don't give up your password,
+
+402
+00:17:15,479 --> 00:17:16,239
+you go to jail.
+
+403
+00:17:16,848 --> 00:17:17,920
+UK Rip Act.
+
+404
+00:17:18,270 --> 00:17:18,930
+Yes.
+
+405
+00:17:19,229 --> 00:17:22,959
+And, you know, there have been people who sat in jail for a very long time
+
+406
+00:17:23,108 --> 00:17:24,118
+because of that.
+
+407
+00:17:25,630 --> 00:17:26,219
+So,
+
+408
+00:17:26,560 --> 00:17:29,530
+um, and, and the other thing too is, you know, for a lot of this, they're, they're,
+
+409
+00:17:29,540 --> 00:17:31,069
+they're gonna go, well, yeah,
+
+410
+00:17:31,079 --> 00:17:33,109
+we could have a back door where we physically need access,
+
+411
+00:17:33,119 --> 00:17:34,880
+but we want the one with remote access.
+
+412
+00:17:35,760 --> 00:17:39,550
+Well, well, it's even more complicated than that because, I mean, like,
+
+413
+00:17:39,560 --> 00:17:41,770
+for example, you could have a,
+
+414
+00:17:42,469 --> 00:17:44,229
+you could have a victim's phone
+
+415
+00:17:44,560 --> 00:17:45,939
+and the victim is dead.
+
+416
+00:17:46,239 --> 00:17:46,569
+Right?
+
+417
+00:17:46,579 --> 00:17:48,829
+You can't unlock a dead person's phone with
+
+418
+00:17:48,839 --> 00:17:51,469
+the dead person's knowledge because they're not there.
+
+419
+00:17:51,930 --> 00:17:52,510
+So there's,
+
+420
+00:17:52,650 --> 00:17:53,920
+-- unless they wrote it down
+-- somewhere
+
+421
+00:17:54,119 --> 00:17:54,880
+-- there,
+-- which
+
+422
+00:17:55,640 --> 00:17:56,790
+it does.
+
+423
+00:17:57,239 --> 00:17:58,430
+But anyway, anyway,
+
+424
+00:17:58,550 --> 00:18:04,459
+so the issue kind of becomes you either have one key or, or millions of keys and,
+
+425
+00:18:04,469 --> 00:18:06,560
+and both come with their own set of problems.
+
+426
+00:18:06,569 --> 00:18:09,719
+And now here's the thing, anyone who tells you, oh, the keys will be secret.
+
+427
+00:18:09,729 --> 00:18:12,930
+We'll put them in an HSM, we'll lock him in a vault. What? Blah, blah, blah.
+
+428
+00:18:13,640 --> 00:18:14,699
+Here's the thing.
+
+429
+00:18:15,000 --> 00:18:18,180
+Has anything ever been kept a secret in the history of humanity?
+
+430
+00:18:19,010 --> 00:18:22,599
+No, nothing ever has. Right. The answer is no, because
+
+431
+00:18:22,770 --> 00:18:25,359
+this is, you know what, you know what I always think of when I,
+
+432
+00:18:25,369 --> 00:18:26,750
+when I talk about this is,
+
+433
+00:18:26,890 --> 00:18:28,780
+do you remember like the hacker mantra back in
+
+434
+00:18:28,790 --> 00:18:30,780
+the day of information wants to be free?
+
+435
+00:18:31,619 --> 00:18:34,130
+And I remember III I love that.
+
+436
+00:18:34,290 --> 00:18:37,219
+But the thing is, it's not so much information wants to be free.
+
+437
+00:18:37,229 --> 00:18:40,040
+It's the fact that once information exists
+
+438
+00:18:40,400 --> 00:18:41,150
+in public,
+
+439
+00:18:41,500 --> 00:18:46,069
+you can never make it un exist, right? There's no way to put that genie back in the box.
+
+440
+00:18:46,079 --> 00:18:51,160
+And just by its very nature and beauty, like digital information is
+
+441
+00:18:51,449 --> 00:18:52,770
+infinitely and
+
+442
+00:18:53,040 --> 00:18:56,790
+I want to use the word trivial but even more trivial than trivially copy.
+
+443
+00:18:57,660 --> 00:18:59,959
+Right. Right. And, and that's exactly the problem.
+
+444
+00:18:59,969 --> 00:19:02,989
+You, you cannot undo this once it is done.
+
+445
+00:19:03,500 --> 00:19:06,400
+And so kind of from the, from the context of a back door,
+
+446
+00:19:07,270 --> 00:19:09,599
+you like we could do it today.
+
+447
+00:19:09,810 --> 00:19:12,069
+But the problem is we can't do it in a way
+
+448
+00:19:12,199 --> 00:19:12,829
+that's even,
+
+449
+00:19:12,839 --> 00:19:17,010
+I would say 80% secure because those keys are going to leak and let's face it if,
+
+450
+00:19:17,020 --> 00:19:20,989
+if someone knows Apple has a vault somewhere full of super secret keys,
+
+451
+00:19:21,140 --> 00:19:21,790
+like
+
+452
+00:19:21,900 --> 00:19:23,339
+you might as well paint a job,
+
+453
+00:19:23,454 --> 00:19:28,354
+can't target on that building and say, come on in guys because every
+
+454
+00:19:28,515 --> 00:19:34,844
+intelligence agency on the planet is going to make it their job to get that stuff.
+
+455
+00:19:34,905 --> 00:19:37,844
+-- I mean, how would you vet those people that work there? Good
+-- Lord.
+
+456
+00:19:38,005 --> 00:19:39,444
+Right. There's, there's like
+
+457
+00:19:40,060 --> 00:19:41,599
+there's no way right.
+
+458
+00:19:41,609 --> 00:19:43,300
+There is no way and, and people will say, oh,
+
+459
+00:19:43,310 --> 00:19:45,329
+but you need three or five keys and we'll do
+
+460
+00:19:45,339 --> 00:19:47,719
+multiple things and sign off and it's just no,
+
+461
+00:19:47,790 --> 00:19:48,310
+it, it,
+
+462
+00:19:48,630 --> 00:19:50,160
+there is no way
+
+463
+00:19:50,369 --> 00:19:51,109
+you're going to do it.
+
+464
+00:19:51,119 --> 00:19:53,319
+And imagine if you were like one of those people, man, you could,
+
+465
+00:19:53,329 --> 00:19:54,640
+you could be collecting like some fat
+
+466
+00:19:54,650 --> 00:19:57,319
+paychecks from every intelligence agency on the planet
+
+467
+00:19:57,819 --> 00:19:58,589
+pretty much.
+
+468
+00:19:58,890 --> 00:19:59,760
+I mean, it's just,
+
+469
+00:20:00,469 --> 00:20:02,939
+it's, it's one of those things that this is,
+
+470
+00:20:03,829 --> 00:20:06,589
+I don't think we can ever solve this as human
+
+471
+00:20:06,599 --> 00:20:09,439
+beings because we screw things up way too much.
+
+472
+00:20:09,829 --> 00:20:10,369
+Yeah.
+
+473
+00:20:10,479 --> 00:20:10,890
+Yeah.
+
+474
+00:20:11,099 --> 00:20:13,479
+And so, I mean, fundamentally what it boils down to,
+
+475
+00:20:13,489 --> 00:20:15,719
+for me is the frustration that these people are like, oh, it can be done.
+
+476
+00:20:15,729 --> 00:20:19,869
+So we should therefore see the problem is you could very easily mandate this in law
+
+477
+00:20:20,790 --> 00:20:23,069
+without having a good technical solution and then you
+
+478
+00:20:23,079 --> 00:20:25,089
+would probably end up with a bad technical solution.
+
+479
+00:20:26,079 --> 00:20:28,400
+They've sort of tried doing that more than once.
+
+480
+00:20:28,410 --> 00:20:31,349
+It's, it's not made it yet through, through any,
+
+481
+00:20:31,359 --> 00:20:33,670
+any congress or anything in the US at least.
+
+482
+00:20:33,680 --> 00:20:38,229
+But it, it would not surprise me if, if we see something similar eventually.
+
+483
+00:20:39,530 --> 00:20:43,349
+Well, I mean, as, as proof in the pudding, the Rip Act in the UK in 2000,
+
+484
+00:20:43,660 --> 00:20:46,910
+right? We, we, they basically acknowledged we can't,
+
+485
+00:20:47,180 --> 00:20:50,670
+there will be technology that we can't subvert or otherwise,
+
+486
+00:20:51,479 --> 00:20:53,359
+you know, intercept or whatever. So
+
+487
+00:20:53,699 --> 00:20:54,699
+plan B,
+
+488
+00:20:54,780 --> 00:20:57,660
+if we think you're guilty and we want your passwords and you won't give them up.
+
+489
+00:20:57,670 --> 00:20:58,500
+We chuck you in jail.
+
+490
+00:21:00,150 --> 00:21:00,459
+And
+
+491
+00:21:00,650 --> 00:21:03,109
+so this legislation has passed in,
+
+492
+00:21:03,250 --> 00:21:06,410
+not just in some crazy despot country, but, like, in the western world,
+
+493
+00:21:08,770 --> 00:21:10,839
+like, I expect this kind of thing and, you know, the,
+
+494
+00:21:11,239 --> 00:21:11,619
+yeah.
+
+495
+00:21:12,579 --> 00:21:17,479
+No, I, I understand what you're saying though. Right. This is a very fair point is
+
+496
+00:21:18,589 --> 00:21:19,329
+now
+
+497
+00:21:20,020 --> 00:21:22,810
+ignoring the politics because I don't want to
+
+498
+00:21:22,819 --> 00:21:24,829
+get into a political discussion because I,
+
+499
+00:21:24,839 --> 00:21:26,569
+I no good ever comes of that.
+
+500
+00:21:26,579 --> 00:21:27,849
+-- Everyone has their
+-- opinion.
+
+501
+00:21:28,060 --> 00:21:29,780
+We also have the entire world, right?
+
+502
+00:21:29,790 --> 00:21:32,869
+Where every like you're in the US, I'm in Canada. There's some very big differences.
+
+503
+00:21:32,979 --> 00:21:35,910
+Well, I travel places, right?
+
+504
+00:21:36,339 --> 00:21:39,609
+Like what happens when I go to another country
+
+505
+00:21:39,959 --> 00:21:40,930
+now?
+
+506
+00:21:41,079 --> 00:21:45,530
+Great. So my country protects my phone but theirs maybe doesn't.
+
+507
+00:21:45,660 --> 00:21:46,310
+And, and
+
+508
+00:21:46,949 --> 00:21:51,310
+do they get access to my secret backdoor key because I'm in their country?
+
+509
+00:21:51,729 --> 00:21:53,729
+Right? But I, I don't know.
+
+510
+00:21:54,260 --> 00:21:55,530
+So, so anyway,
+
+511
+00:21:55,540 --> 00:21:57,689
+now the one thing I will give Ray Ozzie credit
+
+512
+00:21:57,699 --> 00:22:02,050
+for in his write up about his uh backdoor proposal
+
+513
+00:22:02,750 --> 00:22:07,849
+is one of his ideas was when law enforcement basically backdoors the phone,
+
+514
+00:22:07,890 --> 00:22:10,969
+it would have like fuses inside of it that would blow,
+
+515
+00:22:11,180 --> 00:22:12,839
+rendering the phone or, well,
+
+516
+00:22:12,849 --> 00:22:16,000
+I guess the device will say basically rendering the device
+
+517
+00:22:16,060 --> 00:22:18,280
+useless for the most part where it kind of becomes read
+
+518
+00:22:18,420 --> 00:22:18,599
+on
+
+519
+00:22:19,010 --> 00:22:20,650
+that. That's actually a good idea.
+
+520
+00:22:20,810 --> 00:22:23,310
+Yes and no, because that's great for phones.
+
+521
+00:22:23,319 --> 00:22:26,729
+But what about for like general purpose computing devices.
+
+522
+00:22:27,229 --> 00:22:27,819
+What do you mean?
+
+523
+00:22:28,229 --> 00:22:32,979
+Well, I mean, more things like desktops, laptops, tablets, do we put this on every,
+
+524
+00:22:33,469 --> 00:22:35,949
+you, you'd have to build them special? I mean,
+
+525
+00:22:36,469 --> 00:22:40,979
+so then essentially what you're saying is if I break into the system,
+
+526
+00:22:40,989 --> 00:22:43,979
+I can render every computer on the face of the planet inoperable,
+
+527
+00:22:44,550 --> 00:22:46,780
+conceivably sounds like a win.
+
+528
+00:22:48,750 --> 00:22:50,900
+I'm not gonna completely disagree with you there.
+
+529
+00:22:51,829 --> 00:22:53,339
+Um, but, you know, at the
+
+530
+00:22:53,689 --> 00:22:58,319
+same time by building this capability in that, that's a potentially a huge problem.
+
+531
+00:22:58,579 --> 00:23:04,140
+But the, the value of it I think is you couldn't have say law enforcement,
+
+532
+00:23:04,150 --> 00:23:05,619
+take your phone while you're
+
+533
+00:23:05,739 --> 00:23:08,010
+in the shower, quick hack it and then, you know,
+
+534
+00:23:08,020 --> 00:23:10,560
+quick put it back on your dresser while they run out of the hotel, right?
+
+535
+00:23:10,569 --> 00:23:14,020
+Like if this is a one shot deal, you do it and it's done
+
+536
+00:23:15,060 --> 00:23:16,310
+and, and, but, but
+
+537
+00:23:16,560 --> 00:23:19,810
+again, it's not technically possible.
+
+538
+00:23:20,160 --> 00:23:23,489
+-- So,
+-- well, it is technically possible, just not in the way that they,
+
+539
+00:23:23,500 --> 00:23:26,829
+I think are claiming it can be done quote unquote safely and securely.
+
+540
+00:23:27,060 --> 00:23:31,770
+No, I'm, I'm going to say it's not technically possible using, using the what we
+
+541
+00:23:32,219 --> 00:23:34,510
+assuming humans have to build it, which is true.
+
+542
+00:23:34,839 --> 00:23:36,050
+Knowing what we know today,
+
+543
+00:23:36,530 --> 00:23:37,829
+you cannot build
+
+544
+00:23:38,140 --> 00:23:40,670
+a, a backdoor, key escrow system
+
+545
+00:23:40,800 --> 00:23:42,989
+that is going to be secure and reliable.
+
+546
+00:23:43,130 --> 00:23:44,709
+That is, that is what I will say
+
+547
+00:23:46,160 --> 00:23:46,709
+100%.
+
+548
+00:23:47,479 --> 00:23:48,339
+Um,
+
+549
+00:23:48,760 --> 00:23:51,310
+especially if you care even remotely about the security
+
+550
+00:23:51,319 --> 00:23:53,660
+and safety and privacy of the end users,
+
+551
+00:23:54,699 --> 00:23:56,640
+which I mean, look, let's face it.
+
+552
+00:23:56,650 --> 00:23:59,640
+And that is literally enshrined in law in many countries. Right?
+
+553
+00:23:59,650 --> 00:24:02,900
+Canada, Human Rights Act, the US, what? Fourth Amendment,
+
+554
+00:24:03,660 --> 00:24:06,229
+these are some pretty core legal principles here in
+
+555
+00:24:06,239 --> 00:24:08,920
+most western countries and even non western countries.
+
+556
+00:24:09,650 --> 00:24:10,109
+And
+
+557
+00:24:10,930 --> 00:24:13,359
+that, that's all well and good. Right.
+
+558
+00:24:13,369 --> 00:24:17,790
+And, and I, I appreciate that and I love that aspect of democracy
+
+559
+00:24:18,699 --> 00:24:19,640
+but it's
+
+560
+00:24:19,849 --> 00:24:24,319
+even ignoring the legal ramifications, just technically speaking, it's,
+
+561
+00:24:24,329 --> 00:24:25,719
+it's not doable.
+
+562
+00:24:25,900 --> 00:24:26,319
+Right.
+
+563
+00:24:29,420 --> 00:24:30,579
+And I'm also not sure.
+
+564
+00:24:30,589 --> 00:24:34,859
+I mean, because my understanding is so far we've had many times where, oh my God,
+
+565
+00:24:34,869 --> 00:24:37,619
+it's the end of the world if we can't get access to this and it hasn't
+
+566
+00:24:37,630 --> 00:24:41,660
+been the end of the world and they also have been able to get access,
+
+567
+00:24:41,670 --> 00:24:43,069
+you know, through other means.
+
+568
+00:24:43,079 --> 00:24:44,939
+-- And
+-- this is something that
+
+569
+00:24:45,160 --> 00:24:49,250
+I, I think law enforcement recently has kind of screwed up
+
+570
+00:24:49,510 --> 00:24:54,449
+is you can't say if we don't get this, you know, think of the Children sort of thing.
+
+571
+00:24:54,459 --> 00:24:57,650
+And then when they don't get what they need and things still are ok,
+
+572
+00:24:57,660 --> 00:25:00,010
+it's like you guys lied to us, right?
+
+573
+00:25:00,020 --> 00:25:01,489
+Like you were making up some crap
+
+574
+00:25:02,180 --> 00:25:04,569
+and you kind of got caught, you know, and
+
+575
+00:25:04,920 --> 00:25:06,140
+that's not healthy.
+
+576
+00:25:06,150 --> 00:25:08,260
+And I think honestly that the security industry
+
+577
+00:25:08,270 --> 00:25:09,829
+in general is kind of in this position
+
+578
+00:25:09,839 --> 00:25:11,489
+where we've been screaming at people for so
+
+579
+00:25:11,500 --> 00:25:13,189
+long about doom and gloom and they're like,
+
+580
+00:25:13,199 --> 00:25:15,849
+yeah, but like my, my lights still work, you know,
+
+581
+00:25:16,510 --> 00:25:17,160
+you guys are,
+
+582
+00:25:17,170 --> 00:25:20,709
+are either wrong or you're lying and either way I don't want to listen to you
+
+583
+00:25:21,359 --> 00:25:21,849
+and,
+
+584
+00:25:22,160 --> 00:25:24,489
+and that's kind of one of those things that
+
+585
+00:25:24,900 --> 00:25:28,520
+if law enforcement wants to be viewed as
+
+586
+00:25:28,839 --> 00:25:32,000
+somebody who could be trusted with this sort of technology,
+
+587
+00:25:32,439 --> 00:25:37,680
+they need to have a certain level of, I guess just upstanding. This isn't a word.
+
+588
+00:25:37,890 --> 00:25:38,739
+But, you know, you know what I mean?
+
+589
+00:25:38,750 --> 00:25:41,760
+They have to be seen as like the good guys and in this case,
+
+590
+00:25:41,770 --> 00:25:45,119
+it's like you guys are kind of being weasels about this one, you know, come on, do,
+
+591
+00:25:45,130 --> 00:25:46,359
+do a better job here.
+
+592
+00:25:47,170 --> 00:25:49,300
+Yeah. No, I'll uh, I'll agree with that. Cuz,
+
+593
+00:25:50,380 --> 00:25:51,920
+yeah, there's been a lot of, oh my God.
+
+594
+00:25:51,930 --> 00:25:53,800
+Yeah, the end of the world, if we lose this capability,
+
+595
+00:25:53,810 --> 00:25:56,959
+-- we lose the capability and the world keeps ticking along
+-- well.
+
+596
+00:25:56,969 --> 00:25:58,520
+And it's even crazier too because I, I,
+
+597
+00:25:58,530 --> 00:26:02,000
+from my understanding is while the FBI was yelling at Apple,
+
+598
+00:26:02,339 --> 00:26:03,939
+they, they were also working with celeb
+
+599
+00:26:04,079 --> 00:26:05,680
+right to unlock these phones.
+
+600
+00:26:05,689 --> 00:26:09,199
+So it's like you guys knew you could do this and you're pretending you can't,
+
+601
+00:26:09,770 --> 00:26:12,349
+I'm assuming it was, you know, more political in nature than
+
+602
+00:26:12,459 --> 00:26:12,569
+I
+
+603
+00:26:13,199 --> 00:26:14,310
+imagine so.
+
+604
+00:26:14,640 --> 00:26:15,160
+-- But
+-- still,
+
+605
+00:26:15,430 --> 00:26:15,569
+I mean,
+
+606
+00:26:15,819 --> 00:26:17,310
+here's the thing from, from their perspective,
+
+607
+00:26:17,319 --> 00:26:19,760
+having this capability would just be amazing, right?
+
+608
+00:26:19,770 --> 00:26:21,510
+Like I just recently downloaded, actually,
+
+609
+00:26:21,520 --> 00:26:23,430
+I have Google location enabled on my phone
+
+610
+00:26:23,719 --> 00:26:28,699
+and I downloaded the, uh, the file with all the data and, uh, I need to plot it in
+
+611
+00:26:28,890 --> 00:26:28,949
+something,
+
+612
+00:26:29,280 --> 00:26:29,630
+you know,
+
+613
+00:26:29,949 --> 00:26:32,300
+and it's gonna be, it's gonna, that's basically my life.
+
+614
+00:26:32,310 --> 00:26:33,760
+Like you'll know where I get my Slurpees.
+
+615
+00:26:33,920 --> 00:26:38,180
+There's a way you can view it on Google Maps. I forget what it is off the top of my head.
+
+616
+00:26:38,229 --> 00:26:40,280
+-- Oh,
+-- there's a ton of things to manipulate the data.
+
+617
+00:26:40,290 --> 00:26:43,750
+-- It's, it's a very standard file format. It's
+-- super crazy imac
+
+618
+00:26:43,959 --> 00:26:44,209
+or something.
+
+619
+00:26:44,329 --> 00:26:44,349
+I,
+
+620
+00:26:45,199 --> 00:26:47,359
+I don't know, I, I opened mine up.
+
+621
+00:26:47,369 --> 00:26:51,140
+Uh, I don't know, maybe 34 weeks ago and I looked at it. I was like, holy crap
+
+622
+00:26:52,479 --> 00:26:53,270
+everywhere.
+
+623
+00:26:53,280 --> 00:26:58,630
+I've been in the last, probably seven years was on that map and it's like, well,
+
+624
+00:26:58,640 --> 00:27:00,469
+I'm just gonna close this and
+
+625
+00:27:00,579 --> 00:27:04,430
+go back to crawling under the blanket and crying softly.
+
+626
+00:27:05,510 --> 00:27:08,569
+Yeah, I, I, it's amazing to me that in the span of 12 years.
+
+627
+00:27:08,640 --> 00:27:13,609
+Uh, well, and even prior to 12 years, you know, smartphones are from 2006,
+
+628
+00:27:13,619 --> 00:27:16,689
+but prior to that we had phones and logging of this location data,
+
+629
+00:27:16,829 --> 00:27:19,319
+although not quite as fine grained as it is now. But
+
+630
+00:27:19,770 --> 00:27:24,369
+yeah, in the span of what a good solid 20 years, we've, we've just trained pretty much
+
+631
+00:27:24,609 --> 00:27:27,329
+half or more of humanity to carry a tracking device.
+
+632
+00:27:29,209 --> 00:27:29,359
+Uh
+
+633
+00:27:29,680 --> 00:27:29,930
+Yes,
+
+634
+00:27:30,239 --> 00:27:31,239
+that's pretty amazing,
+
+635
+00:27:31,569 --> 00:27:31,900
+you know.
+
+636
+00:27:32,089 --> 00:27:36,400
+Ok. No, it's not amazing because most people don't realize what's going on.
+
+637
+00:27:36,810 --> 00:27:39,540
+You and I have the unfortunate reality of knowing.
+
+638
+00:27:39,550 --> 00:27:40,599
+-- Well, no, no,
+-- even more than that,
+
+639
+00:27:40,609 --> 00:27:44,800
+it doesn't matter because this thing is so fundamentally useful.
+
+640
+00:27:45,520 --> 00:27:46,130
+-- I don't
+-- care.
+
+641
+00:27:46,260 --> 00:27:50,479
+And I'm kind of in that situation too of. I know they're spying on me.
+
+642
+00:27:50,489 --> 00:27:53,199
+I know they're stealing an insane amount of my personal data.
+
+643
+00:27:53,520 --> 00:27:54,739
+But at the same time
+
+644
+00:27:54,949 --> 00:27:56,339
+it's like I, I haven't,
+
+645
+00:27:56,510 --> 00:28:00,859
+-- I can play angry birds at the checkout line.
+-- Ignoring that. My, my, my take is always
+
+646
+00:28:01,030 --> 00:28:02,329
+I go on a trip now
+
+647
+00:28:02,459 --> 00:28:05,949
+and I don't bring any paper with me and I get on airplanes and I
+
+648
+00:28:05,959 --> 00:28:09,199
+get off airplanes and then people pick me up and they bring me places and I
+
+649
+00:28:09,449 --> 00:28:11,209
+to hotels and it's like this is
+
+650
+00:28:11,589 --> 00:28:12,329
+magic
+
+651
+00:28:13,040 --> 00:28:13,189
+is,
+
+652
+00:28:13,400 --> 00:28:15,300
+yeah, we were, we were running errands the other day and I'm like, oh,
+
+653
+00:28:15,310 --> 00:28:16,170
+can we swing by the bank?
+
+654
+00:28:16,180 --> 00:28:18,050
+And I'm like, oh no, wait a second. I poke away at my phone.
+
+655
+00:28:18,060 --> 00:28:18,560
+I'm like, oh, wait, no,
+
+656
+00:28:18,569 --> 00:28:21,300
+I can do this online and I set up a bill payment and paid it and I was like, ok,
+
+657
+00:28:21,310 --> 00:28:21,729
+never mind.
+
+658
+00:28:21,739 --> 00:28:25,020
+-- We're not going to the bank.
+-- Seriously. II I haven't been to my bank in months
+
+659
+00:28:25,420 --> 00:28:26,660
+and I'm glad,
+
+660
+00:28:26,900 --> 00:28:28,329
+you know, it's no
+
+661
+00:28:28,550 --> 00:28:29,069
+lines.
+
+662
+00:28:29,329 --> 00:28:33,500
+They do and they're always very slick. Well, because now they have one teller
+
+663
+00:28:33,680 --> 00:28:35,430
+because nobody goes to the bank.
+
+664
+00:28:36,400 --> 00:28:39,140
+Well, I think it's kind of like ts a precheck approval.
+
+665
+00:28:39,250 --> 00:28:40,180
+It's called this by definition,
+
+666
+00:28:40,189 --> 00:28:42,079
+the people going to the bank are not very good at this and they have a
+
+667
+00:28:42,310 --> 00:28:42,530
+long time.
+
+668
+00:28:42,640 --> 00:28:43,589
+-- Probably
+-- true.
+
+669
+00:28:43,880 --> 00:28:44,800
+-- I
+-- think that's part of it.
+
+670
+00:28:44,810 --> 00:28:46,310
+-- I've
+-- noticed that, you know what, man,
+
+671
+00:28:46,319 --> 00:28:49,020
+I was in San Francisco a couple of weeks ago and the TS,
+
+672
+00:28:49,030 --> 00:28:52,790
+a line was significantly longer than the normal person line.
+
+673
+00:28:53,520 --> 00:28:58,109
+And it's still like, smoked them in terms of getting people through because,
+
+674
+00:28:58,119 --> 00:29:00,579
+you know, the normal people are like, what do you mean?
+
+675
+00:29:00,589 --> 00:29:03,020
+I can't wear my winter coat and boots through this thing.
+
+676
+00:29:03,030 --> 00:29:07,560
+It's like, just listen to the nice person and take your stuff off. Come on.
+
+677
+00:29:07,859 --> 00:29:08,510
+Yeah.
+
+678
+00:29:09,180 --> 00:29:09,819
+Yeah.
+
+679
+00:29:10,310 --> 00:29:10,800
+Oh, well.
+
+680
+00:29:11,449 --> 00:29:13,170
+But anyway, anyway,
+
+681
+00:29:13,540 --> 00:29:17,400
+-- all right. So,
+-- backdoors, I think, well, no, no, legally mandated backdoors.
+
+682
+00:29:17,619 --> 00:29:18,709
+I, I don't think,
+
+683
+00:29:19,209 --> 00:29:20,829
+I don't think they can be done
+
+684
+00:29:20,959 --> 00:29:24,550
+on a large scale even remotely securely and,
+
+685
+00:29:24,560 --> 00:29:28,000
+and that kind of sucks because on the one hand, the magic part of me that's like, oh,
+
+686
+00:29:28,010 --> 00:29:29,989
+you know, the good guys of law enforcement because
+
+687
+00:29:30,609 --> 00:29:33,369
+honestly, in my experience, generally speaking a lot,
+
+688
+00:29:33,380 --> 00:29:35,030
+most law enforcement is pretty,
+
+689
+00:29:35,829 --> 00:29:37,810
+they're not complete raving lunatics. Right.
+
+690
+00:29:37,819 --> 00:29:41,770
+They, I think they do generally have, they do generally want to help society. Right.
+
+691
+00:29:42,869 --> 00:29:45,859
+Granted, there have been some, well, a lot of bad things
+
+692
+00:29:47,060 --> 00:29:47,800
+in the past, the thing,
+
+693
+00:29:47,810 --> 00:29:51,930
+I'm going to the threat of law enforcement itself and just say that
+
+694
+00:29:52,310 --> 00:29:55,170
+using our current technology and know how
+
+695
+00:29:55,300 --> 00:29:56,829
+my fear isn't law enforcement.
+
+696
+00:29:56,839 --> 00:30:01,130
+My fear is Apple accidentally posting the keys to an FTP site and then
+
+697
+00:30:01,500 --> 00:30:05,739
+that's the thing. Once this stuff is out, it never comes back.
+
+698
+00:30:06,000 --> 00:30:07,489
+And that's the problem. Right.
+
+699
+00:30:08,060 --> 00:30:10,890
+Well, what I was trying to get to is there are numerous
+
+700
+00:30:11,260 --> 00:30:14,969
+cases of, you know, the police abusing their powers to
+
+701
+00:30:15,150 --> 00:30:19,209
+track people to surveil people, you know, all sorts of naughtiness,
+
+702
+00:30:19,339 --> 00:30:22,089
+um, especially around journalists and stuff. Right. So,
+
+703
+00:30:22,189 --> 00:30:26,319
+it's, you know, I would like to live in a somewhat free and just society and
+
+704
+00:30:27,010 --> 00:30:29,469
+we need these checks and balances and
+
+705
+00:30:29,689 --> 00:30:32,430
+giving, you know, a group like law enforcement,
+
+706
+00:30:32,439 --> 00:30:34,790
+this unfettered access to everybody's personal data
+
+707
+00:30:35,050 --> 00:30:36,310
+-- makes me a little
+-- nervous.
+
+708
+00:30:36,469 --> 00:30:39,459
+No, I, I agree completely. And it's,
+
+709
+00:30:40,310 --> 00:30:41,900
+it's tricky man.
+
+710
+00:30:41,910 --> 00:30:44,219
+II, I guess here's what I'll say again,
+
+711
+00:30:44,229 --> 00:30:46,300
+I'm going to ignore law enforcement and just say
+
+712
+00:30:46,829 --> 00:30:48,670
+we cannot do this today
+
+713
+00:30:48,849 --> 00:30:50,770
+in a reasonable fashion,
+
+714
+00:30:51,430 --> 00:30:52,250
+full stop
+
+715
+00:30:52,920 --> 00:30:55,780
+and it's the way it is now, it is conceivable.
+
+716
+00:30:55,829 --> 00:30:58,939
+Somebody will figure out a way to do this correctly and then we
+
+717
+00:30:58,949 --> 00:31:02,699
+can have another conversation about the fact that now that this exists,
+
+718
+00:31:02,709 --> 00:31:03,880
+what do we do with it?
+
+719
+00:31:04,920 --> 00:31:07,699
+Well, and one thing to keep in mind too is do we actually need this,
+
+720
+00:31:09,339 --> 00:31:09,900
+like straight
+
+721
+00:31:10,030 --> 00:31:10,050
+up,
+
+722
+00:31:10,219 --> 00:31:10,489
+you know,
+
+723
+00:31:10,609 --> 00:31:11,109
+and
+
+724
+00:31:12,040 --> 00:31:15,630
+that, that's a political discussion in all seriousness.
+
+725
+00:31:16,229 --> 00:31:18,599
+Well, see that's what frustrates a lot of stuff around law enforcement is,
+
+726
+00:31:18,609 --> 00:31:19,599
+does this actually
+
+727
+00:31:19,920 --> 00:31:22,319
+help or benefit? Does it make a difference? Right.
+
+728
+00:31:22,329 --> 00:31:25,030
+Like people often call for, I want more police in my community,
+
+729
+00:31:25,040 --> 00:31:26,329
+like walking the streets or whatever.
+
+730
+00:31:26,339 --> 00:31:26,660
+And it's
+
+731
+00:31:26,910 --> 00:31:30,680
+the majority of studies have shown that like that doesn't really matter.
+
+732
+00:31:31,569 --> 00:31:36,069
+I will compare this and, and we can kind of close on this is,
+
+733
+00:31:36,790 --> 00:31:41,469
+it is similar to a lot of security advice. Do you need a password manager? No.
+
+734
+00:31:41,680 --> 00:31:43,729
+Does it make your life better? Yes.
+
+735
+00:31:44,239 --> 00:31:47,349
+Right. And, and there's a number of security things
+
+736
+00:31:47,699 --> 00:31:52,560
+and this is kind of part of that advice of. Do you need this? Well, technically, no,
+
+737
+00:31:52,760 --> 00:31:55,630
+but would it make certain things better? It might.
+
+738
+00:31:55,780 --> 00:31:57,810
+Right. And that's what it's going to come down to?
+
+739
+00:31:57,819 --> 00:32:01,719
+And that, that is not necessarily a decision I want to be trusted with.
+
+740
+00:32:02,410 --> 00:32:05,239
+It's quite likely no human should be trusted with it.
+
+741
+00:32:05,469 --> 00:32:06,520
+But unfortunately,
+
+742
+00:32:06,530 --> 00:32:10,069
+that's not how it works because somebody's going to make some laws
+
+743
+00:32:10,790 --> 00:32:12,489
+and then that's what's going to happen
+
+744
+00:32:12,880 --> 00:32:15,010
+and they'll probably say think of the Children
+
+745
+00:32:15,270 --> 00:32:18,390
+and then it will, will get passed. But anyway, anyway.
+
+746
+00:32:18,800 --> 00:32:21,329
+All right, man. Any, any last thoughts on backdoors?
+
+747
+00:32:22,819 --> 00:32:25,130
+Uh nothing other than, you know,
+
+748
+00:32:25,800 --> 00:32:26,660
+please don't.
+
+749
+00:32:27,930 --> 00:32:29,010
+Yeah, that'll work.
+
+750
+00:32:30,449 --> 00:32:33,150
+All right. Awesome. Thanks, Kurt. Thanks everyone for listening.
+
+751
+00:32:33,160 --> 00:32:35,979
+You can go to open source security podcast.com. Hit up the show notes.
+
+752
+00:32:35,989 --> 00:32:40,119
+You can use Pound Os S podcast hashtag to get our attention on social media.
+
+753
+00:32:40,130 --> 00:32:43,270
+And yeah, nothing else. Kurt have a fantastic rest of your day.
+
+754
+00:32:43,560 --> 00:32:44,250
+You too. Thanks.
+
+755
+00:32:44,589 --> 00:32:45,339
+Thanks guys. Bye bye.

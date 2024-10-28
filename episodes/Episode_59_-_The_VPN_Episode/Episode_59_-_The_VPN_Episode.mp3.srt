@@ -1,0 +1,5540 @@
+0
+00:00:05,269 --> 00:00:09,289
+Hello and welcome to episode 59 of the open source security podcast with myself,
+
+1
+00:00:09,300 --> 00:00:11,100
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:11,109 --> 00:00:11,840
+Josh Bresser.
+
+3
+00:00:12,029 --> 00:00:16,399
+-- What's new Kurt? Not a lot. It's been a quiet week. It has
+-- been a really quiet week.
+
+4
+00:00:16,409 --> 00:00:17,290
+I was thinking that too.
+
+5
+00:00:17,299 --> 00:00:21,090
+There, there's not a ton of news which, which actually makes me happy
+
+6
+00:00:21,309 --> 00:00:22,430
+because as,
+
+7
+00:00:22,510 --> 00:00:26,909
+as you brilliantly suggested is this gives us an opportunity to
+
+8
+00:00:26,920 --> 00:00:30,469
+kind of talk about an idea instead of necessarily current events.
+
+9
+00:00:30,799 --> 00:00:31,500
+So
+
+10
+00:00:31,610 --> 00:00:34,990
+thanks to, thanks to Kurt, everybody we are going to spend,
+
+11
+00:00:35,150 --> 00:00:35,709
+I guess,
+
+12
+00:00:35,830 --> 00:00:37,459
+as much time as we can bear
+
+13
+00:00:37,630 --> 00:00:41,509
+talking about VPN S, which is actually a really interesting and fun topic.
+
+14
+00:00:41,900 --> 00:00:43,700
+Yeah. Yeah. No, it's, I mean,
+
+15
+00:00:43,830 --> 00:00:47,500
+well, for a whole pile of reasons, you know, people might want to have
+
+16
+00:00:48,009 --> 00:00:50,860
+a VPN either the traditional corporate, you know,
+
+17
+00:00:50,869 --> 00:00:55,159
+where they dial into their home network or their corporate network
+
+18
+00:00:55,340 --> 00:00:55,500
+or,
+
+19
+00:00:56,569 --> 00:00:57,020
+I mean,
+
+20
+00:00:57,479 --> 00:01:00,340
+or you dial into your home network so you can, like, check on the cat or whatever.
+
+21
+00:01:00,349 --> 00:01:02,279
+I basically do the same thing
+
+22
+00:01:02,439 --> 00:01:03,389
+in my house.
+
+23
+00:01:03,669 --> 00:01:04,019
+Right.
+
+24
+00:01:04,239 --> 00:01:05,889
+It's an easy way to get in
+
+25
+00:01:07,279 --> 00:01:10,540
+and of course, you know, for people surfing the web, they might want to, um,
+
+26
+00:01:11,160 --> 00:01:13,040
+not necessarily hide what they mean,
+
+27
+00:01:13,169 --> 00:01:16,519
+but at least, you know, not have it logged at their ISP or, you know?
+
+28
+00:01:16,830 --> 00:01:18,769
+Well, and there's a lot of countries now and I used to, well,
+
+29
+00:01:18,779 --> 00:01:21,540
+we would have joked about these countries but now they countries like the UK,
+
+30
+00:01:21,830 --> 00:01:23,449
+you know, where the stuff is logged.
+
+31
+00:01:24,470 --> 00:01:27,900
+Um, I believe they have to hold it for, like, 12 months or something ridiculous.
+
+32
+00:01:27,910 --> 00:01:29,739
+Why is it that long? That's crazy.
+
+33
+00:01:29,910 --> 00:01:30,019
+Yeah.
+
+34
+00:01:30,029 --> 00:01:32,220
+Well, I remember when it came out, there was a real concern about like,
+
+35
+00:01:32,230 --> 00:01:34,110
+seriously how much is this data storage going to cost?
+
+36
+00:01:34,120 --> 00:01:34,900
+Because
+
+37
+00:01:35,239 --> 00:01:35,250
+uh
+
+38
+00:01:35,360 --> 00:01:35,989
+yeah,
+
+39
+00:01:37,209 --> 00:01:39,970
+so anyway, so there's a whole bunch of good reasons for VPN S.
+
+40
+00:01:40,540 --> 00:01:41,230
+Um
+
+41
+00:01:41,489 --> 00:01:45,480
+And we're gonna discuss basically some of the technology behind VPN S and what you
+
+42
+00:01:45,489 --> 00:01:48,370
+might want to look for and then I think we'll kind of briefly go over
+
+43
+00:01:48,620 --> 00:01:52,269
+VPN services uh that are kind of more for home users.
+
+44
+00:01:53,309 --> 00:01:56,730
+You know, obviously, if you're running a corporate mothership, there's like,
+
+45
+00:01:56,739 --> 00:02:01,800
+really like what four or five major choices of VPN provider like Cisco and
+
+46
+00:02:02,739 --> 00:02:04,199
+I'm sure there's others
+
+47
+00:02:04,949 --> 00:02:06,239
+and you just go buy one of them,
+
+48
+00:02:06,379 --> 00:02:06,879
+right?
+
+49
+00:02:07,629 --> 00:02:09,880
+Yeah, nobody, nobody really sets this stuff up.
+
+50
+00:02:11,250 --> 00:02:11,800
+Um
+
+51
+00:02:11,929 --> 00:02:15,759
+But yeah, so, so speaking about VPN S and the sort of the technology behind it and, um
+
+52
+00:02:16,429 --> 00:02:18,130
+I mean, obviously one of the first big things,
+
+53
+00:02:18,139 --> 00:02:20,699
+uh but behind a virtual private network is,
+
+54
+00:02:20,710 --> 00:02:22,690
+you probably want to actually be private.
+
+55
+00:02:24,139 --> 00:02:27,210
+I suppose that's a reasonable assumption.
+
+56
+00:02:27,500 --> 00:02:31,750
+Yeah. I mean, but there are VPN technologies still out there and use that are, like,
+
+57
+00:02:32,149 --> 00:02:35,559
+really easily cracked or hacked, you know, ones that use like
+
+58
+00:02:35,720 --> 00:02:37,910
+really weak encryption, like, say DES or three des.
+
+59
+00:02:38,240 --> 00:02:41,309
+Yeah. Yeah. No, there are plenty. Well, not only that, I think
+
+60
+00:02:41,679 --> 00:02:43,570
+this is where I like to think about
+
+61
+00:02:43,820 --> 00:02:44,929
+Tor as well,
+
+62
+00:02:45,520 --> 00:02:46,320
+is Tor
+
+63
+00:02:46,559 --> 00:02:49,110
+is meant to be a very private system.
+
+64
+00:02:49,350 --> 00:02:51,350
+And, and the reality is that
+
+65
+00:02:51,839 --> 00:02:57,520
+if you're trying to escape the eyes of, let's say a nation state,
+
+66
+00:02:57,639 --> 00:02:59,190
+you're not going to do it with Tor
+
+67
+00:03:00,020 --> 00:03:03,259
+because these are adversaries that have the ability to
+
+68
+00:03:03,270 --> 00:03:06,699
+watch most of the traffic going in and coming out
+
+69
+00:03:07,149 --> 00:03:09,520
+and you can actually discern a lot of really
+
+70
+00:03:09,529 --> 00:03:12,809
+interesting data just by paying attention to what is coming
+
+71
+00:03:12,820 --> 00:03:15,139
+-- in and what is going out
+-- or you simply run
+
+72
+00:03:15,149 --> 00:03:18,100
+an exit node block all the encrypted outgoing connections.
+
+73
+00:03:18,110 --> 00:03:21,570
+So like, you know, port 443 from secure web and stuff,
+
+74
+00:03:21,960 --> 00:03:25,500
+uh you know, only allow like port 8025 that kind of stuff and then just
+
+75
+00:03:25,820 --> 00:03:27,500
+uh well, log all the traffic,
+
+76
+00:03:29,449 --> 00:03:33,169
+you know, it literally can be that simple. I remember. I don't, I don't think
+
+77
+00:03:33,529 --> 00:03:35,990
+that is quite as effective now because there's, you know, a lot of,
+
+78
+00:03:36,000 --> 00:03:38,789
+a lot more websites are using HTTP S now.
+
+79
+00:03:39,009 --> 00:03:43,389
+Well, well, even with http si mean, if you're visiting,
+
+80
+00:03:43,649 --> 00:03:45,809
+you know, like, like buy guns
+
+81
+00:03:45,919 --> 00:03:48,509
+online.com, which they're gonna know
+
+82
+00:03:49,199 --> 00:03:51,619
+it, it's pretty obvious what you're doing. Right.
+
+83
+00:03:51,630 --> 00:03:53,699
+-- And, and
+-- there's, there's been, uh,
+
+84
+00:03:53,710 --> 00:03:59,270
+studies and work done on actually analyzing the HTTP s like just the traffic flows
+
+85
+00:03:59,470 --> 00:04:00,179
+to see,
+
+86
+00:04:00,190 --> 00:04:02,960
+you can tell basically which web pages they're specifically visiting at
+
+87
+00:04:02,970 --> 00:04:05,779
+certain websites based on their sizes and their responses and,
+
+88
+00:04:06,250 --> 00:04:09,020
+you know, the calls to other domains, the calls to other,
+
+89
+00:04:09,339 --> 00:04:10,149
+you know, web,
+
+90
+00:04:10,369 --> 00:04:10,820
+um,
+
+91
+00:04:10,960 --> 00:04:12,429
+-- resources and whatnot.
+-- Right.
+
+92
+00:04:12,600 --> 00:04:17,250
+Yeah, it's crazy, man. So, so anyway, we, uh we, we won't spend a ton of time on Tor
+
+93
+00:04:17,820 --> 00:04:18,309
+because
+
+94
+00:04:18,428 --> 00:04:21,548
+it's sort of a VPN. It's sort of not and it does some other stuff.
+
+95
+00:04:21,559 --> 00:04:23,390
+But, but anyway, on to the VPN.
+
+96
+00:04:23,779 --> 00:04:24,170
+Yeah.
+
+97
+00:04:24,179 --> 00:04:27,130
+So I guess, well, I mean, that would be one of the biggest things is, first of all,
+
+98
+00:04:27,140 --> 00:04:28,459
+you want to make sure it's using
+
+99
+00:04:29,019 --> 00:04:31,000
+a VPN technology that doesn't suck.
+
+100
+00:04:31,010 --> 00:04:35,070
+Like PPTP point to point tunneling protocol, which is the old windows based stuff.
+
+101
+00:04:35,130 --> 00:04:37,239
+I hope nobody uses it anymore.
+
+102
+00:04:37,480 --> 00:04:42,910
+Well, it comes by default in windows on both the server kind of side and client side.
+
+103
+00:04:42,920 --> 00:04:43,299
+So
+
+104
+00:04:43,839 --> 00:04:46,700
+I'm guessing a lot of people still use it because, you know, it's,
+
+105
+00:04:46,709 --> 00:04:50,559
+it's free and it's just built in and set up is pretty simple.
+
+106
+00:04:51,380 --> 00:04:54,079
+Uh But yeah, it's completely just broken.
+
+107
+00:04:54,980 --> 00:04:56,850
+-- There's no nice way to put it.
+-- Right.
+
+108
+00:04:57,230 --> 00:05:01,369
+So, so let me ask you this, what is, what is your VPN client? Of choice.
+
+109
+00:05:01,660 --> 00:05:03,529
+Uh I typically, if it's a Linux
+
+110
+00:05:03,649 --> 00:05:04,750
+machine or UNIX
+
+111
+00:05:04,859 --> 00:05:06,200
+machine, I use open VPN.
+
+112
+00:05:06,690 --> 00:05:08,950
+-- Open VPN is pretty solid man. I like
+-- it
+
+113
+00:05:09,200 --> 00:05:10,260
+well and it comes by default.
+
+114
+00:05:10,489 --> 00:05:14,279
+It does, it generally works, it supports modern protocols.
+
+115
+00:05:14,500 --> 00:05:15,190
+It's nice
+
+116
+00:05:15,570 --> 00:05:19,279
+and the majority of the VPN providers provide open VPN. Config
+
+117
+00:05:19,750 --> 00:05:20,320
+Yes.
+
+118
+00:05:20,670 --> 00:05:26,279
+In fact, all of the ones I have used in recent years, I have Open VPN has been
+
+119
+00:05:26,959 --> 00:05:28,329
+my client of choice,
+
+120
+00:05:28,760 --> 00:05:30,089
+which is, which is nice.
+
+121
+00:05:30,239 --> 00:05:32,100
+And in fact, my, my router,
+
+122
+00:05:32,390 --> 00:05:35,290
+I have an ASIS router. I think, I don't even remember now.
+
+123
+00:05:36,170 --> 00:05:37,730
+But it uh yeah, it, it, it,
+
+124
+00:05:38,049 --> 00:05:39,109
+it has a, a
+
+125
+00:05:39,260 --> 00:05:44,850
+button I can press to enable an open VPN server or I can set it up.
+
+126
+00:05:44,859 --> 00:05:49,459
+So my router becomes an open VPN client and VPN S me somewhere else,
+
+127
+00:05:49,470 --> 00:05:50,940
+which is really cool actually.
+
+128
+00:05:51,459 --> 00:05:51,709
+Well,
+
+129
+00:05:51,720 --> 00:05:55,100
+because then you can shove all your devices through easily and not have to set it up.
+
+130
+00:05:55,109 --> 00:05:57,779
+I mean, because quite honestly, you know, just even just
+
+131
+00:05:58,100 --> 00:05:59,869
+uh typing stuff into your phone, right?
+
+132
+00:05:59,880 --> 00:06:02,040
+I mean, I know you can import the config but yeah,
+
+133
+00:06:02,049 --> 00:06:03,910
+it's just sometimes it's easier to like
+
+134
+00:06:04,329 --> 00:06:05,910
+force the whole network through a VPN.
+
+135
+00:06:06,420 --> 00:06:10,559
+And I did that. Actually, I took a Hutu Nano. I think it is
+
+136
+00:06:10,950 --> 00:06:12,750
+and I put uh what is it open?
+
+137
+00:06:12,950 --> 00:06:13,029
+W
+
+138
+00:06:13,209 --> 00:06:13,690
+not open
+
+139
+00:06:13,790 --> 00:06:13,890
+W
+
+140
+00:06:14,010 --> 00:06:14,480
+RT
+
+141
+00:06:15,459 --> 00:06:15,570
+D
+
+142
+00:06:15,720 --> 00:06:16,040
+RT.
+
+143
+00:06:16,459 --> 00:06:17,399
+No, no, not that one.
+
+144
+00:06:18,160 --> 00:06:18,820
+Something on it,
+
+145
+00:06:19,570 --> 00:06:23,109
+maybe, maybe tomato. Um Anyway, I I forget off the top of my head.
+
+146
+00:06:23,119 --> 00:06:25,260
+But I, I basically put Linux on the thing.
+
+147
+00:06:25,640 --> 00:06:26,480
+I installed O
+
+148
+00:06:26,730 --> 00:06:27,380
+VPN
+
+149
+00:06:27,700 --> 00:06:30,739
+and it has a little switch on it and the switch is meant to be
+
+150
+00:06:30,940 --> 00:06:33,500
+used for when, when you have the, the
+
+151
+00:06:33,649 --> 00:06:37,980
+factory firmware to switch between wireless mode and the wired mode
+
+152
+00:06:38,329 --> 00:06:42,700
+and I, I set the switch up. So when I flip the switch, it turns the VPN on.
+
+153
+00:06:43,130 --> 00:06:44,459
+So that way I can like, turn it off.
+
+154
+00:06:44,470 --> 00:06:47,630
+Obviously, no VPN connect to the hotel wifi or whatever,
+
+155
+00:06:47,640 --> 00:06:50,179
+flip the switch and all of a sudden, pow, everything connected
+
+156
+00:06:50,350 --> 00:06:53,869
+to the, the hoochie Nano is now VPN, which is awesome.
+
+157
+00:06:54,440 --> 00:06:54,640
+Well,
+
+158
+00:06:54,649 --> 00:06:57,730
+that's a great example because my kids aren't kind of really using the internet yet.
+
+159
+00:06:57,739 --> 00:06:57,910
+You know,
+
+160
+00:06:57,920 --> 00:07:00,079
+they have ipads and they're locked down and they can basically
+
+161
+00:07:00,089 --> 00:07:02,540
+use like kids youtube and some apps and games and stuff.
+
+162
+00:07:03,049 --> 00:07:04,489
+But once they sort of start,
+
+163
+00:07:05,010 --> 00:07:08,100
+like, once they start surfing the web, for example, or, you know,
+
+164
+00:07:08,549 --> 00:07:08,559
+uh,
+
+165
+00:07:08,709 --> 00:07:10,570
+sending and receiving email, you know,
+
+166
+00:07:10,579 --> 00:07:12,920
+chances are I'm going to put them on their own wireless network
+
+167
+00:07:12,929 --> 00:07:15,440
+forced over a VPN so that if they do dumb crap,
+
+168
+00:07:15,450 --> 00:07:18,119
+it doesn't come back to me because, you know, kids are idiots and like,
+
+169
+00:07:18,970 --> 00:07:19,540
+that's not
+
+170
+00:07:19,649 --> 00:07:21,220
+a bad idea actually.
+
+171
+00:07:21,510 --> 00:07:25,010
+Well, I mean, I, I don't think they're stupid enough to, for example,
+
+172
+00:07:25,019 --> 00:07:28,510
+send in a bomb threat to their school, but kids do stuff like that.
+
+173
+00:07:29,019 --> 00:07:29,500
+You know,
+
+174
+00:07:30,070 --> 00:07:31,739
+um, or they get malware.
+
+175
+00:07:32,130 --> 00:07:33,529
+Right. Because they'll click anything.
+
+176
+00:07:33,950 --> 00:07:37,920
+Well, well, malware is going to happen with if you have a VPN or not. Right.
+
+177
+00:07:37,929 --> 00:07:40,170
+But at least this way it's like, away from all my stuff.
+
+178
+00:07:40,470 --> 00:07:42,359
+Yeah. All right. Anyway, let's do this.
+
+179
+00:07:42,500 --> 00:07:47,959
+You, you have a link to a site here. It's called VPN report.org.
+
+180
+00:07:48,010 --> 00:07:49,279
+We'll put it in the show notes
+
+181
+00:07:49,619 --> 00:07:54,160
+and it lists some, uh, important, nice to have and forbidden options.
+
+182
+00:07:54,339 --> 00:07:57,799
+I think it would be amusing. Yeah. Yeah. Let's, let's go through it.
+
+183
+00:07:58,369 --> 00:08:01,160
+Well, let's start with the forbidden because there's only two of them.
+
+184
+00:08:01,170 --> 00:08:06,079
+So PPTP based clearly. Yeah, if you, if you do a search for that in the CV database,
+
+185
+00:08:06,489 --> 00:08:08,190
+um, just know
+
+186
+00:08:08,579 --> 00:08:10,910
+like the protocol is broken, it's not the implement, well,
+
+187
+00:08:10,920 --> 00:08:13,040
+the implementations are also broken in some cases,
+
+188
+00:08:13,739 --> 00:08:13,950
+but
+
+189
+00:08:14,100 --> 00:08:18,059
+the protocol itself is just horrendously broken. And, um,
+
+190
+00:08:19,170 --> 00:08:21,609
+-- yeah, you just don't use it.
+-- It's easy
+
+191
+00:08:21,829 --> 00:08:22,440
+to hack.
+
+192
+00:08:22,630 --> 00:08:22,959
+Right.
+
+193
+00:08:23,119 --> 00:08:23,600
+Yes.
+
+194
+00:08:23,839 --> 00:08:23,970
+Yeah.
+
+195
+00:08:24,329 --> 00:08:27,600
+And, and they also list data throttling is forbidden. But I,
+
+196
+00:08:28,299 --> 00:08:31,640
+I don't know, I, I can sort of like, you don't want somebody, you know,
+
+197
+00:08:31,649 --> 00:08:34,320
+paying $10 a month to a VPN provider and then
+
+198
+00:08:34,330 --> 00:08:37,000
+using like 10 gigabits per second of traffic consistently,
+
+199
+00:08:37,229 --> 00:08:37,409
+it would
+
+200
+00:08:38,030 --> 00:08:38,109
+probably
+
+201
+00:08:38,219 --> 00:08:38,330
+be a
+
+202
+00:08:38,450 --> 00:08:39,729
+situation, I think.
+
+203
+00:08:39,830 --> 00:08:40,320
+Right.
+
+204
+00:08:41,659 --> 00:08:43,239
+So, but, uh,
+
+205
+00:08:43,520 --> 00:08:44,469
+I mean, in general,
+
+206
+00:08:44,479 --> 00:08:45,609
+I wouldn't want to deal with a VPN
+
+207
+00:08:45,619 --> 00:08:48,030
+that does data throttling unless I'm being like abusive
+
+208
+00:08:49,380 --> 00:08:50,719
+and, and I mean, the reality is,
+
+209
+00:08:50,729 --> 00:08:53,559
+most of these VPN providers nowadays are 10 bucks a month or less.
+
+210
+00:08:54,179 --> 00:08:58,280
+-- I don't even know what I pay. It's not a lot though. I think
+-- mine is eight or nine,
+
+211
+00:08:58,469 --> 00:08:59,289
+something like that.
+
+212
+00:09:00,229 --> 00:09:01,710
+Look into this at some point. I mean,
+
+213
+00:09:01,859 --> 00:09:05,599
+I just, just pay the bill every year and I don't, I don't think about it. So,
+
+214
+00:09:05,799 --> 00:09:05,820
+yeah.
+
+215
+00:09:05,880 --> 00:09:07,580
+And then, so the important things, uh,
+
+216
+00:09:07,590 --> 00:09:09,460
+the first one they list is DN le protection
+
+217
+00:09:09,469 --> 00:09:11,969
+and that's actually really critical because for example,
+
+218
+00:09:12,580 --> 00:09:13,200
+uh
+
+219
+00:09:13,700 --> 00:09:16,690
+you know, you're surfing the web, you make a link, uh you make a um
+
+220
+00:09:17,739 --> 00:09:21,559
+uh a request for a web page on Wikipedia talking about, say fascism or whatever.
+
+221
+00:09:22,340 --> 00:09:26,919
+Uh you know, you don't want your browser making DNS lookups outside of the VPN,
+
+222
+00:09:26,929 --> 00:09:29,719
+like not over the VPN but to the public.
+
+223
+00:09:29,849 --> 00:09:30,559
+And this is
+
+224
+00:09:30,710 --> 00:09:33,669
+a huge problem because what happens in many instances
+
+225
+00:09:33,679 --> 00:09:35,349
+and this is actually a huge problem with Tor
+
+226
+00:09:35,549 --> 00:09:36,280
+as well
+
+227
+00:09:36,380 --> 00:09:37,130
+is
+
+228
+00:09:37,250 --> 00:09:38,960
+you might have a secure link
+
+229
+00:09:39,104 --> 00:09:40,594
+to wherever you're going.
+
+230
+00:09:40,835 --> 00:09:41,765
+But your
+
+231
+00:09:41,945 --> 00:09:46,234
+computer is still set up to resolve to say your I SPS DNS servers.
+
+232
+00:09:46,244 --> 00:09:50,244
+So it'll basically send out your DNS traffic over the VPN
+
+233
+00:09:50,414 --> 00:09:52,265
+to the I SPS DNS.
+
+234
+00:09:52,445 --> 00:09:55,825
+And so now in their logs, they basically have your exit node
+
+235
+00:09:56,094 --> 00:09:58,575
+-- as well as what you're doing, right?
+-- Like,
+
+236
+00:09:59,244 --> 00:10:02,804
+like I said back to the web pages based on DNS queries in the order of them. You can,
+
+237
+00:10:03,020 --> 00:10:07,609
+you can really quite easily tell what, uh, what web pages people are looking at.
+
+238
+00:10:08,140 --> 00:10:08,520
+Um,
+
+239
+00:10:08,750 --> 00:10:11,219
+and, and so one of the things I do with this is I have, um,
+
+240
+00:10:11,380 --> 00:10:12,919
+a system that's on a VPN
+
+241
+00:10:13,700 --> 00:10:18,119
+and it's firewalled so it can only talk to the VPN server
+
+242
+00:10:18,950 --> 00:10:19,580
+and that's it.
+
+243
+00:10:19,690 --> 00:10:22,039
+-- And
+-- that's the right way to do it because not only that,
+
+244
+00:10:22,049 --> 00:10:26,679
+the thing that always scares me is how many times have you been doing something?
+
+245
+00:10:26,690 --> 00:10:28,280
+And the VPN drops
+
+246
+00:10:28,400 --> 00:10:30,840
+and obviously just given the way TCP works,
+
+247
+00:10:31,049 --> 00:10:32,640
+it naturally keeps going
+
+248
+00:10:32,750 --> 00:10:35,250
+and it's just not using the VPN anymore. Right?
+
+249
+00:10:35,260 --> 00:10:37,159
+And it's like, oh, crap, what have I done?
+
+250
+00:10:38,380 --> 00:10:41,309
+So, and then sort of the second one they talk about is the same thing IP address,
+
+251
+00:10:41,320 --> 00:10:42,030
+leak protection.
+
+252
+00:10:42,039 --> 00:10:42,340
+So,
+
+253
+00:10:42,739 --> 00:10:46,669
+um again, you know, if you're, well, if your computer is on the, the quote unquote,
+
+254
+00:10:46,679 --> 00:10:47,559
+like, you know,
+
+255
+00:10:47,570 --> 00:10:49,270
+real internet with like a real IP and you're
+
+256
+00:10:49,280 --> 00:10:52,640
+not behind like a net network address translation machine,
+
+257
+00:10:53,380 --> 00:10:54,109
+you know, you,
+
+258
+00:10:54,239 --> 00:10:59,320
+you could potentially leak your real IP address, which would be bad because, well,
+
+259
+00:10:59,330 --> 00:11:00,890
+yeah, then they know exactly who you are.
+
+260
+00:11:01,260 --> 00:11:05,559
+-- Uh And so again, what I do with my machines ideally is uh well,
+-- but even,
+
+261
+00:11:05,570 --> 00:11:08,429
+even when you're inside of a net, this can be an issue.
+
+262
+00:11:08,440 --> 00:11:11,330
+And so the, the what what happens here is
+
+263
+00:11:11,809 --> 00:11:14,239
+you might connect somewhere through the VPN
+
+264
+00:11:14,719 --> 00:11:15,880
+and then you might say,
+
+265
+00:11:15,890 --> 00:11:19,190
+visit a malicious website that then has your web browser for example,
+
+266
+00:11:19,200 --> 00:11:23,250
+start like pinging internal hosts or non IP S for example, right?
+
+267
+00:11:23,260 --> 00:11:23,539
+And,
+
+268
+00:11:23,710 --> 00:11:27,059
+and in fact, this was there was an attack some years ago using javascript.
+
+269
+00:11:27,669 --> 00:11:27,770
+You
+
+270
+00:11:27,890 --> 00:11:28,190
+could,
+
+271
+00:11:29,010 --> 00:11:31,760
+you could essentially, right, like like scan a network
+
+272
+00:11:31,969 --> 00:11:34,330
+using javascript, like over the VPN,
+
+273
+00:11:34,340 --> 00:11:37,119
+essentially because it was still allowing internal access.
+
+274
+00:11:37,130 --> 00:11:41,320
+And so really the right way to do this is to make sure that once you connect to the VPN,
+
+275
+00:11:41,330 --> 00:11:43,989
+you cannot connect to any local hosts inside of
+
+276
+00:11:44,000 --> 00:11:46,030
+your network for the duration of that session.
+
+277
+00:11:46,520 --> 00:11:46,539
+Yeah.
+
+278
+00:11:46,669 --> 00:11:48,950
+-- Well, basically, depending on what you're doing.
+-- Well. Right.
+
+279
+00:11:48,960 --> 00:11:51,440
+Yeah, I mean, we're, we're putting the tinfoil hat on here, right?
+
+280
+00:11:51,450 --> 00:11:53,320
+Like not that I take mine off. But
+
+281
+00:11:54,030 --> 00:11:54,289
+yeah.
+
+282
+00:11:54,440 --> 00:11:54,969
+Right. Right.
+
+283
+00:11:55,200 --> 00:11:55,869
+How they get you?
+
+284
+00:11:56,469 --> 00:11:57,219
+-- That's
+-- right.
+
+285
+00:11:58,429 --> 00:12:01,299
+Every time I shower, man, like I, I know they're there.
+
+286
+00:12:01,729 --> 00:12:02,039
+Yeah.
+
+287
+00:12:02,289 --> 00:12:02,599
+Yeah.
+
+288
+00:12:02,799 --> 00:12:05,570
+So, and then the next one is the web RT C league product. And again, that's the same.
+
+289
+00:12:05,599 --> 00:12:08,130
+Like here's the horrible reality web browsers have
+
+290
+00:12:08,140 --> 00:12:11,090
+gone from being web browsers to being essentially application
+
+291
+00:12:11,229 --> 00:12:13,119
+operating systems, man. Come
+
+292
+00:12:13,340 --> 00:12:13,539
+on.
+
+293
+00:12:13,929 --> 00:12:14,210
+Yeah.
+
+294
+00:12:14,559 --> 00:12:16,489
+And so there's all sorts of things like web
+
+295
+00:12:16,500 --> 00:12:20,299
+sockets and just there's a whole plethora of technologies that
+
+296
+00:12:20,770 --> 00:12:22,099
+essentially your browser
+
+297
+00:12:22,239 --> 00:12:24,340
+can do all sorts of cool, crazy things,
+
+298
+00:12:24,609 --> 00:12:24,840
+but
+
+299
+00:12:25,119 --> 00:12:28,590
+maybe somebody doesn't know what web RT C is
+
+300
+00:12:28,960 --> 00:12:30,570
+and, and we should explain it.
+
+301
+00:12:31,349 --> 00:12:33,549
+-- So
+-- web RT C is
+
+302
+00:12:33,559 --> 00:12:34,099
+the real
+
+303
+00:12:34,500 --> 00:12:34,530
+time
+
+304
+00:12:34,659 --> 00:12:36,619
+-- communication
+-- stuff. Yeah. Here we go,
+
+305
+00:12:36,929 --> 00:12:38,190
+real time communication.
+
+306
+00:12:39,390 --> 00:12:40,549
+And I mean,
+
+307
+00:12:40,979 --> 00:12:41,070
+I
+
+308
+00:12:41,280 --> 00:12:44,330
+-- think we used to call it Ajax back in our Yeah,
+-- basically.
+
+309
+00:12:44,340 --> 00:12:48,489
+Like, so the idea is that so javascript, not java, but javascript,
+
+310
+00:12:49,640 --> 00:12:50,460
+uh which has,
+
+311
+00:12:50,609 --> 00:12:52,289
+if I remember. Right. Nothing in common at all,
+
+312
+00:12:52,919 --> 00:12:52,950
+at
+
+313
+00:12:53,130 --> 00:12:53,619
+all.
+
+314
+00:12:53,950 --> 00:12:56,919
+Yeah. I, I've never understood that, but regardless.
+
+315
+00:12:57,280 --> 00:13:00,979
+Um Yeah, so, I mean, you can build really cool apps in
+
+316
+00:13:01,119 --> 00:13:01,859
+javascript.
+
+317
+00:13:01,869 --> 00:13:05,659
+-- I mean, well, like Google Docs is a great example,
+-- like the whole internet now, man,
+
+318
+00:13:05,750 --> 00:13:08,500
+I mean, everything is all that like real time.
+
+319
+00:13:08,510 --> 00:13:11,320
+A magic things to websites, click things,
+
+320
+00:13:11,330 --> 00:13:13,989
+type things and it's not like the good old days where you
+
+321
+00:13:14,000 --> 00:13:18,409
+were like literally visiting a new page every time you did something.
+
+322
+00:13:18,859 --> 00:13:21,849
+Yeah. And so, I mean, you know, there's a million ways for this stuff to leak.
+
+323
+00:13:22,260 --> 00:13:25,179
+Um So, you know, ideally you want the client.
+
+324
+00:13:25,760 --> 00:13:28,010
+So ideally what happens is these clients are kind of smart
+
+325
+00:13:28,020 --> 00:13:31,609
+enough or configured to kind of prevent that leakage of traffic.
+
+326
+00:13:32,080 --> 00:13:36,859
+-- Um Right.
+-- Well, then web RT C has the extra special bonus of
+
+327
+00:13:37,200 --> 00:13:37,580
+it.
+
+328
+00:13:37,590 --> 00:13:40,119
+You can do clever things with it when using the word clever
+
+329
+00:13:40,130 --> 00:13:43,640
+loosely where it can discover things that maybe shouldn't be able to.
+
+330
+00:13:43,650 --> 00:13:45,179
+But I think the other trick
+
+331
+00:13:45,450 --> 00:13:48,619
+that you need to be careful for is when you're using a VPN
+
+332
+00:13:48,869 --> 00:13:50,859
+is if you do some things
+
+333
+00:13:51,169 --> 00:13:52,820
+and then you connect to the VPN,
+
+334
+00:13:53,119 --> 00:13:55,799
+you've already left like a footprint in your web browser.
+
+335
+00:13:55,909 --> 00:13:56,260
+Uh
+
+336
+00:13:57,010 --> 00:13:59,650
+If we can find that link eff fingerprint,
+
+337
+00:14:00,190 --> 00:14:01,849
+browser fingerprint, I think it was.
+
+338
+00:14:01,859 --> 00:14:03,520
+And it's just things like based on your screen
+
+339
+00:14:03,530 --> 00:14:06,020
+size and your offering system and your plugins.
+
+340
+00:14:06,500 --> 00:14:07,190
+Exactly. Uh, pen
+
+341
+00:14:07,469 --> 00:14:09,580
+to click. We'll put a link in the show notes.
+
+342
+00:14:09,869 --> 00:14:13,739
+Um, but, yeah, like here we go. Test me. I am leaking.
+
+343
+00:14:13,750 --> 00:14:15,979
+I'm gonna guess probably about 20 bits of information
+
+344
+00:14:17,510 --> 00:14:22,010
+uh We'll see in one second. Oh, wow. It's taking a while.
+
+345
+00:14:23,179 --> 00:14:23,590
+They gotta,
+
+346
+00:14:24,169 --> 00:14:25,479
+they gotta test it all man.
+
+347
+00:14:27,000 --> 00:14:28,099
+Yeah. Well, and,
+
+348
+00:14:28,239 --> 00:14:30,270
+and there's also all sorts of new tracking
+
+349
+00:14:30,280 --> 00:14:33,710
+technologies like using the html canvas or using
+
+350
+00:14:33,989 --> 00:14:38,020
+um you can use HSTS headers. So the, the whole security transport security headers
+
+351
+00:14:38,530 --> 00:14:42,700
+because basically you can set these headers on a browser. And then the next time
+
+352
+00:14:43,479 --> 00:14:44,590
+if you want to test
+
+353
+00:14:44,960 --> 00:14:49,020
+you, you have them, you know, make a connection to this website and you'll see
+
+354
+00:14:49,549 --> 00:14:50,309
+uh
+
+355
+00:14:50,580 --> 00:14:54,010
+like basically you tell them to make a connection to port 80 on the website.
+
+356
+00:14:54,020 --> 00:14:56,460
+And if they've already got the HSTS header, they'll, they won't,
+
+357
+00:14:56,469 --> 00:14:58,299
+they'll just go straight to port 443.
+
+358
+00:14:58,510 --> 00:15:00,900
+And so you could quite easily just set a
+
+359
+00:15:00,909 --> 00:15:04,590
+unique serial number for like every web request with,
+
+360
+00:15:04,599 --> 00:15:05,739
+you know, a unique host name
+
+361
+00:15:06,200 --> 00:15:07,369
+and fingerprint.
+
+362
+00:15:07,380 --> 00:15:09,190
+Like, well, every single request to your website,
+
+363
+00:15:09,200 --> 00:15:11,700
+you can send out a fingerprint to that web client.
+
+364
+00:15:11,710 --> 00:15:17,830
+-- So
+-- I, I think the lesson here is that you probably need a dedicated VM or something
+
+365
+00:15:18,320 --> 00:15:18,409
+you
+
+366
+00:15:18,559 --> 00:15:18,599
+need
+
+367
+00:15:18,789 --> 00:15:18,849
+something
+
+368
+00:15:20,000 --> 00:15:20,020
+you
+
+369
+00:15:20,219 --> 00:15:20,239
+do
+
+370
+00:15:20,460 --> 00:15:20,679
+like
+
+371
+00:15:21,090 --> 00:15:22,119
+proper tinfoil
+
+372
+00:15:22,260 --> 00:15:22,960
+hat. VPN.
+
+373
+00:15:23,460 --> 00:15:23,820
+Right.
+
+374
+00:15:25,299 --> 00:15:29,609
+Yeah. And so, yeah, I mean, there's, uh, there's a million ways for this to go wrong.
+
+375
+00:15:29,820 --> 00:15:30,359
+Um,
+
+376
+00:15:31,099 --> 00:15:34,099
+then they mentioned speed. Obviously you want speed, right? You don't want a VPN.
+
+377
+00:15:34,109 --> 00:15:34,320
+That's like
+
+378
+00:15:34,549 --> 00:15:36,760
+-- 10-K per second.
+-- That's like the whole point, right?
+
+379
+00:15:36,979 --> 00:15:38,340
+Some things are ok.
+
+380
+00:15:38,409 --> 00:15:40,570
+You know, some applications that run in the background,
+
+381
+00:15:40,580 --> 00:15:42,159
+downloading stuff or whatever, right?
+
+382
+00:15:42,349 --> 00:15:44,099
+Doesn't have to be super fast,
+
+383
+00:15:44,989 --> 00:15:46,799
+but speed is always better than not speed.
+
+384
+00:15:47,210 --> 00:15:48,510
+You need it fast.
+
+385
+00:15:48,539 --> 00:15:51,140
+And, and one thing to remember too, again, back to the fingerprinting,
+
+386
+00:15:51,150 --> 00:15:52,510
+if you're up against a nation state, right?
+
+387
+00:15:52,520 --> 00:15:55,650
+They can just simply throttle your network traffic and look at other things.
+
+388
+00:15:55,659 --> 00:15:56,159
+You know,
+
+389
+00:15:56,789 --> 00:16:00,500
+that's true. It's, you're not going to escape a nation state.
+
+390
+00:16:00,510 --> 00:16:04,130
+I mean, let's just, let's just start there if that's your threat model like
+
+391
+00:16:04,239 --> 00:16:06,590
+this is the wrong podcast for you.
+
+392
+00:16:06,969 --> 00:16:08,570
+Yeah. You know what I mean?
+
+393
+00:16:09,210 --> 00:16:13,659
+And then they talk about using open VPN or uh IV two I PE
+
+394
+00:16:13,859 --> 00:16:17,650
+based. So internet key exchange version two or, you know IP security based.
+
+395
+00:16:18,739 --> 00:16:19,799
+I would generally agree.
+
+396
+00:16:19,869 --> 00:16:24,369
+There's, there's a bunch of other VPN technologies or implementations.
+
+397
+00:16:24,849 --> 00:16:31,469
+Ok? No, I'm gonna say that open VPN is basically the only reasonable decision.
+
+398
+00:16:32,179 --> 00:16:36,400
+Ike and IP SEC are a freaking nightmare to deal with.
+
+399
+00:16:37,210 --> 00:16:37,570
+Yeah.
+
+400
+00:16:37,859 --> 00:16:40,869
+Well, I mean, you really have to be, well, you have
+
+401
+00:16:41,299 --> 00:16:42,780
+your provider better send you a config
+
+402
+00:16:43,020 --> 00:16:46,190
+-- file. That's all I'm gonna say.
+-- It's it's even worse than that, man.
+
+403
+00:16:46,200 --> 00:16:48,390
+It's just, it's such a nightmare to deal with them.
+
+404
+00:16:48,599 --> 00:16:50,429
+-- It don't, don't,
+-- please.
+
+405
+00:16:50,549 --> 00:16:50,719
+I know I
+
+406
+00:16:51,409 --> 00:16:51,440
+was
+
+407
+00:16:51,640 --> 00:16:54,039
+supposed to make this easier, but I don't think it has.
+
+408
+00:16:54,409 --> 00:16:54,489
+I
+
+409
+00:16:54,619 --> 00:16:56,700
+PV six has its own set of problems.
+
+410
+00:16:58,849 --> 00:16:59,390
+Anyway.
+
+411
+00:16:59,780 --> 00:16:59,929
+Don't
+
+412
+00:17:00,219 --> 00:17:00,390
+they talk
+
+413
+00:17:00,510 --> 00:17:00,640
+about
+
+414
+00:17:01,450 --> 00:17:03,890
+no logging or tracking? Which is sort of self evident. Right.
+
+415
+00:17:03,900 --> 00:17:07,329
+You don't ideally want a VPN that logs or track stuff because, you know,
+
+416
+00:17:07,339 --> 00:17:09,229
+10 years from now those records could be
+
+417
+00:17:09,520 --> 00:17:10,589
+requested. And
+
+418
+00:17:10,858 --> 00:17:11,189
+well,
+
+419
+00:17:11,348 --> 00:17:13,989
+even though not even 10 years from now, didn't one of the,
+
+420
+00:17:14,000 --> 00:17:18,739
+the VPN S just get in trouble for selling user data to an advertiser.
+
+421
+00:17:18,750 --> 00:17:19,339
+That's awesome.
+
+422
+00:17:19,510 --> 00:17:22,150
+I, I gotta monetize those, uh, things
+
+423
+00:17:22,280 --> 00:17:23,469
+cost recovery.
+
+424
+00:17:24,380 --> 00:17:26,098
+Uh, the next criteria they put,
+
+425
+00:17:26,108 --> 00:17:28,750
+I'm not so sure it's three plus simultaneous devices,
+
+426
+00:17:30,239 --> 00:17:34,260
+I guess. I mean, if you have a mobile phone, a laptop and your tablet,
+
+427
+00:17:34,369 --> 00:17:40,380
+maybe I, I only have a service that allows one which is fine for my purposes.
+
+428
+00:17:40,910 --> 00:17:44,380
+I assume I get it for cheaper. I mean, whatever that's up to each person.
+
+429
+00:17:44,390 --> 00:17:45,810
+If, if you've got a lot of VPN
+
+430
+00:17:45,910 --> 00:17:46,900
+to do good for you.
+
+431
+00:17:47,079 --> 00:17:49,969
+Well, I think part of it is, I mean, here's the reality
+
+432
+00:17:50,829 --> 00:17:52,229
+operation security. So
+
+433
+00:17:52,520 --> 00:17:52,959
+OPSEC,
+
+434
+00:17:53,109 --> 00:17:54,229
+the real problem with
+
+435
+00:17:54,420 --> 00:17:57,839
+OPSEC is you basically have to do it right all the time everywhere.
+
+436
+00:17:58,180 --> 00:17:58,819
+End of story.
+
+437
+00:17:59,510 --> 00:18:00,260
+Yes,
+
+438
+00:18:00,390 --> 00:18:03,910
+that really, that's the problem with security in general, right?
+
+439
+00:18:03,920 --> 00:18:06,339
+Is, is the good guys need to get it right,
+
+440
+00:18:06,349 --> 00:18:10,329
+100% of the time and the bad guys only need to get it right once.
+
+441
+00:18:10,550 --> 00:18:13,219
+So the odds are not in our favor.
+
+442
+00:18:14,910 --> 00:18:16,560
+And then the next two things they list,
+
+443
+00:18:16,569 --> 00:18:20,959
+I would have just assumed for any company they say honest billing practices
+
+444
+00:18:21,849 --> 00:18:25,109
+and honest marketing and actually the honest marketing I get because
+
+445
+00:18:25,369 --> 00:18:28,239
+it was actually funny, there's this one VPN,
+
+446
+00:18:28,250 --> 00:18:31,270
+actually a VPN rating site that keeps spamming me asking
+
+447
+00:18:31,280 --> 00:18:32,750
+me to put a link on my website to that.
+
+448
+00:18:33,449 --> 00:18:34,689
+So I'm not even going to give them
+
+449
+00:18:35,040 --> 00:18:35,160
+uh
+
+450
+00:18:35,920 --> 00:18:38,760
+you could get some free VPN service here, man.
+
+451
+00:18:39,180 --> 00:18:40,989
+No, because they are a VPN rating site.
+
+452
+00:18:41,140 --> 00:18:42,109
+-- Just a
+-- rating.
+
+453
+00:18:43,369 --> 00:18:44,060
+So terrible.
+
+454
+00:18:44,520 --> 00:18:45,859
+Yeah. So anyways and like,
+
+455
+00:18:46,260 --> 00:18:49,040
+I think they also have a service because they were talking about how they use like,
+
+456
+00:18:49,050 --> 00:18:51,939
+oh no, sorry, this was the, the, the VPN service we'll discuss next.
+
+457
+00:18:51,949 --> 00:18:55,890
+But they, they keep talking about how they use cutting edge crypto and it's like a
+
+458
+00:18:56,150 --> 00:19:00,369
+-- and all the other normal everybody else uses it
+-- like military grade.
+
+459
+00:19:00,479 --> 00:19:02,859
+It's like we make our sandwiches with bread
+
+460
+00:19:04,170 --> 00:19:06,050
+-- like, yes,
+-- that's tell me
+
+461
+00:19:07,219 --> 00:19:08,500
+you had me at bread.
+
+462
+00:19:08,609 --> 00:19:10,939
+-- We cut our bread
+-- gone.
+
+463
+00:19:11,400 --> 00:19:12,780
+We use sliced bread.
+
+464
+00:19:13,540 --> 00:19:16,250
+I, I prefer potato bread myself but
+
+465
+00:19:16,890 --> 00:19:17,599
+it's fair
+
+466
+00:19:17,869 --> 00:19:18,729
+but still a bread.
+
+467
+00:19:18,949 --> 00:19:19,479
+It is.
+
+468
+00:19:19,719 --> 00:19:19,920
+Yes.
+
+469
+00:19:20,900 --> 00:19:24,280
+And what's interesting is the nice to have category they have on this rating site.
+
+470
+00:19:24,290 --> 00:19:25,760
+I would actually say this first one
+
+471
+00:19:25,939 --> 00:19:26,979
+outside of the US.
+
+472
+00:19:26,989 --> 00:19:30,560
+And UK servers is actually pretty damn important because
+
+473
+00:19:30,569 --> 00:19:33,520
+-- it
+-- was the number one criteria for me.
+
+474
+00:19:33,839 --> 00:19:34,790
+I'm not gonna lie.
+
+475
+00:19:35,569 --> 00:19:38,670
+Now, the downside is I struggle to watch Netflix
+
+476
+00:19:39,010 --> 00:19:39,750
+VPN,
+
+477
+00:19:41,689 --> 00:19:42,650
+but definitely
+
+478
+00:19:43,640 --> 00:19:45,420
+they mentioned a free trial. Um,
+
+479
+00:19:45,930 --> 00:19:46,180
+sure
+
+480
+00:19:46,430 --> 00:19:51,260
+we can't, you can't just skip over outside of us and UK like that. Come on.
+
+481
+00:19:51,369 --> 00:19:55,660
+-- It's,
+-- I mean, it's so, you know, it is really quite tragic. I mean, that we've,
+
+482
+00:19:56,189 --> 00:19:58,739
+what used to be these jurisdictions where, you know,
+
+483
+00:20:00,010 --> 00:20:03,949
+we made jokes about other countries lacking the freedoms that we have.
+
+484
+00:20:04,880 --> 00:20:09,150
+You know, now when you actually read the laws, like the UK Rip Act or,
+
+485
+00:20:09,579 --> 00:20:13,709
+uh, well, like us national security letters and they're like, oh, but it's ok, like
+
+486
+00:20:14,010 --> 00:20:17,040
+a judge resides over these and approves or disapproves them and it's like, well,
+
+487
+00:20:17,050 --> 00:20:18,380
+how many has the judge disapproved?
+
+488
+00:20:18,390 --> 00:20:19,680
+And it was like, three
+
+489
+00:20:20,170 --> 00:20:21,030
+or something?
+
+490
+00:20:21,520 --> 00:20:23,619
+You know, like, it, it basically never happened.
+
+491
+00:20:23,810 --> 00:20:27,489
+Here's the thing and, and let's not get, we won't get too much into the politics of it,
+
+492
+00:20:27,500 --> 00:20:27,829
+but
+
+493
+00:20:28,010 --> 00:20:32,270
+kind of the entire purpose of having a VPN service is
+
+494
+00:20:33,050 --> 00:20:34,599
+that you're not going to be tracked.
+
+495
+00:20:34,609 --> 00:20:36,800
+And, and even when, even though, like, let's face it,
+
+496
+00:20:36,810 --> 00:20:39,989
+I'm not doing anything even remotely illegal in my VPN.
+
+497
+00:20:40,000 --> 00:20:42,239
+It's just, I, when I'm on the road
+
+498
+00:20:42,510 --> 00:20:44,510
+and I'm connected to airport wi fi,
+
+499
+00:20:44,739 --> 00:20:48,010
+I'm turning on the VPN. Right. And in all seriousness,
+
+500
+00:20:48,280 --> 00:20:50,400
+that is what I use my VPN.
+
+501
+00:20:50,650 --> 00:20:50,750
+The
+
+502
+00:20:50,900 --> 00:20:50,969
+number
+
+503
+00:20:51,109 --> 00:20:54,239
+one reason Google's pushing HTTP S everywhere. It's,
+
+504
+00:20:54,739 --> 00:20:54,849
+it's
+
+505
+00:20:55,300 --> 00:20:55,550
+revenue.
+
+506
+00:20:55,650 --> 00:20:56,199
+Exactly.
+
+507
+00:20:56,300 --> 00:20:57,599
+Well, and so here's the thing,
+
+508
+00:20:57,859 --> 00:21:00,364
+my VPN gets used when I'm at the gym because
+
+509
+00:21:00,375 --> 00:21:02,444
+their networks screwed up and I can't connect to Google.
+
+510
+00:21:02,454 --> 00:21:02,464
+I
+
+511
+00:21:03,204 --> 00:21:03,234
+was,
+
+512
+00:21:06,185 --> 00:21:08,694
+I'm afraid to tell them what they've done wrong for fear.
+
+513
+00:21:08,704 --> 00:21:10,255
+They'll accuse me of hacking them.
+
+514
+00:21:10,395 --> 00:21:13,035
+So, I just, I just VPN, I'm like, whatever the song.
+
+515
+00:21:13,844 --> 00:21:14,974
+Right. I don't want to get involved
+
+516
+00:21:15,584 --> 00:21:19,974
+and then I also use it at the airport and that's literally all I use a VPN service for
+
+517
+00:21:20,224 --> 00:21:21,775
+and, but at the same time, like,
+
+518
+00:21:22,339 --> 00:21:23,839
+I'm not comfortable
+
+519
+00:21:24,020 --> 00:21:28,290
+using a service that can be easily subpoenaed by their, that's
+
+520
+00:21:29,530 --> 00:21:31,979
+fundamentally a technology like a VPN.
+
+521
+00:21:32,260 --> 00:21:34,750
+It's not completely hack proof.
+
+522
+00:21:34,760 --> 00:21:37,959
+Like if a nation state attacker wants to, they can put enough effort into
+
+523
+00:21:38,260 --> 00:21:41,500
+manipulating your traffic flows and monitoring everywhere to see, you know,
+
+524
+00:21:41,510 --> 00:21:42,800
+where you're going and what you're doing.
+
+525
+00:21:43,089 --> 00:21:44,800
+But it does significantly raise the bar.
+
+526
+00:21:44,810 --> 00:21:46,660
+And another thing to significantly raise the
+
+527
+00:21:46,670 --> 00:21:48,760
+bar is to involve other jurisdictions.
+
+528
+00:21:49,640 --> 00:21:51,790
+Like if they have to go to Sweden to get a subpoena,
+
+529
+00:21:52,020 --> 00:21:54,949
+that's a lot more work than like getting a federal judge in,
+
+530
+00:21:55,099 --> 00:21:57,290
+you know, Delaware or whatever
+
+531
+00:21:57,439 --> 00:21:58,589
+to sign off on something.
+
+532
+00:21:58,689 --> 00:22:02,349
+Well, well, right. And kind of my view of it is I would rather support
+
+533
+00:22:02,849 --> 00:22:04,400
+a VPN in one of these,
+
+534
+00:22:04,410 --> 00:22:06,709
+we'll say friendly countries in that
+
+535
+00:22:06,719 --> 00:22:10,630
+respect versus necessarily supporting an organization,
+
+536
+00:22:11,000 --> 00:22:14,060
+you know, in, in the US or the UK where I know that
+
+537
+00:22:14,310 --> 00:22:18,469
+they have to legally do certain things and I'm, I'm not bashing these VPN providers.
+
+538
+00:22:18,479 --> 00:22:21,660
+Like they, they certainly have purpose and, and they're good at what they do and,
+
+539
+00:22:22,479 --> 00:22:25,020
+yeah, go ahead. Get, get a US service.
+
+540
+00:22:25,030 --> 00:22:27,420
+If you're gonna, you know, be surfing from Starbucks or whatever.
+
+541
+00:22:27,430 --> 00:22:29,050
+That, that's totally up to you.
+
+542
+00:22:29,150 --> 00:22:32,010
+But from my perspective I just see value in making sure my money
+
+543
+00:22:32,020 --> 00:22:34,339
+is going to one of these other companies because I'm sure they,
+
+544
+00:22:34,400 --> 00:22:35,719
+they probably need it.
+
+545
+00:22:36,459 --> 00:22:36,660
+Yeah.
+
+546
+00:22:37,439 --> 00:22:40,640
+Well, I mean, the good news is now is if you look at the actual cost
+
+547
+00:22:41,040 --> 00:22:44,859
+of either colo a physical server or even VPs hosting,
+
+548
+00:22:45,640 --> 00:22:48,400
+it is crazy cheap. It's really cheap. I know.
+
+549
+00:22:48,430 --> 00:22:52,020
+And that's the thing about a VPN server too is like, it basically uses like,
+
+550
+00:22:52,500 --> 00:22:53,099
+almost,
+
+551
+00:22:53,410 --> 00:22:56,699
+no. Well, in theory, it really shouldn't be using any hard drive at all.
+
+552
+00:22:56,709 --> 00:22:57,739
+Just the operating system.
+
+553
+00:22:58,319 --> 00:22:59,579
+They should have disabled logging.
+
+554
+00:22:59,630 --> 00:23:04,869
+I've heard stories of VPN providers where their VPN hosts or their end points,
+
+555
+00:23:04,880 --> 00:23:05,449
+I guess,
+
+556
+00:23:05,969 --> 00:23:07,680
+literally don't have hard drives
+
+557
+00:23:07,939 --> 00:23:10,030
+where they use like a CD ROM.
+
+558
+00:23:10,040 --> 00:23:11,959
+That way, there's literally, there just is,
+
+559
+00:23:11,969 --> 00:23:15,619
+there's nowhere to store data even if the machines get hacked into.
+
+560
+00:23:17,329 --> 00:23:19,630
+And, uh, and I mean, bandwidth has gotten pretty cheap.
+
+561
+00:23:19,640 --> 00:23:22,719
+Like you go to some of these companies now and like a gigabit per second,
+
+562
+00:23:22,729 --> 00:23:24,199
+sustained traffic is like
+
+563
+00:23:25,150 --> 00:23:26,219
+tens of dollars.
+
+564
+00:23:26,410 --> 00:23:29,579
+And here's the other thing is in many instances.
+
+565
+00:23:30,270 --> 00:23:32,189
+Yeah, you can just go to, you know,
+
+566
+00:23:32,199 --> 00:23:34,890
+essentially a network provider and you can buy a port.
+
+567
+00:23:35,099 --> 00:23:38,829
+It's not like where you and I are buying, you know, maybe certain,
+
+568
+00:23:38,869 --> 00:23:41,969
+how many gigabytes in a month or whatever, up and down.
+
+569
+00:23:41,979 --> 00:23:45,880
+Like, no, no, you just, you buy a port and you can do whatever you want with it then.
+
+570
+00:23:47,109 --> 00:23:49,650
+Yeah, I remember looking, even back in the day, like years ago,
+
+571
+00:23:49,660 --> 00:23:53,089
+I think it was Hurricane Electric was what, 5000 bucks for a gigabit.
+
+572
+00:23:53,099 --> 00:23:56,319
+-- But I mean, this is like a decade ago now. It's no doubt, much
+-- more
+
+573
+00:23:56,609 --> 00:23:59,130
+like two packs of gum and a sticker.
+
+574
+00:24:00,150 --> 00:24:00,170
+Yeah.
+
+575
+00:24:00,869 --> 00:24:03,910
+Right. No, it's, it's super cheap, man. It's crazy.
+
+576
+00:24:04,479 --> 00:24:07,189
+In fact, that's one of the things I think about all the time is
+
+577
+00:24:07,599 --> 00:24:08,550
+I don't need it,
+
+578
+00:24:08,760 --> 00:24:14,030
+but I'm like I could, I should host my Amazon data in, in Europe because I can,
+
+579
+00:24:14,199 --> 00:24:14,660
+you know,
+
+580
+00:24:14,810 --> 00:24:17,290
+that way if something happens in the United States.
+
+581
+00:24:19,800 --> 00:24:21,869
+-- No,
+-- I mean, in both places, right?
+
+582
+00:24:22,050 --> 00:24:23,099
+That way, just,
+
+583
+00:24:23,109 --> 00:24:26,739
+just in case like for whatever reason society crumbles in the US then, then I,
+
+584
+00:24:26,834 --> 00:24:30,055
+you can easily just migrate to Europe and recover my data.
+
+585
+00:24:30,265 --> 00:24:30,724
+Right.
+
+586
+00:24:30,734 --> 00:24:33,844
+I'm pretty sure if you can't get your data in the US,
+
+587
+00:24:33,854 --> 00:24:36,484
+that Europe is probably not going to be taking a whole.
+
+588
+00:24:36,614 --> 00:24:36,875
+-- Yeah,
+-- that's,
+
+589
+00:24:37,314 --> 00:24:38,775
+that's assuming I can get there.
+
+590
+00:24:39,005 --> 00:24:41,354
+Uh And that's, that's basically my assumption.
+
+591
+00:24:42,275 --> 00:24:45,574
+Uh Yeah, I could, I, I wonder if anyone's done that. Probably,
+
+592
+00:24:46,589 --> 00:24:48,369
+I believe the shortest,
+
+593
+00:24:48,380 --> 00:24:51,630
+I know the record for the shortest boat to make the Atlantic Crossing is, uh,
+
+594
+00:24:51,640 --> 00:24:53,609
+I think it's 4 ft or slightly less.
+
+595
+00:24:53,949 --> 00:24:55,079
+What? That's,
+
+596
+00:24:55,900 --> 00:24:55,920
+yeah,
+
+597
+00:24:56,099 --> 00:25:00,050
+some guy tried to set the record in a 3 ft boat and he had to turn around pretty quick
+
+598
+00:25:00,680 --> 00:25:01,099
+that it's
+
+599
+00:25:01,380 --> 00:25:02,579
+basically like a little,
+
+600
+00:25:02,869 --> 00:25:05,410
+like, think of a dishwasher with like a 3 ft
+
+601
+00:25:05,750 --> 00:25:05,790
+mast
+
+602
+00:25:05,890 --> 00:25:10,530
+-- on it.
+-- Like, what is a 3 ft boat? I don't even know if I could kneel in a 3 ft boat.
+
+603
+00:25:10,750 --> 00:25:13,489
+Well, no, he had like the special bubble canopy so he could, like,
+
+604
+00:25:13,500 --> 00:25:14,660
+crouch in it basically
+
+605
+00:25:15,989 --> 00:25:16,020
+in
+
+606
+00:25:16,479 --> 00:25:16,719
+a
+
+607
+00:25:16,890 --> 00:25:18,530
+barrel at that point. Right.
+
+608
+00:25:18,910 --> 00:25:21,489
+She's getting a wooden barrel with a paddle
+
+609
+00:25:21,500 --> 00:25:23,219
+and that's what you're dealing with there.
+
+610
+00:25:24,520 --> 00:25:24,689
+Oh, my
+
+611
+00:25:24,880 --> 00:25:26,420
+goodness. People are crazy.
+
+612
+00:25:26,839 --> 00:25:30,020
+Well, you know, you got to set those, setting records is hard nowadays,
+
+613
+00:25:31,140 --> 00:25:31,160
+the
+
+614
+00:25:31,410 --> 00:25:31,989
+ones have been set.
+
+615
+00:25:32,109 --> 00:25:35,810
+-- No,
+-- I know, I think about that sometimes is, is you think about, I remember like,
+
+616
+00:25:35,819 --> 00:25:37,060
+back in when I was a kid,
+
+617
+00:25:37,310 --> 00:25:39,060
+there were all these world records and things
+
+618
+00:25:39,180 --> 00:25:40,880
+and it was always a huge deal to see who is
+
+619
+00:25:40,890 --> 00:25:43,089
+going to break the next world record for whatever thing.
+
+620
+00:25:43,099 --> 00:25:44,699
+And now it's like, yeah, there's,
+
+621
+00:25:45,150 --> 00:25:48,459
+-- now you're basically gonna die if you try to break a record. Yeah. Right.
+-- Right.
+
+622
+00:25:48,469 --> 00:25:49,760
+Don't, don't, don't do that
+
+623
+00:25:50,349 --> 00:25:51,459
+anyway. Anyway.
+
+624
+00:25:52,640 --> 00:25:56,760
+So next on the nice to have list is anonymous payment, which definitely,
+
+625
+00:25:56,770 --> 00:25:59,569
+if you are doing things that you're worried about getting in trouble about,
+
+626
+00:26:00,520 --> 00:26:01,520
+I mean, let's face it. Right.
+
+627
+00:26:01,530 --> 00:26:04,239
+One of the biggest things to deal with crime that most
+
+628
+00:26:04,250 --> 00:26:07,010
+-- law enforcement has learned is learn to trace
+-- the money.
+
+629
+00:26:07,020 --> 00:26:08,189
+The money is a huge one.
+
+630
+00:26:08,199 --> 00:26:13,420
+And if you're, let's say, in, in a country that isn't very free in terms of speech,
+
+631
+00:26:13,890 --> 00:26:14,900
+this one's huge.
+
+632
+00:26:15,239 --> 00:26:16,290
+Well, more of the point too,
+
+633
+00:26:16,300 --> 00:26:17,689
+you got to remember a lot of the world
+
+634
+00:26:17,699 --> 00:26:20,449
+doesn't really have easy access to like credit cards.
+
+635
+00:26:20,880 --> 00:26:20,900
+Uh
+
+636
+00:26:22,349 --> 00:26:24,020
+So how are you going to pay them? Right. And that's
+
+637
+00:26:24,170 --> 00:26:24,400
+so
+
+638
+00:26:24,510 --> 00:26:25,719
+I think to some degree,
+
+639
+00:26:25,729 --> 00:26:27,459
+it's less about anonymous payment and more about
+
+640
+00:26:27,469 --> 00:26:29,780
+supporting forms of payment that are like nontraditional.
+
+641
+00:26:29,790 --> 00:26:31,930
+Like I know in Africa, um
+
+642
+00:26:32,750 --> 00:26:35,050
+uh you can recharge your cell phone like minutes,
+
+643
+00:26:35,060 --> 00:26:37,930
+like you can basically send credits to your friends and family
+
+644
+00:26:38,660 --> 00:26:40,849
+and those systems have become de facto currencies.
+
+645
+00:26:41,660 --> 00:26:44,800
+-- I can see that. Right?
+-- Because it's way more convenient than carrying cash.
+
+646
+00:26:44,810 --> 00:26:46,010
+No bank is involved
+
+647
+00:26:46,380 --> 00:26:47,400
+and it's instant,
+
+648
+00:26:48,750 --> 00:26:49,270
+you know.
+
+649
+00:26:49,660 --> 00:26:50,449
+Um,
+
+650
+00:26:50,979 --> 00:26:52,069
+so, well,
+
+651
+00:26:52,079 --> 00:26:55,469
+Bitcoin is kind of a terrible example of an anonymous currency because a it's
+
+652
+00:26:55,479 --> 00:26:58,609
+not really anonymous and b it's just kind of a pain in the,
+
+653
+00:26:59,089 --> 00:27:01,650
+well, you can tell our listeners about your experience.
+
+654
+00:27:01,660 --> 00:27:03,979
+-- It's worth
+-- a ton of money now though.
+
+655
+00:27:04,589 --> 00:27:05,949
+Well, show me the money.
+
+656
+00:27:06,859 --> 00:27:10,560
+I I Bitcoin Rich man. Right. That's what it's all about.
+
+657
+00:27:10,650 --> 00:27:14,439
+Send me a picture once you've converted it into Benjamin's and I'll believe you.
+
+658
+00:27:14,609 --> 00:27:15,199
+I,
+
+659
+00:27:15,369 --> 00:27:17,079
+yeah, I know. Anyway,
+
+660
+00:27:18,130 --> 00:27:21,640
+so I think the anonymous payment is sort of valid but even more valid for, like,
+
+661
+00:27:21,650 --> 00:27:21,760
+you know,
+
+662
+00:27:21,770 --> 00:27:25,560
+people just in weird parts of the world where you can't easily get a visa or an A E
+
+663
+00:27:25,834 --> 00:27:26,704
+or a mastercard.
+
+664
+00:27:27,234 --> 00:27:27,925
+Yeah, I think that's
+
+665
+00:27:28,515 --> 00:27:29,925
+a lot of these companies, you know,
+
+666
+00:27:29,935 --> 00:27:33,895
+use payment processors that look very suspiciously on, like, visas from
+
+667
+00:27:34,675 --> 00:27:36,385
+-- strange countries.
+-- Uh, yes.
+
+668
+00:27:36,395 --> 00:27:36,854
+In fact,
+
+669
+00:27:36,864 --> 00:27:40,655
+I have this problem every time I pay my VPN bill because
+
+670
+00:27:40,665 --> 00:27:44,775
+it shows up as a foreign transaction taking place in their country.
+
+671
+00:27:45,255 --> 00:27:47,614
+And then my, my credit card fraud detection
+
+672
+00:27:47,984 --> 00:27:49,594
+goes crazy every time.
+
+673
+00:27:49,854 --> 00:27:51,265
+And I'm like, what? No, it's cool.
+
+674
+00:27:51,275 --> 00:27:54,824
+It's still, still me guys, like every year, same, same, same thing,
+
+675
+00:27:55,800 --> 00:27:58,420
+which is fine. I, I get it. It's, it's tough.
+
+676
+00:27:58,859 --> 00:28:02,060
+-- Well, it's definitely outside that statistical norm of behavior
+-- and,
+
+677
+00:28:02,069 --> 00:28:04,660
+and it's actually funny too because when, when I pay them,
+
+678
+00:28:04,670 --> 00:28:07,819
+they always warn me that my payment is easily tracked.
+
+679
+00:28:08,219 --> 00:28:12,739
+And I'm like, yes, I'm, I'm ok with that guys. It's, it's cool like we're good
+
+680
+00:28:14,150 --> 00:28:15,479
+anyway. Anyway,
+
+681
+00:28:15,800 --> 00:28:18,020
+so the next one is uh P to P and torrenting, which, well,
+
+682
+00:28:18,030 --> 00:28:20,550
+obviously if you want to use peer to peer or torrenting you,
+
+683
+00:28:20,729 --> 00:28:22,810
+you better find a VPN that supports that.
+
+684
+00:28:23,800 --> 00:28:25,550
+I don't really know what else to say to that.
+
+685
+00:28:26,189 --> 00:28:28,130
+Yes, I don't know if
+
+686
+00:28:28,310 --> 00:28:30,420
+do VPN S not allow it. I mean,
+
+687
+00:28:30,819 --> 00:28:32,650
+some don't
+
+688
+00:28:33,089 --> 00:28:34,010
+or they don't,
+
+689
+00:28:34,209 --> 00:28:37,020
+well, they may not allow it or they don't support it properly.
+
+690
+00:28:37,439 --> 00:28:37,670
+Um,
+
+691
+00:28:37,680 --> 00:28:40,300
+and that's kind of back to that whole incoming connection thing because
+
+692
+00:28:40,390 --> 00:28:42,540
+the thing to remember about a lot of VPN S is they'll,
+
+693
+00:28:42,550 --> 00:28:43,540
+some of the cheaper ones, right.
+
+694
+00:28:43,550 --> 00:28:46,729
+They'll only have a single IP address with like 10 million people coming out of it.
+
+695
+00:28:47,160 --> 00:28:48,540
+That would be silly.
+
+696
+00:28:49,229 --> 00:28:51,280
+Well, yes and no, on the other hand,
+
+697
+00:28:51,290 --> 00:28:54,000
+it makes tracking the traffic very difficult because it's, you know,
+
+698
+00:28:54,010 --> 00:28:55,209
+it's very much aggregated.
+
+699
+00:28:55,219 --> 00:28:57,260
+You know what? No, I bet you
+
+700
+00:28:57,550 --> 00:28:58,209
+that
+
+701
+00:28:58,390 --> 00:29:02,560
+it would be trivial to take an added system like, like where you have,
+
+702
+00:29:02,569 --> 00:29:05,130
+let's say 100 users on one IP.
+
+703
+00:29:05,640 --> 00:29:06,979
+And I bet it would be
+
+704
+00:29:07,459 --> 00:29:10,849
+very simple to put those, that puzzle back together.
+
+705
+00:29:11,959 --> 00:29:11,989
+I,
+
+706
+00:29:12,150 --> 00:29:14,310
+I think it would depend because for example,
+
+707
+00:29:14,319 --> 00:29:16,900
+if those 100 users were all accessing Facebook
+
+708
+00:29:17,180 --> 00:29:17,569
+or
+
+709
+00:29:17,900 --> 00:29:18,540
+even then
+
+710
+00:29:18,709 --> 00:29:21,140
+even then I bet you it would not be hard to do.
+
+711
+00:29:21,150 --> 00:29:22,959
+And that would be a fascinating research project.
+
+712
+00:29:22,969 --> 00:29:27,030
+So someone smarter and less lazy than us, uh please go do this
+
+713
+00:29:28,380 --> 00:29:29,270
+or IV two or IP
+
+714
+00:29:30,260 --> 00:29:31,739
+A I know that they don't natively sort
+
+715
+00:29:31,750 --> 00:29:34,180
+of support traffic generation and padding to like,
+
+716
+00:29:34,189 --> 00:29:37,670
+you know, make it less kind of to normalize the traffic flows.
+
+717
+00:29:37,699 --> 00:29:39,599
+But do any VPN providers do that,
+
+718
+00:29:39,989 --> 00:29:42,920
+not where they have the client or they have the server sending
+
+719
+00:29:42,930 --> 00:29:45,140
+out traffic to kind of pad out the traffic to make it,
+
+720
+00:29:45,229 --> 00:29:46,589
+you know, harder to analyze.
+
+721
+00:29:46,599 --> 00:29:48,540
+I'd be amazed if any of them do.
+
+722
+00:29:48,979 --> 00:29:51,859
+I would assume they don't because I've never seen or heard of it happening.
+
+723
+00:29:52,119 --> 00:29:53,500
+-- Yeah,
+-- that's there.
+
+724
+00:29:53,510 --> 00:29:58,020
+I remember research being done around this at some university some, some time ago.
+
+725
+00:29:58,060 --> 00:29:58,459
+And
+
+726
+00:29:58,819 --> 00:29:59,880
+it, it works though.
+
+727
+00:29:59,890 --> 00:30:05,520
+If you add random garbage to your encrypted streams, it can make a big difference.
+
+728
+00:30:06,449 --> 00:30:09,319
+Although on the, on the same side though, if you're a VPN provider,
+
+729
+00:30:09,489 --> 00:30:11,109
+you're burning cash,
+
+730
+00:30:11,729 --> 00:30:16,349
+right? You're wasting capacity if you're sending garbage packets back and forth.
+
+731
+00:30:17,020 --> 00:30:17,430
+Yeah.
+
+732
+00:30:17,930 --> 00:30:19,760
+Well, and that's the problem with here.
+
+733
+00:30:19,770 --> 00:30:22,280
+Well, this goes back to the whole NSA thing of,
+
+734
+00:30:22,609 --> 00:30:26,760
+you know, they don't really need to break the encryption because the metadata alone
+
+735
+00:30:27,000 --> 00:30:29,760
+is more than enough in most cases, like we know
+
+736
+00:30:30,170 --> 00:30:32,280
+Alice is talking to Bob at three in the morning
+
+737
+00:30:32,290 --> 00:30:35,199
+consistently and then banks are being robbed an hour later,
+
+738
+00:30:36,170 --> 00:30:37,459
+right? It's that kind of, you know,
+
+739
+00:30:37,560 --> 00:30:39,989
+that kind of metadata who's talking to who, how like,
+
+740
+00:30:40,260 --> 00:30:45,140
+you know, they phoned this person seven times hung up after 30 seconds and then,
+
+741
+00:30:45,150 --> 00:30:47,329
+you know, finally got a hold of them and talked for an hour,
+
+742
+00:30:48,050 --> 00:30:49,010
+you know, things like that.
+
+743
+00:30:49,020 --> 00:30:52,400
+You can, you can very strongly infer relationships and, you know,
+
+744
+00:30:53,060 --> 00:30:54,390
+kind of what's going on.
+
+745
+00:30:54,410 --> 00:30:58,449
+Um And I don't have enough data and traffic which, you know, if you're a nation state,
+
+746
+00:30:58,459 --> 00:31:00,099
+you do because let's face it right?
+
+747
+00:31:00,290 --> 00:31:03,579
+As we learned from my back of the envelope, Santa Claus exercise.
+
+748
+00:31:04,589 --> 00:31:05,229
+I mean,
+
+749
+00:31:05,619 --> 00:31:06,900
+you don't even have to like,
+
+750
+00:31:07,180 --> 00:31:08,400
+spend the money upfront.
+
+751
+00:31:08,410 --> 00:31:11,579
+You can just pay Amazon monthly to track everybody on the planet. Now.
+
+752
+00:31:12,040 --> 00:31:13,359
+That, that is true.
+
+753
+00:31:14,089 --> 00:31:15,810
+God bless the cloud.
+
+754
+00:31:16,930 --> 00:31:17,910
+Yeah. So,
+
+755
+00:31:18,760 --> 00:31:21,640
+yeah. No, I don't think any of them do traffic padding.
+
+756
+00:31:21,650 --> 00:31:22,079
+And of course,
+
+757
+00:31:22,089 --> 00:31:23,439
+the other thing is you can't really
+
+758
+00:31:23,449 --> 00:31:25,770
+do traffic subtraction without like breaking things.
+
+759
+00:31:26,400 --> 00:31:27,219
+Uh Yeah.
+
+760
+00:31:27,229 --> 00:31:33,099
+Well, not only that, if, if a VPN provider is preventing, say, like, uh, Bittorrent,
+
+761
+00:31:33,589 --> 00:31:37,439
+that means they're, they're messing with the traffic. Right? You don't want that.
+
+762
+00:31:38,089 --> 00:31:38,339
+Yeah.
+
+763
+00:31:38,349 --> 00:31:41,709
+Well, or they're possibly not allowing any incoming connections, for example,
+
+764
+00:31:42,359 --> 00:31:44,300
+you know, actually that's another good point.
+
+765
+00:31:44,310 --> 00:31:46,229
+And that's something people have to be really mindful of
+
+766
+00:31:46,239 --> 00:31:49,290
+here is when you connect to some VPN providers,
+
+767
+00:31:49,599 --> 00:31:52,790
+your computer suddenly has a public IP address
+
+768
+00:31:53,260 --> 00:31:56,430
+and if your firewall isn't configured to, like, keep things out,
+
+769
+00:31:56,709 --> 00:31:58,300
+you can find yourself in trouble.
+
+770
+00:31:58,310 --> 00:32:01,079
+If you're running some services you shouldn't be in your firewall,
+
+771
+00:32:01,089 --> 00:32:02,989
+lets them in because now you're essentially
+
+772
+00:32:03,000 --> 00:32:05,109
+a computer just sitting on the internet.
+
+773
+00:32:06,060 --> 00:32:09,750
+Well, like your classic Windows client with the SMB reporting the computer name
+
+774
+00:32:10,510 --> 00:32:14,359
+-- and the computer name is like Lisa's PC or whatever.
+-- Right. Right.
+
+775
+00:32:14,719 --> 00:32:18,750
+Exactly. Or, or maybe you're running SMBV one on the internet.
+
+776
+00:32:18,859 --> 00:32:19,290
+Right.
+
+777
+00:32:19,489 --> 00:32:21,310
+Oh, wow. Nobody does that though.
+
+778
+00:32:21,770 --> 00:32:22,089
+So,
+
+779
+00:32:22,099 --> 00:32:23,859
+and then they finally list as a nice to have
+
+780
+00:32:23,869 --> 00:32:25,930
+and I love that this isn't an important requirement,
+
+781
+00:32:25,939 --> 00:32:26,670
+is I PV six?
+
+782
+00:32:26,729 --> 00:32:26,900
+Oh, my
+
+783
+00:32:27,010 --> 00:32:27,319
+goodness.
+
+784
+00:32:27,449 --> 00:32:30,979
+We could argue for hours about I PV six and, like,
+
+785
+00:32:31,479 --> 00:32:33,130
+yeah, it's neat. But
+
+786
+00:32:33,280 --> 00:32:36,709
+talk to me in two years and I've been saying that forever
+
+787
+00:32:37,040 --> 00:32:37,739
+and I wish
+
+788
+00:32:37,859 --> 00:32:40,699
+it wasn't true because I PV six in theory is a great,
+
+789
+00:32:40,800 --> 00:32:41,209
+-- one
+-- of my I
+
+790
+00:32:41,829 --> 00:32:45,670
+SPS actually supports I PV six. Now. Tech savvy.
+
+791
+00:32:45,680 --> 00:32:48,349
+They're like one of those little scrappy upstarts that,
+
+792
+00:32:48,569 --> 00:32:51,160
+you know, buys access on the actual hardware lines.
+
+793
+00:32:51,170 --> 00:32:53,089
+Like they don't, like, tell us and Shaw
+
+794
+00:32:53,189 --> 00:32:53,859
+own like,
+
+795
+00:32:54,130 --> 00:32:55,310
+you know, the last mile.
+
+796
+00:32:55,569 --> 00:33:00,050
+But thank, thankfully in Canada they have to resell wholesale access to other I SPS.
+
+797
+00:33:00,420 --> 00:33:02,699
+-- Yeah,
+-- I've been, I actually have one of the big ones.
+
+798
+00:33:02,709 --> 00:33:05,079
+It used to be Time Warner and I think Charter bought
+
+799
+00:33:05,089 --> 00:33:08,910
+them now or something like I've had I PV six for years
+
+800
+00:33:09,489 --> 00:33:15,150
+and I haven't enabled and it works and I connect to things with I PV six and whatever.
+
+801
+00:33:15,170 --> 00:33:15,630
+Like,
+
+802
+00:33:15,969 --> 00:33:16,869
+what's the difference?
+
+803
+00:33:17,160 --> 00:33:17,910
+You know what I mean?
+
+804
+00:33:18,599 --> 00:33:22,709
+It's not changing the world and, and in fact, there have been a handful of,
+
+805
+00:33:23,310 --> 00:33:26,209
+uh, uh, hosting providers. I've used that just didn't even support it.
+
+806
+00:33:26,869 --> 00:33:28,040
+So it's like this is
+
+807
+00:33:28,140 --> 00:33:28,770
+nuts.
+
+808
+00:33:29,300 --> 00:33:29,890
+You know what I mean?
+
+809
+00:33:29,979 --> 00:33:30,400
+Well,
+
+810
+00:33:30,410 --> 00:33:33,930
+I know cloud flare is making some inroads there because something like 30% of
+
+811
+00:33:33,939 --> 00:33:37,290
+the world's kind of internet traffic and web traffic goes through cloud flare now
+
+812
+00:33:37,650 --> 00:33:40,849
+and you can just turn I PV six on with them and then it'll talk IP
+
+813
+00:33:41,050 --> 00:33:43,130
+-- physics or I PV four to the actual
+-- back end
+
+814
+00:33:43,380 --> 00:33:46,910
+they do magic kind of cloud fronting sort of thing
+
+815
+00:33:46,920 --> 00:33:49,640
+where if you don't have an I PV six server,
+
+816
+00:33:49,650 --> 00:33:52,489
+you can still connect to their I PV six service.
+
+817
+00:33:52,880 --> 00:33:54,739
+Yeah, just like with the HTTP S right.
+
+818
+00:33:54,930 --> 00:33:57,160
+The actual back end server can be HTTP,
+
+819
+00:33:57,170 --> 00:34:00,459
+it can be HTTP S with a cell sign certificate or it can be like strict where
+
+820
+00:34:00,569 --> 00:34:02,020
+actually has to be correctly set off.
+
+821
+00:34:02,030 --> 00:34:02,319
+See,
+
+822
+00:34:02,329 --> 00:34:05,170
+and like this is actually an instance where I PV six is gonna
+
+823
+00:34:05,180 --> 00:34:10,580
+be hugely awesome because I assume cloud flare just gives literally every single
+
+824
+00:34:10,850 --> 00:34:14,820
+host or whatever. It's, it's very own I PV six address. Right?
+
+825
+00:34:16,809 --> 00:34:18,268
+-- If they don't,
+-- they're freaking small.
+
+826
+00:34:19,148 --> 00:34:23,309
+Well, everybody has like enormous blocks of I PV six addresses.
+
+827
+00:34:23,478 --> 00:34:26,579
+Like, it's just, you get them, that's how it works crazy.
+
+828
+00:34:28,069 --> 00:34:30,739
+They don't, I know they list their I PV four
+
+829
+00:34:30,958 --> 00:34:31,809
+blocks.
+
+830
+00:34:32,750 --> 00:34:36,489
+I don't see their I PV, hang on that cloud
+
+831
+00:34:39,129 --> 00:34:39,879
+last,
+
+832
+00:34:40,989 --> 00:34:42,409
+ah IP Rangers. Here we go.
+
+833
+00:34:43,780 --> 00:34:45,188
+Um,
+
+834
+00:34:45,458 --> 00:34:53,320
+I PV six they got slash 32 slash 32 slash ok. 123456 slash 32. So
+
+835
+00:34:53,639 --> 00:34:56,000
+that's basically six times the modern internet
+
+836
+00:34:56,270 --> 00:34:57,370
+and slash 29.
+
+837
+00:34:57,560 --> 00:34:58,080
+Good measure.
+
+838
+00:34:59,479 --> 00:35:02,669
+So I'm not even gonna bother to. Well,
+
+839
+00:35:02,850 --> 00:35:03,899
+it's a lot,
+
+840
+00:35:04,040 --> 00:35:05,820
+it's enormous, man.
+
+841
+00:35:07,370 --> 00:35:10,879
+-- That's, I think it's a
+-- slash 29 again in I PV six. It's
+
+842
+00:35:11,179 --> 00:35:13,340
+what is it? Yeah. So it would be two to the 99th.
+
+843
+00:35:13,810 --> 00:35:14,620
+Is that correct?
+
+844
+00:35:15,010 --> 00:35:16,270
+I have no idea. That sounds
+
+845
+00:35:16,389 --> 00:35:17,090
+right.
+
+846
+00:35:18,129 --> 00:35:19,580
+Uh, it's a big number.
+
+847
+00:35:21,209 --> 00:35:21,899
+Yes.
+
+848
+00:35:23,689 --> 00:35:27,320
+You know what I think about sometimes with I PV six though is
+
+849
+00:35:27,850 --> 00:35:30,469
+I wonder if someday we're going to be like, oh, crap,
+
+850
+00:35:30,479 --> 00:35:32,979
+we're running out of I PV six addresses quick.
+
+851
+00:35:32,989 --> 00:35:34,189
+Everyone, you know,
+
+852
+00:35:34,330 --> 00:35:37,770
+we need, we need to get some back. Let's, let's renumber things.
+
+853
+00:35:38,080 --> 00:35:41,899
+I don't think we'll run out of addresses. I think we might run out of network blocks.
+
+854
+00:35:43,699 --> 00:35:46,520
+Uh Yeah. Ok. That's fair. That could be because
+
+855
+00:35:46,800 --> 00:35:49,520
+they're handing them out pretty, pretty willy nilly today.
+
+856
+00:35:49,540 --> 00:35:53,699
+Well, if you look at even I PV four, it's not like we've actually run out of I PV four.
+
+857
+00:35:53,709 --> 00:35:56,860
+It's just, we've run out of network blocks and a lot of them are not
+
+858
+00:35:57,520 --> 00:35:59,790
+well used. I mean, what was it like
+
+859
+00:36:00,060 --> 00:36:02,129
+mit had their own class? A
+
+860
+00:36:02,280 --> 00:36:02,399
+I
+
+861
+00:36:02,610 --> 00:36:05,760
+-- had a couple, I think back in the day,
+-- you know. So like,
+
+862
+00:36:06,709 --> 00:36:07,610
+yeah, I mean, there's,
+
+863
+00:36:07,620 --> 00:36:09,429
+there's been a whole pile of classes that
+
+864
+00:36:09,439 --> 00:36:13,330
+are clearly not like remotely actually used.
+
+865
+00:36:14,510 --> 00:36:15,330
+Um,
+
+866
+00:36:16,229 --> 00:36:18,110
+I, to me the most exciting things are like,
+
+867
+00:36:18,120 --> 00:36:21,689
+if in theory we got things like mobile I PV six, that would be neat.
+
+868
+00:36:21,810 --> 00:36:25,070
+But more to the point it doesn't matter anymore because everything is web based.
+
+869
+00:36:26,070 --> 00:36:29,120
+Like who cares what your IP is and what it changes when you reconnect with the server,
+
+870
+00:36:29,129 --> 00:36:30,290
+I'll be like, I don't know who you are.
+
+871
+00:36:30,649 --> 00:36:32,030
+Reate. Oh, you're Bob. Cool. Yeah, I
+
+872
+00:36:32,260 --> 00:36:34,770
+was sending you video. Here you go. Here's your video,
+
+873
+00:36:35,139 --> 00:36:37,080
+right? Like who, who cares?
+
+874
+00:36:37,370 --> 00:36:38,810
+Well, really the only thing that cares is Google.
+
+875
+00:36:38,820 --> 00:36:42,469
+It gets touchy every time my IP address changes and it's like you have to log in again.
+
+876
+00:36:42,479 --> 00:36:45,050
+-- I'm like, uh, interesting,
+-- you know, Google's pretty,
+
+877
+00:36:45,060 --> 00:36:49,489
+pretty kind to me about that when my IP address changes as I travel.
+
+878
+00:36:49,500 --> 00:36:52,010
+Although it knows I travel also. So maybe that's part of
+
+879
+00:36:53,419 --> 00:36:57,179
+I'm, I'm probably in some high risk pool of, of people not to care.
+
+880
+00:36:57,239 --> 00:36:59,040
+I know it varies because when I travel I'll kind
+
+881
+00:36:59,050 --> 00:37:01,580
+of get that initial one or two authentication logins.
+
+882
+00:37:01,770 --> 00:37:03,719
+But then I think it's smart enough to know, for example.
+
+883
+00:37:03,729 --> 00:37:05,719
+Oh, he's in like San Francisco. Cool.
+
+884
+00:37:06,439 --> 00:37:07,199
+That could be,
+
+885
+00:37:07,399 --> 00:37:07,419
+you
+
+886
+00:37:07,550 --> 00:37:07,580
+know,
+
+887
+00:37:07,969 --> 00:37:08,370
+I mean,
+
+888
+00:37:08,629 --> 00:37:09,090
+Google is not dumb.
+
+889
+00:37:09,270 --> 00:37:10,250
+I mean, this is not,
+
+890
+00:37:10,419 --> 00:37:12,409
+and this isn't exactly rocket science, right?
+
+891
+00:37:12,550 --> 00:37:14,159
+This is like your credit card company where you
+
+892
+00:37:14,169 --> 00:37:16,129
+warn them that I'm going to South America.
+
+893
+00:37:16,139 --> 00:37:18,229
+So please don't block my credit card.
+
+894
+00:37:18,719 --> 00:37:19,239
+You know,
+
+895
+00:37:19,719 --> 00:37:21,639
+because like I got a new credit card and then I
+
+896
+00:37:21,649 --> 00:37:25,000
+went to the cabin and it's like I can't spend any money
+
+897
+00:37:26,120 --> 00:37:27,800
+because I'm like a four hour drive from home,
+
+898
+00:37:27,810 --> 00:37:30,320
+which is kind of exactly what somebody who stole my credit card would be,
+
+899
+00:37:30,629 --> 00:37:33,810
+is try to gas up and hit the liquor store, which is
+
+900
+00:37:34,239 --> 00:37:36,120
+exactly what I do when I go to the cabin.
+
+901
+00:37:36,290 --> 00:37:39,209
+So you just have to stop exhibiting deviant behavior.
+
+902
+00:37:39,909 --> 00:37:43,320
+That's all I did. Anyways. I, yeah, it was just such a pain because, uh,
+
+903
+00:37:44,219 --> 00:37:44,419
+yeah,
+
+904
+00:37:44,830 --> 00:37:45,739
+-- so,
+-- anyway,
+
+905
+00:37:45,909 --> 00:37:50,500
+as well as well, we, we've rattled again, which we tend to do,
+
+906
+00:37:50,959 --> 00:37:54,169
+uh, what about alternatives to, to VPN S?
+
+907
+00:37:54,870 --> 00:37:57,270
+I'm, I'm gonna tell you now that, you know what my favorite one is.
+
+908
+00:37:57,719 --> 00:37:58,560
+SSH.
+
+909
+00:37:59,389 --> 00:37:59,810
+Yeah.
+
+910
+00:38:00,340 --> 00:38:00,780
+And you know,
+
+911
+00:38:00,790 --> 00:38:05,399
+that's the SSH team has done some real good stuff around setting up SSH for VPN.
+
+912
+00:38:05,409 --> 00:38:05,610
+And
+
+913
+00:38:05,840 --> 00:38:08,649
+see this is my biggest annoyance with VPN.
+
+914
+00:38:08,659 --> 00:38:10,219
+And on the other hand, I get it that it's necessary.
+
+915
+00:38:10,229 --> 00:38:12,969
+It's like you have to have sort of administrative control of the machine.
+
+916
+00:38:14,550 --> 00:38:18,939
+Um But more to the point, like quite often, I don't want all of my machine to be VPN.
+
+917
+00:38:18,949 --> 00:38:21,520
+I just want like one or two high risk apps to be VPN
+
+918
+00:38:22,959 --> 00:38:24,669
+and that could be sometimes.
+
+919
+00:38:24,739 --> 00:38:27,310
+And so like a great example of that is when I'm traveling, right?
+
+920
+00:38:27,320 --> 00:38:28,770
+Like I wanna use my web browser
+
+921
+00:38:29,310 --> 00:38:30,110
+um
+
+922
+00:38:30,590 --> 00:38:34,040
+to surf the web, but I don't want, yeah, like the hotel network shenanigans
+
+923
+00:38:35,050 --> 00:38:38,020
+to go on or whatever, you know, somebody to inject malware or,
+
+924
+00:38:38,260 --> 00:38:40,449
+you know, put an ad server in with malware or whatever, right?
+
+925
+00:38:40,459 --> 00:38:44,590
+So what I'll quite often do is just set up a local SSH port, you know,
+
+926
+00:38:44,600 --> 00:38:48,500
+redirect like local port 80 to a remote server
+
+927
+00:38:48,830 --> 00:38:52,050
+and then, you know, point my web browser at that port 80 as the proxy.
+
+928
+00:38:52,320 --> 00:38:55,010
+Well, you know, you can ssh has,
+
+929
+00:38:55,020 --> 00:38:58,929
+it's like dash capital D or something that turns it into a sox proxy.
+
+930
+00:38:59,270 --> 00:39:01,050
+Yeah, that's the one I use, which is amazing.
+
+931
+00:39:01,739 --> 00:39:02,169
+Yeah.
+
+932
+00:39:02,479 --> 00:39:02,669
+Yeah.
+
+933
+00:39:02,679 --> 00:39:06,010
+No, it's, and it's because, well, I'm not going to say everything has a socks proxy.
+
+934
+00:39:06,020 --> 00:39:08,229
+Everything used to have a socks proxy, like 50
+
+935
+00:39:08,370 --> 00:39:08,570
+years ago.
+
+936
+00:39:08,679 --> 00:39:08,979
+It was
+
+937
+00:39:09,199 --> 00:39:09,419
+huge.
+
+938
+00:39:09,520 --> 00:39:13,879
+-- But Socks is basically, I think outside of web browsers, it's pretty
+-- dead.
+
+939
+00:39:13,889 --> 00:39:16,320
+I can't think of anything outside of a web browser
+
+940
+00:39:16,449 --> 00:39:19,520
+that, that I would even use it with, to be honest with you.
+
+941
+00:39:21,110 --> 00:39:22,270
+Uh email client,
+
+942
+00:39:23,379 --> 00:39:26,010
+email client, my email clients, my web browser,
+
+943
+00:39:26,850 --> 00:39:27,580
+-- let's face
+-- it.
+
+944
+00:39:27,729 --> 00:39:29,760
+Everything, web browser is everything.
+
+945
+00:39:30,060 --> 00:39:33,000
+Yeah, that's all it is. Everything else supports my web browser.
+
+946
+00:39:33,159 --> 00:39:34,479
+That's, that's life.
+
+947
+00:39:35,649 --> 00:39:36,229
+So
+
+948
+00:39:36,659 --> 00:39:39,429
+I mean part of me ascribes to that whole uh what is the Google
+
+949
+00:39:39,979 --> 00:39:41,889
+Man for all the times I mentioned this, you think I'm on
+
+950
+00:39:42,110 --> 00:39:42,169
+the
+
+951
+00:39:42,530 --> 00:39:42,790
+Corp
+
+952
+00:39:43,090 --> 00:39:44,370
+beyond Corp where, where,
+
+953
+00:39:44,379 --> 00:39:45,820
+where the assumption is essentially even your
+
+954
+00:39:45,830 --> 00:39:47,439
+internal network is like the public internet,
+
+955
+00:39:47,629 --> 00:39:49,830
+you have to just encrypt and authenticate everything.
+
+956
+00:39:50,689 --> 00:39:51,080
+You know.
+
+957
+00:39:51,090 --> 00:39:55,229
+Funny enough is I now have that kind of view of my home network
+
+958
+00:39:55,239 --> 00:39:57,810
+where I used to like have segments and stuff and I'm like screwed.
+
+959
+00:39:57,820 --> 00:39:58,709
+It's all flat now
+
+960
+00:39:58,889 --> 00:40:01,409
+because I view my Children as adversaries.
+
+961
+00:40:01,550 --> 00:40:04,260
+So I I cannot trust them,
+
+962
+00:40:04,389 --> 00:40:07,379
+not in the context of them like hacking me, but rather
+
+963
+00:40:07,510 --> 00:40:11,090
+I'm sure the devices they use will certainly have malware on them.
+
+964
+00:40:11,270 --> 00:40:12,060
+And so
+
+965
+00:40:12,179 --> 00:40:14,969
+I have to assume they're compromised in some way.
+
+966
+00:40:16,050 --> 00:40:17,800
+Yeah, that's, that's my problem. Exactly. Right.
+
+967
+00:40:17,810 --> 00:40:19,179
+My kids are getting old enough that they're going to
+
+968
+00:40:19,189 --> 00:40:20,790
+want to start browsing the web and it's like,
+
+969
+00:40:21,080 --> 00:40:21,830
+you know what?
+
+970
+00:40:21,840 --> 00:40:25,139
+At first I was like, oh, be careful doing this and this and this and now I'm like,
+
+971
+00:40:25,149 --> 00:40:25,899
+you know, what?
+
+972
+00:40:25,909 --> 00:40:29,659
+Screw it. I'm just going to wipe this computer probably a couple of times a year.
+
+973
+00:40:29,669 --> 00:40:31,110
+And that's, that's life. Now,
+
+974
+00:40:31,590 --> 00:40:34,090
+that's one of the reasons I like being with an Apple device is you can
+
+975
+00:40:34,100 --> 00:40:39,219
+-- wipe the device and reset it except
+-- you probably have time machine backing it up.
+
+976
+00:40:39,229 --> 00:40:41,419
+-- So you've got all your malware safe and sound.
+-- Not
+
+977
+00:40:41,810 --> 00:40:41,899
+the
+
+978
+00:40:42,030 --> 00:40:42,169
+ipad.
+
+979
+00:40:42,479 --> 00:40:44,310
+Those are all whatever.
+
+980
+00:40:44,620 --> 00:40:45,169
+Ok.
+
+981
+00:40:45,979 --> 00:40:46,449
+You know.
+
+982
+00:40:47,030 --> 00:40:50,030
+Uh, yeah, tablets. Well, and this other nice thing about tablets too, right?
+
+983
+00:40:50,040 --> 00:40:52,679
+Is it's really difficult to store files locally. Like you can't
+
+984
+00:40:52,909 --> 00:40:55,879
+kind of locally from your web browser easily. Save a file.
+
+985
+00:40:55,969 --> 00:40:57,360
+I mean, you can, like, save a, you know,
+
+986
+00:40:57,370 --> 00:40:59,239
+you can kind of send it to another app but you
+
+987
+00:40:59,250 --> 00:41:01,800
+can't just like locally dump stuff onto the file system.
+
+988
+00:41:02,530 --> 00:41:02,800
+Yeah.
+
+989
+00:41:03,080 --> 00:41:03,290
+Yeah.
+
+990
+00:41:04,010 --> 00:41:06,020
+Or if you do it's kind of more contained like
+
+991
+00:41:06,139 --> 00:41:10,790
+VLC media player, you can download files but it lives within the VLC app.
+
+992
+00:41:10,800 --> 00:41:12,540
+So if you blow that app away, it's gone.
+
+993
+00:41:13,010 --> 00:41:13,250
+It's,
+
+994
+00:41:13,389 --> 00:41:14,040
+I love that
+
+995
+00:41:14,560 --> 00:41:16,280
+I absolutely love that.
+
+996
+00:41:17,000 --> 00:41:17,379
+-- You know,
+-- because,
+
+997
+00:41:17,649 --> 00:41:17,860
+you know,
+
+998
+00:41:17,870 --> 00:41:20,479
+it's something I just realized wasn't on this list
+
+999
+00:41:20,489 --> 00:41:22,879
+for VPN S but probably should have been,
+
+1000
+00:41:23,719 --> 00:41:27,840
+is this guy didn't make any reference in any way to,
+
+1001
+00:41:28,760 --> 00:41:30,939
+you could maybe claim open source.
+
+1002
+00:41:31,360 --> 00:41:32,820
+But, but having, you know,
+
+1003
+00:41:33,129 --> 00:41:35,659
+I guess verifiable clients
+
+1004
+00:41:35,780 --> 00:41:40,139
+-- that you can be using to connect into a VPN service,
+-- well, all of them,
+
+1005
+00:41:40,189 --> 00:41:42,189
+if they're open VPN or IP
+
+1006
+00:41:42,340 --> 00:41:42,350
+A
+
+1007
+00:41:42,659 --> 00:41:44,300
+V two, they all have open source clients.
+
+1008
+00:41:44,770 --> 00:41:46,909
+And that's true actually, because if you're using open
+
+1009
+00:41:47,010 --> 00:41:50,139
+VP, I mean, open VPN by its nature, I guess, start as an open
+
+1010
+00:41:50,250 --> 00:41:51,340
+source project, didn't it?
+
+1011
+00:41:51,889 --> 00:41:54,719
+Yeah. Well, and for example, on my Macs, I use viscosity,
+
+1012
+00:41:55,489 --> 00:41:57,129
+right? Which is a pretty nice client.
+
+1013
+00:41:57,149 --> 00:42:01,389
+I am familiar with that because actually getting a VPN client on a Mac was a pain.
+
+1014
+00:42:01,969 --> 00:42:03,909
+Basically, you use viscosity. That's how,
+
+1015
+00:42:04,239 --> 00:42:06,060
+that's what I anything else is, doesn't
+
+1016
+00:42:06,199 --> 00:42:06,750
+really
+
+1017
+00:42:06,860 --> 00:42:06,889
+work.
+
+1018
+00:42:06,949 --> 00:42:09,070
+I read some things and then I paid money for it,
+
+1019
+00:42:09,080 --> 00:42:11,949
+which really bothered me because I haven't actually paid for software in like,
+
+1020
+00:42:11,959 --> 00:42:12,790
+years
+
+1021
+00:42:13,020 --> 00:42:15,469
+and I'm thinking what, who pays for stuff anymore.
+
+1022
+00:42:15,479 --> 00:42:18,669
+But in this particular instance, it had to be done.
+
+1023
+00:42:19,080 --> 00:42:19,580
+It could have been,
+
+1024
+00:42:20,830 --> 00:42:23,929
+well, the reality is my Mac runs a whole pile of random stuff that, like,
+
+1025
+00:42:23,939 --> 00:42:27,969
+I hope the guy is not a bad guy because I, you know, it, these things,
+
+1026
+00:42:27,979 --> 00:42:30,129
+auto update once every month or two and like,
+
+1027
+00:42:30,830 --> 00:42:34,969
+uh, how could I possibly know if they're evil or not like, well, Handbrake. Right.
+
+1028
+00:42:34,979 --> 00:42:35,489
+It got
+
+1029
+00:42:36,030 --> 00:42:37,429
+a mirror site got fiddled
+
+1030
+00:42:37,590 --> 00:42:37,620
+with
+
+1031
+00:42:37,729 --> 00:42:39,770
+-- and it didn't get caught with
+-- that
+
+1032
+00:42:39,899 --> 00:42:42,449
+Google chrome extension that got hacked.
+
+1033
+00:42:43,219 --> 00:42:45,439
+-- We talked about that
+-- last, last week, I think.
+
+1034
+00:42:45,820 --> 00:42:47,530
+Just madness, man.
+
+1035
+00:42:48,250 --> 00:42:48,699
+Yeah.
+
+1036
+00:42:49,899 --> 00:42:52,399
+So, yeah, I definitely try to minimize what's on my computer.
+
+1037
+00:42:53,449 --> 00:42:56,300
+I want to make one more plug as well in the VPN category.
+
+1038
+00:42:56,310 --> 00:42:58,419
+Is there something, I mean, give me an eye on that.
+
+1039
+00:42:58,429 --> 00:43:00,840
+That's kind of, I will call it an up and comer perhaps,
+
+1040
+00:43:01,159 --> 00:43:02,840
+but it's something called wire guard
+
+1041
+00:43:03,570 --> 00:43:05,520
+and I'll, I'll put a link in the show. No, it's,
+
+1042
+00:43:06,770 --> 00:43:09,469
+I'm intrigued by it and I hope it does work out.
+
+1043
+00:43:10,040 --> 00:43:11,340
+Yeah, it's super crazy.
+
+1044
+00:43:11,350 --> 00:43:16,479
+And so so generally speaking, the we'll say historical VPN S had a very
+
+1045
+00:43:16,729 --> 00:43:17,350
+right.
+
+1046
+00:43:18,120 --> 00:43:21,760
+They're written by developers for people who know how to use
+
+1047
+00:43:21,770 --> 00:43:22,860
+them and if you don't know how to use them,
+
+1048
+00:43:22,870 --> 00:43:23,469
+that's too bad.
+
+1049
+00:43:23,479 --> 00:43:28,500
+That's part of it. But it also has that kind of Ivory tower mindset of
+
+1050
+00:43:28,879 --> 00:43:30,580
+you. You kind of have the
+
+1051
+00:43:30,790 --> 00:43:34,620
+somebody is speaking truth out to the universe and you,
+
+1052
+00:43:34,629 --> 00:43:38,379
+you have your trusted certificates and all of your credentials, trusted.
+
+1053
+00:43:38,389 --> 00:43:38,620
+And
+
+1054
+00:43:38,750 --> 00:43:41,540
+you know what I mean? You need some level of trust up front
+
+1055
+00:43:41,729 --> 00:43:45,100
+before you can even really join that ecosystem. Uh with,
+
+1056
+00:43:45,840 --> 00:43:51,179
+with like open VPN is a great example in, in IP SEC is a huge example of, of this.
+
+1057
+00:43:51,610 --> 00:43:54,939
+Well, and the other ugly truth is the majority of current VPN S don't
+
+1058
+00:43:55,360 --> 00:43:58,810
+like they work in a container, but they weren't like built with containers and mine,
+
+1059
+00:43:58,870 --> 00:43:59,399
+they do.
+
+1060
+00:43:59,409 --> 00:44:00,060
+And so
+
+1061
+00:44:00,270 --> 00:44:02,570
+that's one thing that Wireguard really gets me is that
+
+1062
+00:44:03,139 --> 00:44:06,679
+uh here it is Wireguard sends and receives encrypted packets using the
+
+1063
+00:44:06,689 --> 00:44:10,439
+network name space in which the wireguard interface was originally created,
+
+1064
+00:44:10,449 --> 00:44:13,320
+which basically means it understands containers
+
+1065
+00:44:13,449 --> 00:44:18,709
+-- and will behave sanely and rationally inside of container,
+-- which is super cool.
+
+1066
+00:44:18,719 --> 00:44:21,399
+But then also importantly, on this point is
+
+1067
+00:44:21,840 --> 00:44:23,610
+it's designed to be easy,
+
+1068
+00:44:23,620 --> 00:44:25,729
+kind of like how SSH works when you connect to
+
+1069
+00:44:25,739 --> 00:44:28,540
+a new host instead of having to find the certificates and
+
+1070
+00:44:29,179 --> 00:44:30,820
+certificates and blah, blah, blah,
+
+1071
+00:44:31,169 --> 00:44:33,909
+-- it's just
+-- I set up a five node, fully interconnected IPs E
+
+1072
+00:44:34,489 --> 00:44:37,409
+thing once and adding that sixth node meant, you know,
+
+1073
+00:44:37,419 --> 00:44:39,479
+I had to update all the other five nodes.
+
+1074
+00:44:39,879 --> 00:44:41,100
+You shouldn't, you screwed something up,
+
+1075
+00:44:41,360 --> 00:44:44,439
+-- you shouldn't have to do that. But
+-- no, this was like 20 years ago.
+
+1076
+00:44:44,540 --> 00:44:45,179
+That could be,
+
+1077
+00:44:45,409 --> 00:44:46,199
+-- but it
+-- was
+
+1078
+00:44:46,340 --> 00:44:46,389
+like,
+
+1079
+00:44:46,870 --> 00:44:50,320
+and I wasn't using certificates was basically even more impossible.
+
+1080
+00:44:50,330 --> 00:44:51,810
+So I was using like shared keys.
+
+1081
+00:44:52,020 --> 00:44:53,600
+Terrible. I know
+
+1082
+00:44:54,000 --> 00:44:57,780
+I wanted a full mesh so that, you know, it was more efficient and oh my God,
+
+1083
+00:44:58,149 --> 00:45:00,459
+it, it was just like once I got it working,
+
+1084
+00:45:00,469 --> 00:45:03,209
+it worked and they let it run for like three years, we never patched it,
+
+1085
+00:45:03,219 --> 00:45:05,760
+we never touched it because, you know, if you touch it or look at it funny, it'll,
+
+1086
+00:45:05,770 --> 00:45:06,179
+it'll,
+
+1087
+00:45:06,709 --> 00:45:08,709
+you know, and that's actually a really good point is,
+
+1088
+00:45:08,719 --> 00:45:11,919
+is a lot of these BPN providers in, in,
+
+1089
+00:45:12,399 --> 00:45:17,040
+they don't touch it once it works and that's super destructive. Let's face it.
+
+1090
+00:45:17,350 --> 00:45:17,780
+Right.
+
+1091
+00:45:17,939 --> 00:45:18,979
+-- Like
+-- you with your,
+
+1092
+00:45:19,189 --> 00:45:21,780
+-- how long did your server stay up before a power outage hit
+-- it.
+
+1093
+00:45:21,790 --> 00:45:25,219
+It might have been, I think, like, 700 days or something
+
+1094
+00:45:25,800 --> 00:45:26,340
+right
+
+1095
+00:45:26,830 --> 00:45:27,250
+now.
+
+1096
+00:45:27,260 --> 00:45:29,080
+In my defense, I did, uh,
+
+1097
+00:45:29,090 --> 00:45:33,830
+I did yum update it on a regular basis but it was obviously running a multi
+
+1098
+00:45:33,969 --> 00:45:34,899
+year old kernel.
+
+1099
+00:45:35,250 --> 00:45:35,370
+Well,
+
+1100
+00:45:35,610 --> 00:45:38,699
+-- Angie lipsy and
+-- minor details. Yes.
+
+1101
+00:45:39,520 --> 00:45:40,600
+-- Right.
+-- Anyway,
+
+1102
+00:45:40,929 --> 00:45:41,000
+see
+
+1103
+00:45:41,169 --> 00:45:41,419
+here. Uh,
+
+1104
+00:45:41,629 --> 00:45:44,610
+no, it was fine. It was running in my trusted home network.
+
+1105
+00:45:45,229 --> 00:45:46,810
+Everything was ok.
+
+1106
+00:45:47,610 --> 00:45:47,629
+Yeah.
+
+1107
+00:45:48,379 --> 00:45:50,459
+No, I know. I know. That's something I thought about a lot.
+
+1108
+00:45:50,469 --> 00:45:52,419
+It's, uh, but, but ironically, so here's,
+
+1109
+00:45:52,429 --> 00:45:55,250
+here's the thing though and I'm sure people can relate to this is
+
+1110
+00:45:55,570 --> 00:45:57,929
+I didn't want to shut it down because I knew
+
+1111
+00:45:57,939 --> 00:46:01,179
+the disc probably went fsck cleanly on start up.
+
+1112
+00:46:01,739 --> 00:46:01,770
+Right.
+
+1113
+00:46:01,959 --> 00:46:02,219
+And so
+
+1114
+00:46:02,419 --> 00:46:04,969
+you hit the, uh, the date count limit, which I've,
+
+1115
+00:46:07,989 --> 00:46:10,169
+you know, you reboot once a year and it's just like, what?
+
+1116
+00:46:10,429 --> 00:46:10,459
+Right.
+
+1117
+00:46:10,649 --> 00:46:10,820
+And
+
+1118
+00:46:11,399 --> 00:46:13,129
+it takes like, four hours to reboot.
+
+1119
+00:46:13,389 --> 00:46:15,020
+I mean, it's totally like being sick,
+
+1120
+00:46:15,030 --> 00:46:17,689
+not going to the doctor because you're afraid you're gonna tell you're dying.
+
+1121
+00:46:18,300 --> 00:46:20,340
+That's exactly what it is. Stage
+
+1122
+00:46:20,530 --> 00:46:20,620
+four
+
+1123
+00:46:20,770 --> 00:46:24,090
+Melanoma. Right. Right. Exactly. Like I'm just, I'm happy you're not knowing.
+
+1124
+00:46:24,100 --> 00:46:26,810
+And that's kind of the security model of many people
+
+1125
+00:46:27,070 --> 00:46:28,810
+and, and it used to be mine.
+
+1126
+00:46:28,820 --> 00:46:31,610
+We'll, we'll say I won't say I'm perfect, but I'm certainly better.
+
+1127
+00:46:32,399 --> 00:46:33,580
+Uh, anyway, we're,
+
+1128
+00:46:33,590 --> 00:46:37,219
+we're nearly out of time and there's one more thing I'd like to bring up is
+
+1129
+00:46:37,780 --> 00:46:38,260
+we,
+
+1130
+00:46:38,270 --> 00:46:40,179
+we will almost certainly not be recording an episode
+
+1131
+00:46:40,189 --> 00:46:42,219
+next week because I'm going to see an eclipse
+
+1132
+00:46:43,120 --> 00:46:43,510
+and
+
+1133
+00:46:43,919 --> 00:46:46,830
+I am going to see the eclipse. But here's the crazy thing.
+
+1134
+00:46:47,330 --> 00:46:50,629
+I'm going to a middle of nowhere city in Kentucky
+
+1135
+00:46:50,969 --> 00:46:52,149
+and, and the population,
+
+1136
+00:46:52,159 --> 00:46:54,629
+I guess is like 20,000 people or something and they're
+
+1137
+00:46:54,639 --> 00:46:58,270
+expecting it to swell to 100 and 20,000 people.
+
+1138
+00:46:58,790 --> 00:47:00,139
+I can't even imagine
+
+1139
+00:47:00,580 --> 00:47:00,600
+you
+
+1140
+00:47:01,080 --> 00:47:01,100
+up,
+
+1141
+00:47:01,790 --> 00:47:05,590
+I'm going to get gas and toilet paper and I figure everything else is fine. Yep. Yep.
+
+1142
+00:47:05,600 --> 00:47:07,820
+No, no, for real though. Are you taking your kids or just
+
+1143
+00:47:07,929 --> 00:47:11,360
+the whole family's gone? We're, we're super excited to go see it. It's gonna be fun.
+
+1144
+00:47:11,419 --> 00:47:11,739
+But yeah.
+
+1145
+00:47:12,840 --> 00:47:13,649
+No, don't lie.
+
+1146
+00:47:13,659 --> 00:47:15,000
+Don't laugh is we're,
+
+1147
+00:47:15,010 --> 00:47:17,290
+we're making sure we have plenty of gas and we're bringing a
+
+1148
+00:47:17,300 --> 00:47:19,909
+bunch of food and water with us just in case we're like,
+
+1149
+00:47:19,919 --> 00:47:21,209
+-- you know, like stuck on
+-- some,
+
+1150
+00:47:21,419 --> 00:47:23,370
+there was an article on,
+
+1151
+00:47:23,540 --> 00:47:27,090
+yeah, like the expected, like there were traffic jams in the one in the 19 seventies.
+
+1152
+00:47:27,739 --> 00:47:32,199
+And honestly, this is interesting because this is one of those things where like,
+
+1153
+00:47:32,209 --> 00:47:33,439
+how do you deal with the
+
+1154
+00:47:33,610 --> 00:47:36,780
+sort of security slash safety side of this event when like, say
+
+1155
+00:47:36,889 --> 00:47:40,169
+10% of the population all decides to stick a fork in their ear.
+
+1156
+00:47:40,860 --> 00:47:42,489
+And like, what do you, what do you do?
+
+1157
+00:47:42,919 --> 00:47:45,300
+Well, ignoring the safety aspect of it,
+
+1158
+00:47:45,310 --> 00:47:49,489
+I just keep thinking from a security angle if I was like an evil doer or,
+
+1159
+00:47:49,500 --> 00:47:51,290
+or a pickpocket or whatever.
+
+1160
+00:47:51,300 --> 00:47:54,949
+Like this is, this is prime pickens here, man. Right?
+
+1161
+00:47:54,959 --> 00:47:59,340
+-- Like 100,000 people descending on like some middle of nowhere city in Kentucky.
+-- How
+
+1162
+00:47:59,560 --> 00:48:01,310
+easy it is to fence a stolen telescope.
+
+1163
+00:48:01,949 --> 00:48:04,379
+I, those things are not cheap to buy.
+
+1164
+00:48:05,409 --> 00:48:05,699
+Not that I'm
+
+1165
+00:48:06,760 --> 00:48:06,840
+to be
+
+1166
+00:48:07,139 --> 00:48:09,189
+-- clear,
+-- but I don't, I'm not bringing one with me.
+
+1167
+00:48:09,199 --> 00:48:13,479
+Maybe I'll see there, there might be a guy behind the building selling telescopes,
+
+1168
+00:48:13,939 --> 00:48:16,810
+I'll keep an eye out for that and I'll certainly take a picture if it happens.
+
+1169
+00:48:17,199 --> 00:48:19,570
+But no, I mean, like this is something
+
+1170
+00:48:19,810 --> 00:48:21,479
+I think many people don't consider,
+
+1171
+00:48:21,489 --> 00:48:24,929
+but there are enormous security implications of,
+
+1172
+00:48:24,939 --> 00:48:28,209
+of a population increasing by a factor of 10.
+
+1173
+00:48:28,550 --> 00:48:29,419
+-- Yeah,
+-- it's crazy.
+
+1174
+00:48:29,429 --> 00:48:30,770
+Even a factor of two.
+
+1175
+00:48:30,939 --> 00:48:34,969
+Like, I mean, even if law enforcement basically calls everybody out on duty,
+
+1176
+00:48:35,540 --> 00:48:37,179
+you know, they only have like
+
+1177
+00:48:37,540 --> 00:48:40,280
+most, maybe three or four times total capacity at a
+
+1178
+00:48:40,520 --> 00:48:40,639
+single,
+
+1179
+00:48:41,050 --> 00:48:44,429
+like this probably has what? Legitimately? 10 officers at best?
+
+1180
+00:48:44,719 --> 00:48:48,590
+I mean, come on, 10 officers for 100,000 people.
+
+1181
+00:48:48,899 --> 00:48:51,129
+No, I mean, it just, that's the thing, the traffic alone
+
+1182
+00:48:52,340 --> 00:48:54,300
+I mean, not even considering traffic.
+
+1183
+00:48:54,310 --> 00:48:54,530
+Right,
+
+1184
+00:48:54,540 --> 00:48:55,760
+because that's one of the other things we're going
+
+1185
+00:48:55,770 --> 00:48:57,780
+to get up really early and drive there,
+
+1186
+00:48:57,790 --> 00:48:59,719
+hopefully before traffic gets too bad.
+
+1187
+00:48:59,770 --> 00:49:04,050
+But it, and part of it too is my drive is in the path of the totality.
+
+1188
+00:49:04,060 --> 00:49:07,689
+So worst case scenario, like park the car, look up, you know, that,
+
+1189
+00:49:07,909 --> 00:49:09,189
+that's plan B
+
+1190
+00:49:09,469 --> 00:49:10,000
+but
+
+1191
+00:49:10,649 --> 00:49:13,840
+no, it's just, I, I keep thinking about this and, and yeah, there's
+
+1192
+00:49:14,689 --> 00:49:16,199
+my brain can't handle
+
+1193
+00:49:16,340 --> 00:49:16,449
+what
+
+1194
+00:49:16,560 --> 00:49:17,310
+-- is going to happen.
+-- The
+
+1195
+00:49:17,469 --> 00:49:21,500
+sad thing, there was a person who specifically was going to travel to the US to
+
+1196
+00:49:21,649 --> 00:49:24,030
+talk to all these small towns about kind of what
+
+1197
+00:49:24,040 --> 00:49:25,840
+to expect with the eclipse and how to handle it.
+
+1198
+00:49:25,850 --> 00:49:28,159
+Public safety, food toilets, the whole nine yards
+
+1199
+00:49:28,580 --> 00:49:29,840
+and she couldn't get a work visa.
+
+1200
+00:49:30,370 --> 00:49:34,399
+And so she only ended up visiting like 10 cities out of like 200 planned ones
+
+1201
+00:49:34,770 --> 00:49:35,909
+or something ridiculous.
+
+1202
+00:49:36,090 --> 00:49:40,080
+And so the majority of these cities are not really all that well prepared for this.
+
+1203
+00:49:40,129 --> 00:49:42,320
+I don't see how a small town could even
+
+1204
+00:49:42,330 --> 00:49:44,209
+remotely prepare for this because here's the thing,
+
+1205
+00:49:44,219 --> 00:49:46,129
+this is like a one shot deal, right?
+
+1206
+00:49:46,139 --> 00:49:46,570
+Like
+
+1207
+00:49:46,870 --> 00:49:48,120
+it's coming once
+
+1208
+00:49:48,280 --> 00:49:53,320
+and it's never coming back like you're never going to see this kind of traffic again.
+
+1209
+00:49:53,330 --> 00:49:56,175
+And part of me also feels bad because I imagine there's going to be just
+
+1210
+00:49:56,185 --> 00:50:00,665
+like a path of destruction behind all of the people who descend on this,
+
+1211
+00:50:00,675 --> 00:50:01,935
+this like 70 mile wide.
+
+1212
+00:50:03,175 --> 00:50:03,875
+Seriously.
+
+1213
+00:50:03,885 --> 00:50:07,385
+That's what I feel like is you're going to be able to look at a map, you know,
+
+1214
+00:50:07,395 --> 00:50:09,304
+like an aerial shot of the United States
+
+1215
+00:50:09,514 --> 00:50:15,304
+and just see like the trample marks from all the people in this path. And it's just,
+
+1216
+00:50:15,455 --> 00:50:17,054
+yeah, my, my brain is,
+
+1217
+00:50:17,254 --> 00:50:19,534
+and part of me is super excited. I get to see it.
+
+1218
+00:50:19,989 --> 00:50:20,179
+Well,
+
+1219
+00:50:20,189 --> 00:50:25,360
+I imagine Google traffic is just a solid swath of red through the path of totality.
+
+1220
+00:50:25,370 --> 00:50:25,929
+I guess
+
+1221
+00:50:26,209 --> 00:50:29,370
+that's assuming any of the cell phones even work. Right.
+
+1222
+00:50:29,840 --> 00:50:31,300
+Well, and there's a good example, right?
+
+1223
+00:50:31,310 --> 00:50:31,449
+Like,
+
+1224
+00:50:31,459 --> 00:50:35,899
+I know a lot of stadiums and stuff are set up for a sudden influx of 1020 50,000 people.
+
+1225
+00:50:36,229 --> 00:50:39,360
+But I'm guessing most small towns aren't prepared for
+
+1226
+00:50:39,370 --> 00:50:41,360
+like four times as many cell phone users.
+
+1227
+00:50:41,590 --> 00:50:42,439
+Right? And, and
+
+1228
+00:50:42,550 --> 00:50:44,860
+much less 10 times as many. Right.
+
+1229
+00:50:44,870 --> 00:50:49,020
+I'm totally expecting to have zero cell coverage the entire time.
+
+1230
+00:50:49,030 --> 00:50:49,899
+I'm, I'm down there.
+
+1231
+00:50:51,320 --> 00:50:52,739
+Yeah, it's going to be crazy, man.
+
+1232
+00:50:55,149 --> 00:50:57,870
+-- Well, I hope you stay safe and have fun. I hope
+-- I have fun
+
+1233
+00:50:58,070 --> 00:51:01,030
+and, and I guess mostly stay safe. It, it, I don't know.
+
+1234
+00:51:01,040 --> 00:51:02,340
+It, it'll be fun to talk about that.
+
+1235
+00:51:02,350 --> 00:51:05,739
+I'm sure I'll have many crazy stories to tell and, and nothing else.
+
+1236
+00:51:05,750 --> 00:51:06,800
+I get to see a total eclipse.
+
+1237
+00:51:06,810 --> 00:51:09,260
+I've never seen a total eclipse before, so I'm very excited
+
+1238
+00:51:09,429 --> 00:51:10,090
+I've seen.
+
+1239
+00:51:10,110 --> 00:51:13,919
+Well, I was in Germany for the total eclipse but I wasn't in the path of totality.
+
+1240
+00:51:13,929 --> 00:51:15,090
+You weren't in totality.
+
+1241
+00:51:15,449 --> 00:51:18,209
+No, we, well, because, um, we were pretty close,
+
+1242
+00:51:18,219 --> 00:51:19,989
+I think it was about 90 something percent.
+
+1243
+00:51:20,129 --> 00:51:21,689
+It was low nineties or whatever.
+
+1244
+00:51:22,070 --> 00:51:22,250
+Um,
+
+1245
+00:51:22,409 --> 00:51:22,860
+and it was
+
+1246
+00:51:22,965 --> 00:51:25,465
+weird, I'm not gonna lie. It was just like, because,
+
+1247
+00:51:25,635 --> 00:51:28,024
+like, you're not supposed to turn the lights off outside.
+
+1248
+00:51:28,334 --> 00:51:30,655
+Right. Right. That's not how that works.
+
+1249
+00:51:30,915 --> 00:51:32,824
+Like, my brain is like, no,
+
+1250
+00:51:32,834 --> 00:51:35,715
+this isn't really happening and the rest of me is kind of like, yep, it is.
+
+1251
+00:51:35,915 --> 00:51:38,864
+And the birds just got real wonky and confusing.
+
+1252
+00:51:38,875 --> 00:51:41,135
+I heard that, that, that birds do crazy things.
+
+1253
+00:51:41,145 --> 00:51:43,344
+-- All the animals apparently do crazy things
+-- all of
+
+1254
+00:51:43,354 --> 00:51:45,104
+a sudden it's nighttime except it's not nighttime.
+
+1255
+00:51:45,225 --> 00:51:48,195
+And you know, this is actually a really, this is something we should spend some time.
+
+1256
+00:51:48,205 --> 00:51:50,635
+Maybe we, we have two weeks to do it, we can do some reading. But uh
+
+1257
+00:51:51,000 --> 00:51:53,540
+this is one of those great examples of just human nature
+
+1258
+00:51:53,679 --> 00:51:55,419
+where as a human,
+
+1259
+00:51:55,689 --> 00:51:58,679
+I am not programmed to accept the sun disappearing in the middle
+
+1260
+00:51:58,689 --> 00:52:01,219
+of the day for two minutes and then coming back and,
+
+1261
+00:52:01,229 --> 00:52:03,659
+and it, it's like fishing is a great, you know,
+
+1262
+00:52:03,879 --> 00:52:04,080
+never
+
+1263
+00:52:04,209 --> 00:52:04,330
+mind
+
+1264
+00:52:04,689 --> 00:52:05,560
+-- is
+-- the um
+
+1265
+00:52:06,100 --> 00:52:06,979
+the tsunami,
+
+1266
+00:52:06,989 --> 00:52:11,629
+the Southeast Asian tsunami where they show the video of the water drawing out to sea
+
+1267
+00:52:11,780 --> 00:52:14,139
+and how many people know what that meant. Well, now
+
+1268
+00:52:14,350 --> 00:52:14,909
+everybody
+
+1269
+00:52:15,320 --> 00:52:15,959
+knows now.
+
+1270
+00:52:16,679 --> 00:52:19,979
+Yeah, but back in the day, like I quite honestly, if I was you know,
+
+1271
+00:52:20,159 --> 00:52:23,310
+standing next to the ocean and the water started receding suddenly I would be like,
+
+1272
+00:52:23,320 --> 00:52:24,389
+what the, you know, I wouldn't
+
+1273
+00:52:24,550 --> 00:52:28,260
+probably followed. It been, like, I wonder where it's going. Right.
+
+1274
+00:52:30,020 --> 00:52:32,110
+Yeah. So, I mean, you know, that's the thing. Right.
+
+1275
+00:52:32,120 --> 00:52:34,570
+We're just, yeah, there's, there's these freak events
+
+1276
+00:52:35,360 --> 00:52:37,820
+but just, yeah, the, the physical world like earthquakes,
+
+1277
+00:52:37,830 --> 00:52:39,050
+that's just not supposed to happen.
+
+1278
+00:52:39,159 --> 00:52:39,610
+Right.
+
+1279
+00:52:39,879 --> 00:52:40,409
+Right.
+
+1280
+00:52:40,679 --> 00:52:43,810
+Well, but, and here's the thing, right? Is, is some of these events,
+
+1281
+00:52:44,070 --> 00:52:45,250
+it, it doesn't matter
+
+1282
+00:52:45,389 --> 00:52:48,979
+because as humans, we don't know what to do. It amuses us. Ha ha.
+
+1283
+00:52:48,989 --> 00:52:51,040
+That's like roller coasters, right? Good example.
+
+1284
+00:52:51,540 --> 00:52:53,290
+But, but there are other things,
+
+1285
+00:52:53,300 --> 00:52:55,360
+especially around security where obviously the bad
+
+1286
+00:52:55,370 --> 00:52:57,370
+guys take advantage of human nature.
+
+1287
+00:52:57,659 --> 00:52:58,260
+And so
+
+1288
+00:52:58,899 --> 00:52:59,850
+I don't know, it, it,
+
+1289
+00:53:00,929 --> 00:53:03,570
+uh, you gotta love it. You know, it reminds me of it.
+
+1290
+00:53:03,580 --> 00:53:07,429
+Well, I remember reading a story once that the, the astronauts on the moon,
+
+1291
+00:53:07,949 --> 00:53:08,290
+the,
+
+1292
+00:53:08,300 --> 00:53:12,729
+the horizon of the moon is obviously much different than the horizon of the earth
+
+1293
+00:53:13,179 --> 00:53:14,510
+and it bothered them
+
+1294
+00:53:14,790 --> 00:53:17,550
+when they looked at it. Right. Like they, they couldn't explain it
+
+1295
+00:53:17,699 --> 00:53:19,149
+but they knew it wasn't. Right.
+
+1296
+00:53:20,139 --> 00:53:20,979
+Which is just, yeah.
+
+1297
+00:53:20,989 --> 00:53:25,600
+-- No,
+-- I can definitely imagine that because, yeah, like we're just, well, it's like,
+
+1298
+00:53:26,770 --> 00:53:29,800
+well, it's like being surrounded by air. We're just used to that.
+
+1299
+00:53:30,350 --> 00:53:32,689
+Well, no, we kind of need that to live. Right? That
+
+1300
+00:53:32,989 --> 00:53:34,800
+it's a different thing I think.
+
+1301
+00:53:35,280 --> 00:53:35,739
+Yeah.
+
+1302
+00:53:35,760 --> 00:53:38,860
+So, well, when you, when I see those deep sea things and it's just like, uh,
+
+1303
+00:53:38,870 --> 00:53:40,020
+that doesn't seem right
+
+1304
+00:53:40,449 --> 00:53:40,979
+under all that,
+
+1305
+00:53:41,209 --> 00:53:44,760
+-- those
+-- people. Yeah. I've, I've never going to space kind of.
+
+1306
+00:53:44,899 --> 00:53:48,239
+I'm in the same boat. Like I, I don't, I don't want to do that.
+
+1307
+00:53:48,310 --> 00:53:52,780
+I don't really like roller coasters. I can't imagine enjoying myself on a rocket.
+
+1308
+00:53:53,429 --> 00:53:53,669
+No.
+
+1309
+00:53:54,479 --> 00:53:54,909
+Yeah.
+
+1310
+00:53:55,429 --> 00:53:56,050
+Yep.
+
+1311
+00:53:56,659 --> 00:53:57,429
+So, anyway,
+
+1312
+00:53:57,840 --> 00:53:57,850
+I
+
+1313
+00:53:58,780 --> 00:54:02,870
+-- think that's it, folks, if we don't hear from Josh in two weeks, I guess it's
+-- true.
+
+1314
+00:54:02,879 --> 00:54:05,050
+This, you might be getting a new partner for the open
+
+1315
+00:54:05,209 --> 00:54:06,409
+source security podcast.
+
+1316
+00:54:06,419 --> 00:54:09,530
+I, I may be living although, although I must say I'm very upset
+
+1317
+00:54:10,719 --> 00:54:13,870
+we planned our trip to go to Kentucky because we are like, what,
+
+1318
+00:54:13,879 --> 00:54:16,580
+whatever they call it, like the length of totality.
+
+1319
+00:54:16,729 --> 00:54:18,479
+I'm basically about as,
+
+1320
+00:54:18,489 --> 00:54:20,870
+as close as you can get because I'll get like two extra
+
+1321
+00:54:20,879 --> 00:54:23,389
+seconds of totality than the rest of the country or something.
+
+1322
+00:54:23,399 --> 00:54:24,949
+Which right then, why not?
+
+1323
+00:54:24,959 --> 00:54:26,949
+Which I'm sure was also a brilliant decision because
+
+1324
+00:54:26,959 --> 00:54:28,229
+I'm sure no one else thought of that.
+
+1325
+00:54:28,600 --> 00:54:29,219
+So, anyway,
+
+1326
+00:54:30,560 --> 00:54:31,229
+so anyway,
+
+1327
+00:54:31,639 --> 00:54:34,939
+I, I was reading and apparently, I think it's in South Carolina.
+
+1328
+00:54:35,219 --> 00:54:36,060
+They have, uh,
+
+1329
+00:54:36,070 --> 00:54:38,899
+many yeti and giant lizard man sightings and
+
+1330
+00:54:38,909 --> 00:54:42,340
+they expect them to peak during the eclipse.
+
+1331
+00:54:42,350 --> 00:54:47,090
+So I'm like, I could have seen a yeti or a giant lizard man and I, I totally did.
+
+1332
+00:54:48,570 --> 00:54:50,540
+-- They have both. I
+-- know totally
+
+1333
+00:54:50,649 --> 00:54:52,209
+different, like ecosystems.
+
+1334
+00:54:52,699 --> 00:54:55,949
+I'm not making this up. This is some other quack on the internet.
+
+1335
+00:54:55,959 --> 00:54:58,389
+And I'm upset that I would have had an opportunity
+
+1336
+00:54:58,399 --> 00:55:00,810
+to potentially see a yeti or giant lizard man.
+
+1337
+00:55:00,820 --> 00:55:02,100
+-- Well, you better
+-- photograph it.
+
+1338
+00:55:02,110 --> 00:55:05,010
+I mean, because like I'm tired of everybody now carries phones
+
+1339
+00:55:05,969 --> 00:55:08,159
+and we still don't have good footage of these things.
+
+1340
+00:55:09,790 --> 00:55:11,389
+Like get your phones out of people and
+
+1341
+00:55:11,830 --> 00:55:13,959
+for the love of God don't use portrait mode
+
+1342
+00:55:14,300 --> 00:55:14,489
+or I
+
+1343
+00:55:14,600 --> 00:55:14,709
+was
+
+1344
+00:55:15,870 --> 00:55:15,909
+gonna
+
+1345
+00:55:17,620 --> 00:55:19,120
+say mode. Sorry, that's what I meant to say. Not
+
+1346
+00:55:19,939 --> 00:55:20,750
+uh Yes.
+
+1347
+00:55:21,080 --> 00:55:23,469
+No, I know what you mean or, or even better
+
+1348
+00:55:23,699 --> 00:55:23,949
+-- use
+-- land,
+
+1349
+00:55:24,129 --> 00:55:25,520
+not portrait. That's what I meant to say.
+
+1350
+00:55:25,860 --> 00:55:26,659
+It's time to go.
+
+1351
+00:55:26,820 --> 00:55:27,169
+Landscape is the
+
+1352
+00:55:27,520 --> 00:55:27,850
+time to
+
+1353
+00:55:27,959 --> 00:55:28,219
+use that.
+
+1354
+00:55:28,649 --> 00:55:29,459
+-- It's
+-- time to go.
+
+1355
+00:55:30,169 --> 00:55:34,389
+Yeah. Thank. Thank you, Kurt. Thank you everyone for putting up with this.
+
+1356
+00:55:34,780 --> 00:55:38,909
+Like it was fun. No, it was good. It was good. It was fun to talk about the VPN stuff.
+
+1357
+00:55:39,209 --> 00:55:41,590
+So if you need any links to the show notes,
+
+1358
+00:55:41,600 --> 00:55:44,500
+you can go to open source security podcast.com.
+
+1359
+00:55:44,760 --> 00:55:46,959
+We have links there to Twitter
+
+1360
+00:55:47,090 --> 00:55:51,840
+and a Facebook group and you can use the Pound Os s podcast hashtag to get a hold of us.
+
+1361
+00:55:51,850 --> 00:55:54,639
+We love hearing feedback. So by all means, let us know
+
+1362
+00:55:55,169 --> 00:55:58,639
+and yeah, I guess uh hopefully I'll, I'll see you in two weeks.
+
+1363
+00:55:59,010 --> 00:56:02,350
+-- Yeah, I hope you enjoy the eclipse and everybody else as well.
+-- Awesome.
+
+1364
+00:56:02,360 --> 00:56:03,870
+Talk to you later guys. Bye bye.

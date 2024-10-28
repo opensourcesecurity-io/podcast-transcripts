@@ -1,0 +1,2794 @@
+0
+00:00:05,309 --> 00:00:09,779
+Hello and welcome to episode 107 of the open source security podcast with myself,
+
+1
+00:00:09,789 --> 00:00:12,159
+Kurt Siefried and my partner in Thought Crime, Josh Bresser.
+
+2
+00:00:12,899 --> 00:00:17,639
+All Kurt. I'm going to call 2018 as the year of the Linux
+
+3
+00:00:17,780 --> 00:00:18,610
+desktop.
+
+4
+00:00:18,850 --> 00:00:19,940
+I'm inclined to agree
+
+5
+00:00:20,309 --> 00:00:21,209
+for real,
+
+6
+00:00:21,420 --> 00:00:23,719
+for real. Like it's been
+
+7
+00:00:24,510 --> 00:00:24,520
+a
+
+8
+00:00:24,620 --> 00:00:26,250
+year forever.
+
+9
+00:00:26,350 --> 00:00:26,770
+Right.
+
+10
+00:00:26,780 --> 00:00:30,729
+And, and I feel like we made it, we finally made it, but ironically,
+
+11
+00:00:30,739 --> 00:00:33,139
+we didn't make it for the reasons anyone thought we know
+
+12
+00:00:33,400 --> 00:00:33,950
+-- we
+-- were
+
+13
+00:00:36,119 --> 00:00:37,810
+because the year the Linux desktop is
+
+14
+00:00:37,819 --> 00:00:41,610
+going to exist because of chromebooks and windows
+
+15
+00:00:42,009 --> 00:00:42,509
+and android
+
+16
+00:00:42,720 --> 00:00:42,750
+phone.
+
+17
+00:00:44,560 --> 00:00:46,270
+I consider that less desktop
+
+18
+00:00:46,389 --> 00:00:51,250
+than chromebooks. I mean, a phone is a phone whereas a chromebook is a computer,
+
+19
+00:00:51,770 --> 00:00:52,529
+a desktop.
+
+20
+00:00:53,060 --> 00:00:54,090
+And I think that's part of the thing.
+
+21
+00:00:54,319 --> 00:00:57,090
+The desktop thing is a dying metaphor
+
+22
+00:00:58,389 --> 00:00:58,529
+shipments
+
+23
+00:00:58,790 --> 00:00:58,830
+are,
+
+24
+00:00:59,479 --> 00:01:00,520
+everybody's got a smartphone.
+
+25
+00:01:00,639 --> 00:01:00,659
+Now.
+
+26
+00:01:01,520 --> 00:01:04,339
+Did I buy? I don't even remember the last time I bought a computer.
+
+27
+00:01:04,349 --> 00:01:05,550
+It's, it's been a while, I
+
+28
+00:01:05,650 --> 00:01:05,690
+think
+
+29
+00:01:06,029 --> 00:01:06,739
+for my kids,
+
+30
+00:01:06,930 --> 00:01:10,190
+my kids play games on a windows machine, but that's it.
+
+31
+00:01:10,199 --> 00:01:11,980
+Uh But anyway, anyway, we should explain this.
+
+32
+00:01:12,150 --> 00:01:15,730
+So, and, and why is the security podcast talking about a desktop.
+
+33
+00:01:15,790 --> 00:01:19,819
+So this is a bunch of bizarrely related things come together.
+
+34
+00:01:19,830 --> 00:01:23,059
+So, chromebooks have been around for a while and they're insanely inexpensive.
+
+35
+00:01:23,069 --> 00:01:24,180
+In fact, I have one
+
+36
+00:01:24,940 --> 00:01:27,379
+and it's what I use when I travel and it works
+
+37
+00:01:27,389 --> 00:01:30,199
+perfectly and I have no issues with it and it's obviously ultra
+
+38
+00:01:30,330 --> 00:01:32,010
+secure compared to any laptop
+
+39
+00:01:32,279 --> 00:01:34,709
+except maybe some of the windows stuff. But that's another story.
+
+40
+00:01:34,809 --> 00:01:35,809
+But anyway, anyway,
+
+41
+00:01:36,099 --> 00:01:36,139
+so
+
+42
+00:01:36,599 --> 00:01:36,680
+you
+
+43
+00:01:36,800 --> 00:01:40,860
+have to, you have to work to make it secure. It doesn't come out of the box that way.
+
+44
+00:01:40,870 --> 00:01:41,410
+Typically
+
+45
+00:01:41,699 --> 00:01:43,019
+that's fair. That's fair. You know,
+
+46
+00:01:43,120 --> 00:01:43,639
+unless you work for
+
+47
+00:01:46,650 --> 00:01:47,569
+which nobody does.
+
+48
+00:01:50,220 --> 00:01:53,669
+I've tried walking down the biases and these things. It's, it's,
+
+49
+00:01:53,839 --> 00:01:55,199
+it's a nontrivial task and I
+
+50
+00:01:55,430 --> 00:01:55,849
+know some of
+
+51
+00:01:55,959 --> 00:01:57,790
+-- the
+-- new ones are OK.
+
+52
+00:01:57,800 --> 00:02:00,069
+Some of the new ones come locked down by default and
+
+53
+00:02:00,080 --> 00:02:02,699
+you have to actually unlock the stuff if you want it.
+
+54
+00:02:02,839 --> 00:02:05,459
+But anyway, anyway, so chromebooks
+
+55
+00:02:05,589 --> 00:02:08,639
+are basically desktops. They're, they're basically web browsers
+
+56
+00:02:08,899 --> 00:02:09,470
+and
+
+57
+00:02:09,877 --> 00:02:12,828
+you now have the ability on a select number of chromebooks.
+
+58
+00:02:12,839 --> 00:02:15,018
+I'm very exciting because at the end of July mine gets it
+
+59
+00:02:15,279 --> 00:02:17,768
+is you have the ability to run native Linux
+
+60
+00:02:17,869 --> 00:02:21,979
+apps in the chromebook. And I guess it's using some magic container technology.
+
+61
+00:02:22,108 --> 00:02:25,468
+But this is super exciting because now I have like an ultra portable,
+
+62
+00:02:25,479 --> 00:02:26,779
+ultra secure device
+
+63
+00:02:27,179 --> 00:02:30,259
+that is essentially my Linux desktop and it's,
+
+64
+00:02:30,438 --> 00:02:31,089
+I, I
+
+65
+00:02:31,268 --> 00:02:32,858
+don't even know what to say.
+
+66
+00:02:32,988 --> 00:02:33,938
+It's awesome.
+
+67
+00:02:34,559 --> 00:02:34,578
+Yeah.
+
+68
+00:02:35,529 --> 00:02:35,738
+Well,
+
+69
+00:02:35,748 --> 00:02:37,098
+the other thing that I like about chromebooks
+
+70
+00:02:37,108 --> 00:02:39,048
+is similar to Apple is that they keep state
+
+71
+00:02:39,300 --> 00:02:40,440
+sort of natively,
+
+72
+00:02:41,119 --> 00:02:44,759
+like, you don't have to set up something to do data replication and all sorts of
+
+73
+00:02:45,149 --> 00:02:46,720
+stuff to get your data,
+
+74
+00:02:46,899 --> 00:02:50,639
+not just backed up, but like in real time synchronized to another device. So that
+
+75
+00:02:50,960 --> 00:02:52,679
+God forbid you like,
+
+76
+00:02:52,690 --> 00:02:55,729
+want to edit a thing on your phone and put your phone
+
+77
+00:02:55,740 --> 00:02:58,869
+in your pocket and then immediately start editing it on your laptop
+
+78
+00:02:59,160 --> 00:03:02,800
+and not have to do some like black magic in between to get it to work.
+
+79
+00:03:02,809 --> 00:03:07,440
+Well, not only that, I mean, one of the things I love about it is, is part of that story.
+
+80
+00:03:07,699 --> 00:03:11,160
+So my chromebook cost me $250 dirt cheap.
+
+81
+00:03:11,270 --> 00:03:13,179
+And, and I have the opinion of like,
+
+82
+00:03:13,190 --> 00:03:15,250
+let's say I go through airport security and they take my
+
+83
+00:03:15,259 --> 00:03:17,130
+computer away from me and they give it back to me
+
+84
+00:03:17,330 --> 00:03:20,669
+that's going to go in the garbage can as soon as I walk away from the TS a checkpoint.
+
+85
+00:03:20,679 --> 00:03:22,440
+Right. And I won't think twice
+
+86
+00:03:22,789 --> 00:03:23,600
+about
+
+87
+00:03:23,839 --> 00:03:28,520
+getting all my stuff back because it's all magic. Right? It's super cool like that.
+
+88
+00:03:28,529 --> 00:03:29,399
+I really dig it.
+
+89
+00:03:29,410 --> 00:03:32,399
+And so that's one of the beauties of traveling with that versus traveling with,
+
+90
+00:03:32,410 --> 00:03:34,330
+you know, a multi $1000 laptop.
+
+91
+00:03:35,330 --> 00:03:38,149
+Yeah. No, I just checked my laptop is from 2012
+
+92
+00:03:38,869 --> 00:03:41,830
+and I haven't bothered upgrading it because everything's in the cloud it's
+
+93
+00:03:41,940 --> 00:03:42,179
+like
+
+94
+00:03:42,429 --> 00:03:42,770
+ancient man.
+
+95
+00:03:43,839 --> 00:03:44,350
+Well, that's the thing.
+
+96
+00:03:44,360 --> 00:03:45,880
+I'm looking at the hardware specs for some of
+
+97
+00:03:45,889 --> 00:03:48,429
+these newer tablets and phones and chromebooks and it's like
+
+98
+00:03:48,960 --> 00:03:53,580
+they are pretty solid machines. Like, generally speaking at least four gigs of ra M
+
+99
+00:03:54,399 --> 00:03:56,929
+ac pui, I don't know what that means anymore.
+
+100
+00:03:56,940 --> 00:03:57,800
+Like, I know, I think it's,
+
+101
+00:03:57,809 --> 00:04:01,380
+the newer Apple phones have like two fast cores and four slow cores for
+
+102
+00:04:01,649 --> 00:04:02,929
+stuff to
+
+103
+00:04:03,039 --> 00:04:05,880
+-- save battery. And I don't know,
+-- I've got so
+
+104
+00:04:06,145 --> 00:04:11,044
+and my chromebook, I have four fast cars, two slow cars and so it's a six
+
+105
+00:04:11,214 --> 00:04:14,684
+car chip which is weird, but whatever it works, I don't care.
+
+106
+00:04:15,115 --> 00:04:15,134
+I
+
+107
+00:04:15,315 --> 00:04:15,354
+don't
+
+108
+00:04:15,494 --> 00:04:15,535
+think
+
+109
+00:04:15,955 --> 00:04:16,375
+-- so.
+-- Yeah.
+
+110
+00:04:16,385 --> 00:04:18,904
+No, I'm just, I'm looking at the hardware specs and all this stuff and like honestly,
+
+111
+00:04:18,915 --> 00:04:22,355
+it all boils down to, yeah, it'll, it'll let me like watch video.
+
+112
+00:04:22,364 --> 00:04:23,255
+It'll let me
+
+113
+00:04:23,635 --> 00:04:26,244
+do all my office type work
+
+114
+00:04:26,654 --> 00:04:29,885
+and even play some minimal games. So, yeah,
+
+115
+00:04:30,005 --> 00:04:32,315
+you know, these things are under 500 bucks.
+
+116
+00:04:33,350 --> 00:04:34,119
+Uh Yeah,
+
+117
+00:04:34,529 --> 00:04:35,489
+seriously, man.
+
+118
+00:04:36,149 --> 00:04:36,920
+And they all run Linux
+
+119
+00:04:37,140 --> 00:04:38,299
+year of Linux desktop.
+
+120
+00:04:38,309 --> 00:04:42,769
+Well, actually we should also point out why we jokingly said Windows is these days.
+
+121
+00:04:42,779 --> 00:04:44,929
+If you have a Windows desktop,
+
+122
+00:04:45,690 --> 00:04:48,029
+you can use what's called the Linux subsystem.
+
+123
+00:04:48,040 --> 00:04:50,450
+And you can like literally run Linux applications
+
+124
+00:04:50,459 --> 00:04:52,869
+on Windows and it works pretty well actually.
+
+125
+00:04:53,540 --> 00:04:58,119
+Oh, it works great because I needed an SSH client on my Windows machine.
+
+126
+00:04:58,450 --> 00:05:01,720
+So I went to the Apple or to the Microsoft store typed in SSH.
+
+127
+00:05:01,730 --> 00:05:04,399
+And the first result was ubuntu. So I'm like, yeah, whatever. Sure
+
+128
+00:05:04,820 --> 00:05:07,450
+Ubuntu has a copy of Open SSH, which is actually what I want.
+
+129
+00:05:07,459 --> 00:05:10,920
+I don't want some wonky home brew written copy of SSH,
+
+130
+00:05:11,109 --> 00:05:11,850
+you know.
+
+131
+00:05:12,369 --> 00:05:17,839
+Um And so I, I, yeah, I clicked it and like 10 minutes later after a reboot, I'm
+
+132
+00:05:18,019 --> 00:05:23,190
+running Linux in a container and the beauty is, it runs like an app like there's
+
+133
+00:05:23,779 --> 00:05:24,160
+it
+
+134
+00:05:24,500 --> 00:05:27,329
+when you type in Reboot, it says I can't do that because there's no process one,
+
+135
+00:05:27,339 --> 00:05:29,500
+there's no system to like I, I am a container.
+
+136
+00:05:29,510 --> 00:05:33,040
+I was instantiated, not like a computer but like a container.
+
+137
+00:05:33,299 --> 00:05:36,619
+And I love that I can just click the X in the corner and it, it's gone
+
+138
+00:05:36,809 --> 00:05:38,649
+and when I reopen it, like
+
+139
+00:05:38,779 --> 00:05:40,760
+whatever state was on disk is saved,
+
+140
+00:05:41,250 --> 00:05:42,920
+right? So it's not like
+
+141
+00:05:43,209 --> 00:05:44,600
+it works for losing state or anything.
+
+142
+00:05:44,609 --> 00:05:48,320
+And yeah, it's just, it's incredibly easy and simple and
+
+143
+00:05:49,220 --> 00:05:50,510
+yeah, I mean,
+
+144
+00:05:50,739 --> 00:05:54,130
+it's, it's honestly, I, I'm not going to bother installing, you know,
+
+145
+00:05:54,140 --> 00:05:56,920
+I used to install sin the tool chain on my windows machine.
+
+146
+00:05:56,929 --> 00:05:58,209
+So I'd have like said and a
+
+147
+00:05:58,399 --> 00:05:59,679
+and grab and all that stuff.
+
+148
+00:05:59,950 --> 00:06:01,179
+Yeah. Now, no, I just
+
+149
+00:06:01,440 --> 00:06:03,079
+click on the ubuntu icon and,
+
+150
+00:06:03,339 --> 00:06:06,200
+and go to slash MNT slash C mount C,
+
+151
+00:06:06,609 --> 00:06:09,839
+you know, it natively mounts your C drive and all your local drives and just,
+
+152
+00:06:09,850 --> 00:06:11,119
+you can monkey around with your stuff.
+
+153
+00:06:11,130 --> 00:06:14,739
+-- No problem. Yep.
+-- Yep. I, I wonder how many listeners we just lost
+
+154
+00:06:15,079 --> 00:06:17,200
+in the last three minutes.
+
+155
+00:06:18,720 --> 00:06:22,670
+But, you know, in context, I remember back in the day and by back in the day, I mean,
+
+156
+00:06:22,679 --> 00:06:23,299
+like 10 years ago,
+
+157
+00:06:23,309 --> 00:06:26,459
+I would force myself for two weeks every summer to use Linux on my desktop
+
+158
+00:06:26,839 --> 00:06:30,730
+and get it fully working, sound everything and, like, really try hard to use Linux
+
+159
+00:06:30,880 --> 00:06:31,179
+and
+
+160
+00:06:31,799 --> 00:06:33,700
+invariably I just was like, oh, man,
+
+161
+00:06:33,709 --> 00:06:36,980
+this is just such a chore and I would give up and go back to,
+
+162
+00:06:37,089 --> 00:06:37,579
+you know,
+
+163
+00:06:37,820 --> 00:06:39,250
+Mac Os or Windows.
+
+164
+00:06:39,880 --> 00:06:42,579
+Um, and, and, and, and Linux in a virtual machine,
+
+165
+00:06:43,420 --> 00:06:43,880
+you know,
+
+166
+00:06:44,820 --> 00:06:48,339
+so I've been running Linux on my desktop probably for 20 years.
+
+167
+00:06:48,760 --> 00:06:51,980
+And it, it, it has reached the point now where it's a
+
+168
+00:06:52,480 --> 00:06:53,679
+non event.
+
+169
+00:06:53,839 --> 00:06:58,640
+And I remember back in the day when I was going to install the new version of something
+
+170
+00:06:59,140 --> 00:07:01,079
+usually Fedora or Red Hat Linux
+
+171
+00:07:01,489 --> 00:07:03,040
+that were that long ago,
+
+172
+00:07:03,980 --> 00:07:06,609
+like I remember I would set aside a weekend
+
+173
+00:07:06,899 --> 00:07:09,250
+to get it working and I needed it.
+
+174
+00:07:09,690 --> 00:07:11,959
+Right. It wasn't just, oh, I'll screw it up for a weekend.
+
+175
+00:07:11,970 --> 00:07:12,299
+Like, no,
+
+176
+00:07:12,309 --> 00:07:16,890
+I actually needed to work my behind off for a whole weekend to get my desktop working.
+
+177
+00:07:17,429 --> 00:07:20,529
+Oh, no, I, I ran Linux on the desktop slackware one point.
+
+178
+00:07:20,540 --> 00:07:22,510
+Oh, and some other things because what else was there?
+
+179
+00:07:22,640 --> 00:07:24,190
+But what I'm just realizing too is
+
+180
+00:07:24,390 --> 00:07:25,279
+if I run Linux,
+
+181
+00:07:25,880 --> 00:07:29,920
+I can't really easily run windows or Mac O SI can run windows in a VM,
+
+182
+00:07:29,929 --> 00:07:32,279
+but I can't really run Mac Os at all.
+
+183
+00:07:32,459 --> 00:07:35,619
+Whereas if I'm running Mac Os or Windows, I can trivially run Linux
+
+184
+00:07:35,859 --> 00:07:36,339
+now.
+
+185
+00:07:36,690 --> 00:07:38,959
+Yes, that, that is a very good point.
+
+186
+00:07:39,040 --> 00:07:41,899
+It's, although, you know, man, I find like, II,
+
+187
+00:07:41,910 --> 00:07:44,329
+I purposely make myself switch between different kinds of
+
+188
+00:07:44,339 --> 00:07:46,779
+desktops just so I can keep it kind of fresh
+
+189
+00:07:47,500 --> 00:07:52,859
+and honestly like on, on Mac O si just open a shell and I use my web browser.
+
+190
+00:07:52,869 --> 00:07:54,549
+It's basically as good as Linux.
+
+191
+00:07:54,910 --> 00:07:57,880
+I mean, honestly, I don't notice a difference.
+
+192
+00:07:58,230 --> 00:08:01,799
+I removed my virtual machines that I had for my previous job and
+
+193
+00:08:02,760 --> 00:08:03,220
+yeah, Mac
+
+194
+00:08:03,429 --> 00:08:03,869
+Os command
+
+195
+00:08:03,970 --> 00:08:06,649
+shell. Uh I did have to install a newer version of GP G.
+
+196
+00:08:06,730 --> 00:08:08,290
+That was basically the only thing I needed
+
+197
+00:08:08,410 --> 00:08:09,970
+and home brew obviously to get all the
+
+198
+00:08:10,390 --> 00:08:11,149
+news said
+
+199
+00:08:11,299 --> 00:08:12,890
+because the Mac Os said does not
+
+200
+00:08:13,619 --> 00:08:14,190
+-- home
+-- brew
+
+201
+00:08:14,429 --> 00:08:15,640
+-- line
+-- returns.
+
+202
+00:08:17,239 --> 00:08:17,399
+The
+
+203
+00:08:17,549 --> 00:08:17,579
+Mac
+
+204
+00:08:17,829 --> 00:08:19,059
+Os utilities are
+
+205
+00:08:20,220 --> 00:08:20,459
+they're
+
+206
+00:08:20,730 --> 00:08:20,910
+broken,
+
+207
+00:08:21,299 --> 00:08:22,609
+they're straight up broken. Like,
+
+208
+00:08:22,790 --> 00:08:25,309
+like go read the man page for
+
+209
+00:08:25,420 --> 00:08:28,250
+said on Mac Os and what you need to do to handle line returns.
+
+210
+00:08:28,260 --> 00:08:31,230
+And compared to like GNU said where it's trivial.
+
+211
+00:08:31,690 --> 00:08:32,750
+Yeah. No, it's
+
+212
+00:08:33,140 --> 00:08:33,799
+Yeah. No.
+
+213
+00:08:34,140 --> 00:08:34,169
+Yeah,
+
+214
+00:08:34,179 --> 00:08:35,950
+but that's probably because they're using like some
+
+215
+00:08:35,960 --> 00:08:39,950
+1965 version of AT&T set or something.
+
+216
+00:08:41,859 --> 00:08:44,909
+But I guess here's, here's the thing I keep thinking of here is, you know,
+
+217
+00:08:44,919 --> 00:08:46,989
+why we can even have this conversation, man.
+
+218
+00:08:47,159 --> 00:08:49,700
+It's because like open source one
+
+219
+00:08:51,049 --> 00:08:51,780
+down
+
+220
+00:08:52,840 --> 00:08:54,140
+and what I really love is, is
+
+221
+00:08:54,669 --> 00:08:56,099
+in the container space. Linux one,
+
+222
+00:08:56,320 --> 00:08:57,700
+right. Is there, is there any,
+
+223
+00:08:58,280 --> 00:09:01,830
+is anybody even making a really serious attempt to
+
+224
+00:09:01,840 --> 00:09:03,580
+have containers that are not based on Linux?
+
+225
+00:09:03,590 --> 00:09:06,359
+And the answer is, well, yeah, there's a, there's a couple of BS D things and what not.
+
+226
+00:09:06,369 --> 00:09:06,609
+But they,
+
+227
+00:09:07,510 --> 00:09:10,219
+yeah, they're like those weirdos living out in the woods with sharp sticks.
+
+228
+00:09:11,500 --> 00:09:14,280
+You know, they, they mean, well, but you probably want to avoid them.
+
+229
+00:09:18,369 --> 00:09:18,960
+You're gonna,
+
+230
+00:09:19,789 --> 00:09:21,950
+don't, don't poke the bear cart.
+
+231
+00:09:22,099 --> 00:09:22,580
+Just,
+
+232
+00:09:23,030 --> 00:09:23,799
+just don't
+
+233
+00:09:24,739 --> 00:09:27,609
+anyway. Anyway. Anyway. All right. That's cool.
+
+234
+00:09:27,619 --> 00:09:29,280
+But it's, I don't know, I'm excited.
+
+235
+00:09:29,289 --> 00:09:33,460
+I think there's some, some fun stuff going on and I'm always happy to talk about it.
+
+236
+00:09:33,469 --> 00:09:35,890
+-- But, but you have some other stories.
+-- Yeah.
+
+237
+00:09:35,919 --> 00:09:37,799
+-- So, so
+-- something that you wanted to discuss,
+
+238
+00:09:37,820 --> 00:09:41,070
+but I've kind of wondered why nobody wrote about this before is, um,
+
+239
+00:09:41,349 --> 00:09:42,789
+thermal imaging cameras.
+
+240
+00:09:43,219 --> 00:09:45,489
+And so when you type in a password, um,
+
+241
+00:09:45,500 --> 00:09:48,630
+obviously you generally touch the keys on your keyboard
+
+242
+00:09:49,070 --> 00:09:52,330
+and that would transfer some heat. And so, uh,
+
+243
+00:09:52,479 --> 00:09:54,809
+thermal imaging cameras now are, are quite affordable.
+
+244
+00:09:54,820 --> 00:09:56,049
+Like I was just looking online.
+
+245
+00:09:56,440 --> 00:09:59,130
+Uh, there's a really nifty one that plugs into the bottom of your phone,
+
+246
+00:09:59,140 --> 00:10:00,520
+either Apple or Android
+
+247
+00:10:01,000 --> 00:10:03,700
+200 bucks, apparently quite a nice,
+
+248
+00:10:03,880 --> 00:10:04,460
+uh,
+
+249
+00:10:04,729 --> 00:10:05,710
+infrared camera.
+
+250
+00:10:05,919 --> 00:10:06,179
+You know,
+
+251
+00:10:06,190 --> 00:10:08,070
+there's a couple of branded phones like a
+
+252
+00:10:08,080 --> 00:10:10,190
+Caterpillar actually makes a brand of phones,
+
+253
+00:10:10,200 --> 00:10:11,239
+you know, the heavy equipment
+
+254
+00:10:11,479 --> 00:10:14,049
+guys that paint all their stuff. Caterpillar yellow.
+
+255
+00:10:14,190 --> 00:10:15,919
+And they have a couple of, like, ruggedized
+
+256
+00:10:16,090 --> 00:10:17,020
+phones for
+
+257
+00:10:17,390 --> 00:10:18,710
+construction type people, I guess.
+
+258
+00:10:18,719 --> 00:10:21,460
+I don't know, but they have thermal cameras built into them. Which,
+
+259
+00:10:21,830 --> 00:10:23,020
+yeah, that'd be kind of useful.
+
+260
+00:10:23,030 --> 00:10:25,419
+You know, if you're looking at an engine or, like you said, you're,
+
+261
+00:10:25,429 --> 00:10:26,940
+where do I insulate my house?
+
+262
+00:10:28,539 --> 00:10:28,849
+Right.
+
+263
+00:10:29,000 --> 00:10:31,369
+There's, I'm sure there's countless uses
+
+264
+00:10:31,559 --> 00:10:34,840
+for it. I'm thinking especially with like pins, you know, on a pin pad.
+
+265
+00:10:34,849 --> 00:10:36,090
+It's, it's, well,
+
+266
+00:10:36,229 --> 00:10:38,130
+usually everybody has four digits.
+
+267
+00:10:38,140 --> 00:10:42,849
+Uh you can have six, but then you run the risk of that not working in Europe or America
+
+268
+00:10:43,219 --> 00:10:44,250
+with older equipment.
+
+269
+00:10:44,919 --> 00:10:49,000
+Um, because I used to have a six digit pin and it works almost all the time
+
+270
+00:10:49,340 --> 00:10:50,570
+for my debit card.
+
+271
+00:10:51,250 --> 00:10:56,869
+A six digit pin. I don't think I've ever heard of a six digit pin for a debit card.
+
+272
+00:10:57,270 --> 00:10:58,780
+Yeah. So you, you can get,
+
+273
+00:10:59,380 --> 00:11:02,489
+uh, you can definitely get up to a six digit pin on most cards.
+
+274
+00:11:02,500 --> 00:11:05,719
+But like I said, if you encounter an older payment terminal,
+
+275
+00:11:06,119 --> 00:11:07,359
+you might have a bad day,
+
+276
+00:11:07,719 --> 00:11:09,359
+not in the US.
+
+277
+00:11:09,559 --> 00:11:11,640
+Like we don't use pins.
+
+278
+00:11:12,260 --> 00:11:13,239
+It's so bad.
+
+279
+00:11:13,250 --> 00:11:14,320
+But, um, but yeah,
+
+280
+00:11:14,330 --> 00:11:15,739
+like I'm surprised this hasn't kind of
+
+281
+00:11:15,750 --> 00:11:18,159
+come out sooner because apparently there's enough
+
+282
+00:11:18,169 --> 00:11:21,719
+heat left on these keyboards for a good 45 seconds to a minute to,
+
+283
+00:11:22,380 --> 00:11:24,320
+you know, basically get the person's um,
+
+284
+00:11:24,330 --> 00:11:26,510
+password and what I noticed I was actually watching
+
+285
+00:11:26,700 --> 00:11:30,250
+a tech tips and he is in their server room and he's logging into a server
+
+286
+00:11:30,340 --> 00:11:31,880
+and they actually blurred out his hands and
+
+287
+00:11:31,890 --> 00:11:33,820
+the keyboard while he's typing in the password.
+
+288
+00:11:33,830 --> 00:11:36,369
+And I was like, oh, yeah, because you could, you know,
+
+289
+00:11:36,380 --> 00:11:39,090
+have the youtube video go through at like quarter speed or whatever
+
+290
+00:11:39,289 --> 00:11:42,039
+and you'd clearly be able to see what key is hitting.
+
+291
+00:11:42,359 --> 00:11:42,840
+Sure.
+
+292
+00:11:43,109 --> 00:11:43,630
+Yeah.
+
+293
+00:11:43,900 --> 00:11:45,080
+And this is one thing that gets me,
+
+294
+00:11:45,090 --> 00:11:47,000
+especially around two factor authentication is that,
+
+295
+00:11:47,789 --> 00:11:49,650
+you know, especially in office environments, it's just,
+
+296
+00:11:49,659 --> 00:11:51,989
+it's people can watch you type
+
+297
+00:11:52,500 --> 00:11:54,099
+unless you're like in an office
+
+298
+00:11:54,299 --> 00:11:57,570
+room facing a backing into a wall or something. You know,
+
+299
+00:11:57,950 --> 00:12:00,210
+it's like when people discover the cameras are good enough now
+
+300
+00:12:00,219 --> 00:12:02,630
+to easily take a picture of a key and you know,
+
+301
+00:12:02,640 --> 00:12:05,369
+you can figure out what the bidding, the cut pattern is.
+
+302
+00:12:05,460 --> 00:12:09,890
+-- Your,
+-- your fingerprints, man, right? You can take pictures of fingerprints. Now
+
+303
+00:12:10,580 --> 00:12:11,039
+most,
+
+304
+00:12:11,239 --> 00:12:12,609
+let's be brutally honest,
+
+305
+00:12:12,650 --> 00:12:16,010
+any decent phone nowadays has at least a 10 megapixel camera,
+
+306
+00:12:17,590 --> 00:12:22,919
+right? I remember buying a one megapixel camera for like 500 bucks back in the day,
+
+307
+00:12:23,890 --> 00:12:24,539
+you know,
+
+308
+00:12:24,820 --> 00:12:25,359
+it was,
+
+309
+00:12:25,650 --> 00:12:26,349
+did it take
+
+310
+00:12:26,890 --> 00:12:28,710
+pretty much? I think I'm, I'm restricted to
+
+311
+00:12:29,030 --> 00:12:29,719
+-- 16
+-- megabyte
+
+312
+00:12:30,460 --> 00:12:31,820
+SD cards.
+
+313
+00:12:32,099 --> 00:12:34,739
+But um yeah, I mean, the reality is like modern phones,
+
+314
+00:12:34,750 --> 00:12:37,869
+some of them have upwards of 20 or 30 megapixel cameras.
+
+315
+00:12:37,880 --> 00:12:38,190
+And
+
+316
+00:12:38,330 --> 00:12:41,450
+yeah, like if you're doing that, what is it that um the, the,
+
+317
+00:12:41,580 --> 00:12:42,000
+that
+
+318
+00:12:42,770 --> 00:12:44,250
+the, the thing that the, you know,
+
+319
+00:12:44,260 --> 00:12:45,950
+where they hold their fingers up in the peace symbol.
+
+320
+00:12:46,770 --> 00:12:49,280
+Whenever they take a photo, it's like this iconic thing,
+
+321
+00:12:49,289 --> 00:12:50,979
+I think that the Japanese do or something.
+
+322
+00:12:51,479 --> 00:12:51,909
+And yeah,
+
+323
+00:12:51,919 --> 00:12:54,840
+like you're holding your fingers up to the picture and
+
+324
+00:12:54,849 --> 00:12:57,390
+apparently these cameras are good enough now that you can like
+
+325
+00:12:57,599 --> 00:13:00,000
+literally see us. I, you know, enhance, enhance.
+
+326
+00:13:00,010 --> 00:13:01,349
+Oh you have the killer's fingerprint,
+
+327
+00:13:02,229 --> 00:13:02,880
+you know,
+
+328
+00:13:03,659 --> 00:13:07,020
+but like legitimately, you know, and, and that's the thing that gets me right is
+
+329
+00:13:07,440 --> 00:13:07,619
+it,
+
+330
+00:13:08,780 --> 00:13:11,650
+we always go back to, you know, security through obscurity never works.
+
+331
+00:13:11,700 --> 00:13:14,190
+Um Largely because most security through obscurity,
+
+332
+00:13:14,200 --> 00:13:16,530
+you can't change what it is you're hiding, right?
+
+333
+00:13:16,849 --> 00:13:19,559
+So with passwords, you can argue that you can change your password quickly.
+
+334
+00:13:19,570 --> 00:13:22,250
+So it's not so terrible, but like, yeah, something like your fingerprint.
+
+335
+00:13:22,710 --> 00:13:25,840
+Uh Well, you can technically change your fingerprint, but it's going to hurt
+
+336
+00:13:26,049 --> 00:13:26,650
+a lot.
+
+337
+00:13:26,989 --> 00:13:31,419
+And so I think any security that kind of relies on something
+
+338
+00:13:31,520 --> 00:13:35,429
+never being physically seen by an attacker. A great example being like a key,
+
+339
+00:13:36,010 --> 00:13:37,419
+you know, I think we need to start
+
+340
+00:13:37,549 --> 00:13:41,260
+thinking about these things because II, I know people,
+
+341
+00:13:41,270 --> 00:13:43,969
+like I've seen people that wear their key ring on their belt
+
+342
+00:13:44,450 --> 00:13:46,590
+and you could easily take a picture of
+
+343
+00:13:46,780 --> 00:13:49,750
+most of that thing and, and get the bidding of most of the keys.
+
+344
+00:13:50,159 --> 00:13:53,500
+I would argue keys are different
+
+345
+00:13:54,150 --> 00:13:55,340
+because
+
+346
+00:13:55,820 --> 00:13:57,820
+let's face it. There are
+
+347
+00:13:58,000 --> 00:14:00,010
+janitor with a master key on his key ring.
+
+348
+00:14:00,429 --> 00:14:04,830
+Yeah. But even with that man, do you know how easy it is to pick basically every line on
+
+349
+00:14:05,020 --> 00:14:09,169
+the planet today? I mean, with a bump key, you can pick it in literally four seconds.
+
+350
+00:14:09,200 --> 00:14:14,210
+I mean, keys are to keep honest people out, they are not to keep evildoers out.
+
+351
+00:14:14,219 --> 00:14:17,030
+And I think that's kind of the difference with passwords is passwords
+
+352
+00:14:17,039 --> 00:14:19,859
+are meant to keep evil doers out and honest people out.
+
+353
+00:14:19,869 --> 00:14:21,000
+Right. And, and
+
+354
+00:14:21,460 --> 00:14:21,650
+I
+
+355
+00:14:22,849 --> 00:14:24,909
+really, if we kind of think about
+
+356
+00:14:25,359 --> 00:14:28,359
+passwords, like we think about keys,
+
+357
+00:14:28,570 --> 00:14:31,000
+a password is really to keep the honest people out,
+
+358
+00:14:31,010 --> 00:14:34,460
+but you need two factor on now if you want to keep the evil doers out.
+
+359
+00:14:34,469 --> 00:14:35,849
+Right? I mean, that's probably the right way.
+
+360
+00:14:35,919 --> 00:14:38,559
+Part of the challenge is if you have just a password,
+
+361
+00:14:38,570 --> 00:14:43,059
+then you really do need things like account lockouts for bad logins or, you know,
+
+362
+00:14:43,070 --> 00:14:46,309
+like slowdowns like, ok, it's, I'm gonna make you wait 10 seconds,
+
+363
+00:14:46,320 --> 00:14:47,729
+I'm gonna make you wait 20 seconds.
+
+364
+00:14:47,969 --> 00:14:51,349
+And that's great with like a physical device, like a phone.
+
+365
+00:14:51,460 --> 00:14:51,919
+But
+
+366
+00:14:52,059 --> 00:14:54,150
+that really sucks if I'm trying to log into like
+
+367
+00:14:54,440 --> 00:14:55,390
+my gmail
+
+368
+00:14:56,150 --> 00:15:00,429
+and some Russian dude hammered it and now I can't log in for like half a day,
+
+369
+00:15:00,859 --> 00:15:01,890
+right? Because that's, that's,
+
+370
+00:15:02,000 --> 00:15:04,450
+that's actually one of the cwe identifiers is like
+
+371
+00:15:04,460 --> 00:15:07,549
+overly aggressive account lockout because I've literally seen systems
+
+372
+00:15:07,559 --> 00:15:09,650
+where you get three bad logins and the system
+
+373
+00:15:09,659 --> 00:15:11,390
+locks you out completely and you have to,
+
+374
+00:15:11,400 --> 00:15:12,789
+like, get the admin to let you back in
+
+375
+00:15:13,179 --> 00:15:16,109
+which, you know, for some crazy high security environment maybe.
+
+376
+00:15:16,200 --> 00:15:17,049
+But, like,
+
+377
+00:15:17,059 --> 00:15:20,450
+you can't put that online because then everybody will be locked out in half an hour.
+
+378
+00:15:21,090 --> 00:15:21,219
+Yeah.
+
+379
+00:15:21,229 --> 00:15:21,460
+My,
+
+380
+00:15:21,469 --> 00:15:25,760
+my bank does that where if I type my password in wrong more than three times I
+
+381
+00:15:25,770 --> 00:15:30,299
+have to then provide them with an obscene amount of information to prove it to me.
+
+382
+00:15:30,989 --> 00:15:32,469
+And it, it, it sucks.
+
+383
+00:15:32,479 --> 00:15:36,450
+But I guess, and that one I can probably let go and it doesn't happen very often.
+
+384
+00:15:36,460 --> 00:15:37,719
+It's, it's usually,
+
+385
+00:15:37,960 --> 00:15:40,590
+for some reason I end up accidentally hitting
+
+386
+00:15:40,599 --> 00:15:43,090
+buttons while I'm pasting the password from,
+
+387
+00:15:43,140 --> 00:15:44,450
+from the password manager.
+
+388
+00:15:45,479 --> 00:15:48,549
+Yeah. Or at least they don't have the cut and paste disabled in javascript. Right.
+
+389
+00:15:49,859 --> 00:15:51,309
+Oh, my goodness.
+
+390
+00:15:51,650 --> 00:15:53,559
+II, I, yeah,
+
+391
+00:15:53,570 --> 00:15:57,280
+I'm actually going to be campaigning this year probably to make that like a flaw.
+
+392
+00:15:57,289 --> 00:16:00,239
+Like if you block, cut and paste, that's a flaw. Don't do that.
+
+393
+00:16:00,460 --> 00:16:06,119
+-- I agree. That should, that should get a CV E unquestionably like it.
+-- Well, and a CV,
+
+394
+00:16:07,739 --> 00:16:11,719
+-- get them both.
+-- And then the other big hardware news. Well, not really big news again.
+
+395
+00:16:11,729 --> 00:16:12,820
+It's been for a while, but like,
+
+396
+00:16:12,830 --> 00:16:16,570
+if you buy an evil replacement screen for your smartphone, like,
+
+397
+00:16:16,580 --> 00:16:18,330
+obviously it can see what you're typing
+
+398
+00:16:18,650 --> 00:16:21,369
+because, like, the screen is also the keyboard. Right?
+
+399
+00:16:21,630 --> 00:16:23,099
+And you can also impersonate them too. Right.
+
+400
+00:16:23,109 --> 00:16:25,710
+Because the, the, the screen sends the signals to the,
+
+401
+00:16:26,390 --> 00:16:28,840
+to the computer saying, you know, they tap over here, they tap over here,
+
+402
+00:16:28,849 --> 00:16:30,469
+they swipe this, right?
+
+403
+00:16:30,640 --> 00:16:34,250
+And so it sounds like, you know, for example, Apple is dealing with this by
+
+404
+00:16:34,739 --> 00:16:38,169
+e essentially uh my understanding is the parts will, you know,
+
+405
+00:16:38,179 --> 00:16:40,559
+they'll have like a little encryption thing in them
+
+406
+00:16:40,960 --> 00:16:43,460
+that proves that they're part of the legitimate supply chain
+
+407
+00:16:43,469 --> 00:16:46,359
+and not some like off brand third party whatever piece,
+
+408
+00:16:47,510 --> 00:16:48,099
+right? Because
+
+409
+00:16:48,229 --> 00:16:50,539
+when you think about it, right, if you have somebody like
+
+410
+00:16:50,989 --> 00:16:54,460
+replace the screen on your phone, like you have no idea where that screen came from.
+
+411
+00:16:54,609 --> 00:16:56,179
+That, that is true.
+
+412
+00:16:56,270 --> 00:17:00,280
+-- Like
+-- is it a legit Apple screen or is it some third party thing or is it, who knows?
+
+413
+00:17:00,289 --> 00:17:00,710
+Right.
+
+414
+00:17:00,929 --> 00:17:05,089
+And now man, this one, I get torn over because
+
+415
+00:17:05,430 --> 00:17:08,368
+I'm sensitive to the concept of right to repair
+
+416
+00:17:08,469 --> 00:17:11,150
+where if, if my phone does break,
+
+417
+00:17:11,550 --> 00:17:16,660
+I should be able to get it fixed wherever I want to. But and the other side of it,
+
+418
+00:17:17,189 --> 00:17:20,650
+there is something to be said about some of this kind of dodgy gear.
+
+419
+00:17:20,739 --> 00:17:25,449
+It's like Apple getting more and more restrictive with the
+
+420
+00:17:25,459 --> 00:17:27,579
+cables that you can use to plug your phone in,
+
+421
+00:17:28,050 --> 00:17:28,500
+right?
+
+422
+00:17:28,540 --> 00:17:30,410
+Because the the the lightning cables do have
+
+423
+00:17:30,420 --> 00:17:32,380
+again like a little encryption do hicky in them
+
+424
+00:17:32,550 --> 00:17:34,650
+like I have cables that used to work and then I
+
+425
+00:17:34,660 --> 00:17:36,770
+did an I OS update and then they stopped working.
+
+426
+00:17:36,849 --> 00:17:39,849
+See, that's lame, man. I'm sorry. That's lame.
+
+427
+00:17:40,380 --> 00:17:41,300
+And, well, it is.
+
+428
+00:17:41,310 --> 00:17:42,880
+But at the flip side you have these people
+
+429
+00:17:42,890 --> 00:17:45,599
+buying like really garbage cables and frying their phone.
+
+430
+00:17:45,660 --> 00:17:46,770
+Like that guy again.
+
+431
+00:17:46,780 --> 00:17:50,670
+Back to the Google guy that did those USB C cable testing and like fried his laptop
+
+432
+00:17:51,680 --> 00:17:57,550
+-- from a bad cable.
+-- Yeah. But look if, if you fry your iphone on a bad cable,
+
+433
+00:17:58,069 --> 00:18:01,270
+are, are they gonna, I assume they can tell,
+
+434
+00:18:01,760 --> 00:18:03,810
+-- are they going to replace it?
+-- If it's Apple care?
+
+435
+00:18:04,000 --> 00:18:07,020
+Possibly if you're off Apple care, then that's your problem.
+
+436
+00:18:07,030 --> 00:18:09,630
+And more to the point you're what if it burns your house down?
+
+437
+00:18:10,949 --> 00:18:11,160
+Right?
+
+438
+00:18:11,170 --> 00:18:13,119
+-- Because there's been pictures of some of these phones
+-- that, like,
+
+439
+00:18:13,130 --> 00:18:14,520
+don't buy cheap stuff.
+
+440
+00:18:14,989 --> 00:18:16,459
+Well, the problem is though, I don't know.
+
+441
+00:18:16,469 --> 00:18:20,040
+How do I know that the expensive cable I'm buying is legit or not. And that's true.
+
+442
+00:18:20,050 --> 00:18:23,719
+You don't like? I know that the cheap stuff is probably not legit
+
+443
+00:18:23,959 --> 00:18:26,859
+but the expensive stuff like monster cables, those are expensive,
+
+444
+00:18:26,869 --> 00:18:27,520
+aren't they legit?
+
+445
+00:18:27,530 --> 00:18:29,359
+I thought they were gold plated for your safety.
+
+446
+00:18:31,839 --> 00:18:36,359
+-- Did you ever see the website where some guy did a test of monster
+-- cables?
+
+447
+00:18:37,439 --> 00:18:37,540
+The
+
+448
+00:18:37,650 --> 00:18:37,689
+coat
+
+449
+00:18:38,310 --> 00:18:38,530
+hanger.
+
+450
+00:18:39,030 --> 00:18:40,890
+Nobody could tell the difference.
+
+451
+00:18:42,329 --> 00:18:46,780
+I'm not even a little surprised and obviously digital is even funnier
+
+452
+00:18:47,319 --> 00:18:48,189
+but whatever
+
+453
+00:18:49,209 --> 00:18:49,709
+in fairness,
+
+454
+00:18:49,719 --> 00:18:51,489
+I have had digital cables that were of such
+
+455
+00:18:51,500 --> 00:18:54,199
+poor quality or mangled that they actually were bad.
+
+456
+00:18:54,209 --> 00:18:55,719
+But like these things have been like, chewed on.
+
+457
+00:18:55,729 --> 00:18:56,500
+Basically,
+
+458
+00:18:56,569 --> 00:18:59,969
+I remember one time I bought a bunch of cheap cables
+
+459
+00:18:59,979 --> 00:19:03,160
+of ebay and like half of them just wouldn't work.
+
+460
+00:19:03,839 --> 00:19:04,400
+They would,
+
+461
+00:19:04,410 --> 00:19:06,300
+they would plug in and it would start charging for
+
+462
+00:19:06,310 --> 00:19:08,479
+like two seconds and then it would just stop charging.
+
+463
+00:19:08,609 --> 00:19:12,010
+And so I, I threw them away and then I bought nice cables
+
+464
+00:19:12,130 --> 00:19:14,839
+-- and I've never,
+-- yeah, like a great example. Um,
+
+465
+00:19:15,119 --> 00:19:18,040
+in the car, you know, you have your old timey, we call them a power plug.
+
+466
+00:19:18,050 --> 00:19:20,250
+Now what they used to be for cigarette lighters, kids.
+
+467
+00:19:20,260 --> 00:19:23,119
+And so you have that little round thing that has the USB plugs on the end, right?
+
+468
+00:19:23,130 --> 00:19:25,550
+It's like basically a little physical adapter.
+
+469
+00:19:26,819 --> 00:19:30,219
+And I bought like a super cheap one thinking like, don't do, who cares? Right.
+
+470
+00:19:30,229 --> 00:19:32,800
+It's just like a chunk of, it's basically a couple of bits of metal.
+
+471
+00:19:32,810 --> 00:19:33,800
+There's nothing in there. Really.
+
+472
+00:19:34,369 --> 00:19:38,599
+No. And uh so I found one where uh my phone won't charge off that one.
+
+473
+00:19:39,219 --> 00:19:41,880
+Like it provides power and it'll run like a dash cam.
+
+474
+00:19:41,890 --> 00:19:45,099
+But like you plug an iphone into it and the iphone's like, just like, no, I'm just,
+
+475
+00:19:45,109 --> 00:19:46,050
+this thing is garbage.
+
+476
+00:19:46,060 --> 00:19:47,699
+I don't know what's going on. I'm not going to charge.
+
+477
+00:19:48,189 --> 00:19:50,890
+And then I, I bought a nicer one, like uh
+
+478
+00:19:51,219 --> 00:19:55,010
+it's a fancy one with like USB ports and the port, uh the, the,
+
+479
+00:19:55,020 --> 00:19:56,839
+the round ports and it's got like an on off
+
+480
+00:19:56,849 --> 00:19:58,719
+switch and it shows you how much voltage it's drawing.
+
+481
+00:19:58,729 --> 00:19:59,290
+It's pretty neat.
+
+482
+00:19:59,930 --> 00:20:00,949
+And that one works fine.
+
+483
+00:20:01,369 --> 00:20:04,930
+Yeah, I get it because I don't want to, like, save $3 and fry my phone. But
+
+484
+00:20:05,079 --> 00:20:08,390
+let's be honest, unless you go to the Apple store and buy the Apple cables, then
+
+485
+00:20:08,520 --> 00:20:09,670
+you have no idea.
+
+486
+00:20:10,069 --> 00:20:14,709
+And in the Android ecosystem, like, where do you get provably good USB C cables?
+
+487
+00:20:14,979 --> 00:20:19,140
+Uh, I go to Amazon and by the Amazon basics and I have the
+
+488
+00:20:19,400 --> 00:20:19,780
+assumption,
+
+489
+00:20:20,160 --> 00:20:24,719
+I assume they've done some level of quality control on their cable.
+
+490
+00:20:24,890 --> 00:20:24,930
+That's
+
+491
+00:20:25,250 --> 00:20:25,300
+fair
+
+492
+00:20:25,819 --> 00:20:28,650
+-- and
+-- that's all. And again, it just goes back to having a brand to protect, right?
+
+493
+00:20:28,660 --> 00:20:31,130
+That's honestly as a consumer, that's about the only thing I can do.
+
+494
+00:20:31,300 --> 00:20:34,930
+This is a very similar problem to security
+
+495
+00:20:35,510 --> 00:20:36,530
+because
+
+496
+00:20:36,920 --> 00:20:38,739
+I don't know which cables are good.
+
+497
+00:20:38,750 --> 00:20:41,310
+Just like if I need a security product,
+
+498
+00:20:41,369 --> 00:20:44,260
+I have no way to know which security product is good.
+
+499
+00:20:44,270 --> 00:20:45,209
+And so
+
+500
+00:20:45,520 --> 00:20:47,969
+there might be some places I can rely on,
+
+501
+00:20:47,979 --> 00:20:51,739
+on advice because maybe they make good decisions or they have a brand,
+
+502
+00:20:51,750 --> 00:20:52,650
+they're looking to protect.
+
+503
+00:20:52,660 --> 00:20:53,089
+But I mean,
+
+504
+00:20:53,449 --> 00:20:55,089
+fundamentally at the end of the day,
+
+505
+00:20:55,160 --> 00:20:58,699
+like let's think about using open source libraries and github,
+
+506
+00:20:59,060 --> 00:21:02,300
+I have zero way to tell which one is the most secure.
+
+507
+00:21:02,310 --> 00:21:06,449
+Just like if I'm buying cables, I really don't know which is the best
+
+508
+00:21:06,660 --> 00:21:11,500
+and more to the point too, most software is so complex to objectively say,
+
+509
+00:21:12,209 --> 00:21:15,260
+well, like, it's like whenever somebody does ratings of software,
+
+510
+00:21:16,349 --> 00:21:18,410
+I'm just like, yeah, nine out of 10. What does that mean?
+
+511
+00:21:18,420 --> 00:21:20,260
+Like, I get for games you can kind of rate games,
+
+512
+00:21:20,270 --> 00:21:23,369
+like it has good gameplay or it sucks with gameplay or it's got beautiful graphics,
+
+513
+00:21:23,380 --> 00:21:24,180
+terrible graphics.
+
+514
+00:21:24,189 --> 00:21:25,229
+These are somewhat,
+
+515
+00:21:25,770 --> 00:21:27,010
+you know, they,
+
+516
+00:21:27,020 --> 00:21:29,829
+they're somewhat easy to understand the measurement and
+
+517
+00:21:29,839 --> 00:21:31,540
+to kind of validate the measurement but to,
+
+518
+00:21:31,550 --> 00:21:34,550
+like, look at a piece of software and say like, yeah, it's a nine out of 10 for a,
+
+519
+00:21:34,560 --> 00:21:35,869
+for an image library
+
+520
+00:21:37,449 --> 00:21:40,650
+-- and,
+-- and, and that's fair. And you think like power cables
+
+521
+00:21:40,900 --> 00:21:41,170
+and,
+
+522
+00:21:41,180 --> 00:21:44,010
+and power supplies would be very easy to
+
+523
+00:21:44,020 --> 00:21:47,079
+-- measure if somebody was
+-- technically they're supposed to be
+
+524
+00:21:47,469 --> 00:21:51,689
+tested and like, either ul, like underwriters laboratory listed or
+
+525
+00:21:53,459 --> 00:21:55,239
+most of them don't have that though.
+
+526
+00:21:55,369 --> 00:21:57,439
+Well, uh, two problems. No,
+
+527
+00:21:57,839 --> 00:21:59,319
+number one, they will have it,
+
+528
+00:21:59,329 --> 00:22:02,130
+but it will be self tested and certified by the manufacturer.
+
+529
+00:22:02,140 --> 00:22:03,469
+Not by a testing lab,
+
+530
+00:22:03,630 --> 00:22:03,910
+right?
+
+531
+00:22:03,920 --> 00:22:07,709
+Because they went to a, a self testing regime because it's a lot cheaper and faster.
+
+532
+00:22:07,949 --> 00:22:08,939
+And, yeah, number two is,
+
+533
+00:22:08,949 --> 00:22:13,000
+they just don't have any of those markings and it's just like buyer beware.
+
+534
+00:22:13,010 --> 00:22:13,680
+Good luck with that.
+
+535
+00:22:14,660 --> 00:22:20,160
+Yeah, I've, I had a bunch of power supplies for USB that had no markings and II,
+
+536
+00:22:20,260 --> 00:22:22,239
+I forget what happened.
+
+537
+00:22:22,250 --> 00:22:26,430
+One of them did something weird and I just, I've thrown them all away now
+
+538
+00:22:26,640 --> 00:22:31,770
+and I've given up and I purposely just buy things that I know I can trust because
+
+539
+00:22:32,140 --> 00:22:36,569
+my assumption is if it says UL on it, it's gone through some level of testing,
+
+540
+00:22:36,979 --> 00:22:38,979
+assuming they just didn't put the markings on.
+
+541
+00:22:39,150 --> 00:22:41,910
+I'm assuming it went through some level of testing.
+
+542
+00:22:43,229 --> 00:22:46,010
+But again, you're right. I, I have no way to truly prove it.
+
+543
+00:22:46,390 --> 00:22:46,790
+Right.
+
+544
+00:22:47,199 --> 00:22:47,510
+Yeah.
+
+545
+00:22:47,520 --> 00:22:49,880
+And see, this is where I think some of the, you know,
+
+546
+00:22:49,890 --> 00:22:52,310
+some of the people have been talking about things like
+
+547
+00:22:52,319 --> 00:22:56,160
+Blockchain for supply chain management where you can actually trace like
+
+548
+00:22:56,319 --> 00:22:59,339
+that fish from the fish farm to your plate or
+
+549
+00:22:59,469 --> 00:23:01,930
+that specific component from like
+
+550
+00:23:02,500 --> 00:23:06,280
+where it was made and what went into it to your end
+
+551
+00:23:06,459 --> 00:23:07,160
+thing.
+
+552
+00:23:07,489 --> 00:23:09,060
+And I think longer term that will definitely
+
+553
+00:23:09,069 --> 00:23:10,800
+happen for some of the more expensive stuff.
+
+554
+00:23:10,810 --> 00:23:12,680
+But yeah, for like a $1 cable. That's
+
+555
+00:23:13,119 --> 00:23:16,189
+-- right. Yeah, that's going to be tough.
+-- Right. Exactly.
+
+556
+00:23:17,010 --> 00:23:18,579
+Exactly. And, and
+
+557
+00:23:18,890 --> 00:23:23,530
+man, you think about what goes into even a $1 cable, I mean, there's wire in it,
+
+558
+00:23:23,540 --> 00:23:24,550
+there's connectors in it.
+
+559
+00:23:24,560 --> 00:23:25,989
+There's the plastic, there's
+
+560
+00:23:27,010 --> 00:23:27,239
+that guy
+
+561
+00:23:27,349 --> 00:23:28,349
+that made a toaster,
+
+562
+00:23:28,699 --> 00:23:29,880
+remember that guy that made a toaster,
+
+563
+00:23:30,329 --> 00:23:30,339
+a
+
+564
+00:23:30,560 --> 00:23:33,869
+toaster? He didn't make a, he, he barely made a wire.
+
+565
+00:23:34,280 --> 00:23:34,729
+That's what he
+
+566
+00:23:34,839 --> 00:23:34,949
+did.
+
+567
+00:23:35,650 --> 00:23:39,260
+Well, technically he made something that toasted bread once and then caught fire,
+
+568
+00:23:39,270 --> 00:23:40,459
+whatever
+
+569
+00:23:40,930 --> 00:23:41,680
+anyway.
+
+570
+00:23:41,790 --> 00:23:44,119
+-- But
+-- no, the point is it was basically impossible to build.
+
+571
+00:23:44,130 --> 00:23:44,819
+Right.
+
+572
+00:23:45,250 --> 00:23:49,750
+Right. But that doesn't see, at the same time, I think that's ridiculous.
+
+573
+00:23:49,760 --> 00:23:50,819
+Way to think about it. I mean,
+
+574
+00:23:51,479 --> 00:23:55,150
+we live in a society where people have different things. They do.
+
+575
+00:23:55,290 --> 00:23:57,069
+I don't grow my own food.
+
+576
+00:23:57,239 --> 00:23:57,790
+Right.
+
+577
+00:23:58,030 --> 00:23:58,719
+You don't grow.
+
+578
+00:23:59,020 --> 00:24:00,310
+-- But
+-- did you see the picture of the,
+
+579
+00:24:00,319 --> 00:24:02,829
+of the $4 toaster he bought and took apart and there was, like,
+
+580
+00:24:02,839 --> 00:24:04,319
+over 100 components in it.
+
+581
+00:24:04,819 --> 00:24:08,219
+I, right. Right. Because that's how
+
+582
+00:24:08,359 --> 00:24:10,030
+the modern society works.
+
+583
+00:24:10,719 --> 00:24:11,099
+Yeah.
+
+584
+00:24:13,479 --> 00:24:17,229
+So, I guess the moral of the story is where, um,
+
+585
+00:24:17,630 --> 00:24:21,359
+he shielded gloves, like, so wear winter gloves whenever you're typing passwords.
+
+586
+00:24:21,369 --> 00:24:23,979
+No, don't do that. That's ridiculous.
+
+587
+00:24:24,229 --> 00:24:28,290
+Look, here's what, here's what the moral of the story is. The moral of the story is.
+
+588
+00:24:28,300 --> 00:24:30,969
+We are surrounded by risk every day
+
+589
+00:24:31,189 --> 00:24:34,140
+and we have to make decisions about where we want to put,
+
+590
+00:24:34,150 --> 00:24:36,280
+invest our risk dollars and where not to
+
+591
+00:24:36,540 --> 00:24:39,420
+worrying about the heat signature on your keyboard.
+
+592
+00:24:39,760 --> 00:24:44,020
+If someone wants to attack you on that level, they're going to get you no matter what.
+
+593
+00:24:44,199 --> 00:24:46,619
+That's just one of the possible ways they can get in.
+
+594
+00:24:46,989 --> 00:24:47,500
+Right.
+
+595
+00:24:47,770 --> 00:24:50,660
+And so the reality is if that's the risk you're worried about,
+
+596
+00:24:50,670 --> 00:24:54,699
+you better be like some spy in a hostile foreign nation
+
+597
+00:24:55,400 --> 00:24:59,380
+because if you're not, you're probably wasting your resources.
+
+598
+00:25:00,109 --> 00:25:01,619
+This is where, like, two factor
+
+599
+00:25:01,750 --> 00:25:01,760
+a
+
+600
+00:25:01,910 --> 00:25:04,530
+solves this problem 100%.
+
+601
+00:25:04,810 --> 00:25:05,290
+Right.
+
+602
+00:25:05,780 --> 00:25:06,000
+And
+
+603
+00:25:06,359 --> 00:25:07,010
+not on two factor
+
+604
+00:25:07,229 --> 00:25:07,250
+off.
+
+605
+00:25:07,380 --> 00:25:10,300
+I was glancing through the user list in a slack,
+
+606
+00:25:10,500 --> 00:25:11,609
+uh, that we'd set up
+
+607
+00:25:11,910 --> 00:25:14,430
+and I noticed one of them had next to their name.
+
+608
+00:25:14,439 --> 00:25:17,829
+Two fa enabled and I was like, oh, Slack Sports two fa, I didn't even know that.
+
+609
+00:25:17,839 --> 00:25:19,569
+So I went and enabled it on my account. But
+
+610
+00:25:20,199 --> 00:25:24,239
+yeah, that just goes to show even me with my whole, oh, use two fa everybody used to fa,
+
+611
+00:25:24,250 --> 00:25:24,290
+I,
+
+612
+00:25:24,300 --> 00:25:27,099
+I still don't because honestly half the time I'm not
+
+613
+00:25:27,109 --> 00:25:29,780
+even aware it's supported in some of these newer services.
+
+614
+00:25:29,790 --> 00:25:32,339
+I, I had no idea I could do that either
+
+615
+00:25:32,550 --> 00:25:35,599
+and I blame Slack for not forcing us to use it.
+
+616
+00:25:36,270 --> 00:25:36,750
+I would agree.
+
+617
+00:25:37,160 --> 00:25:39,140
+-- I mean, for real, they
+-- appear to have that switch.
+
+618
+00:25:39,150 --> 00:25:41,260
+You can flip to like force two fa across the org.
+
+619
+00:25:42,050 --> 00:25:42,810
+Oh, nice,
+
+620
+00:25:43,319 --> 00:25:44,189
+nice, nice.
+
+621
+00:25:44,660 --> 00:25:45,430
+But um,
+
+622
+00:25:46,119 --> 00:25:46,349
+yeah,
+
+623
+00:25:46,520 --> 00:25:51,130
+even you and I are guilty of not taking simple steps that are extremely easy and
+
+624
+00:25:51,439 --> 00:25:52,319
+extremely.
+
+625
+00:25:52,989 --> 00:25:55,979
+Ok. No, we don't want to say guilty because
+
+626
+00:25:56,430 --> 00:26:00,239
+now that I know a Slack allows two factor off, I'm going to go enable it.
+
+627
+00:26:00,250 --> 00:26:01,739
+Like, as soon as we stop talking,
+
+628
+00:26:02,369 --> 00:26:05,589
+I didn't know about this before. So you can't say I'm guilty. Right.
+
+629
+00:26:05,599 --> 00:26:06,589
+Then that's, I mean,
+
+630
+00:26:06,790 --> 00:26:07,939
+in all seriousness this,
+
+631
+00:26:09,939 --> 00:26:11,890
+we should probably we could stand to do.
+
+632
+00:26:12,199 --> 00:26:16,359
+I would say part of it is we have the expectation that there isn't always two fa like,
+
+633
+00:26:16,369 --> 00:26:18,199
+and that's the fault of all these companies
+
+634
+00:26:18,209 --> 00:26:20,520
+because they should have supported this sooner.
+
+635
+00:26:20,989 --> 00:26:21,040
+No,
+
+636
+00:26:21,339 --> 00:26:24,699
+no, it's not about that. It's about the words we use right?
+
+637
+00:26:24,709 --> 00:26:26,760
+When you tell someone they're guilty of not doing it,
+
+638
+00:26:26,770 --> 00:26:28,510
+you're now placing the blame on them
+
+639
+00:26:28,699 --> 00:26:34,150
+or, or like, for example, I, I had someone I know the other day said if you can use git,
+
+640
+00:26:34,160 --> 00:26:35,540
+you can use GP G
+
+641
+00:26:36,189 --> 00:26:36,859
+and I
+
+642
+00:26:37,010 --> 00:26:37,420
+understand,
+
+643
+00:26:37,859 --> 00:26:38,229
+I know.
+
+644
+00:26:38,239 --> 00:26:41,199
+Well, that's another story but I understand the intention of saying that,
+
+645
+00:26:41,209 --> 00:26:44,280
+that it is complicated and you're a smart person if you're using it.
+
+646
+00:26:44,290 --> 00:26:46,359
+So you should be smart enough to set up GP G
+
+647
+00:26:46,859 --> 00:26:47,609
+and he's not wrong.
+
+648
+00:26:47,619 --> 00:26:50,469
+But what he actually said was if you don't know how GP G works, you're dumb.
+
+649
+00:26:50,680 --> 00:26:51,130
+Right?
+
+650
+00:26:51,140 --> 00:26:55,170
+And it's, I think this is something I'm becoming really sensitive to insecurity is
+
+651
+00:26:55,550 --> 00:26:58,969
+we're really good at saying things that, that don't have ill intent
+
+652
+00:26:59,329 --> 00:27:03,489
+but to a, a number of humans who hear our words,
+
+653
+00:27:03,760 --> 00:27:06,599
+they realize we're effectively
+
+654
+00:27:06,739 --> 00:27:07,770
+demeaning them,
+
+655
+00:27:08,130 --> 00:27:12,209
+not on purpose, but we are. And that's a huge problem for this industry.
+
+656
+00:27:12,219 --> 00:27:14,780
+But we won't, we don't need to get into that today because
+
+657
+00:27:14,959 --> 00:27:15,150
+that's
+
+658
+00:27:15,609 --> 00:27:15,619
+a,
+
+659
+00:27:15,810 --> 00:27:16,030
+that's
+
+660
+00:27:16,130 --> 00:27:16,560
+true because
+
+661
+00:27:17,099 --> 00:27:17,930
+there's similar, you know,
+
+662
+00:27:17,939 --> 00:27:21,800
+the similar thing with like car mechanics talking down to people or whatever.
+
+663
+00:27:21,810 --> 00:27:22,000
+Right.
+
+664
+00:27:22,010 --> 00:27:25,319
+And when you find a car mechanic that doesn't talk down to you, you tend to keep them,
+
+665
+00:27:26,260 --> 00:27:28,959
+-- you know. Yeah,
+-- exactly. That's exactly right.
+
+666
+00:27:28,969 --> 00:27:32,589
+And it's the same deal with security and I just, I keep thinking about there,
+
+667
+00:27:33,430 --> 00:27:36,729
+there's all these parallels and all these analogies and
+
+668
+00:27:37,300 --> 00:27:42,640
+this, these problems exist in almost every other industry as well.
+
+669
+00:27:43,130 --> 00:27:45,170
+And so I, I often wonder,
+
+670
+00:27:45,560 --> 00:27:49,430
+will we, will it ever get better? And I have a feeling the answer is no,
+
+671
+00:27:49,790 --> 00:27:52,680
+I, I'm more hopeful because II I am seeing across the industry,
+
+672
+00:27:52,689 --> 00:27:53,969
+I think people are beginning to,
+
+673
+00:27:54,079 --> 00:27:57,310
+to become more aware of the fact that security is not just a technical problem,
+
+674
+00:27:57,319 --> 00:27:59,530
+it's a people problem, it's a social problem.
+
+675
+00:27:59,959 --> 00:28:01,560
+Yeah. There, there is some of that.
+
+676
+00:28:01,760 --> 00:28:04,969
+Well, there's that famous quote, you know, you can't solve social problems
+
+677
+00:28:05,089 --> 00:28:07,719
+very well with technology and, and I think it goes the other way,
+
+678
+00:28:07,729 --> 00:28:11,000
+speaking down to these people, yeah, that definitely will not help.
+
+679
+00:28:11,010 --> 00:28:12,810
+And I think there's an awareness that we,
+
+680
+00:28:12,819 --> 00:28:15,300
+we need to work with these people and not just bully them
+
+681
+00:28:15,739 --> 00:28:17,699
+and, and part of it is I love the cloud for that, right?
+
+682
+00:28:17,709 --> 00:28:20,800
+Because you, you can't bully users anymore because they're like, fine.
+
+683
+00:28:20,810 --> 00:28:22,920
+I'm going over to this service. That doesn't sound right.
+
+684
+00:28:23,560 --> 00:28:25,479
+Exactly. Exactly.
+
+685
+00:28:27,030 --> 00:28:30,369
+Indeed. And, and that's probably a topic for another day.
+
+686
+00:28:30,380 --> 00:28:33,569
+So I think, I think we should call it, man. It's, it's a good end.
+
+687
+00:28:34,060 --> 00:28:37,819
+So awesome. Thank you, Kurt. Thank you everyone for listening. You can go to open
+
+688
+00:28:37,949 --> 00:28:41,150
+source security podcast.com. Hit up the show notes, use our pounds
+
+689
+00:28:41,469 --> 00:28:44,329
+as podcast hashtag to hit us on social media.
+
+690
+00:28:44,339 --> 00:28:47,569
+And yeah, Kurt, have a fantastic rest of your day.
+
+691
+00:28:48,079 --> 00:28:49,209
+You too. Thanks.

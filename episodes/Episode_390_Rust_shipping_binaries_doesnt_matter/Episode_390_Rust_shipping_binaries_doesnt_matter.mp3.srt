@@ -1,0 +1,3842 @@
+0
+00:00:05,349 --> 00:00:08,449
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,460 --> 00:00:10,930
+Kurt Siefried and my partner in talking about printers
+
+2
+00:00:10,939 --> 00:00:12,850
+and the crimes that they commit upon humanity.
+
+3
+00:00:12,859 --> 00:00:16,729
+-- Josh Pressers.
+-- It is true. Kurt and I were just whining about our printers.
+
+4
+00:00:16,909 --> 00:00:20,129
+Anyone who's ever had to like feed and care for a printer,
+
+5
+00:00:20,139 --> 00:00:22,325
+-- we know exactly what we mean
+-- and worse like you
+
+6
+00:00:22,334 --> 00:00:24,274
+and I have both found a printer that works reasonably,
+
+7
+00:00:24,284 --> 00:00:25,194
+not terribly,
+
+8
+00:00:25,454 --> 00:00:26,004
+but
+
+9
+00:00:26,165 --> 00:00:29,045
+one day we'll have to replace it. And I, I fear that day enormously.
+
+10
+00:00:29,055 --> 00:00:33,845
+I know, man, it's like in my top 10 anxiety inducing problems that could happen.
+
+11
+00:00:33,854 --> 00:00:36,325
+-- Like
+-- I spent, I think three months shopping, like,
+
+12
+00:00:36,334 --> 00:00:38,805
+researching printers before I bought this one
+
+13
+00:00:39,215 --> 00:00:40,845
+because like, topics like,
+
+14
+00:00:40,854 --> 00:00:42,625
+do I have to install dumb software that'll like
+
+15
+00:00:42,634 --> 00:00:44,715
+root my system so I can print a document
+
+16
+00:00:44,985 --> 00:00:45,104
+that
+
+17
+00:00:45,325 --> 00:00:46,005
+can I,
+
+18
+00:00:46,215 --> 00:00:48,715
+you know, the toner crutches? Can I put the chip out into a new one?
+
+19
+00:00:48,724 --> 00:00:49,744
+So I don't have to pay 100
+
+20
+00:00:50,169 --> 00:00:52,069
+and change for a new toner cartridge.
+
+21
+00:00:52,720 --> 00:00:52,729
+Uh
+
+22
+00:00:52,970 --> 00:00:55,810
+Anyways, which is kind of actually the theme of today's episode.
+
+23
+00:00:55,819 --> 00:00:59,270
+-- It's like, uh, the C programming language apparently has pulled a printer did
+-- they?
+
+24
+00:00:59,279 --> 00:01:01,270
+This is just C like, ok,
+
+25
+00:01:01,680 --> 00:01:02,299
+so
+
+26
+00:01:03,240 --> 00:01:07,489
+-- Kurt found a document. Well, someone I think sent it to us on Mastodon,
+-- right?
+
+27
+00:01:07,519 --> 00:01:08,360
+I saw it on Mastodon
+
+28
+00:01:08,500 --> 00:01:09,349
+in my feed. Ok.
+
+29
+00:01:09,599 --> 00:01:10,230
+Mastodon is the new, uh
+
+30
+00:01:10,370 --> 00:01:12,900
+-- I was going to say Twitter, the new X.
+-- Oh, my goodness.
+
+31
+00:01:12,910 --> 00:01:15,540
+I will never call it that like my brain just won't let me.
+
+32
+00:01:15,919 --> 00:01:16,660
+So the,
+
+33
+00:01:16,669 --> 00:01:21,610
+the title of this paper is C and C++ prioritize performance over Correctness.
+
+34
+00:01:22,440 --> 00:01:23,440
+-- Lets do most
+-- devs,
+
+35
+00:01:23,629 --> 00:01:28,580
+I mean, as ac programmer, I read that. I was like, well, yes, yes, they do. And like, I,
+
+36
+00:01:28,959 --> 00:01:33,139
+-- this is normal
+-- and people forget we come from an age where computers used to be slow.
+
+37
+00:01:33,480 --> 00:01:35,169
+Like 20 years ago, computer
+
+38
+00:01:35,290 --> 00:01:37,309
+were slow and performance matters.
+
+39
+00:01:37,319 --> 00:01:40,819
+-- They're still slow at certain things, but they're
+-- OK.
+
+40
+00:01:40,830 --> 00:01:43,970
+But like I was gripping a data set that it took like seven minutes to grip,
+
+41
+00:01:43,980 --> 00:01:46,110
+but it was a data set that was so large 20 years ago.
+
+42
+00:01:46,120 --> 00:01:48,089
+You couldn't have had it.
+
+43
+00:01:48,370 --> 00:01:51,080
+-- You didn't own enough disks. Like
+-- literally,
+
+44
+00:01:51,470 --> 00:01:53,419
+I was working with a 2.6 gigabyte
+
+45
+00:01:53,750 --> 00:01:54,580
+JSON file just
+
+46
+00:01:54,989 --> 00:01:57,849
+casually throwing it into emacs and hitting. Yes when it warns me that.
+
+47
+00:01:57,860 --> 00:01:58,470
+Oh, it's a big,
+
+48
+00:01:58,800 --> 00:02:00,000
+it's more 10 megabytes. Oh,
+
+49
+00:02:00,589 --> 00:02:01,120
+and I'm like, you
+
+50
+00:02:01,260 --> 00:02:01,620
+like
+
+51
+00:02:01,980 --> 00:02:04,970
+64 gigs of ra M 24 gigs of video memory.
+
+52
+00:02:05,110 --> 00:02:07,930
+Uh I think I have eight cores or maybe
+
+53
+00:02:08,339 --> 00:02:12,550
+12. I don't know, don't care. And a two terabyte Western digital black SS SD which is
+
+54
+00:02:12,899 --> 00:02:15,330
+rated for, what is it? 1.1 million
+
+55
+00:02:15,860 --> 00:02:20,050
+write iops per 2nd and 1.2 million read. Iops.
+
+56
+00:02:20,479 --> 00:02:20,929
+I mean
+
+57
+00:02:21,100 --> 00:02:21,929
+like OK.
+
+58
+00:02:22,339 --> 00:02:27,429
+-- OK.
+-- Build me a like build me a disc cluster 10 years ago. That would do a million iops.
+
+59
+00:02:27,779 --> 00:02:31,610
+-- And the answer is sure if you give me like a billion dollars,
+-- 10 years,
+
+60
+00:02:31,619 --> 00:02:33,059
+probably 20 years.
+
+61
+00:02:33,070 --> 00:02:34,800
+-- No.
+-- OK. 20 years. No,
+
+62
+00:02:35,130 --> 00:02:37,899
+no, I remember working with some of those Giant Disco.
+
+63
+00:02:38,350 --> 00:02:39,389
+It was, man,
+
+64
+00:02:39,750 --> 00:02:39,759
+I,
+
+65
+00:02:41,580 --> 00:02:41,830
+I don't,
+
+66
+00:02:42,009 --> 00:02:44,449
+I don't want to dwell on old man, hard work stories today.
+
+67
+00:02:44,460 --> 00:02:48,710
+I want to, there's a bigger aspect of this see thing and I want to,
+
+68
+00:02:48,770 --> 00:02:52,669
+there is a person I've come to know and respect named Nisha.
+
+69
+00:02:52,679 --> 00:02:54,380
+I will link to Nisha's
+
+70
+00:02:54,929 --> 00:02:57,630
+toot. I don't know what to call it anymore because I think they renamed it
+
+71
+00:02:57,839 --> 00:02:58,350
+where
+
+72
+00:02:58,679 --> 00:03:01,800
+-- you can't rename it. It's decentralized. We decide what it means.
+-- OK?
+
+73
+00:03:01,809 --> 00:03:03,529
+I guess I don't care anyway.
+
+74
+00:03:03,979 --> 00:03:04,380
+And
+
+75
+00:03:05,020 --> 00:03:07,800
+they, they used the term I really liked,
+
+76
+00:03:07,809 --> 00:03:11,320
+which was frustration reduction in the context of security
+
+77
+00:03:11,330 --> 00:03:14,000
+because it's obvious that we can't scare people straight like
+
+78
+00:03:14,300 --> 00:03:16,020
+we've tried, it doesn't work.
+
+79
+00:03:16,210 --> 00:03:19,039
+And I think this C document
+
+80
+00:03:19,389 --> 00:03:22,119
+kind of talks about that a lot and it's
+
+81
+00:03:22,130 --> 00:03:25,520
+partially because C is old and just partially because
+
+82
+00:03:25,949 --> 00:03:29,449
+it's kind of machine language. I, so when I, OK,
+
+83
+00:03:29,940 --> 00:03:32,330
+when I program in C, I don't think about C,
+
+84
+00:03:32,339 --> 00:03:34,139
+I think about what it's turning into the
+
+85
+00:03:34,149 --> 00:03:36,580
+machine code underneath essentially because I'm so old.
+
+86
+00:03:36,589 --> 00:03:39,179
+Like I had to actually write machine code at one time because
+
+87
+00:03:39,190 --> 00:03:42,250
+it's the only way to program microprocessors back in the day.
+
+88
+00:03:42,259 --> 00:03:43,490
+Like you couldn't write C
+
+89
+00:03:44,039 --> 00:03:47,369
+there's crypto libraries like open SSL had stuff written in assembler because,
+
+90
+00:03:47,419 --> 00:03:48,809
+and they still do, they still do.
+
+91
+00:03:48,820 --> 00:03:51,169
+There's still things that are written in assembly like
+
+92
+00:03:51,179 --> 00:03:53,250
+in the Linux kernel to go faster and whatever.
+
+93
+00:03:53,539 --> 00:03:54,850
+Now the point is.
+
+94
+00:03:55,279 --> 00:04:00,139
+So when you're like C and C++ and assembly, like they just do what they're told,
+
+95
+00:04:00,149 --> 00:04:00,529
+right?
+
+96
+00:04:00,539 --> 00:04:02,339
+There's no assumptions that
+
+97
+00:04:02,770 --> 00:04:06,660
+a variable will be empty before you use it. There's no assumptions.
+
+98
+00:04:06,669 --> 00:04:09,289
+-- There's no safety nets.
+-- No, absolutely not. Like
+
+99
+00:04:09,589 --> 00:04:09,610
+the
+
+100
+00:04:09,750 --> 00:04:12,550
+-- compiler maybe tries to
+-- help you with, it's better.
+
+101
+00:04:12,559 --> 00:04:15,820
+Now a lot of compilers check a lot of things like, for example,
+
+102
+00:04:15,830 --> 00:04:18,570
+let's say you have an uninitialized variable, that's the one I'm gonna pick on.
+
+103
+00:04:18,579 --> 00:04:20,619
+It's the first one in this paper.
+
+104
+00:04:20,630 --> 00:04:25,820
+It's the one all of us know and love from C programming day. So like in Python, right,
+
+105
+00:04:26,119 --> 00:04:28,859
+if I create, let's say a string,
+
+106
+00:04:30,049 --> 00:04:33,679
+can you even make an empty, like an uninitialized string? In Python?
+
+107
+00:04:33,690 --> 00:04:33,980
+I don't think you can
+
+108
+00:04:34,089 --> 00:04:34,119
+make
+
+109
+00:04:34,709 --> 00:04:36,440
+um when you say uninitialized,
+
+110
+00:04:36,899 --> 00:04:39,250
+you can make a variable and it can be blank like
+
+111
+00:04:39,260 --> 00:04:42,160
+you can initialize an empty list like fu equals square bracket,
+
+112
+00:04:42,170 --> 00:04:43,230
+-- square bracket,
+-- right?
+
+113
+00:04:43,329 --> 00:04:46,480
+-- And it's just an empty list, right?
+-- Or an empty string or an empty D
+
+114
+00:04:46,760 --> 00:04:50,989
+-- we
+-- use an empty list. A list is good because in Python, I can say this is a list, right?
+
+115
+00:04:51,423 --> 00:04:53,803
+The variable is an empty list. Now, in C
+
+116
+00:04:53,953 --> 00:04:58,692
+if I say I need an array, we'll use the word array because they don't have lists,
+
+117
+00:04:58,703 --> 00:04:59,643
+they have arrays.
+
+118
+00:04:59,653 --> 00:05:03,963
+I need an array that is 10 things long, right? It says great.
+
+119
+00:05:03,972 --> 00:05:07,233
+Here's a block of memory that can hold 10 of those things
+
+120
+00:05:07,263 --> 00:05:09,673
+-- and
+-- you better tell them how big that thing is correctly.
+
+121
+00:05:10,023 --> 00:05:11,153
+Yeah, that too
+
+122
+00:05:13,855 --> 00:05:15,246
+-- dictionaries in it.
+-- Right.
+
+123
+00:05:15,466 --> 00:05:19,515
+Yes, I have a list that contains strings, integers, dictionaries
+
+124
+00:05:19,665 --> 00:05:20,555
+and everything else.
+
+125
+00:05:20,566 --> 00:05:23,696
+-- I can
+-- think of binary objects, another computer and
+
+126
+00:05:23,756 --> 00:05:23,876
+yeah,
+
+127
+00:05:23,885 --> 00:05:25,376
+Python doesn't care at all.
+
+128
+00:05:25,385 --> 00:05:28,496
+-- Right. I love that, you know,
+-- a running copy of Minecraft.
+
+129
+00:05:28,675 --> 00:05:32,376
+It's really funny because a lot of go developers especially,
+
+130
+00:05:32,385 --> 00:05:34,055
+they detest that about Python.
+
+131
+00:05:34,540 --> 00:05:35,679
+It's like my favorite thing,
+
+132
+00:05:35,690 --> 00:05:38,679
+the fact that I can literally put like any garbage in it and it works.
+
+133
+00:05:38,690 --> 00:05:40,160
+My favorite thing is that
+
+134
+00:05:40,429 --> 00:05:41,510
+the way Python handles
+
+135
+00:05:41,799 --> 00:05:42,489
+Json is you take the
+
+136
+00:05:42,799 --> 00:05:45,410
+JSON and just convert it into a Python variables.
+
+137
+00:05:46,369 --> 00:05:46,880
+And it's like,
+
+138
+00:05:46,980 --> 00:05:49,839
+and then you walk the list of lists and dictionaries and
+
+139
+00:05:49,959 --> 00:05:52,880
+-- whatever the hell, whatever it is. Yeah.
+-- Who knows what, who knows what it is.
+
+140
+00:05:52,890 --> 00:05:53,480
+It can be.
+
+141
+00:05:53,579 --> 00:05:57,269
+I have some hilarious code where I had to do that one time and I'm like 20
+
+142
+00:05:57,279 --> 00:06:00,279
+layers deep and I it's like I'm not and I have a comment at one point.
+
+143
+00:06:00,290 --> 00:06:03,839
+It's like I'm not even sorry. It's just, it's so hard to follow anyway.
+
+144
+00:06:04,290 --> 00:06:05,950
+So now in CN C++,
+
+145
+00:06:06,609 --> 00:06:09,890
+if I tell the compiler, like give me an array,
+
+146
+00:06:10,320 --> 00:06:12,989
+it just gives me an array and whatever happened to have been
+
+147
+00:06:13,000 --> 00:06:15,170
+in memory at that time is what is in the array.
+
+148
+00:06:15,179 --> 00:06:19,790
+So it's up to me to clear the memory or fill the memory with actual data
+
+149
+00:06:19,970 --> 00:06:23,230
+or know that it is full of uninitialized data, right?
+
+150
+00:06:23,399 --> 00:06:27,130
+In modern compilers, if I do that, the compiler will at least say, hey,
+
+151
+00:06:27,140 --> 00:06:31,149
+you're using an uninitialized variable, like you declared this variable,
+
+152
+00:06:31,160 --> 00:06:32,899
+but nothing has been written to it.
+
+153
+00:06:32,910 --> 00:06:34,910
+And now you're reading from it, something is wrong.
+
+154
+00:06:35,179 --> 00:06:37,380
+But back in the day, none of that existed,
+
+155
+00:06:37,570 --> 00:06:39,910
+right? Like the compiler just did what you told it to do.
+
+156
+00:06:39,920 --> 00:06:41,600
+-- And that was that like
+-- I'm trying to see,
+
+157
+00:06:41,609 --> 00:06:44,600
+I know windows now does zero initialized memory.
+
+158
+00:06:44,609 --> 00:06:44,920
+But
+
+159
+00:06:45,149 --> 00:06:46,929
+I mean, it didn't always do that obviously
+
+160
+00:06:47,209 --> 00:06:49,359
+does for some, it doesn't always. And the problem.
+
+161
+00:06:49,420 --> 00:06:52,519
+So the reason we don't do that by default, usually I know you can,
+
+162
+00:06:52,529 --> 00:06:53,670
+I believe you can tell the compiler
+
+163
+00:06:53,875 --> 00:06:55,785
+to do that now by default, the modern ones.
+
+164
+00:06:55,795 --> 00:07:00,424
+But the reason you didn't do that is computers were too slow.
+
+165
+00:07:00,475 --> 00:07:04,304
+And so you couldn't trust that they would, it would allocate
+
+166
+00:07:04,475 --> 00:07:09,325
+the memory and then zero it fast enough for whatever it is you were trying to do
+
+167
+00:07:09,434 --> 00:07:10,785
+which to us now
+
+168
+00:07:11,015 --> 00:07:12,225
+sounds absurd.
+
+169
+00:07:12,670 --> 00:07:13,179
+But like
+
+170
+00:07:13,350 --> 00:07:16,420
+when you're talking about a machine running at Killer Hertz,
+
+171
+00:07:16,730 --> 00:07:17,899
+that is a big deal.
+
+172
+00:07:18,059 --> 00:07:19,279
+Well, the latency on that. Yeah.
+
+173
+00:07:19,660 --> 00:07:24,299
+And memory was slow and disc was slow. Everything was terrible.
+
+174
+00:07:24,309 --> 00:07:28,070
+I mean, the fact that anything worked at all is an absolute miracle. Yeah,
+
+175
+00:07:28,519 --> 00:07:31,140
+it was, it was bad. But anyway, so the point is right.
+
+176
+00:07:31,410 --> 00:07:35,869
+So this is where if we put on our security hats and we think about
+
+177
+00:07:36,109 --> 00:07:39,049
+the whole security versus usability argument, you know,
+
+178
+00:07:39,059 --> 00:07:41,910
+where we're frustration reduction as, as we'll call it.
+
+179
+00:07:41,920 --> 00:07:43,100
+This is where
+
+180
+00:07:43,209 --> 00:07:45,910
+as security people, we love to say
+
+181
+00:07:46,040 --> 00:07:49,579
+that you should do this thing because it's more secure,
+
+182
+00:07:49,769 --> 00:07:52,779
+-- it's more correct and better
+-- and it might be more correct.
+
+183
+00:07:52,790 --> 00:07:55,859
+I mean, technically correct is the best kind of correct, right? And
+
+184
+00:07:56,209 --> 00:07:59,089
+the reality is when you're working with users
+
+185
+00:07:59,100 --> 00:08:02,359
+and developers and people who aren't security nerds,
+
+186
+00:08:02,760 --> 00:08:04,489
+they literally don't care.
+
+187
+00:08:04,630 --> 00:08:09,369
+Their job is to add the feature and make it work, not make it secure.
+
+188
+00:08:09,380 --> 00:08:10,730
+Well, here's the thing I keep coming back to
+
+189
+00:08:11,000 --> 00:08:13,420
+even if you have a giant glaring security flaw,
+
+190
+00:08:13,829 --> 00:08:16,100
+it may not get exploited. Uh For sure
+
+191
+00:08:16,279 --> 00:08:20,010
+I have on multiple occasions accidentally left my front door unlocked
+
+192
+00:08:20,160 --> 00:08:22,480
+and come home and it's ok and I know nobody came
+
+193
+00:08:22,489 --> 00:08:24,850
+in because I have a doorbell camera and all that stuff.
+
+194
+00:08:24,929 --> 00:08:25,980
+But fundamentally
+
+195
+00:08:26,459 --> 00:08:29,339
+user interaction with the system
+
+196
+00:08:29,670 --> 00:08:33,739
+on security may or may not happen but on performance and stability
+
+197
+00:08:34,119 --> 00:08:35,700
+and features that they want
+
+198
+00:08:35,880 --> 00:08:37,260
+absolutely will happen.
+
+199
+00:08:37,500 --> 00:08:38,308
+Yeah, absolutely.
+
+200
+00:08:38,320 --> 00:08:41,969
+If the system is slow, that will hit the user guaranteed every time.
+
+201
+00:08:41,979 --> 00:08:45,599
+And not only that, how many security features get in the way of users.
+
+202
+00:08:45,609 --> 00:08:49,219
+I mean, I'm gonna pick on Se Lennox as our favorite whipping boy here, but like
+
+203
+00:08:49,500 --> 00:08:53,440
+Se Linux gets in the way a lot and it's really hard to fix.
+
+204
+00:08:53,450 --> 00:08:56,640
+So the solution for virtually everyone is turn it off.
+
+205
+00:08:56,950 --> 00:09:00,799
+I was about to say, is it enabled or disabled in my VM? Uh It's not even there.
+
+206
+00:09:00,900 --> 00:09:03,299
+If you're not running a red hat system,
+
+207
+00:09:03,309 --> 00:09:07,669
+-- you probably don't have the
+-- cli I ran the command Gettin Force and
+
+208
+00:09:07,679 --> 00:09:10,679
+it said command Getin Force not found but can be installed with.
+
+209
+00:09:10,690 --> 00:09:11,460
+There you go.
+
+210
+00:09:11,880 --> 00:09:12,630
+Does this thing even happen?
+
+211
+00:09:12,815 --> 00:09:13,205
+Se Linux?
+
+212
+00:09:13,606 --> 00:09:16,455
+What, what, what VM, what are you running for your operating system?
+
+213
+00:09:16,745 --> 00:09:17,096
+It's
+
+214
+00:09:17,445 --> 00:09:20,346
+ubuntu, whatever came from the Microsoft store, Ubuntu, LTs. Ubuntu
+
+215
+00:09:20,796 --> 00:09:24,145
+likes App Armor like you can, I believe you can run Sc Linux in
+
+216
+00:09:24,286 --> 00:09:26,315
+Ubuntu, but App Armor is definitely their side
+
+217
+00:09:27,306 --> 00:09:32,166
+and App Armor has a whole other set of weird problems that I'm not even going to touch.
+
+218
+00:09:32,176 --> 00:09:32,575
+But
+
+219
+00:09:32,736 --> 00:09:36,312
+and I mean, App Armor is a great example of App Armor. Tried to be
+
+220
+00:09:36,581 --> 00:09:38,642
+-- App
+-- Armor module is not loaded, not
+
+221
+00:09:38,651 --> 00:09:39,132
+loaded.
+
+222
+00:09:39,221 --> 00:09:41,942
+They tried to be slightly more user friendly than Se Linux.
+
+223
+00:09:42,812 --> 00:09:45,591
+-- That was Crispin Cohen's stuff, right? Originally,
+-- Crispin did that
+
+224
+00:09:45,721 --> 00:09:48,872
+and and they, it's funny because the Se Linux people, like, oh, well,
+
+225
+00:09:48,882 --> 00:09:51,562
+they don't do it this way and it's less secure and, like,
+
+226
+00:09:51,572 --> 00:09:53,581
+-- you're
+-- not wrong and everybody's like, don't care.
+
+227
+00:09:53,591 --> 00:09:57,231
+-- I can actually configure up armor
+-- but they can't anyway because it's still too hard.
+
+228
+00:09:57,802 --> 00:09:58,911
+So no one leaves it on
+
+229
+00:09:59,690 --> 00:10:02,080
+and it, it's kind of one of those instances. Right.
+
+230
+00:10:02,090 --> 00:10:05,799
+This is, this is again where we come back to, like, usability versus security
+
+231
+00:10:05,950 --> 00:10:09,799
+is if you make something secure and I'll put secure in air quotes,
+
+232
+00:10:09,809 --> 00:10:10,950
+but it's really hard to use.
+
+233
+00:10:10,960 --> 00:10:12,919
+People get annoyed and frustrated and they just
+
+234
+00:10:12,929 --> 00:10:14,460
+turn it off because they can't be bothered.
+
+235
+00:10:14,469 --> 00:10:16,880
+You're also making a major fallacy that assumes that
+
+236
+00:10:16,890 --> 00:10:18,380
+what you're doing will make it more secure.
+
+237
+00:10:19,049 --> 00:10:22,080
+And I would actually say I would not make that assumption because I've seen
+
+238
+00:10:22,090 --> 00:10:25,309
+people do things and they make that argument of this will be more secure,
+
+239
+00:10:25,320 --> 00:10:26,119
+a little less usable.
+
+240
+00:10:26,229 --> 00:10:29,320
+We can make that trade off. And I'm like, this actually doesn't make it more secure.
+
+241
+00:10:29,450 --> 00:10:31,770
+It just makes it more unusable. That does happen.
+
+242
+00:10:31,799 --> 00:10:35,219
+And a great example of this is session, time notes, session,
+
+243
+00:10:35,229 --> 00:10:39,729
+time outs don't matter anymore because what's going to happen is like L TT
+
+244
+00:10:39,739 --> 00:10:42,929
+found out they opened up a PDF and it hijacked their live session,
+
+245
+00:10:42,940 --> 00:10:44,260
+session, time notes
+
+246
+00:10:44,369 --> 00:10:48,090
+no longer matter what you do need is step up authentication. So
+
+247
+00:10:48,390 --> 00:10:52,770
+Kurt wants to change his password. Ok. Put in your key Kurt wants to delete the organ.
+
+248
+00:10:53,469 --> 00:10:58,510
+-- Ok. Put in your key and answer a physical snail mail with a pin code. Right.
+-- Exactly. I
+
+249
+00:10:58,900 --> 00:11:00,349
+mean, that, that's exactly right.
+
+250
+00:11:00,359 --> 00:11:06,539
+But again, so this is where I also like to pick on like voodoo security
+
+251
+00:11:06,789 --> 00:11:10,719
+where there's a nontrivial amount of what we call security,
+
+252
+00:11:10,729 --> 00:11:13,679
+best practices that aren't actually best practices.
+
+253
+00:11:13,690 --> 00:11:16,580
+There, there are things a smart person thought was a good idea
+
+254
+00:11:16,780 --> 00:11:19,219
+or they might have been good practices 20 years ago.
+
+255
+00:11:20,359 --> 00:11:21,900
+-- I don't think they were then either, but
+-- a
+
+256
+00:11:21,909 --> 00:11:22,039
+lot
+
+257
+00:11:22,210 --> 00:11:23,390
+of them probably weren't. But
+
+258
+00:11:23,510 --> 00:11:27,080
+like, that's part of the problem too is they might have been valid 20 years ago
+
+259
+00:11:27,599 --> 00:11:29,469
+and they're not anymore. And there's
+
+260
+00:11:29,640 --> 00:11:31,590
+like, in the medical world, there's so many things like that,
+
+261
+00:11:31,599 --> 00:11:34,390
+like the way they do c sections cut vertically or horizontally
+
+262
+00:11:34,559 --> 00:11:35,369
+and vertically,
+
+263
+00:11:35,489 --> 00:11:38,969
+like it's much better. I forget which one is the correct way. But I don't know.
+
+264
+00:11:39,469 --> 00:11:39,820
+But I
+
+265
+00:11:40,010 --> 00:11:42,710
+heard that before there was like, this commonly accepted ulcer, like the whole,
+
+266
+00:11:42,719 --> 00:11:43,109
+you know,
+
+267
+00:11:43,210 --> 00:11:45,789
+oh, you have like an upset tummy. It's stress, blah, blah, blah.
+
+268
+00:11:45,799 --> 00:11:50,219
+And this one guy is like, I think it might be bacteria. And so the ulcer guy. Yeah.
+
+269
+00:11:50,500 --> 00:11:51,309
+And he, like,
+
+270
+00:11:51,650 --> 00:11:53,909
+got almost drummed out and they got a Nobel Prize.
+
+271
+00:11:54,099 --> 00:11:54,549
+OK.
+
+272
+00:11:54,880 --> 00:11:59,109
+I want to explain this because anyone under the age of old
+
+273
+00:11:59,440 --> 00:12:01,260
+has no idea what, what we're even talking about.
+
+274
+00:12:01,270 --> 00:12:05,190
+So, when Kurt and I were young there was a medical condition called an ulcer,
+
+275
+00:12:05,200 --> 00:12:06,510
+which you got in your stomach.
+
+276
+00:12:06,520 --> 00:12:09,070
+-- And it was very painful and it was very
+-- disruptive.
+
+277
+00:12:09,090 --> 00:12:10,429
+It's an open wound in your stomach,
+
+278
+00:12:10,559 --> 00:12:11,489
+basically. Yes.
+
+279
+00:12:12,030 --> 00:12:15,429
+And they, they could literally like kill people if they got bad. Right.
+
+280
+00:12:16,030 --> 00:12:18,150
+-- And the assumption
+-- was that someone firsthand that
+
+281
+00:12:18,159 --> 00:12:20,479
+had their stomach removed due to untreated ulcers.
+
+282
+00:12:20,549 --> 00:12:21,539
+Oh, man, that's
+
+283
+00:12:21,940 --> 00:12:22,150
+so they have
+
+284
+00:12:22,840 --> 00:12:22,849
+a
+
+285
+00:12:23,039 --> 00:12:25,840
+pouch now and they eat like 10 times a day because they have no stomach, right?
+
+286
+00:12:25,849 --> 00:12:26,880
+It was a huge deal.
+
+287
+00:12:26,890 --> 00:12:28,750
+And so, but when we were young,
+
+288
+00:12:28,760 --> 00:12:31,940
+ulcers were caused by stress and poor diet and all this stuff.
+
+289
+00:12:31,950 --> 00:12:34,520
+And yeah, some researcher was like, hey,
+
+290
+00:12:34,919 --> 00:12:37,460
+-- I think, is it a virus?
+-- No bacteria? It was bacteria
+
+291
+00:12:37,789 --> 00:12:37,960
+because
+
+292
+00:12:38,330 --> 00:12:40,010
+it was a 10 day course of antibiotics and
+
+293
+00:12:40,119 --> 00:12:40,650
+boop done.
+
+294
+00:12:41,210 --> 00:12:42,700
+And, and so anyway, this guy,
+
+295
+00:12:42,820 --> 00:12:45,419
+he did all this research and it was funny because people were like, you're crazy.
+
+296
+00:12:45,429 --> 00:12:46,020
+This isn't real.
+
+297
+00:12:46,030 --> 00:12:49,239
+It reminds me of the guy who is like, oh, you should, everyone should wash their hands
+
+298
+00:12:49,479 --> 00:12:52,929
+-- and, and they like, drove him insane and he literally, they
+-- had him committed
+
+299
+00:12:53,489 --> 00:12:54,299
+the bacterium.
+
+300
+00:12:54,520 --> 00:12:56,150
+He uh helicobacter
+
+301
+00:12:56,299 --> 00:12:56,590
+pylori.
+
+302
+00:12:56,989 --> 00:13:00,929
+But, right? Like this is an example of ulcers don't exist.
+
+303
+00:13:00,940 --> 00:13:02,619
+No one even talks about this anymore.
+
+304
+00:13:02,760 --> 00:13:04,799
+And they were an enormous problem.
+
+305
+00:13:05,150 --> 00:13:06,820
+What, 30 years ago?
+
+306
+00:13:07,280 --> 00:13:07,820
+Well, I mean, it's,
+
+307
+00:13:08,000 --> 00:13:08,450
+it's like,
+
+308
+00:13:08,460 --> 00:13:12,469
+it's in all the movies and TV shows the fifties and sixties like the man's like, oh,
+
+309
+00:13:12,979 --> 00:13:16,039
+I got, ok, I can't get angry. Uh, my ulcer.
+
+310
+00:13:16,340 --> 00:13:18,669
+Right. Right. Exactly. Yeah. Yeah. Yeah.
+
+311
+00:13:19,070 --> 00:13:21,900
+And security reminds me of that sometimes. Yeah.
+
+312
+00:13:21,909 --> 00:13:23,460
+-- Like
+-- somebody like Barry Marshall,
+
+313
+00:13:23,469 --> 00:13:26,020
+that's the guy who did this research and got the Nobel Prize.
+
+314
+00:13:26,229 --> 00:13:30,000
+They come along with some reasonable proposition and even better what I love is.
+
+315
+00:13:30,229 --> 00:13:32,609
+And they're like, I'm pretty sure this is correct, but you know what,
+
+316
+00:13:32,619 --> 00:13:33,520
+I'm not 100% certain.
+
+317
+00:13:33,530 --> 00:13:35,260
+I think we should research it and everybody's like, no,
+
+318
+00:13:35,580 --> 00:13:36,299
+the witch.
+
+319
+00:13:36,510 --> 00:13:41,440
+Ok. Now, on that note, I want to bring up the rust binary
+
+320
+00:13:41,919 --> 00:13:43,960
+debacle. I don't know what to even call it.
+
+321
+00:13:44,299 --> 00:13:47,250
+Um, I think it didn't rise to the level of debacle.
+
+322
+00:13:47,260 --> 00:13:50,340
+I would say it was a, a solid seven on the kerfuffle scale.
+
+323
+00:13:50,429 --> 00:13:54,090
+I, I would give, ok, I'll, I'll agree with that. So what happened was
+
+324
+00:13:54,390 --> 00:13:58,080
+there is a rust crate called ser
+
+325
+00:13:58,390 --> 00:14:00,159
+S er dec,
+
+326
+00:14:00,380 --> 00:14:00,760
+right?
+
+327
+00:14:00,979 --> 00:14:01,530
+And anyway,
+
+328
+00:14:01,739 --> 00:14:02,099
+ser
+
+329
+00:14:02,330 --> 00:14:02,919
+whatever
+
+330
+00:14:03,080 --> 00:14:03,419
+it.
+
+331
+00:14:03,690 --> 00:14:07,669
+Right. So they have this crate that a lot of people use. It's very, very common.
+
+332
+00:14:07,690 --> 00:14:10,609
+Um, a lot like damn near everything that does serialization and deser.
+
+333
+00:14:11,219 --> 00:14:11,849
+It's one of
+
+334
+00:14:12,489 --> 00:14:12,659
+it.
+
+335
+00:14:13,690 --> 00:14:15,349
+Well, well, the conversation will go there.
+
+336
+00:14:15,830 --> 00:14:18,109
+Yeah. And, and Saturday is cer deserializing
+
+337
+00:14:18,789 --> 00:14:22,650
+is my assumption of what it stands for. But I don't, I can't prove that. But anyway,
+
+338
+00:14:22,809 --> 00:14:23,390
+so
+
+339
+00:14:23,849 --> 00:14:26,219
+they had a bug opened
+
+340
+00:14:26,429 --> 00:14:28,049
+a couple, a couple of days ago at the time,
+
+341
+00:14:28,059 --> 00:14:30,679
+maybe a week at the time of us recording and basically
+
+342
+00:14:30,690 --> 00:14:32,979
+it was uh I think it was a packager for Fedora
+
+343
+00:14:33,210 --> 00:14:35,130
+noticed there was a binary blob
+
+344
+00:14:35,250 --> 00:14:39,929
+inside of this package and he was like, hey, uh I can't ship this what's going on.
+
+345
+00:14:39,940 --> 00:14:43,820
+And the developer was like, this is the this default now like deal with it
+
+346
+00:14:43,940 --> 00:14:44,559
+and
+
+347
+00:14:44,739 --> 00:14:46,530
+hilarity ensued.
+
+348
+00:14:47,099 --> 00:14:50,599
+And one of the arguments was people saying, oh,
+
+349
+00:14:50,609 --> 00:14:53,960
+how can we trust the binary blob in this pile of source code?
+
+350
+00:14:54,030 --> 00:14:56,799
+-- Because you totally reviewed all that source code. Well, and
+-- that's just it, right?
+
+351
+00:14:56,809 --> 00:14:57,679
+Like, ok,
+
+352
+00:14:57,690 --> 00:15:00,750
+so you're gonna say the binary blob is maybe dangerous but
+
+353
+00:15:00,760 --> 00:15:04,000
+you're already installing probably a million lines of source code.
+
+354
+00:15:04,010 --> 00:15:07,500
+-- You didn't look at reviewer
+-- rights when I type pip install or
+
+355
+00:15:08,260 --> 00:15:09,890
+whatever. The other ones are like
+
+356
+00:15:10,159 --> 00:15:12,479
+a whole pile of stuff goes flying by.
+
+357
+00:15:12,849 --> 00:15:13,549
+Yeah, no idea
+
+358
+00:15:13,799 --> 00:15:15,960
+-- of it is
+-- my favorite is I, you know, I,
+
+359
+00:15:15,969 --> 00:15:20,780
+I type in something and it's like this will install 246 megabytes of packages.
+
+360
+00:15:21,409 --> 00:15:21,539
+Yes.
+
+361
+00:15:22,169 --> 00:15:23,440
+Go get a coffee.
+
+362
+00:15:24,549 --> 00:15:27,909
+Well, some and so that's a funny thing too. Python ships. Binaries.
+
+363
+00:15:28,359 --> 00:15:31,429
+-- Oh, I was talking about like apt get. But yeah, Python also. Well, there's
+-- apt
+
+364
+00:15:31,530 --> 00:15:34,270
+get but even when you do a pip install of Python,
+
+365
+00:15:34,690 --> 00:15:38,109
+there are, if there is a prebuilt binary for your architecture,
+
+366
+00:15:38,119 --> 00:15:39,700
+it'll just install that and use it.
+
+367
+00:15:39,710 --> 00:15:41,700
+So like Python's already doing this.
+
+368
+00:15:41,919 --> 00:15:42,630
+It's just
+
+369
+00:15:42,840 --> 00:15:47,369
+obviously in the like Fedora Python world, they don't build the Binaries,
+
+370
+00:15:47,380 --> 00:15:50,190
+they use the binaries and Python has this ability, right.
+
+371
+00:15:50,200 --> 00:15:52,270
+They have wheels that know what to do.
+
+372
+00:15:52,880 --> 00:15:55,570
+And it, it's all very complicated and whatever it doesn't matter.
+
+373
+00:15:55,580 --> 00:15:58,700
+But the point is using security as this argument
+
+374
+00:15:59,030 --> 00:15:59,619
+is
+
+375
+00:15:59,880 --> 00:16:03,429
+not going to work because anyone who thinks about it for five minutes is like, oh,
+
+376
+00:16:03,440 --> 00:16:05,219
+I guess that doesn't really matter.
+
+377
+00:16:05,229 --> 00:16:09,539
+And here we go, here's the funny thing is, it's explained here, but basically
+
+378
+00:16:09,880 --> 00:16:12,419
+it was to do with compiling and building it and that
+
+379
+00:16:12,429 --> 00:16:14,940
+it was taking for damn ever because of its dependency chain.
+
+380
+00:16:15,049 --> 00:16:19,739
+-- And so by doing the binaries, it
+-- just boop. Do you know how long forever is?
+
+381
+00:16:20,059 --> 00:16:20,700
+I don't know,
+
+382
+00:16:21,260 --> 00:16:22,150
+10 seconds,
+
+383
+00:16:22,450 --> 00:16:25,760
+nine seconds, they did this to save nine seconds.
+
+384
+00:16:26,030 --> 00:16:26,150
+Yeah.
+
+385
+00:16:26,159 --> 00:16:30,400
+But I mean, honestly, globally, carbon footprint wise, that probably matters
+
+386
+00:16:30,630 --> 00:16:33,280
+and that's fine. It just amused me that
+
+387
+00:16:33,570 --> 00:16:38,559
+from my history in compiling things, nine seconds is zero,
+
+388
+00:16:38,570 --> 00:16:41,320
+like anything under five minutes is zero.
+
+389
+00:16:41,424 --> 00:16:41,924
+I just,
+
+390
+00:16:41,934 --> 00:16:45,205
+I remember when I finally got my DX 266 tune to
+
+391
+00:16:45,215 --> 00:16:47,364
+compile a Linux kernel in less than a couple hours.
+
+392
+00:16:47,895 --> 00:16:47,924
+I,
+
+393
+00:16:48,195 --> 00:16:52,085
+I remember building a kernel one time on a 386 computer.
+
+394
+00:16:52,174 --> 00:16:53,765
+It literally took like three days.
+
+395
+00:16:54,155 --> 00:16:54,294
+Yeah.
+
+396
+00:16:54,304 --> 00:16:57,594
+My friend would actually compile on my system and download his
+
+397
+00:16:57,604 --> 00:17:01,484
+updated Linux kernel over 9600 bond from my computer at night,
+
+398
+00:17:02,020 --> 00:17:04,089
+man. The old man stories.
+
+399
+00:17:04,310 --> 00:17:05,479
+Anyway. Anyway.
+
+400
+00:17:05,689 --> 00:17:06,069
+Ok.
+
+401
+00:17:06,079 --> 00:17:08,310
+Well, then that's kind of ridiculous to save nine seconds,
+
+402
+00:17:08,319 --> 00:17:10,050
+but still nine seconds is nine seconds.
+
+403
+00:17:10,250 --> 00:17:14,479
+Well, I don't, I don't think it is nine seconds matters to people
+
+404
+00:17:14,770 --> 00:17:18,380
+and the point is like, nine seconds or not, it doesn't matter. Right. But
+
+405
+00:17:18,819 --> 00:17:25,030
+their intent was to do this in a way that makes the user's life easier.
+
+406
+00:17:25,650 --> 00:17:28,900
+-- And I have a suspicion, security
+-- people do not like that.
+
+407
+00:17:29,089 --> 00:17:30,239
+No. No, they don't.
+
+408
+00:17:30,819 --> 00:17:32,849
+And I have a suspicion many of the users
+
+409
+00:17:32,859 --> 00:17:34,699
+would rather save the nine because here's the thing,
+
+410
+00:17:34,709 --> 00:17:34,930
+if,
+
+411
+00:17:35,050 --> 00:17:39,130
+if you install 300 rust packages and every package can save nine seconds.
+
+412
+00:17:39,140 --> 00:17:41,540
+Now, you're talking about real money, three quarters of an hour.
+
+413
+00:17:42,270 --> 00:17:43,729
+And so this is where
+
+414
+00:17:44,569 --> 00:17:47,599
+it's not nine seconds times 300 that's not three quarters of an hour.
+
+415
+00:17:47,609 --> 00:17:49,300
+Is it 2700 seconds?
+
+416
+00:17:49,619 --> 00:17:51,520
+Is it? I don't know. I can't do math in my head.
+
+417
+00:17:51,530 --> 00:17:53,699
+I'm gonna, I'm gonna get out my, my calculator here,
+
+418
+00:17:53,709 --> 00:17:57,150
+out of my pocket that I walk around with every day that my math teacher said I wouldn't
+
+419
+00:17:57,910 --> 00:18:00,420
+uh nine seconds times 300. I said
+
+420
+00:18:00,810 --> 00:18:03,849
+20 divided by 60 45 minutes. It
+
+421
+00:18:04,099 --> 00:18:05,290
+three quarters of an hour.
+
+422
+00:18:05,410 --> 00:18:05,650
+That's
+
+423
+00:18:06,040 --> 00:18:06,170
+bananas.
+
+424
+00:18:06,439 --> 00:18:09,530
+Ok. So that's ridiculous because most rust things compile pretty fast.
+
+425
+00:18:09,780 --> 00:18:11,369
+But you get the point right.
+
+426
+00:18:11,380 --> 00:18:14,180
+And, and obviously most rust things compile in under a second, I
+
+427
+00:18:14,300 --> 00:18:14,609
+think,
+
+428
+00:18:14,734 --> 00:18:16,545
+or most of the, the crates, but whatever.
+
+429
+00:18:16,755 --> 00:18:19,314
+Well, on a modern machine. Sure. But you get the point right.
+
+430
+00:18:19,324 --> 00:18:21,454
+Is this is one of those examples of if
+
+431
+00:18:21,464 --> 00:18:23,785
+your argument is gonna be security versus usability,
+
+432
+00:18:23,795 --> 00:18:24,944
+security is already lost.
+
+433
+00:18:24,954 --> 00:18:26,135
+Like there's no argument here.
+
+434
+00:18:26,145 --> 00:18:31,314
+Now, I will say, I think you can easily make an argument about reliability here
+
+435
+00:18:31,760 --> 00:18:34,819
+because one of my complaints and I'm sure you're familiar with this
+
+436
+00:18:34,829 --> 00:18:38,099
+is when you would get like some random binary from somewhere,
+
+437
+00:18:38,109 --> 00:18:40,390
+like back in the day and it wouldn't run.
+
+438
+00:18:40,400 --> 00:18:43,500
+And then you were like, let me install this library and now this library, you know,
+
+439
+00:18:43,510 --> 00:18:45,469
+this library like, oh good, it started running.
+
+440
+00:18:45,479 --> 00:18:46,199
+Oh, it crashed.
+
+441
+00:18:46,979 --> 00:18:49,270
+I'm in CLL health. There's a word for that in windows,
+
+442
+00:18:49,589 --> 00:18:50,380
+right? And
+
+443
+00:18:50,709 --> 00:18:54,760
+this is the, the concern I have isn't the speed of the compile.
+
+444
+00:18:54,770 --> 00:18:57,199
+It's the fact that I have a binary now
+
+445
+00:18:57,500 --> 00:18:58,219
+that in
+
+446
+00:18:58,660 --> 00:19:01,520
+a year or two or three or whatever
+
+447
+00:19:01,810 --> 00:19:05,319
+might just start randomly crashing because they changed something in
+
+448
+00:19:05,489 --> 00:19:06,800
+Glib C or whatever
+
+449
+00:19:07,000 --> 00:19:09,439
+and no one knows why. And it's hard to figure out,
+
+450
+00:19:10,280 --> 00:19:11,300
+but again, not secure.
+
+451
+00:19:11,369 --> 00:19:15,010
+-- And
+-- that actually speaks to, well as a sideways and this might be a separate episode.
+
+452
+00:19:15,020 --> 00:19:15,800
+But the dod
+
+453
+00:19:16,060 --> 00:19:19,810
+essentially wanting people to work on, take this binary blob,
+
+454
+00:19:19,819 --> 00:19:21,119
+turn it back into source code.
+
+455
+00:19:21,339 --> 00:19:23,689
+And I would have said in the past, that's damn near impossible.
+
+456
+00:19:23,699 --> 00:19:25,469
+But now with generative A I, I'm like
+
+457
+00:19:26,729 --> 00:19:29,199
+-- probably
+-- even with a generative A Iii
+
+458
+00:19:29,530 --> 00:19:31,869
+I know I've talked about this in the past, but like
+
+459
+00:19:32,770 --> 00:19:35,969
+Mario 64 the Nintendo 64 game.
+
+460
+00:19:36,140 --> 00:19:38,750
+They have reversed engineered the ROM and they have
+
+461
+00:19:38,760 --> 00:19:40,699
+C code that when you compile the C code,
+
+462
+00:19:40,709 --> 00:19:43,520
+you literally get exactly the Mario 64 rom.
+
+463
+00:19:43,530 --> 00:19:45,880
+So they can prove like this is a reproducible build.
+
+464
+00:19:46,160 --> 00:19:48,089
+They can prove the C code they have
+
+465
+00:19:48,444 --> 00:19:51,324
+generates the rum and now people are making amazing hacks
+
+466
+00:19:51,334 --> 00:19:54,015
+and fixing bugs and doing all kinds of wild stuff.
+
+467
+00:19:54,045 --> 00:19:55,635
+-- So this is very, very
+-- doable.
+
+468
+00:19:55,645 --> 00:20:00,114
+I think that might be an extra episode because that really raises like for example,
+
+469
+00:20:00,125 --> 00:20:02,915
+the member Ibmib MS Bio
+
+470
+00:20:03,145 --> 00:20:03,785
+was
+
+471
+00:20:03,984 --> 00:20:07,834
+essentially reverse engineered by having some guy take it apart and document it,
+
+472
+00:20:07,844 --> 00:20:08,734
+implementing a
+
+473
+00:20:08,905 --> 00:20:10,104
+non nation state
+
+474
+00:20:10,810 --> 00:20:14,670
+sanctioned firewall. So it's a private firewall in between the two of them.
+
+475
+00:20:15,569 --> 00:20:17,270
+All right. So basically, like this guy
+
+476
+00:20:17,410 --> 00:20:20,640
+produced the spec, this guy implemented the spec and so technically,
+
+477
+00:20:20,650 --> 00:20:23,209
+there was no copyright or trademark or whatever shenanigans.
+
+478
+00:20:23,219 --> 00:20:26,229
+No, it's not technically like this is called Clean Room. Reverse engineering.
+
+479
+00:20:26,239 --> 00:20:28,310
+-- It's used all the time.
+-- Clean Room implementation.
+
+480
+00:20:28,319 --> 00:20:29,859
+Don't say reverse engineering because
+
+481
+00:20:29,959 --> 00:20:31,319
+that will not go well in front of a job.
+
+482
+00:20:32,180 --> 00:20:33,510
+But like this is very reasonable.
+
+483
+00:20:33,520 --> 00:20:36,989
+And yes, that is exactly what compact did to the IBM Bios and it worked.
+
+484
+00:20:37,000 --> 00:20:38,630
+-- Was it
+-- compact? I thought it was Microsoft,
+
+485
+00:20:38,910 --> 00:20:40,239
+I thought it was compact. I don't know,
+
+486
+00:20:40,369 --> 00:20:42,474
+-- doesn't matter. No
+-- Microsoft was friends with IB at that time. The
+
+487
+00:20:46,035 --> 00:20:46,464
+fact that
+
+488
+00:20:46,704 --> 00:20:51,035
+yeah, I the fact that these big companies have friends like Sony Suit itself,
+
+489
+00:20:51,244 --> 00:20:53,084
+look, their friends in the regard.
+
+490
+00:20:53,094 --> 00:20:56,635
+They're not actively trying to stab each other in the kidneys. Like that's,
+
+491
+00:20:57,655 --> 00:20:59,155
+I was gonna say they're like friends in the,
+
+492
+00:20:59,165 --> 00:21:01,755
+in the sense of nation states not having a nuclear war.
+
+493
+00:21:01,765 --> 00:21:04,415
+Right. Exactly. Exactly. But the point is OK.
+
+494
+00:21:04,484 --> 00:21:06,954
+So this reverse engineering thing I can relate to this.
+
+495
+00:21:06,964 --> 00:21:09,194
+So the first job I had out of college
+
+496
+00:21:09,619 --> 00:21:10,880
+we had
+
+497
+00:21:11,130 --> 00:21:13,729
+this life insurance software that was written
+
+498
+00:21:13,739 --> 00:21:16,479
+in Cobal obviously because every uh probably,
+
+499
+00:21:16,489 --> 00:21:17,739
+I probably still is written in coal.
+
+500
+00:21:18,550 --> 00:21:19,010
+But
+
+501
+00:21:19,380 --> 00:21:20,989
+they had a ZL
+
+502
+00:21:21,109 --> 00:21:23,680
+binary. They linked into their Cobal
+
+503
+00:21:24,239 --> 00:21:27,900
+and it was a binary. No one knew where no one even knew where it came from.
+
+504
+00:21:28,010 --> 00:21:32,119
+Like they literally had a binary in their build that got linked in to give them ZL
+
+505
+00:21:32,319 --> 00:21:35,439
+-- for compression
+-- came from a developer workstation
+
+506
+00:21:35,849 --> 00:21:36,880
+or a website.
+
+507
+00:21:37,280 --> 00:21:39,550
+Yeah. Where did this come from? Nobody knew.
+
+508
+00:21:39,670 --> 00:21:42,569
+In fact, they didn't even know what it was like. I figured out it was Z
+
+509
+00:21:42,699 --> 00:21:46,300
+Lib by running strings on the binary because it was, it had a weird name.
+
+510
+00:21:46,430 --> 00:21:47,479
+I'm like, oh, this is just Z
+
+511
+00:21:47,760 --> 00:21:48,459
+Lib and they were like, what?
+
+512
+00:21:48,469 --> 00:21:51,420
+Now I'm like, oh my goodness, why, how are you people using this?
+
+513
+00:21:51,739 --> 00:21:56,579
+But the thing, yes, someone added it probably 1520 years before that.
+
+514
+00:21:57,050 --> 00:21:59,540
+You know, I don't know if Z lib existed 20 years before that. But,
+
+515
+00:22:01,119 --> 00:22:02,310
+-- but you get the point
+-- right.
+
+516
+00:22:02,939 --> 00:22:06,430
+-- Zip's been around a long time. But
+-- anyway,
+
+517
+00:22:06,609 --> 00:22:10,270
+this is an example of the government is full of crap like this. Right.
+
+518
+00:22:10,280 --> 00:22:14,150
+The government is filled with binaries that they don't know where they came from.
+
+519
+00:22:14,160 --> 00:22:15,670
+They have no idea what they do.
+
+520
+00:22:15,729 --> 00:22:18,569
+They just know if I don't copy this file into this folder,
+
+521
+00:22:18,819 --> 00:22:19,410
+-- nothing
+-- works.
+
+522
+00:22:19,420 --> 00:22:21,650
+And even better that they're required by law to
+
+523
+00:22:21,660 --> 00:22:23,550
+run that piece of software to do that job.
+
+524
+00:22:23,829 --> 00:22:24,280
+Right.
+
+525
+00:22:24,420 --> 00:22:25,109
+Exactly.
+
+526
+00:22:25,609 --> 00:22:26,709
+I mean, this is, what isn't it?
+
+527
+00:22:26,719 --> 00:22:31,150
+Boeing has to run Windows 95 for some, like, software they need that.
+
+528
+00:22:31,160 --> 00:22:33,030
+Built the 747 or something like that.
+
+529
+00:22:33,040 --> 00:22:34,819
+-- Like, probably,
+-- yeah, I mean, I just,
+
+530
+00:22:34,829 --> 00:22:37,510
+I remember always when the BC corporate registry,
+
+531
+00:22:37,689 --> 00:22:39,510
+a lady wanted to name her company in her
+
+532
+00:22:39,520 --> 00:22:41,760
+native language and the BC corporate registry is like,
+
+533
+00:22:41,770 --> 00:22:42,319
+yeah,
+
+534
+00:22:42,469 --> 00:22:43,290
+cool.
+
+535
+00:22:43,469 --> 00:22:44,069
+No,
+
+536
+00:22:44,185 --> 00:22:46,944
+like, and everybody's like, oh, why are they such jerks? And it's like,
+
+537
+00:22:47,175 --> 00:22:52,385
+because the BC Corporate Registries Act that they are governed by says they can't,
+
+538
+00:22:52,395 --> 00:22:54,084
+like, it can only be in English and French
+
+539
+00:22:54,474 --> 00:22:56,314
+and assuming you change that act,
+
+540
+00:22:56,645 --> 00:22:59,805
+all the software has been written assuming English or French and not,
+
+541
+00:22:59,814 --> 00:23:02,744
+it certainly doesn't support unit code because it was written in the eighties
+
+542
+00:23:03,094 --> 00:23:07,334
+and everything downstream of it will break and like, just, I'm sorry, but no,
+
+543
+00:23:08,000 --> 00:23:11,819
+without, you know, essentially rewriting a massive chunk of our infrastructure.
+
+544
+00:23:12,250 --> 00:23:12,569
+And
+
+545
+00:23:12,989 --> 00:23:14,640
+so we found an OK solution for her.
+
+546
+00:23:14,650 --> 00:23:16,959
+But, but fundamentally, it's kind of like we're not trying to be jerks.
+
+547
+00:23:16,969 --> 00:23:20,130
+But, you know, and there's so much government stuff where it's regulated and it's,
+
+548
+00:23:20,380 --> 00:23:20,510
+yeah.
+
+549
+00:23:20,619 --> 00:23:20,810
+Yeah.
+
+550
+00:23:21,359 --> 00:23:22,949
+Oh, yeah. Yeah, for sure. 100%.
+
+551
+00:23:23,339 --> 00:23:24,930
+The thing I find fascinating is in, here in Canada,
+
+552
+00:23:24,939 --> 00:23:28,069
+all federal government forms are required by law to be
+
+553
+00:23:28,079 --> 00:23:30,050
+in English and French because we have two official languages.
+
+554
+00:23:30,369 --> 00:23:31,939
+Right. In America. That's not the case.
+
+555
+00:23:31,949 --> 00:23:36,959
+It's just by, it's just by common practice that they're all in English
+
+556
+00:23:37,229 --> 00:23:38,589
+and maybe other languages,
+
+557
+00:23:39,280 --> 00:23:41,280
+-- right?
+-- But there's no law that says that.
+
+558
+00:23:41,709 --> 00:23:45,790
+Right. No, no, there is not. And they're almost universally English
+
+559
+00:23:45,959 --> 00:23:48,270
+when I used to do my ta like back in the day
+
+560
+00:23:48,280 --> 00:23:51,150
+you'd go to the post office to get forms because they had forms
+
+561
+00:23:51,160 --> 00:23:53,709
+and they would always have like three copies of the English tax
+
+562
+00:23:53,719 --> 00:23:56,219
+form and then like a giant box of the French ones here.
+
+563
+00:23:56,229 --> 00:23:57,589
+Sure. I mean, that makes sense.
+
+564
+00:23:57,849 --> 00:24:00,849
+-- But
+-- anyways, yeah, it's, I think that that reverse engineer because yeah,
+
+565
+00:24:00,859 --> 00:24:01,829
+like I was gonna say that
+
+566
+00:24:01,930 --> 00:24:04,910
+Zed Lip is probably not a security problem until it is.
+
+567
+00:24:05,319 --> 00:24:08,739
+And like there was just that thing with Winrar where you unpack an archive
+
+568
+00:24:08,930 --> 00:24:09,390
+and it
+
+569
+00:24:09,680 --> 00:24:11,900
+arbitrarily executes code. Oops,
+
+570
+00:24:12,219 --> 00:24:14,689
+that's normal. It's fine. It's a feature, it's fine.
+
+571
+00:24:15,319 --> 00:24:20,160
+But right, and, and look, I ignoring that, right. Just the fact is again,
+
+572
+00:24:20,619 --> 00:24:23,099
+the dod, well, the government, the US government,
+
+573
+00:24:23,560 --> 00:24:25,489
+they're using all this binary crap
+
+574
+00:24:25,920 --> 00:24:28,930
+and it's, they don't care about the security aspect. Of it. Right.
+
+575
+00:24:28,939 --> 00:24:33,550
+That in some cases they might do things to, to firewall it off or sandbox or whatever.
+
+576
+00:24:33,560 --> 00:24:34,459
+But fundamentally,
+
+577
+00:24:34,760 --> 00:24:37,430
+and they, they don't want the source code for security purposes.
+
+578
+00:24:37,670 --> 00:24:39,859
+They want the source code for usability because if they
+
+579
+00:24:39,869 --> 00:24:41,859
+have the source code now you can recompile it,
+
+580
+00:24:41,869 --> 00:24:45,619
+you can move it to another architecture, you can incorporate into other stuff.
+
+581
+00:24:46,469 --> 00:24:46,910
+But
+
+582
+00:24:47,020 --> 00:24:48,540
+Sed Lib was 1995
+
+583
+00:24:48,800 --> 00:24:52,979
+95. I would have started at that company in 01.
+
+584
+00:24:53,089 --> 00:24:53,819
+So
+
+585
+00:24:54,489 --> 00:24:55,280
+there you go.
+
+586
+00:24:55,390 --> 00:24:55,739
+Yep.
+
+587
+00:24:56,250 --> 00:24:59,750
+And what's more wild is the PPP deflate protocol is from,
+
+588
+00:24:59,760 --> 00:25:03,410
+-- guess which year
+-- PPP deflate PPP is from what?
+
+589
+00:25:03,420 --> 00:25:04,839
+-- Probably the late
+-- eighties
+
+590
+00:25:04,979 --> 00:25:06,369
+96. How's that?
+
+591
+00:25:07,109 --> 00:25:10,869
+The PPP compression protocol? Oh, because they would have to do Z Lib first. Right.
+
+592
+00:25:10,880 --> 00:25:10,930
+Do
+
+593
+00:25:11,780 --> 00:25:12,020
+well,
+
+594
+00:25:12,030 --> 00:25:15,189
+they had compress and there were other compression
+
+595
+00:25:15,199 --> 00:25:18,479
+algorithms but ZZ Lib was by far the,
+
+596
+00:25:18,770 --> 00:25:19,280
+I guess,
+
+597
+00:25:19,410 --> 00:25:21,900
+easiest to use and, and best,
+
+598
+00:25:22,869 --> 00:25:24,439
+and we still use it today. Right.
+
+599
+00:25:24,449 --> 00:25:27,119
+Like we haven't come up with anything better, which is wild.
+
+600
+00:25:27,290 --> 00:25:29,359
+Well, no, it's not that we haven't come up with anything better.
+
+601
+00:25:29,369 --> 00:25:31,800
+The problem is we haven't come up with anything better.
+
+602
+00:25:31,810 --> 00:25:35,089
+That's better, better enough to actually replace Zed
+
+603
+00:25:35,250 --> 00:25:35,500
+Lip.
+
+604
+00:25:35,939 --> 00:25:36,780
+Right. Right.
+
+605
+00:25:36,890 --> 00:25:39,469
+-- And, well, not only that.
+-- So, no, we have better things.
+
+606
+00:25:39,479 --> 00:25:43,364
+We have B zip, we have XZ, we have a lot of things that are faster and
+
+607
+00:25:43,525 --> 00:25:46,875
+-- squishier.
+-- No, they're not. I don't think they're faster, are they?
+
+608
+00:25:46,885 --> 00:25:49,425
+-- I think
+-- uh some OK. Um I think B zip
+
+609
+00:25:49,564 --> 00:25:49,594
+and
+
+610
+00:25:49,744 --> 00:25:53,395
+said are slower to compress but faster to uncompress.
+
+611
+00:25:53,795 --> 00:25:55,214
+And so for like the software distribution
+
+612
+00:25:55,224 --> 00:25:56,915
+thing where you compress once uncompressed.
+
+613
+00:25:56,925 --> 00:26:01,474
+Many heck yeah, that's what we want, right? Like pay up on the front end and then
+
+614
+00:26:01,574 --> 00:26:02,875
+save money on the back end.
+
+615
+00:26:03,214 --> 00:26:05,584
+Um But fundamentally like
+
+616
+00:26:06,025 --> 00:26:09,275
+there are things that are faster and make use of CPU instructions
+
+617
+00:26:09,785 --> 00:26:10,905
+in clever ways
+
+618
+00:26:11,650 --> 00:26:12,640
+that are just faster.
+
+619
+00:26:13,310 --> 00:26:16,020
+And so, um but fundamentally
+
+620
+00:26:16,420 --> 00:26:18,000
+like if you get a 5% per
+
+621
+00:26:18,260 --> 00:26:21,569
+performance improvement in like compression time or something
+
+622
+00:26:21,989 --> 00:26:25,449
+that's not worth rewriting your software. And it's the problem is always
+
+623
+00:26:25,910 --> 00:26:27,849
+you're not rewriting just your software.
+
+624
+00:26:27,949 --> 00:26:30,170
+There's somebody else that you're talking to.
+
+625
+00:26:30,560 --> 00:26:31,859
+Yeah. The world runs on Z li
+
+626
+00:26:32,130 --> 00:26:34,040
+like it's everywhere, literally.
+
+627
+00:26:34,930 --> 00:26:37,589
+Yeah, that's like English one and at this point,
+
+628
+00:26:38,459 --> 00:26:39,270
+English one,
+
+629
+00:26:39,540 --> 00:26:41,760
+-- sorry guys. Yeah,
+-- it doesn't matter how bad it is. Like
+
+630
+00:26:42,229 --> 00:26:46,329
+-- everyone uses it
+-- like that. That was that comic con. How do you pronounce? Ouh.
+
+631
+00:26:46,339 --> 00:26:51,310
+Well, like cough brought Trough Fought like it gave like seven or eight examples.
+
+632
+00:26:51,319 --> 00:26:52,260
+And then the summary was like,
+
+633
+00:26:52,270 --> 00:26:55,839
+just don't even try just force br memorize how these words are pronounced
+
+634
+00:26:56,020 --> 00:26:58,170
+and like, ignore the rules because that's how that works.
+
+635
+00:26:58,410 --> 00:27:00,089
+-- Like, welcome
+-- to English.
+
+636
+00:27:00,780 --> 00:27:02,030
+Nothing makes sense.
+
+637
+00:27:02,069 --> 00:27:05,959
+I'm not going to lead you on to the lead mind because I was led there by
+
+638
+00:27:06,619 --> 00:27:07,770
+-- I'm like, which, which
+-- is,
+
+639
+00:27:07,780 --> 00:27:08,250
+which
+
+640
+00:27:08,760 --> 00:27:10,219
+whatever, whatever
+
+641
+00:27:10,390 --> 00:27:13,469
+all I wanna, I wanna bring this one home but with some more sees
+
+642
+00:27:13,800 --> 00:27:14,739
+because we can.
+
+643
+00:27:15,030 --> 00:27:15,400
+Right.
+
+644
+00:27:15,410 --> 00:27:15,530
+I,
+
+645
+00:27:15,540 --> 00:27:17,880
+I just want to run through this document and explain kind of some of
+
+646
+00:27:17,890 --> 00:27:20,500
+the things that are hilarious because we don't have to deal with these anymore.
+
+647
+00:27:20,510 --> 00:27:20,670
+Right there.
+
+648
+00:27:21,030 --> 00:27:23,380
+Uninitialized variables is where we started. That's the first one.
+
+649
+00:27:23,390 --> 00:27:24,160
+That's all we got to.
+
+650
+00:27:24,739 --> 00:27:27,130
+There's also arithmetic overflows
+
+651
+00:27:27,630 --> 00:27:29,050
+which when you're dealing with.
+
+652
+00:27:29,060 --> 00:27:31,800
+And this is funny because things like Python and stuff, they don't even, they don't,
+
+653
+00:27:31,810 --> 00:27:33,459
+this isn't a thing, right?
+
+654
+00:27:33,469 --> 00:27:33,849
+But
+
+655
+00:27:34,189 --> 00:27:38,829
+in the world of CPU arithmetic, you might have
+
+656
+00:27:38,939 --> 00:27:40,089
+an integer.
+
+657
+00:27:40,609 --> 00:27:43,630
+That is a known wi with number of bits.
+
+658
+00:27:43,640 --> 00:27:46,459
+So if you have a four bit integer, you'd have four is what?
+
+659
+00:27:46,469 --> 00:27:51,040
+124888 would be seven would be the largest number you can represent
+
+660
+00:27:51,189 --> 00:27:51,339
+because
+
+661
+00:27:51,489 --> 00:27:52,709
+you have to start counting at zero.
+
+662
+00:27:53,209 --> 00:27:56,209
+-- Right. You start at 00 is a number.
+-- You should probably mention that
+
+663
+00:27:56,420 --> 00:27:58,939
+-- because a lot of programmers forgot.
+-- That's true. That's
+
+664
+00:27:59,050 --> 00:27:59,199
+true.
+
+665
+00:28:00,619 --> 00:28:04,160
+Let's say you've got a four bit integer, it can make it to seven.
+
+666
+00:28:04,170 --> 00:28:06,489
+What happens when you add 1 to 7? You get zero,
+
+667
+00:28:06,750 --> 00:28:07,650
+it wraps around.
+
+668
+00:28:08,079 --> 00:28:08,359
+Right.
+
+669
+00:28:08,520 --> 00:28:11,930
+And, and that's unsigned and that's a whole, they're signed and unsigned and,
+
+670
+00:28:12,609 --> 00:28:15,260
+and there's right, there's two compliment and, and
+
+671
+00:28:15,369 --> 00:28:18,469
+there's so much weird stuff going on and, and they're all different.
+
+672
+00:28:18,479 --> 00:28:19,900
+Big Indian, little Indian, whatever.
+
+673
+00:28:20,229 --> 00:28:20,750
+And
+
+674
+00:28:21,189 --> 00:28:23,550
+-- I
+-- finally read a good explanation of why
+
+675
+00:28:23,890 --> 00:28:26,109
+big Indian and little Indians sort of matter.
+
+676
+00:28:26,119 --> 00:28:28,979
+And from the being able to do arithmetic by bit
+
+677
+00:28:28,989 --> 00:28:31,319
+shifts and it's just like instant and I'm like,
+
+678
+00:28:31,329 --> 00:28:31,869
+whoa.
+
+679
+00:28:33,420 --> 00:28:35,189
+And so that's the thing. Like, back in the day
+
+680
+00:28:35,719 --> 00:28:39,510
+again, doing arithmetic on computers was horrifically slow.
+
+681
+00:28:39,910 --> 00:28:42,479
+And so you could do these clever tricks where you literally
+
+682
+00:28:42,489 --> 00:28:45,479
+just shifted bits up or down one to get the answer.
+
+683
+00:28:46,170 --> 00:28:46,550
+You can,
+
+684
+00:28:46,760 --> 00:28:50,319
+you can aa number by just shifting all the bits to, well to the left or right,
+
+685
+00:28:50,329 --> 00:28:51,589
+depending upon which direction you're going.
+
+686
+00:28:51,599 --> 00:28:52,500
+But towards the,
+
+687
+00:28:52,670 --> 00:28:53,619
+the most significant.
+
+688
+00:28:53,729 --> 00:28:54,500
+And now
+
+689
+00:28:54,880 --> 00:28:57,250
+it doesn't matter because we all have CPU
+
+690
+00:28:58,060 --> 00:28:58,140
+the
+
+691
+00:28:58,469 --> 00:28:59,199
+gigahertz.
+
+692
+00:28:59,219 --> 00:29:03,569
+But anyway, when, when you have an arithmetic overflow in C and C++,
+
+693
+00:29:03,579 --> 00:29:04,569
+that's what's known as
+
+694
+00:29:04,979 --> 00:29:05,880
+um um
+
+695
+00:29:06,010 --> 00:29:08,219
+oh crap. What do they call that undefined behavior? That's
+
+696
+00:29:08,530 --> 00:29:10,959
+right. And now there's also applications of that
+
+697
+00:29:11,109 --> 00:29:13,640
+and I love that it's undefined. It's like, well, no, it's wrong.
+
+698
+00:29:13,650 --> 00:29:15,910
+-- Like,
+-- well, no, no, no, no, no, no, it's under,
+
+699
+00:29:16,020 --> 00:29:17,349
+well, there are,
+
+700
+00:29:17,569 --> 00:29:18,920
+there are architectures that,
+
+701
+00:29:18,930 --> 00:29:22,109
+that relied on this behavior to do certain activities
+
+702
+00:29:22,119 --> 00:29:24,640
+and actions like it is not unheard of.
+
+703
+00:29:24,650 --> 00:29:26,199
+But the problem is every,
+
+704
+00:29:26,209 --> 00:29:28,260
+every computer architecture would handle it differently.
+
+705
+00:29:28,270 --> 00:29:30,415
+Like today, virtually everything is X 80 six.
+
+706
+00:29:30,885 --> 00:29:34,594
+But like 3040 years ago, you had dozens of architecture.
+
+707
+00:29:35,055 --> 00:29:38,015
+-- It's back to
+-- arms. Well, OK, I mean, arm, whatever
+
+708
+00:29:38,224 --> 00:29:39,375
+arms making a comeback.
+
+709
+00:29:39,755 --> 00:29:42,015
+Well, of course, it is. But you get the point right.
+
+710
+00:29:42,025 --> 00:29:45,405
+Like you could have a 31 bit IBM mainframe.
+
+711
+00:29:45,415 --> 00:29:47,204
+And what does that do with an injured overflow?
+
+712
+00:29:47,214 --> 00:29:50,474
+And some of those had traps in hardware that would catch this kind of stuff.
+
+713
+00:29:50,484 --> 00:29:52,055
+It was all completely different.
+
+714
+00:29:52,275 --> 00:29:53,685
+And so you couldn't rely on it,
+
+715
+00:29:53,864 --> 00:29:54,734
+but now
+
+716
+00:29:55,275 --> 00:29:56,025
+I'm going to keep going
+
+717
+00:29:57,734 --> 00:29:58,314
+for a sec, but
+
+718
+00:29:58,564 --> 00:29:59,454
+defining
+
+719
+00:30:00,010 --> 00:30:02,849
+the behavior and then deciding if it's correct or not,
+
+720
+00:30:03,010 --> 00:30:03,589
+you might
+
+721
+00:30:03,900 --> 00:30:06,270
+like, it's like, kind of like deciding to drive on the right
+
+722
+00:30:06,510 --> 00:30:07,609
+hand side of the road.
+
+723
+00:30:07,619 --> 00:30:12,579
+Like at some point, it matters less if it's correct in the sense of like optimal
+
+724
+00:30:12,719 --> 00:30:14,310
+and more in the sense of correct,
+
+725
+00:30:14,319 --> 00:30:17,369
+we just all agree to do that so that we all kind of know what happens.
+
+726
+00:30:17,520 --> 00:30:18,819
+And that's the other problem here is with the
+
+727
+00:30:18,829 --> 00:30:20,540
+way the words undefined and correct are being used.
+
+728
+00:30:20,550 --> 00:30:22,140
+I think that might be confusing some people
+
+729
+00:30:22,449 --> 00:30:23,550
+that's fair, that's fair.
+
+730
+00:30:23,910 --> 00:30:27,449
+Uh Infinite loops if you have an infinite loop that never exits,
+
+731
+00:30:27,780 --> 00:30:27,810
+it
+
+732
+00:30:27,979 --> 00:30:29,959
+is undefined what the compiler could do.
+
+733
+00:30:29,969 --> 00:30:31,770
+And there are compilers that would optimize
+
+734
+00:30:31,780 --> 00:30:33,449
+out infinite loops that never returned.
+
+735
+00:30:33,459 --> 00:30:36,369
+Well, no, I think we, they, they say it here. I think it's C++
+
+736
+00:30:36,650 --> 00:30:39,640
+yes, it says here, the problem C++ defines every side effect free loop.
+
+737
+00:30:39,650 --> 00:30:42,719
+Infinite loop can be assumed by the compiler to terminate
+
+738
+00:30:43,500 --> 00:30:45,199
+and so undefined behavior, right?
+
+739
+00:30:45,420 --> 00:30:49,040
+And, and this sounds again silly and it is, but
+
+740
+00:30:49,140 --> 00:30:52,530
+the fact that you don't know what's going to happen in this instance is the problem,
+
+741
+00:30:52,540 --> 00:30:52,699
+right?
+
+742
+00:30:52,709 --> 00:30:53,770
+Like that's the issue.
+
+743
+00:30:54,030 --> 00:30:57,319
+Uh null pointer usage. Oh my goodness, null pointers. Those are my favorite.
+
+744
+00:30:57,550 --> 00:30:59,150
+So a null pointer is
+
+745
+00:30:59,319 --> 00:31:00,229
+in C
+
+746
+00:31:00,439 --> 00:31:02,449
+you have a concept called a pointer which is
+
+747
+00:31:02,459 --> 00:31:05,369
+the variable just holds like AAA memory address,
+
+748
+00:31:05,650 --> 00:31:06,050
+right?
+
+749
+00:31:06,150 --> 00:31:07,760
+And it points to memory, right?
+
+750
+00:31:08,069 --> 00:31:09,359
+And you're basically saying, OK,
+
+751
+00:31:09,699 --> 00:31:10,439
+don't
+
+752
+00:31:10,569 --> 00:31:12,469
+worry about what's in the variable.
+
+753
+00:31:12,479 --> 00:31:14,040
+I want you to go to this location in
+
+754
+00:31:14,050 --> 00:31:17,160
+memory and that's the thing we're gonna do stuff with
+
+755
+00:31:17,300 --> 00:31:20,660
+what happens is you, you have a memory address, right?
+
+756
+00:31:20,670 --> 00:31:22,640
+Well, what happens if you're not pointing at anything?
+
+757
+00:31:22,859 --> 00:31:23,359
+Right?
+
+758
+00:31:23,770 --> 00:31:28,140
+You point at nothing null, right? You said that you said it to zero, you zero it out.
+
+759
+00:31:28,369 --> 00:31:32,109
+Now when you have a system, if you try to do something in the null
+
+760
+00:31:32,400 --> 00:31:33,520
+pointer space,
+
+761
+00:31:34,000 --> 00:31:37,500
+the reason that's undefined is because we like to think of, oh,
+
+762
+00:31:37,510 --> 00:31:39,160
+I'm just going to try to
+
+763
+00:31:39,650 --> 00:31:41,660
+address memory address zero.
+
+764
+00:31:41,670 --> 00:31:44,760
+I'm going to try to, to, to figure out what's that memory address here? Right.
+
+765
+00:31:44,770 --> 00:31:45,880
+And things would usually crash.
+
+766
+00:31:46,050 --> 00:31:49,459
+But what happens when you're trying to get the third thing in this array?
+
+767
+00:31:49,510 --> 00:31:51,300
+You go to zero plus three, right?
+
+768
+00:31:51,310 --> 00:31:53,119
+So now you're at that memory address and every
+
+769
+00:31:53,130 --> 00:31:55,790
+system handled the zero page as it was known
+
+770
+00:31:55,890 --> 00:31:56,800
+a little different.
+
+771
+00:31:56,810 --> 00:32:00,640
+And there are many, many when, when you and I started our career,
+
+772
+00:32:00,650 --> 00:32:04,500
+we thought null point or D reference bugs were harmless crashes.
+
+773
+00:32:04,609 --> 00:32:09,030
+And then I think, was it, was it Tavis or, or Chris Evans? One of those guys like,
+
+774
+00:32:09,530 --> 00:32:14,800
+or one of them basically figured out, oh, these bugs are real, like,
+
+775
+00:32:14,880 --> 00:32:16,369
+this is a big deal.
+
+776
+00:32:16,550 --> 00:32:19,589
+And then there have been countless instances where a null
+
+777
+00:32:19,599 --> 00:32:23,500
+point of D reference is used to actually run arbitrary code
+
+778
+00:32:23,859 --> 00:32:25,310
+which it's like, it's like when, when,
+
+779
+00:32:25,390 --> 00:32:27,729
+and the double free was found to be exploitable.
+
+780
+00:32:27,739 --> 00:32:30,050
+It like changed the world. It was hilarious.
+
+781
+00:32:30,060 --> 00:32:34,670
+This goes back, well, this the, the official of this goes back to 2002.
+
+782
+00:32:34,680 --> 00:32:35,290
+But well,
+
+783
+00:32:35,300 --> 00:32:37,479
+what I was trying to get at was basically is the no pointer de
+
+784
+00:32:37,520 --> 00:32:40,050
+run is a great example of trying to get people to do memory management.
+
+785
+00:32:40,380 --> 00:32:41,270
+People just,
+
+786
+00:32:41,959 --> 00:32:45,060
+it's like trying to get people to drive and use their turn signals consistently.
+
+787
+00:32:45,650 --> 00:32:45,939
+It's just not
+
+788
+00:32:47,560 --> 00:32:51,739
+right. And I mean, this is, this is the poster child of why
+
+789
+00:32:52,069 --> 00:32:54,619
+no one should use C or C plus ones anymore
+
+790
+00:32:54,780 --> 00:32:55,329
+because like
+
+791
+00:32:55,689 --> 00:32:58,329
+the programming language can deal with this crap.
+
+792
+00:32:58,339 --> 00:33:00,229
+So let it and it's just not an issue.
+
+793
+00:33:00,420 --> 00:33:00,489
+I
+
+794
+00:33:00,859 --> 00:33:01,150
+know.
+
+795
+00:33:01,160 --> 00:33:06,020
+Yeah, see, I would never argue that you shouldn't use C or C++ for a security reason.
+
+796
+00:33:06,030 --> 00:33:06,609
+I would say
+
+797
+00:33:06,800 --> 00:33:10,400
+you should never use it because you can be way more productive in other languages.
+
+798
+00:33:10,650 --> 00:33:11,069
+And
+
+799
+00:33:11,229 --> 00:33:15,329
+to put it bluntly for the vast majority of us, we don't need to optimize our code.
+
+800
+00:33:15,739 --> 00:33:19,189
+And by the time we finish optimizing our code Moore's law will have caught up.
+
+801
+00:33:20,099 --> 00:33:20,130
+I
+
+802
+00:33:20,250 --> 00:33:22,760
+-- mean, there is an aspect of that for sure
+-- for the majority,
+
+803
+00:33:22,770 --> 00:33:26,599
+like are there a few corner cases like say crypto or the Linux kernel or whatever?
+
+804
+00:33:26,739 --> 00:33:27,589
+Yeah, but
+
+805
+00:33:28,329 --> 00:33:29,790
+I mean, this, you know, yeah,
+
+806
+00:33:29,800 --> 00:33:31,959
+like the majority of us build a house by throwing a bunch
+
+807
+00:33:31,969 --> 00:33:34,430
+of two by fours and plywood together and that's close enough,
+
+808
+00:33:34,599 --> 00:33:34,969
+you know.
+
+809
+00:33:34,979 --> 00:33:36,199
+Yeah, if you want to build the Hoover Dam,
+
+810
+00:33:36,209 --> 00:33:38,270
+you might need a structural engineer and a bit of concrete.
+
+811
+00:33:38,520 --> 00:33:39,989
+But fundamentally
+
+812
+00:33:40,209 --> 00:33:41,810
+for me, what always gets me is,
+
+813
+00:33:42,040 --> 00:33:44,069
+well, there was a study like if you write this line of code,
+
+814
+00:33:44,079 --> 00:33:46,069
+how many machine instructions does it result in?
+
+815
+00:33:46,469 --> 00:33:50,550
+Right? And obviously like going from assembler to C to like PHP to Python,
+
+816
+00:33:50,680 --> 00:33:53,170
+you know, you write like one line of Python and it pulls in
+
+817
+00:33:53,420 --> 00:33:54,969
+like a web browser, you know.
+
+818
+00:33:55,829 --> 00:33:59,979
+And so for me, it's just more about being productive than anything else. Like I,
+
+819
+00:34:00,280 --> 00:34:03,150
+because that's the thing, I feel like the people that are
+
+820
+00:34:04,510 --> 00:34:06,329
+the people who have ac code base,
+
+821
+00:34:06,489 --> 00:34:07,890
+they have ac code base.
+
+822
+00:34:08,648 --> 00:34:12,069
+Sure. Sure. And, and they're stuck with it for now. Absolutely.
+
+823
+00:34:12,248 --> 00:34:14,108
+And, and I get that I'm sensitive to that.
+
+824
+00:34:14,358 --> 00:34:15,839
+I'm not saying if you have it,
+
+825
+00:34:15,849 --> 00:34:18,228
+get rid of it because rewriting things often creates new
+
+826
+00:34:18,239 --> 00:34:20,467
+-- and horrible bugs
+-- but never write anything new in it.
+
+827
+00:34:20,579 --> 00:34:22,178
+Yeah, if you're, if you're doing something new, like
+
+828
+00:34:22,849 --> 00:34:23,809
+literally anything else.
+
+829
+00:34:25,118 --> 00:34:28,447
+Php like I take PHP over C like,
+
+830
+00:34:28,458 --> 00:34:31,279
+-- well
+-- and I love that people are like PHP is not performing.
+
+831
+00:34:31,289 --> 00:34:33,108
+I'm like, Facebook would say
+
+832
+00:34:33,603 --> 00:34:34,254
+no one cares.
+
+833
+00:34:34,804 --> 00:34:34,824
+It
+
+834
+00:34:35,594 --> 00:34:36,284
+doesn't matter
+
+835
+00:34:36,415 --> 00:34:37,245
+anyway. All right.
+
+836
+00:34:37,254 --> 00:34:39,324
+And then the last one on this document it says crashes out
+
+837
+00:34:39,333 --> 00:34:42,165
+of sorts and this is around doing comparisons in the sort.
+
+838
+00:34:42,175 --> 00:34:43,485
+Operator in C++
+
+839
+00:34:43,833 --> 00:34:45,083
+it's overly complicated.
+
+840
+00:34:45,094 --> 00:34:49,524
+I don't want to explain it and just know that like sorting sounds easy,
+
+841
+00:34:49,583 --> 00:34:51,935
+but C C++ made it hard.
+
+842
+00:34:52,600 --> 00:34:53,219
+Sorry
+
+843
+00:34:53,510 --> 00:34:57,080
+if, if C++ can do anything, it's making easy things hard. It's a good job.
+
+844
+00:34:57,090 --> 00:34:58,510
+C++ I raise my glass,
+
+845
+00:34:58,520 --> 00:35:02,429
+I was gonna say it makes things potentially very dangerous consistently.
+
+846
+00:35:02,439 --> 00:35:02,939
+-- I
+-- mean,
+
+847
+00:35:03,110 --> 00:35:03,129
+it
+
+848
+00:35:03,429 --> 00:35:09,199
+-- is a language from another time and so fundamentally
+-- how many C security bugs
+
+849
+00:35:09,639 --> 00:35:12,770
+are less than 10 character patches?
+
+850
+00:35:13,159 --> 00:35:13,169
+A
+
+851
+00:35:13,310 --> 00:35:18,070
+-- lot of them, it's usually like
+-- a greater than, or a less than symbol or an equal symbol
+
+852
+00:35:18,379 --> 00:35:22,780
+or, or it should have been less than, instead of less than, or equal to or,
+
+853
+00:35:23,379 --> 00:35:25,379
+or a zero and a one or
+
+854
+00:35:26,189 --> 00:35:27,989
+whatever, very, very common. But that's the thing.
+
+855
+00:35:28,000 --> 00:35:30,689
+It makes it easy to make very small and simple mistakes and so fun of
+
+856
+00:35:31,110 --> 00:35:33,510
+the point of this whole episode. What I want to go out on
+
+857
+00:35:33,820 --> 00:35:36,050
+is throughout time,
+
+858
+00:35:36,060 --> 00:35:38,020
+there has never been an era where
+
+859
+00:35:38,030 --> 00:35:42,750
+people prioritize security above usability or features
+
+860
+00:35:43,010 --> 00:35:48,320
+or, and you know, the, the lovely words of, of Nisha is frustration reduction. Like
+
+861
+00:35:48,909 --> 00:35:50,610
+if your security
+
+862
+00:35:50,830 --> 00:35:53,669
+it, it can't just keep the, the level the same.
+
+863
+00:35:53,679 --> 00:35:55,489
+It actually has to make something better
+
+864
+00:35:55,530 --> 00:35:57,729
+and if security isn't making something better,
+
+865
+00:35:57,899 --> 00:36:00,179
+-- no one's gonna care.
+-- Well, and that goes to that.
+
+866
+00:36:00,189 --> 00:36:02,050
+I've seen a lot of people trying to use the
+
+867
+00:36:02,060 --> 00:36:06,300
+security as enabler of X and trying to push security
+
+868
+00:36:06,409 --> 00:36:09,949
+so that we can then do something else at all like, or shut
+
+869
+00:36:10,060 --> 00:36:10,820
+them safely.
+
+870
+00:36:11,020 --> 00:36:15,679
+And I think that has the potential to work. But the problem is,
+
+871
+00:36:16,310 --> 00:36:18,590
+or you can just do it without the security,
+
+872
+00:36:18,600 --> 00:36:21,129
+-- which a lot of companies have done
+-- for sure.
+
+873
+00:36:21,139 --> 00:36:22,610
+Because what is the,
+
+874
+00:36:22,719 --> 00:36:25,989
+what actually happens when you don't have security in most instances,
+
+875
+00:36:26,219 --> 00:36:28,840
+in most instances? Nothing happens.
+
+876
+00:36:29,340 --> 00:36:32,189
+And that's the problem. So you end up with this survivor bias
+
+877
+00:36:32,550 --> 00:36:35,409
+where people are, like, I don't have to care because it's gonna be fine.
+
+878
+00:36:35,419 --> 00:36:38,530
+I did this at my last job and nothing happened and it's like you are correct.
+
+879
+00:36:38,540 --> 00:36:39,320
+-- But
+-- I,
+
+880
+00:36:39,330 --> 00:36:42,530
+I think it's worse than that because there's also the
+
+881
+00:36:42,540 --> 00:36:45,145
+survivor bias of all these companies had security incidents.
+
+882
+00:36:45,295 --> 00:36:46,906
+And like, so what they paid a fine,
+
+883
+00:36:47,115 --> 00:36:48,656
+it was probably cheaper than that.
+
+884
+00:36:48,825 --> 00:36:49,075
+They probably
+
+885
+00:36:49,246 --> 00:36:53,236
+-- didn't even pay a fine,
+-- like, or, you know, it was, uh, if, if there was a fine,
+
+886
+00:36:53,246 --> 00:36:56,906
+-- it's still a lot cheaper than setting up a security program
+-- and, and look, we're,
+
+887
+00:36:56,916 --> 00:36:57,986
+we're, uh, ok.
+
+888
+00:36:58,406 --> 00:37:00,986
+It's incentives, right. It's all about incentives.
+
+889
+00:37:00,996 --> 00:37:04,416
+Sometimes incentives cost money. Sometimes incentives are ease of use.
+
+890
+00:37:04,565 --> 00:37:07,545
+What is the incentive for security?
+
+891
+00:37:07,706 --> 00:37:09,385
+And in many instances, we don't have it,
+
+892
+00:37:09,395 --> 00:37:11,105
+which is why we try to peddle fear and
+
+893
+00:37:11,115 --> 00:37:13,941
+peddling fear doesn't work like it fails every time.
+
+894
+00:37:15,221 --> 00:37:18,562
+The way to go is insurance is tying this stuff to insurance
+
+895
+00:37:18,701 --> 00:37:21,681
+because the insurance companies then have the incentive to not pay out.
+
+896
+00:37:21,852 --> 00:37:23,672
+Yeah, they have incentive, which is money.
+
+897
+00:37:23,781 --> 00:37:26,082
+Like that's the thing. They have an incentive.
+
+898
+00:37:27,181 --> 00:37:28,541
+For example, it has to be insurance companies.
+
+899
+00:37:28,552 --> 00:37:31,632
+It can't be like, audits are tough because, well,
+
+900
+00:37:31,781 --> 00:37:34,832
+the audit companies like we want to get hired next year, we're not going to fail you.
+
+901
+00:37:35,011 --> 00:37:35,511
+Right. Oh,
+
+902
+00:37:35,612 --> 00:37:36,592
+-- of course.
+-- You know,
+
+903
+00:37:36,602 --> 00:37:38,622
+and that's the thing. Insurance is slightly different
+
+904
+00:37:38,791 --> 00:37:39,441
+because
+
+905
+00:37:39,739 --> 00:37:44,050
+they, and they don't care about things that do or don't work.
+
+906
+00:37:44,060 --> 00:37:48,120
+They're going to look at the data and be like if, if this, then this right?
+
+907
+00:37:48,129 --> 00:37:49,209
+Insurance is,
+
+908
+00:37:49,500 --> 00:37:52,409
+I can't working for a life insurance company and
+
+909
+00:37:52,419 --> 00:37:54,959
+working with like actuaries who did this stuff?
+
+910
+00:37:54,969 --> 00:37:55,479
+It is
+
+911
+00:37:56,310 --> 00:37:59,879
+when you're a young person who's never really been in this field and you enter that.
+
+912
+00:37:59,889 --> 00:38:01,209
+-- It's like,
+-- it's horrifying.
+
+913
+00:38:01,439 --> 00:38:03,120
+Yeah, it's, it's, it's a horror show.
+
+914
+00:38:03,129 --> 00:38:04,780
+It's a, it's a spreadsheet, it's a spreadsheet.
+
+915
+00:38:04,790 --> 00:38:08,899
+-- The number says X
+-- literal death in a spreadsheet like it's bananas
+
+916
+00:38:09,320 --> 00:38:10,510
+and, and that's what I mean.
+
+917
+00:38:10,520 --> 00:38:13,649
+That's what it comes down to is security is if, if we want people
+
+918
+00:38:13,760 --> 00:38:17,639
+to listen to us, we have to give them a reason to listen to us and saying,
+
+919
+00:38:17,649 --> 00:38:20,040
+you'll be sorry if you don't listen to us isn't a reason
+
+920
+00:38:21,189 --> 00:38:23,439
+if it worked. Like,
+
+921
+00:38:23,750 --> 00:38:27,050
+I can't even imagine how easy parenting would be if that line of reasoning worked.
+
+922
+00:38:27,370 --> 00:38:28,169
+If that,
+
+923
+00:38:28,360 --> 00:38:31,770
+I mean, that's, if I want my kids to do something, I'll tell them not to,
+
+924
+00:38:31,899 --> 00:38:35,229
+like, people would wear seatbelts and stop at red lights.
+
+925
+00:38:35,560 --> 00:38:39,070
+But seriously, like, there's so many human behaviors that if they listen to,
+
+926
+00:38:39,080 --> 00:38:40,340
+you'll be sorry if you don't.
+
+927
+00:38:40,850 --> 00:38:43,550
+No, they, they, they aren't whatever.
+
+928
+00:38:43,560 --> 00:38:45,909
+-- And survivor bias says I don't have to care because it's
+-- fun
+
+929
+00:38:46,439 --> 00:38:48,909
+because everybody that didn't listen and went through the front windshield,
+
+930
+00:38:48,919 --> 00:38:50,129
+-- they're not around to talk
+-- about it.
+
+931
+00:38:50,239 --> 00:38:51,389
+They don't get to talk and I,
+
+932
+00:38:51,399 --> 00:38:53,560
+I'm fine because I didn't wear my seatbelt and I
+
+933
+00:38:53,570 --> 00:38:56,469
+hit a deer or whatever and it doesn't matter anyway.
+
+934
+00:38:56,479 --> 00:38:59,360
+All right, I'm ending this. Thank you, Kurt. Thank you for listening. Go to
+
+935
+00:38:59,570 --> 00:39:01,750
+Paar Security podcast.com. Head up the show notes, T Podos
+
+936
+00:39:02,129 --> 00:39:06,379
+Podcast. Hashtag on Mastodon. Kurt. You have a marvelous rest of your day.
+
+937
+00:39:06,510 --> 00:39:07,870
+You too. Thanks everybody.
+
+938
+00:39:08,100 --> 00:39:09,989
+Thanks everyone. Bye bye.

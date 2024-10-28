@@ -1,0 +1,3209 @@
+0
+00:00:05,309 --> 00:00:08,380
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,390 --> 00:00:11,359
+Kurt Siegfried and my partner in compiling software from source code.
+
+2
+00:00:11,369 --> 00:00:12,390
+Josh Pressers,
+
+3
+00:00:12,539 --> 00:00:17,170
+-- not anymore, man, like compiling things is terrible dot
+-- slash.
+
+4
+00:00:17,180 --> 00:00:21,540
+What is it dot slash configure dot slash make dot slash make install.
+
+5
+00:00:21,549 --> 00:00:25,469
+-- Oh no, make test, then make install and hope for the best,
+-- make test.
+
+6
+00:00:25,479 --> 00:00:30,030
+What, whatever new you don't need to make, test, you just make install that stuff.
+
+7
+00:00:30,370 --> 00:00:33,229
+So uh some, some interesting news.
+
+8
+00:00:33,240 --> 00:00:36,490
+Um Number one ubuntu flavors agree to stop using flat pack.
+
+9
+00:00:36,840 --> 00:00:40,430
+-- Really? I didn't hear that well
+-- because it like literally came out like an hour ago.
+
+10
+00:00:41,209 --> 00:00:41,619
+Oh,
+
+11
+00:00:41,830 --> 00:00:44,840
+well, there you go. It's funny because we plan on talking about this for a while.
+
+12
+00:00:44,849 --> 00:00:49,119
+You say an hour ago except we don't know when this episode will come out. So, whatever
+
+13
+00:00:49,279 --> 00:00:52,250
+and then what actually triggered this episode happened a few days
+
+14
+00:00:52,259 --> 00:00:55,740
+ago was somebody wrote a really good article about Pip install
+
+15
+00:00:56,119 --> 00:00:58,599
+and it's titled one does not simply Pip install,
+
+16
+00:00:58,610 --> 00:01:01,119
+which anytime you can fit a Lord of the Rings Me in.
+
+17
+00:01:01,130 --> 00:01:02,200
+I am in.
+
+18
+00:01:02,669 --> 00:01:05,830
+It's a very subtle problem, but back in the olden days
+
+19
+00:01:06,279 --> 00:01:07,550
+we had an operating system
+
+20
+00:01:07,680 --> 00:01:10,069
+and we would install software on it and you would have a
+
+21
+00:01:10,080 --> 00:01:14,510
+piece of software that required library version 1.2 or older or newer.
+
+22
+00:01:14,819 --> 00:01:17,660
+And so you would install that and things worked
+
+23
+00:01:17,989 --> 00:01:20,680
+until you had another application that required
+
+24
+00:01:20,690 --> 00:01:22,269
+a different version of the library.
+
+25
+00:01:23,309 --> 00:01:26,300
+And this is where we get the expression, for example, Windows dll, hell
+
+26
+00:01:26,900 --> 00:01:31,660
+for anybody that's dealt with Windows and this, you know, it's not very much fun.
+
+27
+00:01:31,959 --> 00:01:34,940
+I mean, there used to be R PM. Hell, like same idea.
+
+28
+00:01:35,470 --> 00:01:35,500
+Oh
+
+29
+00:01:36,069 --> 00:01:36,639
+yeah.
+
+30
+00:01:36,989 --> 00:01:37,839
+And the,
+
+31
+00:01:37,970 --> 00:01:39,419
+and I'm making big air quotes here.
+
+32
+00:01:39,430 --> 00:01:41,949
+The solution to this was to have a vendor like Red
+
+33
+00:01:41,959 --> 00:01:45,260
+Hat basically control everything and make sure it kind of worked
+
+34
+00:01:45,459 --> 00:01:47,220
+and ship all the packages.
+
+35
+00:01:47,430 --> 00:01:50,860
+And if you wanted to do something on your own, you were kind of on your own.
+
+36
+00:01:51,080 --> 00:01:52,739
+Like if you installed a new version or a
+
+37
+00:01:52,750 --> 00:01:54,919
+different version of something like good luck to you.
+
+38
+00:01:55,129 --> 00:01:59,019
+I mean, ok, so let's explain this a little more because
+
+39
+00:01:59,250 --> 00:02:01,660
+when I started my UNIX career,
+
+40
+00:02:02,269 --> 00:02:05,260
+there weren't packages, there weren't package managers,
+
+41
+00:02:05,269 --> 00:02:06,819
+you installed UNIX and you,
+
+42
+00:02:07,110 --> 00:02:08,149
+there were Tar Balls.
+
+43
+00:02:08,389 --> 00:02:13,080
+Yeah, it was basically tar files and you might have like an optional CD,
+
+44
+00:02:13,089 --> 00:02:14,559
+which is where slash opt,
+
+45
+00:02:14,770 --> 00:02:16,160
+you know, comes into play.
+
+46
+00:02:16,369 --> 00:02:18,779
+And I could install random tools and utilities that
+
+47
+00:02:18,789 --> 00:02:21,750
+usually ended up in slash opt and they often carried
+
+48
+00:02:21,949 --> 00:02:25,660
+whatever libraries they needed. There was no, like shared
+
+49
+00:02:25,839 --> 00:02:28,279
+Lib Jpeg or something like that. This was
+
+50
+00:02:28,710 --> 00:02:30,460
+random balls of garbage.
+
+51
+00:02:30,830 --> 00:02:32,979
+And then what would happen is if you had something you
+
+52
+00:02:32,990 --> 00:02:35,889
+liked that was built on like some version of Solaris.
+
+53
+00:02:35,949 --> 00:02:38,100
+I don't even remember what the versions were anymore.
+
+54
+00:02:38,309 --> 00:02:38,919
+But you know what I mean?
+
+55
+00:02:38,929 --> 00:02:42,339
+If it worked on like Solaris five and you went to Solaris seven,
+
+56
+00:02:42,779 --> 00:02:45,080
+it probably broke because the libraries it was
+
+57
+00:02:45,089 --> 00:02:48,460
+linked against were gone or versioned or,
+
+58
+00:02:48,470 --> 00:02:49,380
+or whatever.
+
+59
+00:02:49,960 --> 00:02:50,809
+And so
+
+60
+00:02:50,919 --> 00:02:54,270
+it was a pain in the butt. And this is where the Linux distributions
+
+61
+00:02:54,600 --> 00:02:56,100
+really changed the world
+
+62
+00:02:56,350 --> 00:02:58,559
+because now the idea was you go to your
+
+63
+00:02:58,570 --> 00:03:01,619
+Linux distribution like Debian or Red Hat or whoever
+
+64
+00:03:01,759 --> 00:03:05,770
+they give you the installer, it installs all of these packages.
+
+65
+00:03:05,779 --> 00:03:07,720
+And if you install more packages,
+
+66
+00:03:07,869 --> 00:03:10,455
+it has a well defined dependency tree.
+
+67
+00:03:10,675 --> 00:03:14,014
+The dependencies of each library are very well understood.
+
+68
+00:03:14,024 --> 00:03:17,044
+And generally speaking, as long as you played in that sandbox,
+
+69
+00:03:17,054 --> 00:03:18,794
+everything basically worked
+
+70
+00:03:18,934 --> 00:03:19,315
+well.
+
+71
+00:03:19,324 --> 00:03:21,625
+What's interesting is all the dependencies had to be
+
+72
+00:03:21,634 --> 00:03:25,914
+manually put in and sometimes they were wrong.
+
+73
+00:03:25,925 --> 00:03:28,794
+Like I remember I have filed more than a few bugs saying like
+
+74
+00:03:29,054 --> 00:03:30,115
+this R PM
+
+75
+00:03:30,429 --> 00:03:33,509
+does not have this declared dependency that it needs.
+
+76
+00:03:33,779 --> 00:03:37,199
+And so you might get lucky and happen to have that installed.
+
+77
+00:03:37,210 --> 00:03:37,449
+And I,
+
+78
+00:03:37,460 --> 00:03:38,589
+I would always run into this because I
+
+79
+00:03:38,600 --> 00:03:41,449
+would do a minimal install of Fedora or whatever
+
+80
+00:03:41,570 --> 00:03:44,119
+and then install stuff and it would break. And I'm like, well is it broken?
+
+81
+00:03:44,130 --> 00:03:46,929
+Oh, because it's missing this package in the minimal install.
+
+82
+00:03:46,940 --> 00:03:50,110
+That's in the more workstation or server install.
+
+83
+00:03:50,220 --> 00:03:51,970
+My favorite example of that was
+
+84
+00:03:52,100 --> 00:03:57,089
+I was building things for a time on. It was like Red Hat Linux seven maybe.
+
+85
+00:03:57,100 --> 00:03:58,330
+I don't remember which one.
+
+86
+00:03:58,649 --> 00:04:01,259
+Yeah. Red Hat Linux. Not Enterprise. Linux. Red Hat Linux,
+
+87
+00:04:02,039 --> 00:04:04,580
+the one that came on a CD from Best Buy.
+
+88
+00:04:05,449 --> 00:04:07,470
+Uh Yeah. Yeah. Yeah. And
+
+89
+00:04:07,809 --> 00:04:10,399
+I, I was setting up these like build farms
+
+90
+00:04:10,570 --> 00:04:14,070
+and I found out the fortune command which is like you type fortune
+
+91
+00:04:14,309 --> 00:04:16,970
+and it would give you like a random fortune out of a file.
+
+92
+00:04:16,980 --> 00:04:20,608
+For some reason, the build system needed that package or something.
+
+93
+00:04:20,619 --> 00:04:22,890
+I built, I don't remember exactly what the details were but
+
+94
+00:04:23,029 --> 00:04:26,119
+it wasn't installed, nothing said it was required.
+
+95
+00:04:26,130 --> 00:04:29,920
+So I always had to install my build system computers
+
+96
+00:04:30,220 --> 00:04:32,880
+and then make sure I also installed Fortune
+
+97
+00:04:32,890 --> 00:04:34,609
+and there was no like answerable back then.
+
+98
+00:04:34,619 --> 00:04:40,109
+-- So you just like SSH D in and why did you install things back then? It was Rh
+-- nr PM.
+
+99
+00:04:40,119 --> 00:04:43,609
+-- Hyphen capital UVH space package name or URL.
+-- No,
+
+100
+00:04:43,709 --> 00:04:48,559
+no, no, no, you downloaded it. There was no Yum or DNF. It was I think Red Hat.
+
+101
+00:04:48,790 --> 00:04:50,839
+Yeah, it was R PM. No, no R PM.
+
+102
+00:04:50,850 --> 00:04:54,880
+It you would use the Red Hat network to download the packages
+
+103
+00:04:55,109 --> 00:05:00,970
+like this is this is old school man. Like this is uh these were the before times.
+
+104
+00:05:00,980 --> 00:05:02,010
+-- So
+-- what's interesting,
+
+105
+00:05:02,070 --> 00:05:04,910
+but hang on, hang on, let's, let's finish this story.
+
+106
+00:05:04,989 --> 00:05:08,089
+So we've got Linux distributions, they're doing this thing.
+
+107
+00:05:08,359 --> 00:05:09,179
+And then
+
+108
+00:05:09,500 --> 00:05:12,859
+the idea was in the perfect world you just like
+
+109
+00:05:12,989 --> 00:05:17,720
+did an app to get installed or a yum install of the things you needed, right?
+
+110
+00:05:17,730 --> 00:05:21,940
+And this was true if you're running Python or, or C code or whatever PHP.
+
+111
+00:05:21,950 --> 00:05:25,420
+And then eventually we end up in the world we have now where
+
+112
+00:05:25,429 --> 00:05:27,309
+there's this mass explosion of open
+
+113
+00:05:27,320 --> 00:05:30,980
+source and we're seeing people using containers
+
+114
+00:05:31,130 --> 00:05:33,359
+and virtual environments and things like that
+
+115
+00:05:33,529 --> 00:05:37,019
+to get around the limitations of the operating system because at the same time,
+
+116
+00:05:37,029 --> 00:05:39,859
+you don't want to just like pollute the crap out of your system, right?
+
+117
+00:05:39,869 --> 00:05:41,269
+You want to put things
+
+118
+00:05:41,420 --> 00:05:42,000
+in a place,
+
+119
+00:05:42,010 --> 00:05:44,640
+you can clean up the mess later and that is kind of
+
+120
+00:05:44,649 --> 00:05:47,040
+the root of the one does not simply pip and stop.
+
+121
+00:05:47,089 --> 00:05:51,440
+Well, the thing is the world changed. We went from having 100 Python libraries
+
+122
+00:05:51,779 --> 00:05:53,760
+to 100,000.
+
+123
+00:05:54,480 --> 00:05:55,809
+Now when you have
+
+124
+00:05:56,190 --> 00:05:58,260
+like 100 core Python libraries.
+
+125
+00:05:58,730 --> 00:06:00,290
+Yeah, you can package them all up.
+
+126
+00:06:01,149 --> 00:06:03,959
+It's, it's a couple of weeks work for a human being to do that.
+
+127
+00:06:04,450 --> 00:06:05,410
+It's, it's totally doable
+
+128
+00:06:06,420 --> 00:06:09,769
+-- and even look at
+-- Debian, right? Debian now comes on like, what is it?
+
+129
+00:06:09,779 --> 00:06:16,579
+-- It's like 16 or 18 CD. Si mean, it used to fit on one C
+-- DS. My first dis
+
+130
+00:06:16,700 --> 00:06:20,429
+-- drill was on floppy disk.
+-- Well, that's Right. And I remember, yeah, I remember 16.
+
+131
+00:06:20,440 --> 00:06:21,000
+I think,
+
+132
+00:06:21,260 --> 00:06:24,730
+-- I feel like my first Debian was like, 10
+-- floppies.
+
+133
+00:06:24,739 --> 00:06:27,649
+I'm always reminded of people saying, why do we do this stupid thing?
+
+134
+00:06:27,660 --> 00:06:31,209
+Well, because the stupid thing was actually really intelligent 20 years ago
+
+135
+00:06:31,359 --> 00:06:33,049
+and it totally worked 20 years ago.
+
+136
+00:06:33,429 --> 00:06:34,809
+And so, for example,
+
+137
+00:06:35,149 --> 00:06:39,619
+20 some years ago, having a distribution with several 1000 packages
+
+138
+00:06:39,970 --> 00:06:43,250
+that was pretty much the known software world that mattered.
+
+139
+00:06:43,470 --> 00:06:44,769
+Yeah, that's right. You know,
+
+140
+00:06:44,910 --> 00:06:46,690
+and then Python exploded and
+
+141
+00:06:46,839 --> 00:06:48,709
+javascript exploded and
+
+142
+00:06:49,339 --> 00:06:53,450
+like the Pearl Comprehensive um package archive network, you know,
+
+143
+00:06:53,459 --> 00:06:54,850
+was sort of the beginning of the end
+
+144
+00:06:55,130 --> 00:06:59,440
+of a distribution of being able to do the packaging because see the problem is,
+
+145
+00:06:59,519 --> 00:07:03,269
+it's not just that Red Hat is doing all this work to package up this stuff.
+
+146
+00:07:03,420 --> 00:07:06,269
+It's also Debian and it's Fedora and it's sent to and it's
+
+147
+00:07:06,549 --> 00:07:08,950
+the 15 million flavors of Debian and the
+
+148
+00:07:08,959 --> 00:07:11,510
+15 million flavors of Mint Linux and whatever.
+
+149
+00:07:11,679 --> 00:07:16,350
+And so at some point, the amount of poorly replicated work
+
+150
+00:07:16,489 --> 00:07:18,549
+goes out of control, it becomes really inefficient
+
+151
+00:07:19,549 --> 00:07:23,929
+and the, the sort of package ecosystem falls apart because
+
+152
+00:07:24,570 --> 00:07:27,519
+like you can't package up 100,000 Python packages now
+
+153
+00:07:27,540 --> 00:07:30,029
+and have them all be compatible with each other.
+
+154
+00:07:30,100 --> 00:07:31,850
+That's part of it as well. Because
+
+155
+00:07:32,070 --> 00:07:34,130
+if you're running a Linux distribution,
+
+156
+00:07:34,399 --> 00:07:38,450
+you have probably one version of Python, right? Probably.
+
+157
+00:07:38,809 --> 00:07:42,690
+And these days, like it is expected
+
+158
+00:07:43,019 --> 00:07:47,239
+that you will just install the specific version of Python
+
+159
+00:07:47,250 --> 00:07:50,350
+or node or Ruby or whatever it is you're using
+
+160
+00:07:50,750 --> 00:07:55,429
+and then you will use that because sometimes there's weird reasons you don't want.
+
+161
+00:07:55,440 --> 00:07:56,450
+The latest version
+
+162
+00:07:56,619 --> 00:07:58,089
+-- R
+-- PM depends on Python.
+
+163
+00:07:58,100 --> 00:07:59,730
+So every red hat system had Python,
+
+164
+00:07:59,739 --> 00:08:03,739
+which is one of the reasons I actually started doing Python early on is because no,
+
+165
+00:08:03,750 --> 00:08:06,079
+because it was guaranteed to be installed just like V I.
+
+166
+00:08:06,089 --> 00:08:08,760
+That's why I learned how to use V I because it's always there even on Sco
+
+167
+00:08:09,170 --> 00:08:10,290
+UNIX that pile of garbage,
+
+168
+00:08:10,959 --> 00:08:11,329
+you know,
+
+169
+00:08:11,440 --> 00:08:14,519
+but that's the thing I used Python because it's installed by default.
+
+170
+00:08:14,529 --> 00:08:18,250
+It was a dependency of R PM. And I'm like, it's always there. Good old Python,
+
+171
+00:08:18,480 --> 00:08:18,790
+you know,
+
+172
+00:08:18,799 --> 00:08:21,859
+and it also turns out to be a really good language with really great libraries,
+
+173
+00:08:21,869 --> 00:08:22,700
+which is nice.
+
+174
+00:08:23,089 --> 00:08:25,140
+But that's one of the reasons I wouldn't use
+
+175
+00:08:25,149 --> 00:08:27,619
+other languages because I'd have to install them.
+
+176
+00:08:27,630 --> 00:08:29,859
+And if I'm not the administrator of the system,
+
+177
+00:08:30,410 --> 00:08:31,450
+well, now what,
+
+178
+00:08:31,619 --> 00:08:32,080
+you know,
+
+179
+00:08:32,200 --> 00:08:35,729
+and installing it to your local directory was not an option 20 years ago.
+
+180
+00:08:35,739 --> 00:08:38,030
+I mean, you could do that sort of kind of, but it was
+
+181
+00:08:38,340 --> 00:08:38,630
+complicated.
+
+182
+00:08:39,159 --> 00:08:40,840
+And so I think what a lot of these
+
+183
+00:08:40,940 --> 00:08:43,140
+languages and ecosystems realized is
+
+184
+00:08:43,950 --> 00:08:44,349
+OK.
+
+185
+00:08:44,359 --> 00:08:47,929
+Do we want like 100 or 1000 distributions trying to package up all
+
+186
+00:08:47,940 --> 00:08:51,080
+our packages or do we build the thing that does this properly?
+
+187
+00:08:51,210 --> 00:08:52,429
+Because the other thing to remember is
+
+188
+00:08:52,630 --> 00:08:53,650
+Python
+
+189
+00:08:53,960 --> 00:08:54,400
+and
+
+190
+00:08:54,619 --> 00:08:57,469
+the way Python does stuff is a different culture
+
+191
+00:08:57,479 --> 00:08:59,320
+and mindset than the way R PM does stuff,
+
+192
+00:08:59,330 --> 00:08:59,520
+right.
+
+193
+00:08:59,530 --> 00:09:03,130
+R PM is for an operating system. Python is a programming language.
+
+194
+00:09:03,140 --> 00:09:05,049
+These are two very different things
+
+195
+00:09:05,450 --> 00:09:06,250
+in some ways.
+
+196
+00:09:06,460 --> 00:09:07,640
+That's right. And
+
+197
+00:09:07,880 --> 00:09:09,979
+it was always funny because I remember
+
+198
+00:09:10,119 --> 00:09:11,020
+especially,
+
+199
+00:09:11,030 --> 00:09:13,099
+I feel like Debian was worse at this that
+
+200
+00:09:13,109 --> 00:09:15,030
+I'm sure there's plenty of examples for Red Hat,
+
+201
+00:09:15,070 --> 00:09:19,580
+but the packager would, will say make decisions for you sometimes
+
+202
+00:09:19,840 --> 00:09:21,619
+that like I, I still complain about this.
+
+203
+00:09:21,630 --> 00:09:24,419
+So I run Debian on all of the machines I have in my basement
+
+204
+00:09:24,669 --> 00:09:25,799
+and it is like
+
+205
+00:09:26,010 --> 00:09:28,770
+the the eye watering pet peeve of mine
+
+206
+00:09:28,940 --> 00:09:32,489
+that the Debian vim enables the stupid click.
+
+207
+00:09:32,500 --> 00:09:36,130
+Like you let the mouse cursor click on the screen to like do stuff
+
+208
+00:09:36,340 --> 00:09:37,250
+like I don't want that.
+
+209
+00:09:37,260 --> 00:09:39,909
+I want my vim to be dumb and the mouse cursor
+
+210
+00:09:39,919 --> 00:09:43,090
+is only there for highlighting text and copying it like no,
+
+211
+00:09:43,179 --> 00:09:46,250
+do not like let them respond to my mouse cursor clicking.
+
+212
+00:09:46,500 --> 00:09:48,969
+Is there not some easy global you can set or something?
+
+213
+00:09:49,359 --> 00:09:49,530
+Yeah,
+
+214
+00:09:49,539 --> 00:09:53,729
+I turn it off but I like never remember until I run it and then I'm filled with rage
+
+215
+00:09:53,989 --> 00:09:57,179
+and it's like this is not, it's not the default either. That's the thing.
+
+216
+00:09:57,190 --> 00:09:59,630
+It's literally only Devi and systems that do this
+
+217
+00:09:59,640 --> 00:10:01,719
+and it is like uh even talking about it,
+
+218
+00:10:01,729 --> 00:10:02,849
+-- it's making me angry,
+-- Kurt.
+
+219
+00:10:02,859 --> 00:10:05,929
+So I, I can tell you probably why that is that behavior
+
+220
+00:10:06,070 --> 00:10:07,909
+because the package developer likes it.
+
+221
+00:10:08,250 --> 00:10:10,250
+-- Yeah,
+-- of course, it is. That's exactly what it is.
+
+222
+00:10:10,590 --> 00:10:11,049
+I mean,
+
+223
+00:10:11,059 --> 00:10:13,630
+I had some packages that did some goofy things because
+
+224
+00:10:13,640 --> 00:10:15,049
+I built them and I liked it that way.
+
+225
+00:10:15,390 --> 00:10:15,809
+Yeah.
+
+226
+00:10:15,820 --> 00:10:17,679
+And that's what happens when you're the packager,
+
+227
+00:10:17,690 --> 00:10:20,539
+you get to make decisions for me and I can hate them.
+
+228
+00:10:20,549 --> 00:10:20,809
+And
+
+229
+00:10:21,219 --> 00:10:25,609
+anyway, so then, so then we entered a world where, you know, Python built
+
+230
+00:10:26,080 --> 00:10:27,609
+pip N PM.
+
+231
+00:10:27,619 --> 00:10:31,049
+You know, all these different ecosystems built their own,
+
+232
+00:10:31,059 --> 00:10:34,239
+not just tools but like back ends to store the
+
+233
+00:10:34,250 --> 00:10:36,489
+packages to have name spacing because that's another thing,
+
+234
+00:10:36,500 --> 00:10:39,330
+people forget name spacing is a really hard problem.
+
+235
+00:10:39,580 --> 00:10:40,770
+And for example,
+
+236
+00:10:41,169 --> 00:10:42,549
+if you like,
+
+237
+00:10:42,659 --> 00:10:46,109
+so if you have Python dash name, OK, you're probably safe. But
+
+238
+00:10:46,210 --> 00:10:49,989
+there are sometimes libraries and stuff that have like overlapping names. And
+
+239
+00:10:50,409 --> 00:10:53,250
+there were cases of this is back in the olden days,
+
+240
+00:10:53,260 --> 00:10:55,229
+like you'd have Red Hat and the official Red Hat stuff.
+
+241
+00:10:55,239 --> 00:10:56,510
+But there was also, I'm trying to remember,
+
+242
+00:10:56,520 --> 00:10:58,890
+what was that Dutch guy that did all that R PM packaging?
+
+243
+00:10:58,900 --> 00:10:59,710
+That was amazing.
+
+244
+00:11:00,049 --> 00:11:00,789
+Um
+
+245
+00:11:00,890 --> 00:11:04,890
+dag dag, that's the guy. Remember Dar PM.
+
+246
+00:11:05,000 --> 00:11:07,239
+And like I would go uh was it dag wear?
+
+247
+00:11:08,140 --> 00:11:09,169
+Let's see if it's still around.
+
+248
+00:11:12,090 --> 00:11:14,780
+Yeah, there we go. It's still there man. And shout out to that guy.
+
+249
+00:11:14,789 --> 00:11:18,640
+He did a ton of work that saved probably humanity several million hours.
+
+250
+00:11:20,570 --> 00:11:22,929
+But for example, like there would be packages that, you know,
+
+251
+00:11:22,940 --> 00:11:24,760
+third party packages that had the exact same
+
+252
+00:11:24,770 --> 00:11:26,479
+name as system packages and like kind of.
+
+253
+00:11:26,489 --> 00:11:27,039
+Now what
+
+254
+00:11:28,030 --> 00:11:30,150
+and, and look this problem
+
+255
+00:11:30,469 --> 00:11:32,440
+still sort of exists
+
+256
+00:11:33,010 --> 00:11:34,919
+in the Python and
+
+257
+00:11:35,059 --> 00:11:35,979
+node
+
+258
+00:11:36,130 --> 00:11:36,960
+and everything world.
+
+259
+00:11:36,969 --> 00:11:37,109
+I mean,
+
+260
+00:11:37,119 --> 00:11:40,270
+this is where you hear about all of the typo squatting
+
+261
+00:11:40,280 --> 00:11:43,710
+type attacks and all of those sort of weird backdoors because
+
+262
+00:11:44,299 --> 00:11:46,349
+there's like, like for example,
+
+263
+00:11:46,359 --> 00:11:50,679
+but I think Docker got this right where let's say you upload a container,
+
+264
+00:11:50,690 --> 00:11:56,229
+the container is in like Kurt siefried slash container name colon version, right?
+
+265
+00:11:56,239 --> 00:12:00,150
+So I know everything you put in. Kurt siefried is your stuff.
+
+266
+00:12:00,400 --> 00:12:02,840
+And if I create a container of the same name, who cares?
+
+267
+00:12:02,849 --> 00:12:05,770
+Because that container is actually in slash Josh Bresser slash
+
+268
+00:12:06,219 --> 00:12:07,130
+whatever.
+
+269
+00:12:07,369 --> 00:12:09,640
+And that's great. Like that's the right way to do it. Whereas
+
+270
+00:12:10,159 --> 00:12:15,179
+in the Python and node world, if I do pip install like Kurt sucks
+
+271
+00:12:15,590 --> 00:12:20,750
+and if I spelled it sucks and then you create one called Kurt sucks. Sux. Like
+
+272
+00:12:20,890 --> 00:12:24,429
+-- those are totally different but it it's hard to tell them apart.
+-- Right?
+
+273
+00:12:24,460 --> 00:12:27,609
+Well, and the other thing too is, and this is a very subtle thing.
+
+274
+00:12:27,619 --> 00:12:30,679
+It gives a much easier attribution of where did this come from,
+
+275
+00:12:32,090 --> 00:12:32,270
+right?
+
+276
+00:12:32,280 --> 00:12:34,609
+And most package managers have some metadata where you can
+
+277
+00:12:34,619 --> 00:12:36,679
+dig it out and figure it out at some point.
+
+278
+00:12:36,969 --> 00:12:40,960
+But having it be like in the name or in that thing makes it so much simpler,
+
+279
+00:12:41,200 --> 00:12:43,520
+-- you know, so much faster.
+-- Sure. Right.
+
+280
+00:12:43,530 --> 00:12:44,840
+Now, now I wanna,
+
+281
+00:12:44,849 --> 00:12:48,919
+I wanna tie this all up into the little package I expected us to talk about, which is
+
+282
+00:12:49,159 --> 00:12:51,940
+so in the, in the operating system universe
+
+283
+00:12:52,330 --> 00:12:54,409
+in, we'll say the case of Red Hat,
+
+284
+00:12:54,710 --> 00:12:57,090
+Red Hat and Debian has this as well as does in Buntu.
+
+285
+00:12:57,099 --> 00:13:00,900
+They have security teams that are paying attention to what is going on
+
+286
+00:13:01,020 --> 00:13:02,239
+in the larger world
+
+287
+00:13:02,429 --> 00:13:04,289
+and they're creating updates,
+
+288
+00:13:04,479 --> 00:13:05,830
+they're triaging issues,
+
+289
+00:13:05,840 --> 00:13:08,059
+they're making sure the important stuff gets fixed right away.
+
+290
+00:13:08,380 --> 00:13:09,250
+And in the
+
+291
+00:13:09,780 --> 00:13:14,640
+kind of Python and node and the packaging ecosystems, it's not like there's,
+
+292
+00:13:14,650 --> 00:13:16,840
+there are, there are security teams,
+
+293
+00:13:16,849 --> 00:13:19,520
+but they obviously can't track all of the stuff because there's just
+
+294
+00:13:19,530 --> 00:13:22,640
+too much and they certainly do a kind of best effort.
+
+295
+00:13:22,929 --> 00:13:24,049
+But at the same time,
+
+296
+00:13:24,059 --> 00:13:28,729
+it's also not part of that universe where like when you set up your environment,
+
+297
+00:13:28,739 --> 00:13:30,159
+you do your PIP installs,
+
+298
+00:13:30,890 --> 00:13:34,289
+you generally don't do a whole lot about it after that point. Right?
+
+299
+00:13:34,299 --> 00:13:37,099
+It's, it's kind of a set it and forget it, sort of thing.
+
+300
+00:13:37,340 --> 00:13:40,590
+What's fascinating to me is like, so brew on Mac Os,
+
+301
+00:13:40,809 --> 00:13:44,239
+when you install a new package and brew, it also runs an update typically.
+
+302
+00:13:44,679 --> 00:13:49,320
+But for example, sometimes if I pip install something, it doesn't do a global update
+
+303
+00:13:49,710 --> 00:13:52,799
+and nor should it by default, some would argue
+
+304
+00:13:53,570 --> 00:13:53,700
+that.
+
+305
+00:13:54,609 --> 00:13:59,219
+But on then what that means is, you know, how often do people do a pip global update.
+
+306
+00:13:59,229 --> 00:14:01,039
+And the answer is like, probably never,
+
+307
+00:14:01,729 --> 00:14:03,719
+probably never because look. So here's what happens.
+
+308
+00:14:03,729 --> 00:14:05,409
+And this is where we kind of come back to
+
+309
+00:14:05,419 --> 00:14:08,489
+the point of that one does not simply pip install is
+
+310
+00:14:08,659 --> 00:14:11,219
+if you are like, say do pip install is root,
+
+311
+00:14:11,229 --> 00:14:12,650
+which you can totally do and it just
+
+312
+00:14:12,659 --> 00:14:15,229
+starts crapping Python stuff all over your system
+
+313
+00:14:15,469 --> 00:14:18,059
+-- and your system packages.
+-- Yes, that's right.
+
+314
+00:14:18,070 --> 00:14:20,380
+-- You can overwrite system things
+-- well or, or worse,
+
+315
+00:14:20,390 --> 00:14:22,789
+it doesn't necessarily overwrite them, it installs them in parallel.
+
+316
+00:14:22,799 --> 00:14:25,700
+And then depending on how the fight goes with LD configure,
+
+317
+00:14:28,179 --> 00:14:30,280
+-- you know, basically roll ad 20. So
+-- anyway,
+
+318
+00:14:30,700 --> 00:14:31,690
+pip install,
+
+319
+00:14:32,619 --> 00:14:34,830
+pip install global installs.
+
+320
+00:14:34,840 --> 00:14:37,520
+Now you're stuck with all this stuff and it'll never get updated right
+
+321
+00:14:37,530 --> 00:14:40,559
+in a million years because that's just not what we do now.
+
+322
+00:14:40,890 --> 00:14:43,250
+You can create virtual environments which are really cool.
+
+323
+00:14:43,260 --> 00:14:45,179
+They have them in Python, they have them in lots of languages,
+
+324
+00:14:45,190 --> 00:14:47,960
+but I'll just talk about Python because I think they got it really, really right,
+
+325
+00:14:48,250 --> 00:14:49,799
+you create a virtual environment
+
+326
+00:14:50,099 --> 00:14:53,330
+and basically when I do pip install, it only goes in the virtual environment.
+
+327
+00:14:53,340 --> 00:14:56,000
+So I can obviously have a virtual environment per project
+
+328
+00:14:56,159 --> 00:14:57,260
+or even multiple.
+
+329
+00:14:57,669 --> 00:14:59,580
+That's the beautiful thing about virtual environment.
+
+330
+00:14:59,590 --> 00:15:02,479
+You can have multiple virtual environments for a project or for.
+
+331
+00:15:02,679 --> 00:15:04,000
+So you can test updates.
+
+332
+00:15:04,340 --> 00:15:04,950
+Right. Right.
+
+333
+00:15:04,960 --> 00:15:05,119
+Well,
+
+334
+00:15:05,130 --> 00:15:07,679
+and that's my point is so what I find I do more
+
+335
+00:15:07,690 --> 00:15:10,789
+often than not is instead of trying to update my virtual environment,
+
+336
+00:15:10,799 --> 00:15:11,840
+I just make a new one
+
+337
+00:15:12,390 --> 00:15:16,469
+and then I do my because the other thing I do is in my requirements dot TXT,
+
+338
+00:15:16,479 --> 00:15:19,419
+which is where you can tell Pip like take everything in this.
+
+339
+00:15:19,469 --> 00:15:21,549
+I like to remove the version numbers for everything
+
+340
+00:15:21,559 --> 00:15:23,900
+because when you create a requirements dot txt,
+
+341
+00:15:24,130 --> 00:15:25,489
+it will pin the versions.
+
+342
+00:15:25,859 --> 00:15:29,159
+But when I'm doing development, I often want the latest version of something.
+
+343
+00:15:29,349 --> 00:15:32,330
+And so I make sure I don't pin them too hard because that way
+
+344
+00:15:32,340 --> 00:15:34,880
+I can get my updates and I just blow away my virtual environment,
+
+345
+00:15:34,890 --> 00:15:36,030
+create a new one,
+
+346
+00:15:36,039 --> 00:15:39,159
+install all the new stuff and then see if everything works the way it's supposed to,
+
+347
+00:15:39,169 --> 00:15:40,770
+which is convenient
+
+348
+00:15:41,440 --> 00:15:43,190
+and not at all how
+
+349
+00:15:43,349 --> 00:15:45,659
+like Red Hat or any of those things would work.
+
+350
+00:15:45,669 --> 00:15:48,520
+Yeah, I think what's interesting to me is that
+
+351
+00:15:48,919 --> 00:15:51,969
+it used to be that installing libraries and getting
+
+352
+00:15:51,979 --> 00:15:54,059
+them to work and behave was so hard.
+
+353
+00:15:54,070 --> 00:15:57,659
+It made sense to have some experts at your operating system level, do it.
+
+354
+00:15:57,690 --> 00:16:00,820
+But now, you know, with Python Pippin Virtual and for example,
+
+355
+00:16:00,830 --> 00:16:03,119
+that expertise and that knowledge has been put into
+
+356
+00:16:03,130 --> 00:16:05,260
+those tools and it's been made so easy.
+
+357
+00:16:05,729 --> 00:16:08,190
+Well, I mean, OK, so there's two pieces to that.
+
+358
+00:16:08,200 --> 00:16:11,179
+First of all, it's because Pip didn't exist at
+
+359
+00:16:11,429 --> 00:16:12,510
+one point in time.
+
+360
+00:16:12,770 --> 00:16:15,969
+Well, and that's what I'm saying, right? Is we went like why did we get here?
+
+361
+00:16:15,979 --> 00:16:18,349
+Well, because we, we didn't have here.
+
+362
+00:16:18,650 --> 00:16:21,549
+Like, that's right. That's right. You know, why didn't we have a boat?
+
+363
+00:16:21,559 --> 00:16:23,559
+Because we didn't even have trees. We had rocks.
+
+364
+00:16:24,020 --> 00:16:25,010
+They weren't even sharp.
+
+365
+00:16:25,799 --> 00:16:26,469
+No. Really?
+
+366
+00:16:26,479 --> 00:16:27,950
+Like when you look at the state of,
+
+367
+00:16:27,960 --> 00:16:29,400
+when you look at the state of tooling
+
+368
+00:16:29,409 --> 00:16:31,950
+for managing software and libraries 20 years ago,
+
+369
+00:16:31,960 --> 00:16:33,669
+it's laughably terrible.
+
+370
+00:16:34,489 --> 00:16:36,799
+Well, it, it's the best we had. I mean,
+
+371
+00:16:37,289 --> 00:16:38,679
+that's the thing and, and that's,
+
+372
+00:16:38,880 --> 00:16:41,159
+that's the one thing I always have to remind myself of.
+
+373
+00:16:41,169 --> 00:16:41,559
+And in fact,
+
+374
+00:16:41,570 --> 00:16:43,840
+this is funny because when I work with those kids
+
+375
+00:16:43,849 --> 00:16:46,140
+as part of the robotics mentor thing I'm doing,
+
+376
+00:16:46,260 --> 00:16:49,349
+they're always like, this is terrible. Why did you do it like that?
+
+377
+00:16:49,359 --> 00:16:54,070
+It's like, because we had nothing else like this is, this was it, this was all we had.
+
+378
+00:16:54,080 --> 00:16:56,640
+There was no decisions we could make other than this one.
+
+379
+00:16:57,130 --> 00:16:57,679
+And
+
+380
+00:16:57,979 --> 00:17:00,359
+it's funny. And it's even funny too when I
+
+381
+00:17:00,679 --> 00:17:03,400
+talk to people who've been in the industry for a long time
+
+382
+00:17:03,760 --> 00:17:05,880
+and they talk about like all the technical debt of like, oh,
+
+383
+00:17:05,890 --> 00:17:07,739
+we can't get rid of this system because if
+
+384
+00:17:07,750 --> 00:17:09,979
+we needed to build this Cobalt thing or whatever,
+
+385
+00:17:09,989 --> 00:17:11,510
+and it's like, oh, OK.
+
+386
+00:17:11,598 --> 00:17:13,219
+And like my favorite example is
+
+387
+00:17:13,479 --> 00:17:16,699
+I was telling someone about my first job out of college.
+
+388
+00:17:16,709 --> 00:17:19,209
+I worked for a company that wrote insurance software.
+
+389
+00:17:19,219 --> 00:17:20,699
+It was written in Cobal of course,
+
+390
+00:17:21,000 --> 00:17:25,719
+-- and the build system was a custom build system in this language called object
+-- Rex.
+
+391
+00:17:25,729 --> 00:17:28,640
+But what else would it be? It's not like you could get an off the shelf.
+
+392
+00:17:28,650 --> 00:17:30,540
+No, anything except object rex.
+
+393
+00:17:30,550 --> 00:17:33,609
+Object rex was an IBM created scripting language and
+
+394
+00:17:33,619 --> 00:17:36,255
+it was basically only ever used inside of IBM,
+
+395
+00:17:36,265 --> 00:17:36,775
+I think.
+
+396
+00:17:37,214 --> 00:17:37,974
+And so
+
+397
+00:17:38,145 --> 00:17:41,454
+I was stuck with it and they were like, we need to build system updated.
+
+398
+00:17:41,464 --> 00:17:42,484
+You're young and smart.
+
+399
+00:17:42,494 --> 00:17:45,515
+Like you go figure out this terrible language, nobody knows.
+
+400
+00:17:45,625 --> 00:17:46,655
+And I did.
+
+401
+00:17:46,824 --> 00:17:50,854
+But like it was horrible again, like people are saying, why did you do that?
+
+402
+00:17:50,864 --> 00:17:54,714
+I'm like, well, because I wanted to stay employed like that is why I did it.
+
+403
+00:17:55,910 --> 00:17:58,099
+And so what's interesting to me though is that there's,
+
+404
+00:17:58,109 --> 00:17:59,939
+there's always trade offs with these things.
+
+405
+00:17:59,949 --> 00:18:01,020
+So for example,
+
+406
+00:18:02,020 --> 00:18:05,630
+um well, like flat pack and sort of go binaries are a great example of, well,
+
+407
+00:18:05,640 --> 00:18:09,479
+we made a static binary effectively that works like you go,
+
+408
+00:18:09,760 --> 00:18:11,520
+you run it and containers.
+
+409
+00:18:11,589 --> 00:18:16,290
+Yeah, basically containers are the ultimate static binary in that the only,
+
+410
+00:18:16,380 --> 00:18:19,349
+the only possible dependence we have is you need something that looks
+
+411
+00:18:19,359 --> 00:18:22,239
+kind of vaguely like a Linux kernel and a container environment.
+
+412
+00:18:22,469 --> 00:18:24,579
+And there's a and you actually have choices, right?
+
+413
+00:18:24,589 --> 00:18:27,599
+It's not just like you can take a docker container and shove it into pod min,
+
+414
+00:18:28,430 --> 00:18:28,609
+boom,
+
+415
+00:18:28,780 --> 00:18:29,449
+it'll work.
+
+416
+00:18:30,160 --> 00:18:30,319
+Um
+
+417
+00:18:30,910 --> 00:18:31,300
+So
+
+418
+00:18:31,439 --> 00:18:37,569
+well, but I I like to tell people that pod man is containers with hard mode turned on.
+
+419
+00:18:37,869 --> 00:18:40,739
+And in fact, I love using pod man in all seriousness
+
+420
+00:18:40,849 --> 00:18:42,969
+because we use a lot of containers at work.
+
+421
+00:18:43,060 --> 00:18:47,359
+And I purposely do things with pod man because pod man finds weird bugs.
+
+422
+00:18:47,369 --> 00:18:51,040
+It's like the gen two of containers where like things that just shouldn't happen,
+
+423
+00:18:51,050 --> 00:18:51,489
+happen.
+
+424
+00:18:51,660 --> 00:18:53,530
+And so it's a great way to find a fix bugs
+
+425
+00:18:54,030 --> 00:18:54,390
+anyway.
+
+426
+00:18:54,400 --> 00:18:55,979
+-- You were saying
+-- well, but basically the,
+
+427
+00:18:55,989 --> 00:19:00,290
+the problem is now we have binaries that you turn on and they work, but to update them,
+
+428
+00:19:00,670 --> 00:19:05,650
+you have to rip and replace, which again has its own downsides and benefits of,
+
+429
+00:19:05,660 --> 00:19:08,640
+you know, well, rip and replace means I can like swap to the new one,
+
+430
+00:19:08,650 --> 00:19:10,599
+see if it works or not downgrade to the old one easily.
+
+431
+00:19:10,609 --> 00:19:11,020
+Whereas,
+
+432
+00:19:11,189 --> 00:19:13,969
+you know, there's a lot of things where you do an R PM upgrade
+
+433
+00:19:14,089 --> 00:19:17,369
+and while technically RP MS are supposed to be, you can
+
+434
+00:19:17,599 --> 00:19:18,530
+downgrade.
+
+435
+00:19:18,630 --> 00:19:21,599
+There are cases where like, no, no, no, it touched a config file and
+
+436
+00:19:22,130 --> 00:19:25,930
+I have had R PM downgrade work essentially zero times.
+
+437
+00:19:25,939 --> 00:19:29,040
+I never tried to use it like it has never worked for me well,
+
+438
+00:19:29,050 --> 00:19:31,550
+-- for
+-- anything meaningful where it touches config files and stuff.
+
+439
+00:19:31,560 --> 00:19:32,150
+It's just no
+
+440
+00:19:32,310 --> 00:19:32,619
+kaboom.
+
+441
+00:19:33,180 --> 00:19:36,550
+Like I don't have a good flow chart in my head of this,
+
+442
+00:19:36,560 --> 00:19:39,359
+but I do know what some of the tradeoffs and some of the benefits are.
+
+443
+00:19:39,680 --> 00:19:42,790
+But fundamentally I think what a lot of this boils down to
+
+444
+00:19:43,260 --> 00:19:46,869
+is, do you want to do the work? And could you do it better
+
+445
+00:19:47,349 --> 00:19:48,150
+than Pip?
+
+446
+00:19:48,670 --> 00:19:49,670
+And the answer is no.
+
+447
+00:19:50,140 --> 00:19:51,560
+Uh, it, let's be real.
+
+448
+00:19:51,670 --> 00:19:52,459
+This is the same thing.
+
+449
+00:19:52,469 --> 00:19:54,280
+This is the whole point of open source is,
+
+450
+00:19:54,290 --> 00:19:57,969
+could you invent a better X than the open source one?
+
+451
+00:19:58,119 --> 00:19:59,680
+And the answer is probably no.
+
+452
+00:19:59,689 --> 00:20:03,040
+And even if you tried, it would take so much time and effort and it would be terrible.
+
+453
+00:20:03,180 --> 00:20:06,000
+-- You're better off using curl lip
+-- curl. Ok.
+
+454
+00:20:06,010 --> 00:20:08,800
+I, I don't, I don't think of it like this at all. Actually, in my mind,
+
+455
+00:20:09,250 --> 00:20:14,239
+I think the way I think of this is, is it's the tiktok of, of progress
+
+456
+00:20:14,430 --> 00:20:15,199
+where
+
+457
+00:20:15,790 --> 00:20:18,979
+-- we had UNIX, we had the
+-- ability,
+
+458
+00:20:19,119 --> 00:20:21,020
+you mean Tik Tok the noise or the website?
+
+459
+00:20:21,069 --> 00:20:24,800
+-- Just
+-- no tiktok, like think of a, a back and forth motion, right.
+
+460
+00:20:25,329 --> 00:20:26,380
+We had
+
+461
+00:20:26,869 --> 00:20:28,619
+UNIX, then we had
+
+462
+00:20:29,040 --> 00:20:30,819
+crap you can install into opt
+
+463
+00:20:31,150 --> 00:20:32,489
+and it was hard to update.
+
+464
+00:20:32,500 --> 00:20:35,959
+So then we landed with package managers which solved the updating problem.
+
+465
+00:20:35,969 --> 00:20:39,400
+But now it was harder to upgrade, we'll say to
+
+466
+00:20:39,540 --> 00:20:40,920
+new or better things
+
+467
+00:20:41,109 --> 00:20:42,910
+and we ended up with these package managers,
+
+468
+00:20:42,920 --> 00:20:45,380
+but now we don't have our upgrades again because it's not
+
+469
+00:20:45,390 --> 00:20:47,569
+doing a good job of telling us what to upgrade.
+
+470
+00:20:47,579 --> 00:20:48,650
+And when and then
+
+471
+00:20:48,900 --> 00:20:51,339
+now we're back, we understand what's going on.
+
+472
+00:20:51,349 --> 00:20:55,020
+So I think we have that kind of the tooling now is going to catch up to where we're at.
+
+473
+00:20:55,030 --> 00:20:57,550
+And we're going to have tooling that helps us stay more
+
+474
+00:20:57,560 --> 00:21:00,920
+current and pay attention to security vulnerability and things like that.
+
+475
+00:21:01,189 --> 00:21:03,859
+And then the next thing will happen and then we'll lag there.
+
+476
+00:21:03,979 --> 00:21:10,430
+And so I think what we're experiencing right now is we saw the leap of progress into,
+
+477
+00:21:10,699 --> 00:21:13,020
+we'll say new ways to manage software,
+
+478
+00:21:13,030 --> 00:21:16,020
+be it containers or pip or virtual environments or whatever.
+
+479
+00:21:16,160 --> 00:21:19,199
+And now the tooling is catching up, this is where we're seeing things like, you know,
+
+480
+00:21:19,369 --> 00:21:24,390
+s bombs and vulnerability scans and, and managing all this stuff going on around us.
+
+481
+00:21:24,479 --> 00:21:26,680
+And so I think it's just we're getting there.
+
+482
+00:21:26,689 --> 00:21:27,199
+It's just,
+
+483
+00:21:27,209 --> 00:21:30,599
+-- it's taking a while
+-- and that's what I'm trying to say is this goes back to the classic,
+
+484
+00:21:30,609 --> 00:21:34,040
+if you build a tool that makes developers more productive,
+
+485
+00:21:34,319 --> 00:21:36,319
+they're not gonna care if it creates a security problem,
+
+486
+00:21:36,329 --> 00:21:37,479
+they're gonna be more productive.
+
+487
+00:21:38,089 --> 00:21:39,599
+And then at some point,
+
+488
+00:21:40,150 --> 00:21:42,390
+either the security debt becomes big enough that you
+
+489
+00:21:42,400 --> 00:21:44,380
+have to deal with it or maybe it doesn't.
+
+490
+00:21:44,859 --> 00:21:46,979
+But at some point, the tooling maybe
+
+491
+00:21:47,579 --> 00:21:50,719
+shows that it lacks maturity and that there's other things like yes,
+
+492
+00:21:50,729 --> 00:21:52,079
+we made the devs more productive.
+
+493
+00:21:52,089 --> 00:21:54,859
+But now there's a higher cost on the operational side because the poor ops
+
+494
+00:21:54,869 --> 00:21:57,880
+people can't update this stuff because it's just a giant static go binary.
+
+495
+00:21:58,260 --> 00:22:01,579
+-- You know, they can't upgrade the library in it, so
+-- they just don't update it,
+
+496
+00:22:01,810 --> 00:22:03,260
+like just don't ever update it.
+
+497
+00:22:03,709 --> 00:22:04,069
+But
+
+498
+00:22:04,689 --> 00:22:05,000
+and,
+
+499
+00:22:05,619 --> 00:22:09,239
+but what I'm trying to get at is we don't have like an alternative.
+
+500
+00:22:09,250 --> 00:22:09,599
+You can, you,
+
+501
+00:22:09,609 --> 00:22:14,300
+you can't do this yourself and you definitely can't build a better system yourself.
+
+502
+00:22:14,310 --> 00:22:15,050
+Because when you look at
+
+503
+00:22:15,310 --> 00:22:18,800
+the number of people and the amount of work going into something like Pip,
+
+504
+00:22:18,810 --> 00:22:19,560
+-- it's
+-- amazing.
+
+505
+00:22:19,609 --> 00:22:23,510
+-- It's a lot of people. I, I had the number once.
+-- If you look at Pip,
+
+506
+00:22:23,880 --> 00:22:27,900
+it has, yeah, just under 14,000 commits
+
+507
+00:22:28,150 --> 00:22:29,140
+from
+
+508
+00:22:29,599 --> 00:22:31,800
+625 contributors.
+
+509
+00:22:32,140 --> 00:22:35,790
+So if you think you can build something that even does 1% of what Pip does,
+
+510
+00:22:35,949 --> 00:22:38,849
+-- you're wrong.
+-- Well, no one's suggesting that though.
+
+511
+00:22:38,859 --> 00:22:43,180
+I think you're, you're creating a false dichotomy. I think what we have is
+
+512
+00:22:43,449 --> 00:22:45,550
+the tooling to manage. It
+
+513
+00:22:45,680 --> 00:22:48,949
+is catching up to the reality of the tooling we have.
+
+514
+00:22:49,000 --> 00:22:49,270
+Well,
+
+515
+00:22:49,280 --> 00:22:50,770
+and that's what I'm saying is embrace this and
+
+516
+00:22:50,780 --> 00:22:52,750
+lean into it because we don't have an alternative.
+
+517
+00:22:52,920 --> 00:22:56,310
+There is no alternative and no one's suggesting we stop using any of this.
+
+518
+00:22:57,079 --> 00:22:57,430
+Well, I
+
+519
+00:22:57,599 --> 00:22:59,329
+-- think people for not
+-- an option.
+
+520
+00:22:59,359 --> 00:23:03,109
+Well, so for example, Ubuntu is ditching flat pack because they're like, oh it,
+
+521
+00:23:03,119 --> 00:23:03,949
+blah, blah, blah.
+
+522
+00:23:04,199 --> 00:23:04,520
+OK.
+
+523
+00:23:04,530 --> 00:23:09,310
+Look the flat pack stuff and I'll, I'll even pick on what does, what does Red Hat have?
+
+524
+00:23:09,319 --> 00:23:12,510
+Fedora has something. Um Snaps. No snaps is
+
+525
+00:23:12,859 --> 00:23:13,670
+no snaps is
+
+526
+00:23:13,880 --> 00:23:14,880
+Buntu, right? And flat
+
+527
+00:23:15,000 --> 00:23:15,959
+pack is Fedora.
+
+528
+00:23:16,250 --> 00:23:16,880
+Maybe
+
+529
+00:23:17,380 --> 00:23:17,910
+they're, they're,
+
+530
+00:23:18,089 --> 00:23:19,780
+they're competing platforms. My guess is
+
+531
+00:23:19,969 --> 00:23:22,719
+Muntu isn't getting rid of snaps. They just don't want to support
+
+532
+00:23:23,000 --> 00:23:25,060
+flat pack anymore is my guess.
+
+533
+00:23:25,209 --> 00:23:25,219
+Oh,
+
+534
+00:23:25,380 --> 00:23:27,520
+there's also app image. That's the third one.
+
+535
+00:23:27,810 --> 00:23:27,939
+Yeah.
+
+536
+00:23:27,949 --> 00:23:31,640
+And there's a bunch of stuff and, and the point is like, none of it's going to go away.
+
+537
+00:23:31,829 --> 00:23:34,359
+But when you're, uh, when you're an organization, like
+
+538
+00:23:34,780 --> 00:23:35,119
+tu,
+
+539
+00:23:35,359 --> 00:23:36,020
+the
+
+540
+00:23:36,180 --> 00:23:39,359
+maintenance burden on creating this stuff and keeping
+
+541
+00:23:39,369 --> 00:23:42,260
+it security updated properly is very high.
+
+542
+00:23:42,390 --> 00:23:47,079
+If you're a random person who's gonna build your app image
+
+543
+00:23:47,089 --> 00:23:49,900
+or flat pack or whatever and never update it ever again,
+
+544
+00:23:50,000 --> 00:23:52,369
+your maintenance burden is very low.
+
+545
+00:23:52,930 --> 00:23:53,739
+And so
+
+546
+00:23:53,890 --> 00:23:58,989
+I think as a responsible open source vendor, which canonical is
+
+547
+00:23:59,410 --> 00:24:03,569
+they are unwilling to take on all of this additional burden. And that's fine.
+
+548
+00:24:03,579 --> 00:24:04,260
+I get that.
+
+549
+00:24:04,880 --> 00:24:05,880
+Yeah, because if you,
+
+550
+00:24:05,890 --> 00:24:08,069
+if you somebody did a nice comparison chart and
+
+551
+00:24:08,079 --> 00:24:11,209
+literally the only difference pretty much between these is
+
+552
+00:24:11,680 --> 00:24:15,579
+sandbox is mandatory in flat back but not in snap or app image
+
+553
+00:24:16,209 --> 00:24:17,300
+and
+
+554
+00:24:17,530 --> 00:24:21,689
+running without root access is possible after installation or all
+
+555
+00:24:21,699 --> 00:24:24,239
+the time with app image and that's pretty much it.
+
+556
+00:24:24,290 --> 00:24:27,819
+Yeah, they're functionally the same. The sandbox does create some
+
+557
+00:24:27,949 --> 00:24:32,089
+difficulties. We'll say in the I know this is in the Fedara land because
+
+558
+00:24:32,650 --> 00:24:34,709
+it's fedora and they've got Se Linux
+
+559
+00:24:34,910 --> 00:24:35,229
+and
+
+560
+00:24:35,489 --> 00:24:36,270
+it's
+
+561
+00:24:36,550 --> 00:24:40,890
+-- a horrible user experience
+-- still to this day like remember and there used to
+
+562
+00:24:40,900 --> 00:24:44,550
+be a gooey tool to help generate Se Linux policy and it went away.
+
+563
+00:24:45,359 --> 00:24:49,199
+Well, it had to go away because the policy it was generating was broken.
+
+564
+00:24:49,449 --> 00:24:50,719
+And the problem is when,
+
+565
+00:24:50,829 --> 00:24:52,119
+when you have no,
+
+566
+00:24:52,270 --> 00:24:55,170
+when you have security policy,
+
+567
+00:24:55,280 --> 00:24:58,089
+broken security policy is worse than no security
+
+568
+00:24:58,099 --> 00:25:00,250
+policy because at least with no security policy,
+
+569
+00:25:00,260 --> 00:25:01,609
+you know, there's no security policy.
+
+570
+00:25:01,655 --> 00:25:03,484
+See with broken security policy,
+
+571
+00:25:03,494 --> 00:25:06,314
+-- you think there's security policy
+-- or you could have fixed the,
+
+572
+00:25:06,324 --> 00:25:08,775
+we could have fixed the tool to make better security policy,
+
+573
+00:25:09,324 --> 00:25:11,704
+unfixable. It was unfixable
+
+574
+00:25:11,805 --> 00:25:14,155
+because Se Linux is too complicated
+
+575
+00:25:14,324 --> 00:25:15,435
+and that was the reality.
+
+576
+00:25:15,915 --> 00:25:16,425
+Se Linux
+
+577
+00:25:17,015 --> 00:25:21,675
+is a amazing tool for very specific use cases.
+
+578
+00:25:21,685 --> 00:25:24,515
+It struggles in the general purpose world and that's fine.
+
+579
+00:25:24,770 --> 00:25:27,949
+It is OK. That, that is the case because the alternative
+
+580
+00:25:28,079 --> 00:25:29,310
+is you end up with
+
+581
+00:25:29,569 --> 00:25:31,630
+a weaker policy engine
+
+582
+00:25:31,849 --> 00:25:32,670
+that is
+
+583
+00:25:32,839 --> 00:25:34,800
+very easy to break out of.
+
+584
+00:25:34,810 --> 00:25:35,619
+And in that case,
+
+585
+00:25:35,630 --> 00:25:40,180
+people think it's providing benefits when it's not and that's even worse,
+
+586
+00:25:41,359 --> 00:25:44,839
+but that's like a conversation for a whole another day.
+
+587
+00:25:44,949 --> 00:25:47,900
+But so I think going to this, the, the other reality is that
+
+588
+00:25:48,069 --> 00:25:49,790
+these tools are
+
+589
+00:25:50,010 --> 00:25:51,500
+actually quite mature
+
+590
+00:25:51,689 --> 00:25:54,520
+compared to like if you look again, if you look at what we had 20 years ago,
+
+591
+00:25:54,530 --> 00:25:55,859
+we would have killed for these.
+
+592
+00:25:55,949 --> 00:25:56,369
+Yes,
+
+593
+00:25:56,719 --> 00:25:59,050
+they're mature for what they do.
+
+594
+00:25:59,189 --> 00:26:03,709
+But what they do isn't what we need anymore. We need the ability
+
+595
+00:26:03,829 --> 00:26:05,579
+to audit what's installed
+
+596
+00:26:05,729 --> 00:26:09,260
+to understand the risk that comes with our installations. Be it
+
+597
+00:26:09,599 --> 00:26:13,270
+unmaintained packages, the security vulnerabilities,
+
+598
+00:26:13,280 --> 00:26:14,880
+it could be malware and stuff.
+
+599
+00:26:14,890 --> 00:26:16,709
+There's a million things that can be happening.
+
+600
+00:26:17,010 --> 00:26:19,030
+And that is the thing we need now
+
+601
+00:26:19,199 --> 00:26:22,589
+because the world started using these tools,
+
+602
+00:26:22,869 --> 00:26:26,569
+but then the world changed and now the tools have to
+
+603
+00:26:26,579 --> 00:26:29,010
+change and in some cases they are because you look at like
+
+604
+00:26:29,020 --> 00:26:31,760
+N PM and PIP now have like their what audit commands
+
+605
+00:26:31,770 --> 00:26:33,939
+or something where they'll tell you like what's out of date.
+
+606
+00:26:34,189 --> 00:26:35,790
+But there's still more to do
+
+607
+00:26:36,079 --> 00:26:38,949
+because there's still weird security things.
+
+608
+00:26:39,010 --> 00:26:42,390
+There's how maintained is something, there's how many developers does stuff have.
+
+609
+00:26:42,400 --> 00:26:45,619
+There's a ton to happen still and it's, it's happening and it's going to happen.
+
+610
+00:26:46,229 --> 00:26:46,989
+And that's
+
+611
+00:26:47,099 --> 00:26:50,640
+the beauty of open source is we're using these tools and
+
+612
+00:26:50,650 --> 00:26:53,449
+we're going to get all of these amazing benefits for,
+
+613
+00:26:53,459 --> 00:26:55,050
+for free, basically.
+
+614
+00:26:55,150 --> 00:26:56,689
+Well, and I think that's my takeaway here is,
+
+615
+00:26:56,699 --> 00:27:00,609
+is none of this really matters until it gets that critical massive adoption,
+
+616
+00:27:00,819 --> 00:27:03,410
+right? If there's six people on the planet using Python tip,
+
+617
+00:27:03,920 --> 00:27:05,689
+ok. Who cares about the security of it? Really?
+
+618
+00:27:05,979 --> 00:27:06,449
+But
+
+619
+00:27:06,780 --> 00:27:09,810
+we're, we're well past six people now with all of these.
+
+620
+00:27:09,819 --> 00:27:12,329
+And I think that is to me, what is amazing is,
+
+621
+00:27:13,010 --> 00:27:15,420
+I mean, I'm seeing reports saying that something like, you know,
+
+622
+00:27:15,430 --> 00:27:18,170
+uh 60 to 80% of software being deployed is
+
+623
+00:27:18,180 --> 00:27:21,670
+open source and like 97% of software uses open source
+
+624
+00:27:22,199 --> 00:27:25,380
+because you know, everything has some buried acknowledgment screen,
+
+625
+00:27:25,849 --> 00:27:28,589
+you know, your car, your TV, whatever.
+
+626
+00:27:29,280 --> 00:27:29,890
+And
+
+627
+00:27:30,250 --> 00:27:31,939
+when I think about
+
+628
+00:27:32,140 --> 00:27:35,739
+the expertise being baked into these tools and then being used by the rest of us.
+
+629
+00:27:36,479 --> 00:27:40,579
+I don't want to go back to anything but having these amazing tools and
+
+630
+00:27:40,790 --> 00:27:42,060
+this maturity piece,
+
+631
+00:27:42,180 --> 00:27:44,699
+the other thing to think about too is we don't,
+
+632
+00:27:44,979 --> 00:27:49,619
+you can't know about this maturity piece until you actually go and do it.
+
+633
+00:27:49,630 --> 00:27:53,229
+You can hypothesize saying like, oh if we build a tool that mass produces software,
+
+634
+00:27:53,239 --> 00:27:55,079
+we'll probably have to handle security updates better.
+
+635
+00:27:55,150 --> 00:27:58,300
+But you don't know what that means or what that is until you actually do it
+
+636
+00:27:58,430 --> 00:28:00,099
+and discover. For example, like
+
+637
+00:28:00,510 --> 00:28:02,540
+IOT is a great example. Like there's
+
+638
+00:28:03,109 --> 00:28:07,530
+different use cases in it. Like it turns out that people will buy light bulbs with
+
+639
+00:28:08,040 --> 00:28:10,369
+no hope of ever getting a software update
+
+640
+00:28:11,099 --> 00:28:12,280
+because they don't care.
+
+641
+00:28:12,569 --> 00:28:14,719
+And it's probably ok because they're behind that
+
+642
+00:28:15,859 --> 00:28:17,020
+in most cases. I mean,
+
+643
+00:28:17,290 --> 00:28:18,630
+look, I have a bunch of Phillips
+
+644
+00:28:18,819 --> 00:28:21,479
+huls in my house. Are they, do they get software updates?
+
+645
+00:28:21,729 --> 00:28:26,959
+Probably, I don't know. Do I care? No, not really. Like I just want my lights to turn on
+
+646
+00:28:27,290 --> 00:28:30,119
+like that, that's, that's its job security.
+
+647
+00:28:30,130 --> 00:28:33,719
+I'm a security guy and like security updates aren't on my checklist of things.
+
+648
+00:28:33,729 --> 00:28:35,089
+I expect my light bulbs to do.
+
+649
+00:28:35,130 --> 00:28:38,959
+Like the literally only thing on my checklist is turn on and turn off,
+
+650
+00:28:38,969 --> 00:28:41,949
+maybe change colors maybe.
+
+651
+00:28:42,239 --> 00:28:43,839
+But even that I generally don't care.
+
+652
+00:28:43,849 --> 00:28:45,400
+But although I will say I put,
+
+653
+00:28:45,410 --> 00:28:47,260
+I bought one of this really expensive bulb to
+
+654
+00:28:47,270 --> 00:28:49,900
+put on my front porch and it's like ungodly pricey
+
+655
+00:28:50,069 --> 00:28:50,579
+and
+
+656
+00:28:50,920 --> 00:28:53,689
+it, at, like Halloween, I could turn my front porch light red.
+
+657
+00:28:54,069 --> 00:28:57,760
+I got some color changing bulbs from my dining or for my, uh, breakfast nook.
+
+658
+00:28:57,920 --> 00:28:58,619
+And I've got the
+
+659
+00:28:58,979 --> 00:29:01,829
+Christmas, I've got the app where it'll listen to music and, like,
+
+660
+00:29:01,839 --> 00:29:04,020
+strobe the bulbs and make it do stuff.
+
+661
+00:29:04,030 --> 00:29:04,050
+Oh,
+
+662
+00:29:04,540 --> 00:29:07,380
+no. You know what that reminds me actually, for Halloween for trick or treat,
+
+663
+00:29:07,680 --> 00:29:12,140
+I could turn on like a, a fire mode which it flickered like it was a flame.
+
+664
+00:29:12,150 --> 00:29:14,459
+And I'm like, oh, this is cool. It was very fun.
+
+665
+00:29:14,630 --> 00:29:17,760
+I just checked the Phillips Hue app and under software update
+
+666
+00:29:17,770 --> 00:29:19,770
+it has green check mark for everything is up to date,
+
+667
+00:29:19,780 --> 00:29:22,219
+automatic updates at 2 p.m. That's weird.
+
+668
+00:29:22,560 --> 00:29:27,609
+Um, and then it actually tells me the software versions of all the bulbs and they,
+
+669
+00:29:28,280 --> 00:29:32,739
+uh, there's a whole bunch of different versions here, 0.2 and 0.8.
+
+670
+00:29:33,089 --> 00:29:34,369
+-- So something's not
+-- going by
+
+671
+00:29:34,599 --> 00:29:35,790
+end of life or something.
+
+672
+00:29:36,119 --> 00:29:37,219
+No, no, these are all, no.
+
+673
+00:29:37,229 --> 00:29:39,630
+What it is is a lot of these things are turned off all the time,
+
+674
+00:29:40,829 --> 00:29:41,250
+right.
+
+675
+00:29:41,589 --> 00:29:45,099
+Uh, especially I don't use my lights at 2 p.m. because it's daytime.
+
+676
+00:29:45,229 --> 00:29:49,099
+That's true. Although I leave my lights on all the time and I let
+
+677
+00:29:49,329 --> 00:29:50,329
+the various
+
+678
+00:29:50,459 --> 00:29:52,859
+like robot turn them on and off.
+
+679
+00:29:53,020 --> 00:29:56,530
+Well, now that I say that, yeah, because if I say, you know, blank lights on,
+
+680
+00:29:56,540 --> 00:29:57,260
+it turns them on
+
+681
+00:29:57,500 --> 00:30:00,829
+so they must be plugged in and turned on anyways, but they're not getting whatever.
+
+682
+00:30:00,839 --> 00:30:01,640
+So, but
+
+683
+00:30:02,219 --> 00:30:03,160
+like I said,
+
+684
+00:30:03,410 --> 00:30:07,199
+the thing I think for people to remember is part of this too is learning
+
+685
+00:30:07,209 --> 00:30:11,140
+how to use the tools because a lot of these tools are gaining capabilities.
+
+686
+00:30:11,579 --> 00:30:15,660
+Like VNI I kind of vaguely remember when VN came out and I'm like, oh OK.
+
+687
+00:30:15,670 --> 00:30:19,109
+That looks cute. But now it's like, I cannot imagine life without VN.
+
+688
+00:30:19,155 --> 00:30:21,255
+It would just, it's so gross and painful.
+
+689
+00:30:21,334 --> 00:30:25,734
+That's the Python virtual environment tool for anyone playing along at home.
+
+690
+00:30:26,285 --> 00:30:26,584
+You know,
+
+691
+00:30:26,594 --> 00:30:30,454
+because like I don't wanna poop random Python packages all over my system
+
+692
+00:30:30,464 --> 00:30:32,935
+or even in my home directory and be stuck with a certain version.
+
+693
+00:30:33,104 --> 00:30:35,974
+That's right. So I, I have a good lesson for that actually. So
+
+694
+00:30:36,969 --> 00:30:40,689
+I am writing as part of my, my robot mentorship,
+
+695
+00:30:40,699 --> 00:30:42,989
+which I feel like I talk about too much but too bad you're getting it.
+
+696
+00:30:43,209 --> 00:30:49,630
+So we're using open CV to do color detection on the feed to detect cones and cubes,
+
+697
+00:30:49,640 --> 00:30:50,000
+right?
+
+698
+00:30:50,010 --> 00:30:51,869
+One of the cones are yellow, the cubes are blue,
+
+699
+00:30:51,890 --> 00:30:55,390
+which sucks because detecting blue is really hard because everything's blue,
+
+700
+00:30:55,400 --> 00:30:57,469
+everything's blue, there's tons of blue all around it.
+
+701
+00:30:57,599 --> 00:30:59,150
+That's the problem anyway, it doesn't matter.
+
+702
+00:30:59,359 --> 00:30:59,949
+So
+
+703
+00:31:00,250 --> 00:31:00,949
+where
+
+704
+00:31:01,290 --> 00:31:04,670
+we're detecting our yellow cones using open CV,
+
+705
+00:31:04,680 --> 00:31:08,800
+which is a like color and object detection visualization
+
+706
+00:31:08,810 --> 00:31:11,579
+tool or whatever it's written in C++ there's Python bindings
+
+707
+00:31:11,849 --> 00:31:12,430
+and
+
+708
+00:31:12,869 --> 00:31:14,550
+we had one person
+
+709
+00:31:15,069 --> 00:31:17,349
+that was using the open CV installed by
+
+710
+00:31:17,670 --> 00:31:17,949
+Muntu
+
+711
+00:31:18,739 --> 00:31:21,900
+and nothing was working, right? And I'm like losing my mind.
+
+712
+00:31:21,910 --> 00:31:23,180
+And I finally realized, wait a minute,
+
+713
+00:31:23,189 --> 00:31:26,119
+you're like literally an entire version behind by using the
+
+714
+00:31:26,270 --> 00:31:27,369
+ubuntu system package.
+
+715
+00:31:27,489 --> 00:31:30,260
+This is why everything is broken and nothing is working.
+
+716
+00:31:30,479 --> 00:31:32,400
+We create a virtual environment
+
+717
+00:31:32,660 --> 00:31:36,589
+install like the newest open CV and holy crap, everything just works.
+
+718
+00:31:36,599 --> 00:31:40,800
+And I was like, oh my goodness, what a nightmare. And at the same time, I think like,
+
+719
+00:31:41,449 --> 00:31:44,329
+I come from a world where I think to check things like that
+
+720
+00:31:44,989 --> 00:31:46,390
+young people don't
+
+721
+00:31:46,849 --> 00:31:47,719
+because
+
+722
+00:31:47,969 --> 00:31:51,839
+they don't like things just work and install. And I'm like, oh my goodness.
+
+723
+00:31:51,849 --> 00:31:52,479
+So of course,
+
+724
+00:31:52,489 --> 00:31:55,469
+the next thing was we created requirements dot TXT and put everything in there.
+
+725
+00:31:55,479 --> 00:31:56,319
+But you get the idea.
+
+726
+00:31:56,459 --> 00:31:59,359
+All right. So anyway, I want to wrap this one up because we're running out of time. But
+
+727
+00:31:59,650 --> 00:32:03,790
+I feel like the, the the conversation is fun. I think these are hard problems.
+
+728
+00:32:03,800 --> 00:32:07,050
+But I also think like we're making really good progress as an industry.
+
+729
+00:32:07,239 --> 00:32:09,270
+It is easy as security people to
+
+730
+00:32:09,469 --> 00:32:13,550
+just wail and moan about all of the bad things happening and all of
+
+731
+00:32:13,560 --> 00:32:17,660
+the security vulnerabilities and all of the malware and all the type of squatting.
+
+732
+00:32:17,670 --> 00:32:22,109
+But I think honestly as a whole, like our graph is going up into the right here and
+
+733
+00:32:22,339 --> 00:32:26,520
+yeah, it could go faster but I'm pretty happy with everything I see right now.
+
+734
+00:32:26,530 --> 00:32:31,560
+-- I, I feel like we are definitely on the right path.
+-- I built web finger dot A O by myself
+
+735
+00:32:32,000 --> 00:32:33,890
+in like 30 or 40 hours.
+
+736
+00:32:33,900 --> 00:32:36,560
+Plus I had to relearn how to program in javascript on cloudflare,
+
+737
+00:32:36,569 --> 00:32:38,060
+which is like a subset of javascript.
+
+738
+00:32:38,069 --> 00:32:39,199
+Like you don't have a file system
+
+739
+00:32:39,609 --> 00:32:40,810
+and like I got that
+
+740
+00:32:41,170 --> 00:32:43,160
+and I got that whole thing working and,
+
+741
+00:32:43,170 --> 00:32:45,119
+and have you checked your dependencies lately?
+
+742
+00:32:45,420 --> 00:32:48,319
+Uh I ba I basically don't have any dependencies. It's quite lovely.
+
+743
+00:32:48,930 --> 00:32:51,079
+There's a UU ID dependency and
+
+744
+00:32:51,660 --> 00:32:53,479
+like there's two dependencies or three.
+
+745
+00:32:53,930 --> 00:32:57,989
+No, no. OK. Look, no, no. Here's the lesson for Kurt for the day
+
+746
+00:32:58,609 --> 00:32:58,979
+when you
+
+747
+00:32:59,479 --> 00:32:59,790
+install. No
+
+748
+00:32:59,930 --> 00:33:00,439
+stop
+
+749
+00:33:00,609 --> 00:33:05,079
+when you install any N PM package, it installs like 600 other packages.
+
+750
+00:33:05,089 --> 00:33:08,869
+You need to look at your entire list of N PM packages.
+
+751
+00:33:09,329 --> 00:33:10,160
+There's not a lot
+
+752
+00:33:10,319 --> 00:33:12,510
+I pull in a UU ID library and that's about it
+
+753
+00:33:13,329 --> 00:33:14,849
+and that doesn't pull in anything else
+
+754
+00:33:14,959 --> 00:33:18,729
+-- and I pull
+-- in the cloud flare thing, which is their problem. But yeah,
+
+755
+00:33:18,859 --> 00:33:20,479
+-- no, it's, it's literally
+-- just
+
+756
+00:33:20,800 --> 00:33:23,420
+public somewhere. I'm going to look at this later.
+
+757
+00:33:23,469 --> 00:33:27,380
+Uh uh Send me I will put the link to the repo in the show notes and I'm going
+
+758
+00:33:27,390 --> 00:33:29,479
+to go look at this and see how many dependencies
+
+759
+00:33:29,489 --> 00:33:32,020
+there actually are versus what Kurt thinks there is.
+
+760
+00:33:33,229 --> 00:33:35,300
+But um but the point is
+
+761
+00:33:35,560 --> 00:33:38,329
+like 20 years ago, there's no way somebody could have built this on their own
+
+762
+00:33:39,479 --> 00:33:40,520
+in a month or two
+
+763
+00:33:40,920 --> 00:33:43,750
+of like not spare time but like not full time.
+
+764
+00:33:44,609 --> 00:33:46,660
+Well, it would have been PHP also but
+
+765
+00:33:47,069 --> 00:33:49,949
+was there PHP 20 years ago? It was 20 years ago.
+
+766
+00:33:50,089 --> 00:33:53,229
+-- 2000, there was PHP in 2000. Yeah, it would have been PHP.
+-- Ok.
+
+767
+00:33:53,459 --> 00:33:53,680
+Yeah.
+
+768
+00:33:53,689 --> 00:33:54,060
+So the,
+
+769
+00:33:54,069 --> 00:33:56,630
+the validator API is PHP because PHP lets me
+
+770
+00:33:56,640 --> 00:33:58,829
+do a clever thing of like accept a connection,
+
+771
+00:33:59,329 --> 00:33:59,959
+acknowledge it,
+
+772
+00:33:59,969 --> 00:34:03,689
+close it and then do the work so that the cloud flare worker can be like, yep,
+
+773
+00:34:03,699 --> 00:34:04,530
+I sent the request out.
+
+774
+00:34:04,540 --> 00:34:07,510
+-- It's good. Oh my
+-- goodness, Kurt, I don't think we can be friends anymore.
+
+775
+00:34:08,728 --> 00:34:09,389
+It works.
+
+776
+00:34:09,600 --> 00:34:09,830
+No,
+
+777
+00:34:09,840 --> 00:34:12,060
+III I did a lot of PHP programming and I
+
+778
+00:34:12,070 --> 00:34:14,429
+have a suspicion PHP probably still runs the world.
+
+779
+00:34:14,438 --> 00:34:14,909
+It's like the
+
+780
+00:34:15,228 --> 00:34:15,418
+coal.
+
+781
+00:34:15,560 --> 00:34:16,688
+See the trick is I have, yeah,
+
+782
+00:34:16,699 --> 00:34:19,469
+I have one dependencies and it's that UU ID library that
+
+783
+00:34:19,478 --> 00:34:22,148
+has no dependencies because it just generates you U I Ds.
+
+784
+00:34:23,339 --> 00:34:25,398
+Oh, and Wrangler technically is a dependency as well,
+
+785
+00:34:25,408 --> 00:34:29,268
+but I use that to deploy it and then there's a couple of little things, but that's it.
+
+786
+00:34:29,878 --> 00:34:30,819
+I'm cutting us off.
+
+787
+00:34:31,197 --> 00:34:33,259
+Thank you, Kurt. Thank you everyone for listening. Go to OSO
+
+788
+00:34:33,467 --> 00:34:35,559
+security podcast.com. Hit up the show notes, U
+
+789
+00:34:35,839 --> 00:34:38,697
+Pound Os S Podcast. Hashtag do hit us up on social media.
+
+790
+00:34:38,708 --> 00:34:41,878
+Kurt have a marvelous rest of your day. You too. Thanks everybody.
+
+791
+00:34:42,039 --> 00:34:43,819
+Thanks everyone. Bye. Bye
+
+792
+00:34:48,520 --> 00:34:48,580
+the.

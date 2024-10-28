@@ -1,0 +1,4240 @@
+0
+00:00:05,539 --> 00:00:08,510
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,520 --> 00:00:11,000
+Kurt Siefried and my partner in arguing Josh Bresser.
+
+2
+00:00:11,420 --> 00:00:14,890
+We do argue a lot. Most people don't have a view behind the curtain.
+
+3
+00:00:14,899 --> 00:00:16,950
+But Kurt and I argue about literally everything
+
+4
+00:00:16,959 --> 00:00:18,819
+and we really mean to each other sometimes.
+
+5
+00:00:18,879 --> 00:00:19,930
+But in the classic sense,
+
+6
+00:00:20,059 --> 00:00:23,610
+I guess from the, we'll say the learned man sense, I'd call it where.
+
+7
+00:00:23,670 --> 00:00:27,090
+Well, it's respectful. We do. We're friends at the end of the day.
+
+8
+00:00:27,100 --> 00:00:29,489
+We never end our arguments with like I hate you,
+
+9
+00:00:29,680 --> 00:00:30,489
+which is good
+
+10
+00:00:31,045 --> 00:00:33,905
+even though I make fun of you sometimes for being an A I fan boy.
+
+11
+00:00:34,245 --> 00:00:34,875
+Yeah, I am.
+
+12
+00:00:34,956 --> 00:00:37,785
+But I think part of it too is even when we disagree,
+
+13
+00:00:37,796 --> 00:00:41,305
+I still in the back of the mind have the and it's not even that you might be right.
+
+14
+00:00:41,316 --> 00:00:43,375
+It's also that I might be wrong. And those are two
+
+15
+00:00:43,596 --> 00:00:44,166
+things
+
+16
+00:00:44,395 --> 00:00:47,076
+-- because quite often we're both wrong.
+-- Oh, absolutely.
+
+17
+00:00:47,866 --> 00:00:48,326
+And I,
+
+18
+00:00:48,436 --> 00:00:50,425
+I'm also happy to change my mind
+
+19
+00:00:50,566 --> 00:00:52,666
+when you provide me with compelling evidence.
+
+20
+00:00:52,675 --> 00:00:55,445
+I am happy to change my position and I've done that
+
+21
+00:00:55,756 --> 00:00:56,625
+many times
+
+22
+00:00:56,742 --> 00:01:00,832
+anyways. So what does mail channels allowing spoofing of email domains by default.
+
+23
+00:01:01,062 --> 00:01:03,582
+Uh Google marking, a web page is serving malware
+
+24
+00:01:03,782 --> 00:01:04,171
+and has
+
+25
+00:01:04,321 --> 00:01:04,331
+a
+
+26
+00:01:04,441 --> 00:01:06,662
+corps license change. All have in common. I mean,
+
+27
+00:01:06,832 --> 00:01:09,561
+but you said you, you wrote it down and I've already forgotten it.
+
+28
+00:01:09,571 --> 00:01:10,402
+-- Um
+-- I told
+
+29
+00:01:10,412 --> 00:01:11,351
+-- you
+-- what the answer was it,
+
+30
+00:01:11,361 --> 00:01:13,601
+is it responsibility? Was it? Yeah.
+
+31
+00:01:13,611 --> 00:01:16,611
+Some version of responsibility or accountability. OK.
+
+32
+00:01:16,622 --> 00:01:18,762
+I want to set some context before we keep going.
+
+33
+00:01:18,882 --> 00:01:22,442
+So it's Sunday at approximately 1 p.m. For me,
+
+34
+00:01:22,611 --> 00:01:24,482
+I woke up like two hours ago
+
+35
+00:01:24,849 --> 00:01:30,220
+and it was the, the Sunday after a B sides and, and black hat and Defcon.
+
+36
+00:01:30,230 --> 00:01:31,750
+I flew home on Friday night.
+
+37
+00:01:31,760 --> 00:01:33,739
+And so I basically had Saturday to rest,
+
+38
+00:01:33,750 --> 00:01:36,919
+but I'm still like insanely tired and I slept for like 12 hours last night.
+
+39
+00:01:37,690 --> 00:01:40,230
+I'm totally old. I'm not even gonna pretend that's not the case,
+
+40
+00:01:40,400 --> 00:01:44,339
+but I do want, I do want to call out Bides because this year, all I did was B sides.
+
+41
+00:01:44,739 --> 00:01:48,589
+I didn't go to black hat. I didn't go to Defcon. I decided they're too busy
+
+42
+00:01:48,769 --> 00:01:51,930
+and it was super chill. Besides, besides Las Vegas is very chill.
+
+43
+00:01:51,940 --> 00:01:53,690
+I really like the hotel they do it at and I
+
+44
+00:01:53,699 --> 00:01:56,110
+stuck around on Thursday to just hang out and go,
+
+45
+00:01:56,120 --> 00:01:59,440
+you know, have lunch and drinks with friends and stuff and it was marvelous, but
+
+46
+00:01:59,540 --> 00:02:01,569
+I need to call up B sides for their
+
+47
+00:02:01,699 --> 00:02:03,290
+amazing attention to detail.
+
+48
+00:02:03,300 --> 00:02:06,309
+So I gave a talk this year called next generation Enterprise Security.
+
+49
+00:02:06,319 --> 00:02:07,690
+And it's where I watched All Star Trek
+
+50
+00:02:07,794 --> 00:02:09,714
+next generation and talk about their terrible security.
+
+51
+00:02:09,725 --> 00:02:11,615
+Now, I've done this before and I know we've talked about it,
+
+52
+00:02:11,625 --> 00:02:14,054
+but B sides has a box when you submit a talk that says,
+
+53
+00:02:14,065 --> 00:02:17,615
+please submit your most ridiculous speaker request you can think of.
+
+54
+00:02:17,794 --> 00:02:22,375
+And I asked for a person dressed in a Starfleet uniform in the front row to heckle me. I
+
+55
+00:02:23,304 --> 00:02:24,395
+think it's amazing.
+
+56
+00:02:24,604 --> 00:02:26,904
+And I walk into the talk and there's no one
+
+57
+00:02:26,914 --> 00:02:29,014
+in the front row dressed in a Starfleet uniform.
+
+58
+00:02:29,024 --> 00:02:30,854
+And I'm like, oh man, they didn't do it.
+
+59
+00:02:31,139 --> 00:02:32,360
+So I start talking
+
+60
+00:02:32,630 --> 00:02:35,729
+and like maybe three or four minutes into the talk.
+
+61
+00:02:35,740 --> 00:02:40,380
+A dude barges through the door with a Star fet uniform on, carrying a trombone.
+
+62
+00:02:40,389 --> 00:02:43,320
+And I was like, this is gonna be so good and it was, it's,
+
+63
+00:02:43,330 --> 00:02:44,559
+I'll put a link in the show notes.
+
+64
+00:02:44,570 --> 00:02:47,789
+It's, it's, it's on youtube, but it's like the, the guy was amazing.
+
+65
+00:02:47,800 --> 00:02:48,919
+-- It was so much fun.
+-- Did, did
+
+66
+00:02:48,929 --> 00:02:51,050
+-- he ever
+-- do the Picard Tuck while he was in there?
+
+67
+00:02:51,490 --> 00:02:52,339
+-- No, no,
+-- they
+
+68
+00:02:52,690 --> 00:02:52,729
+pull
+
+69
+00:02:52,830 --> 00:02:55,720
+-- out the uniform because they kept writing up,
+-- right? He did not do that.
+
+70
+00:02:55,729 --> 00:02:58,399
+I don't, he sat in a chair much of the time in the front
+
+71
+00:02:58,690 --> 00:03:00,330
+and heckled, but he was very good.
+
+72
+00:03:01,339 --> 00:03:03,009
+-- It was good. Heckling
+-- is hard.
+
+73
+00:03:03,020 --> 00:03:03,179
+Like,
+
+74
+00:03:03,190 --> 00:03:05,279
+that's my favorite thing about a stand up comedian is when
+
+75
+00:03:05,289 --> 00:03:07,800
+a stand up comedian gets heckled and heckling is bad.
+
+76
+00:03:07,809 --> 00:03:08,479
+Like, my favorite one,
+
+77
+00:03:08,490 --> 00:03:10,990
+there was just a recent one where somebody said you're not funny.
+
+78
+00:03:11,000 --> 00:03:15,169
+And the stand up comedians, like, oh, what now? Like, ok, let's, let's go with that.
+
+79
+00:03:15,389 --> 00:03:17,009
+Like, ok, you're German, you're not funny.
+
+80
+00:03:17,020 --> 00:03:18,809
+You made fun of the German person, blah, blah, blah.
+
+81
+00:03:18,820 --> 00:03:22,050
+And he's like, ok, let's try again. Like, something, tell me what's wrong.
+
+82
+00:03:22,399 --> 00:03:25,770
+And the German guy went, you're not funny. And the Canadian comedians, like,
+
+83
+00:03:26,389 --> 00:03:28,449
+like, you're not even trying. Yeah. Right.
+
+84
+00:03:28,830 --> 00:03:31,529
+So, but, but then you see good heckling and it's like,
+
+85
+00:03:31,800 --> 00:03:34,320
+-- that's funny. It is.
+-- It is. And
+
+86
+00:03:34,460 --> 00:03:38,059
+generally speaking don't heckle comedians because they're like professional
+
+87
+00:03:38,820 --> 00:03:42,179
+-- things on the spot and you're not,
+-- and they're sober and you're probably not
+
+88
+00:03:42,190 --> 00:03:42,410
+sober.
+
+89
+00:03:42,419 --> 00:03:44,169
+That is a good point actually. Yes, that's,
+
+90
+00:03:44,300 --> 00:03:46,399
+I remember I was at a comedy club once and some
+
+91
+00:03:46,410 --> 00:03:49,690
+drunk guys from Red Deer started heckling the comedian and he,
+
+92
+00:03:49,699 --> 00:03:49,729
+uh,
+
+93
+00:03:50,173 --> 00:03:53,682
+-- yeah, he was not nice.
+-- They, they take, they take you down. It's amazing. I know.
+
+94
+00:03:53,772 --> 00:03:56,533
+-- But they were so drunk, they didn't even realize.
+-- Well, that could be too.
+
+95
+00:03:56,542 --> 00:03:58,492
+And that's sad. But anyway. Ok. Ok.
+
+96
+00:03:58,652 --> 00:03:59,513
+So, uh, Bide.
+
+97
+00:03:59,792 --> 00:03:59,873
+So
+
+98
+00:04:00,003 --> 00:04:00,973
+super fun. Well done
+
+99
+00:04:01,203 --> 00:04:03,792
+Bides. It's, it's an amazing show. All right, back to your topic.
+
+100
+00:04:03,802 --> 00:04:06,162
+Sorry, I had to interrupt that way when people understand why I'm not.
+
+101
+00:04:06,173 --> 00:04:07,723
+-- Well, ok, so
+-- basically
+
+102
+00:04:07,932 --> 00:04:11,623
+mail channels is a mail delivery provider. You
+
+103
+00:04:12,072 --> 00:04:13,223
+have a web api
+
+104
+00:04:13,645 --> 00:04:15,675
+api, you give it some data and
+
+105
+00:04:15,805 --> 00:04:20,735
+an email goes out, it's free. Mostly. Um there's also you can buy services.
+
+106
+00:04:20,745 --> 00:04:22,496
+And so by default,
+
+107
+00:04:22,526 --> 00:04:24,846
+most people that want to send mail just want to send
+
+108
+00:04:24,855 --> 00:04:27,316
+mail and they don't want to do so like hyper securely.
+
+109
+00:04:27,526 --> 00:04:30,985
+And it's funny because I actually mail channels did a thing with cloud flare
+
+110
+00:04:30,996 --> 00:04:33,906
+and where you can use them very easily from your cloud flare workers.
+
+111
+00:04:33,915 --> 00:04:36,355
+And I had a cloud flare worker for the web finger dot io thing where I should
+
+112
+00:04:36,466 --> 00:04:37,196
+send email.
+
+113
+00:04:37,480 --> 00:04:40,679
+And honestly I tried uh mail gun and Sendgrid which we
+
+114
+00:04:40,920 --> 00:04:42,329
+have accounts with and pay for
+
+115
+00:04:42,510 --> 00:04:45,130
+and like, oh man, there are web API S and stuff for a bit.
+
+116
+00:04:45,269 --> 00:04:45,779
+Anyway, the
+
+117
+00:04:45,989 --> 00:04:48,670
+point is it did not work well from cloud Flair's worker.
+
+118
+00:04:48,709 --> 00:04:51,140
+I tried mail channel the demo example
+
+119
+00:04:51,470 --> 00:04:54,260
+and it just worked immediately and I'm like, oh, ok.
+
+120
+00:04:54,440 --> 00:04:56,220
+And then I immediately had the thought of wait a minute.
+
+121
+00:04:56,489 --> 00:04:59,279
+There's no authentication. There's just like I'm sending email as
+
+122
+00:04:59,839 --> 00:04:59,940
+clouds
+
+123
+00:05:00,290 --> 00:05:02,140
+carolines.org. Oh, I can't have them.
+
+124
+00:05:02,149 --> 00:05:06,299
+I like I can't add them to our SPF record center protective framework
+
+125
+00:05:06,444 --> 00:05:10,044
+because then anybody can use male channels to spoof a cloud crew line.
+
+126
+00:05:11,164 --> 00:05:15,373
+And then I checked, oh, they support DKIM uh domain. He's identified male. I know
+
+127
+00:05:15,743 --> 00:05:15,864
+it
+
+128
+00:05:16,894 --> 00:05:18,123
+-- before
+-- encrypted mail
+
+129
+00:05:18,294 --> 00:05:20,104
+signed email, not encrypted mail. Sorry.
+
+130
+00:05:20,634 --> 00:05:21,864
+And so I'm like, ok, cool.
+
+131
+00:05:22,283 --> 00:05:25,074
+I look at their tutorial. It's terrible. It's disjointed. So
+
+132
+00:05:25,273 --> 00:05:28,973
+I set it up. I document it because I'm gonna have to rotate my de
+
+133
+00:05:29,144 --> 00:05:30,743
+keys or set it up again in the future.
+
+134
+00:05:30,914 --> 00:05:32,903
+And I actually emailed the mail channels people and
+
+135
+00:05:32,914 --> 00:05:35,294
+they actually replied and actually added it to their official
+
+136
+00:05:35,447 --> 00:05:37,988
+augmentation and put a link to ours saying thank you for this
+
+137
+00:05:38,197 --> 00:05:38,708
+because,
+
+138
+00:05:38,907 --> 00:05:39,588
+well, yeah, I mean,
+
+139
+00:05:40,157 --> 00:05:42,627
+I had it like from literally just cut and paste.
+
+140
+00:05:42,638 --> 00:05:46,018
+Here's the open SSL commands, here's the, this the, this the, this done
+
+141
+00:05:46,257 --> 00:05:49,497
+because future me is gonna have to fix this and it's gonna be tired and just
+
+142
+00:05:49,697 --> 00:05:50,608
+have to figure it out.
+
+143
+00:05:51,287 --> 00:05:51,988
+And so
+
+144
+00:05:52,138 --> 00:05:53,808
+now somebody figured out, wait a minute,
+
+145
+00:05:53,817 --> 00:05:55,687
+mail channels has become quite successful and
+
+146
+00:05:55,697 --> 00:05:57,868
+there's like 2 million domains using it,
+
+147
+00:05:57,907 --> 00:06:00,268
+then they can all be spoofed because none of them bothered setting up DC.
+
+148
+00:06:01,127 --> 00:06:01,227
+Yeah.
+
+149
+00:06:01,608 --> 00:06:02,778
+The second one is that
+
+150
+00:06:02,888 --> 00:06:04,227
+somebody complained on hack
+
+151
+00:06:04,372 --> 00:06:07,032
+news that Google marked their website as hosting
+
+152
+00:06:07,041 --> 00:06:09,272
+malware and it turns out they actually had
+
+153
+00:06:09,391 --> 00:06:09,402
+a
+
+154
+00:06:10,122 --> 00:06:12,372
+zip file on it that contained malware that
+
+155
+00:06:12,381 --> 00:06:14,832
+they were intentionally distributing for like testing or whatever
+
+156
+00:06:16,011 --> 00:06:18,462
+and like, yeah, and hacker news is kind of like, yeah.
+
+157
+00:06:18,471 --> 00:06:22,002
+So you're saying you distributed malware and Google discovered it and I mean,
+
+158
+00:06:22,011 --> 00:06:26,092
+your site is malware and now there's not a real good process to get rid of that because
+
+159
+00:06:26,261 --> 00:06:28,492
+weirdly people who actually are malicious
+
+160
+00:06:28,502 --> 00:06:30,272
+and distribute malware often claim like,
+
+161
+00:06:30,321 --> 00:06:30,731
+oops,
+
+162
+00:06:31,022 --> 00:06:31,932
+yeah. Should you please
+
+163
+00:06:32,122 --> 00:06:33,201
+unlist us? Like we're,
+
+164
+00:06:33,335 --> 00:06:35,675
+-- we're good now
+-- we promise we won't do it again
+
+165
+00:06:36,205 --> 00:06:36,925
+-- and
+-- then again,
+
+166
+00:06:37,055 --> 00:06:41,635
+so Hashy Corp just came up with a license change for, um, uh, what was it called? The
+
+167
+00:06:41,876 --> 00:06:42,376
+Hashy
+
+168
+00:06:42,526 --> 00:06:44,246
+Corp Business License.
+
+169
+00:06:44,455 --> 00:06:47,276
+And I think it's like all their stuff basically is it?
+
+170
+00:06:47,286 --> 00:06:49,226
+I haven't looked at exactly what it is,
+
+171
+00:06:49,235 --> 00:06:52,115
+but Vault and Terraform are the two big ones that they
+
+172
+00:06:52,246 --> 00:06:53,355
+-- have.
+-- That's all their stuff. Like
+
+173
+00:06:53,786 --> 00:06:55,835
+that's fair. I know they have other things but
+
+174
+00:06:55,936 --> 00:06:59,075
+-- that's basically all their stuff.
+-- Those two things are what matters
+
+175
+00:06:59,335 --> 00:07:00,395
+for sure. For sure.
+
+176
+00:07:00,825 --> 00:07:01,156
+Yeah.
+
+177
+00:07:01,446 --> 00:07:02,135
+And so
+
+178
+00:07:02,609 --> 00:07:05,420
+I'm looking at this and it's all sort of this,
+
+179
+00:07:06,190 --> 00:07:08,089
+people seem to have this expectation of
+
+180
+00:07:08,299 --> 00:07:10,519
+responsibility or quasi
+
+181
+00:07:10,750 --> 00:07:12,269
+ethical or moral behavior, but
+
+182
+00:07:12,579 --> 00:07:16,089
+like the world has changed. So a perfect example is email, email used to like
+
+183
+00:07:16,290 --> 00:07:19,649
+you and I were running email servers before SPF even existed.
+
+184
+00:07:19,920 --> 00:07:21,790
+There was like no security on anything
+
+185
+00:07:22,070 --> 00:07:25,019
+-- you
+-- would get Joe jobbed. Somebody would spoof your address in
+
+186
+00:07:25,149 --> 00:07:28,619
+-- return for spam and you'd get like hammered,
+-- you could tell that
+
+187
+00:07:28,760 --> 00:07:33,730
+-- to almost any email server and just send like crap email. I am
+-- Bob.
+
+188
+00:07:34,532 --> 00:07:34,553
+I
+
+189
+00:07:35,322 --> 00:07:38,513
+don't remember how to do it, but I, I remember doing that a lot.
+
+190
+00:07:38,763 --> 00:07:41,233
+It's ok. You tell it blah, blah port 25
+
+191
+00:07:41,592 --> 00:07:43,053
+and then you hello or you?
+
+192
+00:07:44,472 --> 00:07:44,513
+That's
+
+193
+00:07:44,792 --> 00:07:46,592
+-- right.
+-- And then it's, it's mail from
+
+194
+00:07:47,013 --> 00:07:48,192
+and receipt two, right?
+
+195
+00:07:48,352 --> 00:07:48,972
+-- Receipt
+-- two
+
+196
+00:07:49,502 --> 00:07:50,122
+and then,
+
+197
+00:07:50,493 --> 00:07:52,463
+and then enter your data including subject focal
+
+198
+00:07:52,662 --> 00:07:53,643
+and blah, blah, blah and then hit
+
+199
+00:07:53,792 --> 00:07:56,363
+twice blank line or no sorry dot Enter
+
+200
+00:07:58,292 --> 00:07:59,013
+to. Um,
+
+201
+00:07:59,243 --> 00:08:01,983
+and then, like, accept it for delivery or not, then you're done.
+
+202
+00:08:02,233 --> 00:08:02,352
+I mean,
+
+203
+00:08:02,592 --> 00:08:02,622
+the,
+
+204
+00:08:02,876 --> 00:08:07,216
+the reality is a company like mail channels or any mail delivery company forcing,
+
+205
+00:08:07,226 --> 00:08:09,415
+I'm doing a thing with my hands here that Josh can see
+
+206
+00:08:09,626 --> 00:08:15,175
+the scales forcing people to set it up securely or getting a lot of customers.
+
+207
+00:08:15,186 --> 00:08:20,325
+I mean, look, that is the perpetual argument in the business world.
+
+208
+00:08:20,335 --> 00:08:24,955
+There are times where security goes against the features
+
+209
+00:08:24,966 --> 00:08:27,716
+-- that business
+-- needs ease of use and set up.
+
+210
+00:08:27,726 --> 00:08:31,135
+Sure. And, and security always loses because the reality is
+
+211
+00:08:31,420 --> 00:08:33,599
+if you don't have customers, you don't have a business.
+
+212
+00:08:33,609 --> 00:08:35,659
+So security is irrelevant in that context.
+
+213
+00:08:35,669 --> 00:08:36,890
+Yeah, I mean, we're at a point now where I've,
+
+214
+00:08:36,900 --> 00:08:39,799
+I've interacted with companies that don't even validate my email address
+
+215
+00:08:40,299 --> 00:08:43,210
+and I actually logged into an old Aws test account and
+
+216
+00:08:43,219 --> 00:08:45,119
+it's like you haven't validated your email and I'm like,
+
+217
+00:08:45,130 --> 00:08:47,419
+how did this account even get set up?
+
+218
+00:08:47,760 --> 00:08:48,340
+And like
+
+219
+00:08:48,559 --> 00:08:52,059
+it's been billed and like it's paid for stuff and like we used it for testing.
+
+220
+00:08:52,690 --> 00:08:57,679
+-- How did that even happen?
+-- So this reminds me of a conversation I actually had
+
+221
+00:08:58,250 --> 00:09:00,789
+while in Las Vegas. I don't remember with who.
+
+222
+00:09:00,799 --> 00:09:04,400
+So I apologize if, if whoever I, I talked about this with is listening, like,
+
+223
+00:09:04,409 --> 00:09:07,349
+-- let me know and I'll give you
+-- a shut up, just claim we're being GDPR compliant.
+
+224
+00:09:07,359 --> 00:09:08,880
+Right. Right. There you go. That's Right.
+
+225
+00:09:08,919 --> 00:09:11,450
+They, they made a comment like something has to change.
+
+226
+00:09:11,460 --> 00:09:16,960
+And I said, I don't know if it does because this is the security, the market demands,
+
+227
+00:09:17,280 --> 00:09:20,390
+right? If you look at the world, the world functions
+
+228
+00:09:21,250 --> 00:09:25,119
+yet we as security people are talking about how everything's on fire and terror.
+
+229
+00:09:26,679 --> 00:09:27,679
+Right? Like
+
+230
+00:09:28,039 --> 00:09:29,179
+-- is it,
+-- it's coming, I mean,
+
+231
+00:09:30,099 --> 00:09:34,030
+-- it just, it'll probably just after the Linux desktop. Right.
+-- Yes, that's fair.
+
+232
+00:09:34,039 --> 00:09:37,630
+That's fair. But it's at the same time, like society functions.
+
+233
+00:09:37,640 --> 00:09:41,109
+This is the amount of security, the market demands
+
+234
+00:09:41,530 --> 00:09:42,150
+and like,
+
+235
+00:09:42,929 --> 00:09:44,549
+I wish it was better but
+
+236
+00:09:45,030 --> 00:09:50,020
+-- it obviously isn't that bad.
+-- Yeah. Like, and I think part of it is
+
+237
+00:09:50,780 --> 00:09:52,909
+there's not just sort of what is responsible
+
+238
+00:09:52,919 --> 00:09:55,299
+but what is sort of necessary and needed.
+
+239
+00:09:55,309 --> 00:09:55,750
+Like
+
+240
+00:09:56,039 --> 00:09:58,859
+the reality is we've had email spoofing since email began.
+
+241
+00:09:59,530 --> 00:10:02,219
+That's it. That's, that's, that's the extent of my argument.
+
+242
+00:10:02,229 --> 00:10:05,780
+Like I would say it was mostly harmless jokes in the past where, like,
+
+243
+00:10:05,789 --> 00:10:08,739
+you send your friends an email from God or something.
+
+244
+00:10:08,750 --> 00:10:09,130
+Well,
+
+245
+00:10:09,140 --> 00:10:11,570
+and then it's started to kind of escalate
+
+246
+00:10:11,580 --> 00:10:13,440
+because especially for spam delivery or fishing,
+
+247
+00:10:13,450 --> 00:10:15,460
+like, obviously for fishing, if I can spoof you know,
+
+248
+00:10:15,469 --> 00:10:17,299
+your CEO S name at your company.com,
+
+249
+00:10:17,929 --> 00:10:19,859
+that's going to look a lot more believable than like
+
+250
+00:10:20,539 --> 00:10:23,719
+we get stuff from like, blah, blah. Oh, what was the last one we got was um,
+
+251
+00:10:23,849 --> 00:10:26,159
+some vet clinic or something got popped and so was
+
+252
+00:10:26,169 --> 00:10:28,719
+sending out email pretending to be Zendesk or something or
+
+253
+00:10:28,820 --> 00:10:28,830
+uh
+
+254
+00:10:29,150 --> 00:10:29,599
+oh
+
+255
+00:10:29,820 --> 00:10:31,250
+Sendgrid. So we are getting,
+
+256
+00:10:31,609 --> 00:10:33,799
+somebody is going through all the DNS records on
+
+257
+00:10:33,809 --> 00:10:36,210
+the planet looking for SPF records for Sendgrid,
+
+258
+00:10:36,219 --> 00:10:36,700
+I think
+
+259
+00:10:36,969 --> 00:10:40,479
+and sending fake like your Sendgrid account has been suspended.
+
+260
+00:10:40,489 --> 00:10:41,799
+Click here, blah, blah.
+
+261
+00:10:42,299 --> 00:10:45,679
+And of course you click there and it's like some totally nasty fishing site, but
+
+262
+00:10:46,039 --> 00:10:46,919
+I only get them for sen
+
+263
+00:10:47,109 --> 00:10:49,869
+grid, not for male gun or the other ones because it's kind of weird.
+
+264
+00:10:49,880 --> 00:10:52,169
+And so I'm kind of wondering if maybe the average SD
+
+265
+00:10:52,440 --> 00:10:53,679
+user is not as savvy
+
+266
+00:10:53,809 --> 00:10:54,559
+that could be because
+
+267
+00:10:54,909 --> 00:10:56,460
+it's really easy to tell
+
+268
+00:10:57,020 --> 00:11:00,880
+who uses what email systems because YSPF records
+
+269
+00:11:01,070 --> 00:11:01,299
+like
+
+270
+00:11:01,690 --> 00:11:04,380
+otherwise your email doesn't get through or
+
+271
+00:11:04,630 --> 00:11:05,729
+in the case of Google it gets through,
+
+272
+00:11:05,739 --> 00:11:09,359
+but it gets that horrific nasty yellow warning banner saying this might not be blah,
+
+273
+00:11:09,489 --> 00:11:09,559
+blah,
+
+274
+00:11:09,679 --> 00:11:09,710
+blah.
+
+275
+00:11:10,650 --> 00:11:13,539
+So anyways like, yeah, I mean,
+
+276
+00:11:13,549 --> 00:11:16,679
+I wish mail channels require dkim set up for every customer.
+
+277
+00:11:16,690 --> 00:11:19,059
+Then there would be like way less spoofing, but
+
+278
+00:11:19,260 --> 00:11:20,400
+obviously
+
+279
+00:11:20,840 --> 00:11:24,070
+the people using it are not being affected enough
+
+280
+00:11:24,489 --> 00:11:28,130
+to go set up deacon because well, they're, they're not going and setting up Dean,
+
+281
+00:11:28,679 --> 00:11:30,809
+like, like you said, the market is spoken
+
+282
+00:11:31,200 --> 00:11:31,609
+and
+
+283
+00:11:31,750 --> 00:11:31,840
+I,
+
+284
+00:11:32,140 --> 00:11:35,500
+I wish people wouldn't smoke cigarettes. But that's the thing.
+
+285
+00:11:35,900 --> 00:11:38,619
+I mean, the market speaks on many things. That's,
+
+286
+00:11:39,919 --> 00:11:42,059
+and that's the challenge too is it becomes a boil of the ocean problem.
+
+287
+00:11:42,070 --> 00:11:45,590
+Like I pointed out like there's a guide on how to click, click, click, do this thing.
+
+288
+00:11:45,770 --> 00:11:48,280
+And you know, somebody pointed out that that's not easy
+
+289
+00:11:48,380 --> 00:11:51,119
+because it's a scale issue of like 2 million domains have to do this.
+
+290
+00:11:51,130 --> 00:11:53,559
+And that's the second part I wanted to think about here is
+
+291
+00:11:54,070 --> 00:11:54,440
+like,
+
+292
+00:11:55,140 --> 00:11:56,419
+oh perfect example.
+
+293
+00:11:56,859 --> 00:12:01,090
+All everybody's losing their minds because all the A I bots are scraping the web to,
+
+294
+00:12:01,409 --> 00:12:02,929
+we scrape the web and have training data
+
+295
+00:12:03,700 --> 00:12:06,580
+and they're all like, oh, but we, you know, we support robots dot TX.
+
+296
+00:12:06,619 --> 00:12:09,710
+And if you put in like, don't crawl, blah, blah, blah, we'll respect that.
+
+297
+00:12:09,719 --> 00:12:10,250
+But it's like
+
+298
+00:12:10,700 --> 00:12:13,570
+asking everybody to opt in to secure their data.
+
+299
+00:12:13,599 --> 00:12:16,450
+They're not like half the people don't even know it exists.
+
+300
+00:12:16,460 --> 00:12:18,890
+So that's funny you say this because I got in,
+
+301
+00:12:19,479 --> 00:12:20,890
+I was in a discussion
+
+302
+00:12:21,400 --> 00:12:24,979
+at one point where there is a, a lawyer doing privacy leg
+
+303
+00:12:25,090 --> 00:12:29,020
+like legislation fundamentally and some other people and these people are talking
+
+304
+00:12:29,030 --> 00:12:32,150
+about all of the interesting technologies you can secure your data with.
+
+305
+00:12:32,159 --> 00:12:35,400
+And finally, I just said, I'm like, look, I looked at the lawyer, I said,
+
+306
+00:12:35,409 --> 00:12:36,760
+tell me if you think I'm wrong,
+
+307
+00:12:37,260 --> 00:12:40,479
+technology doesn't matter. We have to solve this through legislation.
+
+308
+00:12:40,489 --> 00:12:42,500
+And he was like, you are absolutely correct
+
+309
+00:12:42,679 --> 00:12:44,820
+because the problem is even with technology,
+
+310
+00:12:44,830 --> 00:12:46,969
+anytime there's a problem and the data leaks out
+
+311
+00:12:46,979 --> 00:12:48,789
+like the horses left the barn is over.
+
+312
+00:12:48,799 --> 00:12:51,630
+Versus if you have legislation that protects your data.
+
+313
+00:12:51,780 --> 00:12:52,200
+Cambridge
+
+314
+00:12:52,304 --> 00:12:52,885
+analytics,
+
+315
+00:12:53,294 --> 00:12:55,265
+people will try to do bad things with it.
+
+316
+00:12:55,275 --> 00:12:57,184
+But at least there's legal ramifications then.
+
+317
+00:12:57,195 --> 00:13:01,445
+Whereas today there's nothing, once your data is out, it's out and that's the end
+
+318
+00:13:01,684 --> 00:13:03,875
+or you get that like, $2 settlement with, uh,
+
+319
+00:13:04,885 --> 00:13:05,275
+or
+
+320
+00:13:05,424 --> 00:13:05,914
+whatever.
+
+321
+00:13:06,325 --> 00:13:07,125
+Yes.
+
+322
+00:13:08,869 --> 00:13:11,679
+You know what my favorite was, was there was some point,
+
+323
+00:13:11,690 --> 00:13:14,070
+like in the nineties or early two thousands where there
+
+324
+00:13:14,080 --> 00:13:16,539
+was like a settlement with one of the music companies
+
+325
+00:13:16,880 --> 00:13:19,030
+and I got like, I think a 70 cent
+
+326
+00:13:19,159 --> 00:13:20,729
+credit to buy
+
+327
+00:13:20,900 --> 00:13:21,320
+-- music.
+-- That's my
+
+328
+00:13:21,429 --> 00:13:24,299
+favorite thing. It's like you get 70 cents off your next purchase. It's like
+
+329
+00:13:24,640 --> 00:13:26,070
+this is ridiculous.
+
+330
+00:13:27,659 --> 00:13:32,030
+Like why even send this to me? This was the postage was half of the cost of this.
+
+331
+00:13:32,909 --> 00:13:33,520
+Did. Well,
+
+332
+00:13:34,510 --> 00:13:35,059
+oh, here we go.
+
+333
+00:13:35,070 --> 00:13:37,789
+If you are a class member, the deadline to file initial claims,
+
+334
+00:13:37,799 --> 00:13:41,510
+perry claims for free or free for free credit monitoring or up to 100
+
+335
+00:13:41,520 --> 00:13:45,840
+and $25 cash payment and other cash reimbursement passed on January 22nd 2020.
+
+336
+00:13:45,849 --> 00:13:46,130
+So
+
+337
+00:13:46,799 --> 00:13:48,739
+Equifax data breach is long done. I
+
+338
+00:13:48,859 --> 00:13:48,960
+don't
+
+339
+00:13:49,239 --> 00:13:49,270
+sign
+
+340
+00:13:50,200 --> 00:13:50,219
+up
+
+341
+00:13:50,340 --> 00:13:52,580
+for that. I feel like I don't think I did
+
+342
+00:13:52,840 --> 00:13:53,070
+to get
+
+343
+00:13:53,549 --> 00:13:57,520
+making people sign up to get it. Like at most a few percent will, like
+
+344
+00:13:58,210 --> 00:14:01,215
+in North America, we can't even get half of people to vote in a federal election
+
+345
+00:14:01,854 --> 00:14:02,414
+for sure.
+
+346
+00:14:02,525 --> 00:14:02,645
+For
+
+347
+00:14:02,875 --> 00:14:05,965
+sure. Is the heck not going to get them to set up deacon records on their email?
+
+348
+00:14:06,145 --> 00:14:06,304
+Do
+
+349
+00:14:07,104 --> 00:14:07,775
+exactly.
+
+350
+00:14:07,945 --> 00:14:08,255
+And,
+
+351
+00:14:08,405 --> 00:14:10,775
+and on the flip side, somebody was pointing out that this,
+
+352
+00:14:11,015 --> 00:14:13,094
+they said emails becoming the walled garden. And
+
+353
+00:14:13,424 --> 00:14:16,565
+I sort of agree and disagree in that in that some of the, well,
+
+354
+00:14:16,604 --> 00:14:18,705
+Twitter only Google and Microsoft outlook are
+
+355
+00:14:19,344 --> 00:14:21,405
+Google gmail is 30% or something.
+
+356
+00:14:21,414 --> 00:14:24,174
+And I don't know what outlook is, but on the corporate side, it's massive.
+
+357
+00:14:24,900 --> 00:14:27,799
+And for example, if Google says, like do SPF or we don't,
+
+358
+00:14:28,000 --> 00:14:30,210
+we don't accept your email, then
+
+359
+00:14:30,530 --> 00:14:31,869
+people would deploy SPF D
+
+360
+00:14:32,000 --> 00:14:32,020
+D.
+
+361
+00:14:32,369 --> 00:14:33,849
+But there's an incentive at that point,
+
+362
+00:14:33,859 --> 00:14:37,200
+it's like when they switched over to the HTTP S or else
+
+363
+00:14:37,559 --> 00:14:39,500
+for web searches, it,
+
+364
+00:14:39,650 --> 00:14:40,179
+it
+
+365
+00:14:40,299 --> 00:14:43,369
+improves your search engine rankings and everybody's like I would like to.
+
+366
+00:14:43,559 --> 00:14:47,650
+-- But
+-- again, that's, that's a market incentive that's effective versus art today,
+
+367
+00:14:47,869 --> 00:14:50,289
+-- we have no market incentives.
+-- Well, but what's interesting though,
+
+368
+00:14:50,429 --> 00:14:52,030
+we go from a boiling the ocean and trying to
+
+369
+00:14:52,039 --> 00:14:54,950
+get 2 million people to agree to one company being
+
+370
+00:14:55,080 --> 00:14:56,989
+potentially able to make a decision. But
+
+371
+00:14:57,270 --> 00:14:57,409
+I mean,
+
+372
+00:14:57,419 --> 00:15:01,130
+it incentivizes those 2 million people sufficiently to actually go do something.
+
+373
+00:15:01,140 --> 00:15:02,599
+-- Now,
+-- at the same time,
+
+374
+00:15:02,609 --> 00:15:06,289
+I think you could create an antitrust argument about the power.
+
+375
+00:15:06,299 --> 00:15:09,210
+This company has to do such things because I mean,
+
+376
+00:15:09,219 --> 00:15:11,679
+Google could also say if you don't put a uh
+
+377
+00:15:11,690 --> 00:15:14,070
+like a dancing bear at the top of your website,
+
+378
+00:15:14,080 --> 00:15:15,169
+we won't index it.
+
+379
+00:15:15,179 --> 00:15:17,510
+Everyone would have a, I think they're at the top of their website and
+
+380
+00:15:17,659 --> 00:15:19,349
+that's kind of scary, you know.
+
+381
+00:15:19,510 --> 00:15:20,469
+Well, I mean, like,
+
+382
+00:15:20,479 --> 00:15:22,530
+people forget this is kind of how barcodes happened
+
+383
+00:15:22,539 --> 00:15:24,700
+is Walmart and the Department of Defense said like,
+
+384
+00:15:24,710 --> 00:15:25,940
+no barcode, no buy.
+
+385
+00:15:26,349 --> 00:15:28,250
+And everybody's like, ok, barcodes are awesome.
+
+386
+00:15:29,150 --> 00:15:30,250
+And so I like,
+
+387
+00:15:30,390 --> 00:15:31,450
+I guess what I'm saying is,
+
+388
+00:15:31,460 --> 00:15:34,950
+I don't think the answer to this sort of market
+
+389
+00:15:34,960 --> 00:15:37,090
+speaks thing is to have a company like Google,
+
+390
+00:15:37,099 --> 00:15:40,130
+hopefully do the right thing and ask for more security.
+
+391
+00:15:40,880 --> 00:15:41,690
+I think
+
+392
+00:15:42,150 --> 00:15:43,169
+as much as I
+
+393
+00:15:43,549 --> 00:15:44,650
+am nervous by
+
+394
+00:15:45,000 --> 00:15:47,000
+specific technical legislation,
+
+395
+00:15:47,140 --> 00:15:47,729
+I think that
+
+396
+00:15:47,840 --> 00:15:49,450
+maybe is the better way to go,
+
+397
+00:15:49,859 --> 00:15:50,080
+but
+
+398
+00:15:50,630 --> 00:15:54,450
+-- it's so far behind that. Does it even matter?
+-- Well, and that's one of the questions.
+
+399
+00:15:54,460 --> 00:15:54,979
+I mean
+
+400
+00:15:55,140 --> 00:15:56,210
+that this, but this,
+
+401
+00:15:56,739 --> 00:15:59,469
+I don't want to get into that today. I want you to tell me how has
+
+402
+00:15:59,609 --> 00:15:59,619
+a
+
+403
+00:15:59,739 --> 00:16:03,260
+Corp fits into this still which we haven't gotten to yet has
+
+404
+00:16:03,510 --> 00:16:03,710
+Corp is
+
+405
+00:16:03,835 --> 00:16:06,825
+just the latest example. But a lot of other companies have done this where
+
+406
+00:16:07,125 --> 00:16:10,534
+well, like Facebook with their Lama open source license, that
+
+407
+00:16:10,705 --> 00:16:11,474
+is open source
+
+408
+00:16:11,604 --> 00:16:13,614
+unless you have more than 700 million users,
+
+409
+00:16:14,125 --> 00:16:16,655
+which would be a problem I would like to have.
+
+410
+00:16:16,664 --> 00:16:21,515
+But so is there these companies want to make money because
+
+411
+00:16:22,244 --> 00:16:24,354
+that's kind of the whole point of companies in general
+
+412
+00:16:24,875 --> 00:16:25,335
+and
+
+413
+00:16:25,859 --> 00:16:30,179
+they have a thing. That was true. I let's go with true O SI,
+
+414
+00:16:30,500 --> 00:16:32,619
+what was the phrase O SI approved open
+
+415
+00:16:32,909 --> 00:16:33,419
+source? That's right.
+
+416
+00:16:33,429 --> 00:16:35,929
+An O SI approved license is what we currently think
+
+417
+00:16:35,940 --> 00:16:38,450
+-- of as open source
+-- and they go to something that is
+
+418
+00:16:38,809 --> 00:16:39,609
+not just
+
+419
+00:16:39,900 --> 00:16:43,469
+like a minor tweak or change, but is it goes against the spirit,
+
+420
+00:16:43,619 --> 00:16:48,679
+many would say of what open source is meant to be on the flip side though, like
+
+421
+00:16:48,869 --> 00:16:49,270
+Hashi
+
+422
+00:16:49,409 --> 00:16:51,299
+Corp is getting essentially
+
+423
+00:16:51,659 --> 00:16:56,280
+clear cut by people using their stuff and not contributing back even a bug report.
+
+424
+00:16:56,809 --> 00:16:58,780
+Right? And we've seen this happen with a lot of products like
+
+425
+00:16:59,140 --> 00:17:03,179
+-- Nessus, you know, like, I
+-- mean, that's open source. That's how it works.
+
+426
+00:17:03,190 --> 00:17:05,079
+So I can't help but wonder is like,
+
+427
+00:17:05,150 --> 00:17:08,180
+should there be an expectation if you're a company doing open
+
+428
+00:17:08,189 --> 00:17:10,618
+source that somebody can come in and eat your lunch and?
+
+429
+00:17:10,630 --> 00:17:13,949
+-- Well, there's no recourse.
+-- Yes, that, that's absolutely an expectation.
+
+430
+00:17:14,729 --> 00:17:18,579
+And what I was going to say, argument wise is whether or not you like it,
+
+431
+00:17:18,589 --> 00:17:19,858
+that's the reality.
+
+432
+00:17:20,000 --> 00:17:22,219
+It's like, should I look both ways when I cross the street?
+
+433
+00:17:22,229 --> 00:17:24,739
+Well, I have the right of way as a pedestrian in a marked crosswalk,
+
+434
+00:17:24,750 --> 00:17:26,339
+but I'm still going to look both ways
+
+435
+00:17:26,739 --> 00:17:29,800
+-- because the world we live in, I might get run over.
+-- Right. Right. Ok.
+
+436
+00:17:29,810 --> 00:17:30,119
+I want,
+
+437
+00:17:30,130 --> 00:17:32,459
+I want to start at the beginning and this is related to that
+
+438
+00:17:32,469 --> 00:17:34,910
+email we got that I said I didn't read but I did skim
+
+439
+00:17:35,260 --> 00:17:37,739
+and I, and I like an episode or two ago,
+
+440
+00:17:37,750 --> 00:17:40,839
+I made a comment like if it's not on the O SI S list.
+
+441
+00:17:40,849 --> 00:17:43,209
+It's not open source and it turns out it's technically
+
+442
+00:17:43,219 --> 00:17:45,800
+open source approved is what the O SI calls it.
+
+443
+00:17:45,849 --> 00:17:49,000
+-- It's, it's kind of complicated.
+-- They, there's trademarks and stuff going on.
+
+444
+00:17:49,270 --> 00:17:49,560
+They
+
+445
+00:17:50,170 --> 00:17:53,189
+fundamentally the definition of open source is squishy.
+
+446
+00:17:53,199 --> 00:17:57,199
+But so far the O SI has managed to, I think, hold the line
+
+447
+00:17:57,300 --> 00:18:00,439
+on we own like we control this term. Go away.
+
+448
+00:18:00,515 --> 00:18:02,464
+-- Everyone else I would
+-- say more convincingly.
+
+449
+00:18:02,474 --> 00:18:04,285
+their list is in the spirit of open source
+
+450
+00:18:04,464 --> 00:18:05,214
+and that they accept.
+
+451
+00:18:07,074 --> 00:18:07,925
+So here's the thing
+
+452
+00:18:08,545 --> 00:18:09,665
+I would start with Red Hat
+
+453
+00:18:10,185 --> 00:18:11,064
+like Red hat,
+
+454
+00:18:11,194 --> 00:18:12,665
+Red hat Enterprise Linux
+
+455
+00:18:12,785 --> 00:18:14,165
+is technically
+
+456
+00:18:14,305 --> 00:18:16,015
+covered by open source licenses,
+
+457
+00:18:16,025 --> 00:18:18,104
+but it is definitely not within the spirit of open
+
+458
+00:18:18,114 --> 00:18:20,464
+source because if you distribute the source RP MS,
+
+459
+00:18:20,484 --> 00:18:20,854
+they,
+
+460
+00:18:21,005 --> 00:18:25,415
+they remove your license to access Red hit Enterprise Linux.
+
+461
+00:18:26,270 --> 00:18:29,750
+So you could definitely say like that is open source but not in the spirit.
+
+462
+00:18:29,760 --> 00:18:34,050
+And then you look at things like Mango or elastic or Hashy Corp or whatever
+
+463
+00:18:34,199 --> 00:18:35,579
+where they basically
+
+464
+00:18:35,729 --> 00:18:40,770
+-- they like to claim open source. But it is not technically in the open
+-- source
+
+465
+00:18:40,880 --> 00:18:43,260
+or the open core. This part's open
+
+466
+00:18:43,420 --> 00:18:43,609
+source,
+
+467
+00:18:44,079 --> 00:18:45,829
+-- but like,
+-- well, open core is different.
+
+468
+00:18:45,839 --> 00:18:49,349
+Open core is open source because you have actual open source components,
+
+469
+00:18:49,359 --> 00:18:51,310
+-- but
+-- it's useless with all, all the other stuff.
+
+470
+00:18:51,530 --> 00:18:54,739
+-- Uh
+-- Some of it is and that's a different problem. Yes.
+
+471
+00:18:54,880 --> 00:18:57,079
+But then what I think these like Hashy
+
+472
+00:18:57,280 --> 00:19:01,189
+Corp is doing uh I best heard it described as business source
+
+473
+00:19:01,560 --> 00:19:04,619
+where it's basically, if you're a person, you can use this.
+
+474
+00:19:04,630 --> 00:19:07,530
+But if you're a company and you're creating a competing product,
+
+475
+00:19:07,839 --> 00:19:10,079
+-- you can't. Well, that's
+-- the llama thing. 700 million.
+
+476
+00:19:10,089 --> 00:19:12,979
+I'm assuming that's the number for like 10 cent Baidu, Google
+
+477
+00:19:13,119 --> 00:19:15,060
+-- Microsoft,
+-- probably. Right.
+
+478
+00:19:15,069 --> 00:19:17,900
+And that's almost certainly their target for that particular,
+
+479
+00:19:17,989 --> 00:19:21,719
+the number of companies with more than 700 million users is I'm hoping last thing
+
+480
+00:19:22,989 --> 00:19:24,099
+I want to
+
+481
+00:19:24,310 --> 00:19:28,010
+pick this up where you made a comment about, you know, companies make money.
+
+482
+00:19:28,310 --> 00:19:30,849
+And is it ok if someone takes their open
+
+483
+00:19:30,859 --> 00:19:33,219
+source and like eats their lunch with it basically.
+
+484
+00:19:33,800 --> 00:19:34,380
+And
+
+485
+00:19:34,520 --> 00:19:37,739
+I think the danger we see happening here is the,
+
+486
+00:19:37,869 --> 00:19:40,579
+if you look at almost every start up on the planet today,
+
+487
+00:19:40,670 --> 00:19:44,339
+they brag about having open source because open source is a good marketing tool.
+
+488
+00:19:44,349 --> 00:19:45,540
+Like I'll give you an example
+
+489
+00:19:45,920 --> 00:19:47,359
+if I work for Anor
+
+490
+00:19:47,689 --> 00:19:50,859
+Anchor has two tools called sift and gripe that get used a lot.
+
+491
+00:19:50,869 --> 00:19:53,280
+We don't have AC L A contributor license agreement.
+
+492
+00:19:53,290 --> 00:19:54,489
+I'll explain what that means in a little bit.
+
+493
+00:19:54,500 --> 00:19:56,479
+I would not have gone to Anchor if they did because
+
+494
+00:19:56,489 --> 00:19:58,800
+I just come off the heels of elastic pulling the shenanigans.
+
+495
+00:19:58,810 --> 00:19:59,439
+But anyway,
+
+496
+00:20:00,310 --> 00:20:01,579
+they had right, they had one too.
+
+497
+00:20:01,689 --> 00:20:02,459
+But anyway,
+
+498
+00:20:02,790 --> 00:20:03,500
+so like
+
+499
+00:20:04,000 --> 00:20:07,560
+we have these tools that are open source and they're open projects,
+
+500
+00:20:07,569 --> 00:20:09,339
+we accept lots of patches from people.
+
+501
+00:20:09,630 --> 00:20:14,030
+And if now, if I go to a conference and I say I wanna talk about Anchor Enterprise,
+
+502
+00:20:14,040 --> 00:20:16,260
+the product my company creates, that's close source.
+
+503
+00:20:16,339 --> 00:20:16,839
+Like
+
+504
+00:20:17,260 --> 00:20:17,369
+no,
+
+505
+00:20:17,619 --> 00:20:21,540
+that's not getting in under any circuit. We don't do vendor pitches. Yeah, exactly.
+
+506
+00:20:21,739 --> 00:20:23,270
+But I can show up and say, oh, hey,
+
+507
+00:20:23,280 --> 00:20:27,189
+I'm gonna talk about gripe this open source tool that does vulnerability scans
+
+508
+00:20:27,390 --> 00:20:30,810
+and that gets accepted a lot, right? Because it's an open source tool and it's cool.
+
+509
+00:20:30,819 --> 00:20:33,349
+And so most start ups treat open source
+
+510
+00:20:33,359 --> 00:20:36,010
+as their marketing department because you can say
+
+511
+00:20:36,306 --> 00:20:40,076
+I have this thing that's open source. Let me come talk about
+
+512
+00:20:40,206 --> 00:20:45,796
+-- it at whatever venue you have
+-- even more simply, it allows me to get a taste test and go,
+
+513
+00:20:45,806 --> 00:20:47,875
+oh, this actually does kind of do what I want
+
+514
+00:20:48,056 --> 00:20:48,956
+and to a degree
+
+515
+00:20:49,196 --> 00:20:53,946
+and more importantly, 99 times out of 100 as a company or a corporation or a,
+
+516
+00:20:53,956 --> 00:20:57,666
+if I'm using this for work stuff, my response is, oh, and you'll like,
+
+517
+00:20:57,676 --> 00:21:01,566
+sell it to me with all this other stuff that makes it really easy to use.
+
+518
+00:21:01,906 --> 00:21:02,286
+And I
+
+519
+00:21:02,582 --> 00:21:02,761
+like,
+
+520
+00:21:02,771 --> 00:21:06,312
+like I have a vendor right now where I'm paying 99 we upgraded from
+
+521
+00:21:06,322 --> 00:21:09,832
+$49 a month to $99 a month for something I could totally build.
+
+522
+00:21:09,942 --> 00:21:12,161
+But it would take me like 100 hours to build and run
+
+523
+00:21:12,322 --> 00:21:14,641
+-- and then
+-- you have to run it and running things is expensive
+
+524
+00:21:14,732 --> 00:21:16,411
+and, and or we can pay 12 hun
+
+525
+00:21:16,521 --> 00:21:18,021
+like 1200 bucks a year.
+
+526
+00:21:18,771 --> 00:21:19,031
+It's no
+
+527
+00:21:19,612 --> 00:21:19,781
+brainer.
+
+528
+00:21:19,952 --> 00:21:21,482
+But now here's what happens, right?
+
+529
+00:21:21,621 --> 00:21:22,241
+So like
+
+530
+00:21:22,501 --> 00:21:23,391
+in the context of
+
+531
+00:21:23,651 --> 00:21:28,121
+Acor, we have sift and Gripe and they are like the foundation of our enterprise tool.
+
+532
+00:21:28,131 --> 00:21:28,602
+OK.
+
+533
+00:21:28,781 --> 00:21:31,157
+So anyone could take sift and gripe and build a tool on top.
+
+534
+00:21:31,167 --> 00:21:35,078
+In fact, there are many companies have, we know of many comp competitors to
+
+535
+00:21:35,368 --> 00:21:37,417
+Acor that have literally taken sift and gripe
+
+536
+00:21:37,427 --> 00:21:39,218
+and built competing products on top of it.
+
+537
+00:21:39,228 --> 00:21:42,708
+And that's how open source works like those are, that's the deal.
+
+538
+00:21:42,917 --> 00:21:44,708
+That's it. We deal with it too bad.
+
+539
+00:21:44,927 --> 00:21:47,578
+Like we hope what they contribute back,
+
+540
+00:21:47,708 --> 00:21:50,267
+-- but they don't have to. Well, and
+-- I think the big thing is though,
+
+541
+00:21:50,407 --> 00:21:52,677
+ideas are easy, execution is hard
+
+542
+00:21:52,817 --> 00:21:55,634
+and sustained execution of like an open source
+
+543
+00:21:55,884 --> 00:21:56,504
+project.
+
+544
+00:21:57,244 --> 00:21:58,894
+-- It's tough for sure.
+-- Absolutely.
+
+545
+00:21:58,994 --> 00:22:00,073
+-- That's super
+-- hard
+
+546
+00:22:00,203 --> 00:22:01,234
+for sure, for sure.
+
+547
+00:22:01,244 --> 00:22:03,494
+And if a company can do that and actually keep
+
+548
+00:22:03,504 --> 00:22:05,953
+that piece of open source alive and going well.
+
+549
+00:22:06,433 --> 00:22:09,754
+Yeah, then like, I'll look at the vendors and a lot or the,
+
+550
+00:22:09,764 --> 00:22:11,183
+the sort of the secondary market,
+
+551
+00:22:11,193 --> 00:22:12,884
+let's call it where they kind of take the open
+
+552
+00:22:12,894 --> 00:22:15,494
+source from the original company and repackage or rebrand it.
+
+553
+00:22:15,913 --> 00:22:18,713
+-- And in my experience, most of them don't do a great job.
+-- No, of course.
+
+554
+00:22:18,723 --> 00:22:21,963
+And that, that's my excuse. Always, as I tell people, look, if, if a competitive,
+
+555
+00:22:22,199 --> 00:22:25,979
+taking one of our things and they're doing a better job than us. We suck. Like that's,
+
+556
+00:22:26,219 --> 00:22:29,280
+that's how, that's like my other argument is sometimes people would be like, oh,
+
+557
+00:22:29,319 --> 00:22:31,229
+but if this feature goes into open source
+
+558
+00:22:31,239 --> 00:22:32,949
+and then people won't pay us for enterprise,
+
+559
+00:22:32,959 --> 00:22:34,359
+I'm like, look, if, if an open
+
+560
+00:22:34,479 --> 00:22:37,280
+source project can damage your enterprise product, like you suck.
+
+561
+00:22:37,339 --> 00:22:38,579
+That's the lesson here
+
+562
+00:22:40,369 --> 00:22:41,260
+keeps moving forward.
+
+563
+00:22:42,199 --> 00:22:45,780
+Exactly. Well, they all do anyway. Ok. Ok. So here's the important part of this.
+
+564
+00:22:45,790 --> 00:22:46,229
+I think
+
+565
+00:22:46,839 --> 00:22:47,790
+so. Hashy
+
+566
+00:22:48,189 --> 00:22:48,270
+Corp,
+
+567
+00:22:48,739 --> 00:22:52,770
+they had this open source and I think we can easily agree. This is true of Mango DB.
+
+568
+00:22:52,780 --> 00:22:54,040
+This is true of elastic search
+
+569
+00:22:54,390 --> 00:22:57,280
+without an open source product.
+
+570
+00:22:57,489 --> 00:23:00,479
+These things would not have gained the popularity. They had,
+
+571
+00:23:00,829 --> 00:23:04,180
+-- they would have never launched for sure. They'd have like six users.
+-- Absolutely.
+
+572
+00:23:04,319 --> 00:23:06,560
+So the open source was very much
+
+573
+00:23:06,819 --> 00:23:09,130
+a, an important component of their success.
+
+574
+00:23:09,410 --> 00:23:12,640
+And now what they had is they had something called a contributor license agreement.
+
+575
+00:23:12,650 --> 00:23:14,319
+What happens when you have AC L A
+
+576
+00:23:14,680 --> 00:23:18,849
+is you are signing over your copyright rights
+
+577
+00:23:19,189 --> 00:23:22,150
+to the company or organization because like
+
+578
+00:23:22,160 --> 00:23:24,109
+the free software foundation has clas also.
+
+579
+00:23:24,119 --> 00:23:26,060
+But their, their purpose isn't to relic
+
+580
+00:23:26,239 --> 00:23:28,119
+it as a business someday. Well, yet.
+
+581
+00:23:28,689 --> 00:23:29,930
+But they could though,
+
+582
+00:23:30,040 --> 00:23:30,380
+that's the
+
+583
+00:23:30,510 --> 00:23:31,079
+thing we never know.
+
+584
+00:23:31,089 --> 00:23:34,589
+This is what I love is, people are like, oh, but they would never do that.
+
+585
+00:23:34,599 --> 00:23:37,050
+I'm like, cool, put that in writing in the contract and they're like, oh, but,
+
+586
+00:23:37,160 --> 00:23:38,589
+-- yeah.
+-- Exactly. Exactly.
+
+587
+00:23:38,640 --> 00:23:43,069
+And and they claim it so they can switch to other licenses and whatever,
+
+588
+00:23:43,130 --> 00:23:44,849
+like a proprietary business
+
+589
+00:23:45,344 --> 00:23:45,935
+just saying.
+
+590
+00:23:46,285 --> 00:23:47,364
+-- Right.
+-- Well, and so that's the thing.
+
+591
+00:23:47,375 --> 00:23:49,964
+See, that's what gets me is, for example, do they ever say,
+
+592
+00:23:49,974 --> 00:23:51,194
+do they ever put in that thing?
+
+593
+00:23:51,464 --> 00:23:54,834
+I guess you could put this in ac a, uh, contributor license agreement where
+
+594
+00:23:55,055 --> 00:23:56,625
+we will only go for example,
+
+595
+00:23:56,635 --> 00:24:01,594
+-- to O SI approved licenses and then you'd also have to subvert the O SI
+-- I believe the um
+
+596
+00:24:01,959 --> 00:24:05,050
+I, I think Liber Office has such a clause,
+
+597
+00:24:05,819 --> 00:24:07,410
+I think don't quote me on that, but II,
+
+598
+00:24:07,420 --> 00:24:10,300
+I know they exist and I think Liber Office has one.
+
+599
+00:24:10,310 --> 00:24:10,979
+But anyway,
+
+600
+00:24:11,189 --> 00:24:12,380
+so you got the CL A right?
+
+601
+00:24:12,390 --> 00:24:15,099
+If you want to contribute source code to a project like
+
+602
+00:24:15,109 --> 00:24:18,569
+Hashy Corp in the past or Elastic Search or Mango DB,
+
+603
+00:24:18,829 --> 00:24:21,660
+you had to sign a contributor license agreement
+
+604
+00:24:21,670 --> 00:24:23,939
+that said I'm giving you all my rights
+
+605
+00:24:24,130 --> 00:24:25,209
+and a lot of people did it.
+
+606
+00:24:25,219 --> 00:24:26,449
+And most of these companies said, oh,
+
+607
+00:24:26,459 --> 00:24:29,689
+we will never change our license under any circumstances, you know,
+
+608
+00:24:29,869 --> 00:24:33,810
+super double cross pinky swear. And then eventually
+
+609
+00:24:34,109 --> 00:24:34,650
+they did.
+
+610
+00:24:34,969 --> 00:24:37,030
+And because of that cl a,
+
+611
+00:24:37,160 --> 00:24:38,969
+there's nothing anyone could do about it
+
+612
+00:24:39,239 --> 00:24:41,550
+because what happens if well, they can fork it,
+
+613
+00:24:41,689 --> 00:24:43,630
+well, you can fork it and that will happen.
+
+614
+00:24:43,640 --> 00:24:47,290
+And that happened with elastic search because like uh open search was forked off.
+
+615
+00:24:47,300 --> 00:24:48,150
+Elastic search.
+
+616
+00:24:48,550 --> 00:24:51,859
+Nessus was forked. I'm, I'm, I know hashy corp will be forked.
+
+617
+00:24:51,869 --> 00:24:53,010
+I don't know if the fork will live.
+
+618
+00:24:53,719 --> 00:24:55,890
+Well, of course, well, anyone can fork it, but I don't,
+
+619
+00:24:55,900 --> 00:24:57,270
+is it going to survive as a question?
+
+620
+00:24:57,479 --> 00:24:58,790
+Like, talk to me in a year?
+
+621
+00:24:58,920 --> 00:24:59,349
+Yeah.
+
+622
+00:24:59,449 --> 00:24:59,790
+Yeah.
+
+623
+00:25:00,530 --> 00:25:00,680
+More than
+
+624
+00:25:00,910 --> 00:25:01,469
+commits.
+
+625
+00:25:02,040 --> 00:25:04,229
+Right. Exactly. And that's, that's always the thing.
+
+626
+00:25:04,239 --> 00:25:05,819
+People are always like, oh, we'll just fork it.
+
+627
+00:25:05,829 --> 00:25:07,589
+It's like forking things is really hard.
+
+628
+00:25:07,819 --> 00:25:07,949
+Yeah.
+
+629
+00:25:07,959 --> 00:25:10,420
+Like when that whole rel thing came out and people were like, oh, we'll just like,
+
+630
+00:25:10,430 --> 00:25:11,310
+do it ourselves.
+
+631
+00:25:11,319 --> 00:25:12,140
+And it's like, oh
+
+632
+00:25:13,040 --> 00:25:13,390
+right.
+
+633
+00:25:13,400 --> 00:25:17,829
+That's like saying, oh, just walk the Cascadia trail with a 400 pound backpack.
+
+634
+00:25:17,839 --> 00:25:19,630
+It's fine. It's very easy. Everyone.
+
+635
+00:25:20,010 --> 00:25:21,209
+Yeah, I know. I know.
+
+636
+00:25:21,219 --> 00:25:25,560
+So anyway, now here's where, here's where not having AC L A is important, right?
+
+637
+00:25:25,800 --> 00:25:29,430
+So today there is a, a blog post by uh Pamela Chaste
+
+638
+00:25:29,839 --> 00:25:31,199
+I will try to find and
+
+639
+00:25:31,400 --> 00:25:34,040
+it basically talks about how we don't actually know
+
+640
+00:25:34,050 --> 00:25:38,329
+who owns open source license code if there's multiple contributors
+
+641
+00:25:38,650 --> 00:25:41,420
+because the way traditional copyright law works, like, for example,
+
+642
+00:25:41,430 --> 00:25:42,959
+let's say you draw a picture of a cat
+
+643
+00:25:43,229 --> 00:25:45,260
+and then you give me the picture of the cat and say, Josh,
+
+644
+00:25:45,270 --> 00:25:47,160
+you have my permission to change my picture of a cat
+
+645
+00:25:47,270 --> 00:25:48,810
+and then I draw a tree in the background
+
+646
+00:25:49,020 --> 00:25:51,650
+who owns the copyright to that picture.
+
+647
+00:25:51,660 --> 00:25:56,170
+Uh If memory serves, if you do enough transformative work to the thing,
+
+648
+00:25:56,180 --> 00:25:57,319
+then you own that copy.
+
+649
+00:25:57,329 --> 00:26:00,369
+It doesn't even have to be transformative if you give me permission and I do it.
+
+650
+00:26:01,109 --> 00:26:02,030
+Yeah, I forgot the permission thing.
+
+651
+00:26:02,040 --> 00:26:04,150
+Well, yeah, obviously I can license you the copyright. Yeah.
+
+652
+00:26:04,160 --> 00:26:07,709
+-- And then you have, yeah,
+-- the last person to touch it has copyright over that work then
+
+653
+00:26:08,280 --> 00:26:11,680
+and open source is different though because you have multiple contributors.
+
+654
+00:26:11,689 --> 00:26:13,859
+So if I contribute a one line patch,
+
+655
+00:26:13,869 --> 00:26:18,439
+do I now does the last person have the copyright over the code?
+
+656
+00:26:18,750 --> 00:26:20,390
+And no one's ever answered this legally?
+
+657
+00:26:20,709 --> 00:26:24,540
+So, but the intention is with, if you don't have a contributor license agreement,
+
+658
+00:26:24,819 --> 00:26:29,420
+everyone involved in the project would have to agree to change their license.
+
+659
+00:26:29,430 --> 00:26:33,069
+And obviously, if you're trying to go from Apache two to business source,
+
+660
+00:26:33,250 --> 00:26:35,229
+that is not going to happen, right?
+
+661
+00:26:35,369 --> 00:26:38,020
+-- 100%.
+-- I mean, in theory, you
+
+662
+00:26:38,204 --> 00:26:38,625
+could,
+
+663
+00:26:38,635 --> 00:26:42,165
+but you'd have to also probably gut a whole bunch of code for people that don't.
+
+664
+00:26:42,175 --> 00:26:44,074
+But even that's not obvious, like
+
+665
+00:26:44,285 --> 00:26:45,094
+because
+
+666
+00:26:45,285 --> 00:26:48,104
+we don't know the copyright ownership is just,
+
+667
+00:26:48,114 --> 00:26:50,324
+is going back in time and removing some code.
+
+668
+00:26:50,334 --> 00:26:54,064
+But, but what, well, I should say is removing code in the current iteration
+
+669
+00:26:54,204 --> 00:26:57,885
+that was added in the past. Does that count as removing their contribution?
+
+670
+00:26:57,895 --> 00:27:01,344
+Like it doesn't, this is not obvious at all. This is very murky
+
+671
+00:27:01,859 --> 00:27:05,530
+and traditionally in the open source world, we've ignored it because we could
+
+672
+00:27:05,890 --> 00:27:07,920
+because no one's ever said like, oh, hey,
+
+673
+00:27:07,930 --> 00:27:10,300
+I'm the last contributor to this project and I own it now.
+
+674
+00:27:10,739 --> 00:27:14,660
+And if someone did it would be a heck of a court case to say the least.
+
+675
+00:27:14,670 --> 00:27:16,719
+Well, it sort of has happened but it's never been.
+
+676
+00:27:16,729 --> 00:27:19,930
+Most of these people don't have the money to properly fund
+
+677
+00:27:19,939 --> 00:27:22,989
+a court fight for it or it just doesn't really matter.
+
+678
+00:27:23,000 --> 00:27:26,040
+Like somebody claims ownership of something. It's kind of like, ok,
+
+679
+00:27:26,180 --> 00:27:28,479
+cool. Who cares? Like life goes on
+
+680
+00:27:28,930 --> 00:27:29,469
+because,
+
+681
+00:27:29,479 --> 00:27:31,189
+and this is something that's been coming up a lot
+
+682
+00:27:31,199 --> 00:27:33,050
+because obviously I'm doing a lot of stuff with a IA
+
+683
+00:27:33,410 --> 00:27:36,599
+I generated content cannot hold a copyright unless the
+
+684
+00:27:36,609 --> 00:27:38,189
+human does a whole bunch of transformation to it.
+
+685
+00:27:38,199 --> 00:27:42,040
+We have no idea what level that is. 1% 10% 99%. Who knows? Right.
+
+686
+00:27:42,219 --> 00:27:44,589
+But one thing I've been coming across is
+
+687
+00:27:45,160 --> 00:27:46,760
+why do I care about copyright?
+
+688
+00:27:46,790 --> 00:27:48,660
+And the best answer I have is I care about
+
+689
+00:27:48,670 --> 00:27:52,599
+copyright because traditionally we use copyright to control the thing,
+
+690
+00:27:52,650 --> 00:27:54,979
+especially if somebody
+
+691
+00:27:55,270 --> 00:27:56,380
+abuses the thing.
+
+692
+00:27:56,390 --> 00:27:57,859
+Like if they post it to their website,
+
+693
+00:27:57,869 --> 00:28:01,219
+I can use copyright to issue ad MC a takedown notice for example.
+
+694
+00:28:02,119 --> 00:28:02,430
+But,
+
+695
+00:28:03,069 --> 00:28:03,969
+but, but
+
+696
+00:28:04,219 --> 00:28:06,959
+there are cases where I don't care that much like
+
+697
+00:28:07,030 --> 00:28:09,790
+well to put it simply the the Cloud Security Alliance,
+
+698
+00:28:09,800 --> 00:28:11,739
+we we want you to read our papers.
+
+699
+00:28:12,359 --> 00:28:14,619
+So like if you want to take our papers and distribute them,
+
+700
+00:28:14,709 --> 00:28:16,079
+we're not super happy about that.
+
+701
+00:28:16,089 --> 00:28:19,339
+But at the same time, like we're kind of giving them away for free to begin with.
+
+702
+00:28:19,349 --> 00:28:22,229
+So it's not that big a deal like we're not charging, you know, 50 bucks.
+
+703
+00:28:22,239 --> 00:28:25,609
+It's not like an iso standard where they watermark each one with
+
+704
+00:28:25,619 --> 00:28:28,420
+your email address because they cost some godly amount of money,
+
+705
+00:28:28,719 --> 00:28:29,300
+you know,
+
+706
+00:28:29,819 --> 00:28:32,349
+uh we're, you know, we're just handing these things out.
+
+707
+00:28:33,069 --> 00:28:34,729
+And so I was thinking about this and I was kind
+
+708
+00:28:34,739 --> 00:28:36,839
+of asking people this kind of awkward question of like,
+
+709
+00:28:36,849 --> 00:28:39,199
+well, why do we care about copyright?
+
+710
+00:28:39,209 --> 00:28:43,280
+Assuming it's not like a music CD where we're trying to sell the darn thing, you know,
+
+711
+00:28:43,290 --> 00:28:44,280
+and prevent piracy.
+
+712
+00:28:44,290 --> 00:28:48,500
+I mean, fundamentally, if you don't care about piracy, why would you really,
+
+713
+00:28:48,510 --> 00:28:50,420
+that's the open source way, right?
+
+714
+00:28:50,430 --> 00:28:52,650
+Is generally speaking as long, like,
+
+715
+00:28:52,660 --> 00:28:55,520
+so GP L is a little different because GP L you have to,
+
+716
+00:28:55,540 --> 00:28:58,319
+you have to release the source code, but with like Apache two,
+
+717
+00:28:58,699 --> 00:29:02,540
+-- no one really cares what happens.
+-- And, and so that's the flip side of it is
+
+718
+00:29:02,650 --> 00:29:07,119
+again, they're sort of using copyright to enforce something they want.
+
+719
+00:29:07,780 --> 00:29:09,000
+And in this case, it's sort of the,
+
+720
+00:29:09,010 --> 00:29:11,329
+I don't want to say it's the opposite of control because it is still controlled,
+
+721
+00:29:11,339 --> 00:29:12,800
+but it's controlled to contribute
+
+722
+00:29:12,920 --> 00:29:15,040
+and gain access to those contributions
+
+723
+00:29:15,430 --> 00:29:16,719
+as opposed to locking it up.
+
+724
+00:29:17,109 --> 00:29:18,119
+But again,
+
+725
+00:29:18,505 --> 00:29:20,454
+well, for example, all the service companies just
+
+726
+00:29:20,604 --> 00:29:23,925
+ingest open source and like, maybe never give anything back
+
+727
+00:29:24,035 --> 00:29:27,574
+to the point where companies change their licenses. So that they can't do that,
+
+728
+00:29:27,685 --> 00:29:28,074
+right.
+
+729
+00:29:28,135 --> 00:29:29,675
+But fundamentally, I've been thinking about this, like,
+
+730
+00:29:29,685 --> 00:29:31,944
+do I really care all that much about copyright?
+
+731
+00:29:31,954 --> 00:29:33,505
+Like if we have an A I uh
+
+732
+00:29:33,714 --> 00:29:34,785
+support bot
+
+733
+00:29:34,895 --> 00:29:38,204
+generate a answer to how do I reset my password ticket?
+
+734
+00:29:38,714 --> 00:29:40,935
+-- Yeah, we don't care about the copyright on that answer.
+-- Ok.
+
+735
+00:29:40,944 --> 00:29:43,525
+Look, there's two sides to this argument. OK.
+
+736
+00:29:43,795 --> 00:29:45,925
+There's the data going in
+
+737
+00:29:46,410 --> 00:29:50,989
+and today there are multiple court cases where you have creators
+
+738
+00:29:51,189 --> 00:29:55,260
+who are upset that their content was used without permission in an A I system.
+
+739
+00:29:55,270 --> 00:29:56,670
+And I totally relate to this.
+
+740
+00:29:56,849 --> 00:29:57,550
+I don't,
+
+741
+00:29:57,750 --> 00:30:01,040
+I go back and forth whether it should or shouldn't be legal, but it's not up to me.
+
+742
+00:30:01,050 --> 00:30:03,819
+-- So it doesn't matter.
+-- It's also kind of, it's a done deal.
+
+743
+00:30:05,550 --> 00:30:08,079
+-- No,
+-- it's, it's not, it's not at all. Don't talk like that.
+
+744
+00:30:08,239 --> 00:30:12,060
+The reality is until this goes through the courts. It's not a done deal.
+
+745
+00:30:12,069 --> 00:30:15,880
+Court and law is the functioning foundation of society.
+
+746
+00:30:16,284 --> 00:30:19,583
+You can't say it's a done deal. It's a, it looks like it's a done deal.
+
+747
+00:30:19,593 --> 00:30:21,473
+But if the courts tell an A I company,
+
+748
+00:30:21,634 --> 00:30:25,703
+you have to remove all of the art from this particular artist from your model,
+
+749
+00:30:25,734 --> 00:30:27,303
+they're completely screwed
+
+750
+00:30:27,534 --> 00:30:28,784
+and that's, they know it.
+
+751
+00:30:28,793 --> 00:30:30,394
+-- We
+-- thought GDPR might make a difference,
+
+752
+00:30:30,404 --> 00:30:32,553
+but a lot of these tech companies engineered around it.
+
+753
+00:30:32,573 --> 00:30:35,764
+-- GDPR
+-- has made a difference. Kurt GDPR has made a huge difference.
+
+754
+00:30:35,774 --> 00:30:38,323
+I'm pretty sure Facebook still has all our data and is selling it.
+
+755
+00:30:38,333 --> 00:30:40,854
+-- Facebook has
+-- our data but there's definitely more
+
+756
+00:30:40,864 --> 00:30:44,413
+power you can exert over not Facebook.
+
+757
+00:30:44,423 --> 00:30:48,998
+We'll say Facebook is special because they're extra sleazy and extra huge.
+
+758
+00:30:49,008 --> 00:30:52,387
+But the challenges some of these large A I companies are
+
+759
+00:30:52,677 --> 00:30:56,017
+-- well like Google saying basically extra
+-- sleazy and extra huge.
+
+760
+00:30:56,027 --> 00:30:58,307
+Google is like, you know, if it's on the public web,
+
+761
+00:30:58,317 --> 00:31:01,017
+-- we're feeding it into an A I
+-- because today they can,
+
+762
+00:31:01,027 --> 00:31:03,137
+but if copyright says you can't do that,
+
+763
+00:31:03,147 --> 00:31:05,078
+they will change because they have to because
+
+764
+00:31:05,088 --> 00:31:07,078
+they're going to get sued by literally everyone.
+
+765
+00:31:07,088 --> 00:31:08,907
+It's not a done deal, but now
+
+766
+00:31:09,547 --> 00:31:12,277
+-- they're going to fight it to the death because they have to, I get
+-- that
+
+767
+00:31:12,417 --> 00:31:14,608
+and they, and the thing to remember too is they don't have to win,
+
+768
+00:31:14,618 --> 00:31:15,307
+they just have to stop
+
+769
+00:31:15,602 --> 00:31:17,411
+and they will, they'll try.
+
+770
+00:31:17,552 --> 00:31:22,141
+But now on the other side as well, you have the issue of copyright on the output
+
+771
+00:31:22,261 --> 00:31:23,852
+of this stuff.
+
+772
+00:31:23,871 --> 00:31:27,791
+You and I don't care a lot about copyright because it doesn't pay our bills.
+
+773
+00:31:27,952 --> 00:31:30,052
+But if I was an author
+
+774
+00:31:30,161 --> 00:31:35,761
+and I was creating copyrighted works that I was then selling as my job.
+
+775
+00:31:35,771 --> 00:31:37,112
+You know how I was living,
+
+776
+00:31:37,381 --> 00:31:38,712
+I would care a lot.
+
+777
+00:31:38,822 --> 00:31:41,891
+The online romance book novel industry has already
+
+778
+00:31:41,901 --> 00:31:45,052
+been just stomped by A I generated stuff.
+
+779
+00:31:45,145 --> 00:31:45,725
+I
+
+780
+00:31:45,865 --> 00:31:48,005
+am not surprised at all.
+
+781
+00:31:48,255 --> 00:31:48,885
+I mean, I
+
+782
+00:31:49,026 --> 00:31:49,176
+-- think
+-- that's
+
+783
+00:31:49,336 --> 00:31:53,706
+-- already formulaic,
+-- right? I've heard a lot of the children's books are coming
+
+784
+00:31:53,845 --> 00:31:57,186
+under the same sort of attack with a lot of low quality,
+
+785
+00:31:57,255 --> 00:31:59,395
+like generating a board book with like
+
+786
+00:31:59,735 --> 00:32:03,475
+50 or 60 lines of text in total. And some images is
+
+787
+00:32:03,605 --> 00:32:05,806
+that's a really easy thing to set up and,
+
+788
+00:32:06,115 --> 00:32:06,576
+well, no,
+
+789
+00:32:06,715 --> 00:32:07,796
+no, no,
+
+790
+00:32:07,985 --> 00:32:10,135
+I, I think it's easy to turn out.
+
+791
+00:32:10,145 --> 00:32:13,166
+But I think making a good story because, like, when I was,
+
+792
+00:32:13,505 --> 00:32:14,725
+when I had young Children
+
+793
+00:32:15,040 --> 00:32:16,900
+there were a handful of books that were
+
+794
+00:32:16,910 --> 00:32:20,180
+clearly just heads and tails above the others.
+
+795
+00:32:20,510 --> 00:32:22,750
+Yeah. And those stories do very well.
+
+796
+00:32:22,760 --> 00:32:24,839
+The others my guess is they probably don't make any
+
+797
+00:32:24,849 --> 00:32:26,260
+money because you look at them and you're like,
+
+798
+00:32:26,270 --> 00:32:30,030
+this is obviously crap and maybe someone will buy it and give it to your kid
+
+799
+00:32:30,150 --> 00:32:30,270
+in a
+
+800
+00:32:30,469 --> 00:32:34,660
+-- present and then you throw it out.
+-- Fun fact there was, um was it
+
+801
+00:32:35,150 --> 00:32:39,349
+who's the guy, uh is it Neil Gaiman? Who's the guy that wrote The Fool?
+
+802
+00:32:39,550 --> 00:32:41,099
+Uh Not The Fool series, the one
+
+803
+00:32:41,500 --> 00:32:44,239
+they're based in San Francisco kind of magical
+
+804
+00:32:44,369 --> 00:32:45,650
+devils and stuff. Anyways,
+
+805
+00:32:45,979 --> 00:32:49,030
+somebody set their name as the author's name
+
+806
+00:32:49,040 --> 00:32:51,469
+and released a new book with a similar title
+
+807
+00:32:52,020 --> 00:32:52,739
+by similar title.
+
+808
+00:32:52,750 --> 00:32:56,270
+I mean, I think it was the same title of an upcoming book of the author and I
+
+809
+00:32:56,430 --> 00:32:59,560
+was like, oh, it released finally. Hallelujah. And I bought it and this
+
+810
+00:32:59,790 --> 00:33:02,339
+thing comes to me in the mail that was like an on demand print.
+
+811
+00:33:02,349 --> 00:33:06,349
+And I'm like, no, and I did a return and filled out the form and
+
+812
+00:33:06,630 --> 00:33:09,359
+Amazon, you know, like, whatever, they don't care as long as you do, like,
+
+813
+00:33:09,369 --> 00:33:11,420
+less than 1% returns that are just like we don't care.
+
+814
+00:33:11,839 --> 00:33:14,489
+But it was pretty clearly this person had set up
+
+815
+00:33:14,650 --> 00:33:15,449
+a, they were trying to,
+
+816
+00:33:15,890 --> 00:33:16,180
+yeah,
+
+817
+00:33:16,300 --> 00:33:17,250
+that's horrible.
+
+818
+00:33:17,390 --> 00:33:17,430
+Yeah.
+
+819
+00:33:17,550 --> 00:33:19,569
+And I mean, we're going to see more of that because
+
+820
+00:33:19,810 --> 00:33:20,199
+yes,
+
+821
+00:33:20,359 --> 00:33:21,650
+it's easy. Ok.
+
+822
+00:33:21,920 --> 00:33:22,410
+But
+
+823
+00:33:22,709 --> 00:33:23,530
+I think
+
+824
+00:33:23,670 --> 00:33:27,239
+how does this tie into responsibility and hashy Corp,
+
+825
+00:33:27,250 --> 00:33:28,780
+I'm still not putting all these pieces in.
+
+826
+00:33:28,900 --> 00:33:29,829
+So, for example,
+
+827
+00:33:30,339 --> 00:33:30,920
+like
+
+828
+00:33:32,229 --> 00:33:35,390
+in the past companies behaved in ways that were
+
+829
+00:33:35,439 --> 00:33:38,579
+usually reasonably ok when it came to making money.
+
+830
+00:33:38,849 --> 00:33:41,109
+And what's interesting is they would sometimes do things that
+
+831
+00:33:41,119 --> 00:33:43,400
+we said that is not an acceptable way to,
+
+832
+00:33:43,410 --> 00:33:45,150
+to make money or to defend your moat,
+
+833
+00:33:45,380 --> 00:33:46,520
+you know, like suddenly
+
+834
+00:33:46,670 --> 00:33:50,390
+like suing competitors to drive them out of business, you know, like you,
+
+835
+00:33:50,900 --> 00:33:54,339
+and what's interesting now is it's becoming kind
+
+836
+00:33:54,349 --> 00:33:57,790
+of a trope where these companies become successful.
+
+837
+00:33:58,229 --> 00:33:58,810
+And
+
+838
+00:33:58,959 --> 00:34:00,699
+in my experience it seems to be driven a lot by
+
+839
+00:34:00,709 --> 00:34:04,489
+service companies using their open source and offering a service now
+
+840
+00:34:05,250 --> 00:34:09,850
+and, and this is driving them to modify their open source licenses to this, you know,
+
+841
+00:34:09,860 --> 00:34:13,389
+hashy court business license or like the totally free but business friendly,
+
+842
+00:34:13,399 --> 00:34:15,020
+open source license or whatever.
+
+843
+00:34:15,030 --> 00:34:15,409
+Ok.
+
+844
+00:34:15,560 --> 00:34:18,168
+-- Well, is this good or bad? Is it
+-- ok. It's bad.
+
+845
+00:34:18,179 --> 00:34:23,000
+I'm gonna, I'm gonna unwind everything you just said. Ok, I wanna unwind all this.
+
+846
+00:34:23,070 --> 00:34:26,879
+So if you can't say companies like, somehow had this
+
+847
+00:34:27,498 --> 00:34:31,668
+moment of, of like Zen and realism where they were good and decent and they,
+
+848
+00:34:32,009 --> 00:34:33,009
+what happened was,
+
+849
+00:34:33,197 --> 00:34:33,378
+that was
+
+850
+00:34:33,489 --> 00:34:33,638
+-- not my
+-- in.
+
+851
+00:34:34,059 --> 00:34:35,589
+-- Ok.
+-- That's kind of what it sounded like.
+
+852
+00:34:35,599 --> 00:34:35,958
+Ok.
+
+853
+00:34:36,217 --> 00:34:39,239
+Well, no, I meant more that they didn't do reprehensible things
+
+854
+00:34:39,658 --> 00:34:39,748
+yet.
+
+855
+00:34:40,108 --> 00:34:43,329
+-- They, they wanted to but they couldn't or they didn't
+-- feel it was necessary.
+
+856
+00:34:43,349 --> 00:34:45,768
+But no, no, they did. So this is where, ok.
+
+857
+00:34:45,779 --> 00:34:47,279
+So you did kind of say what I thought you said,
+
+858
+00:34:47,520 --> 00:34:48,989
+this is where if you look at
+
+859
+00:34:49,280 --> 00:34:53,938
+the way companies acted and they'll say in the late 18 hundreds, early 19 hundreds,
+
+860
+00:34:54,110 --> 00:34:56,360
+like they were literally throwing human beings
+
+861
+00:34:56,370 --> 00:34:58,379
+into machines because it was cheaper than,
+
+862
+00:34:58,389 --> 00:35:00,020
+than building a railing.
+
+863
+00:35:00,540 --> 00:35:04,840
+And like you had these huge companies that were just
+
+864
+00:35:04,850 --> 00:35:07,780
+awful and they literally killed people and no one cared.
+
+865
+00:35:08,080 --> 00:35:09,189
+And then the government, it got,
+
+866
+00:35:09,389 --> 00:35:10,149
+well, I'm talking more
+
+867
+00:35:10,600 --> 00:35:13,590
+-- the last 2030 years of tech companies. I mean, and
+-- that's just it, right?
+
+868
+00:35:13,600 --> 00:35:16,260
+So it got so bad. Governments had to step in and be like, hold on.
+
+869
+00:35:16,270 --> 00:35:17,419
+We have to fix some of this.
+
+870
+00:35:17,959 --> 00:35:20,080
+And now we're back there again where these companies,
+
+871
+00:35:20,090 --> 00:35:24,699
+like if a company could like remove all their hand rails at their, at their plant,
+
+872
+00:35:24,709 --> 00:35:25,810
+they would, right?
+
+873
+00:35:25,820 --> 00:35:28,429
+They would love to if it saved them five dollars,
+
+874
+00:35:28,459 --> 00:35:31,370
+there was that meatpacking thing where a 17 year
+
+875
+00:35:31,379 --> 00:35:33,889
+old lost his hand and the company was fined,
+
+876
+00:35:33,899 --> 00:35:37,129
+-- it was just over 1000 bucks,
+-- which they don't care, they're going to keep doing it.
+
+877
+00:35:37,139 --> 00:35:37,540
+You know.
+
+878
+00:35:38,260 --> 00:35:40,209
+And that's why we had these, like,
+
+879
+00:35:40,219 --> 00:35:42,679
+we had labor unions and we had government regulation that was
+
+880
+00:35:42,689 --> 00:35:45,439
+basically telling the companies you can't throw people into machines.
+
+881
+00:35:45,449 --> 00:35:46,770
+It's not, it's not ok.
+
+882
+00:35:46,979 --> 00:35:49,810
+And we're back because a lot of these protections are gone and
+
+883
+00:35:49,820 --> 00:35:52,479
+in many ways the world has changed and it took it away.
+
+884
+00:35:52,489 --> 00:35:53,860
+Now on the topic of like,
+
+885
+00:35:54,080 --> 00:35:55,620
+like saying hashy Corp is,
+
+886
+00:35:55,629 --> 00:35:58,540
+is getting their lunch eaten by another company or whatever.
+
+887
+00:35:58,820 --> 00:36:01,439
+I think this is your classic commodity
+
+888
+00:36:01,709 --> 00:36:04,360
+problem where if I create a product and I can,
+
+889
+00:36:04,370 --> 00:36:06,760
+let's say patented and I get my 20 years of patent
+
+890
+00:36:07,020 --> 00:36:09,919
+and at the end, if I haven't done anything to really innovate,
+
+891
+00:36:10,199 --> 00:36:11,949
+people are gonna copy what I do
+
+892
+00:36:12,060 --> 00:36:14,889
+and they're gonna steal my stuff. And you could argue, well, that's not fair.
+
+893
+00:36:14,899 --> 00:36:18,379
+Hashi Corp did all this work and they built this thing and like you're not wrong,
+
+894
+00:36:18,570 --> 00:36:20,379
+they did a lot of work, they did a lot of good work.
+
+895
+00:36:20,389 --> 00:36:22,840
+But at the same time, I think you could argue that
+
+896
+00:36:23,320 --> 00:36:26,550
+the fundamental functionality of terraform and vault,
+
+897
+00:36:26,739 --> 00:36:29,219
+it's not going to change drastically because
+
+898
+00:36:29,229 --> 00:36:31,840
+it's basically a commodity function now like
+
+899
+00:36:32,260 --> 00:36:36,290
+it's expected and we need that functionality and it's not novel anymore.
+
+900
+00:36:36,469 --> 00:36:37,770
+So, and this, for example,
+
+901
+00:36:37,780 --> 00:36:40,300
+is a perfect example of where worldly mapping gets it right where
+
+902
+00:36:40,310 --> 00:36:43,570
+it talks about things go from Genesis to custom to products,
+
+903
+00:36:43,580 --> 00:36:44,629
+to utility
+
+904
+00:36:44,909 --> 00:36:45,409
+and
+
+905
+00:36:45,550 --> 00:36:46,969
+to put it bluntly
+
+906
+00:36:47,149 --> 00:36:50,580
+-- in most of the utility space, your margins are 1 to 3%. Right.
+-- Exactly.
+
+907
+00:36:50,590 --> 00:36:51,689
+And that's what's happening.
+
+908
+00:36:51,800 --> 00:36:54,360
+-- Like
+-- grocery stores 3% margins to,
+
+909
+00:36:54,479 --> 00:36:56,949
+if you're lucky, it is horrifying to find out. You know, I
+
+910
+00:36:57,149 --> 00:37:00,919
+don't, when you like, I remember a chef at large did an episode with Earl's.
+
+911
+00:37:00,929 --> 00:37:03,540
+It's a chain of restaurants, Canada where they went over like,
+
+912
+00:37:03,550 --> 00:37:06,770
+here's this dish of food for like 28 bucks and like, ok, like,
+
+913
+00:37:06,929 --> 00:37:09,100
+you know, like, uh, about a third in food costs.
+
+914
+00:37:09,110 --> 00:37:10,840
+Here's the labor cost, here's the like,
+
+915
+00:37:10,850 --> 00:37:13,639
+cutlery or plates getting broken is like 10 cents and
+
+916
+00:37:13,649 --> 00:37:15,169
+like this and that and that and then it's like,
+
+917
+00:37:15,179 --> 00:37:16,729
+literally you're left with this handful.
+
+918
+00:37:16,850 --> 00:37:19,459
+This is like, this is so old. We still had pennies
+
+919
+00:37:19,689 --> 00:37:20,149
+and like,
+
+920
+00:37:20,159 --> 00:37:23,080
+it's literally a handful of like a couple of nickels and a couple of pennies.
+
+921
+00:37:23,090 --> 00:37:23,750
+And that's
+
+922
+00:37:24,760 --> 00:37:26,350
+amazing. It's absolutely amazing.
+
+923
+00:37:27,000 --> 00:37:30,149
+So anyway, I think that's the difference when we have this discussion.
+
+924
+00:37:30,159 --> 00:37:32,379
+It's easy to say, oh, big be Amazon.
+
+925
+00:37:32,389 --> 00:37:34,969
+Big mean Google are stealing from poor little hashy
+
+926
+00:37:35,090 --> 00:37:35,310
+carp
+
+927
+00:37:35,610 --> 00:37:39,129
+and it was the same with elastic where big mean Amazon was stealing from elastic.
+
+928
+00:37:39,500 --> 00:37:44,199
+But I think what you end up with is like, your product has become a commodity.
+
+929
+00:37:44,209 --> 00:37:45,959
+It's time to do something else.
+
+930
+00:37:46,010 --> 00:37:47,899
+-- This is not going to make a difference
+-- and
+
+931
+00:37:47,909 --> 00:37:50,159
+the smart companies keep moving up the food chain.
+
+932
+00:37:50,270 --> 00:37:54,510
+So like Microsoft and Red Hat went from like we have an operating system
+
+933
+00:37:54,729 --> 00:37:55,419
+to
+
+934
+00:37:55,879 --> 00:37:57,199
+that. We have everything
+
+935
+00:37:58,179 --> 00:38:00,300
+had 100 and 20 products.
+
+936
+00:38:01,379 --> 00:38:01,860
+Like,
+
+937
+00:38:02,439 --> 00:38:05,760
+and, and I mean, so here's what's funny is so like elastic, did that change?
+
+938
+00:38:06,379 --> 00:38:09,610
+Elastic doesn't sell elastic search anymore.
+
+939
+00:38:09,620 --> 00:38:12,100
+They're selling solutions built on top of elastic search. So
+
+940
+00:38:12,560 --> 00:38:13,100
+elastic search
+
+941
+00:38:13,639 --> 00:38:14,199
+fundamentally,
+
+942
+00:38:14,840 --> 00:38:17,260
+fundamentally, I don't think they had to change their license.
+
+943
+00:38:17,270 --> 00:38:19,709
+I think they were just really mad at Amazon or something. But
+
+944
+00:38:19,889 --> 00:38:20,169
+like,
+
+945
+00:38:20,489 --> 00:38:20,500
+I
+
+946
+00:38:21,729 --> 00:38:22,000
+sometimes
+
+947
+00:38:22,110 --> 00:38:25,510
+wonder if it's one of those interim steps that a lot of these companies have to take
+
+948
+00:38:26,080 --> 00:38:29,510
+because to put it bluntly, if they could make the leap from software to services
+
+949
+00:38:29,719 --> 00:38:30,340
+they would have.
+
+950
+00:38:30,360 --> 00:38:33,419
+And maybe, and that's true, maybe, maybe that's what they needed to,
+
+951
+00:38:33,429 --> 00:38:35,030
+to change their internal mindset.
+
+952
+00:38:35,040 --> 00:38:38,219
+-- I don't know,
+-- we talk about culture and that company's culture is software.
+
+953
+00:38:38,229 --> 00:38:40,850
+Like a great example of this is Microsoft's company culture
+
+954
+00:38:41,100 --> 00:38:43,780
+is not software, it's business solutions,
+
+955
+00:38:44,209 --> 00:38:45,810
+right? Everything they ship
+
+956
+00:38:46,139 --> 00:38:47,340
+is a business solution.
+
+957
+00:38:47,350 --> 00:38:51,040
+So like Windows 11 still has PR N and calm one and com
+
+958
+00:38:51,050 --> 00:38:55,280
+two as reserve device names because people are still using them for that.
+
+959
+00:38:55,590 --> 00:38:55,620
+Like
+
+960
+00:38:56,530 --> 00:38:58,679
+somebody discovered you can't make a Microsoft team's
+
+961
+00:38:58,689 --> 00:39:01,429
+name of like LPT or PR N because
+
+962
+00:39:02,455 --> 00:39:06,215
+that like then we have to make a directory call that and you can't do that on Windows.
+
+963
+00:39:06,675 --> 00:39:08,784
+So those are magic forbidden words.
+
+964
+00:39:08,794 --> 00:39:11,135
+And I was toying with the idea of like making
+
+965
+00:39:11,145 --> 00:39:13,455
+a major open source project called LPT One or something.
+
+966
+00:39:13,465 --> 00:39:14,504
+That would be really funny,
+
+967
+00:39:14,794 --> 00:39:16,294
+-- you know,
+-- walk out all the windows people.
+
+968
+00:39:16,915 --> 00:39:17,334
+But
+
+969
+00:39:17,844 --> 00:39:18,324
+like
+
+970
+00:39:18,719 --> 00:39:20,800
+talking about this corporate DNA, like,
+
+971
+00:39:20,810 --> 00:39:24,780
+that's the thing is if your culture and DNA is making software,
+
+972
+00:39:24,790 --> 00:39:26,139
+which a lot of these start ups,
+
+973
+00:39:26,560 --> 00:39:28,260
+they are technically
+
+974
+00:39:28,459 --> 00:39:30,860
+minded, founded entities.
+
+975
+00:39:30,989 --> 00:39:34,300
+And so they have that, like, we make software, not, we make a solution or we make,
+
+976
+00:39:34,310 --> 00:39:36,449
+you know, they don't have to step up until
+
+977
+00:39:36,760 --> 00:39:39,850
+they maybe let business people come in and redefine the company, which
+
+978
+00:39:39,969 --> 00:39:42,560
+that's, that's rare for it to work.
+
+979
+00:39:42,570 --> 00:39:45,310
+One of the few examples I can think of for success for that is Apple.
+
+980
+00:39:45,320 --> 00:39:47,929
+They were from a technical company to a lifestyle company
+
+981
+00:39:49,110 --> 00:39:49,889
+and that's what people don't get.
+
+982
+00:39:49,899 --> 00:39:52,159
+It drives me nuts when they're like, oh my God, that Mac is so overpriced.
+
+983
+00:39:52,169 --> 00:39:53,260
+I'm like, yeah, none of us care.
+
+984
+00:39:53,530 --> 00:39:53,649
+I,
+
+985
+00:39:54,149 --> 00:39:56,020
+I do, I hate my Mac. But anyway.
+
+986
+00:39:57,030 --> 00:39:59,750
+Right. But like, fundamentally my math watch with all my other stuff
+
+987
+00:39:59,899 --> 00:40:00,570
+don't care.
+
+988
+00:40:00,709 --> 00:40:05,169
+They fuel my lifestyle of hatred, Kurt, they fuel my lifestyle of hatred.
+
+989
+00:40:06,050 --> 00:40:08,090
+And I, I think that's the thing is what is this,
+
+990
+00:40:08,270 --> 00:40:09,110
+I guess
+
+991
+00:40:09,409 --> 00:40:12,409
+what is the new behaviors and the new things?
+
+992
+00:40:13,050 --> 00:40:15,040
+But we want from companies, but also
+
+993
+00:40:15,199 --> 00:40:18,459
+what is sustainable and what will actually work because
+
+994
+00:40:18,560 --> 00:40:21,250
+we can want company like greenwashing, right?
+
+995
+00:40:21,260 --> 00:40:24,330
+All these companies are like, oh, we're going to be socially environmentally,
+
+996
+00:40:24,340 --> 00:40:25,080
+blah, blah.
+
+997
+00:40:25,290 --> 00:40:25,560
+You know,
+
+998
+00:40:25,570 --> 00:40:27,239
+and then every time one of these companies is
+
+999
+00:40:27,250 --> 00:40:30,090
+investigated for what they're actually doing with the environment.
+
+1000
+00:40:30,159 --> 00:40:30,750
+It's like,
+
+1001
+00:40:31,709 --> 00:40:33,479
+oh, yeah, we took all the plastic and burned it.
+
+1002
+00:40:33,979 --> 00:40:34,399
+Right. Like
+
+1003
+00:40:35,379 --> 00:40:35,580
+we dump
+
+1004
+00:40:35,709 --> 00:40:35,870
+it in the
+
+1005
+00:40:36,020 --> 00:40:36,030
+o,
+
+1006
+00:40:36,209 --> 00:40:37,699
+-- we
+-- planted
+-- a pine tree. It's ok.
+
+1007
+00:40:38,419 --> 00:40:38,780
+Right.
+
+1008
+00:40:38,919 --> 00:40:40,919
+Look, I, I think here's how I'm gonna end this one.
+
+1009
+00:40:40,929 --> 00:40:44,419
+I don't think open source is gonna stop being a
+
+1010
+00:40:44,429 --> 00:40:48,209
+feature used by small companies to get attention because it works
+
+1011
+00:40:48,330 --> 00:40:49,820
+right until it stops.
+
+1012
+00:40:50,040 --> 00:40:51,899
+I think what we're going to see
+
+1013
+00:40:52,250 --> 00:40:53,070
+is
+
+1014
+00:40:53,239 --> 00:40:56,389
+the community is becoming wise to what's going on.
+
+1015
+00:40:56,399 --> 00:41:02,110
+And like, for example, if I saw AC L A on a project, there's absolutely no way
+
+1016
+00:41:02,320 --> 00:41:06,399
+I'm going to participate in that community because I know how that story ends.
+
+1017
+00:41:06,729 --> 00:41:08,909
+And so I, I'm hopeful that the,
+
+1018
+00:41:08,919 --> 00:41:12,360
+the what's going to come of this is start ups will keep using open source,
+
+1019
+00:41:12,370 --> 00:41:14,389
+but they're gonna have to stop using CLAS.
+
+1020
+00:41:14,679 --> 00:41:17,250
+That's my hope because I think no cl A
+
+1021
+00:41:17,600 --> 00:41:19,939
+I won't say it solves the problem, but I think it makes it better.
+
+1022
+00:41:20,500 --> 00:41:24,189
+That's a thought for like maybe for the um what is it? The open
+
+1023
+00:41:24,379 --> 00:41:26,050
+OS sf what does that mean? Again? Open source, open
+
+1024
+00:41:26,479 --> 00:41:27,620
+-- source
+-- security foundation.
+
+1025
+00:41:27,810 --> 00:41:28,889
+Yeah, like maybe
+
+1026
+00:41:29,189 --> 00:41:30,780
+do they have a badge around cl A
+
+1027
+00:41:31,459 --> 00:41:32,120
+not having AC L A?
+
+1028
+00:41:32,429 --> 00:41:35,939
+I don't know if their members would be appreciative of that
+
+1029
+00:41:37,629 --> 00:41:40,590
+and then we're back to incentives and doing things that the people
+
+1030
+00:41:40,780 --> 00:41:41,760
+don't like.
+
+1031
+00:41:43,149 --> 00:41:45,199
+This is why we don't have sponsors.
+
+1032
+00:41:48,000 --> 00:41:50,709
+All right, I'm going to call this one. Thank you, Kurt.
+
+1033
+00:41:50,870 --> 00:41:52,500
+Thank you for listening. Go
+
+1034
+00:41:52,770 --> 00:41:55,260
+open source security podcast.com. Head up the show notes. He's a
+
+1035
+00:41:55,449 --> 00:41:56,889
+Pound Os S podcast. Hashtag
+
+1036
+00:41:57,840 --> 00:41:59,870
+Kurt have a marvelous rest of your day.
+
+1037
+00:42:00,199 --> 00:42:02,189
+Excuse me? You too.
+
+1038
+00:42:04,199 --> 00:42:06,560
+I love it. All right. Thanks everyone. Bye bye.

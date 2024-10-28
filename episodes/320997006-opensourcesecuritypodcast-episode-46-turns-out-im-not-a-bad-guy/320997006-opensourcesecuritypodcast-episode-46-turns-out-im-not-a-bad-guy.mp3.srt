@@ -1,0 +1,4650 @@
+0
+00:00:05,289 --> 00:00:09,840
+Hello and welcome to episode 46 of the open source security podcast with myself,
+
+1
+00:00:09,850 --> 00:00:11,420
+Kurt Siefried and my partner in crime.
+
+2
+00:00:11,430 --> 00:00:12,199
+Josh Bresser.
+
+3
+00:00:12,439 --> 00:00:13,890
+Merry Christmas. Kurt.
+
+4
+00:00:14,600 --> 00:00:14,750
+Huh?
+
+5
+00:00:15,630 --> 00:00:16,860
+Yeah, that, that right.
+
+6
+00:00:18,229 --> 00:00:20,129
+So yesterday was
+
+7
+00:00:20,540 --> 00:00:24,809
+Christmas time for security people because of that crazy Google fish.
+
+8
+00:00:24,819 --> 00:00:28,930
+I was so excited. It was, it was amazing to see someone
+
+9
+00:00:29,239 --> 00:00:32,610
+mount an attack that while everyone kind of knew could happen,
+
+10
+00:00:32,619 --> 00:00:36,240
+-- we haven't seen like a good worm in a long time and this one
+-- a
+
+11
+00:00:37,099 --> 00:00:37,200
+while
+
+12
+00:00:37,340 --> 00:00:37,419
+ago,
+
+13
+00:00:38,310 --> 00:00:40,799
+uh that was less exciting. I felt like, uh, and,
+
+14
+00:00:41,090 --> 00:00:42,689
+and this one was
+
+15
+00:00:43,080 --> 00:00:44,439
+very well done.
+
+16
+00:00:44,580 --> 00:00:46,810
+I was, I was incredibly impressed
+
+17
+00:00:47,389 --> 00:00:50,450
+and, and granted, it didn't really do any, any significant damage,
+
+18
+00:00:50,459 --> 00:00:51,959
+which makes it much nicer as well.
+
+19
+00:00:51,970 --> 00:00:55,409
+Like if it had taken out half the internet I'd be crying instead of being all excited.
+
+20
+00:00:55,590 --> 00:00:56,290
+Well, see, and that's,
+
+21
+00:00:56,299 --> 00:00:59,330
+that's actually the worst thing is it could have done something really nasty, like,
+
+22
+00:00:59,340 --> 00:01:03,250
+say, replaced a random value in every spreadsheet it found,
+
+23
+00:01:03,529 --> 00:01:06,250
+you know, and just modify it by like, say 2%.
+
+24
+00:01:06,709 --> 00:01:09,349
+And the funny thing is you, you would have been able to find it.
+
+25
+00:01:09,360 --> 00:01:12,709
+Had you been willing to go through your logs of what changed over the last 24 hours,
+
+26
+00:01:12,720 --> 00:01:13,580
+but who's going to do that?
+
+27
+00:01:13,589 --> 00:01:14,010
+Right.
+
+28
+00:01:14,690 --> 00:01:15,330
+Google.
+
+29
+00:01:16,169 --> 00:01:18,300
+Well, but, you know, see here's the thing.
+
+30
+00:01:18,309 --> 00:01:22,059
+So, like, uh I have, you know, well, like most people, I have Google apps, you know,
+
+31
+00:01:22,069 --> 00:01:23,379
+for my personal email, right,
+
+32
+00:01:24,050 --> 00:01:25,419
+or Google, whatever it's called now.
+
+33
+00:01:25,529 --> 00:01:30,459
+And I actually pay for the Google uh vault, right? The extra
+
+34
+00:01:30,580 --> 00:01:33,809
+uh and the nice thing is it gives you insane audit trails.
+
+35
+00:01:33,819 --> 00:01:38,709
+Like, for example, my calendars, every single thing, addition change removal,
+
+36
+00:01:38,720 --> 00:01:41,699
+everything is audited and like logged and you can go
+
+37
+00:01:41,709 --> 00:01:43,879
+through those logs and search them and export them.
+
+38
+00:01:44,790 --> 00:01:46,830
+So the reality is like a worm like this.
+
+39
+00:01:46,839 --> 00:01:50,069
+Yeah, it could have been like, let's say for the sake of argument,
+
+40
+00:01:50,080 --> 00:01:53,089
+it did do something terrible like delete stuff or modify stuff.
+
+41
+00:01:53,150 --> 00:01:55,769
+You actually could have like programmatically
+
+42
+00:01:56,129 --> 00:01:57,269
+cleaned up after it.
+
+43
+00:01:57,989 --> 00:02:01,370
+And my thinking is like, you know, it's like those crypto locker viruses where you,
+
+44
+00:02:01,379 --> 00:02:03,290
+you know, these people can't, they have no,
+
+45
+00:02:03,489 --> 00:02:05,680
+they have no like imagine a crypto locker virus
+
+46
+00:02:05,690 --> 00:02:07,489
+that instead of crypto locking just said was like,
+
+47
+00:02:07,500 --> 00:02:10,529
+I may or may not have randomly changed some values in your financial.
+
+48
+00:02:12,259 --> 00:02:13,419
+It would be
+
+49
+00:02:14,009 --> 00:02:16,029
+probably more powerful.
+
+50
+00:02:16,529 --> 00:02:16,949
+Yeah.
+
+51
+00:02:17,559 --> 00:02:18,309
+Um
+
+52
+00:02:18,809 --> 00:02:21,949
+So I'm I'm kind of curious it, it's interesting to me now because in theory, you know,
+
+53
+00:02:21,960 --> 00:02:22,710
+because all this,
+
+54
+00:02:22,720 --> 00:02:26,850
+we have these huge audit trails and we have all this data stored by Google
+
+55
+00:02:27,059 --> 00:02:30,660
+in a way where, you know, even if it's deleted, it's, it's not really gone anymore.
+
+56
+00:02:31,410 --> 00:02:34,190
+Yeah. And that's kind of something I suspect is
+
+57
+00:02:34,440 --> 00:02:36,710
+even if you're not paying for their vault,
+
+58
+00:02:36,839 --> 00:02:41,300
+I bet they could undo any changes and let's face it too. So true
+
+59
+00:02:41,710 --> 00:02:42,100
+story.
+
+60
+00:02:42,350 --> 00:02:42,369
+Yeah.
+
+61
+00:02:42,740 --> 00:02:44,149
+Uh, person I know,
+
+62
+00:02:44,860 --> 00:02:45,570
+um,
+
+63
+00:02:45,740 --> 00:02:48,979
+their email account at Google, um, got,
+
+64
+00:02:49,449 --> 00:02:50,100
+uh,
+
+65
+00:02:50,259 --> 00:02:52,250
+the organization deleted it.
+
+66
+00:02:54,210 --> 00:02:56,250
+This person because of who they are in
+
+67
+00:02:56,259 --> 00:02:58,350
+the industry was able to find somebody at Google
+
+68
+00:02:58,520 --> 00:03:01,029
+to have them reinstate the account and recover it.
+
+69
+00:03:02,080 --> 00:03:02,360
+Right.
+
+70
+00:03:02,369 --> 00:03:03,970
+So it's, it's technically possible for them to,
+
+71
+00:03:04,070 --> 00:03:06,750
+it's just normally they don't do that because, you know, it's such a hassle, right?
+
+72
+00:03:06,759 --> 00:03:08,500
+They don't want to get support calls being like
+
+73
+00:03:09,300 --> 00:03:11,339
+dip, I accidentally deleted my account. Can you please fix it?
+
+74
+00:03:11,580 --> 00:03:13,380
+But the reality is like that stuff.
+
+75
+00:03:13,389 --> 00:03:13,660
+I mean,
+
+76
+00:03:13,669 --> 00:03:16,720
+obviously Google has backups because you know what if one of their
+
+77
+00:03:16,729 --> 00:03:19,750
+data sensors catches fire or what if all of them catch fire?
+
+78
+00:03:19,789 --> 00:03:22,320
+-- I
+-- don't know if they have backups in the traditional
+
+79
+00:03:22,330 --> 00:03:25,399
+sense as much as just massive replication of data.
+
+80
+00:03:25,770 --> 00:03:28,089
+-- They do have offline backups.
+-- They do good for them.
+
+81
+00:03:28,500 --> 00:03:33,000
+But I mean, I think fundamentally this is one of the things with cloud,
+
+82
+00:03:33,009 --> 00:03:35,759
+people need to make sure they understand is if you hit delete
+
+83
+00:03:35,970 --> 00:03:37,399
+it, it's never gone.
+
+84
+00:03:37,940 --> 00:03:38,279
+It.
+
+85
+00:03:38,460 --> 00:03:39,559
+I guarantee
+
+86
+00:03:39,960 --> 00:03:43,000
+that data sticks around probably forever.
+
+87
+00:03:43,440 --> 00:03:48,509
+Well, but the, the, probably the closest we'll ever get to being gone is,
+
+88
+00:03:48,750 --> 00:03:51,600
+you know, all the backups are encrypted now, obviously, because, you know,
+
+89
+00:03:51,610 --> 00:03:53,500
+backup tapes do get lost
+
+90
+00:03:53,899 --> 00:03:56,589
+or forgotten or sent to the wrong address.
+
+91
+00:03:56,889 --> 00:04:00,470
+Um So the, the generally speaking, the closest we'll get to delete it is, you know,
+
+92
+00:04:00,479 --> 00:04:02,509
+crypto shredding of the keys that would
+
+93
+00:04:02,669 --> 00:04:03,660
+un encrypt the data.
+
+94
+00:04:04,429 --> 00:04:06,839
+I, I bet they don't even go that far.
+
+95
+00:04:07,300 --> 00:04:10,580
+Uh The, well, depending on which organization it is. Some do.
+
+96
+00:04:10,779 --> 00:04:15,210
+-- It's
+-- probably for, for example, I know in, in like elastic search,
+
+97
+00:04:15,240 --> 00:04:18,640
+when you delete data, it doesn't really get deleted, it's just mark deleted,
+
+98
+00:04:18,649 --> 00:04:19,750
+it's all still there.
+
+99
+00:04:20,970 --> 00:04:21,920
+And the thing is too, is,
+
+100
+00:04:21,928 --> 00:04:25,880
+-- is properly deleting data is like horrendously difficult and
+-- it takes a long
+
+101
+00:04:25,890 --> 00:04:29,209
+time and when you're really concerned about latency and things like that,
+
+102
+00:04:29,220 --> 00:04:30,209
+like who cares, do it later
+
+103
+00:04:30,679 --> 00:04:33,350
+and there's ways to force it to happen like
+
+104
+00:04:33,359 --> 00:04:35,339
+where you condense your indexes and things like that.
+
+105
+00:04:35,350 --> 00:04:36,109
+But fundamentally,
+
+106
+00:04:36,459 --> 00:04:36,709
+no,
+
+107
+00:04:36,720 --> 00:04:40,279
+because what if your elastic search is sitting on some sort of NFS file system
+
+108
+00:04:40,290 --> 00:04:42,260
+that's abstracted and actually running on a cluster
+
+109
+00:04:42,299 --> 00:04:44,239
+file system that's actually running on an SSD
+
+110
+00:04:44,559 --> 00:04:47,709
+ignoring that, right? Just in the context of
+
+111
+00:04:48,149 --> 00:04:50,359
+data store. So anyway, I am
+
+112
+00:04:50,609 --> 00:04:51,390
+not done
+
+113
+00:04:51,660 --> 00:04:52,989
+with the Google Fish
+
+114
+00:04:53,109 --> 00:04:57,350
+because I love this story and, and I want to tell you what happened to me
+
+115
+00:04:57,700 --> 00:05:01,589
+and I'm, I'm smiling, I'm so giddy. It's not even funny. So anyway,
+
+116
+00:05:02,059 --> 00:05:04,480
+I'm on a phone call. I have a meeting. Right.
+
+117
+00:05:04,940 --> 00:05:07,839
+And my wife barges into my office and says
+
+118
+00:05:08,019 --> 00:05:12,279
+I've just been hacked someone, sending everyone in my contact list emails.
+
+119
+00:05:12,589 --> 00:05:13,380
+And I thought, oh,
+
+120
+00:05:13,519 --> 00:05:15,329
+ok. Well, that's exciting.
+
+121
+00:05:15,459 --> 00:05:15,880
+Right.
+
+122
+00:05:16,170 --> 00:05:20,239
+And so I, I get up, well, the first thing I did was I said, bring me your computer
+
+123
+00:05:20,730 --> 00:05:23,709
+and, and of course, so she does. And the first thing I did is I logged.
+
+124
+00:05:23,720 --> 00:05:24,880
+I too use Google apps.
+
+125
+00:05:25,529 --> 00:05:29,410
+I log in as my account administrator and I just lock her account.
+
+126
+00:05:29,420 --> 00:05:32,190
+I sign out all sessions and I change her password, right?
+
+127
+00:05:32,200 --> 00:05:34,980
+And I thought, ok, now we'll go and uh
+
+128
+00:05:35,209 --> 00:05:37,549
+II I set her up with, with uh
+
+129
+00:05:37,720 --> 00:05:42,600
+last pass and UB key for, for U two F and all that stuff, right? And I'm getting her,
+
+130
+00:05:42,839 --> 00:05:44,209
+I'm walking her through it and whatnot.
+
+131
+00:05:44,220 --> 00:05:47,670
+And then I come back to my office and I sit down and I see the email from her
+
+132
+00:05:47,820 --> 00:05:50,390
+and I thought, oh, ok. Well, let's see what this is right.
+
+133
+00:05:51,140 --> 00:05:52,720
+And I look at it and think
+
+134
+00:05:53,010 --> 00:05:54,519
+this is good, right? Like
+
+135
+00:05:55,000 --> 00:05:57,480
+it. So, I don't know. Did, did you get one?
+
+136
+00:05:57,929 --> 00:05:59,920
+I sadly did not,
+
+137
+00:06:00,380 --> 00:06:02,040
+you're just not cool enough, Kurt.
+
+138
+00:06:04,739 --> 00:06:07,739
+So anyway, anyway, so here's what happened is
+
+139
+00:06:07,899 --> 00:06:10,190
+you get the email and it basically says like so and so shared a
+
+140
+00:06:10,200 --> 00:06:13,440
+Google document with you and it looked just like the Google Docs sharing email.
+
+141
+00:06:13,820 --> 00:06:16,320
+The, the email looks fairly legitimate
+
+142
+00:06:16,809 --> 00:06:17,450
+and
+
+143
+00:06:17,799 --> 00:06:20,869
+you open it up it appears to be a Google Docs sharing email.
+
+144
+00:06:21,089 --> 00:06:21,720
+And
+
+145
+00:06:21,910 --> 00:06:23,899
+so I click the open button
+
+146
+00:06:24,450 --> 00:06:26,119
+and the first thing it does is it says,
+
+147
+00:06:26,140 --> 00:06:29,299
+which account do you want to open this with for Google?
+
+148
+00:06:29,309 --> 00:06:31,329
+Because obviously everyone has more than one Google account.
+
+149
+00:06:31,339 --> 00:06:33,200
+And I thought this is new. Right.
+
+150
+00:06:33,640 --> 00:06:37,339
+So I, I click on my, uh, funny enough, my kids account
+
+151
+00:06:37,600 --> 00:06:38,540
+is the one I have.
+
+152
+00:06:39,630 --> 00:06:40,440
+Right. Right.
+
+153
+00:06:40,450 --> 00:06:43,049
+Well, they don't send email, they don't have contacts, things like that.
+
+154
+00:06:43,190 --> 00:06:45,010
+So anyway, uh I click their account
+
+155
+00:06:45,420 --> 00:06:49,690
+and then it asks if I want to allow Google Docs
+
+156
+00:06:49,820 --> 00:06:52,290
+and it has all the Google icons and everything,
+
+157
+00:06:52,500 --> 00:06:56,589
+Google Docs to have access to my email and basically everything, right?
+
+158
+00:06:56,600 --> 00:06:57,529
+Like full access.
+
+159
+00:06:57,910 --> 00:06:59,730
+And I thought that's not right.
+
+160
+00:06:59,980 --> 00:07:04,079
+And so basically I, I went back and I pulled apart the email
+
+161
+00:07:04,190 --> 00:07:06,209
+that I got to just see what's going on and
+
+162
+00:07:06,220 --> 00:07:09,399
+it turned out it was pointing at a another domain.
+
+163
+00:07:09,869 --> 00:07:10,140
+And
+
+164
+00:07:11,140 --> 00:07:13,630
+uh well, no, no, the mail was all your mail was CC demin.
+
+165
+00:07:16,579 --> 00:07:19,160
+That's how they were harvesting kind of the contact lens. That's
+
+166
+00:07:19,690 --> 00:07:20,670
+what that ends up being.
+
+167
+00:07:21,230 --> 00:07:24,540
+But then uh so basically what it was, it was in, in an o
+
+168
+00:07:24,890 --> 00:07:30,709
+off request for all access to some site. That was, it was very well done
+
+169
+00:07:30,940 --> 00:07:32,480
+in, in terms of what it was named.
+
+170
+00:07:33,170 --> 00:07:33,910
+And then,
+
+171
+00:07:34,149 --> 00:07:37,220
+right? So obviously this was not Google, it was just, this is how OO
+
+172
+00:07:37,529 --> 00:07:38,190
+works
+
+173
+00:07:38,470 --> 00:07:40,170
+in the context of allowing just
+
+174
+00:07:40,329 --> 00:07:43,779
+for a quick maybe run down for our viewers. What exactly is oo
+
+175
+00:07:44,399 --> 00:07:48,029
+it, it's kind of a, an authorization system that exists on the internet.
+
+176
+00:07:48,040 --> 00:07:51,269
+Like when you, when you try to log into something, it says log in with Google,
+
+177
+00:07:51,290 --> 00:07:52,130
+that's essentially o
+
+178
+00:07:52,429 --> 00:07:56,980
+off and part of that system says you can grant access to certain information.
+
+179
+00:07:56,989 --> 00:07:57,829
+So for example,
+
+180
+00:07:57,970 --> 00:08:01,410
+when for at a minimum, it needs to know who you are from Google
+
+181
+00:08:01,649 --> 00:08:02,940
+and then certain things like actually that,
+
+182
+00:08:02,950 --> 00:08:04,970
+that unroll me thing we talked about last time
+
+183
+00:08:05,239 --> 00:08:07,149
+was this where enroll me?
+
+184
+00:08:07,160 --> 00:08:11,000
+Told Google, hey, uh I want access to all this person's email and of course,
+
+185
+00:08:11,010 --> 00:08:12,350
+the person has to accept it.
+
+186
+00:08:12,779 --> 00:08:13,989
+Same thing here, right?
+
+187
+00:08:14,519 --> 00:08:15,890
+So anyway, my story is not done though.
+
+188
+00:08:16,079 --> 00:08:19,190
+So anyway, I, I figure out what's going on and I'm like, oh man,
+
+189
+00:08:19,200 --> 00:08:21,350
+this is an oath attack like this is super cool.
+
+190
+00:08:21,359 --> 00:08:25,070
+I get all excited and I'm like, oh, no, wait and I go running through the house.
+
+191
+00:08:25,079 --> 00:08:28,140
+I get to my wife like, give me your computer right now and she's like, what's going on?
+
+192
+00:08:28,149 --> 00:08:31,545
+I said just give it to, we don't have questions and I like taken from her
+
+193
+00:08:31,785 --> 00:08:33,734
+and I go into her Google settings and I,
+
+194
+00:08:33,744 --> 00:08:38,054
+and I remove that application from having access to her account right immediately.
+
+195
+00:08:38,135 --> 00:08:39,025
+And she's like, what's going on?
+
+196
+00:08:39,034 --> 00:08:41,155
+I'm like, stop talking, I'll tell you in a minute, you know,
+
+197
+00:08:41,424 --> 00:08:44,804
+it's like, I'm typing furiously to get to what needs to be done.
+
+198
+00:08:45,130 --> 00:08:46,510
+And anyway, then it gets done.
+
+199
+00:08:46,520 --> 00:08:49,030
+I tried to explain it to her and she mostly understood it.
+
+200
+00:08:49,039 --> 00:08:54,190
+But, but the fundamental thing and here's what it really has me. So excited is
+
+201
+00:08:54,369 --> 00:08:57,409
+what are the things we'd love to talk about in security? We love to talk about.
+
+202
+00:08:57,419 --> 00:09:00,229
+Uh, make sure you give your user awareness training, which doesn't work.
+
+203
+00:09:00,299 --> 00:09:02,739
+And then we say, well, why don't you two factor authentication?
+
+204
+00:09:02,940 --> 00:09:04,710
+But in this instance, two factor a
+
+205
+00:09:05,030 --> 00:09:08,640
+does not help you because you're already authenticated.
+
+206
+00:09:08,650 --> 00:09:11,260
+It's just someone's tricking you into giving a a
+
+207
+00:09:11,539 --> 00:09:14,559
+malicious site access to all of your Google data.
+
+208
+00:09:14,570 --> 00:09:18,510
+I'm like this is like the perfect attack, right? It's, it's brilliant.
+
+209
+00:09:18,960 --> 00:09:21,950
+Yeah. No, I'm just, I'm actually looking at. So if you go to my account, do,
+
+210
+00:09:22,070 --> 00:09:23,340
+for example, with Google,
+
+211
+00:09:23,469 --> 00:09:27,780
+you go to my account.google.com/permissions and that shows
+
+212
+00:09:27,789 --> 00:09:29,400
+you which apps are connected to your account.
+
+213
+00:09:29,789 --> 00:09:32,580
+So obviously, my Google Chrome has full access to my account.
+
+214
+00:09:32,590 --> 00:09:34,250
+At least I hope that's my Google Chrome.
+
+215
+00:09:34,549 --> 00:09:36,710
+Uh Same for my I Os and Os X.
+
+216
+00:09:38,030 --> 00:09:40,710
+And then I have a thing called Pixar Express
+
+217
+00:09:40,719 --> 00:09:42,770
+that I don't remember giving access to something.
+
+218
+00:09:42,840 --> 00:09:43,020
+What the
+
+219
+00:09:43,140 --> 00:09:43,669
+heck is that?
+
+220
+00:09:43,830 --> 00:09:43,859
+OK.
+
+221
+00:09:44,659 --> 00:09:46,250
+Remove that.
+
+222
+00:09:46,260 --> 00:09:50,169
+So yeah, I I myself have something I'm looking at and I do not recognize it.
+
+223
+00:09:50,270 --> 00:09:52,150
+I bet that's super common because people
+
+224
+00:09:52,799 --> 00:09:54,489
+give access to stuff all the time.
+
+225
+00:09:55,434 --> 00:09:58,255
+Everything else has access to just basic account info,
+
+226
+00:09:58,265 --> 00:10:01,335
+which basically means like feed le or discuss whatever it just, yeah,
+
+227
+00:10:01,344 --> 00:10:04,474
+it knows who I am so that I can authenticate to that service.
+
+228
+00:10:04,864 --> 00:10:08,614
+But so yeah, perfect example. I had that Pixl dot whatever the hell that was
+
+229
+00:10:08,864 --> 00:10:11,594
+and I don't, I don't recall at all what that was
+
+230
+00:10:11,835 --> 00:10:12,724
+interesting.
+
+231
+00:10:13,359 --> 00:10:16,789
+Um I think it was an image editing thing that I might have fired up for some.
+
+232
+00:10:18,400 --> 00:10:20,989
+But uh regardless, this is a great example because, yeah,
+
+233
+00:10:21,000 --> 00:10:25,570
+even as a security professional, I clearly at some point whiffed one of these.
+
+234
+00:10:25,799 --> 00:10:25,830
+But
+
+235
+00:10:25,969 --> 00:10:26,960
+here's the thing actually,
+
+236
+00:10:26,969 --> 00:10:30,820
+if my wife hadn't run in the room and said I'm being hacked,
+
+237
+00:10:31,799 --> 00:10:33,940
+if I would have just opened that mail from her,
+
+238
+00:10:34,309 --> 00:10:37,460
+I would have been like, well, this is a little weird but OK,
+
+239
+00:10:37,710 --> 00:10:38,260
+and
+
+240
+00:10:38,690 --> 00:10:41,299
+I, I'm not saying I would or wouldn't have,
+
+241
+00:10:41,309 --> 00:10:44,669
+but I don't think clicking the allow Google docs access to
+
+242
+00:10:44,679 --> 00:10:47,219
+my stuff would have been out of the question at all
+
+243
+00:10:47,390 --> 00:10:48,440
+because it looked,
+
+244
+00:10:48,549 --> 00:10:51,059
+it looked really legit. I'm not gonna lie to you. I mean,
+
+245
+00:10:51,239 --> 00:10:56,169
+it looked good. The, these people, they did a great job making it look good.
+
+246
+00:10:57,599 --> 00:10:59,460
+Yeah. No, this is what gets me is um
+
+247
+00:11:00,109 --> 00:11:02,570
+the majority of protocols,
+
+248
+00:11:02,580 --> 00:11:05,619
+especially security protocols and authentication protocols
+
+249
+00:11:05,840 --> 00:11:09,359
+don't really seem to have a graceful failure scenario for
+
+250
+00:11:09,369 --> 00:11:12,400
+when an attacker uses them to impersonate somebody else.
+
+251
+00:11:12,409 --> 00:11:12,739
+I mean,
+
+252
+00:11:12,960 --> 00:11:16,580
+uh TLS and SSL are a great example, right? Oh Look for the lock icon.
+
+253
+00:11:16,590 --> 00:11:20,280
+-- Well, except, you know, now you can get an SSL actually.
+-- Could you bring that up?
+
+254
+00:11:20,289 --> 00:11:24,369
+Because obviously that's the first thing I did is I looked at the URL bar saying,
+
+255
+00:11:24,750 --> 00:11:30,130
+where am I? Right? I'm on google.com. I have the green EV cert.
+
+256
+00:11:30,140 --> 00:11:32,659
+So I'm thinking all right, this looks legit, right? Like,
+
+257
+00:11:32,830 --> 00:11:35,809
+and that's the thing everything we've ever taught people
+
+258
+00:11:36,059 --> 00:11:40,390
+failed in this instance because we were not prepared for this instance.
+
+259
+00:11:40,400 --> 00:11:42,510
+However, however, here's the one thing I will say
+
+260
+00:11:42,729 --> 00:11:43,210
+is
+
+261
+00:11:43,880 --> 00:11:46,890
+there, it would be very difficult to defend against this.
+
+262
+00:11:46,909 --> 00:11:51,859
+But what Google did is exactly the right thing is they acted quickly in like an hour.
+
+263
+00:11:51,869 --> 00:11:52,700
+This was shut down.
+
+264
+00:11:52,710 --> 00:11:54,780
+You think about that an hour, how many,
+
+265
+00:11:54,789 --> 00:11:59,460
+-- how many it departments can respond
+-- in this specific attack was shut down quickly.
+
+266
+00:11:59,469 --> 00:12:00,989
+But the problem is the fundamental,
+
+267
+00:12:01,000 --> 00:12:03,299
+here's what I have with this attack is that
+
+268
+00:12:03,309 --> 00:12:05,940
+fundamentally you can't stop this attack because it's,
+
+269
+00:12:05,950 --> 00:12:07,299
+it's like a name space problem, right?
+
+270
+00:12:07,549 --> 00:12:09,979
+And even if for example, this um
+
+271
+00:12:10,390 --> 00:12:13,900
+like for example, Google could show the domain name that the
+
+272
+00:12:14,140 --> 00:12:16,539
+oath request is coming from as part of that request.
+
+273
+00:12:16,549 --> 00:12:18,190
+I think that would be reasonable.
+
+274
+00:12:18,200 --> 00:12:20,229
+And also it said Google docs,
+
+275
+00:12:20,270 --> 00:12:23,510
+Kurt like Google should not allow anything with Google's name in it.
+
+276
+00:12:23,640 --> 00:12:24,489
+But what about
+
+277
+00:12:24,960 --> 00:12:25,059
+uh
+
+278
+00:12:25,299 --> 00:12:25,820
+well, what about
+
+279
+00:12:26,044 --> 00:12:29,664
+like, you know gmail or what about, you know, the problem is there's so many
+
+280
+00:12:31,255 --> 00:12:31,635
+stuff.
+
+281
+00:12:32,054 --> 00:12:32,575
+I don't know
+
+282
+00:12:32,914 --> 00:12:34,914
+what I'm saying is from a name space perspective.
+
+283
+00:12:34,924 --> 00:12:39,195
+There's so many keywords and words that have special meaning like admin or
+
+284
+00:12:39,434 --> 00:12:41,315
+support or,
+
+285
+00:12:41,690 --> 00:12:46,909
+you know, help or like you get an email from like help or support or something,
+
+286
+00:12:46,919 --> 00:12:49,219
+you know, chances are it's gonna fool enough people.
+
+287
+00:12:49,229 --> 00:12:54,989
+-- Right. Well,
+-- ok. Yes. And, and I think the right way to handle this is to lay down
+
+288
+00:12:55,119 --> 00:12:56,900
+some level of sane rules.
+
+289
+00:12:56,909 --> 00:12:59,950
+Like for example, I think saying nothing with Google in the name or,
+
+290
+00:12:59,960 --> 00:13:01,320
+or if it has Google in the name,
+
+291
+00:13:01,330 --> 00:13:05,469
+make a human click the OK button after they verify what's going on.
+
+292
+00:13:06,140 --> 00:13:08,799
+But I think the right answer is to
+
+293
+00:13:08,940 --> 00:13:12,299
+not over engineer this but wait for things to happen
+
+294
+00:13:12,309 --> 00:13:15,349
+like this and then just fix that particular instance.
+
+295
+00:13:15,359 --> 00:13:17,070
+But see the problem is perfect example,
+
+296
+00:13:17,080 --> 00:13:20,169
+I've actually had this happen to me is when we went to cloud flare,
+
+297
+00:13:20,179 --> 00:13:22,330
+uh the cloud security lines went to cloud flare.
+
+298
+00:13:22,539 --> 00:13:22,760
+You know,
+
+299
+00:13:22,770 --> 00:13:26,000
+supposedly cloud flare will be all automated provisioning will
+
+300
+00:13:26,010 --> 00:13:27,590
+happen in minutes and you'll be up and running.
+
+301
+00:13:27,880 --> 00:13:30,239
+So I click turn on SSL and guess what happens?
+
+302
+00:13:30,940 --> 00:13:31,409
+Nothing.
+
+303
+00:13:31,580 --> 00:13:35,270
+-- Uh
+-- You told me this story because you were using something weird
+
+304
+00:13:35,380 --> 00:13:37,859
+-- because the
+-- word we have the word security in our domain.
+
+305
+00:13:39,309 --> 00:13:42,510
+And so it required a human check and I did this on a Friday afternoon
+
+306
+00:13:43,510 --> 00:13:46,520
+and it didn't get handled, I think until Sunday or Monday.
+
+307
+00:13:46,530 --> 00:13:49,169
+And that was because of the, the, the higher level registrar,
+
+308
+00:13:49,179 --> 00:13:49,830
+I think it was like Komodo
+
+309
+00:13:50,059 --> 00:13:50,679
+or whoever
+
+310
+00:13:50,859 --> 00:13:53,400
+was handling it, you know, that was, it was their thing. Right.
+
+311
+00:13:53,409 --> 00:13:54,489
+It was kind of outside of
+
+312
+00:13:55,469 --> 00:13:57,530
+exactly the right way to do this.
+
+313
+00:13:57,820 --> 00:13:58,030
+Well,
+
+314
+00:13:58,039 --> 00:13:59,815
+but the problem is then you end up pissing
+
+315
+00:13:59,825 --> 00:14:02,875
+the number of false positives is going to be huge
+
+316
+00:14:03,114 --> 00:14:07,984
+because your restricted keyword list is going to have to be huge. What if I use IBM?
+
+317
+00:14:07,994 --> 00:14:10,405
+Or what if I use, uh Compu
+
+318
+00:14:10,575 --> 00:14:12,885
+Corp or what if I use? You know what I mean?
+
+319
+00:14:13,195 --> 00:14:13,984
+Walmart?
+
+320
+00:14:14,630 --> 00:14:15,369
+I,
+
+321
+00:14:15,609 --> 00:14:18,549
+I'm ok with that. I think if you're running it,
+
+322
+00:14:18,650 --> 00:14:20,890
+how does Walmart legitimately tie into it?
+
+323
+00:14:21,119 --> 00:14:22,250
+Maybe they don't.
+
+324
+00:14:23,140 --> 00:14:23,349
+Well,
+
+325
+00:14:23,359 --> 00:14:25,090
+but now you're not going to allow Walmart to run
+
+326
+00:14:25,099 --> 00:14:27,719
+any apps that allow people to authenticate via Google.
+
+327
+00:14:27,729 --> 00:14:29,559
+-- Well, no,
+-- no, no, you certainly do.
+
+328
+00:14:29,570 --> 00:14:33,359
+But you, you add an extra layer of protection, I think.
+
+329
+00:14:34,000 --> 00:14:34,630
+Uh, see,
+
+330
+00:14:34,640 --> 00:14:36,059
+I disagree because fundamentally you're going to
+
+331
+00:14:36,070 --> 00:14:37,299
+get people just doing click through.
+
+332
+00:14:37,309 --> 00:14:37,760
+Ok.
+
+333
+00:14:39,909 --> 00:14:42,080
+Right. We tried that. Remember Windows vista?
+
+334
+00:14:45,020 --> 00:14:46,049
+This is different.
+
+335
+00:14:46,349 --> 00:14:50,440
+It's not different. You're gonna ask people, are you really sure you want to give ft
+
+336
+00:14:50,919 --> 00:14:52,969
+full access to your Google Drive?
+
+337
+00:14:53,210 --> 00:14:54,010
+Yes or no.
+
+338
+00:14:54,559 --> 00:14:56,890
+If they click, no, the service doesn't work and they're like, well,
+
+339
+00:14:56,900 --> 00:14:58,090
+what the heck just happened
+
+340
+00:14:58,440 --> 00:15:00,280
+if you click? Yes, it works and nothing bad.
+
+341
+00:15:00,460 --> 00:15:01,559
+-- No, no, I
+-- don't.
+
+342
+00:15:01,669 --> 00:15:05,369
+No. Ok. I think we're talking about two different things. I'm saying
+
+343
+00:15:05,900 --> 00:15:08,119
+if I'm trying to register
+
+344
+00:15:08,359 --> 00:15:10,630
+something against Google to use o
+
+345
+00:15:10,960 --> 00:15:10,979
+of
+
+346
+00:15:11,119 --> 00:15:13,359
+because obviously you have to register
+
+347
+00:15:13,640 --> 00:15:14,880
+against their service.
+
+348
+00:15:15,580 --> 00:15:19,619
+And I'm saying if the name, if the word Google appears in the service,
+
+349
+00:15:19,630 --> 00:15:20,880
+you're trying to register
+
+350
+00:15:21,070 --> 00:15:22,200
+Google should say,
+
+351
+00:15:22,330 --> 00:15:23,719
+hold on their buddy
+
+352
+00:15:24,010 --> 00:15:28,960
+and then have either extra hoops to jump through to do some extra verification or
+
+353
+00:15:29,119 --> 00:15:32,239
+just have a human being at Google. Look at this and say,
+
+354
+00:15:32,429 --> 00:15:33,909
+yeah, this is fine because it's like,
+
+355
+00:15:34,369 --> 00:15:34,830
+you know, Googly
+
+356
+00:15:35,320 --> 00:15:36,010
+Eyes dot Commerce.
+
+357
+00:15:36,020 --> 00:15:39,020
+-- So
+-- the problem is it would have to be automated because otherwise it's not going
+
+358
+00:15:39,030 --> 00:15:42,250
+to scale because the Attackers are going to send in billions of these requests,
+
+359
+00:15:42,450 --> 00:15:43,739
+right? Because you can just set the o
+
+360
+00:15:43,960 --> 00:15:44,400
+off name.
+
+361
+00:15:44,869 --> 00:15:48,729
+Well, yes, but if it doesn't scale like that and, and you have a problem with it,
+
+362
+00:15:48,739 --> 00:15:50,330
+then just deny them all
+
+363
+00:15:50,630 --> 00:15:54,200
+right. And, and if you want to get it, then pay Google,
+
+364
+00:15:54,650 --> 00:15:57,460
+you know what I mean? Like become a proper customer and give them money.
+
+365
+00:15:58,450 --> 00:15:59,679
+Like that's the thing, right?
+
+366
+00:15:59,690 --> 00:16:03,590
+You need to make sure there's a certain barrier of entry here that makes it too.
+
+367
+00:16:03,599 --> 00:16:06,849
+It's like you were talking about this uh some time ago about when
+
+368
+00:16:06,859 --> 00:16:10,049
+you register a domain name charging people like a quarter to prevent those.
+
+369
+00:16:11,900 --> 00:16:15,989
+That's what I'm talking about here is you need to have some sort of barrier to entry.
+
+370
+00:16:16,039 --> 00:16:17,270
+Sorry, I thought you meant the end users
+
+371
+00:16:17,450 --> 00:16:17,900
+were doing
+
+372
+00:16:18,289 --> 00:16:19,179
+actual Google
+
+373
+00:16:19,320 --> 00:16:19,690
+that makes
+
+374
+00:16:19,840 --> 00:16:19,940
+more
+
+375
+00:16:20,090 --> 00:16:20,239
+sense.
+
+376
+00:16:20,900 --> 00:16:24,260
+Users are the product, right? Like ignore those guys.
+
+377
+00:16:25,059 --> 00:16:26,549
+So that makes a bit of sense. Yeah, I mean,
+
+378
+00:16:26,750 --> 00:16:27,309
+in that case,
+
+379
+00:16:27,320 --> 00:16:29,070
+but the problem I see with this though is that
+
+380
+00:16:29,080 --> 00:16:31,989
+Google would have to have a huge list of keywords
+
+381
+00:16:32,169 --> 00:16:34,070
+and people would still fall for it. I mean,
+
+382
+00:16:34,239 --> 00:16:36,309
+the the great example is right now, you know,
+
+383
+00:16:36,320 --> 00:16:40,909
+the revenue Canada has sent out multiple bulletins saying like first of all,
+
+384
+00:16:40,919 --> 00:16:41,789
+we're not going to phone you,
+
+385
+00:16:42,700 --> 00:16:42,989
+right?
+
+386
+00:16:43,000 --> 00:16:43,530
+Second of all,
+
+387
+00:16:43,539 --> 00:16:46,510
+we're only going to email you if you have registered an account with us.
+
+388
+00:16:46,640 --> 00:16:47,640
+And third of all,
+
+389
+00:16:47,650 --> 00:16:51,809
+we definitely don't take payment of taxes and itunes gift cards over the phone.
+
+390
+00:16:51,820 --> 00:16:55,320
+-- Like really we don't,
+-- that could be a huge business model,
+
+391
+00:16:55,659 --> 00:16:58,770
+you know, and and it's getting to the point now where, you know, it's, it's
+
+392
+00:16:58,940 --> 00:17:03,809
+like this one lady um uh had a newborn, she was super sleep deprived
+
+393
+00:17:04,020 --> 00:17:06,650
+and she's lost her life savings because she, you know, like
+
+394
+00:17:07,020 --> 00:17:11,880
+-- you take somebody who is insanely sleep deprived and yeah, you know,
+-- ok, but so,
+
+395
+00:17:11,890 --> 00:17:13,079
+so here's the thing
+
+396
+00:17:14,208 --> 00:17:15,638
+what you describe
+
+397
+00:17:16,009 --> 00:17:19,578
+sounds like revenue Canada is taking what I
+
+398
+00:17:19,588 --> 00:17:23,638
+would call acceptable steps to mitigate this threat,
+
+399
+00:17:23,838 --> 00:17:24,979
+but they can't mitigate it, right?
+
+400
+00:17:24,989 --> 00:17:27,368
+They can educate the people, they can't actually stop it from happening,
+
+401
+00:17:27,378 --> 00:17:29,129
+they cannot stop it from happening.
+
+402
+00:17:29,139 --> 00:17:33,788
+But if you can make sure it's ok for let's say 80% of the population,
+
+403
+00:17:33,798 --> 00:17:36,288
+that's good enough and that's the best you're gonna get.
+
+404
+00:17:36,298 --> 00:17:37,989
+You're never gonna get it through 100%.
+
+405
+00:17:38,390 --> 00:17:39,410
+And let's face it, man.
+
+406
+00:17:39,540 --> 00:17:41,229
+We've been around long enough to know that,
+
+407
+00:17:41,239 --> 00:17:45,609
+that like 20% of the population can basically basically be tricked into anything.
+
+408
+00:17:45,939 --> 00:17:48,890
+-- And,
+-- and well, see, my concern is for, from Google's perspective,
+
+409
+00:17:48,900 --> 00:17:50,260
+is it worth building this thing?
+
+410
+00:17:50,270 --> 00:17:52,530
+Like does it, you know, reduce their cost,
+
+411
+00:17:52,540 --> 00:17:55,469
+does it improve their brand enough to get more customers?
+
+412
+00:17:55,479 --> 00:17:56,689
+-- Does anybody
+-- care?
+
+413
+00:17:57,069 --> 00:18:00,810
+Uh Right. I think there's two sides to this coin. On one side,
+
+414
+00:18:01,270 --> 00:18:03,640
+Google has to ensure whatever they're doing,
+
+415
+00:18:03,829 --> 00:18:07,069
+helps maintain their revenue stream and their trust.
+
+416
+00:18:07,079 --> 00:18:10,790
+Because a lot of what Google does is built on trust, people, trust Google. OK.
+
+417
+00:18:11,599 --> 00:18:14,310
+-- And I know I can we
+-- go back to the Galaxy Seven argument. We
+
+418
+00:18:14,569 --> 00:18:15,150
+-- argue
+-- that
+
+419
+00:18:15,729 --> 00:18:16,089
+we can
+
+420
+00:18:16,250 --> 00:18:19,229
+-- argue
+-- that you can set stuff on fire and people don't seem to mind it.
+
+421
+00:18:19,430 --> 00:18:21,930
+-- But
+-- here's the other side of it is I think at this
+
+422
+00:18:21,939 --> 00:18:24,640
+point and I think Google has recognized this to a degree.
+
+423
+00:18:24,829 --> 00:18:27,880
+Google is an organization now that I think there are
+
+424
+00:18:27,890 --> 00:18:31,000
+certain expectations of them to act in the public.
+
+425
+00:18:31,010 --> 00:18:31,510
+Good
+
+426
+00:18:31,949 --> 00:18:34,670
+because they run the freaking world.
+
+427
+00:18:35,280 --> 00:18:36,030
+Yeah, it's, well,
+
+428
+00:18:36,040 --> 00:18:38,589
+it's interesting to me because kind of at what point do they become
+
+429
+00:18:38,599 --> 00:18:42,859
+a utility essentially in the sense of like from a regulatory and public
+
+430
+00:18:43,060 --> 00:18:44,900
+use and good point of view, right? Because,
+
+431
+00:18:45,619 --> 00:18:47,699
+and I would argue that they're very definitely there.
+
+432
+00:18:47,709 --> 00:18:51,339
+I, I, I don't think you're wrong but they're,
+
+433
+00:18:51,709 --> 00:18:53,780
+-- they would disagree. I'm sure
+-- of
+
+434
+00:18:53,930 --> 00:18:54,209
+course they would
+
+435
+00:18:54,729 --> 00:18:55,489
+disagree. But
+
+436
+00:18:55,760 --> 00:18:58,380
+the reality is like, you know, here's the thing.
+
+437
+00:18:58,390 --> 00:19:02,300
+Um, you have to give up Gmail forever or running water forever.
+
+438
+00:19:02,750 --> 00:19:04,369
+And the fact is you're going to think about
+
+439
+00:19:04,540 --> 00:19:07,930
+-- it.
+-- No, I would give up Gmail before running water.
+
+440
+00:19:08,180 --> 00:19:10,939
+But only because I've read a lot of
+
+441
+00:19:10,949 --> 00:19:14,369
+stories about what life was like before plumbing existed
+
+442
+00:19:14,510 --> 00:19:14,569
+and
+
+443
+00:19:15,109 --> 00:19:15,250
+for the
+
+444
+00:19:15,369 --> 00:19:15,599
+sake of
+
+445
+00:19:16,160 --> 00:19:16,290
+cholera,
+
+446
+00:19:16,920 --> 00:19:18,979
+you can live off the grid and you have to
+
+447
+00:19:18,989 --> 00:19:21,290
+do your own electricity or you can give up Gmail.
+
+448
+00:19:22,239 --> 00:19:22,819
+Let's face it.
+
+449
+00:19:22,829 --> 00:19:26,510
+Building your own little mini grid would be a lot easier than having your own email,
+
+450
+00:19:26,520 --> 00:19:27,900
+docs and stuff at this point.
+
+451
+00:19:27,910 --> 00:19:30,729
+-- It
+-- sounds like fun to build my own grid.
+
+452
+00:19:31,430 --> 00:19:31,829
+Yeah,
+
+453
+00:19:32,880 --> 00:19:33,770
+but I mean, that's the thing, right?
+
+454
+00:19:33,780 --> 00:19:35,380
+Is like the fact that you're not just, you know,
+
+455
+00:19:35,390 --> 00:19:38,449
+it'd be like the difference between giving up like candy and you know, whatever,
+
+456
+00:19:38,459 --> 00:19:38,640
+right?
+
+457
+00:19:38,650 --> 00:19:41,410
+Everybody would be like I give up candy fine. It's awesome, you know. But
+
+458
+00:19:42,290 --> 00:19:43,189
+I mean,
+
+459
+00:19:43,319 --> 00:19:46,349
+yeah, that what really worries me though is like at some point.
+
+460
+00:19:47,400 --> 00:19:48,729
+Yeah, I just
+
+461
+00:19:49,430 --> 00:19:50,089
+these,
+
+462
+00:19:50,099 --> 00:19:54,319
+you don't want to introduce the other concern I have is with these security measures
+
+463
+00:19:54,329 --> 00:19:55,900
+is you don't want to introduce security measures
+
+464
+00:19:55,910 --> 00:19:57,819
+that have a high rate of false positives
+
+465
+00:19:58,250 --> 00:20:00,810
+and a low rate of actually catching the bad guys
+
+466
+00:20:00,819 --> 00:20:03,290
+and maybe a low rate of actually being effective.
+
+467
+00:20:03,579 --> 00:20:05,829
+And that would be part of my concern with this is that
+
+468
+00:20:06,010 --> 00:20:08,170
+you filter out maybe certain keywords
+
+469
+00:20:08,780 --> 00:20:11,589
+and yeah, you'll get some of the low hanging fruit. But fundamentally,
+
+470
+00:20:12,140 --> 00:20:12,800
+I mean,
+
+471
+00:20:13,280 --> 00:20:16,089
+uh my take on it would be maybe more that, that, you know,
+
+472
+00:20:16,099 --> 00:20:19,989
+when I grant access to Google Docs to an app,
+
+473
+00:20:20,130 --> 00:20:23,199
+you know, it'd be really nice if I could just give it access to a single folder,
+
+474
+00:20:24,119 --> 00:20:24,400
+right?
+
+475
+00:20:24,410 --> 00:20:26,550
+So I could have like that one folder for, you know,
+
+476
+00:20:26,560 --> 00:20:30,530
+using with whatever that Pixar thing I had was instead of everything of it,
+
+477
+00:20:30,540 --> 00:20:31,109
+you know what I mean?
+
+478
+00:20:31,489 --> 00:20:34,589
+Or for example, that, you know, it created uh like
+
+479
+00:20:34,760 --> 00:20:34,770
+a
+
+480
+00:20:35,439 --> 00:20:37,469
+like, you know, it created sort of like a quasi
+
+481
+00:20:37,579 --> 00:20:41,250
+user called pixel or that I could then assign access to the, you know,
+
+482
+00:20:41,260 --> 00:20:43,699
+the documents and stuff I actually wanted to interact with,
+
+483
+00:20:44,229 --> 00:20:47,550
+you know, the downside of that being is that everything just doesn't work anymore,
+
+484
+00:20:47,560 --> 00:20:47,619
+right?
+
+485
+00:20:47,630 --> 00:20:49,040
+You have to go through a whole bunch of extra
+
+486
+00:20:49,050 --> 00:20:51,589
+steps to set up security and permissions and travel,
+
+487
+00:20:51,920 --> 00:20:54,119
+avise me if they've discussed things like this before.
+
+488
+00:20:54,130 --> 00:20:54,660
+But I think there's,
+
+489
+00:20:54,670 --> 00:20:59,089
+there's also one other really important point we have to make sure we discuss is
+
+490
+00:20:59,420 --> 00:21:03,880
+this exact attack was described in 2011 on a mailing
+
+491
+00:21:03,890 --> 00:21:05,530
+list which I'll put a link in the show notes
+
+492
+00:21:06,339 --> 00:21:08,069
+and, and anyone who understands oo
+
+493
+00:21:08,890 --> 00:21:12,079
+is well aware that this has always been a possibility.
+
+494
+00:21:12,530 --> 00:21:14,209
+But here's, here's my question though.
+
+495
+00:21:14,410 --> 00:21:17,510
+This was described in detail in 2011.
+
+496
+00:21:17,520 --> 00:21:20,439
+And it took essentially six years before anyone did it.
+
+497
+00:21:20,760 --> 00:21:21,300
+Well,
+
+498
+00:21:21,430 --> 00:21:23,479
+six years until we found out anyone did a
+
+499
+00:21:25,060 --> 00:21:25,410
+worm,
+
+500
+00:21:26,290 --> 00:21:30,939
+I'm sure there have been similar attacks. And that, that leads me to really wonder,
+
+501
+00:21:31,300 --> 00:21:33,219
+did the person who did this,
+
+502
+00:21:33,790 --> 00:21:36,800
+did they screw up where it wasn't supposed to worm itself?
+
+503
+00:21:36,810 --> 00:21:38,910
+It was just supposed to attack their target, you know,
+
+504
+00:21:38,920 --> 00:21:42,280
+X fill whatever I assume they're looking for, for contacts
+
+505
+00:21:42,449 --> 00:21:43,300
+to be X filled
+
+506
+00:21:43,670 --> 00:21:45,119
+and then they somehow goofed it up.
+
+507
+00:21:45,130 --> 00:21:49,089
+So it turned into a worm on accident or did someone legitimately create the worm?
+
+508
+00:21:49,300 --> 00:21:50,829
+I think you'd legitimately have to create the
+
+509
+00:21:50,839 --> 00:21:52,969
+worm because to accidentally worm something is,
+
+510
+00:21:52,979 --> 00:21:54,339
+you know, it's a bit of nontrivial work.
+
+511
+00:21:54,349 --> 00:21:54,670
+But
+
+512
+00:21:54,930 --> 00:21:56,199
+I would say even more fundamentally,
+
+513
+00:21:56,209 --> 00:21:59,880
+this problem boils down to something we've known for decades, which is when you let
+
+514
+00:22:00,160 --> 00:22:04,579
+anybody choose any name and present it as being like, hey, I'm Google.
+
+515
+00:22:04,790 --> 00:22:06,709
+Really? That, that's what this says,
+
+516
+00:22:07,260 --> 00:22:07,670
+you know.
+
+517
+00:22:08,109 --> 00:22:11,500
+Right. Like it's when my old ISP, let you choose your host name.
+
+518
+00:22:11,510 --> 00:22:14,650
+And I tried admin and that was a reserved keyword and I tried support and that
+
+519
+00:22:14,660 --> 00:22:18,290
+was a reserved keyword and I tried local hosting that was not a reserved keyword.
+
+520
+00:22:18,435 --> 00:22:19,175
+Sweet.
+
+521
+00:22:19,344 --> 00:22:21,574
+-- And then you have to actually call them on the phone,
+-- right?
+
+522
+00:22:21,584 --> 00:22:23,694
+Because, yeah, because my internet like collapsed
+
+523
+00:22:24,704 --> 00:22:28,714
+because the way DNS works is you look, when you look up a name, first of all,
+
+524
+00:22:28,724 --> 00:22:31,344
+you look up name dot whatever your search domain is,
+
+525
+00:22:31,744 --> 00:22:36,494
+then if that doesn't work, you look up that name, you know. So in.
+
+526
+00:22:37,270 --> 00:22:37,489
+Yeah.
+
+527
+00:22:37,500 --> 00:22:40,810
+So I basically got hammered with everybody's local host traffic to some degree
+
+528
+00:22:41,579 --> 00:22:44,910
+for badly behaving apps, right? Because realistically anyways,
+
+529
+00:22:45,560 --> 00:22:45,719
+yeah,
+
+530
+00:22:45,729 --> 00:22:48,319
+but the point being is whenever you've allowed people to present a
+
+531
+00:22:48,329 --> 00:22:53,290
+name with absolutely no third party verification or very limited verification.
+
+532
+00:22:53,300 --> 00:22:53,619
+Like
+
+533
+00:22:53,719 --> 00:22:57,569
+for example, you know, SSL and TLS domain verification, it's like,
+
+534
+00:22:57,719 --> 00:22:59,839
+yeah, I registered this domain and I control it.
+
+535
+00:22:59,849 --> 00:23:03,880
+That proves that I am food.com, which is technically correct.
+
+536
+00:23:04,030 --> 00:23:07,420
+But that doesn't prove that like legally you should have the rights to food.com.
+
+537
+00:23:08,550 --> 00:23:09,099
+You know,
+
+538
+00:23:09,719 --> 00:23:11,810
+a great example being like in Australia,
+
+539
+00:23:11,819 --> 00:23:13,849
+apparently Burger King is not Burger King because
+
+540
+00:23:13,859 --> 00:23:15,650
+somebody already had Burger King in Australia.
+
+541
+00:23:15,810 --> 00:23:18,050
+So Burger King in Australia is hungry. Jack's
+
+542
+00:23:18,250 --> 00:23:19,119
+interesting.
+
+543
+00:23:19,479 --> 00:23:21,319
+I, you know, if I'd gone to Australia
+
+544
+00:23:21,569 --> 00:23:25,650
+and gone to a Burger King, I would have been like, what the heck is wrong with the menu,
+
+545
+00:23:25,689 --> 00:23:26,489
+you know, like
+
+546
+00:23:26,959 --> 00:23:28,219
+I would have been very confused.
+
+547
+00:23:28,810 --> 00:23:29,010
+And
+
+548
+00:23:29,260 --> 00:23:30,209
+-- so
+-- here
+
+549
+00:23:31,530 --> 00:23:33,660
+essentially the bad guys can do this globally though, right?
+
+550
+00:23:33,670 --> 00:23:34,780
+They can grab any domain name.
+
+551
+00:23:36,829 --> 00:23:38,079
+Yeah, they can grab any domain
+
+552
+00:23:38,349 --> 00:23:38,890
+Google dot
+
+553
+00:23:39,479 --> 00:23:42,920
+Yeah, but if you look, if you, if you take like Google dot something,
+
+554
+00:23:42,930 --> 00:23:45,599
+they're gonna come get you and they're gonna get it back.
+
+555
+00:23:45,609 --> 00:23:48,599
+All right. That's the reality of it. No, they, they're going to
+
+556
+00:23:48,849 --> 00:23:50,329
+maybe if, if, like, if I go by
+
+557
+00:23:50,640 --> 00:23:53,189
+cried dot CX or something and put like, porn on it.
+
+558
+00:23:53,199 --> 00:23:56,079
+No, you probably can't do anything about it, but Google can.
+
+559
+00:23:57,000 --> 00:23:57,579
+True.
+
+560
+00:23:57,630 --> 00:23:58,500
+But I, I,
+
+561
+00:23:58,510 --> 00:24:01,439
+and that brings up one of my favorite things with all these new top level
+
+562
+00:24:01,449 --> 00:24:04,339
+domains is one of the main selling points for like dot sucks was like,
+
+563
+00:24:04,709 --> 00:24:07,650
+you probably wanna do uh defensive registries.
+
+564
+00:24:09,150 --> 00:24:09,939
+And that's kind of,
+
+565
+00:24:10,030 --> 00:24:12,829
+I was actually thinking about registering like a root top level domain.
+
+566
+00:24:12,839 --> 00:24:13,910
+The whole point of it being
+
+567
+00:24:14,170 --> 00:24:16,260
+it was, that's like 100 grand, isn't it to get
+
+568
+00:24:16,449 --> 00:24:18,239
+100 and $80,000 in the US?
+
+569
+00:24:18,550 --> 00:24:21,239
+But when you look like we registered dot Watch domain
+
+570
+00:24:21,250 --> 00:24:23,709
+and it was like 500 bucks for a year.
+
+571
+00:24:25,199 --> 00:24:27,979
+So, I mean, you only need a couple 1000 registrations to break even.
+
+572
+00:24:29,930 --> 00:24:31,500
+-- I'm just saying
+-- only
+
+573
+00:24:31,969 --> 00:24:34,829
+except I'm man, I bet it's so much work to do that.
+
+574
+00:24:35,579 --> 00:24:39,430
+Um Well, there's a couple of 100 new top level domains. So, I mean, there's a
+
+575
+00:24:39,619 --> 00:24:39,709
+lot of
+
+576
+00:24:39,819 --> 00:24:40,250
+people,
+
+577
+00:24:40,770 --> 00:24:41,630
+you know, and if you look at,
+
+578
+00:24:41,640 --> 00:24:44,880
+I was actually looking through the people applying to be these top level domains,
+
+579
+00:24:45,000 --> 00:24:46,979
+some of them were Big corps that you would expect,
+
+580
+00:24:47,119 --> 00:24:50,339
+right? Like big DNS registers, whatever and some of them were like
+
+581
+00:24:50,479 --> 00:24:52,569
+as far as I could tell like a guy
+
+582
+00:24:53,290 --> 00:24:57,280
+uh yeah, there was uh Oh, I forget I was talking to some guys from,
+
+583
+00:24:57,290 --> 00:24:59,550
+I think it was Blue Coat one time and they were talking about there,
+
+584
+00:24:59,560 --> 00:25:00,949
+there was this one TLD
+
+585
+00:25:01,660 --> 00:25:04,719
+that was, it looked like it was owned by literally like a guy
+
+586
+00:25:05,140 --> 00:25:11,180
+and it was like 99% of the traffic that came from these domains was malicious.
+
+587
+00:25:11,609 --> 00:25:16,560
+Like it was clearly set up for, for tricking people and that's all it was done for.
+
+588
+00:25:17,209 --> 00:25:18,239
+No, I've thought about this
+
+589
+00:25:19,619 --> 00:25:22,369
+as you know, but it turns out I'm not a bad guy so
+
+590
+00:25:22,859 --> 00:25:23,930
+that we know of.
+
+591
+00:25:24,260 --> 00:25:25,030
+Yeah, true.
+
+592
+00:25:25,349 --> 00:25:28,729
+But uh no, I mean, that's, that's what gets me is, is um I mean,
+
+593
+00:25:28,739 --> 00:25:29,949
+that's one of the reasons I like the UB
+
+594
+00:25:29,959 --> 00:25:33,180
+key and the uh the that authentication protocol is,
+
+595
+00:25:33,189 --> 00:25:34,729
+it includes the domain name
+
+596
+00:25:34,930 --> 00:25:36,349
+in the authentication process
+
+597
+00:25:36,630 --> 00:25:40,170
+which really helps cut down on the fishing stuff on the UB key. And,
+
+598
+00:25:40,589 --> 00:25:42,849
+but the problem is if you're authenticating against
+
+599
+00:25:43,000 --> 00:25:44,770
+some random domain where it's
+
+600
+00:25:45,109 --> 00:25:45,839
+like the
+
+601
+00:25:46,089 --> 00:25:49,609
+Google doesn't show me really the domain that that request came from.
+
+602
+00:25:50,579 --> 00:25:51,589
+You know, it shows me the a
+
+603
+00:25:51,699 --> 00:25:53,959
+name like a great example here is I see.
+
+604
+00:25:54,400 --> 00:25:54,930
+Um
+
+605
+00:25:55,520 --> 00:25:55,530
+I
+
+606
+00:25:55,630 --> 00:25:55,650
+do
+
+607
+00:25:58,109 --> 00:25:58,130
+it.
+
+608
+00:25:58,689 --> 00:26:00,579
+OK. So here's the deal. I'm gonna stop you though
+
+609
+00:26:00,689 --> 00:26:01,160
+is
+
+610
+00:26:02,739 --> 00:26:06,410
+I suspect the right way to handle this is
+
+611
+00:26:07,599 --> 00:26:11,780
+using Google to authenticate authenticate against an unknown domain
+
+612
+00:26:11,890 --> 00:26:15,349
+is great because now you've got a very limited o
+
+613
+00:26:15,699 --> 00:26:17,760
+off trust relationship. The trick is
+
+614
+00:26:17,949 --> 00:26:19,890
+Google needs a nicer way
+
+615
+00:26:20,109 --> 00:26:26,010
+to make people requesting additional permissions outside of just who am I?
+
+616
+00:26:26,380 --> 00:26:27,939
+They need to add hoops there
+
+617
+00:26:28,260 --> 00:26:31,839
+because this comes back to that 25 cents to register a domain
+
+618
+00:26:32,030 --> 00:26:35,709
+because let any Tom Dick or Harry off people against
+
+619
+00:26:35,719 --> 00:26:38,599
+you because that's actually very useful and far more secure than
+
+620
+00:26:38,609 --> 00:26:41,359
+people picking crappy user names and passwords for every stupid
+
+621
+00:26:41,369 --> 00:26:43,859
+website they need to use like every forum on earth.
+
+622
+00:26:43,869 --> 00:26:44,359
+Right?
+
+623
+00:26:44,910 --> 00:26:46,719
+But there is no reason
+
+624
+00:26:47,050 --> 00:26:50,589
+for a like random site to read your email.
+
+625
+00:26:50,859 --> 00:26:53,260
+Well, I mean, unless it's something I want, like it's a spell checker
+
+626
+00:26:54,030 --> 00:26:55,229
+or I've been seeing
+
+627
+00:26:55,550 --> 00:26:55,560
+a
+
+628
+00:26:55,780 --> 00:26:58,469
+thing that checks your grammar and actually just one comment too.
+
+629
+00:26:58,479 --> 00:26:59,000
+I'm looking at the my
+
+630
+00:26:59,119 --> 00:27:00,989
+account.google.com/permissions thing,
+
+631
+00:27:01,160 --> 00:27:04,479
+for example, I click on Ed X, right? Uh That
+
+632
+00:27:04,910 --> 00:27:06,920
+online university thing doesn't show me the domain.
+
+633
+00:27:06,930 --> 00:27:10,739
+It just shows me Ed X and their logo and remove and it says when I
+
+634
+00:27:10,854 --> 00:27:11,444
+authorized it
+
+635
+00:27:12,025 --> 00:27:12,665
+and, and
+
+636
+00:27:13,045 --> 00:27:13,574
+this is
+
+637
+00:27:13,755 --> 00:27:14,324
+useless.
+
+638
+00:27:14,625 --> 00:27:16,655
+There's no information here for me to make a decision.
+
+639
+00:27:16,665 --> 00:27:19,444
+-- Yes,
+-- it's a bad U I in that respect. I agree with that.
+
+640
+00:27:19,454 --> 00:27:23,094
+-- I suspect they're going to fix it after this particular event.
+-- I would hope so.
+
+641
+00:27:23,104 --> 00:27:23,984
+I mean, because I would go,
+
+642
+00:27:24,125 --> 00:27:24,714
+I mean,
+
+643
+00:27:24,984 --> 00:27:27,555
+yeah, that would definitely go a long way to helping people
+
+644
+00:27:28,150 --> 00:27:30,680
+and, and this is part of it again, is
+
+645
+00:27:30,829 --> 00:27:33,569
+security is hard. It's easy to screw it up.
+
+646
+00:27:33,699 --> 00:27:36,449
+Google responded quickly, which was great.
+
+647
+00:27:36,619 --> 00:27:39,770
+And now as long as they do something about this and they,
+
+648
+00:27:39,780 --> 00:27:42,010
+they make some change to fix it.
+
+649
+00:27:42,020 --> 00:27:43,780
+I would say this was a
+
+650
+00:27:44,020 --> 00:27:45,449
+successful event
+
+651
+00:27:45,824 --> 00:27:46,864
+-- for the powers of
+-- good.
+
+652
+00:27:46,935 --> 00:27:49,114
+And here's my biggest concern though is Google will
+
+653
+00:27:49,125 --> 00:27:51,765
+most likely make some changes and do some real,
+
+654
+00:27:51,875 --> 00:27:54,275
+I'm guessing that they'll do some public facing stuff we know about.
+
+655
+00:27:54,285 --> 00:27:56,114
+And I'm also guessing they're going to do some stuff in the background.
+
+656
+00:27:56,974 --> 00:27:59,604
+You know, I would assume that they're smart enough to be like, hey, you know,
+
+657
+00:27:59,614 --> 00:28:01,714
+we know a little bit about machine learning and domains.
+
+658
+00:28:01,724 --> 00:28:02,994
+Maybe we should sort of like,
+
+659
+00:28:03,255 --> 00:28:06,844
+yeah, like you said, add a hoop for people requesting full access and, you know,
+
+660
+00:28:07,015 --> 00:28:08,555
+compare that to,
+
+661
+00:28:08,810 --> 00:28:09,069
+you know,
+
+662
+00:28:09,079 --> 00:28:11,969
+people who close their accounts or complained about being hacked or whatever.
+
+663
+00:28:12,229 --> 00:28:14,329
+But my concern is that Google will do something about it.
+
+664
+00:28:14,339 --> 00:28:16,500
+But all these other places I'm apparently o off
+
+665
+00:28:16,689 --> 00:28:18,030
+against won't,
+
+666
+00:28:18,819 --> 00:28:19,969
+it doesn't matter with all
+
+667
+00:28:20,109 --> 00:28:21,180
+-- up though
+-- because
+
+668
+00:28:21,520 --> 00:28:23,310
+for example, Twitter or Facebook
+
+669
+00:28:23,439 --> 00:28:24,560
+-- or
+-- those guys,
+
+670
+00:28:27,729 --> 00:28:30,920
+I guess here's part of it too though. Those guys are pretty smart cookies.
+
+671
+00:28:31,170 --> 00:28:31,680
+I'm
+
+672
+00:28:32,530 --> 00:28:35,319
+the number of sites that use Twitter to authenticate and then
+
+673
+00:28:35,329 --> 00:28:38,369
+want full access to send and receive tweets on my behalf.
+
+674
+00:28:38,380 --> 00:28:42,280
+-- I'm like,
+-- no, I have never, although I never use Twitter to authenticate,
+
+675
+00:28:42,449 --> 00:28:46,160
+I will, I will set up AAA different account
+
+676
+00:28:46,680 --> 00:28:49,209
+before I would use Twitter. I use Google
+
+677
+00:28:49,550 --> 00:28:52,180
+or I create crappy passwords
+
+678
+00:28:52,729 --> 00:28:57,099
+using the password manager but I, I refuse to use Facebook or Twitter
+
+679
+00:28:57,510 --> 00:28:59,060
+to do any sort of,
+
+680
+00:28:59,280 --> 00:29:02,339
+well, I guess part of it too though is every time I've tried, like you said, they,
+
+681
+00:29:02,349 --> 00:29:04,930
+they, they ask for too much and I think that's why,
+
+682
+00:29:04,939 --> 00:29:07,939
+where Google seems like they've got it figured out of, like, email only.
+
+683
+00:29:08,760 --> 00:29:10,209
+Yeah. And I'm ok with that.
+
+684
+00:29:11,040 --> 00:29:12,819
+What do you mean email address only? Not actual?
+
+685
+00:29:13,329 --> 00:29:15,579
+Right. Right. Exactly. Like who am I?
+
+686
+00:29:15,790 --> 00:29:19,380
+So, which they're gonna know anyway, if I register a regular account with them,
+
+687
+00:29:19,550 --> 00:29:21,500
+here's a thought for Google. If you're listening,
+
+688
+00:29:21,760 --> 00:29:24,520
+uh by default, give them access to whatever they want.
+
+689
+00:29:24,530 --> 00:29:27,040
+The Google Docs, the gmail, the whole contacts thing,
+
+690
+00:29:27,050 --> 00:29:28,920
+but make it like a fake sandboxed one
+
+691
+00:29:28,989 --> 00:29:31,660
+until the user explicitly gives them real access.
+
+692
+00:29:32,050 --> 00:29:33,650
+That could be interesting to actually,
+
+693
+00:29:33,660 --> 00:29:35,890
+that's kind of how Android permissions work.
+
+694
+00:29:35,900 --> 00:29:37,380
+Now is you install an app
+
+695
+00:29:37,739 --> 00:29:41,709
+and then the first time it wants to say, like, use your camera, it'll say, you know,
+
+696
+00:29:41,739 --> 00:29:44,869
+the blah, blah, blah app wants access to your camera, allow, deny
+
+697
+00:29:45,770 --> 00:29:47,979
+and, and the various permissions and.
+
+698
+00:29:48,329 --> 00:29:50,380
+Right. Right. Which, which does work well.
+
+699
+00:29:50,390 --> 00:29:53,180
+And it would be really interesting too if they would tell you
+
+700
+00:29:53,189 --> 00:29:57,260
+what particular linked things and what they're accessing and what they're doing,
+
+701
+00:29:57,349 --> 00:29:58,500
+that would be probably
+
+702
+00:29:58,900 --> 00:30:02,099
+the other advantage would be is it wouldn't automatically break all these apps,
+
+703
+00:30:02,400 --> 00:30:04,630
+you know, some of them are legitimately useful.
+
+704
+00:30:04,839 --> 00:30:05,459
+Yeah.
+
+705
+00:30:05,599 --> 00:30:06,239
+Yeah, we can.
+
+706
+00:30:06,250 --> 00:30:06,859
+Well,
+
+707
+00:30:06,869 --> 00:30:08,989
+I question if any of the ones that can read
+
+708
+00:30:09,000 --> 00:30:11,699
+and send email on my behalf are technically useful.
+
+709
+00:30:12,000 --> 00:30:12,739
+I did,
+
+710
+00:30:12,750 --> 00:30:16,130
+I did use one for a little while that allowed you to interact with PDF S in
+
+711
+00:30:16,140 --> 00:30:20,060
+-- a way that Google Docs itself did not support and
+-- that needed access to your email.
+
+712
+00:30:20,599 --> 00:30:21,119
+No, it needed
+
+713
+00:30:21,219 --> 00:30:21,329
+access
+
+714
+00:30:21,449 --> 00:30:21,599
+to my
+
+715
+00:30:21,739 --> 00:30:21,810
+Google.
+
+716
+00:30:22,619 --> 00:30:22,750
+I get
+
+717
+00:30:23,109 --> 00:30:24,329
+that. That's fine. That's fine.
+
+718
+00:30:24,540 --> 00:30:24,569
+You
+
+719
+00:30:24,689 --> 00:30:24,780
+know,
+
+720
+00:30:25,319 --> 00:30:26,310
+and the other one I've seen,
+
+721
+00:30:26,319 --> 00:30:29,260
+like I said is a spelling and grammar checker thing that helps you.
+
+722
+00:30:29,290 --> 00:30:30,579
+Uh just write
+
+723
+00:30:31,030 --> 00:30:33,770
+better emails, better papers, better, whatever
+
+724
+00:30:33,939 --> 00:30:34,189
+I heard
+
+725
+00:30:34,329 --> 00:30:37,859
+this, you know, I see, I keep seeing ads for on youtube which makes me, you know,
+
+726
+00:30:37,869 --> 00:30:39,810
+wonder why I'm being targeted for this.
+
+727
+00:30:39,819 --> 00:30:41,130
+Do I not speak good English?
+
+728
+00:30:41,619 --> 00:30:41,939
+Um
+
+729
+00:30:42,089 --> 00:30:42,420
+No, you
+
+730
+00:30:42,650 --> 00:30:43,569
+don't write well.
+
+731
+00:30:45,939 --> 00:30:49,069
+So I actually got a targeted dad the other day that actually applies to me.
+
+732
+00:30:49,079 --> 00:30:51,770
+It was for goldfish crackers which my kids eat a ton of man.
+
+733
+00:30:51,780 --> 00:30:53,930
+Every kid eats a ton of goldfish crackers.
+
+734
+00:30:54,020 --> 00:30:56,810
+And I bet under, under your car seats, I bet you have,
+
+735
+00:30:57,160 --> 00:30:57,189
+I
+
+736
+00:30:57,310 --> 00:30:57,420
+have to
+
+737
+00:30:58,890 --> 00:30:59,520
+goldfish,
+
+738
+00:31:00,329 --> 00:31:02,050
+I vacuum it out every two months because they,
+
+739
+00:31:02,060 --> 00:31:04,050
+they eat goldfish crackers in the car and it's just,
+
+740
+00:31:04,359 --> 00:31:05,849
+they do vacuum up nicely.
+
+741
+00:31:05,859 --> 00:31:08,959
+They, they're until they get crushed and ground into the carpet.
+
+742
+00:31:09,459 --> 00:31:11,030
+Which, but anyway, anyway,
+
+743
+00:31:11,250 --> 00:31:13,880
+-- you know,
+-- go back to this. I mean that this is the thing, right? Is
+
+744
+00:31:14,939 --> 00:31:17,250
+I, I guess really we have really two big problems here.
+
+745
+00:31:17,260 --> 00:31:22,520
+One is, you know, oh, it says it's Google or Apple or support or my it guy.
+
+746
+00:31:22,910 --> 00:31:24,979
+Sure. Right. That must be legit.
+
+747
+00:31:24,989 --> 00:31:27,989
+And there's no real easy way to tell actually who it is.
+
+748
+00:31:28,760 --> 00:31:32,709
+-- Right.
+-- And so they're riding on the coattails of like Google's authenticity.
+
+749
+00:31:33,150 --> 00:31:33,680
+Right.
+
+750
+00:31:33,790 --> 00:31:35,290
+And I think that was kind of,
+
+751
+00:31:35,300 --> 00:31:40,400
+the intent always was we assumed Google was doing something there,
+
+752
+00:31:40,410 --> 00:31:43,680
+which they either aren't or there's some sort of loophole.
+
+753
+00:31:44,550 --> 00:31:47,310
+Yeah. And then that second, um, problem is just,
+
+754
+00:31:48,189 --> 00:31:48,810
+you know,
+
+755
+00:31:49,150 --> 00:31:50,609
+generally speaking,
+
+756
+00:31:50,619 --> 00:31:53,430
+if we make permissions fine grained people end up turning them
+
+757
+00:31:53,439 --> 00:31:56,369
+all on anyways because they just want stuff to work.
+
+758
+00:31:56,800 --> 00:31:59,099
+So a lot of places like this, you know, defaults to do,
+
+759
+00:31:59,109 --> 00:32:02,189
+you want to give it access to your email and it's like, boom all of your email,
+
+760
+00:32:02,469 --> 00:32:06,310
+like not just your inbox but like the whole thing or same thing with docs.
+
+761
+00:32:06,319 --> 00:32:07,790
+It's like all of your docs, not just
+
+762
+00:32:07,969 --> 00:32:09,699
+you remember back in the day where you had
+
+763
+00:32:09,709 --> 00:32:12,689
+a shell account and you had your public underscore html
+
+764
+00:32:13,180 --> 00:32:16,709
+directory and if you put stuff in there, it would now show up on the web server, right?
+
+765
+00:32:17,569 --> 00:32:18,050
+You know.
+
+766
+00:32:18,560 --> 00:32:21,810
+Uh and, and that actually worked pretty well for a while. Um
+
+767
+00:32:22,880 --> 00:32:25,949
+So, you know, something like that where for example, maybe, yeah, like I said,
+
+768
+00:32:25,959 --> 00:32:28,359
+it adds a fake user or it kind of adds like a
+
+769
+00:32:28,469 --> 00:32:32,339
+folder that you can like share the stuff into so that one app can access, you
+
+770
+00:32:32,439 --> 00:32:35,579
+-- know what it
+-- means. Like you're talking about a lot of complexity.
+
+771
+00:32:35,939 --> 00:32:36,469
+Well, exactly.
+
+772
+00:32:36,479 --> 00:32:40,060
+And that's why it won't work for 99% of people and only work for you and me.
+
+773
+00:32:40,180 --> 00:32:43,380
+And then one day we'll get tired of it and just turn it off or enable it for everything.
+
+774
+00:32:44,829 --> 00:32:47,329
+See, that's the problem. Right. With that, those complex permissions.
+
+775
+00:32:47,939 --> 00:32:48,489
+Yes,
+
+776
+00:32:49,079 --> 00:32:50,369
+they become
+
+777
+00:32:50,579 --> 00:32:52,020
+painful to administer.
+
+778
+00:32:52,430 --> 00:32:52,760
+and,
+
+779
+00:32:52,770 --> 00:32:58,810
+and if I had to guess Google is going to solve this on their end with some Google magic
+
+780
+00:32:59,189 --> 00:33:01,890
+because we can't rely on people to do it. Right.
+
+781
+00:33:03,390 --> 00:33:04,579
+Well, even if people do it right.
+
+782
+00:33:04,589 --> 00:33:08,780
+99.9% of the time assuming Google has about a billion users. Which,
+
+783
+00:33:08,989 --> 00:33:10,859
+-- that's
+-- true with the law of large numbers,
+
+784
+00:33:10,869 --> 00:33:14,420
+every insane thing possible does happen all of the time.
+
+785
+00:33:15,170 --> 00:33:15,510
+Yeah.
+
+786
+00:33:15,520 --> 00:33:18,869
+I mean, the reality is somebody's going to be sleep deprived enough to not realize
+
+787
+00:33:19,000 --> 00:33:20,020
+or just
+
+788
+00:33:20,180 --> 00:33:21,650
+not a computer person.
+
+789
+00:33:22,689 --> 00:33:26,270
+Oh, it's funny. So, yesterday I had some, uh, I got some new headshots taken,
+
+790
+00:33:27,199 --> 00:33:28,650
+you know, from my website and whatnot.
+
+791
+00:33:28,660 --> 00:33:31,550
+Like my linkedin profile because basically my, my current headshots are,
+
+792
+00:33:31,560 --> 00:33:33,229
+are old enough that I have hair in them.
+
+793
+00:33:33,729 --> 00:33:34,329
+Um,
+
+794
+00:33:36,430 --> 00:33:38,770
+and, and also I've had people go, who is that?
+
+795
+00:33:39,319 --> 00:33:41,560
+Um, but anyway, so the guy is, you know,
+
+796
+00:33:41,569 --> 00:33:43,060
+obviously we're chit chat and he's asking me what
+
+797
+00:33:43,069 --> 00:33:44,239
+I do and it's computers here and he's like,
+
+798
+00:33:44,250 --> 00:33:45,390
+oh, I got a question for you
+
+799
+00:33:45,739 --> 00:33:49,430
+and basically too long didn't read a friend
+
+800
+00:33:49,699 --> 00:33:53,050
+of a friend, had a spouse or whatever. Die
+
+801
+00:33:53,229 --> 00:33:57,329
+computer has a password. Computer also has photos on it. What can we do about that?
+
+802
+00:33:57,530 --> 00:34:00,339
+And so I explained about, you know, getting one of those, uh, bootle
+
+803
+00:34:00,500 --> 00:34:02,489
+C DS to reset the password and windows. And
+
+804
+00:34:02,890 --> 00:34:05,630
+I'm assuming that their hard drive is not encrypted because, you know,
+
+805
+00:34:05,859 --> 00:34:09,899
+they're not a super savvy person. So this should actually be relatively easy to do.
+
+806
+00:34:09,909 --> 00:34:12,989
+And if that doesn't work, you know, just pop the hard drive out, put it in a caddy,
+
+807
+00:34:13,120 --> 00:34:14,790
+plug it into your machine and, like,
+
+808
+00:34:15,040 --> 00:34:16,429
+go hunting for photos,
+
+809
+00:34:16,780 --> 00:34:17,188
+you know.
+
+810
+00:34:17,610 --> 00:34:21,429
+But, and it was like, it really does boil down to, you know, that like,
+
+811
+00:34:21,438 --> 00:34:23,030
+sort of normal people, like,
+
+812
+00:34:24,250 --> 00:34:27,688
+on the one hand, I, you know, I wish everybody would encrypt their hard drives,
+
+813
+00:34:27,699 --> 00:34:31,870
+but on the other hand, I really, it's gonna, you know, for your,
+
+814
+00:34:31,879 --> 00:34:35,708
+for the survivors of when that person dies and takes the password with them,
+
+815
+00:34:35,719 --> 00:34:36,620
+it's gonna suck,
+
+816
+00:34:37,300 --> 00:34:39,879
+you know, because how many people have, like, say their passwords
+
+817
+00:34:40,250 --> 00:34:43,600
+written down in a way that somebody else can get access to and keeps them up to date.
+
+818
+00:34:43,850 --> 00:34:45,179
+Most people don't.
+
+819
+00:34:45,469 --> 00:34:46,719
+Exactly. You know.
+
+820
+00:34:47,219 --> 00:34:49,418
+No, no, I, I'm very familiar with this problem.
+
+821
+00:34:49,870 --> 00:34:49,958
+Right.
+
+822
+00:34:50,010 --> 00:34:52,889
+-- So,
+-- part of me wants people to have better security encrypted devices,
+
+823
+00:34:52,899 --> 00:34:54,030
+like encrypted phones and stuff.
+
+824
+00:34:54,040 --> 00:34:55,820
+But at the same time, you know, now we're getting to that
+
+825
+00:34:56,139 --> 00:34:58,520
+more common case of like, oh, you know, my son died,
+
+826
+00:34:58,530 --> 00:35:00,479
+I'd like to get access to the photos on his iphone,
+
+827
+00:35:01,260 --> 00:35:03,780
+which then also raises the question of, you know, maybe he doesn't want,
+
+828
+00:35:03,939 --> 00:35:06,860
+maybe he doesn't want people to have access to those photos. You know
+
+829
+00:35:07,459 --> 00:35:08,850
+what this reminds me of always is,
+
+830
+00:35:08,860 --> 00:35:13,139
+is the jokes you see on things like reddit where people joke about,
+
+831
+00:35:13,310 --> 00:35:15,679
+you know, delete my browsing history when I die.
+
+832
+00:35:17,459 --> 00:35:19,889
+But of course, as a security person, my first thought is, well,
+
+833
+00:35:19,899 --> 00:35:22,070
+why aren't you just using an incognito browser?
+
+834
+00:35:22,080 --> 00:35:22,729
+You idiot.
+
+835
+00:35:23,840 --> 00:35:27,610
+It's a funny joke. And I totally understand what you're saying.
+
+836
+00:35:28,050 --> 00:35:31,360
+Yeah. Well, see, that's one of the biggest problems is right is when something asks
+
+837
+00:35:31,860 --> 00:35:33,520
+for permission to do something,
+
+838
+00:35:34,169 --> 00:35:36,989
+we don't know necessarily what the intent is.
+
+839
+00:35:38,600 --> 00:35:40,419
+-- Uh
+-- if you don't, then,
+
+840
+00:35:40,429 --> 00:35:43,949
+then you deny permission because if you don't know what the intent is,
+
+841
+00:35:43,959 --> 00:35:45,939
+why are you even doing that thing in the first place?
+
+842
+00:35:46,709 --> 00:35:47,449
+Well, because you know,
+
+843
+00:35:47,459 --> 00:35:51,370
+-- this unroll me thing says it would get rid of all my spam email,
+-- right?
+
+844
+00:35:51,379 --> 00:35:53,449
+And, and in that case, I think
+
+845
+00:35:53,810 --> 00:35:56,409
+the you understood the intent.
+
+846
+00:35:56,699 --> 00:36:00,850
+It's then there was a misuse of trust on the part of enroll me
+
+847
+00:36:01,060 --> 00:36:03,770
+and, and things like that are also going to happen and,
+
+848
+00:36:03,780 --> 00:36:06,820
+and even I'm sure Google is guilty of this to a degree.
+
+849
+00:36:07,070 --> 00:36:10,600
+But in, in those cases, you just have to deal with them on a case by case basis.
+
+850
+00:36:10,610 --> 00:36:11,489
+Because, I mean, if,
+
+851
+00:36:11,500 --> 00:36:14,810
+if you pretend you're a paranoid nut all the time you end up like us.
+
+852
+00:36:15,020 --> 00:36:16,570
+-- Right. Yeah,
+-- exactly.
+
+853
+00:36:17,080 --> 00:36:18,689
+Unemployable outside a very niche.
+
+854
+00:36:19,030 --> 00:36:19,250
+Right.
+
+855
+00:36:20,280 --> 00:36:23,520
+-- And, and you get your own podcast someday. So,
+-- yeah.
+
+856
+00:36:23,780 --> 00:36:25,340
+Yeah. And you anyways.
+
+857
+00:36:26,270 --> 00:36:30,169
+Yeah. No, it's, I, yeah, well, see what fundamentally boils down to me is,
+
+858
+00:36:30,530 --> 00:36:32,330
+it's a user interface issue,
+
+859
+00:36:33,669 --> 00:36:36,250
+right? Like, really what it boils down to is is you're trying to
+
+860
+00:36:37,370 --> 00:36:37,610
+let me,
+
+861
+00:36:38,070 --> 00:36:38,939
+let me finish it.
+
+862
+00:36:39,489 --> 00:36:42,219
+It's the interface of the computer and the person.
+
+863
+00:36:43,540 --> 00:36:44,959
+And that's a tough problem.
+
+864
+00:36:45,070 --> 00:36:45,679
+Right?
+
+865
+00:36:45,810 --> 00:36:48,810
+I, I'm going to say that's an impossible problem.
+
+866
+00:36:48,929 --> 00:36:50,280
+I think we,
+
+867
+00:36:50,290 --> 00:36:55,600
+we have never been able to design a system that people can't be easily fooled.
+
+868
+00:36:55,610 --> 00:36:57,979
+And even if you design a better interface,
+
+869
+00:36:57,989 --> 00:37:00,600
+the bad guys are just going to design a better attack.
+
+870
+00:37:00,820 --> 00:37:05,469
+I think the only solution to this is to stop this kind of stuff on the back end.
+
+871
+00:37:05,479 --> 00:37:09,399
+And when I say stop this stuff, I mean, stop 80% of it because you can't get it all.
+
+872
+00:37:11,010 --> 00:37:14,550
+And that's, that's basically the best we can hope for is as long as we can kind of,
+
+873
+00:37:14,560 --> 00:37:16,300
+you know, it's kind of like your disease analogy.
+
+874
+00:37:16,310 --> 00:37:19,270
+You always use, you know, we, we can't stop everyone from dying,
+
+875
+00:37:19,280 --> 00:37:20,870
+but we can stop most people from dying.
+
+876
+00:37:21,610 --> 00:37:23,790
+-- Well, for a while.
+-- Hopefully.
+
+877
+00:37:24,239 --> 00:37:24,639
+Yeah,
+
+878
+00:37:25,120 --> 00:37:29,310
+it's uh no, I just know what I mean, in the sense of a U I issue is that there's,
+
+879
+00:37:29,320 --> 00:37:32,689
+it's really hard to display security
+
+880
+00:37:32,830 --> 00:37:36,020
+related information to people in a way that's really understandable.
+
+881
+00:37:36,189 --> 00:37:38,179
+And I mean, a good counter example of it is roads,
+
+882
+00:37:38,439 --> 00:37:41,280
+right, road signs, you know, a lot of thought went into those things,
+
+883
+00:37:41,419 --> 00:37:44,290
+the colors, the shapes, you know, the all of that
+
+884
+00:37:44,459 --> 00:37:47,760
+to make it clear, like, you know, this is a yield sign, this is a stop sign.
+
+885
+00:37:47,770 --> 00:37:49,659
+One of these is a strong suggestion.
+
+886
+00:37:49,669 --> 00:37:50,290
+The other one is like,
+
+887
+00:37:50,300 --> 00:37:53,550
+you really better do this or else something bad is going to happen.
+
+888
+00:37:54,739 --> 00:37:55,709
+Sure.
+
+889
+00:37:56,370 --> 00:37:58,550
+You know, and I've never seen good.
+
+890
+00:37:59,129 --> 00:38:01,979
+I mean, windows vista being a great example of that, you know, the,
+
+891
+00:38:01,989 --> 00:38:05,750
+with the user access controls, like those constant pop up warnings.
+
+892
+00:38:05,760 --> 00:38:08,120
+Yeah, they were a great idea except then it, you know,
+
+893
+00:38:08,129 --> 00:38:10,060
+you immediately went to alarm fatigue.
+
+894
+00:38:11,179 --> 00:38:14,399
+Do you know, I talked to the guy who came up with that idea.
+
+895
+00:38:14,949 --> 00:38:18,439
+This was a long time ago and like he said, as security people,
+
+896
+00:38:18,449 --> 00:38:20,239
+we thought it was a great idea, right?
+
+897
+00:38:20,250 --> 00:38:23,679
+And then obviously it, it turned out to be a terrible mistake
+
+898
+00:38:25,060 --> 00:38:28,090
+and, and I, I guess this is part of our challenge as well,
+
+899
+00:38:28,100 --> 00:38:30,459
+is security people often think something is
+
+900
+00:38:30,469 --> 00:38:33,239
+a great idea and normal people disagree.
+
+901
+00:38:33,820 --> 00:38:37,800
+Well, even security people, the part of it is this idea
+
+902
+00:38:38,100 --> 00:38:41,260
+seems great on paper and it looks great if you do it. For one or two days.
+
+903
+00:38:41,270 --> 00:38:43,290
+But if you have to use it for like 10 years,
+
+904
+00:38:44,100 --> 00:38:46,719
+you know, you're going to want to murder somebody by the end of those 10 years.
+
+905
+00:38:46,729 --> 00:38:47,959
+That's also true.
+
+906
+00:38:48,929 --> 00:38:52,959
+Firewalls. Great idea. Except now we all just poke a hole for port
+
+907
+00:38:53,060 --> 00:38:54,120
+443
+
+908
+00:38:54,419 --> 00:38:55,580
+and maybe port 80.
+
+909
+00:38:55,889 --> 00:38:56,080
+Uh
+
+910
+00:38:56,889 --> 00:39:00,219
+Sure, I think firewalls are fairly successful.
+
+911
+00:39:00,229 --> 00:39:02,560
+But I think the reason for that is we made them usable.
+
+912
+00:39:02,989 --> 00:39:06,439
+The majority of places I've seen using firewalls don't actually have that
+
+913
+00:39:06,600 --> 00:39:11,100
+detailed or tight rule sets outside of where they're like using a subscription to.
+
+914
+00:39:11,110 --> 00:39:12,800
+Like, here's a list of a sites block them,
+
+915
+00:39:13,360 --> 00:39:13,780
+you know,
+
+916
+00:39:14,840 --> 00:39:18,169
+and so it's, they've, they've sort of outsourced that piece and, you know,
+
+917
+00:39:18,250 --> 00:39:21,540
+and this is something where like this is something I've never seen is like, you know,
+
+918
+00:39:21,550 --> 00:39:25,260
+some sort of registry or review site for like, you know, here's these o
+
+919
+00:39:25,489 --> 00:39:26,129
+off sites
+
+920
+00:39:26,379 --> 00:39:29,290
+which ones are trustworthy and which ones are not like, for example,
+
+921
+00:39:29,300 --> 00:39:30,129
+looking in my thing.
+
+922
+00:39:30,139 --> 00:39:32,860
+Well, some of these are apps. So right off the bat that gets a bit complicated.
+
+923
+00:39:32,870 --> 00:39:34,500
+But some of them, you know, like, for example,
+
+924
+00:39:34,510 --> 00:39:38,379
+disgust.com wants basic access to my account info clearly.
+
+925
+00:39:38,389 --> 00:39:39,120
+That's ok.
+
+926
+00:39:39,530 --> 00:39:42,530
+Right. It's, it's the online comments and it just wants to know who I am. Sure.
+
+927
+00:39:42,919 --> 00:39:44,469
+So like five out of five stars, a
+
+928
+00:39:44,639 --> 00:39:46,489
+green thumbs up or whatever, you know,
+
+929
+00:39:47,550 --> 00:39:49,310
+same for feed, le same for medium,
+
+930
+00:39:49,679 --> 00:39:52,370
+you know. But then there's like these other apps where it's like, you know,
+
+931
+00:39:52,929 --> 00:39:54,189
+uh, because I've often wondered, like,
+
+932
+00:39:54,199 --> 00:39:56,209
+are people trying to maybe use this to harvest
+
+933
+00:39:56,629 --> 00:39:57,600
+account names?
+
+934
+00:39:58,250 --> 00:39:58,679
+It
+
+935
+00:39:59,280 --> 00:40:00,899
+maybe, I, I doubt it.
+
+936
+00:40:00,909 --> 00:40:02,409
+-- I think
+-- that, I don't think it's worth it,
+
+937
+00:40:02,500 --> 00:40:04,270
+but it's probably not, it's,
+
+938
+00:40:04,280 --> 00:40:06,310
+it's way easier to just write a worm
+
+939
+00:40:06,469 --> 00:40:09,550
+that handles everybody in your contact list.
+
+940
+00:40:10,909 --> 00:40:13,639
+Yeah. And even that seems like, seriously, like,
+
+941
+00:40:14,679 --> 00:40:18,580
+I mean, it's a good way to get valid emails and the relationship of the, you know,
+
+942
+00:40:18,590 --> 00:40:20,469
+what actually would be maybe even more better there.
+
+943
+00:40:20,479 --> 00:40:22,399
+Is, is it more better? Terrible? Sorry.
+
+944
+00:40:22,719 --> 00:40:26,590
+Um, what's more interesting to me there is that not only with the contact listing,
+
+945
+00:40:26,600 --> 00:40:27,379
+do you get
+
+946
+00:40:27,560 --> 00:40:28,820
+the names of these people
+
+947
+00:40:29,189 --> 00:40:32,729
+but kind of who you should send the email is being from,
+
+948
+00:40:33,820 --> 00:40:35,199
+to get a higher response rate?
+
+949
+00:40:35,350 --> 00:40:39,199
+Well, and not only that because they had full access to people's gmail,
+
+950
+00:40:39,209 --> 00:40:41,560
+they could legitimately send it as that person.
+
+951
+00:40:41,739 --> 00:40:45,159
+Like, not even, not even Joe Job send, like, for real, send
+
+952
+00:40:45,370 --> 00:40:46,000
+the email.
+
+953
+00:40:46,120 --> 00:40:47,800
+Oh, yeah. No, I, I, yeah, like I,
+
+954
+00:40:48,040 --> 00:40:49,399
+yeah, that, that's actually,
+
+955
+00:40:51,379 --> 00:40:53,350
+I don't know what would have happened if they've gotten away with that.
+
+956
+00:40:53,540 --> 00:40:54,129
+Well, they,
+
+957
+00:40:54,489 --> 00:40:57,810
+they wouldn't have and, and so this is what makes me think about.
+
+958
+00:40:57,820 --> 00:41:02,760
+There's really two scenarios I can see that are plausible is, first of all,
+
+959
+00:41:03,120 --> 00:41:07,840
+it was just some, like dumb kid, which is what the suggestion currently is that,
+
+960
+00:41:07,850 --> 00:41:09,040
+that made a mistake
+
+961
+00:41:09,360 --> 00:41:11,560
+and didn't realize what was going to happen. Right.
+
+962
+00:41:11,820 --> 00:41:15,139
+The alternative is somebody made a mistake and this was meant to be
+
+963
+00:41:15,149 --> 00:41:18,689
+a targeted attack to maybe go two or three levels deep on somebody
+
+964
+00:41:19,100 --> 00:41:22,310
+in terms of email contacts and it exploded and went too deep.
+
+965
+00:41:23,270 --> 00:41:24,520
+And I, I don't know,
+
+966
+00:41:25,510 --> 00:41:25,820
+basically,
+
+967
+00:41:26,860 --> 00:41:27,330
+sure
+
+968
+00:41:27,760 --> 00:41:29,969
+it had to check to see if the system was already infected,
+
+969
+00:41:30,500 --> 00:41:30,949
+but
+
+970
+00:41:31,090 --> 00:41:34,129
+it only checked like one in 10 times or whatever and clearly, that's
+
+971
+00:41:34,570 --> 00:41:35,729
+right. And that's fair.
+
+972
+00:41:35,889 --> 00:41:36,290
+Uh
+
+973
+00:41:37,129 --> 00:41:41,120
+This is a tough one to call because I can see
+
+974
+00:41:41,770 --> 00:41:42,570
+two,
+
+975
+00:41:42,840 --> 00:41:47,649
+well, those 22 options where it's either mistake or, or clearly malicious.
+
+976
+00:41:49,010 --> 00:41:51,770
+Here's the thing I don't get if it was clearly malicious in a targeted attack,
+
+977
+00:41:51,780 --> 00:41:53,260
+don't you think they would have set up like a couple
+
+978
+00:41:53,270 --> 00:41:56,149
+dozen Gmail accounts with various contacts and tried it out there
+
+979
+00:41:57,659 --> 00:42:00,550
+or is that just too much hassle for QE? And you just fired off?
+
+980
+00:42:00,560 --> 00:42:03,209
+Well, it can be a simple bug too
+
+981
+00:42:03,500 --> 00:42:03,959
+where
+
+982
+00:42:04,129 --> 00:42:08,979
+it was, that was not the intent. And I don't know how this was actually triggered
+
+983
+00:42:09,479 --> 00:42:13,229
+where obviously there was some sort of command and control system somewhere,
+
+984
+00:42:13,629 --> 00:42:16,909
+right? That was essentially making the magic happen.
+
+985
+00:42:17,320 --> 00:42:19,820
+And, and I don't understand what, what went on with that either.
+
+986
+00:42:19,830 --> 00:42:21,580
+And it could be a lot of things. I mean,
+
+987
+00:42:21,929 --> 00:42:22,760
+in addition, they use
+
+988
+00:42:23,280 --> 00:42:24,500
+Meiner, which is
+
+989
+00:42:24,959 --> 00:42:27,939
+relatively uncontrolled. So,
+
+990
+00:42:28,159 --> 00:42:29,459
+and, and obviously, as happened,
+
+991
+00:42:29,840 --> 00:42:33,219
+Meiner found out and they shut down that account. So now you've lost your data. It
+
+992
+00:42:34,169 --> 00:42:34,850
+honestly,
+
+993
+00:42:34,860 --> 00:42:39,229
+this smells like a mistake from someone who didn't really know what they were doing.
+
+994
+00:42:39,669 --> 00:42:40,570
+But
+
+995
+00:42:40,739 --> 00:42:41,770
+it, at the same time,
+
+996
+00:42:41,780 --> 00:42:46,429
+if I wanted to mount a really nice attack to harvest a bunch of contact information,
+
+997
+00:42:46,939 --> 00:42:49,070
+I'd make it look like a mistake.
+
+998
+00:42:49,560 --> 00:42:50,270
+You know what I mean?
+
+999
+00:42:51,199 --> 00:42:54,189
+Well, that's one thing I'm kind of wondering now is, are we like some of these, like,
+
+1000
+00:42:54,199 --> 00:42:55,699
+really widespread attacks?
+
+1001
+00:42:55,709 --> 00:42:57,389
+Are they actually a targeted attack?
+
+1002
+00:42:57,399 --> 00:42:59,510
+You know, hiding inside of that thundering herd?
+
+1003
+00:43:00,010 --> 00:43:00,639
+I,
+
+1004
+00:43:01,040 --> 00:43:06,110
+I mean, look, you can put on the tinfoil hat and, and make any claim you want.
+
+1005
+00:43:06,120 --> 00:43:11,310
+I think that's a plausible thing to think about, but it, it's not helpful either.
+
+1006
+00:43:11,989 --> 00:43:12,340
+Yeah,
+
+1007
+00:43:12,959 --> 00:43:16,979
+it's tricky man. Welcome to the, welcome to the future we deserve. Right.
+
+1008
+00:43:18,750 --> 00:43:19,850
+I think really a lot of this,
+
+1009
+00:43:19,860 --> 00:43:22,189
+what it boils down to is having those offline backups and
+
+1010
+00:43:22,199 --> 00:43:24,719
+having those audit logs that can't be modified or new.
+
+1011
+00:43:25,000 --> 00:43:28,250
+Yeah. But in this case, who cares that that wouldn't have helped either?
+
+1012
+00:43:28,649 --> 00:43:31,709
+Well, no, no, no, but at least you can sort of clean up after the fact and
+
+1013
+00:43:31,850 --> 00:43:31,860
+I
+
+1014
+00:43:32,370 --> 00:43:32,419
+get
+
+1015
+00:43:32,590 --> 00:43:32,639
+it
+
+1016
+00:43:33,419 --> 00:43:35,770
+so that, you know, the attack doesn't stay in
+
+1017
+00:43:36,070 --> 00:43:38,250
+assuming they had
+
+1018
+00:43:38,600 --> 00:43:39,760
+modified data.
+
+1019
+00:43:40,260 --> 00:43:42,280
+Well, they don't have to have modified data, right.
+
+1020
+00:43:42,290 --> 00:43:45,409
+They just the fact that they still have access to your account six months from now.
+
+1021
+00:43:45,419 --> 00:43:48,719
+Now I'm assuming Google is smart enough to have nuked everybody's, you know,
+
+1022
+00:43:49,229 --> 00:43:50,969
+trust relationship with that entity.
+
+1023
+00:43:51,679 --> 00:43:53,020
+That's, that's happened.
+
+1024
+00:43:53,030 --> 00:43:59,159
+And my understanding is they cleaned it up for anyone who is linked to that provider.
+
+1025
+00:43:59,620 --> 00:43:59,949
+I mean,
+
+1026
+00:43:59,959 --> 00:44:02,540
+the thing that gets me really is I don't have to kind
+
+1027
+00:44:02,550 --> 00:44:05,709
+of worry about what happened because I do have these off like,
+
+1028
+00:44:05,719 --> 00:44:06,110
+well,
+
+1029
+00:44:06,310 --> 00:44:09,340
+effectively offline backups in the sense of Google just has a
+
+1030
+00:44:09,350 --> 00:44:12,510
+whole bunch of magic going on with this Google vault stuff.
+
+1031
+00:44:12,520 --> 00:44:13,239
+And I can like,
+
+1032
+00:44:13,540 --> 00:44:13,760
+you know,
+
+1033
+00:44:13,770 --> 00:44:17,810
+if somebody were to ever come to me and say what exactly what happened on my domain,
+
+1034
+00:44:17,820 --> 00:44:20,689
+at least I'd be like, well, let me check and I'll tell you, you know, and as a,
+
+1035
+00:44:20,699 --> 00:44:21,879
+as a company
+
+1036
+00:44:22,139 --> 00:44:25,590
+that level of sort of like what actually, how bad was this? What actually happened?
+
+1037
+00:44:25,600 --> 00:44:28,580
+Oh, we just lost, you know, the contact list. Ok. Well, it's not great.
+
+1038
+00:44:28,590 --> 00:44:29,780
+-- But
+-- see,
+
+1039
+00:44:29,790 --> 00:44:31,899
+and I think that's exactly the point we
+
+1040
+00:44:31,909 --> 00:44:35,290
+should end this conversation on is the concept that
+
+1041
+00:44:35,750 --> 00:44:37,800
+by leveraging someone like Google,
+
+1042
+00:44:38,300 --> 00:44:42,969
+they have immense resources in terms of security people and
+
+1043
+00:44:42,979 --> 00:44:46,840
+storage and operations and just everything across the board.
+
+1044
+00:44:46,850 --> 00:44:47,610
+And so
+
+1045
+00:44:47,939 --> 00:44:49,919
+even though there might be hiccups here and there,
+
+1046
+00:44:50,659 --> 00:44:56,600
+if this had happened to basically any self hosted organization on the planet,
+
+1047
+00:44:57,020 --> 00:44:57,840
+it would have taken
+
+1048
+00:44:58,229 --> 00:45:00,629
+more than an hour. Well, it wasn't a Friday. It was.
+
+1049
+00:45:01,070 --> 00:45:01,280
+Yeah. Yeah.
+
+1050
+00:45:01,290 --> 00:45:04,149
+But I mean, that's the thing if it happened on Christmas or a Friday or whatever.
+
+1051
+00:45:04,159 --> 00:45:07,179
+-- I mean, it would have been, especially any
+-- day that occurred. I bet,
+
+1052
+00:45:07,300 --> 00:45:11,560
+I bet any other organization who wasn't one of these big guys, someone like Google,
+
+1053
+00:45:11,860 --> 00:45:13,969
+it would have taken a minimum of four hours to
+
+1054
+00:45:13,979 --> 00:45:15,409
+figure out what was going on and to start,
+
+1055
+00:45:15,580 --> 00:45:16,929
+I would have guessed at least two days.
+
+1056
+00:45:17,030 --> 00:45:18,689
+-- It might even be days.
+-- Four hours
+
+1057
+00:45:18,699 --> 00:45:21,679
+is I'm going to be optimistic and generous.
+
+1058
+00:45:22,540 --> 00:45:25,679
+Well, to me in my mind, just to even get your head around the problem. Right.
+
+1059
+00:45:25,689 --> 00:45:27,050
+How many people truly understand o
+
+1060
+00:45:27,320 --> 00:45:27,340
+off
+
+1061
+00:45:27,520 --> 00:45:28,780
+for?
+
+1062
+00:45:29,219 --> 00:45:31,879
+No, there's probably not a ton, there's enough.
+
+1063
+00:45:32,250 --> 00:45:36,840
+But I think, uh, just recognizing the attack, first of all is tricky and,
+
+1064
+00:45:36,850 --> 00:45:40,479
+and my guess is Google knew what was going on because in all seriousness
+
+1065
+00:45:40,760 --> 00:45:43,639
+in the like 20 minutes, I was dealing with this by the end,
+
+1066
+00:45:43,860 --> 00:45:47,340
+it was clear that things were under control already,
+
+1067
+00:45:47,620 --> 00:45:49,639
+which is awesome. Right. That's fantastic.
+
+1068
+00:45:49,810 --> 00:45:50,500
+And you figure I,
+
+1069
+00:45:50,510 --> 00:45:54,000
+I was helping out one person and it took me 20 minutes to figure all this out.
+
+1070
+00:45:54,199 --> 00:45:54,719
+You know,
+
+1071
+00:45:55,189 --> 00:45:57,399
+I wonder if this has happened before and we just never noticed.
+
+1072
+00:45:58,090 --> 00:45:59,570
+I guarantee it has,
+
+1073
+00:46:00,139 --> 00:46:05,350
+but again, we can't fix everybody. We just have to fix most people. Right.
+
+1074
+00:46:06,199 --> 00:46:06,639
+Yeah.
+
+1075
+00:46:07,540 --> 00:46:09,340
+So anyway, any closing thoughts, Kurt,
+
+1076
+00:46:09,689 --> 00:46:11,239
+yeah. Make sure you have audit logs
+
+1077
+00:46:11,500 --> 00:46:15,820
+and some way of gripping them or whatever so that if something does happen,
+
+1078
+00:46:15,830 --> 00:46:17,790
+because that's what gets me is a lot of organizations
+
+1079
+00:46:17,800 --> 00:46:19,310
+just wouldn't have taken a long time to respond.
+
+1080
+00:46:19,320 --> 00:46:21,439
+But, like they would have had to, you know,
+
+1081
+00:46:21,570 --> 00:46:24,010
+figured out where the data was that they need to look at.
+
+1082
+00:46:24,550 --> 00:46:26,969
+Yes, I'm also familiar with this problem.
+
+1083
+00:46:27,239 --> 00:46:27,629
+It is,
+
+1084
+00:46:27,639 --> 00:46:30,360
+logging is tricky and it is certainly not an
+
+1085
+00:46:30,370 --> 00:46:32,949
+easy thing to do and it's becoming increasingly difficult
+
+1086
+00:46:33,219 --> 00:46:37,379
+as the amount of information we have is growing exponentially.
+
+1087
+00:46:38,070 --> 00:46:41,189
+-- But that's a topic for another day, I think. Yeah.
+-- Yeah.
+
+1088
+00:46:41,360 --> 00:46:41,830
+Yeah.
+
+1089
+00:46:42,469 --> 00:46:44,260
+You know what really is interesting is, yeah,
+
+1090
+00:46:44,270 --> 00:46:45,939
+I don't think there's a single piece of useful
+
+1091
+00:46:45,949 --> 00:46:47,620
+advice we can give people to avoid this attack.
+
+1092
+00:46:47,629 --> 00:46:50,570
+There is nothing we can tell people which is what makes it so exciting.
+
+1093
+00:46:52,689 --> 00:46:54,699
+I mean, the only thing I can think of is go through your oo
+
+1094
+00:46:55,010 --> 00:46:57,909
+providers like Twitter, Google linkedin, whatever
+
+1095
+00:46:58,209 --> 00:46:58,810
+and, you know,
+
+1096
+00:46:58,820 --> 00:47:01,840
+hunt down whatever that link is to see what's connected
+
+1097
+00:47:01,850 --> 00:47:04,199
+to your account and maybe give it a quick once over
+
+1098
+00:47:04,800 --> 00:47:06,570
+that. That is. But again, that's all I
+
+1099
+00:47:06,679 --> 00:47:08,320
+got too late at that point.
+
+1100
+00:47:08,919 --> 00:47:09,360
+Yeah. Yeah,
+
+1101
+00:47:10,020 --> 00:47:13,459
+it is. Again, this is why I'm so excited. This is like Christmas time, man.
+
+1102
+00:47:13,469 --> 00:47:15,600
+This is basically a, a new
+
+1103
+00:47:15,770 --> 00:47:17,719
+attack. Not, I shouldn't say that
+
+1104
+00:47:17,929 --> 00:47:18,969
+we've known about it.
+
+1105
+00:47:19,659 --> 00:47:23,520
+We've known about it, but we haven't seen it, like, legitimately exercised
+
+1106
+00:47:24,020 --> 00:47:25,439
+in a large scale manner.
+
+1107
+00:47:25,570 --> 00:47:26,030
+So
+
+1108
+00:47:26,370 --> 00:47:28,330
+I wonder if this is the new exercise for web.
+
+1109
+00:47:29,239 --> 00:47:30,639
+It very well could be.
+
+1110
+00:47:32,199 --> 00:47:33,780
+I don't know because, I mean,
+
+1111
+00:47:33,790 --> 00:47:36,229
+people do put their banking details in their Google docs
+
+1112
+00:47:36,389 --> 00:47:38,459
+and password resets if you have access to their email.
+
+1113
+00:47:38,469 --> 00:47:41,699
+This is actually extra interesting because I've heard people talk about before
+
+1114
+00:47:41,709 --> 00:47:44,709
+about putting a Google spreadsheet together with all your passwords in it.
+
+1115
+00:47:44,770 --> 00:47:44,879
+That,
+
+1116
+00:47:45,179 --> 00:47:46,580
+that's probably bad.
+
+1117
+00:47:47,510 --> 00:47:49,010
+It's, well, it's, it's
+
+1118
+00:47:49,250 --> 00:47:51,939
+probably less worse than having it
+
+1119
+00:47:52,080 --> 00:47:53,939
+on your desktop. But
+
+1120
+00:47:54,429 --> 00:47:56,090
+fundamentally, I mean,
+
+1121
+00:47:56,340 --> 00:47:58,560
+you know that, well, yeah, it's,
+
+1122
+00:47:58,570 --> 00:48:01,860
+it's probably better to use a password specific storage mechanism,
+
+1123
+00:48:03,239 --> 00:48:04,550
+you know, than a spreadsheet.
+
+1124
+00:48:05,050 --> 00:48:05,969
+Um, because you can't
+
+1125
+00:48:06,260 --> 00:48:09,459
+encrypt or password protect specific spreadsheets in Google docs, I don't think.
+
+1126
+00:48:09,469 --> 00:48:10,659
+No, no, you can't.
+
+1127
+00:48:10,840 --> 00:48:12,500
+So, all right, man, it's time.
+
+1128
+00:48:13,229 --> 00:48:13,530
+Thank you.
+
+1129
+00:48:15,129 --> 00:48:15,659
+I'll put up,
+
+1130
+00:48:16,000 --> 00:48:16,439
+uh, well,
+
+1131
+00:48:16,449 --> 00:48:20,239
+I was just gonna say we'll put up a list of uh those links to where you can access your,
+
+1132
+00:48:20,250 --> 00:48:22,060
+uh, what's accessing your account,
+
+1133
+00:48:22,510 --> 00:48:23,409
+I guess on those major
+
+1134
+00:48:23,629 --> 00:48:26,889
+providers. So you can double check them. So go to the website for that.
+
+1135
+00:48:27,389 --> 00:48:30,060
+And, and what, what is the website, Kurt,
+
+1136
+00:48:30,459 --> 00:48:31,209
+uh, open
+
+1137
+00:48:31,350 --> 00:48:33,189
+-- source security podcast dot
+-- com. That's right.
+
+1138
+00:48:33,199 --> 00:48:35,239
+I, I don't think that's the first time you ever said that.
+
+1139
+00:48:35,389 --> 00:48:35,989
+So,
+
+1140
+00:48:36,239 --> 00:48:38,429
+on the show. So, anyway. All right. Thank you, Kurt.
+
+1141
+00:48:38,439 --> 00:48:41,409
+Thank you, everybody for listening. It was fun as Kurt said, open
+
+1142
+00:48:41,510 --> 00:48:43,760
+source Security podcast.com where you can find the show notes.
+
+1143
+00:48:43,770 --> 00:48:47,389
+We have links to Twitter, we have a Pound Os S podcast.
+
+1144
+00:48:47,399 --> 00:48:50,399
+Hashtag you can use to get a hold of Kurt and myself.
+
+1145
+00:48:50,439 --> 00:48:52,280
+We have a Facebook group that we monitor,
+
+1146
+00:48:52,290 --> 00:48:55,389
+you can handle us there if you want to and otherwise, uh, Kurt,
+
+1147
+00:48:55,399 --> 00:48:57,520
+you have a fabulous rest of your day.
+
+1148
+00:48:58,199 --> 00:49:01,379
+-- Yeah, I hope everybody's enjoying spring.
+-- That's right. Stay safe.
+
+1149
+00:49:01,389 --> 00:49:03,659
+Everybody don't, don't be clicking on those emails.

@@ -1,0 +1,3886 @@
+0
+00:00:05,590 --> 00:00:08,329
+Hello and welcome to the open source security podcast
+
+1
+00:00:08,529 --> 00:00:10,029
+with myself, Kurt Siefried
+
+2
+00:00:10,520 --> 00:00:13,569
+and I'm legally obliged to disclose that I'm a Canadian citizen
+
+3
+00:00:14,229 --> 00:00:18,250
+and my not Canadian citizen partner, Josh Bresser.
+
+4
+00:00:18,260 --> 00:00:21,909
+It concerns me when you open a show like this because I know
+
+5
+00:00:21,920 --> 00:00:24,930
+you and you had this smile on your face when I hit record.
+
+6
+00:00:24,940 --> 00:00:27,680
+So they're like, I know you're up to something and I don't know what it is.
+
+7
+00:00:27,690 --> 00:00:30,250
+Well, just I'm going to remind people that under 12 fam,
+
+8
+00:00:30,260 --> 00:00:32,805
+273 point or this is not a contact.
+
+9
+00:00:32,814 --> 00:00:33,904
+So you don't need to report
+
+10
+00:00:34,205 --> 00:00:36,525
+listening to this podcast as a foreign contact.
+
+11
+00:00:36,534 --> 00:00:42,174
+But if you, if you contact us or you give us feedback on the show and we reply to you,
+
+12
+00:00:42,185 --> 00:00:45,564
+then you will probably need to report this as a casual contact.
+
+13
+00:00:45,575 --> 00:00:45,625
+I
+
+14
+00:00:45,775 --> 00:00:46,474
+see, I see
+
+15
+00:00:46,595 --> 00:00:48,014
+unofficial foreign contact.
+
+16
+00:00:48,909 --> 00:00:51,939
+So I get that sometimes when I have meetings with Americans when they find out.
+
+17
+00:00:52,090 --> 00:00:53,650
+Yeah, over the last 25 years,
+
+18
+00:00:53,659 --> 00:00:56,750
+I've intentionally developed a pretty neutral mid Atlantic
+
+19
+00:00:56,759 --> 00:00:58,860
+accent when they find out I'm Canadian.
+
+20
+00:00:58,869 --> 00:01:02,720
+-- Well, we had this on product security all the time. Product
+-- security at Red Hat
+
+21
+00:01:03,069 --> 00:01:03,450
+was
+
+22
+00:01:04,099 --> 00:01:07,220
+not all Americans, there was a bunch of Americans,
+
+23
+00:01:07,400 --> 00:01:09,459
+-- it was
+-- mostly not Americans.
+
+24
+00:01:09,720 --> 00:01:09,989
+Well,
+
+25
+00:01:10,000 --> 00:01:12,029
+because it's a global company and that's kind of how the
+
+26
+00:01:12,040 --> 00:01:16,089
+-- math works out
+-- before we delve into some rat hole.
+
+27
+00:01:16,099 --> 00:01:17,209
+I want to
+
+28
+00:01:17,459 --> 00:01:21,059
+explain like, so we talked about Red Hat
+
+29
+00:01:21,370 --> 00:01:23,930
+and then we talked about like is open source dying,
+
+30
+00:01:23,940 --> 00:01:26,849
+which was one of the conclusions of Red Hat's actions.
+
+31
+00:01:26,860 --> 00:01:28,690
+And I want to tie up this bow
+
+32
+00:01:29,080 --> 00:01:34,489
+with some observations and understandings of just open source in general.
+
+33
+00:01:34,500 --> 00:01:36,930
+And one of those things is
+
+34
+00:01:37,120 --> 00:01:41,169
+there are now organizations gene mostly us based
+
+35
+00:01:41,379 --> 00:01:44,680
+that are asking questions about what countries
+
+36
+00:01:44,800 --> 00:01:47,559
+are the developers from working on this software.
+
+37
+00:01:47,569 --> 00:01:50,629
+And sometimes they're legally required to do so under the Foreign Sanctions Act.
+
+38
+00:01:50,809 --> 00:01:50,980
+That's
+
+39
+00:01:51,110 --> 00:01:51,459
+right. That's
+
+40
+00:01:51,660 --> 00:01:51,750
+right.
+
+41
+00:01:51,910 --> 00:01:54,000
+And it's, and this is what I love is when people are like, oh,
+
+42
+00:01:54,010 --> 00:01:55,699
+these companies are being jerks and it's like,
+
+43
+00:01:55,849 --> 00:01:56,980
+it's like trademark law,
+
+44
+00:01:57,620 --> 00:02:00,989
+I'm required to protect my trademark. I don't want to be a jerk.
+
+45
+00:02:01,000 --> 00:02:03,430
+But if I don't do this, I lose my trademark. That's right. That's
+
+46
+00:02:03,550 --> 00:02:07,589
+right. And same thing with like, you can't just violate foreign sanctions. And
+
+47
+00:02:08,080 --> 00:02:09,490
+hopefully Uncle Sam
+
+48
+00:02:09,630 --> 00:02:13,179
+-- would be like, oh, we understand it's fine not
+-- just sanctions,
+
+49
+00:02:13,330 --> 00:02:17,449
+the country of China comes up consistently in these conversations of,
+
+50
+00:02:17,460 --> 00:02:19,779
+are there any Chinese developers
+
+51
+00:02:20,279 --> 00:02:22,059
+that are contributing to this software?
+
+52
+00:02:22,119 --> 00:02:25,220
+-- Yeah,
+-- I mean, we've banned their telecoms equipment from Canada
+
+53
+00:02:25,610 --> 00:02:27,070
+so much so, but Now,
+
+54
+00:02:27,080 --> 00:02:29,550
+the cell phone companies are saying that the deployment of high
+
+55
+00:02:29,559 --> 00:02:32,380
+speed internet and cell phones in rural areas is delayed because,
+
+56
+00:02:32,690 --> 00:02:35,179
+well, I guess we have to go buy the more expensive stuff from Europe.
+
+57
+00:02:35,190 --> 00:02:39,750
+Well, and I'm sure those companies ramping up production isn't a
+
+58
+00:02:40,100 --> 00:02:44,929
+two month effort. It probably takes 2 to 4 for years is my case.
+
+59
+00:02:45,470 --> 00:02:46,460
+Right. Exactly.
+
+60
+00:02:46,779 --> 00:02:52,050
+So, anyway, ok, there's a lot for us to cover in this one. And I want to start with
+
+61
+00:02:52,309 --> 00:02:55,029
+measuring open source because I think everything is,
+
+62
+00:02:55,039 --> 00:02:57,080
+-- is rooted there
+-- by lines of code.
+
+63
+00:02:57,089 --> 00:02:57,970
+That's how you measure it.
+
+64
+00:02:58,300 --> 00:03:01,059
+That's how you measure source code by lines of code. Everybody knows this.
+
+65
+00:03:01,300 --> 00:03:03,970
+OK? So there is a project
+
+66
+00:03:04,300 --> 00:03:06,029
+that is at the open SSF
+
+67
+00:03:06,479 --> 00:03:07,770
+that is called
+
+68
+00:03:07,970 --> 00:03:08,809
+scorecard.
+
+69
+00:03:08,990 --> 00:03:09,470
+OK?
+
+70
+00:03:09,919 --> 00:03:12,550
+And scorecard is trying to put together
+
+71
+00:03:12,970 --> 00:03:16,479
+a an automated list of things you can look
+
+72
+00:03:16,490 --> 00:03:19,110
+at an open source project is doing or not doing
+
+73
+00:03:19,399 --> 00:03:21,649
+and then basically give a score
+
+74
+00:03:21,960 --> 00:03:25,899
+like zero bad 100 good type thing, right? That's not exactly how it works.
+
+75
+00:03:25,910 --> 00:03:26,550
+You get the idea.
+
+76
+00:03:26,679 --> 00:03:27,029
+Yeah.
+
+77
+00:03:27,529 --> 00:03:30,830
+And this feels like a good idea,
+
+78
+00:03:30,970 --> 00:03:31,369
+right?
+
+79
+00:03:31,380 --> 00:03:36,050
+Where I want to be able to look at an open source project and say how good or bad is this?
+
+80
+00:03:36,059 --> 00:03:38,669
+Well, like I can get blamed to find out who wrote the code.
+
+81
+00:03:38,679 --> 00:03:42,270
+-- Why can't I get blamed to find out what country it's from
+-- the the country to my
+
+82
+00:03:42,520 --> 00:03:47,320
+knowledge at this moment is not taken into account. But there are questions like,
+
+83
+00:03:47,440 --> 00:03:49,389
+how many developers does it have,
+
+84
+00:03:49,639 --> 00:03:52,339
+do they have Binaries checked into their G
+
+85
+00:03:52,490 --> 00:03:54,070
+repo that aren't for tests?
+
+86
+00:03:54,330 --> 00:03:57,889
+Because obviously, like you can run tests on Binaries, things like that.
+
+87
+00:03:57,899 --> 00:04:00,320
+But there's questions like, are, are they using C I?
+
+88
+00:04:00,580 --> 00:04:01,500
+Do they have a repo?
+
+89
+00:04:01,820 --> 00:04:04,110
+-- That,
+-- that is one of the questions. Yes.
+
+90
+00:04:04,119 --> 00:04:06,869
+And if you don't, I don't think you can score very much,
+
+91
+00:04:07,050 --> 00:04:08,270
+but you get the idea right?
+
+92
+00:04:08,279 --> 00:04:10,429
+There's all of these things they look at and then
+
+93
+00:04:10,440 --> 00:04:12,279
+they try to make it decision based on that.
+
+94
+00:04:12,289 --> 00:04:14,619
+This also then lends itself to a question.
+
+95
+00:04:14,630 --> 00:04:18,079
+You asked me a couple of weeks ago, which is,
+
+96
+00:04:18,488 --> 00:04:24,440
+is A I generated code any different than a single project maintainer.
+
+97
+00:04:24,579 --> 00:04:27,200
+-- Mhm.
+-- And I think it's not,
+
+98
+00:04:27,510 --> 00:04:27,959
+but
+
+99
+00:04:28,230 --> 00:04:30,790
+-- that's kind of a different story and,
+-- and just to be clear,
+
+100
+00:04:30,799 --> 00:04:33,540
+let's completely ignore the copyright issue around A
+
+101
+00:04:33,549 --> 00:04:35,410
+I code because obviously that just makes things
+
+102
+00:04:35,619 --> 00:04:38,089
+so much complicated. Let's just magically pretend
+
+103
+00:04:38,230 --> 00:04:42,730
+-- that A I code is somehow acceptable from a copyright perspective.
+-- It probably is.
+
+104
+00:04:42,739 --> 00:04:44,579
+But that's another, it's complicated.
+
+105
+00:04:44,980 --> 00:04:47,890
+Well, it also depends on knowing that it came from an A I and II.
+
+106
+00:04:47,959 --> 00:04:49,109
+I have a suspicion,
+
+107
+00:04:49,119 --> 00:04:52,410
+small suspicion that some developers may have used
+
+108
+00:04:52,420 --> 00:04:54,029
+A I to generate code and checked it in
+
+109
+00:04:54,149 --> 00:04:55,839
+and not disclose that they did that.
+
+110
+00:04:56,390 --> 00:04:56,410
+I
+
+111
+00:04:56,559 --> 00:04:57,809
+think this might have happened.
+
+112
+00:04:58,019 --> 00:05:00,399
+-- It, it almost certainly has, of
+-- course,
+
+113
+00:05:00,570 --> 00:05:02,950
+at some point somebody's gonna do
+
+114
+00:05:03,230 --> 00:05:08,109
+an analysis of get commits of the period from November 2022 to now.
+
+115
+00:05:08,589 --> 00:05:10,829
+And they're going to look at all the developers that went from like
+
+116
+00:05:10,839 --> 00:05:14,070
+a normal amount of work to suddenly checking in twice as much code
+
+117
+00:05:14,329 --> 00:05:16,769
+right around chat GP T four being released.
+
+118
+00:05:16,899 --> 00:05:17,480
+Ok?
+
+119
+00:05:17,489 --> 00:05:22,570
+I'm going to give you like a 32nd licensing kind of overview here in the,
+
+120
+00:05:22,579 --> 00:05:26,850
+the way it's currently viewed a project will be say licensed Apache two.
+
+121
+00:05:26,859 --> 00:05:29,269
+Ok. Now, mind you as well, I'm not a lawyer.
+
+122
+00:05:29,279 --> 00:05:32,290
+So like, please don't get your legal advice from me or Kurt or
+
+123
+00:05:32,970 --> 00:05:33,640
+ever.
+
+124
+00:05:34,470 --> 00:05:37,170
+-- But
+-- I think we're qualified to give recommendations on sandwiches.
+
+125
+00:05:37,179 --> 00:05:42,279
+-- Maybe
+-- I do like sandwiches. But anyway, so a project might be like Apache two, right?
+
+126
+00:05:42,489 --> 00:05:46,260
+And so if you include say a bit of software
+
+127
+00:05:46,269 --> 00:05:48,470
+that is public domain and this happens all the time,
+
+128
+00:05:48,959 --> 00:05:52,570
+that bit of software is still technically public domain,
+
+129
+00:05:52,579 --> 00:05:55,920
+but it is part part of an Apache two license project, let's say.
+
+130
+00:05:55,929 --> 00:05:59,600
+And so it's generally understood that the project as a whole is Apache two.
+
+131
+00:05:59,899 --> 00:06:04,320
+If you know, for certain a piece of software is covered by say public domain,
+
+132
+00:06:04,549 --> 00:06:06,600
+you could extract that code
+
+133
+00:06:07,109 --> 00:06:08,140
+and use it
+
+134
+00:06:08,390 --> 00:06:12,299
+because you don't have to give credit for public for un copyrighted stuff,
+
+135
+00:06:12,309 --> 00:06:13,170
+-- basically,
+-- right?
+
+136
+00:06:13,329 --> 00:06:16,290
+An example might be there's like so many implementations
+
+137
+00:06:16,299 --> 00:06:18,279
+-- of GS that floating around or XML
+-- parsers,
+
+138
+00:06:18,290 --> 00:06:20,690
+some of which are public domain like Z
+
+139
+00:06:20,799 --> 00:06:25,579
+Lib is functionally unlicensed if I remember correctly. But anyway,
+
+140
+00:06:25,799 --> 00:06:28,500
+now when you have A I generated stuff
+
+141
+00:06:28,700 --> 00:06:29,570
+to date.
+
+142
+00:06:29,579 --> 00:06:34,190
+The copyright office in the United States has said A I generated content is not co
+
+143
+00:06:34,437 --> 00:06:38,467
+-- writeable, meaning it is functionally public domain work. Yeah,
+-- that may
+
+144
+00:06:38,627 --> 00:06:39,136
+change.
+
+145
+00:06:39,326 --> 00:06:41,247
+And that's another thing is we're just assuming
+
+146
+00:06:41,256 --> 00:06:43,937
+an implicit us centric view of this problem.
+
+147
+00:06:43,946 --> 00:06:45,536
+I have that because I live here
+
+148
+00:06:45,717 --> 00:06:45,976
+but
+
+149
+00:06:46,256 --> 00:06:47,367
+I have that because I live
+
+150
+00:06:47,486 --> 00:06:47,516
+in
+
+151
+00:06:47,837 --> 00:06:47,937
+Canada
+
+152
+00:06:49,617 --> 00:06:50,557
+-- of our foreign trade with
+-- you.
+
+153
+00:06:50,867 --> 00:06:53,416
+You're changed to us whether you like it or not.
+
+154
+00:06:53,986 --> 00:06:54,106
+That's
+
+155
+00:06:54,337 --> 00:06:54,397
+right.
+
+156
+00:06:55,027 --> 00:06:56,856
+But here's the thing, here's where it gets weird.
+
+157
+00:06:56,867 --> 00:06:59,967
+Let's say you generate a bunch of A I art,
+
+158
+00:07:00,136 --> 00:07:01,777
+right? Let's say you make 100 images.
+
+159
+00:07:01,914 --> 00:07:01,944
+The
+
+160
+00:07:02,303 --> 00:07:04,614
+the pictures themselves
+
+161
+00:07:04,834 --> 00:07:06,553
+are not covered by copyright,
+
+162
+00:07:06,563 --> 00:07:08,414
+but now you put them into a collection of
+
+163
+00:07:08,424 --> 00:07:10,933
+works you're calling Kurt's awesome A I pictures,
+
+164
+00:07:10,944 --> 00:07:11,484
+right?
+
+165
+00:07:11,854 --> 00:07:17,414
+The collection of work, the book you just made is copyrightable,
+
+166
+00:07:17,424 --> 00:07:19,164
+but the individual pictures are not.
+
+167
+00:07:19,174 --> 00:07:23,023
+So for example, if I reproduced your book in the same order,
+
+168
+00:07:23,144 --> 00:07:27,014
+you could make a plausible argument that I am violating your copyright
+
+169
+00:07:27,234 --> 00:07:28,334
+even though
+
+170
+00:07:28,563 --> 00:07:30,571
+it is all copyright free images.
+
+171
+00:07:30,580 --> 00:07:32,851
+Now, if I put them in a different order, I'm probably fine.
+
+172
+00:07:32,860 --> 00:07:35,781
+And so this is where it gets really weird and complicated and the
+
+173
+00:07:35,790 --> 00:07:39,561
+law has not fully weighed in on all of this stuff yet.
+
+174
+00:07:39,781 --> 00:07:41,960
+Well, I mean, it goes back to the phone book argument, right?
+
+175
+00:07:41,971 --> 00:07:43,661
+Where the phone book is copyrighted,
+
+176
+00:07:43,700 --> 00:07:47,140
+but the phone numbers and names and addresses are simple facts.
+
+177
+00:07:47,151 --> 00:07:47,770
+-- That,
+-- that's right.
+
+178
+00:07:47,911 --> 00:07:50,121
+You can't exactly copyright.
+
+179
+00:07:50,281 --> 00:07:52,270
+That's right. That's right. Facts can't be copyrighted.
+
+180
+00:07:52,281 --> 00:07:56,071
+But if you put the facts in a certain order now you can copyright that. Exactly. Ok.
+
+181
+00:07:56,210 --> 00:07:56,651
+Ok.
+
+182
+00:07:56,989 --> 00:08:00,109
+So now the, the other piece of that though I want to touch on is
+
+183
+00:08:00,220 --> 00:08:03,790
+the question becomes, I'm using A I generated code,
+
+184
+00:08:04,019 --> 00:08:08,450
+how is A I generated code better than an open source project with one maintainer?
+
+185
+00:08:08,709 --> 00:08:10,089
+And I think it's not.
+
+186
+00:08:10,380 --> 00:08:12,640
+And here's my explanation behind that.
+
+187
+00:08:12,929 --> 00:08:16,589
+When we think of open source, we generally think of the
+
+188
+00:08:16,809 --> 00:08:19,769
+kind of larger commons
+
+189
+00:08:20,109 --> 00:08:22,929
+community universe where you have like
+
+190
+00:08:23,089 --> 00:08:23,730
+herd immunity.
+
+191
+00:08:24,130 --> 00:08:24,140
+I
+
+192
+00:08:24,260 --> 00:08:26,350
+call it, well, let's just call it herd immunity, right?
+
+193
+00:08:26,359 --> 00:08:28,970
+You have multiple developers, lots of users.
+
+194
+00:08:29,089 --> 00:08:32,700
+So you end up in a situation where let's say there is a security issue,
+
+195
+00:08:32,710 --> 00:08:33,969
+there is a backdoor,
+
+196
+00:08:34,081 --> 00:08:35,052
+there is something
+
+197
+00:08:35,291 --> 00:08:37,351
+some of the people will get hit by it.
+
+198
+00:08:37,520 --> 00:08:39,780
+But then we will, it's kind of like the immune system, right?
+
+199
+00:08:39,791 --> 00:08:44,062
+Like the virus kills some of your cells before your body realizes. Oh, holy crap.
+
+200
+00:08:44,072 --> 00:08:46,481
+We gotta go take care of this thing, right? In, in,
+
+201
+00:08:46,642 --> 00:08:48,291
+in a pandemic type situation,
+
+202
+00:08:48,302 --> 00:08:50,942
+a bunch of people get sick and die first and then we're like, oh crap,
+
+203
+00:08:50,952 --> 00:08:52,221
+we have to figure this out.
+
+204
+00:08:52,512 --> 00:08:54,981
+So anyway, if you have one open source developer, you could,
+
+205
+00:08:54,992 --> 00:08:56,622
+you could make the plausible argument
+
+206
+00:08:56,781 --> 00:08:59,331
+that people aren't looking at this. Right. There's not
+
+207
+00:08:59,494 --> 00:09:01,484
+-- eyeballs
+-- and it's actually more subtle than that.
+
+208
+00:09:01,494 --> 00:09:03,994
+Not only are people not looking at this and there's not enough eyeballs
+
+209
+00:09:04,004 --> 00:09:07,314
+for the sake of argument if that developer is away on vacation.
+
+210
+00:09:07,504 --> 00:09:09,994
+How do you update the source code? Right. Right. Well, that's just it.
+
+211
+00:09:10,004 --> 00:09:12,903
+So, even if somebody is willing to write a patch and submit it now, what?
+
+212
+00:09:12,914 --> 00:09:14,674
+And, and for example, we've seen this happen,
+
+213
+00:09:14,684 --> 00:09:17,754
+like youtube DL is going through this right now where they've refused to
+
+214
+00:09:17,763 --> 00:09:21,124
+ship an update for months because apparently their C I CD system is broken
+
+215
+00:09:21,283 --> 00:09:22,473
+and it's also,
+
+216
+00:09:22,763 --> 00:09:24,633
+there's been a change in youtube's back end that
+
+217
+00:09:24,825 --> 00:09:28,495
+breaks the software. And so there's a one line patch you need to do to make it all work.
+
+218
+00:09:28,505 --> 00:09:30,606
+-- Oh, that's
+-- right. You, you talked about this a couple of weeks ago
+
+219
+00:09:30,866 --> 00:09:34,616
+and so like, do we? Well, OK, if I fork it now, how do I tell the community? Right.
+
+220
+00:09:34,625 --> 00:09:36,075
+We, we talked about this on a previous show.
+
+221
+00:09:36,106 --> 00:09:37,825
+So I'm just going to point out that it's not,
+
+222
+00:09:37,835 --> 00:09:40,375
+it's not just about getting the one developer who
+
+223
+00:09:40,385 --> 00:09:42,245
+understands the code base to write a code patch.
+
+224
+00:09:42,416 --> 00:09:43,685
+You could have the code patch,
+
+225
+00:09:43,926 --> 00:09:46,515
+but you still need to get it checked in, you need to get a release cut,
+
+226
+00:09:46,526 --> 00:09:50,125
+you need to get a change log and notification to people and all that stuff done.
+
+227
+00:09:50,400 --> 00:09:50,770
+And
+
+228
+00:09:50,950 --> 00:09:51,520
+that's
+
+229
+00:09:51,719 --> 00:09:53,469
+where having more than one developer.
+
+230
+00:09:53,479 --> 00:09:56,010
+Well, that's just, that's just one developer, multiple users, right?
+
+231
+00:09:56,130 --> 00:09:59,330
+When you have A I generated code, you probably have one developer,
+
+232
+00:09:59,340 --> 00:10:03,890
+the A I and one user you and so there's going to be bugs and you're not
+
+233
+00:10:03,900 --> 00:10:10,049
+going to find many of them because you're not going to do the crazy herd immunity,
+
+234
+00:10:10,210 --> 00:10:14,719
+flexing of this code. You're going to exercise kind of the one thing you need to do.
+
+235
+00:10:14,729 --> 00:10:16,039
+And so that's where I,
+
+236
+00:10:16,132 --> 00:10:19,442
+I think anyone claiming that one developer open source is somehow
+
+237
+00:10:19,453 --> 00:10:22,593
+dangerous but then is willing to use A I generated code.
+
+238
+00:10:22,603 --> 00:10:27,302
+-- You are a hypocrite is my comment
+-- there. I would extend that to also then
+
+239
+00:10:27,403 --> 00:10:31,122
+anybody that writes their own code is by definition a one developer code shop,
+
+240
+00:10:31,153 --> 00:10:32,973
+you totally are 100%.
+
+241
+00:10:33,013 --> 00:10:34,882
+And the thing is that's fine for internal stuff.
+
+242
+00:10:34,893 --> 00:10:39,232
+Like I have a bunch of shell scripts that an attacker can attack
+
+243
+00:10:39,333 --> 00:10:41,273
+like technically speaking youtube,
+
+244
+00:10:41,283 --> 00:10:44,695
+I guess could have hack me because I'm interfacing with youtube to download stuff,
+
+245
+00:10:45,015 --> 00:10:46,135
+but that's not gonna happen.
+
+246
+00:10:46,306 --> 00:10:47,515
+Right. Right. And, and
+
+247
+00:10:47,616 --> 00:10:47,906
+that's just
+
+248
+00:10:48,205 --> 00:10:53,935
+-- not a concern.
+-- I, I think the other part of this is when you are developing software,
+
+249
+00:10:54,185 --> 00:10:57,426
+a software team of one while it exists
+
+250
+00:10:57,676 --> 00:10:58,926
+often is
+
+251
+00:10:59,116 --> 00:11:03,166
+not common where you're going to have someone else
+
+252
+00:11:03,176 --> 00:11:07,156
+using or testing your product which changes the dynamic.
+
+253
+00:11:07,166 --> 00:11:07,416
+Right,
+
+254
+00:11:07,960 --> 00:11:13,020
+-- hopefully is key.
+-- But this is I think where A I takes off is it's the same
+
+255
+00:11:13,549 --> 00:11:14,080
+paradigm
+
+256
+00:11:14,229 --> 00:11:15,340
+of spreadsheets
+
+257
+00:11:15,489 --> 00:11:17,940
+in the sense of I have a bunch of data
+
+258
+00:11:18,359 --> 00:11:19,669
+that I need to manipulate to,
+
+259
+00:11:19,989 --> 00:11:20,940
+to create a chart
+
+260
+00:11:21,489 --> 00:11:22,890
+uh once a month for a report.
+
+261
+00:11:22,900 --> 00:11:25,609
+Now, I can go talk to my devs and they're a bunch of surly weirdos
+
+262
+00:11:26,119 --> 00:11:27,299
+and it'll never get done.
+
+263
+00:11:27,309 --> 00:11:31,340
+Or I can kind of jam the data up in a spreadsheet and kind of make it work myself.
+
+264
+00:11:31,349 --> 00:11:33,179
+And that's what people ended up doing by and large
+
+265
+00:11:33,299 --> 00:11:34,859
+and to the point now where
+
+266
+00:11:35,030 --> 00:11:35,619
+to put it bluntly,
+
+267
+00:11:35,630 --> 00:11:38,059
+the world's economy runs on a bunch of Janky spreadsheets
+
+268
+00:11:38,070 --> 00:11:39,820
+that the numbers may or may not be right?
+
+269
+00:11:39,830 --> 00:11:41,330
+-- It
+-- always has, it always has.
+
+270
+00:11:41,919 --> 00:11:46,760
+I don't think this is an apt comparison in this context. I'm not saying A I is bad.
+
+271
+00:11:46,919 --> 00:11:49,679
+I'm just saying it has to be viewed in the proper context.
+
+272
+00:11:49,690 --> 00:11:52,580
+-- But
+-- what I'm trying to point out is some people forget as much as they want to disown
+
+273
+00:11:52,710 --> 00:11:54,099
+the quality of A I
+
+274
+00:11:54,400 --> 00:11:58,460
+and users given a choice between getting something Janky and done
+
+275
+00:11:58,979 --> 00:12:00,179
+and scratching their itch
+
+276
+00:12:00,400 --> 00:12:03,539
+versus having to wait or talk to the devs or get a budget.
+
+277
+00:12:03,549 --> 00:12:06,820
+This is the topic that we were going to get to eventually,
+
+278
+00:12:07,030 --> 00:12:08,169
+right? Where
+
+279
+00:12:08,599 --> 00:12:12,739
+I'm going to throw the scorecard project under the bus a little bit here in
+
+280
+00:12:12,900 --> 00:12:14,179
+this context
+
+281
+00:12:14,440 --> 00:12:15,049
+and
+
+282
+00:12:15,390 --> 00:12:19,380
+when you are a developer or you're an organization doing something,
+
+283
+00:12:19,390 --> 00:12:23,169
+building a product, building a service, providing a service, whatever, right?
+
+284
+00:12:23,179 --> 00:12:26,179
+There's every, every company has their, their thing they do.
+
+285
+00:12:26,229 --> 00:12:30,140
+If you look at something like open source open SSF scorecard,
+
+286
+00:12:30,429 --> 00:12:34,380
+and you might say, oh, this open source project has a score of, of negative 12.
+
+287
+00:12:34,390 --> 00:12:36,049
+And it's obviously terrible.
+
+288
+00:12:36,510 --> 00:12:40,549
+You can't use it if it's the only library that does what you need it to do.
+
+289
+00:12:40,559 --> 00:12:42,969
+Your developers literally don't care,
+
+290
+00:12:43,150 --> 00:12:46,880
+they're going to use it and here's the thing and here's how this works out.
+
+291
+00:12:46,960 --> 00:12:49,530
+If you're a security person and you tell your developers,
+
+292
+00:12:49,539 --> 00:12:52,210
+you can't use any project that has a score less than this,
+
+293
+00:12:52,340 --> 00:12:52,650
+right?
+
+294
+00:12:52,659 --> 00:12:56,359
+And now this, this used to happen back in the days when open source was brand new
+
+295
+00:12:56,580 --> 00:12:57,679
+companies would say no
+
+296
+00:12:57,890 --> 00:12:58,770
+open source in the product
+
+297
+00:12:59,200 --> 00:13:00,229
+developers don't say,
+
+298
+00:13:00,239 --> 00:13:03,609
+oh I just won't use this thing that exactly solves the problem I have
+
+299
+00:13:03,739 --> 00:13:05,159
+-- just cut and paste. That's
+-- right.
+
+300
+00:13:05,229 --> 00:13:09,289
+They find a way like life finds a way is exactly what happens here.
+
+301
+00:13:09,299 --> 00:13:14,409
+And so this is where I find the whole concept of what country is someone from?
+
+302
+00:13:14,419 --> 00:13:18,929
+Did A I generate this code? Is this project scoring? Well, on open source,
+
+303
+00:13:19,590 --> 00:13:24,450
+those are secondary questions to the question of does this solve the problem?
+
+304
+00:13:24,460 --> 00:13:25,330
+I have?
+
+305
+00:13:25,750 --> 00:13:28,510
+Well, it it, I mean, this is exactly like public health.
+
+306
+00:13:28,770 --> 00:13:32,200
+There are some things that we should all be doing like washing
+
+307
+00:13:32,210 --> 00:13:35,419
+our hands with soap once in a while brushing our teeth,
+
+308
+00:13:35,450 --> 00:13:36,710
+at least once a day.
+
+309
+00:13:36,739 --> 00:13:38,409
+Flossing. No, I'm serious.
+
+310
+00:13:38,419 --> 00:13:41,940
+-- Like
+-- this is just brush your teeth twice a day, twice a day and floss, floss, once,
+
+311
+00:13:41,950 --> 00:13:42,539
+brush twice.
+
+312
+00:13:42,599 --> 00:13:47,250
+But I mean, I think if we could get everybody to brush their teeth once a day,
+
+313
+00:13:47,520 --> 00:13:51,525
+well, that would be a lot or brushing them that's currently going on. Probably
+
+314
+00:13:51,844 --> 00:13:53,405
+same thing with hand washing with soap.
+
+315
+00:13:53,414 --> 00:13:56,684
+We don't live in that perfect world and we can't make people do things. So then
+
+316
+00:13:57,375 --> 00:13:59,364
+I think the difference is now what do
+
+317
+00:13:59,375 --> 00:14:03,234
+harm reduction strategies look like where we accept?
+
+318
+00:14:03,244 --> 00:14:04,804
+Because the other thing that always drove me nuts about
+
+319
+00:14:04,815 --> 00:14:08,645
+this is I use a thing that has a dependency chain
+
+320
+00:14:08,835 --> 00:14:12,585
+and I can't tweak that dependency chain without horrifically breaking it.
+
+321
+00:14:12,875 --> 00:14:14,284
+Yeah, 100%. That's right.
+
+322
+00:14:14,375 --> 00:14:18,325
+My question I'm always wondering about is what does harm reduction look like. And so
+
+323
+00:14:18,650 --> 00:14:20,159
+uh a great example is,
+
+324
+00:14:20,510 --> 00:14:21,090
+well,
+
+325
+00:14:21,369 --> 00:14:24,090
+what if you get your devs to ship the product once or
+
+326
+00:14:24,099 --> 00:14:28,150
+twice a week as part of the normal just getting features out?
+
+327
+00:14:28,460 --> 00:14:31,169
+And now that means you have the capability of getting a security fix
+
+328
+00:14:31,179 --> 00:14:33,630
+out a lot quicker than if you only ship once a quarter.
+
+329
+00:14:33,640 --> 00:14:37,390
+Not necessarily, that's not true at all. OK? So I've got a great example of this.
+
+330
+00:14:37,479 --> 00:14:42,070
+I have a project I created that uses React. OK?
+
+331
+00:14:42,510 --> 00:14:44,570
+And I did the end,
+
+332
+00:14:44,580 --> 00:14:47,770
+there's a tool called NPX which I don't even know what that stands for.
+
+333
+00:14:47,780 --> 00:14:49,000
+But it, it will like
+
+334
+00:14:49,140 --> 00:14:51,299
+I could type like I think it's NPX something.
+
+335
+00:14:51,309 --> 00:14:55,570
+React something and it creates the initial skeleton project for me. OK?
+
+336
+00:14:55,580 --> 00:14:57,440
+I create a React project.
+
+337
+00:14:57,580 --> 00:15:02,010
+This is using the, we'll say current latest accepted versions of
+
+338
+00:15:02,340 --> 00:15:04,369
+React stuff and
+
+339
+00:15:04,580 --> 00:15:06,409
+I build my project
+
+340
+00:15:06,859 --> 00:15:07,520
+and
+
+341
+00:15:07,719 --> 00:15:10,520
+it installs 1500 dependencies.
+
+342
+00:15:11,289 --> 00:15:14,960
+And there are warnings from some of the dependencies that say things like this
+
+343
+00:15:14,969 --> 00:15:18,159
+dependency is deprecated and it is going to stop working in the future.
+
+344
+00:15:18,349 --> 00:15:21,809
+Like those are literally warnings when I do this. Now.
+
+345
+00:15:21,820 --> 00:15:25,119
+If you are a project, it doesn't matter if you're deploying multiple times a day,
+
+346
+00:15:25,130 --> 00:15:27,299
+you need to be upgrading everything constantly,
+
+347
+00:15:27,309 --> 00:15:30,880
+but you can't upgrade everything because everything is hidden behind
+
+348
+00:15:30,969 --> 00:15:34,650
+the 12 react packages that and turn into 1500 reactions.
+
+349
+00:15:34,695 --> 00:15:36,715
+Think well, yeah, react to stuff.
+
+350
+00:15:36,724 --> 00:15:40,784
+And so even if you say we're going to deploy once a day that guarantees nothing.
+
+351
+00:15:40,794 --> 00:15:41,955
+No, no, that's
+
+352
+00:15:42,085 --> 00:15:43,244
+not the point I was trying to make
+
+353
+00:15:43,354 --> 00:15:45,645
+the point I'm trying to make is I'm trying to get
+
+354
+00:15:45,655 --> 00:15:49,825
+my devs to build capabilities that actually benefit us beyond security
+
+355
+00:15:49,974 --> 00:15:50,515
+so that
+
+356
+00:15:50,775 --> 00:15:53,544
+it potentially has a security benefit.
+
+357
+00:15:53,645 --> 00:15:57,955
+It could selling people. I want to spend a million dollars a year
+
+358
+00:15:58,085 --> 00:16:00,025
+to go from a quarterly deployment of the software
+
+359
+00:16:00,034 --> 00:16:02,455
+to a monthly deployment of the software for security.
+
+360
+00:16:02,815 --> 00:16:04,315
+You will not get that million dollars.
+
+361
+00:16:05,020 --> 00:16:09,140
+I want to spend a million dollars to get our quarterly deployments down
+
+362
+00:16:09,150 --> 00:16:13,599
+to monthly deployments so we can get features out to paying customers faster.
+
+363
+00:16:13,609 --> 00:16:15,739
+-- Oh, now we're having a discussion
+-- maybe.
+
+364
+00:16:15,750 --> 00:16:17,559
+-- I mean, a million dollars is still a lot
+-- but,
+
+365
+00:16:17,570 --> 00:16:19,640
+but they're not going to say no right off the bat.
+
+366
+00:16:19,650 --> 00:16:22,280
+Right. That's fair. That's fair. They might say no later on.
+
+367
+00:16:22,440 --> 00:16:22,840
+But
+
+368
+00:16:23,059 --> 00:16:25,179
+there's now the potential for a discussion and,
+
+369
+00:16:25,190 --> 00:16:28,130
+and that's the kind of thing I'm talking about is like, I, I think about
+
+370
+00:16:28,390 --> 00:16:31,419
+natural disasters and stuff and for example, the electrical system,
+
+371
+00:16:31,489 --> 00:16:34,559
+we no longer have all these extra repair crews
+
+372
+00:16:34,859 --> 00:16:37,479
+where when you have hurricanes down in the US,
+
+373
+00:16:37,489 --> 00:16:39,739
+you have repair crews from Canada going down,
+
+374
+00:16:40,400 --> 00:16:42,570
+right? You kind of have these mutual aid agreements.
+
+375
+00:16:42,859 --> 00:16:44,849
+And so the theory is, well, hopefully,
+
+376
+00:16:44,950 --> 00:16:45,599
+you know, in the,
+
+377
+00:16:45,609 --> 00:16:48,969
+in the summer we have hurricanes in the US and in winter we have ice storms in Canada.
+
+378
+00:16:48,979 --> 00:16:50,650
+So in winter when there's ice storms in Canada,
+
+379
+00:16:50,659 --> 00:16:53,080
+we literally had repair crews from like Texas.
+
+380
+00:16:53,349 --> 00:16:55,729
+But thank you. It's, it's a heck of a drive
+
+381
+00:16:56,000 --> 00:16:59,500
+and it's chilly. So bring some warm clothes and, you know, we got you some sandwiches
+
+382
+00:17:01,099 --> 00:17:01,630
+and, uh,
+
+383
+00:17:01,640 --> 00:17:03,599
+that's a more efficient way of doing it and
+
+384
+00:17:03,609 --> 00:17:05,810
+trying to get an electrical company to be like,
+
+385
+00:17:05,819 --> 00:17:08,069
+oh, we'll just have 10% more repair crews, you know,
+
+386
+00:17:08,079 --> 00:17:09,410
+just in case for hurricane season,
+
+387
+00:17:10,078 --> 00:17:12,749
+-- that's not gonna happen. No,
+-- no, for sure.
+
+388
+00:17:12,828 --> 00:17:12,868
+But
+
+389
+00:17:13,428 --> 00:17:15,739
+you know what, let's build a mutual aid
+
+390
+00:17:16,009 --> 00:17:18,779
+pact society across North America
+
+391
+00:17:18,979 --> 00:17:22,659
+-- that has worked.
+-- I want you to tie this to Open SSF scorecard.
+
+392
+00:17:22,667 --> 00:17:27,259
+-- It goes
+-- back to harm reduction. Open SSF is that historical of this project? Score
+
+393
+00:17:27,654 --> 00:17:29,043
+seven or Flipper
+
+394
+00:17:29,384 --> 00:17:32,433
+Gibbet or green or blue? Like, I don't even know what these numbers mean.
+
+395
+00:17:32,553 --> 00:17:35,313
+Right. That's, yeah, that's, that's part of it. No one knows.
+
+396
+00:17:35,323 --> 00:17:38,443
+There are also some projects where it's like, oh, they don't have a test framework.
+
+397
+00:17:38,553 --> 00:17:38,933
+Well,
+
+398
+00:17:39,244 --> 00:17:41,053
+does that really matter if it's like a
+
+399
+00:17:41,213 --> 00:17:44,354
+thing called American date that converts a date to an American date format?
+
+400
+00:17:45,719 --> 00:17:50,199
+No, I right. Like it matters for G zip and Tar Absolutely.
+
+401
+00:17:50,209 --> 00:17:53,140
+You need to have a horrific set of tests to make
+
+402
+00:17:53,150 --> 00:17:56,079
+sure you don't get all these weird bypasses in theory.
+
+403
+00:17:56,089 --> 00:17:56,560
+I mean,
+
+404
+00:17:56,810 --> 00:17:57,359
+that's the thing.
+
+405
+00:17:57,369 --> 00:18:00,869
+What does the scorecard even mean the thing I've never seen with the Os SF
+
+406
+00:18:00,880 --> 00:18:05,420
+is they don't actually do they give concrete advice on if the score is this,
+
+407
+00:18:05,430 --> 00:18:06,579
+then you need to do this?
+
+408
+00:18:06,589 --> 00:18:07,040
+Yes.
+
+409
+00:18:07,569 --> 00:18:08,339
+Oh, they do.
+
+410
+00:18:08,349 --> 00:18:11,780
+No, not, not in the sense of what the project needs to do, but the user needs to,
+
+411
+00:18:12,250 --> 00:18:15,469
+-- there's nothing for users, there's nothing users can do.
+-- That's what I'm saying.
+
+412
+00:18:15,479 --> 00:18:15,729
+Like,
+
+413
+00:18:15,859 --> 00:18:19,420
+like they don't say if it scores below 20 never use the software.
+
+414
+00:18:19,430 --> 00:18:20,939
+No, they just say this is a 20
+
+415
+00:18:21,189 --> 00:18:22,739
+here's what you can do to increase the score.
+
+416
+00:18:22,750 --> 00:18:26,239
+-- But, and that's the thing, you can't give that advice.
+-- Here's the other part of it.
+
+417
+00:18:26,250 --> 00:18:29,199
+That's really funny is most of the major
+
+418
+00:18:29,209 --> 00:18:32,300
+security events of the last probably 20 years
+
+419
+00:18:32,489 --> 00:18:33,280
+were in
+
+420
+00:18:33,719 --> 00:18:36,449
+projects that would have scored relatively high at
+
+421
+00:18:36,849 --> 00:18:39,780
+scorecard because the reality is they're well used
+
+422
+00:18:39,790 --> 00:18:42,400
+project like Log for J was in everything.
+
+423
+00:18:42,410 --> 00:18:46,900
+-- Log for J didn't have an amazing score, but they did a lot of stuff.
+-- Right.
+
+424
+00:18:47,020 --> 00:18:49,469
+Well, it's just a part of a basic maturity.
+
+425
+00:18:49,479 --> 00:18:50,290
+It's, and see that thing,
+
+426
+00:18:50,300 --> 00:18:54,939
+it's not even security so much as just basic maturity of using C I CD pipelines.
+
+427
+00:18:54,949 --> 00:18:59,060
+-- Having tests, having a bug reporter.
+-- Here's what I really want to know and no one's
+
+428
+00:18:59,165 --> 00:19:01,954
+on this yet that I'm aware of, take all these scores
+
+429
+00:19:02,155 --> 00:19:08,185
+and then look at like how much effort have these projects created
+
+430
+00:19:08,204 --> 00:19:12,165
+or how many problems have these projects created based upon the score.
+
+431
+00:19:12,175 --> 00:19:14,795
+My suspicion is the higher scoring a project is
+
+432
+00:19:14,805 --> 00:19:19,425
+the more impactful security vulnerabilities in an RT organization.
+
+433
+00:19:19,435 --> 00:19:22,084
+And so I think it's the inverse of it's easy to
+
+434
+00:19:22,094 --> 00:19:24,704
+say projects with low scores are bad for me to run
+
+435
+00:19:25,180 --> 00:19:25,640
+when
+
+436
+00:19:26,069 --> 00:19:28,989
+they're probably not good for a variety of reasons.
+
+437
+00:19:29,099 --> 00:19:32,699
+But I have a suspicion the score is completely irrelevant
+
+438
+00:19:32,979 --> 00:19:36,689
+-- in the context we think it matters in.
+-- Let's take it to its logical extreme.
+
+439
+00:19:36,699 --> 00:19:39,599
+How would Microsoft and their software development
+
+440
+00:19:39,609 --> 00:19:41,459
+practices generally score with an OS F
+
+441
+00:19:41,709 --> 00:19:44,319
+scorecard? Well, basically 100% because
+
+442
+00:19:44,569 --> 00:19:46,770
+do they have a security team? Oh, yeah,
+
+443
+00:19:47,060 --> 00:19:50,079
+they have blue team, red team. They, they have a,
+
+444
+00:19:50,199 --> 00:19:51,569
+they have their own conference.
+
+445
+00:19:52,160 --> 00:19:52,650
+Right. Like,
+
+446
+00:19:52,939 --> 00:19:55,339
+they have a leader board of all the people finding bugs in
+
+447
+00:19:55,349 --> 00:19:58,709
+their products and yet Windows is still cranking out Microsoft Tuesday.
+
+448
+00:19:58,890 --> 00:19:59,189
+Yeah.
+
+449
+00:19:59,430 --> 00:19:59,709
+Right.
+
+450
+00:19:59,859 --> 00:20:03,630
+And is it, you know, are, windows, are some of these windows bugs impactful? Yeah.
+
+451
+00:20:03,640 --> 00:20:04,459
+A little bit.
+
+452
+00:20:06,900 --> 00:20:07,660
+That's just it.
+
+453
+00:20:07,829 --> 00:20:10,839
+That's what, that's what amuses me over things like this is
+
+454
+00:20:10,979 --> 00:20:13,280
+what value do these scores bring?
+
+455
+00:20:13,290 --> 00:20:16,119
+Now, I see this all the time though, where you talk to a company,
+
+456
+00:20:16,130 --> 00:20:17,800
+you talk to someone that's
+
+457
+00:20:18,319 --> 00:20:19,760
+looking to use open source.
+
+458
+00:20:19,770 --> 00:20:23,630
+They want like source composition analysis and they've heard that
+
+459
+00:20:23,680 --> 00:20:27,439
+we should be rating our open source or we'll,
+
+460
+00:20:27,449 --> 00:20:30,630
+we'll tie this into, we should know what countries
+
+461
+00:20:30,760 --> 00:20:34,739
+the developers are from that that are writing this open source, right?
+
+462
+00:20:34,750 --> 00:20:37,150
+Like these are things we want to know
+
+463
+00:20:37,500 --> 00:20:38,229
+and
+
+464
+00:20:38,640 --> 00:20:39,839
+-- the question
+-- kind of,
+
+465
+00:20:40,020 --> 00:20:42,819
+I want a pony that's house stream, but we don't get what you want.
+
+466
+00:20:43,089 --> 00:20:45,540
+No. Look, you can kind of OK,
+
+467
+00:20:46,359 --> 00:20:51,050
+-- we'll, we'll get to that in a second. Let's just
+-- ignore the gross GDPR violation.
+
+468
+00:20:51,060 --> 00:20:53,619
+That would be knowing where your source code comes from.
+
+469
+00:20:53,640 --> 00:20:56,829
+Well, not exactly, it's complicated. OK.
+
+470
+00:20:57,569 --> 00:20:58,569
+Here's what they want,
+
+471
+00:20:58,680 --> 00:20:59,920
+here's what they actually want. OK?
+
+472
+00:21:00,119 --> 00:21:02,989
+OK. First of all, let's touch on the idea of like
+
+473
+00:21:03,280 --> 00:21:05,586
+there are these scores, do they matter?
+
+474
+00:21:05,706 --> 00:21:07,576
+We don't know, we think they might,
+
+475
+00:21:07,745 --> 00:21:11,816
+this is where we get into the issue of an enormous amount
+
+476
+00:21:11,826 --> 00:21:15,855
+of what we're calling security today is what I call crap,
+
+477
+00:21:15,865 --> 00:21:17,855
+a smart person thought was a good idea.
+
+478
+00:21:17,865 --> 00:21:23,816
+There is no foundational research or proof into an enormous
+
+479
+00:21:23,826 --> 00:21:25,686
+amount of what we do is scoring open source.
+
+480
+00:21:25,696 --> 00:21:29,215
+A good idea. I, I can't say it is or isn't, does it seem like a good idea?
+
+481
+00:21:29,352 --> 00:21:31,102
+It absolutely does. Is it?
+
+482
+00:21:31,232 --> 00:21:32,102
+I don't know.
+
+483
+00:21:32,202 --> 00:21:37,371
+So one comment you don't need foundational research to, to say if this is good or bad.
+
+484
+00:21:37,531 --> 00:21:39,531
+But what we should be doing is like you said,
+
+485
+00:21:39,541 --> 00:21:41,671
+taking all these scores and all these projects
+
+486
+00:21:42,121 --> 00:21:45,651
+lining them up against all the vulnerabilities and saying like, well,
+
+487
+00:21:45,661 --> 00:21:46,771
+did this help or not?
+
+488
+00:21:46,932 --> 00:21:49,822
+So some things I would argue are
+
+489
+00:21:50,041 --> 00:21:54,612
+like having a source code repo that is public is probably very good for security.
+
+490
+00:21:55,349 --> 00:21:58,000
+Can I prove it? Well, I would have to do a bunch of research
+
+491
+00:21:58,260 --> 00:21:58,339
+and
+
+492
+00:21:58,479 --> 00:21:59,229
+I can't be bothered
+
+493
+00:21:59,959 --> 00:21:59,989
+and,
+
+494
+00:22:00,670 --> 00:22:03,780
+but the thing is you don't need foundational research to figure out like, oh,
+
+495
+00:22:03,790 --> 00:22:05,979
+we're gonna, you know, here's the medicine we need to use.
+
+496
+00:22:05,989 --> 00:22:08,819
+What you can do is OK. Well, here's a population.
+
+497
+00:22:08,869 --> 00:22:10,400
+Half of them wash their hands with soap,
+
+498
+00:22:10,430 --> 00:22:12,979
+half of them don't who gets more sick on average.
+
+499
+00:22:12,989 --> 00:22:15,060
+Oh, the people who don't wash their hands with soap. Ok.
+
+500
+00:22:15,069 --> 00:22:16,900
+So washing hands with soap appears to
+
+501
+00:22:17,589 --> 00:22:19,689
+and there's the problem though, there's correlation.
+
+502
+00:22:20,020 --> 00:22:22,209
+-- You don't know that it's causative though.
+-- That's right.
+
+503
+00:22:22,219 --> 00:22:25,969
+Like, oh the people who wash their hands live near the pump full of cholera,
+
+504
+00:22:28,170 --> 00:22:30,189
+washing your hands makes you more sick. Everyone,
+
+505
+00:22:31,020 --> 00:22:32,819
+the people washing their hands with soap, live in a
+
+506
+00:22:32,939 --> 00:22:34,979
+big enough city to have a soap store.
+
+507
+00:22:35,170 --> 00:22:35,569
+Right.
+
+508
+00:22:35,780 --> 00:22:38,650
+-- Exactly. Exactly.
+-- And thus public sanitation.
+
+509
+00:22:38,890 --> 00:22:39,849
+Right. And that's the thing. Like
+
+510
+00:22:40,329 --> 00:22:44,790
+it's, I, I feel like it would be really tough to find correlation
+
+511
+00:22:45,140 --> 00:22:46,670
+between some of these things. And
+
+512
+00:22:46,920 --> 00:22:51,630
+I think so again, this is why I go back to the well, are there reasons I can sell this
+
+513
+00:22:51,949 --> 00:22:52,859
+that are not security?
+
+514
+00:22:52,869 --> 00:22:56,660
+So for example, having a testing framework so that not for security,
+
+515
+00:22:56,670 --> 00:22:59,709
+but just so we break stuff less often and more importantly.
+
+516
+00:22:59,890 --> 00:23:03,180
+So you can confidently make changes to the software
+
+517
+00:23:03,630 --> 00:23:04,369
+and and
+
+518
+00:23:04,699 --> 00:23:05,859
+not break stuff
+
+519
+00:23:06,170 --> 00:23:08,239
+because that thing, once you have a really good testing framework,
+
+520
+00:23:08,250 --> 00:23:09,550
+you can add features like a
+
+521
+00:23:09,949 --> 00:23:11,979
+chimpanzee on drugs
+
+522
+00:23:12,229 --> 00:23:14,560
+and know if it's gonna make it worse or better.
+
+523
+00:23:15,109 --> 00:23:18,420
+That's our new name for A I now, right? Chimpanzee on drugs.
+
+524
+00:23:18,560 --> 00:23:18,849
+Basically,
+
+525
+00:23:19,130 --> 00:23:19,859
+it's what it is
+
+526
+00:23:21,270 --> 00:23:21,310
+hard,
+
+527
+00:23:21,599 --> 00:23:22,420
+it just doesn't,
+
+528
+00:23:23,260 --> 00:23:23,319
+you
+
+529
+00:23:23,420 --> 00:23:24,339
+-- know.
+-- OK. OK.
+
+530
+00:23:24,520 --> 00:23:24,920
+Hold on.
+
+531
+00:23:26,530 --> 00:23:28,989
+Yes, I think you are correct. And I think
+
+532
+00:23:29,310 --> 00:23:33,069
+the challenge you see with something like scorecard is today,
+
+533
+00:23:33,489 --> 00:23:38,209
+the value in it is viewed almost exclusively as security.
+
+534
+00:23:38,319 --> 00:23:41,500
+This harkens itself back to the I think I talked about this a
+
+535
+00:23:41,510 --> 00:23:45,219
+couple episodes ago when I went to the open source summit in Vancouver,
+
+536
+00:23:45,229 --> 00:23:49,829
+I went to a salsa talk where where people will make claims,
+
+537
+00:23:50,045 --> 00:23:54,275
+extraordinary claims about some of these frameworks and some of these projects
+
+538
+00:23:54,415 --> 00:23:59,395
+and the reality is you can't back that up at all. And I think these claims are
+
+539
+00:23:59,545 --> 00:24:01,224
+probably dangerous.
+
+540
+00:24:01,425 --> 00:24:02,064
+All right. All right.
+
+541
+00:24:02,074 --> 00:24:04,454
+I want to move us on to the last bit, which is the,
+
+542
+00:24:04,464 --> 00:24:06,625
+who is writing the software you're using?
+
+543
+00:24:06,930 --> 00:24:09,770
+-- And there's two pieces
+-- to this. They're all signed off, commits. It's fine.
+
+544
+00:24:09,969 --> 00:24:11,459
+They declared that they wrote it. It's all
+
+545
+00:24:11,670 --> 00:24:11,699
+good.
+
+546
+00:24:12,030 --> 00:24:12,060
+Yeah.
+
+547
+00:24:12,170 --> 00:24:13,699
+No, for real. Ok.
+
+548
+00:24:14,040 --> 00:24:17,319
+So from the legal perspective, basically,
+
+549
+00:24:17,329 --> 00:24:21,189
+what's being asked is does anyone with a.cn email address
+
+550
+00:24:22,140 --> 00:24:25,410
+-- committed to this?
+-- They all have qq.com email addresses.
+
+551
+00:24:25,420 --> 00:24:28,579
+This this actually comes up a lot on the certificate authority mailing list,
+
+552
+00:24:28,589 --> 00:24:31,660
+for example, basically, apparently nobody from China can email Google
+
+553
+00:24:32,479 --> 00:24:33,640
+Bliss and vice versa.
+
+554
+00:24:33,750 --> 00:24:35,079
+Yeah. So they all use like
+
+555
+00:24:35,260 --> 00:24:37,250
+Wonky gmail.com accounts. Oh,
+
+556
+00:24:37,469 --> 00:24:39,800
+so they're literally using Gmail.
+
+557
+00:24:40,689 --> 00:24:45,280
+So you basically have no good way to determine if this person is from.
+
+558
+00:24:45,290 --> 00:24:47,969
+That's the thing I keep bringing up and they're like, oh, ok, shut up. It's fine.
+
+559
+00:24:47,979 --> 00:24:48,400
+And I'm like,
+
+560
+00:24:48,410 --> 00:24:50,400
+this is some random like literally there are
+
+561
+00:24:50,410 --> 00:24:52,614
+gmail addresses on the certificate authority mailing list
+
+562
+00:24:52,885 --> 00:24:55,655
+that have zero occurrences in Google search.
+
+563
+00:24:55,905 --> 00:24:57,364
+So I didn't know this.
+
+564
+00:24:57,385 --> 00:25:01,895
+So this is why those cas aren't mailing that list with their email
+
+565
+00:25:01,905 --> 00:25:05,074
+address because their email address can't get to where it needs to go.
+
+566
+00:25:05,084 --> 00:25:05,655
+You're saying,
+
+567
+00:25:05,854 --> 00:25:07,665
+I guess the great firewall of China or something
+
+568
+00:25:08,074 --> 00:25:11,175
+interesting. So, so ironically,
+
+569
+00:25:12,150 --> 00:25:16,780
+-- there's probably a low
+-- now they're not spoofing it because every time it comes up,
+
+570
+00:25:16,790 --> 00:25:19,530
+they've managed to prove like by either putting in their Bugzilla entry or
+
+571
+00:25:19,640 --> 00:25:23,969
+one of them even said a DNS record saying like straight up this gmail.com account.
+
+572
+00:25:24,000 --> 00:25:29,270
+If you dig txt the C A, it's like this Gmail address is allowed to speak for us. OK?
+
+573
+00:25:29,280 --> 00:25:30,089
+But, but
+
+574
+00:25:30,339 --> 00:25:33,760
+when we're talking about identifying country
+
+575
+00:25:33,770 --> 00:25:35,939
+of origin of open source contributions,
+
+576
+00:25:36,099 --> 00:25:37,609
+if many of the
+
+577
+00:25:37,780 --> 00:25:41,719
+contributors are using a gmail.com address,
+
+578
+00:25:42,530 --> 00:25:46,420
+it becomes significantly harder to I I mean, I had the assumption
+
+579
+00:25:46,859 --> 00:25:48,910
+that many of the Chinese
+
+580
+00:25:49,239 --> 00:25:51,430
+contributors were using.cn email.
+
+581
+00:25:51,859 --> 00:25:53,910
+The biggest, honestly, the biggest
+
+582
+00:25:54,060 --> 00:25:57,670
+Chinese email address provider you will generally see is the qq.com thing,
+
+583
+00:25:58,189 --> 00:26:00,199
+right? Where it's and it's their mobile number.
+
+584
+00:26:00,550 --> 00:26:01,000
+Ok,
+
+585
+00:26:01,500 --> 00:26:02,560
+qq.com, right?
+
+586
+00:26:03,050 --> 00:26:04,439
+Because when I first started seeing those I was
+
+587
+00:26:04,449 --> 00:26:06,250
+like these are clearly spam sign up and then I
+
+588
+00:26:06,599 --> 00:26:10,300
+it's like no, this is like a legit Chinese mobile provider,
+
+589
+00:26:10,310 --> 00:26:12,229
+-- email address thing of a jigger, blah,
+-- blah, blah.
+
+590
+00:26:12,619 --> 00:26:14,689
+But no like that's an example where it
+
+591
+00:26:14,699 --> 00:26:17,959
+would be very easy to identify that contributor as
+
+592
+00:26:18,079 --> 00:26:20,280
+having China as their country of origin, right?
+
+593
+00:26:20,589 --> 00:26:21,680
+If they have a random gmail,
+
+594
+00:26:22,145 --> 00:26:23,185
+I can't do that right?
+
+595
+00:26:24,005 --> 00:26:24,344
+You can
+
+596
+00:26:24,744 --> 00:26:25,665
+you can maybe make,
+
+597
+00:26:25,675 --> 00:26:29,974
+I mean they might say I'm from China in their their email signature or something.
+
+598
+00:26:30,224 --> 00:26:32,925
+And then the question becomes like, ok, are we talking citizenship,
+
+599
+00:26:32,935 --> 00:26:36,175
+country of origin, country of residence?
+
+600
+00:26:36,385 --> 00:26:37,734
+Like these are all different things like,
+
+601
+00:26:37,744 --> 00:26:40,555
+one thing I remember asking at the beginning of GDPR was like, ok,
+
+602
+00:26:40,564 --> 00:26:43,694
+so GDPR applies to European citizens and they're like, correct.
+
+603
+00:26:43,704 --> 00:26:45,645
+I'm like, ok, what about European citizens
+
+604
+00:26:46,160 --> 00:26:47,689
+going on vacation overseas?
+
+605
+00:26:47,849 --> 00:26:49,719
+-- No,
+-- it covers that stuff. It covers
+
+606
+00:26:49,880 --> 00:26:52,079
+anyone in Europe or European citizens.
+
+607
+00:26:52,089 --> 00:26:55,890
+-- Does it cover me as a tourist in Europe for a week?
+-- Yes. Yes. You're covered by that
+
+608
+00:26:56,140 --> 00:26:59,709
+-- the week I'm there or afterwards as
+-- well. I don't know the answer to that.
+
+609
+00:26:59,959 --> 00:27:01,790
+And that's where people like Kurt shut up. It's fine.
+
+610
+00:27:01,869 --> 00:27:04,650
+-- I
+-- mean, I bet the lawyers in Europe know the answer to this.
+
+611
+00:27:04,660 --> 00:27:06,589
+My suspicion is it still covers you.
+
+612
+00:27:06,750 --> 00:27:10,770
+-- But the
+-- point is that's a relatively clean and clear example. Whereas
+
+613
+00:27:10,969 --> 00:27:15,140
+what you actually want and this goes back to the show intro, 12 M 270
+
+614
+00:27:15,540 --> 00:27:16,180
+is
+
+615
+00:27:17,109 --> 00:27:18,130
+foreign agents
+
+616
+00:27:19,109 --> 00:27:21,369
+because you could be a foreign agent for China
+
+617
+00:27:21,589 --> 00:27:23,479
+and be born and bred in America
+
+618
+00:27:23,959 --> 00:27:26,469
+-- and
+-- that happens all the time. And, and that's the point, right?
+
+619
+00:27:26,479 --> 00:27:28,410
+So here's the point of all of that.
+
+620
+00:27:29,130 --> 00:27:31,170
+If I am
+
+621
+00:27:31,349 --> 00:27:36,939
+a malicious actor and the intent fun functionally on all of this is
+
+622
+00:27:37,060 --> 00:27:40,329
+you have organizations wanting to identify,
+
+623
+00:27:40,640 --> 00:27:43,880
+where should we maybe look for malicious intent.
+
+624
+00:27:44,060 --> 00:27:45,930
+If I have malicious intent,
+
+625
+00:27:46,469 --> 00:27:49,900
+I am not going to make any
+
+626
+00:27:50,339 --> 00:27:51,500
+contribution
+
+627
+00:27:51,739 --> 00:27:54,459
+that makes it obvious. I am not like
+
+628
+00:27:54,619 --> 00:27:56,930
+an American in the middle of America
+
+629
+00:27:57,099 --> 00:28:02,939
+and I own a grill and I eat meat like I'm going to go out of my way to look like that.
+
+630
+00:28:02,969 --> 00:28:06,260
+-- You're saying malicious actors might lie.
+-- Exactly.
+
+631
+00:28:06,270 --> 00:28:07,640
+I don't think that's allowed because all the
+
+632
+00:28:07,770 --> 00:28:08,109
+signed off thing,
+
+633
+00:28:09,199 --> 00:28:11,449
+-- you have to set the evil bit in TCP.
+-- If
+
+634
+00:28:11,560 --> 00:28:11,579
+you,
+
+635
+00:28:11,729 --> 00:28:14,760
+this is the other thing that drives me nuts is essentially what they're saying is,
+
+636
+00:28:15,239 --> 00:28:18,260
+or what they're trying to say is this pool of contributors from,
+
+637
+00:28:18,270 --> 00:28:22,239
+for the sake of argument, Canada is statistically safe
+
+638
+00:28:22,599 --> 00:28:24,709
+and this pool of contributors from China is
+
+639
+00:28:24,719 --> 00:28:28,219
+somehow not safe because of government influence,
+
+640
+00:28:28,229 --> 00:28:29,099
+CCP whatever
+
+641
+00:28:29,229 --> 00:28:29,719
+and
+
+642
+00:28:30,000 --> 00:28:31,099
+more to the point,
+
+643
+00:28:31,599 --> 00:28:32,819
+the potential contribute.
+
+644
+00:28:32,829 --> 00:28:36,680
+The the potential value of the contributions from this pool of Chinese developers
+
+645
+00:28:36,989 --> 00:28:37,530
+is
+
+646
+00:28:38,050 --> 00:28:41,369
+not worth running the risk of having an evil contribution.
+
+647
+00:28:41,380 --> 00:28:43,660
+Whereas implicitly this Canadian pool,
+
+648
+00:28:43,729 --> 00:28:47,969
+the the value of contributions will be more than the potential of an evil actor.
+
+649
+00:28:48,599 --> 00:28:48,969
+And
+
+650
+00:28:49,619 --> 00:28:53,250
+this is just wrong on so many levels. I don't even know where to begin.
+
+651
+00:28:53,260 --> 00:28:56,650
+-- No, like I seriously don't know where to begin. We,
+-- we can't begin.
+
+652
+00:28:56,660 --> 00:28:58,599
+I mean, we're, we're, we're running ourselves out of time.
+
+653
+00:28:58,609 --> 00:29:01,319
+And so I don't want to dwell on it too long. I just want to point out the
+
+654
+00:29:01,609 --> 00:29:03,630
+utter absurdity and nonsense
+
+655
+00:29:03,819 --> 00:29:06,119
+of this particular question.
+
+656
+00:29:06,130 --> 00:29:08,479
+-- The problem
+-- is to somebody who says, well,
+
+657
+00:29:08,489 --> 00:29:10,579
+but this works for like military technologies where
+
+658
+00:29:10,589 --> 00:29:13,239
+we restrict crypto exports to these countries.
+
+659
+00:29:13,250 --> 00:29:15,319
+So they can't get a hold of this crypto, right?
+
+660
+00:29:15,410 --> 00:29:17,959
+That actually kind of did work for a few decades.
+
+661
+00:29:18,319 --> 00:29:19,199
+-- That
+-- never worked.
+
+662
+00:29:19,410 --> 00:29:21,400
+-- No,
+-- no, in the fifties and sixties I'm talking
+
+663
+00:29:21,410 --> 00:29:21,760
+about,
+
+664
+00:29:22,020 --> 00:29:25,069
+uh, when everything was hardware to a degree. Sure.
+
+665
+00:29:25,079 --> 00:29:27,349
+That's actually a really good statement when everything was hardware
+
+666
+00:29:28,140 --> 00:29:29,609
+and now it's software so I can just
+
+667
+00:29:30,000 --> 00:29:32,989
+make a copy of it and fire it off to China and they can run it on their own computer.
+
+668
+00:29:33,000 --> 00:29:35,469
+Yeah. I mean, I loved back in the,
+
+669
+00:29:35,689 --> 00:29:39,459
+in the early two thousands, in the late nineties
+
+670
+00:29:40,010 --> 00:29:40,680
+when
+
+671
+00:29:40,939 --> 00:29:45,150
+using Open SSL in the United States was illegal because of the RS A patent.
+
+672
+00:29:45,729 --> 00:29:49,260
+And so me downloading and compiling the Apache web
+
+673
+00:29:49,270 --> 00:29:53,140
+server using Open SSL was technically against patent law.
+
+674
+00:29:53,209 --> 00:29:57,369
+OK. This is old timey story. This is 25 years ago, but I got hired as a contract
+
+675
+00:29:57,540 --> 00:30:02,319
+to assemble a portfolio of open source software for a CD the one in the back of a book.
+
+676
+00:30:02,329 --> 00:30:05,000
+Yeah. Awesome. And I very explicitly
+
+677
+00:30:05,410 --> 00:30:09,390
+did not include anything with the RS, a patented algorithm. Yeah. And
+
+678
+00:30:09,650 --> 00:30:12,510
+oh my God, we spent two months arguing about that where I was like, no,
+
+679
+00:30:12,520 --> 00:30:16,550
+I look here's the list of stuff I, I can basically show you and it's all open.
+
+680
+00:30:16,770 --> 00:30:18,619
+And this is one of the few times where it's all open source.
+
+681
+00:30:18,630 --> 00:30:21,599
+I can actually prove to you that RS A algorithm is not in there.
+
+682
+00:30:21,770 --> 00:30:21,800
+And
+
+683
+00:30:21,930 --> 00:30:23,069
+the publisher,
+
+684
+00:30:23,079 --> 00:30:24,750
+it took a while for them to get over this
+
+685
+00:30:24,760 --> 00:30:28,270
+because II I included a couple of things that had crypto
+
+686
+00:30:28,589 --> 00:30:31,349
+but did not have the RS, a patented algorithm in there.
+
+687
+00:30:32,310 --> 00:30:32,930
+And so
+
+688
+00:30:33,239 --> 00:30:36,050
+the publisher was like, well crypto RS A obviously it,
+
+689
+00:30:36,300 --> 00:30:40,339
+-- I'm like, no, it's not in there again. Open source
+-- here.
+
+690
+00:30:40,459 --> 00:30:42,949
+It was probably covered by some other patent. It's fine.
+
+691
+00:30:43,180 --> 00:30:44,790
+Yeah. But anyway, it's,
+
+692
+00:30:45,160 --> 00:30:46,989
+that's a, that's a good comment is like,
+
+693
+00:30:47,209 --> 00:30:48,550
+because with hardware,
+
+694
+00:30:49,280 --> 00:30:53,329
+I can't just make a copy of it by typing CP space blah, blah
+
+695
+00:30:55,079 --> 00:30:55,260
+work.
+
+696
+00:30:56,160 --> 00:30:56,229
+Yeah.
+
+697
+00:30:56,369 --> 00:30:58,900
+I mean, here's the thing though. It never stopped.
+
+698
+00:30:59,229 --> 00:31:02,020
+The other countries like Russia would get a
+
+699
+00:31:02,030 --> 00:31:03,819
+hold of everything and they would clone it,
+
+700
+00:31:03,869 --> 00:31:04,939
+I mean, guaranteed
+
+701
+00:31:05,089 --> 00:31:06,989
+and, and shave it down and like,
+
+702
+00:31:07,489 --> 00:31:10,660
+but the thing is you'd have to physically acquire one and you can do it harder,
+
+703
+00:31:10,670 --> 00:31:12,680
+you can do inventory management because some of the
+
+704
+00:31:12,689 --> 00:31:15,140
+stuff is just again going away from security,
+
+705
+00:31:15,150 --> 00:31:16,930
+some of this stuff is just really expensive,
+
+706
+00:31:17,989 --> 00:31:18,439
+you know. So,
+
+707
+00:31:18,560 --> 00:31:23,239
+like we might want to do inventory control in these $100 items and not be losing them.
+
+708
+00:31:23,540 --> 00:31:23,709
+Yeah.
+
+709
+00:31:23,979 --> 00:31:25,510
+But going back to this. Yeah. And
+
+710
+00:31:25,719 --> 00:31:26,219
+it's
+
+711
+00:31:26,760 --> 00:31:29,219
+with respect to the bad actor problem.
+
+712
+00:31:29,500 --> 00:31:32,310
+The bad actors are going to do things like
+
+713
+00:31:32,729 --> 00:31:34,560
+set up a Canadian persona.
+
+714
+00:31:34,750 --> 00:31:39,489
+Right. Oh, yeah, for sure. And setting up on a fake online persona is
+
+715
+00:31:39,800 --> 00:31:40,660
+easy
+
+716
+00:31:40,800 --> 00:31:42,819
+hijacking someone else's persona
+
+717
+00:31:43,410 --> 00:31:44,619
+is easy.
+
+718
+00:31:45,560 --> 00:31:47,739
+A perfect example on threads that Kurt
+
+719
+00:31:47,859 --> 00:31:49,260
+Siefried is not me. It's,
+
+720
+00:31:49,369 --> 00:31:50,780
+I'm pretty sure it's west coast Kurt
+
+721
+00:31:50,939 --> 00:31:53,420
+-- siefried. Yeah,
+-- you were complained about this in the last episode.
+
+722
+00:31:53,630 --> 00:31:54,250
+And so,
+
+723
+00:31:54,540 --> 00:31:56,579
+-- you know, like
+-- you're not better.
+
+724
+00:31:56,780 --> 00:32:00,530
+-- Ok. So I wanna, I wanna, I wanna finish this one up.
+-- I am the true Kurt
+
+725
+00:32:00,699 --> 00:32:02,119
+siefried. That is my position.
+
+726
+00:32:02,420 --> 00:32:02,449
+Well,
+
+727
+00:32:02,589 --> 00:32:05,170
+the real Kurt siefried, please stand up.
+
+728
+00:32:07,130 --> 00:32:09,599
+Anyway. Anyway. Oh, my goodness.
+
+729
+00:32:09,810 --> 00:32:13,839
+-- So I want to tie this one all up.
+-- I hope he doesn't listen to the podcast. No.
+
+730
+00:32:13,939 --> 00:32:16,099
+Yeah. Anyway, I want to tie this one all up. Ok.
+
+731
+00:32:16,339 --> 00:32:20,119
+So first we have Red Hat then is open source dying.
+
+732
+00:32:20,130 --> 00:32:22,599
+And now kind of, I wanna, I wanna tie this up with the,
+
+733
+00:32:22,609 --> 00:32:25,619
+the measuring and scoring and use of open source.
+
+734
+00:32:25,630 --> 00:32:26,920
+And I think at the end of the day,
+
+735
+00:32:27,199 --> 00:32:30,290
+none of this is going to matter for the foreseeable future because
+
+736
+00:32:30,300 --> 00:32:34,890
+the reality is open source is used by developers to solve problems
+
+737
+00:32:35,349 --> 00:32:37,719
+and they don't give two craps what the open
+
+738
+00:32:37,729 --> 00:32:40,569
+-- SSF scorecard is
+-- because there's no alternative
+
+739
+00:32:40,640 --> 00:32:40,689
+in,
+
+740
+00:32:40,699 --> 00:32:42,130
+in many cases there isn't.
+
+741
+00:32:42,260 --> 00:32:44,270
+And so what's going to happen is if I'm running a
+
+742
+00:32:44,280 --> 00:32:47,010
+tool that's going to score the open source in my product,
+
+743
+00:32:47,530 --> 00:32:51,560
+I might run the tool and I might say you're using a package that scored very low
+
+744
+00:32:51,790 --> 00:32:53,449
+and the developers, here's what, here's what,
+
+745
+00:32:53,459 --> 00:32:54,959
+here's what the question is going to be.
+
+746
+00:32:54,969 --> 00:32:55,569
+Ok?
+
+747
+00:32:55,579 --> 00:32:59,390
+We can spend $250,000 to replace that with this
+
+748
+00:32:59,400 --> 00:33:01,719
+other package or we can ship the product tomorrow.
+
+749
+00:33:02,050 --> 00:33:03,530
+Guess what's going to win.
+
+750
+00:33:03,650 --> 00:33:05,479
+I mean, we did this a red hat,
+
+751
+00:33:05,709 --> 00:33:08,260
+right? They acquired a company for over $100 million
+
+752
+00:33:08,750 --> 00:33:09,689
+and I'm like, ok,
+
+753
+00:33:09,699 --> 00:33:11,069
+so we're shipping that software on the
+
+754
+00:33:11,079 --> 00:33:12,790
+date that you said we're shipping that software
+
+755
+00:33:13,130 --> 00:33:15,810
+and that's what happened regardless of any security concerns,
+
+756
+00:33:16,420 --> 00:33:19,750
+for sure, because I'm not stupid enough to say, like we're going to block this
+
+757
+00:33:20,849 --> 00:33:21,739
+and, and that's the thing.
+
+758
+00:33:21,750 --> 00:33:24,670
+And so here's my suggestion to all of this is,
+
+759
+00:33:24,680 --> 00:33:29,829
+I think the scorecard has value but not in the way we think of it today.
+
+760
+00:33:29,979 --> 00:33:30,339
+Yeah,
+
+761
+00:33:30,599 --> 00:33:32,189
+I think the value is in,
+
+762
+00:33:33,079 --> 00:33:35,859
+I I think of it as like observ ability where
+
+763
+00:33:35,869 --> 00:33:37,640
+you can look at like your infrastructure and say,
+
+764
+00:33:37,650 --> 00:33:39,209
+oh why is this machine running hot?
+
+765
+00:33:39,219 --> 00:33:40,619
+Is something wrong with that machine?
+
+766
+00:33:40,910 --> 00:33:43,540
+And I think it's the same thing with some of these scores is it's not
+
+767
+00:33:43,550 --> 00:33:47,959
+about like looking at an individual package and saying this package has a low score.
+
+768
+00:33:48,099 --> 00:33:52,780
+It's about connecting all the dots and saying this area of our application
+
+769
+00:33:53,390 --> 00:33:55,859
+doesn't look real good. Why is that?
+
+770
+00:33:55,869 --> 00:33:58,770
+And then you can ask more fundamental questions about, oh,
+
+771
+00:33:59,010 --> 00:34:00,300
+this particular
+
+772
+00:34:00,410 --> 00:34:01,979
+piece of our application
+
+773
+00:34:02,209 --> 00:34:03,709
+isn't well maintained.
+
+774
+00:34:03,839 --> 00:34:06,890
+No one's looking at it like are, are do we need these features?
+
+775
+00:34:06,900 --> 00:34:09,610
+Can we just yank all this stuff and be rid of it?
+
+776
+00:34:09,620 --> 00:34:11,909
+Like are we, are we cutting off a rotten branch?
+
+777
+00:34:11,918 --> 00:34:14,830
+And I think those are the questions and that's the stuff we need to
+
+778
+00:34:14,840 --> 00:34:18,360
+start using these tools for instead of saying like one of my favorites,
+
+779
+00:34:18,370 --> 00:34:23,120
+someone will scan an application and be like, I'm a, I like this CV E needs to be fixed.
+
+780
+00:34:23,129 --> 00:34:23,520
+I'm like,
+
+781
+00:34:23,850 --> 00:34:27,659
+what does that CBE mean in the big picture? Like what do you mean? I'm like,
+
+782
+00:34:27,850 --> 00:34:32,168
+how can I get to that code to exploit it? Like what does that look like?
+
+783
+00:34:32,179 --> 00:34:33,969
+And they're like, I don't, I don't know.
+
+784
+00:34:33,978 --> 00:34:37,649
+I'm like, maybe we should start asking bigger picture questions.
+
+785
+00:34:37,668 --> 00:34:40,728
+I had this constantly with Jackson Data bind and satellite
+
+786
+00:34:40,739 --> 00:34:44,280
+where they did not use those binary de serialization things.
+
+787
+00:34:44,659 --> 00:34:45,850
+And I literally had
+
+788
+00:34:46,388 --> 00:34:47,967
+a higher up at red hat say,
+
+789
+00:34:48,398 --> 00:34:51,809
+but you're saying the customer could modify the product to use that.
+
+790
+00:34:51,819 --> 00:34:52,638
+And I'm like, well,
+
+791
+00:34:52,928 --> 00:34:53,188
+they,
+
+792
+00:34:53,998 --> 00:34:54,368
+I mean,
+
+793
+00:34:54,918 --> 00:34:57,769
+the source goes there, they could do that. And he's like, then we have to fix that.
+
+794
+00:34:57,779 --> 00:34:58,269
+And I'm like,
+
+795
+00:34:58,909 --> 00:35:03,520
+-- I cried,
+-- look, I have a product that ships out to customers
+
+796
+00:35:03,739 --> 00:35:08,489
+and I look at the open. So I look at the vulnerability scans every day
+
+797
+00:35:08,649 --> 00:35:12,020
+-- and I just tell the developers just fix this crap because it's easier than
+-- argument.
+
+798
+00:35:12,120 --> 00:35:14,169
+And that's sometimes what I ended up with.
+
+799
+00:35:14,179 --> 00:35:16,469
+Let's let's fix this cross site scripting because
+
+800
+00:35:16,719 --> 00:35:18,889
+-- it's cheaper.
+-- Well, that's just it. My art
+
+801
+00:35:19,012 --> 00:35:21,072
+isn't, this will make us more secure.
+
+802
+00:35:21,083 --> 00:35:24,113
+My argument is this will keep customers from bugging us.
+
+803
+00:35:24,123 --> 00:35:27,883
+-- It's cheaper than handling all the support requests.
+-- Right. Exactly. Exactly.
+
+804
+00:35:27,893 --> 00:35:28,272
+That.
+
+805
+00:35:28,562 --> 00:35:30,992
+And so it's amusing to me that
+
+806
+00:35:31,193 --> 00:35:33,833
+the vulnerabilities we fix in the product.
+
+807
+00:35:33,843 --> 00:35:36,762
+I, I never make an argument about the security of it.
+
+808
+00:35:36,772 --> 00:35:39,193
+I make the argument of this will keep people.
+
+809
+00:35:40,055 --> 00:35:40,676
+Ironically,
+
+810
+00:35:40,686 --> 00:35:44,176
+it's one of the few times you can actually show a return on investment for that
+
+811
+00:35:44,406 --> 00:35:44,736
+effect.
+
+812
+00:35:45,295 --> 00:35:45,335
+But
+
+813
+00:35:45,466 --> 00:35:45,506
+no,
+
+814
+00:35:45,706 --> 00:35:47,355
+seriously, if it reduces support
+
+815
+00:35:47,656 --> 00:35:48,406
+by 20
+
+816
+00:35:49,016 --> 00:35:49,055
+that's
+
+817
+00:35:49,206 --> 00:35:49,345
+real
+
+818
+00:35:50,176 --> 00:35:50,256
+money.
+
+819
+00:35:50,625 --> 00:35:51,805
+100% 100%
+
+820
+00:35:52,486 --> 00:35:52,656
+anyway.
+
+821
+00:35:53,035 --> 00:35:55,565
+Well, and just to go sideways from it, this is one of the things
+
+822
+00:35:55,875 --> 00:35:59,486
+where I'm focusing on our A I usage policy working group is not,
+
+823
+00:36:00,010 --> 00:36:03,070
+what is it that you want to do to kind of be quote unquote, more secure.
+
+824
+00:36:03,080 --> 00:36:06,000
+It's what do you want to do from an A I usage policy
+
+825
+00:36:06,169 --> 00:36:11,149
+to sort of extract the maximum benefit from A I with sort of the least
+
+826
+00:36:11,739 --> 00:36:15,139
+number of problems and risks and, and gross
+
+827
+00:36:16,449 --> 00:36:18,620
+and potential issues that come from that
+
+828
+00:36:19,020 --> 00:36:23,439
+and also keep things in line with like your, your organization's core values,
+
+829
+00:36:23,449 --> 00:36:23,620
+right?
+
+830
+00:36:23,629 --> 00:36:25,199
+Because I straight up saying in the paper, like,
+
+831
+00:36:25,209 --> 00:36:29,689
+we're not going to talk about the ethics and moral of, of A I replacing jobs.
+
+832
+00:36:29,699 --> 00:36:32,199
+But for some things,
+
+833
+00:36:32,590 --> 00:36:37,425
+having a human do, the work is part of the value like a Rolex watch.
+
+834
+00:36:37,784 --> 00:36:41,495
+But Rolex watches are not mass produced because part
+
+835
+00:36:41,504 --> 00:36:43,995
+of their whole thing is these are Rolex watches.
+
+836
+00:36:44,004 --> 00:36:46,905
+They are made by craftsmen or craftswomen or people,
+
+837
+00:36:46,915 --> 00:36:49,925
+basically people with a high degree of skill
+
+838
+00:36:50,354 --> 00:36:50,995
+and they are,
+
+839
+00:36:51,324 --> 00:36:51,405
+yeah,
+
+840
+00:36:52,024 --> 00:36:52,125
+exactly.
+
+841
+00:36:53,250 --> 00:36:53,850
+And
+
+842
+00:36:53,959 --> 00:36:55,159
+it's funny because
+
+843
+00:36:55,350 --> 00:36:58,469
+people are like, ok, yeah, we, we want to have an A I usage policy now to, like,
+
+844
+00:36:58,479 --> 00:37:02,199
+extract the maximum benefit with and have as few problems as possible.
+
+845
+00:37:02,209 --> 00:37:02,989
+Culturally
+
+846
+00:37:03,370 --> 00:37:06,969
+-- and as a side effect, they'll have slightly better security and less risk.
+-- Cool.
+
+847
+00:37:06,979 --> 00:37:07,320
+Maybe.
+
+848
+00:37:07,330 --> 00:37:09,310
+I mean, you know, well, you know, what's funny is,
+
+849
+00:37:09,320 --> 00:37:10,729
+I think if you have an open source
+
+850
+00:37:10,739 --> 00:37:13,270
+usage policy it'll probably accomplish the same thing.
+
+851
+00:37:13,610 --> 00:37:14,030
+Yep.
+
+852
+00:37:14,350 --> 00:37:14,879
+You know.
+
+853
+00:37:15,110 --> 00:37:17,850
+Well, and see, and then, and that actually goes to the second thing I said,
+
+854
+00:37:17,860 --> 00:37:19,590
+which is you have three policy choices.
+
+855
+00:37:19,600 --> 00:37:22,429
+Basically no policy or anything is allowed run.
+
+856
+00:37:22,709 --> 00:37:25,580
+And that's basically the open source policy at the CS A is like,
+
+857
+00:37:25,590 --> 00:37:27,399
+I just accept it like open sources here.
+
+858
+00:37:27,429 --> 00:37:30,439
+-- And I think most people have that
+-- second major
+
+859
+00:37:30,449 --> 00:37:32,929
+-- choice is just ban it out of
+-- the question.
+
+860
+00:37:33,280 --> 00:37:36,899
+You can't do that even A I or open source. I don't think that's going to happen.
+
+861
+00:37:36,909 --> 00:37:38,340
+You can do it.
+
+862
+00:37:38,540 --> 00:37:39,020
+But
+
+863
+00:37:39,239 --> 00:37:40,810
+unless you're in like some sort of regulated
+
+864
+00:37:40,820 --> 00:37:42,389
+industry or the government with no competition,
+
+865
+00:37:42,399 --> 00:37:43,570
+it's probably not going to end well for
+
+866
+00:37:43,580 --> 00:37:45,489
+you because your competitors are probably going to
+
+867
+00:37:45,500 --> 00:37:47,860
+-- use these tools even that
+-- your employees are going to do it and hide it.
+
+868
+00:37:47,879 --> 00:37:49,639
+-- That's what's going to happen.
+-- Exactly.
+
+869
+00:37:50,030 --> 00:37:50,419
+Yes.
+
+870
+00:37:50,570 --> 00:37:53,820
+And then of course, the third option is, is somewhere in that middle area
+
+871
+00:37:54,050 --> 00:37:55,080
+with nuance. And,
+
+872
+00:37:55,310 --> 00:37:55,959
+-- well,
+-- you have to,
+
+873
+00:37:56,449 --> 00:37:59,239
+that becomes a risk management discussion then where you have to say,
+
+874
+00:37:59,250 --> 00:38:01,489
+what do I consider an acceptable amount of risk?
+
+875
+00:38:01,500 --> 00:38:03,969
+And I think this is true of A I, this is true of open source.
+
+876
+00:38:03,979 --> 00:38:07,550
+-- This is true of anything you do. This is true.
+-- It's true of buying widgets,
+
+877
+00:38:07,679 --> 00:38:11,610
+-- Fred.
+-- This is true of, of the food you stock in your cafeteria. Like
+
+878
+00:38:11,889 --> 00:38:14,159
+apparently the who is gonna declare Aspar
+
+879
+00:38:14,409 --> 00:38:18,399
+-- as a cancer causing chemical
+-- as Kurt holds up a diet Pepsi.
+
+880
+00:38:18,840 --> 00:38:20,110
+Yeah, it was very tasty
+
+881
+00:38:20,669 --> 00:38:21,629
+as pertain.
+
+882
+00:38:21,760 --> 00:38:24,310
+I drink like five sodas a year.
+
+883
+00:38:24,949 --> 00:38:25,270
+Yeah.
+
+884
+00:38:25,479 --> 00:38:27,489
+-- So
+-- I might have to just go strictly to coffee.
+
+885
+00:38:27,500 --> 00:38:29,810
+-- I don't
+-- know that that's there you go, man.
+
+886
+00:38:29,820 --> 00:38:32,149
+So it's funny, you know why I switched to coffee when I was young
+
+887
+00:38:32,719 --> 00:38:33,500
+because
+
+888
+00:38:33,699 --> 00:38:35,500
+Mountain Dew was expensive.
+
+889
+00:38:35,510 --> 00:38:39,919
+Coffee was cheaper and that, no, that left me with more beer money to go to the pub.
+
+890
+00:38:39,929 --> 00:38:44,429
+Like my switch to coffee was strictly a cost
+
+891
+00:38:44,540 --> 00:38:47,639
+-- saving measure so I could buy more beer.
+-- And that's,
+
+892
+00:38:48,000 --> 00:38:51,479
+that is literally what I'm talking about when I say make a harm reduction argument.
+
+893
+00:38:51,489 --> 00:38:51,770
+A,
+
+894
+00:38:52,064 --> 00:38:54,004
+an argument that your life will be better
+
+895
+00:38:54,425 --> 00:38:55,425
+because no,
+
+896
+00:38:55,435 --> 00:38:59,175
+seriously getting somebody telling somebody spend less money
+
+897
+00:38:59,185 --> 00:39:02,185
+on aspartame laced pops because you'll get cancer.
+
+898
+00:39:02,294 --> 00:39:05,604
+Nobody's going to care but spend less money on those pops. So you have more beer money
+
+899
+00:39:05,854 --> 00:39:07,084
+that's gonna work with a lot of
+
+900
+00:39:07,314 --> 00:39:08,254
+harm reduction.
+
+901
+00:39:08,925 --> 00:39:09,125
+Yeah.
+
+902
+00:39:10,774 --> 00:39:11,165
+Yeah.
+
+903
+00:39:11,870 --> 00:39:14,199
+-- Well, beer doesn't cause cancer cars. You
+-- know,
+
+904
+00:39:14,530 --> 00:39:18,439
+cancer was the least of our concerns when, when you're 22 years old,
+
+905
+00:39:18,449 --> 00:39:20,020
+spending your evenings in the
+
+906
+00:39:20,149 --> 00:39:20,719
+pub.
+
+907
+00:39:20,850 --> 00:39:22,030
+Yeah, exactly. So,
+
+908
+00:39:22,510 --> 00:39:24,919
+and I think maybe that's part of what security, see,
+
+909
+00:39:24,929 --> 00:39:26,090
+here's the thing that always drives me nuts is
+
+910
+00:39:26,100 --> 00:39:28,540
+security exists in the world and we always,
+
+911
+00:39:28,550 --> 00:39:30,719
+a lot of security people pretend like we're somehow
+
+912
+00:39:30,729 --> 00:39:33,469
+so special and so unique that we exist separately
+
+913
+00:39:33,790 --> 00:39:35,080
+as we've learned from COVID.
+
+914
+00:39:35,090 --> 00:39:38,959
+Even the public health people are like, yeah, no, we can't make people back
+
+915
+00:39:39,419 --> 00:39:39,629
+like
+
+916
+00:39:40,139 --> 00:39:40,409
+we,
+
+917
+00:39:41,110 --> 00:39:41,770
+we tried
+
+918
+00:39:43,080 --> 00:39:45,489
+and the harder you push, the more push back you get,
+
+919
+00:39:45,500 --> 00:39:48,139
+-- sometimes we
+-- can't even get people to cough into their, you know,
+
+920
+00:39:48,149 --> 00:39:49,699
+vampire cough into their arm.
+
+921
+00:39:49,949 --> 00:39:50,310
+Right?
+
+922
+00:39:50,510 --> 00:39:51,080
+The vampire
+
+923
+00:39:51,330 --> 00:39:52,000
+cough. That's a good name. You
+
+924
+00:39:53,810 --> 00:39:55,590
+cover your face, look, you're a vampire
+
+925
+00:39:55,989 --> 00:39:59,189
+-- and cough into your, the crook of your elbow
+-- anyway. All right. All right.
+
+926
+00:39:59,199 --> 00:40:01,149
+I'm gonna call this one because we're dragging on. But,
+
+927
+00:40:01,489 --> 00:40:04,229
+yep, yep. OK. I think we're in a good place. Thank you, Kurt.
+
+928
+00:40:04,239 --> 00:40:05,379
+Thank you very much for listening. Go to
+
+929
+00:40:05,510 --> 00:40:07,010
+social security podcast.com. Head of our show.
+
+930
+00:40:07,159 --> 00:40:07,550
+It's Easy Podos
+
+931
+00:40:07,919 --> 00:40:11,219
+Podcast. Hashtag on Mastodon. I don't, I don't know how to end it now,
+
+932
+00:40:11,320 --> 00:40:13,090
+-- I
+-- guess, you know what, for bonus points?
+
+933
+00:40:13,100 --> 00:40:14,949
+Can somebody tell us what NPX means because I
+
+934
+00:40:14,959 --> 00:40:16,959
+was googling it while the show was going on.
+
+935
+00:40:17,340 --> 00:40:19,709
+And as far as I can tell NPX doesn't
+
+936
+00:40:19,850 --> 00:40:23,000
+stand for anything other than NP executable,
+
+937
+00:40:23,070 --> 00:40:25,409
+but I'm not finding the acronym anywhere
+
+938
+00:40:26,399 --> 00:40:30,600
+N PM. Is N PM package manager. So I'm assuming NPX is the execution.
+
+939
+00:40:31,159 --> 00:40:31,530
+Ok.
+
+940
+00:40:31,820 --> 00:40:32,330
+Um
+
+941
+00:40:32,979 --> 00:40:38,449
+package named NPX. It says NPX execute N PM package binaries.
+
+942
+00:40:38,780 --> 00:40:42,250
+But what does does that? Is that all NPX means is N PM package execution?
+
+943
+00:40:42,459 --> 00:40:45,320
+So anyways for bonus points, tell us what the heck it means, please. Thank you
+
+944
+00:40:46,020 --> 00:40:46,560
+unmasked
+
+945
+00:40:46,709 --> 00:40:46,929
+on
+
+946
+00:40:47,209 --> 00:40:49,080
+-- and
+-- then you'll have to report your foreign contact.
+
+947
+00:40:51,969 --> 00:40:54,020
+Kurt have a marvelous rest of your day.
+
+948
+00:40:54,129 --> 00:40:57,060
+-- You too. Thanks everybody. Thanks
+-- everyone. Bye bye.
+
+949
+00:40:57,330 --> 00:40:58,560
+Oh, my goodness.

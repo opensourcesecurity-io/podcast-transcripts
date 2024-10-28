@@ -1,0 +1,2996 @@
+0
+00:00:05,750 --> 00:00:08,810
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,819 --> 00:00:12,100
+Kurt Siefried and my partner enjoying the web browsing experience.
+
+2
+00:00:12,109 --> 00:00:14,050
+Josh Pressers. We'll get to that.
+
+3
+00:00:14,060 --> 00:00:17,290
+All right, before we start part of the research I did for this episode.
+
+4
+00:00:17,299 --> 00:00:23,170
+Do you know how to spell the word Wildebeest? Wildebe Est? Ok. So you got it right.
+
+5
+00:00:23,420 --> 00:00:26,799
+Be Est. I was like, there's no way. That's right.
+
+6
+00:00:26,809 --> 00:00:29,870
+I thought it must be some weird British spelling or something.
+
+7
+00:00:29,879 --> 00:00:34,009
+No, that's like the actual way you spell Wildebeest be Est.
+
+8
+00:00:34,020 --> 00:00:36,360
+And that's apparently how the Dutch spell beast.
+
+9
+00:00:36,889 --> 00:00:37,979
+It's a Dutch origin.
+
+10
+00:00:38,090 --> 00:00:41,220
+The Dutch are even cooler now, in my opinion than they were before this.
+
+11
+00:00:41,229 --> 00:00:43,974
+You just called the Dutch? Cool. They are. The Dutch are very cool.
+
+12
+00:00:43,985 --> 00:00:45,994
+Come on, I'm German. So like,
+
+13
+00:00:46,174 --> 00:00:46,514
+uh
+
+14
+00:00:48,005 --> 00:00:52,674
+I'm very Dutch. I'm very Dutch and the Dutch are cool because they have good cheese.
+
+15
+00:00:52,944 --> 00:00:57,095
+Amsterdam is a lovely city and now they spell beast. Be Est.
+
+16
+00:00:57,325 --> 00:00:58,875
+Yeah. Well, that's how you spell the word beast
+
+17
+00:00:59,395 --> 00:01:00,794
+in, in Dutch.
+
+18
+00:01:02,064 --> 00:01:03,465
+Anyway. All right.
+
+19
+00:01:03,805 --> 00:01:06,824
+So we're gonna talk about
+
+20
+00:01:06,925 --> 00:01:07,955
+Google's
+
+21
+00:01:08,144 --> 00:01:11,224
+insane web browser proposal, but
+
+22
+00:01:11,699 --> 00:01:16,599
+I'm going to make it much bigger than this. Well, actually, it's worse than that. OK.
+
+23
+00:01:16,610 --> 00:01:19,669
+You start with why it's worse and then we'll go. Well, no, let's start.
+
+24
+00:01:19,680 --> 00:01:23,760
+I actually, there are some elements of their proposal that I enjoy in the sense of.
+
+25
+00:01:23,769 --> 00:01:25,230
+So in cloud computing, for example,
+
+26
+00:01:25,239 --> 00:01:27,250
+we're finally making inroads with confidential computing,
+
+27
+00:01:27,260 --> 00:01:28,839
+which means I can compute a workload
+
+28
+00:01:29,160 --> 00:01:31,519
+and I don't have to worry about Amazon sticking
+
+29
+00:01:31,529 --> 00:01:33,250
+their grubby little paws in it in theory.
+
+30
+00:01:33,260 --> 00:01:34,230
+Yes. And
+
+31
+00:01:34,449 --> 00:01:36,360
+some thing along
+
+32
+00:01:36,464 --> 00:01:40,254
+those lines would be good for the web where the browser could attest
+
+33
+00:01:40,394 --> 00:01:45,165
+to certain capabilities or like I am a public computer for the love of God.
+
+34
+00:01:45,175 --> 00:01:46,964
+You should never log into your bank on me,
+
+35
+00:01:47,264 --> 00:01:47,605
+right?
+
+36
+00:01:47,614 --> 00:01:50,095
+Or something like where it could block stuff like that or conversely,
+
+37
+00:01:50,114 --> 00:01:52,684
+I am a very private computer, very secure.
+
+38
+00:01:52,694 --> 00:01:53,235
+So like
+
+39
+00:01:53,404 --> 00:01:56,555
+stop harassing Kurt with his BS two fa and just let
+
+40
+00:01:56,565 --> 00:01:58,675
+him log into his bank and pay a bill also.
+
+41
+00:01:58,684 --> 00:02:01,074
+He has no money. So if anybody breaks in, it's fine.
+
+42
+00:02:01,669 --> 00:02:03,059
+The problem is
+
+43
+00:02:03,190 --> 00:02:07,110
+that's my banking security strategy man. I'm just, I don't have any money in there.
+
+44
+00:02:07,699 --> 00:02:07,720
+I
+
+45
+00:02:07,889 --> 00:02:08,059
+I
+
+46
+00:02:08,330 --> 00:02:10,600
+spend it all on bills. There you go.
+
+47
+00:02:10,899 --> 00:02:15,360
+So Google had this idea for the web environment integrity.
+
+48
+00:02:15,550 --> 00:02:15,960
+Oh no, it,
+
+49
+00:02:15,970 --> 00:02:22,389
+it we I web environment integrity which like on the surface is like honestly, we,
+
+50
+00:02:22,449 --> 00:02:24,960
+the industry as a whole needs to move to the level
+
+51
+00:02:24,970 --> 00:02:27,369
+of maturity where things can attest to what they are.
+
+52
+00:02:27,529 --> 00:02:28,929
+Am I a human. Am I a bot?
+
+53
+00:02:29,100 --> 00:02:29,820
+Am I
+
+54
+00:02:30,179 --> 00:02:32,860
+do? I maybe theoretically have an ad blocker installed. And, aha,
+
+55
+00:02:33,160 --> 00:02:35,500
+here's where things start to go off the rails. Right. Because
+
+56
+00:02:36,369 --> 00:02:37,679
+everybody views this
+
+57
+00:02:37,929 --> 00:02:40,639
+and Google gives the example of, you know, websites,
+
+58
+00:02:40,649 --> 00:02:42,479
+some websites are expensive to run and, like,
+
+59
+00:02:42,490 --> 00:02:44,919
+supported by ads and if you have an ad blocker then
+
+60
+00:02:45,039 --> 00:02:48,369
+they can't afford to run it. Like, I wonder who that's geared at.
+
+61
+00:02:48,490 --> 00:02:48,800
+Yeah.
+
+62
+00:02:48,809 --> 00:02:53,080
+So, Google, everybody's like Google, this sounds a lot like DRM to lock people out of
+
+63
+00:02:53,279 --> 00:02:55,789
+using ad blockers and Google's like, no, no, no, no, no.
+
+64
+00:02:55,800 --> 00:02:58,000
+We, we would never do that except,
+
+65
+00:02:58,139 --> 00:03:00,229
+except for the time they did last year with
+
+66
+00:03:00,240 --> 00:03:03,919
+the V three manifest and the extensions ignoring that.
+
+67
+00:03:04,380 --> 00:03:05,649
+But as you said,
+
+68
+00:03:06,179 --> 00:03:09,889
+none of that matters for a simple reason. And can I
+
+69
+00:03:10,110 --> 00:03:12,839
+read the reason if I said no, would it matter?
+
+70
+00:03:13,100 --> 00:03:14,729
+Well, you can always edit it out of the show.
+
+71
+00:03:15,009 --> 00:03:15,850
+So Google,
+
+72
+00:03:16,289 --> 00:03:19,520
+so Google dropped their financial results today. I've not seen these.
+
+73
+00:03:19,529 --> 00:03:21,809
+This is completely new to me. Uh
+
+74
+00:03:22,320 --> 00:03:23,429
+OK. So
+
+75
+00:03:23,660 --> 00:03:26,729
+from 2020 to 2021 because of COVID,
+
+76
+00:03:26,740 --> 00:03:29,860
+there was a massive surge in online advertising like 40%.
+
+77
+00:03:29,869 --> 00:03:30,169
+So
+
+78
+00:03:30,460 --> 00:03:31,910
+sorry. Um Google's numbers.
+
+79
+00:03:31,919 --> 00:03:36,695
+So they went from 146 point 92 billion to 209.49 billion.
+
+80
+00:03:36,705 --> 00:03:39,945
+So like a 41 point whatever percent bump like, wow,
+
+81
+00:03:40,425 --> 00:03:42,074
+some people got some bonuses that year.
+
+82
+00:03:42,184 --> 00:03:46,145
+Uh But from 2021 to 2022 209 to 224.
+
+83
+00:03:46,544 --> 00:03:51,145
+Ok, I mean low single digits improvements. It's still respectable.
+
+84
+00:03:51,154 --> 00:03:54,464
+I would say this year's looking maybe not as good.
+
+85
+00:03:54,634 --> 00:03:58,535
+Is it flat or is it going down? It's probably still going up but
+
+86
+00:03:58,744 --> 00:03:59,654
+less.
+
+87
+00:04:00,134 --> 00:04:00,904
+And that's,
+
+88
+00:04:01,115 --> 00:04:01,714
+this is,
+
+89
+00:04:01,895 --> 00:04:03,945
+but this is for a business
+
+90
+00:04:04,460 --> 00:04:04,490
+in
+
+91
+00:04:04,610 --> 00:04:05,259
+tech
+
+92
+00:04:05,470 --> 00:04:09,000
+with the pe ratio of whatever Google's pe ratio for their stock is
+
+93
+00:04:09,110 --> 00:04:10,490
+this is the apocalypse.
+
+94
+00:04:10,550 --> 00:04:13,759
+The view of the, the companies like Google and Facebook and, well, I'll,
+
+95
+00:04:13,770 --> 00:04:15,169
+I'll say Twitter cheekily,
+
+96
+00:04:15,389 --> 00:04:15,740
+but
+
+97
+00:04:16,139 --> 00:04:17,468
+it was always like that double
+
+98
+00:04:17,748 --> 00:04:19,509
+digit. I love that. You meant meta and a
+
+99
+00:04:19,668 --> 00:04:23,468
+like you're, you're like now six years behind renames. I am, I'm, I'm old now.
+
+100
+00:04:23,479 --> 00:04:24,209
+I could do that.
+
+101
+00:04:24,419 --> 00:04:26,609
+But get off by law, you kids,
+
+102
+00:04:26,618 --> 00:04:30,598
+these companies have experienced like 10 and 20% growth forever.
+
+103
+00:04:30,609 --> 00:04:31,739
+Well, and that's the thing. So
+
+104
+00:04:31,889 --> 00:04:34,759
+Google, Amazon and Microsoft
+
+105
+00:04:34,889 --> 00:04:39,449
+Azure. So their cloud stuff is still growing between 16 and 28%
+
+106
+00:04:39,850 --> 00:04:40,440
+year on
+
+107
+00:04:41,320 --> 00:04:43,269
+which is nice and healthy. But here's the problem.
+
+108
+00:04:43,279 --> 00:04:44,859
+How much money roughly did Google make
+
+109
+00:04:44,869 --> 00:04:47,230
+off advertising last in their financial results?
+
+110
+00:04:47,320 --> 00:04:50,299
+I bet it was 80% or more. Well, yeah, exactly.
+
+111
+00:04:50,420 --> 00:04:53,820
+And so the problem is they made like 56 billion off advertising and
+
+112
+00:04:53,829 --> 00:04:56,500
+about 6 billion off cloud and about 6 billion off other stuff.
+
+113
+00:04:56,510 --> 00:04:56,790
+So
+
+114
+00:04:57,359 --> 00:05:01,010
+like, yeah, 26 or 20% increase. That's great.
+
+115
+00:05:01,230 --> 00:05:07,040
+But a 20 26% increase on and I say only 6 billion, like I have any money.
+
+116
+00:05:07,359 --> 00:05:09,790
+Right. But, but for these companies, that's,
+
+117
+00:05:10,059 --> 00:05:13,790
+that's not a lot of money I get. That's one or 2 billion a year in growth. That's,
+
+118
+00:05:14,250 --> 00:05:17,980
+that's a, that's literally a rounding error on their advertising revenue.
+
+119
+00:05:18,359 --> 00:05:19,630
+Oh, yeah, for sure, for sure.
+
+120
+00:05:19,640 --> 00:05:20,670
+But, but here's,
+
+121
+00:05:20,679 --> 00:05:23,820
+and that's the thing I love is they're trying to technology their
+
+122
+00:05:23,829 --> 00:05:27,709
+way out of an economics and it's not even an economics problem.
+
+123
+00:05:27,720 --> 00:05:29,470
+It's a human behavior
+
+124
+00:05:29,809 --> 00:05:33,100
+problem. Yes, that is exactly where we were going to end up.
+
+125
+00:05:33,109 --> 00:05:35,950
+Or at least I, I hoped we would, I can never guarantee anything
+
+126
+00:05:36,130 --> 00:05:36,559
+but
+
+127
+00:05:36,739 --> 00:05:37,279
+like, no
+
+128
+00:05:37,429 --> 00:05:37,989
+bottles.
+
+129
+00:05:38,250 --> 00:05:38,619
+They paid my
+
+130
+00:05:38,760 --> 00:05:38,910
+street,
+
+131
+00:05:39,869 --> 00:05:39,959
+no
+
+132
+00:05:40,170 --> 00:05:42,160
+straight up. They paid like two blocks of the street. That was really bad.
+
+133
+00:05:42,170 --> 00:05:44,160
+It's lovely. Now, it's like as flat as a pancake
+
+134
+00:05:45,579 --> 00:05:48,890
+here is why I was looking up Wildebeests
+
+135
+00:05:49,410 --> 00:05:51,000
+because I didn't know how to spell it.
+
+136
+00:05:51,290 --> 00:05:54,790
+You didn't watch Wild Mutual of Omaha as a kid. I did.
+
+137
+00:05:54,799 --> 00:05:56,649
+But it's not like I knew how to spell Wildebeest.
+
+138
+00:05:56,980 --> 00:05:57,769
+I assumed Wildebeest
+
+139
+00:05:58,010 --> 00:05:58,440
+was W
+
+140
+00:05:58,630 --> 00:06:01,450
+I LDA beast
+
+141
+00:06:01,570 --> 00:06:05,980
+because I'm from the Midwest and we spell everything the way it sounds
+
+142
+00:06:06,160 --> 00:06:10,790
+and if it's not, we, we change the pronunciation to match what we think it should be.
+
+143
+00:06:10,799 --> 00:06:12,089
+I was about to say
+
+144
+00:06:12,339 --> 00:06:16,410
+like, welcome to the Midwest. Everyone come to our French towns
+
+145
+00:06:16,809 --> 00:06:17,390
+like
+
+146
+00:06:17,640 --> 00:06:18,500
+anyway.
+
+147
+00:06:18,820 --> 00:06:21,880
+So I think we are experiencing
+
+148
+00:06:22,130 --> 00:06:28,720
+the end of what we'll call web two, which was the advertising fueled everything.
+
+149
+00:06:28,730 --> 00:06:31,480
+And I think the behavior we're seeing everything,
+
+150
+00:06:32,410 --> 00:06:33,640
+literally everything.
+
+151
+00:06:33,649 --> 00:06:40,529
+I think the, the behavior we're seeing from the likes of Meta and X and Google
+
+152
+00:06:40,649 --> 00:06:41,200
+and
+
+153
+00:06:41,630 --> 00:06:44,980
+Amazon and literally everyone because a lot of these companies,
+
+154
+00:06:44,989 --> 00:06:47,779
+it looks like they're being run by lunatics,
+
+155
+00:06:48,029 --> 00:06:50,859
+they're making decisions that are bizarre
+
+156
+00:06:51,190 --> 00:06:55,010
+and they're clearly, they don't have like a good solid direction,
+
+157
+00:06:55,019 --> 00:06:56,239
+they don't know what's happening.
+
+158
+00:06:56,250 --> 00:06:57,869
+And I think this is my, my,
+
+159
+00:06:57,880 --> 00:07:01,500
+my comparison is that the people in charge
+
+160
+00:07:01,510 --> 00:07:04,500
+and the investors and the venture capitalists,
+
+161
+00:07:04,510 --> 00:07:06,609
+some of them know what, what is happening.
+
+162
+00:07:06,619 --> 00:07:10,739
+I bet a lot of them don't. It's kind of like how, when you have a herd of wildebeest,
+
+163
+00:07:11,345 --> 00:07:14,785
+they don't know what they're doing, they go where the food is.
+
+164
+00:07:14,894 --> 00:07:18,345
+Right. And I think that is what we're seeing is this ad revenue
+
+165
+00:07:18,454 --> 00:07:20,385
+is starting to dry up
+
+166
+00:07:20,644 --> 00:07:24,174
+and you're seeing investment in things moving somewhere else.
+
+167
+00:07:24,184 --> 00:07:27,265
+And a lot of people don't know what's happening and they don't know why
+
+168
+00:07:27,404 --> 00:07:30,494
+it's not that it's drying up. It's that it's growing
+
+169
+00:07:30,980 --> 00:07:36,220
+slower and it's slowing down enough that while it's technically not flatlining it,
+
+170
+00:07:36,230 --> 00:07:38,769
+anything less than 5% growth a year is basically dead.
+
+171
+00:07:39,119 --> 00:07:39,600
+Right.
+
+172
+00:07:40,809 --> 00:07:41,519
+And so
+
+173
+00:07:41,619 --> 00:07:43,579
+it doesn't have to flatline or even be that bad.
+
+174
+00:07:43,589 --> 00:07:46,899
+It just if it's less than 5% growth a year, you have a real problem.
+
+175
+00:07:47,170 --> 00:07:48,200
+The other thing
+
+176
+00:07:48,559 --> 00:07:50,559
+I think that's happening is a lot of
+
+177
+00:07:50,570 --> 00:07:54,470
+these subscription services are increasing their prices too
+
+178
+00:07:54,579 --> 00:07:57,239
+and offering, you know, like lower tier
+
+179
+00:07:57,459 --> 00:07:59,000
+ad supported ones because,
+
+180
+00:07:59,470 --> 00:07:59,940
+well,
+
+181
+00:07:59,950 --> 00:08:02,890
+to put it bluntly getting $10 a month from somebody
+
+182
+00:08:02,899 --> 00:08:05,010
+and showing them ads is a lot better than getting
+
+183
+00:08:05,410 --> 00:08:06,630
+nothing from them.
+
+184
+00:08:06,940 --> 00:08:07,720
+Right.
+
+185
+00:08:07,899 --> 00:08:11,299
+Because like you, let's be real, your incremental costs on digital goods are
+
+186
+00:08:11,480 --> 00:08:13,489
+as close to zero as they can be without,
+
+187
+00:08:13,660 --> 00:08:15,489
+you know, needing a math degree to express.
+
+188
+00:08:16,480 --> 00:08:17,570
+No. Really? Right.
+
+189
+00:08:17,709 --> 00:08:18,820
+Like I know.
+
+190
+00:08:19,279 --> 00:08:19,559
+So,
+
+191
+00:08:20,160 --> 00:08:20,750
+and
+
+192
+00:08:21,190 --> 00:08:24,429
+the other thing is I, I feel like one of the things I think you missed
+
+193
+00:08:24,619 --> 00:08:27,959
+and that just occurred to me is we also have a new generation coming in
+
+194
+00:08:28,220 --> 00:08:31,600
+a generation that has grown up with web two and advertising
+
+195
+00:08:32,000 --> 00:08:36,099
+and the minute they see it without the, without the ads with an A blocker and stuff,
+
+196
+00:08:36,109 --> 00:08:37,239
+they're like, oh, I like that more.
+
+197
+00:08:37,320 --> 00:08:37,440
+But
+
+198
+00:08:37,690 --> 00:08:39,590
+my son still,
+
+199
+00:08:39,900 --> 00:08:44,080
+like he just has muscle memory for that skip button is on, on youtube
+
+200
+00:08:44,359 --> 00:08:46,409
+because when he's at school and it's on the digital projector,
+
+201
+00:08:46,419 --> 00:08:49,369
+he literally will just like shuffle over to where that button's gonna show
+
+202
+00:08:49,380 --> 00:08:51,880
+up because they're not logged like they're not logged into a premium account
+
+203
+00:08:52,169 --> 00:08:53,510
+and, and it's funny because
+
+204
+00:08:53,780 --> 00:08:56,200
+like the other kid be like, you're blocking the way and, and the teacher will be like,
+
+205
+00:08:56,210 --> 00:08:57,280
+he's going to hit the ad skip button.
+
+206
+00:08:57,289 --> 00:08:58,200
+They're like, oh, ok.
+
+207
+00:08:58,669 --> 00:08:59,270
+Right.
+
+208
+00:09:00,169 --> 00:09:00,880
+You know,
+
+209
+00:09:02,419 --> 00:09:02,570
+they're,
+
+210
+00:09:03,080 --> 00:09:06,429
+they're, these kids are digital native, like
+
+211
+00:09:06,599 --> 00:09:08,630
+they've had ipads and high speed internet since
+
+212
+00:09:09,219 --> 00:09:12,849
+they were in diapers. Oh, yeah. They don't know any better. Absolutely. I really, I
+
+213
+00:09:13,000 --> 00:09:15,950
+can't help but think the advertising doesn't work as well
+
+214
+00:09:15,960 --> 00:09:17,369
+to some degree on them and more to the point
+
+215
+00:09:17,520 --> 00:09:22,190
+they're savvier at blocking it well, and not only that they don't have any money.
+
+216
+00:09:22,200 --> 00:09:25,049
+I mean, I don't want to be, like, in a hole or anything but, like,
+
+217
+00:09:25,059 --> 00:09:27,390
+the young generation is totally being hosed over
+
+218
+00:09:27,400 --> 00:09:29,739
+by the old people between rent and all.
+
+219
+00:09:29,844 --> 00:09:33,934
+Oh, my God. I bought two potatoes today and I, well, I texted you. So or I signaled you.
+
+220
+00:09:33,994 --> 00:09:34,015
+So
+
+221
+00:09:34,885 --> 00:09:38,275
+this sounds like the most Russian story ever. Yeah.
+
+222
+00:09:38,284 --> 00:09:43,325
+So I bought two large potatoes today to do baked potato skins and they cost $7.47
+
+223
+00:09:43,614 --> 00:09:45,424
+and minimum wage locally is $15.
+
+224
+00:09:45,434 --> 00:09:49,565
+So half an hour of work at minimum wage to buy two large russet potatoes.
+
+225
+00:09:49,775 --> 00:09:50,414
+That's
+
+226
+00:09:50,859 --> 00:09:55,400
+insane. That sounds like some like communist Russia stuff right there. I know.
+
+227
+00:09:55,489 --> 00:10:00,159
+But it, it literally means I could buy 16 potatoes a day if I worked minimum wage. And
+
+228
+00:10:00,840 --> 00:10:02,359
+that doesn't include rent or anything.
+
+229
+00:10:02,369 --> 00:10:03,039
+Like, yeah, the,
+
+230
+00:10:03,049 --> 00:10:05,919
+the younger generation advertising is not going to work on them because
+
+231
+00:10:06,869 --> 00:10:07,969
+they don't have two Kopec
+
+232
+00:10:08,299 --> 00:10:10,760
+to rub together or two potatoes. In this case.
+
+233
+00:10:10,869 --> 00:10:11,950
+I think this is, oh,
+
+234
+00:10:12,059 --> 00:10:12,710
+my goodness.
+
+235
+00:10:14,409 --> 00:10:15,239
+Again,
+
+236
+00:10:15,440 --> 00:10:20,359
+I think this comes back to not a lot of people don't understand what's
+
+237
+00:10:20,369 --> 00:10:22,650
+going on and they don't know why they're doing things and I think this,
+
+238
+00:10:22,729 --> 00:10:25,299
+this Google proposal is a great example.
+
+239
+00:10:25,309 --> 00:10:26,559
+Right. Well, first of all,
+
+240
+00:10:26,750 --> 00:10:28,570
+they did it with a
+
+241
+00:10:28,969 --> 00:10:29,400
+non
+
+242
+00:10:29,609 --> 00:10:30,200
+Google Github
+
+243
+00:10:30,340 --> 00:10:31,960
+repository. Right. Then
+
+244
+00:10:32,349 --> 00:10:35,760
+they got some hilarious issues filed, like one that's like, are,
+
+245
+00:10:35,770 --> 00:10:36,869
+are you the bad guys?
+
+246
+00:10:36,880 --> 00:10:37,729
+They lock it.
+
+247
+00:10:37,770 --> 00:10:40,450
+So, first of all, if your open source project has to have the,
+
+248
+00:10:40,500 --> 00:10:43,210
+the repository locked from external contributors,
+
+249
+00:10:43,219 --> 00:10:44,489
+like you're doing something wrong,
+
+250
+00:10:44,659 --> 00:10:45,530
+but then
+
+251
+00:10:45,840 --> 00:10:50,330
+they had a hacker news thread where they basically did their best to say, oh, no, no,
+
+252
+00:10:50,340 --> 00:10:52,690
+we're not the bad guys here like we're the good guys.
+
+253
+00:10:52,820 --> 00:10:53,690
+And here's the thing.
+
+254
+00:10:53,909 --> 00:10:56,169
+I have no doubt
+
+255
+00:10:56,270 --> 00:10:58,609
+the people who put this proposal together
+
+256
+00:10:58,809 --> 00:11:00,570
+think they're doing the right thing
+
+257
+00:11:00,849 --> 00:11:04,469
+because I think they are stuck in the middle of
+
+258
+00:11:04,479 --> 00:11:07,710
+the herd and they don't understand what's happening around them.
+
+259
+00:11:07,719 --> 00:11:10,309
+I think they have nothing but good intentions.
+
+260
+00:11:10,719 --> 00:11:14,070
+But obviously anyone on the outside looks at this and you
+
+261
+00:11:14,080 --> 00:11:17,830
+see exactly what the cliff they're all going to jump off of
+
+262
+00:11:17,950 --> 00:11:22,159
+this will be the literal death of Web two because all of a sudden we'll be locked. Like
+
+263
+00:11:22,690 --> 00:11:24,840
+when I browse the web on my mobile phone,
+
+264
+00:11:24,849 --> 00:11:26,799
+I try not to because I don't run an ad blocker
+
+265
+00:11:26,809 --> 00:11:29,489
+on my phone and it is horrifying like it is,
+
+266
+00:11:29,500 --> 00:11:29,539
+it
+
+267
+00:11:29,650 --> 00:11:33,159
+is almost impossible to navigate some of these sites. And I'm pretty nimble,
+
+268
+00:11:33,500 --> 00:11:36,320
+you know, you can install the duck, duck go Browser on your phone.
+
+269
+00:11:36,330 --> 00:11:37,729
+And it does a pretty good job.
+
+270
+00:11:37,859 --> 00:11:41,219
+But, I mean, more to the point I don't want to go to those sites really.
+
+271
+00:11:41,229 --> 00:11:43,359
+And I'm trying to be a bit anyways.
+
+272
+00:11:43,469 --> 00:11:45,580
+The majority of sites I actually go to are like
+
+273
+00:11:45,590 --> 00:11:48,780
+people's blogs and stuff that actually don't have advertising.
+
+274
+00:11:48,789 --> 00:11:49,549
+It's quite lovely.
+
+275
+00:11:49,669 --> 00:11:51,010
+No, I get it for sure.
+
+276
+00:11:51,020 --> 00:11:55,840
+That's why I love, like, lemme and Mastodon have become my favorite sites because
+
+277
+00:11:56,320 --> 00:11:58,989
+I give Jerry Bell money and he gives me
+
+278
+00:11:59,280 --> 00:12:00,270
+amusement.
+
+279
+00:12:01,260 --> 00:12:05,010
+And I mean, how do you explain people's $100 cable bill? That's
+
+280
+00:12:05,380 --> 00:12:06,179
+people will pay for
+
+281
+00:12:06,880 --> 00:12:08,299
+you pay for ads.
+
+282
+00:12:08,640 --> 00:12:11,760
+So I know, right, remember called the whole premise of cable TV,
+
+283
+00:12:11,770 --> 00:12:13,239
+early on was it's you pay for it.
+
+284
+00:12:13,250 --> 00:12:14,179
+So there's no ads and that's,
+
+285
+00:12:16,440 --> 00:12:20,030
+I think that's part of the challenge is the cult like I've been looking at the,
+
+286
+00:12:20,039 --> 00:12:21,625
+what's fascinating to me is
+
+287
+00:12:21,914 --> 00:12:24,895
+so we have now the cloud, the hyper cloud players, right?
+
+288
+00:12:24,905 --> 00:12:25,994
+There's three of them Google,
+
+289
+00:12:26,005 --> 00:12:29,135
+Amazon and Microsoft and they are three different companies, right?
+
+290
+00:12:29,145 --> 00:12:32,114
+Google is an advertising company that happens to have cloud, right?
+
+291
+00:12:32,125 --> 00:12:37,145
+Amazon is a merchant, right? They're all about that high volume sales.
+
+292
+00:12:37,414 --> 00:12:38,614
+That's their culture
+
+293
+00:12:38,755 --> 00:12:41,565
+that happens to have a cloud and their cloud really does reflect that.
+
+294
+00:12:41,784 --> 00:12:43,434
+And then Microsoft of course,
+
+295
+00:12:43,445 --> 00:12:46,215
+is the classic business solutions to the point of throwing chairs at people
+
+296
+00:12:47,000 --> 00:12:50,989
+and their cloud really reflects that right? It's all about Business Solutions.
+
+297
+00:12:51,000 --> 00:12:51,500
+Right.
+
+298
+00:12:51,880 --> 00:12:53,580
+And well, let me put it this way. Like
+
+299
+00:12:53,960 --> 00:12:57,690
+Gmail will Gmail still be around in 50 years. Would you bet a kidney on it?
+
+300
+00:12:57,700 --> 00:13:00,760
+I would not bet a kidney on that. I would not take that bet. Ok,
+
+301
+00:13:01,030 --> 00:13:04,489
+Microsoft Outlook. Will it be around in 100 years?
+
+302
+00:13:05,219 --> 00:13:08,000
+For sure. Absolutely. Absolutely.
+
+303
+00:13:08,780 --> 00:13:12,890
+It'll probably still be named Outlook, but it'll be like, oh, look 1000
+
+304
+00:13:13,020 --> 00:13:15,359
+and you'll probably still have to rebuild those PST files
+
+305
+00:13:16,450 --> 00:13:16,520
+for
+
+306
+00:13:16,700 --> 00:13:17,000
+sure.
+
+307
+00:13:18,020 --> 00:13:19,000
+And, you know, and,
+
+308
+00:13:19,729 --> 00:13:20,619
+and looking at
+
+309
+00:13:21,020 --> 00:13:24,830
+like the whole A I thing and the, the web two thing and where all this is headed.
+
+310
+00:13:24,840 --> 00:13:28,849
+I mean, fundamentally, here's the thing we have tried for 20 years
+
+311
+00:13:29,460 --> 00:13:33,390
+to find a way to make websites, make money. Right. Right. That's right.
+
+312
+00:13:33,570 --> 00:13:38,280
+The answer is advertising. Well, even then it was a tall hill decline.
+
+313
+00:13:38,479 --> 00:13:38,599
+Yeah.
+
+314
+00:13:38,770 --> 00:13:41,400
+But, I mean, we tried micropayments many, many times.
+
+315
+00:13:41,409 --> 00:13:43,190
+We've tried it again with Blockchain
+
+316
+00:13:43,409 --> 00:13:44,000
+and
+
+317
+00:13:44,289 --> 00:13:46,039
+ignoring the technology that doesn't work.
+
+318
+00:13:46,049 --> 00:13:47,960
+But let's assume for a moment that somehow
+
+319
+00:13:47,969 --> 00:13:50,869
+micro payment technology works and it's efficient enough that
+
+320
+00:13:50,880 --> 00:13:52,419
+you can actually do a one penny transaction
+
+321
+00:13:52,429 --> 00:13:54,880
+without paying like a dollar in transaction fees.
+
+322
+00:13:55,229 --> 00:13:58,200
+But the cognitive load for a human being
+
+323
+00:13:58,500 --> 00:14:01,280
+to, like, like I said to you earlier, like, people,
+
+324
+00:14:01,380 --> 00:14:04,840
+I, the thing I find most offensive about tipping is I have to think about it a lot.
+
+325
+00:14:04,849 --> 00:14:05,200
+Like,
+
+326
+00:14:05,440 --> 00:14:06,940
+and I've come to the conclusion that, like,
+
+327
+00:14:06,950 --> 00:14:09,039
+if I'm asked for a tip before I'm given service.
+
+328
+00:14:09,390 --> 00:14:12,679
+I'm not tipping because how do I know how good service will be?
+
+329
+00:14:12,849 --> 00:14:15,559
+Well, it's going to be bad if you don't give him a tip.
+
+330
+00:14:16,280 --> 00:14:17,340
+Right? But that's the thing, right?
+
+331
+00:14:17,349 --> 00:14:20,510
+So there's this cognitive load and I just, you want spit in your coffee,
+
+332
+00:14:20,520 --> 00:14:23,159
+Kirk because that's how you get spit in your coffee pretty much.
+
+333
+00:14:23,369 --> 00:14:27,679
+So, when I think about, if I had to like cognitively think about,
+
+334
+00:14:27,690 --> 00:14:30,000
+do I want to see this web page or not for a penny?
+
+335
+00:14:30,669 --> 00:14:30,760
+Oh,
+
+336
+00:14:30,900 --> 00:14:31,599
+man.
+
+337
+00:14:31,609 --> 00:14:32,580
+Problem though is,
+
+338
+00:14:32,590 --> 00:14:37,039
+is that we don't have any other path to monetization for websites.
+
+339
+00:14:37,049 --> 00:14:40,000
+That's OK. So this, I think is part of the discussion
+
+340
+00:14:40,330 --> 00:14:43,320
+and this is something I've been thinking about. So
+
+341
+00:14:43,479 --> 00:14:46,739
+the old way of the internet is going to die.
+
+342
+00:14:46,909 --> 00:14:47,380
+The,
+
+343
+00:14:47,390 --> 00:14:50,210
+the way Google and Facebook and Twitter and all these
+
+344
+00:14:50,219 --> 00:14:52,919
+services have worked in the past is going to,
+
+345
+00:14:52,929 --> 00:14:53,820
+it is failing.
+
+346
+00:14:53,830 --> 00:14:56,229
+We are watching it unravel. That is why
+
+347
+00:14:57,070 --> 00:14:57,419
+it
+
+348
+00:14:57,650 --> 00:15:00,349
+ignoring that. Like it feels like
+
+349
+00:15:00,719 --> 00:15:02,380
+no one is driving the bus
+
+350
+00:15:02,669 --> 00:15:03,919
+and they are,
+
+351
+00:15:03,929 --> 00:15:05,809
+they just don't know what they're doing because the
+
+352
+00:15:05,820 --> 00:15:08,229
+way they used to work no longer functions.
+
+353
+00:15:08,239 --> 00:15:11,210
+And so they're just literally throwing spaghetti at the wall.
+
+354
+00:15:11,820 --> 00:15:14,330
+Now something is going to
+
+355
+00:15:14,599 --> 00:15:15,770
+replace
+
+356
+00:15:16,109 --> 00:15:17,109
+all of these things.
+
+357
+00:15:17,119 --> 00:15:18,619
+And like it's funny because people talk about,
+
+358
+00:15:18,630 --> 00:15:21,320
+oh I need a Twitter replacement like no Twitter is dead forever.
+
+359
+00:15:21,434 --> 00:15:24,835
+You, you're never going to replace it. Mastodon is not a Twitter replacement.
+
+360
+00:15:24,844 --> 00:15:27,315
+Mastodon is a totally different thing. That's ok.
+
+361
+00:15:27,325 --> 00:15:30,255
+And it's never going to replace, nothing will ever replace Twitter,
+
+362
+00:15:30,265 --> 00:15:31,494
+which may be good or bad.
+
+363
+00:15:31,585 --> 00:15:32,294
+But anyway,
+
+364
+00:15:32,395 --> 00:15:36,294
+what comes in and, and kind of, I guess takes over now,
+
+365
+00:15:36,445 --> 00:15:38,434
+we don't know because it doesn't exist and
+
+366
+00:15:38,445 --> 00:15:40,135
+it's going to be something we can't imagine
+
+367
+00:15:40,395 --> 00:15:44,455
+because the reality is, if you looked at the internet in 1997
+
+368
+00:15:45,099 --> 00:15:48,289
+right? Like it was very new, it was very different.
+
+369
+00:15:48,299 --> 00:15:51,340
+I mean, I remember the dial up and Netscape one point. Oh, and all the stuff
+
+370
+00:15:53,340 --> 00:15:56,039
+we could not have even explained
+
+371
+00:15:56,140 --> 00:16:00,489
+where we are today. How would you explain an iphone to somebody from 20 years ago?
+
+372
+00:16:01,570 --> 00:16:06,190
+Whatever man, I would have like literally sold my siblings for an iphone back then.
+
+373
+00:16:06,200 --> 00:16:08,770
+Like I would have given anything to have the internet in my pocket.
+
+374
+00:16:08,780 --> 00:16:12,130
+I think most of us would sell our siblings for a sandwich.
+
+375
+00:16:12,219 --> 00:16:14,609
+It did have to be an ok sandwich. Like, but
+
+376
+00:16:14,960 --> 00:16:15,700
+anyway,
+
+377
+00:16:17,210 --> 00:16:17,809
+but anyway,
+
+378
+00:16:18,250 --> 00:16:19,719
+anyway, oh my goodness. I
+
+379
+00:16:19,890 --> 00:16:20,630
+think about sandwiches.
+
+380
+00:16:20,640 --> 00:16:22,840
+You have to, you have to sell something you actually care about.
+
+381
+00:16:23,760 --> 00:16:24,590
+Ok. Ok.
+
+382
+00:16:24,799 --> 00:16:25,150
+So
+
+383
+00:16:26,090 --> 00:16:26,159
+I
+
+384
+00:16:27,169 --> 00:16:30,799
+do like my dog a lot. I just, anyway, that's another story. So. Right.
+
+385
+00:16:30,809 --> 00:16:34,320
+You've derailed me. But anyway, so something is going to replace these things.
+
+386
+00:16:34,330 --> 00:16:37,570
+We don't know what it is and we can't imagine what it is at this point.
+
+387
+00:16:37,580 --> 00:16:39,400
+And so I dare not speculate.
+
+388
+00:16:39,520 --> 00:16:43,309
+Well, and the beautiful thing too is, is Facebook and Google and all that won't
+
+389
+00:16:43,679 --> 00:16:46,669
+like they can actually die, die because they're a company.
+
+390
+00:16:47,080 --> 00:16:50,330
+But something like Irc still chugging along like
+
+391
+00:16:50,340 --> 00:16:52,630
+there are still Irc networks now there,
+
+392
+00:16:52,640 --> 00:16:57,080
+I would call them dead even though they actually have tens
+
+393
+00:16:57,090 --> 00:16:59,369
+or hundreds of thousands of people using them every day.
+
+394
+00:16:59,440 --> 00:17:03,760
+But in the global context of like half of all adults owning a smartphone
+
+395
+00:17:04,108 --> 00:17:04,680
+that it's a,
+
+396
+00:17:04,910 --> 00:17:08,550
+it's not even a rounding error. It's zero, it's zero for sure.
+
+397
+00:17:08,560 --> 00:17:11,618
+And I think Mastodon is going to be the same thing where the people who
+
+398
+00:17:11,630 --> 00:17:15,189
+use Mastodon are going to love it and they're going to be very successful with it
+
+399
+00:17:15,290 --> 00:17:18,750
+from the perspective of how you define success in the context of Twitter,
+
+400
+00:17:19,199 --> 00:17:20,750
+Mastodon is a failure.
+
+401
+00:17:20,880 --> 00:17:23,670
+But luckily Mastodon doesn't care what you think. Exactly.
+
+402
+00:17:24,189 --> 00:17:26,189
+And so that's one thing I find fascinating
+
+403
+00:17:26,199 --> 00:17:28,030
+is something like Google can actually die,
+
+404
+00:17:28,040 --> 00:17:28,630
+die.
+
+405
+00:17:28,989 --> 00:17:32,349
+And whereas protocols can't, and that I think is the other thing is
+
+406
+00:17:32,760 --> 00:17:37,079
+still exists. Exactly. You know, and like, dig is a weird music site now. It's
+
+407
+00:17:37,270 --> 00:17:37,500
+super,
+
+408
+00:17:38,520 --> 00:17:41,300
+like I went through the, I went through like a couple of years ago
+
+409
+00:17:41,630 --> 00:17:43,670
+and I was like, what even is this?
+
+410
+00:17:44,530 --> 00:17:47,369
+Oh, it's no, it's not a music. What is this?
+
+411
+00:17:47,630 --> 00:17:49,380
+Oh, it's buzzfeed. Ok. Never
+
+412
+00:17:49,489 --> 00:17:51,000
+mind that explains it. Yeah. It's basically,
+
+413
+00:17:51,109 --> 00:17:55,650
+I think based on the whatever it doesn't matter, quit, quit browsing the web on
+
+414
+00:17:55,760 --> 00:17:55,920
+a pod.
+
+415
+00:17:56,569 --> 00:18:02,959
+The thing is the problem though is in this sort of death throes and thrashing around.
+
+416
+00:18:02,969 --> 00:18:04,635
+Are they going to hurt you people
+
+417
+00:18:04,834 --> 00:18:06,885
+and make things worse or maybe, you know,
+
+418
+00:18:06,895 --> 00:18:08,675
+just hasten their demise or are they actually going
+
+419
+00:18:08,685 --> 00:18:10,375
+to maybe take out something good with them?
+
+420
+00:18:10,385 --> 00:18:10,994
+I mean, it,
+
+421
+00:18:11,484 --> 00:18:12,625
+one of my concerns
+
+422
+00:18:12,864 --> 00:18:14,155
+is like we've,
+
+423
+00:18:14,165 --> 00:18:17,875
+I think we've firmly as a species decided that the web browser is the thing.
+
+424
+00:18:17,885 --> 00:18:18,984
+It's cool like it,
+
+425
+00:18:19,165 --> 00:18:23,484
+it is a thing. So actually, on that note, I literally just found out
+
+426
+00:18:23,974 --> 00:18:25,594
+right before we hit record,
+
+427
+00:18:26,060 --> 00:18:29,000
+there is a new thing. You'll have to look it up and we'll talk about it some other day.
+
+428
+00:18:29,010 --> 00:18:30,520
+It's called the island browser.
+
+429
+00:18:30,530 --> 00:18:33,489
+It's claiming it's an enterprise web browser that has all these
+
+430
+00:18:33,500 --> 00:18:37,020
+like weird enterprise features about like at a station and,
+
+431
+00:18:37,030 --> 00:18:38,160
+and some other details.
+
+432
+00:18:38,359 --> 00:18:40,469
+So like Microsoft Edge with GPO.
+
+433
+00:18:40,930 --> 00:18:41,380
+Um
+
+434
+00:18:41,510 --> 00:18:43,359
+I don't know, does edge do that? I don't know,
+
+435
+00:18:43,459 --> 00:18:45,459
+Microsoft edge is integrated with
+
+436
+00:18:45,810 --> 00:18:48,569
+windows and you can apply group policy objects to it.
+
+437
+00:18:48,680 --> 00:18:49,250
+There you go.
+
+438
+00:18:49,530 --> 00:18:50,589
+But anyway, we were
+
+439
+00:18:50,760 --> 00:18:50,880
+doing
+
+440
+00:18:51,170 --> 00:18:52,010
+15 years ago.
+
+441
+00:18:52,199 --> 00:18:55,280
+OK. I mean that could be, I don't know. I'm, I'm not hip with enterprises
+
+442
+00:18:55,500 --> 00:18:56,949
+Microsoft proxy one point. Oh
+
+443
+00:18:57,079 --> 00:18:58,180
+I passed that exam.
+
+444
+00:18:58,290 --> 00:18:59,790
+I I don't want to.
+
+445
+00:18:59,959 --> 00:19:00,750
+But anyway, though,
+
+446
+00:19:00,760 --> 00:19:02,680
+your point being right about kind of all
+
+447
+00:19:02,689 --> 00:19:06,030
+this enterprise stuff and what's coming next.
+
+448
+00:19:06,160 --> 00:19:06,500
+Yeah,
+
+449
+00:19:06,609 --> 00:19:09,030
+I, I don't know. It's, it's fascinating
+
+450
+00:19:09,180 --> 00:19:10,270
+and it's terrifying
+
+451
+00:19:10,410 --> 00:19:15,280
+because we live through the.com crash. Which I think was the death of Web one
+
+452
+00:19:15,400 --> 00:19:15,910
+point. Oh,
+
+453
+00:19:16,329 --> 00:19:18,609
+now we see the rise of Web two point.
+
+454
+00:19:18,619 --> 00:19:22,709
+Oh, I'm not going to talk about Web three because that's a poison term. Now,
+
+455
+00:19:22,920 --> 00:19:24,630
+I don't know what we'll call the next thing,
+
+456
+00:19:25,000 --> 00:19:28,829
+but it's going to be fascinating. It might not be the web. That's the crazy thing.
+
+457
+00:19:28,849 --> 00:19:30,670
+No, that's true. Actually, that's a good point.
+
+458
+00:19:30,880 --> 00:19:33,760
+Like there might be a new protocol that comes out. That is no, you know what?
+
+459
+00:19:33,770 --> 00:19:37,469
+I don't think there is. I think HTTP is too good to replace
+
+460
+00:19:37,689 --> 00:19:41,069
+it, solves too many problems that are hard and it does it well.
+
+461
+00:19:41,339 --> 00:19:42,569
+And I mean, you've already got all this
+
+462
+00:19:42,805 --> 00:19:44,984
+instructure where you can pay or not even pay cloud
+
+463
+00:19:44,994 --> 00:19:47,375
+flare to distribute all your junk without getting attacked.
+
+464
+00:19:47,385 --> 00:19:49,135
+And that's a big thing people underestimate
+
+465
+00:19:49,655 --> 00:19:52,334
+is like there's not even the chicken and the egg problem of getting people to
+
+466
+00:19:52,344 --> 00:19:54,204
+install the client because there's no service and
+
+467
+00:19:54,214 --> 00:19:55,474
+there's no service because there's no clients.
+
+468
+00:19:55,484 --> 00:19:55,905
+But like
+
+469
+00:19:56,104 --> 00:19:56,614
+just
+
+470
+00:19:56,994 --> 00:20:00,285
+running a site and doing global data delivery
+
+471
+00:20:00,984 --> 00:20:01,795
+is hard.
+
+472
+00:20:02,545 --> 00:20:05,055
+Yeah. No, look, I firmly believe
+
+473
+00:20:05,364 --> 00:20:06,494
+so. Here's
+
+474
+00:20:06,744 --> 00:20:10,734
+one way to look at this when the birth of sites like Google
+
+475
+00:20:10,944 --> 00:20:12,415
+and Facebook and all this,
+
+476
+00:20:12,910 --> 00:20:16,569
+you had a massive amount of venture capital come in
+
+477
+00:20:16,989 --> 00:20:18,410
+and it funded
+
+478
+00:20:18,550 --> 00:20:21,410
+this essentially giant R and D division
+
+479
+00:20:21,729 --> 00:20:25,869
+that for whatever reason landed on ads as the revenue source.
+
+480
+00:20:25,880 --> 00:20:29,290
+And I don't know if they tried other things. I think it's because it's easy
+
+481
+00:20:29,579 --> 00:20:30,099
+because
+
+482
+00:20:30,300 --> 00:20:33,979
+it's easy to convince people to spend money on advertising through just a,
+
+483
+00:20:33,989 --> 00:20:35,189
+simply a different channel.
+
+484
+00:20:35,199 --> 00:20:37,040
+Sure. And, uh, probably,
+
+485
+00:20:37,189 --> 00:20:37,530
+and a
+
+486
+00:20:37,939 --> 00:20:39,239
+lot of companies had
+
+487
+00:20:39,770 --> 00:20:43,989
+the infrastructure and mindset for spending money that way exists. Right. Right.
+
+488
+00:20:44,000 --> 00:20:47,469
+They're not selling them a new thing. It's ads on the internet. It's, that's right.
+
+489
+00:20:47,479 --> 00:20:51,239
+According to the patent, it's ads with a computer system and they had budgets,
+
+490
+00:20:51,250 --> 00:20:51,569
+right?
+
+491
+00:20:51,579 --> 00:20:53,589
+They had budgets for ads like, ok,
+
+492
+00:20:53,599 --> 00:20:56,150
+let's just take some of our ad budget and give it to these
+
+493
+00:20:56,160 --> 00:20:58,875
+people over here and they say they're doing things and maybe they are,
+
+494
+00:20:58,885 --> 00:20:59,385
+we don't know.
+
+495
+00:20:59,395 --> 00:21:02,265
+And then that led to a virtuous cycle of like, oh, we can do more,
+
+496
+00:21:02,415 --> 00:21:06,724
+targeted, targeted advertising by knowing that you're a white male that whatever,
+
+497
+00:21:06,734 --> 00:21:07,094
+whatever.
+
+498
+00:21:07,244 --> 00:21:11,655
+And of course, that has led to one or two problems but, you know, nothing too major.
+
+499
+00:21:11,665 --> 00:21:15,145
+But now, now here's, here's the thing and I don't want to burst any bubbles.
+
+500
+00:21:15,155 --> 00:21:15,885
+But I'm gonna,
+
+501
+00:21:16,214 --> 00:21:18,425
+because there are people who think
+
+502
+00:21:18,665 --> 00:21:21,574
+things like the Fetta verse are going to be the next thing.
+
+503
+00:21:21,675 --> 00:21:24,025
+And I love the Fetta verse more than I should.
+
+504
+00:21:24,579 --> 00:21:24,859
+Yeah,
+
+505
+00:21:24,979 --> 00:21:27,810
+I don't think it's gonna be that the, the, the thing that pisses me off.
+
+506
+00:21:27,819 --> 00:21:28,560
+We've had the Federer.
+
+507
+00:21:28,890 --> 00:21:30,959
+Like, do you not remember Irc Federer
+
+508
+00:21:31,239 --> 00:21:31,849
+is cooler?
+
+509
+00:21:32,140 --> 00:21:35,209
+But I'm saying like we, it's a similar concept, right? The
+
+510
+00:21:35,849 --> 00:21:36,030
+defer
+
+511
+00:21:36,229 --> 00:21:39,369
+multiple servers, blah, blah, blah. And, and here's the reason I say this though,
+
+512
+00:21:39,709 --> 00:21:44,380
+there was a story, I read one time about this guy who was creating a company
+
+513
+00:21:44,569 --> 00:21:45,670
+and he was doing it
+
+514
+00:21:45,989 --> 00:21:49,630
+entirely self funded, right? Where he had a good idea
+
+515
+00:21:49,770 --> 00:21:52,500
+and he was controlling costs and he was hiring slow
+
+516
+00:21:52,900 --> 00:21:56,469
+and he had a couple of customers and he was making money and doing well.
+
+517
+00:21:56,479 --> 00:22:00,319
+And then one day the CEO of a competitor shows up and says I'm going to,
+
+518
+00:22:00,329 --> 00:22:02,589
+you can sell to me now or I'll kill you in a year.
+
+519
+00:22:02,979 --> 00:22:04,209
+And the guy was like, what do you mean?
+
+520
+00:22:04,359 --> 00:22:07,680
+And he said, look, I've got venture capitalists behind me lined up.
+
+521
+00:22:07,689 --> 00:22:11,160
+I'm gonna hire more sales people in a month than you have employees.
+
+522
+00:22:11,170 --> 00:22:14,380
+We're going to go to every one of your customers. We're gonna undercut, you
+
+523
+00:22:14,839 --> 00:22:18,040
+know, more than you can even reasonably fathom.
+
+524
+00:22:18,050 --> 00:22:20,310
+We're going to steal all of your customers in six months.
+
+525
+00:22:20,319 --> 00:22:24,810
+You'll have zero revenue in a year, like sell to me now or go out of business.
+
+526
+00:22:25,380 --> 00:22:29,439
+And that is what is going to happen because you're going to see some company
+
+527
+00:22:29,930 --> 00:22:34,380
+a merge that's venture capital funded, that can afford to do
+
+528
+00:22:34,609 --> 00:22:38,280
+weird things like they don't need ads with A I
+
+529
+00:22:38,290 --> 00:22:40,609
+now you can do super tar like I'm looking ok,
+
+530
+00:22:40,619 --> 00:22:43,660
+I'm gonna do a little disclosure of private stuff I have,
+
+531
+00:22:43,729 --> 00:22:48,020
+I'm kind of incubating a product, um, a project I'm calling concierge at the CS A.
+
+532
+00:22:48,250 --> 00:22:49,630
+And the idea is
+
+533
+00:22:49,890 --> 00:22:50,880
+so, for example,
+
+534
+00:22:51,199 --> 00:22:53,719
+I could take your resume, go through it with you,
+
+535
+00:22:53,994 --> 00:22:56,135
+talk to you about what you want to do with your career. Do you want to work from home?
+
+536
+00:22:56,145 --> 00:22:56,984
+Do you want to have a family?
+
+537
+00:22:56,994 --> 00:23:00,204
+And we could figure out like, what is an ideal sort of job for you?
+
+538
+00:23:00,214 --> 00:23:01,844
+And so what do you need to do to get that job?
+
+539
+00:23:01,854 --> 00:23:03,425
+What certifications, what training, what,
+
+540
+00:23:03,435 --> 00:23:05,025
+how do you need to bump your resume on all that?
+
+541
+00:23:05,035 --> 00:23:06,135
+Right. We could do that today.
+
+542
+00:23:06,454 --> 00:23:09,814
+The problem is it would take me two or three hours and so it doesn't scale, right?
+
+543
+00:23:09,824 --> 00:23:15,675
+I am 99.7. 3%. Sure. We can design some chat GP T prompts that will do most of that work.
+
+544
+00:23:15,685 --> 00:23:18,084
+I mean, that could be, and then basically,
+
+545
+00:23:19,209 --> 00:23:21,760
+like, sell that, for example, for 100 bucks
+
+546
+00:23:21,920 --> 00:23:25,599
+and make a lot of money. Like, there would be a good margin on that product.
+
+547
+00:23:25,609 --> 00:23:27,560
+Well, the margin is $100.
+
+548
+00:23:27,569 --> 00:23:30,819
+Well, no, no, no, the API calls are actually quite not cheap.
+
+549
+00:23:30,959 --> 00:23:31,640
+Are they really?
+
+550
+00:23:31,750 --> 00:23:33,349
+Yeah, it'd be like five bucks.
+
+551
+00:23:33,689 --> 00:23:34,160
+Um,
+
+552
+00:23:34,849 --> 00:23:36,550
+you know, but that's the point.
+
+553
+00:23:36,560 --> 00:23:40,969
+Like if, if, if you had a service that could really, like, there are career coaches,
+
+554
+00:23:40,979 --> 00:23:42,250
+they charge a lot of money.
+
+555
+00:23:42,319 --> 00:23:44,069
+But if you could have something that would actually, like,
+
+556
+00:23:44,079 --> 00:23:47,270
+help you in the infosec industry, get a much better job
+
+557
+00:23:47,550 --> 00:23:51,800
+with a, like, even a 10% chance of that working. And it only costs 100 bucks,
+
+558
+00:23:52,204 --> 00:23:53,515
+like a lot of people jump on that.
+
+559
+00:23:53,665 --> 00:23:57,635
+And that's an example. I'm not, I don't think we'll maybe do that. But the point is
+
+560
+00:23:57,974 --> 00:24:02,704
+with A I, you can scale out really complicated heavy tasks.
+
+561
+00:24:02,824 --> 00:24:04,704
+And I think that is gonna,
+
+562
+00:24:05,104 --> 00:24:07,265
+that is what's going to be coming next because somebody's
+
+563
+00:24:07,275 --> 00:24:09,454
+going to figure out the killer app where the A I
+
+564
+00:24:09,890 --> 00:24:12,630
+tells you a personalized bedtime story or
+
+565
+00:24:12,650 --> 00:24:15,089
+tells you a personalized newspaper based on,
+
+566
+00:24:15,099 --> 00:24:15,880
+I, I don't know.
+
+567
+00:24:15,890 --> 00:24:16,609
+Right. But it's,
+
+568
+00:24:17,140 --> 00:24:17,510
+there's, there
+
+569
+00:24:17,770 --> 00:24:18,079
+are
+
+570
+00:24:18,359 --> 00:24:19,750
+things that are capable. Right. Exactly.
+
+571
+00:24:19,760 --> 00:24:23,469
+But the point is there are things that are capable now that we couldn't even imagine.
+
+572
+00:24:23,650 --> 00:24:25,310
+But, but here's the challenge.
+
+573
+00:24:25,380 --> 00:24:30,109
+So the challenge though Kurt, and this is what is going to be the issue. We see
+
+574
+00:24:30,489 --> 00:24:34,709
+the challenge is always going to be, what is the road to monetization? Exactly.
+
+575
+00:24:35,369 --> 00:24:35,569
+Exactly.
+
+576
+00:24:36,290 --> 00:24:38,390
+If it's not ads, which
+
+577
+00:24:38,599 --> 00:24:41,630
+I don't know if, I mean, it is completely conceivable.
+
+578
+00:24:41,800 --> 00:24:45,589
+There will be a new company that invents, I'll put in events in quotes, air quotes,
+
+579
+00:24:45,599 --> 00:24:48,219
+invents a new way to sell online advertising that all
+
+580
+00:24:48,229 --> 00:24:50,150
+the advertisers flock to and say this is it,
+
+581
+00:24:50,160 --> 00:24:51,030
+this makes sense.
+
+582
+00:24:51,819 --> 00:24:52,060
+Well,
+
+583
+00:24:53,420 --> 00:24:55,390
+advertising reminds me of let's encrypt in the
+
+584
+00:24:55,400 --> 00:24:57,160
+sense of even if our concierge projects,
+
+585
+00:24:57,170 --> 00:24:58,469
+whatever charge a penny,
+
+586
+00:24:59,150 --> 00:25:02,849
+that's a massive amount of money and hassle for everybody versus advertising.
+
+587
+00:25:02,859 --> 00:25:03,329
+Is just,
+
+588
+00:25:03,599 --> 00:25:05,989
+you consume the advertising but you, you can't,
+
+589
+00:25:06,189 --> 00:25:07,369
+most of this,
+
+590
+00:25:07,569 --> 00:25:11,859
+like, web scale stuff you can't charge for because
+
+591
+00:25:12,060 --> 00:25:16,839
+when your target audience is in the billions of people, billions of people
+
+592
+00:25:17,030 --> 00:25:18,520
+can't spend money.
+
+593
+00:25:18,790 --> 00:25:21,000
+Well, they don't have credit cards even if they have money.
+
+594
+00:25:21,270 --> 00:25:22,119
+Yeah. Right. Right.
+
+595
+00:25:22,130 --> 00:25:26,040
+It's, it's just not practical and, and that's why ads have been the key.
+
+596
+00:25:26,050 --> 00:25:27,630
+But of course, we've also, like,
+
+597
+00:25:28,349 --> 00:25:32,520
+all of our personal details are now in Mark Zuckerberg's basement and like
+
+598
+00:25:32,530 --> 00:25:35,339
+this sucks and everyone knows everything about me and I hate it.
+
+599
+00:25:35,640 --> 00:25:36,050
+I don't know,
+
+600
+00:25:36,770 --> 00:25:37,500
+maybe it's just,
+
+601
+00:25:37,989 --> 00:25:39,300
+no, it sucks. People used
+
+602
+00:25:39,410 --> 00:25:41,359
+to small villages and everybody knew everything
+
+603
+00:25:42,430 --> 00:25:42,699
+that's,
+
+604
+00:25:43,410 --> 00:25:44,319
+that's totally different.
+
+605
+00:25:44,599 --> 00:25:44,760
+Yeah.
+
+606
+00:25:45,010 --> 00:25:48,800
+But uh no, I think the thing that's gonna happen is I think fundamentally,
+
+607
+00:25:48,810 --> 00:25:51,880
+like you said, the problem is not the technology, it's
+
+608
+00:25:52,020 --> 00:25:56,349
+the path to monetization and how that interacts with basic human behaviors
+
+609
+00:25:57,000 --> 00:25:57,560
+because
+
+610
+00:25:58,069 --> 00:25:58,550
+not just that
+
+611
+00:25:58,719 --> 00:26:01,369
+just that people to make any decisions is hard.
+
+612
+00:26:01,599 --> 00:26:04,189
+That's not, that's not even the issue. The issue is
+
+613
+00:26:04,660 --> 00:26:06,479
+many good ideas
+
+614
+00:26:06,849 --> 00:26:08,790
+won't be back for venture capital
+
+615
+00:26:09,430 --> 00:26:12,880
+and the things that venture capital backs will murder the other stuff.
+
+616
+00:26:12,890 --> 00:26:13,689
+Well, I shouldn't say murder,
+
+617
+00:26:13,699 --> 00:26:15,910
+murder is the wrong word because things like the Fetta verse,
+
+618
+00:26:15,920 --> 00:26:17,310
+the Fetta verse is going to be fine,
+
+619
+00:26:17,589 --> 00:26:18,010
+but the Fed
+
+620
+00:26:18,130 --> 00:26:21,250
+Averse is never going to have 6 billion people using it.
+
+621
+00:26:21,300 --> 00:26:22,910
+Average people will hear about threats because
+
+622
+00:26:22,920 --> 00:26:25,420
+they have an advertising budget and even people
+
+623
+00:26:25,430 --> 00:26:28,729
+in tech still don't know what the heck Mastodon is or the Fed Averse is.
+
+624
+00:26:28,739 --> 00:26:32,969
+Sure. Right. Exactly. There's no advertising budget. Absolutely. And it,
+
+625
+00:26:33,074 --> 00:26:37,055
+you know, again, Mastodon doesn't care like it's hard to use. I don't care.
+
+626
+00:26:37,064 --> 00:26:37,854
+Not my problem
+
+627
+00:26:37,984 --> 00:26:39,135
+to me. That's a feature.
+
+628
+00:26:40,094 --> 00:26:40,265
+No,
+
+629
+00:26:40,454 --> 00:26:41,074
+seriously, because I
+
+630
+00:26:41,234 --> 00:26:42,334
+disagree.
+
+631
+00:26:42,785 --> 00:26:46,655
+I don't mean to be a jerk. But like Irc, remember Eternal September back in what?
+
+632
+00:26:46,665 --> 00:26:48,415
+9899?
+
+633
+00:26:49,130 --> 00:26:51,420
+Well, that was use net eternal September was useless.
+
+634
+00:26:52,699 --> 00:26:56,869
+Irc definitely had its own set of complications we'll say
+
+635
+00:26:57,280 --> 00:26:57,400
+over the,
+
+636
+00:26:57,949 --> 00:27:02,930
+oh my goodness. I remember some of the trolls you do on Irc. It was so good. Hunter two.
+
+637
+00:27:02,939 --> 00:27:04,290
+Hunter two comes
+
+638
+00:27:04,474 --> 00:27:04,885
+IC
+
+639
+00:27:05,444 --> 00:27:07,454
+I will put a link to Hunter Two
+
+640
+00:27:07,775 --> 00:27:09,714
+in the show notes if you don't know what that is
+
+641
+00:27:09,875 --> 00:27:12,125
+like, I I know like no one clicks, show notes.
+
+642
+00:27:12,135 --> 00:27:17,844
+You want to click this one because Hunter Two is the best story you will ever read.
+
+643
+00:27:17,854 --> 00:27:19,944
+I think it goes back to the defining success.
+
+644
+00:27:20,305 --> 00:27:25,224
+And what like fundamentally people have a basic human need for connection,
+
+645
+00:27:25,354 --> 00:27:28,775
+storytelling, story, listening, connecting, eating food together,
+
+646
+00:27:28,814 --> 00:27:31,484
+sitting together on a park bench, holding hands, right?
+
+647
+00:27:31,494 --> 00:27:32,655
+Basic human connection.
+
+648
+00:27:32,959 --> 00:27:33,729
+And that
+
+649
+00:27:33,989 --> 00:27:35,589
+if you look at sort of these killer apps,
+
+650
+00:27:35,599 --> 00:27:37,780
+they've always been kind of wrapped around human connection, right?
+
+651
+00:27:37,790 --> 00:27:40,060
+The fax machine, email, social media.
+
+652
+00:27:40,290 --> 00:27:43,969
+And one of the things I kind of hope for is I worry that these things end up getting,
+
+653
+00:27:43,979 --> 00:27:47,479
+like, really mangled and perverted, like Facebook started out.
+
+654
+00:27:47,489 --> 00:27:50,219
+No, I'm not going to say Facebook started with good intentions. But,
+
+655
+00:27:50,390 --> 00:27:53,069
+you know, you chat with your family and stuff and now it's become
+
+656
+00:27:53,170 --> 00:27:54,540
+the horror show that Facebook is.
+
+657
+00:27:54,550 --> 00:27:56,609
+Oh, well, Twitter is a better example where Twitter went from,
+
+658
+00:27:56,619 --> 00:27:57,689
+like something that was kind of cool
+
+659
+00:27:58,145 --> 00:27:58,704
+to like,
+
+660
+00:27:58,895 --> 00:28:00,484
+oh my God, it's,
+
+661
+00:28:00,704 --> 00:28:01,785
+I don't know what happened to you.
+
+662
+00:28:02,055 --> 00:28:03,714
+Well, no, we know exactly what happened, but
+
+663
+00:28:04,454 --> 00:28:07,005
+the right wing moved in and nobody kicked them out
+
+664
+00:28:07,324 --> 00:28:11,834
+and then that's the owner like, and now they're, now they're X
+
+665
+00:28:12,055 --> 00:28:12,444
+Yeah.
+
+666
+00:28:13,064 --> 00:28:13,645
+And I love that.
+
+667
+00:28:13,655 --> 00:28:15,214
+There's so somebody was like, oh,
+
+668
+00:28:15,224 --> 00:28:17,795
+Facebook owns the trademark X as it pertains to social media.
+
+669
+00:28:17,805 --> 00:28:20,055
+And then somebody else was like, oh, but also Microsoft and then somebody's like,
+
+670
+00:28:20,064 --> 00:28:20,954
+no, don't worry about it.
+
+671
+00:28:21,084 --> 00:28:22,724
+There are 700
+
+672
+00:28:23,010 --> 00:28:27,250
+registered ex trademarks of which a bunch of them are social media
+
+673
+00:28:27,400 --> 00:28:27,989
+and
+
+674
+00:28:28,199 --> 00:28:30,689
+companies that are, I was gonna say on par with
+
+675
+00:28:30,839 --> 00:28:32,510
+X or Twitter or whatever.
+
+676
+00:28:32,750 --> 00:28:34,670
+But no, they're actually a lot larger now,
+
+677
+00:28:35,709 --> 00:28:37,400
+Twitter fired half of their people
+
+678
+00:28:37,619 --> 00:28:38,209
+or more.
+
+679
+00:28:38,219 --> 00:28:41,069
+And my first thought when I read that was like,
+
+680
+00:28:41,079 --> 00:28:43,270
+I'm shocked the lawyers let them do that.
+
+681
+00:28:43,280 --> 00:28:45,550
+And I was like, oh, wait, there are no lawyers anymore.
+
+682
+00:28:46,239 --> 00:28:50,349
+Did you hear there apparently something like $700 million in pending
+
+683
+00:28:50,640 --> 00:28:55,939
+lawsuits regarding severance pay? I have no doubt. Like the number was, I think,
+
+684
+00:28:56,119 --> 00:28:58,530
+I think it was 700. It was a big number.
+
+685
+00:28:58,839 --> 00:28:59,400
+So,
+
+686
+00:28:59,709 --> 00:29:00,890
+I mean, just now when I
+
+687
+00:29:01,319 --> 00:29:05,300
+die alone, let's, let's bring this one home. We're out of time. To me.
+
+688
+00:29:05,310 --> 00:29:07,439
+The hopeful news is things like the fetters.
+
+689
+00:29:07,630 --> 00:29:10,520
+Now, somebody like Jerry Bell can run
+
+690
+00:29:10,839 --> 00:29:11,660
+a system
+
+691
+00:29:11,770 --> 00:29:16,380
+with multiple servers for tens of thousands of people affordably
+
+692
+00:29:17,060 --> 00:29:18,920
+like a less than a buck a month per user.
+
+693
+00:29:18,969 --> 00:29:22,359
+And so if even like 10% of his users donate a bit of money,
+
+694
+00:29:22,839 --> 00:29:23,800
+it's sustainable.
+
+695
+00:29:24,270 --> 00:29:24,349
+And
+
+696
+00:29:24,609 --> 00:29:24,939
+that
+
+697
+00:29:25,239 --> 00:29:28,930
+I don't know if it's sustainable. I think Jerry's still paying a lot out of pocket,
+
+698
+00:29:29,869 --> 00:29:33,500
+but regardless, just have him turn it off for an hour and screen test everybody. No.
+
+699
+00:29:33,510 --> 00:29:34,589
+Seriously. Right. Like,
+
+700
+00:29:34,989 --> 00:29:36,000
+like just screen test.
+
+701
+00:29:36,010 --> 00:29:37,819
+Like the thing is like Wikipedia, for example,
+
+702
+00:29:37,829 --> 00:29:40,020
+is at the point now where they actually have a huge endowment,
+
+703
+00:29:40,469 --> 00:29:44,579
+like an absurdly large endowment over $100 million. I know we talked about this.
+
+704
+00:29:44,589 --> 00:29:45,329
+I'm ok with that.
+
+705
+00:29:46,050 --> 00:29:46,290
+So
+
+706
+00:29:46,959 --> 00:29:47,569
+it's, it's,
+
+707
+00:29:47,900 --> 00:29:48,810
+I, I think
+
+708
+00:29:49,030 --> 00:29:49,359
+that
+
+709
+00:29:49,630 --> 00:29:49,640
+I
+
+710
+00:29:49,900 --> 00:29:51,109
+think a lot of fed uh,
+
+711
+00:29:51,329 --> 00:29:55,280
+servers or systems will be sustainable. Either
+
+712
+00:29:55,500 --> 00:29:58,589
+they'll make enough money to pay for themselves or they'll be somebody just like,
+
+713
+00:29:58,599 --> 00:30:00,819
+I don't care about wasting 50 or 100 bucks a month.
+
+714
+00:30:00,829 --> 00:30:03,329
+I mean, maybe, I don't know this podcast. It's a hobby.
+
+715
+00:30:03,750 --> 00:30:04,760
+You waste money on it.
+
+716
+00:30:05,130 --> 00:30:09,290
+It's so what some people earn in a month. Waste is a generous description. But,
+
+717
+00:30:09,750 --> 00:30:10,359
+well, I mean,
+
+718
+00:30:10,369 --> 00:30:13,170
+but the money you spend on this podcast is what some people earn in a month.
+
+719
+00:30:13,199 --> 00:30:19,329
+Uh That could be, that could be. But regardless, I am excited to see what comes next
+
+720
+00:30:19,709 --> 00:30:20,689
+and I'm
+
+721
+00:30:21,069 --> 00:30:25,030
+apprehensive for what the destruction will bring with it
+
+722
+00:30:25,290 --> 00:30:26,010
+because
+
+723
+00:30:26,170 --> 00:30:27,069
+no,
+
+724
+00:30:27,709 --> 00:30:32,640
+when you, when destruction happens, there are always side effects.
+
+725
+00:30:32,680 --> 00:30:34,989
+And that is what scares me a little bit.
+
+726
+00:30:35,089 --> 00:30:37,510
+But I'm also, it will be,
+
+727
+00:30:37,520 --> 00:30:41,079
+it will be very interesting to see what rises from these ashes.
+
+728
+00:30:41,089 --> 00:30:41,630
+So
+
+729
+00:30:42,260 --> 00:30:47,150
+time will tell and I learned how to spell wildebeest. So all in all pretty good day.
+
+730
+00:30:47,290 --> 00:30:49,030
+I'm curious, what would have happened if I'd gotten it wrong?
+
+731
+00:30:49,040 --> 00:30:49,839
+Would you have laughed?
+
+732
+00:30:49,849 --> 00:30:52,829
+No, actually, I wouldn't have, I wouldn't have because I didn't know either.
+
+733
+00:30:53,079 --> 00:30:54,790
+And I was hoping you would have gotten it wrong
+
+734
+00:30:54,800 --> 00:30:56,589
+because I feel like it's a very strange word.
+
+735
+00:30:56,599 --> 00:31:00,589
+And I was going to use that as part of my anecdote of such a strange word.
+
+736
+00:31:00,599 --> 00:31:03,589
+But lo and behold, you know how to spell it. You ruined my day.
+
+737
+00:31:03,734 --> 00:31:06,354
+But you also got to remember I speak some German. So that's kind of
+
+738
+00:31:06,905 --> 00:31:11,185
+what is, what is the quote? My disappointment is immeasurable. My day is ruined
+
+739
+00:31:12,415 --> 00:31:12,484
+him.
+
+740
+00:31:13,285 --> 00:31:14,305
+I like his reviews.
+
+741
+00:31:14,454 --> 00:31:18,555
+At least it's the end of my day. So only a little bit of day is ruined. But anyway.
+
+742
+00:31:18,564 --> 00:31:20,314
+All right. Thank you, Kurt. Thank you both for listening.
+
+743
+00:31:20,324 --> 00:31:22,224
+Go to open social security podcast.com,
+
+744
+00:31:22,405 --> 00:31:22,755
+UZ Podos
+
+745
+00:31:22,974 --> 00:31:25,354
+says podcast hashtag on Mastodon
+
+746
+00:31:25,574 --> 00:31:28,515
+to hit us up. Kurt. Have a marvelous rest of your day.
+
+747
+00:31:28,665 --> 00:31:29,994
+You too. Thanks everybody.
+
+748
+00:31:30,125 --> 00:31:31,875
+-- Thanks everyone. Bye
+-- bye.

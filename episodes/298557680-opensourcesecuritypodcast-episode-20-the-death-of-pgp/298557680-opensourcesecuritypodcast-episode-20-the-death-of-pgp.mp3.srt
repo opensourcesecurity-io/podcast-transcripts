@@ -1,0 +1,4873 @@
+0
+00:00:05,239 --> 00:00:09,520
+Hello and welcome to the open source security podcast number 20 with myself,
+
+1
+00:00:09,529 --> 00:00:11,289
+Kurt Siefried and my partner in crime.
+
+2
+00:00:11,300 --> 00:00:12,090
+Josh Bresser.
+
+3
+00:00:13,840 --> 00:00:15,770
+It's, we're almost old enough to drink in America.
+
+4
+00:00:16,579 --> 00:00:17,409
+That's right.
+
+5
+00:00:17,930 --> 00:00:19,370
+-- Awesome.
+-- Or most of America.
+
+6
+00:00:20,250 --> 00:00:25,530
+-- Uh So, yes. So we have, uh well, we have something, I think a little bit of fun today.
+-- Uh
+
+7
+00:00:26,389 --> 00:00:26,639
+Santa.
+
+8
+00:00:26,739 --> 00:00:26,750
+Uh
+
+9
+00:00:26,899 --> 00:00:27,040
+No,
+
+10
+00:00:27,950 --> 00:00:28,600
+no,
+
+11
+00:00:29,260 --> 00:00:31,170
+not more fun than Santa
+
+12
+00:00:32,348 --> 00:00:32,378
+uh
+
+13
+00:00:32,548 --> 00:00:33,058
+all
+
+14
+00:00:33,668 --> 00:00:34,729
+way to bring it down.
+
+15
+00:00:35,188 --> 00:00:40,398
+-- No, the Santa episode was the, I think the best you've ever done.
+-- True, true.
+
+16
+00:00:41,148 --> 00:00:41,758
+I have to admit I,
+
+17
+00:00:41,769 --> 00:00:44,019
+I'm actually really looking forward to wrapping my kids' presents.
+
+18
+00:00:44,849 --> 00:00:46,069
+I got them some sweet stuff.
+
+19
+00:00:47,220 --> 00:00:49,400
+Make sure you play with it all first just to test it.
+
+20
+00:00:49,520 --> 00:00:50,250
+You're testing. Uh
+
+21
+00:00:50,529 --> 00:00:53,119
+Yes. Yes. Yes.
+
+22
+00:00:53,560 --> 00:00:54,360
+But, uh
+
+23
+00:00:55,259 --> 00:01:00,830
+yeah, so this, uh this episode we are going to uh throw P GB under the bus.
+
+24
+00:01:00,840 --> 00:01:02,310
+Well, we think it's dead already.
+
+25
+00:01:03,389 --> 00:01:07,110
+Well, you know what it is. I, I don't, I don't think it's dead personally.
+
+26
+00:01:07,120 --> 00:01:09,989
+I, I know it's pretty much dead because quite frankly,
+
+27
+00:01:10,339 --> 00:01:11,019
+um,
+
+28
+00:01:12,150 --> 00:01:14,620
+I, well, I, for the listeners out there,
+
+29
+00:01:14,629 --> 00:01:17,610
+I used to do CV assignments on the open source security man list.
+
+30
+00:01:17,620 --> 00:01:19,500
+And I signed all of them so that nobody could, like,
+
+31
+00:01:19,510 --> 00:01:21,629
+impersonate me with a fake CV assignment.
+
+32
+00:01:21,870 --> 00:01:23,989
+The only reason I cared about that was just,
+
+33
+00:01:24,000 --> 00:01:25,779
+I didn't want to have to deal with people complaining to me.
+
+34
+00:01:25,790 --> 00:01:29,139
+There's no actual security thing really. It was just a convenience thing.
+
+35
+00:01:29,949 --> 00:01:32,349
+And so I signed my email religiously for like,
+
+36
+00:01:32,360 --> 00:01:34,449
+I think it was three years and then I stopped one day
+
+37
+00:01:34,599 --> 00:01:35,589
+and nobody noticed, nobody
+
+38
+00:01:36,440 --> 00:01:36,800
+knew
+
+39
+00:01:37,309 --> 00:01:37,540
+well,
+
+40
+00:01:37,550 --> 00:01:40,339
+except for the three people who had been complaining about my
+
+41
+00:01:40,349 --> 00:01:42,930
+signed and encrypted email because it was inconvenient to them.
+
+42
+00:01:43,430 --> 00:01:46,449
+And I'm lucky enough to have one of them here with me today. Josh.
+
+43
+00:01:46,580 --> 00:01:47,550
+I don't,
+
+44
+00:01:47,819 --> 00:01:50,610
+I don't think I ever complained about your signing of email just because
+
+45
+00:01:51,349 --> 00:01:52,260
+-- the encrypting of it.
+-- I
+
+46
+00:01:52,379 --> 00:01:53,449
+totally used to complain.
+
+47
+00:01:53,459 --> 00:01:57,680
+-- You used to encrypt email to me all the time, even email that didn't matter. And it
+-- is
+
+48
+00:01:57,930 --> 00:01:59,050
+just a blanket setting.
+
+49
+00:02:00,790 --> 00:02:02,599
+So I have two,
+
+50
+00:02:03,239 --> 00:02:06,160
+two complaints about this on one side,
+
+51
+00:02:06,400 --> 00:02:10,979
+anyone who signs and encrypts, all of their mail has their key
+
+52
+00:02:11,149 --> 00:02:12,529
+two available,
+
+53
+00:02:13,029 --> 00:02:17,440
+right? Because in order to do this correctly, the key needs to be difficult.
+
+54
+00:02:17,940 --> 00:02:18,460
+Ok.
+
+55
+00:02:19,229 --> 00:02:20,809
+Which means, and, and let's face it.
+
+56
+00:02:20,820 --> 00:02:24,860
+I'm pretty sure because you were doing this before UB keys readily available.
+
+57
+00:02:26,660 --> 00:02:31,929
+You had a file on a disk which means your key is acquirable.
+
+58
+00:02:32,179 --> 00:02:32,649
+Ok.
+
+59
+00:02:32,770 --> 00:02:33,020
+We'll just
+
+60
+00:02:33,229 --> 00:02:33,250
+me.
+
+61
+00:02:34,089 --> 00:02:34,649
+Right.
+
+62
+00:02:34,750 --> 00:02:35,589
+I don't like typing in my
+
+63
+00:02:35,869 --> 00:02:36,009
+password.
+
+64
+00:02:36,500 --> 00:02:37,460
+This is,
+
+65
+00:02:37,619 --> 00:02:39,110
+this is part of my point.
+
+66
+00:02:39,229 --> 00:02:39,800
+OK.
+
+67
+00:02:40,089 --> 00:02:44,529
+So you made it too easy to get to. But then conversely on my side,
+
+68
+00:02:44,820 --> 00:02:48,199
+my key is incredibly difficult
+
+69
+00:02:48,539 --> 00:02:52,630
+to get a hold of and decrypt things. And so I was happy to decrypt
+
+70
+00:02:52,789 --> 00:02:54,190
+important messages,
+
+71
+00:02:54,899 --> 00:02:59,360
+but when it was like day to day stuff, it was a nuisance to me. And so I told you to stop.
+
+72
+00:02:59,619 --> 00:03:01,720
+And this is, I mean, so let's face it, right.
+
+73
+00:03:01,729 --> 00:03:05,839
+This is part of the problem with P GP is it is hard to use
+
+74
+00:03:06,000 --> 00:03:06,919
+correctly.
+
+75
+00:03:07,220 --> 00:03:08,059
+-- It's very
+-- encryption
+
+76
+00:03:08,270 --> 00:03:08,300
+in
+
+77
+00:03:08,820 --> 00:03:09,460
+general.
+
+78
+00:03:10,199 --> 00:03:10,660
+-- That's
+-- right.
+
+79
+00:03:10,720 --> 00:03:12,600
+I mean, with, with, well, let me rephrase
+
+80
+00:03:12,729 --> 00:03:14,960
+with public private key encryption.
+
+81
+00:03:15,210 --> 00:03:15,880
+Yeah, like you said,
+
+82
+00:03:16,910 --> 00:03:18,490
+the key needs to be
+
+83
+00:03:18,660 --> 00:03:22,889
+difficult to attack and, and quite sadly, that typically means it's also that
+
+84
+00:03:23,339 --> 00:03:25,550
+securing a key. So it's difficult to attack,
+
+85
+00:03:26,139 --> 00:03:29,289
+typically impacts the usability heavily. Um
+
+86
+00:03:29,610 --> 00:03:30,789
+You know, like at a minimum,
+
+87
+00:03:30,800 --> 00:03:35,320
+you should be putting it on like a sort of an HS MA hardware security module device,
+
+88
+00:03:36,100 --> 00:03:37,970
+you know, where it can't be easily exported.
+
+89
+00:03:38,360 --> 00:03:40,470
+Uh which then becomes the question of like, for example,
+
+90
+00:03:40,479 --> 00:03:41,800
+how do you back this stupid thing up?
+
+91
+00:03:41,949 --> 00:03:44,419
+-- I
+-- could
+-- tell you a story about that if you like.
+
+92
+00:03:44,690 --> 00:03:48,139
+-- Is it a happy story? No,
+-- no. It's, it's what I do.
+
+93
+00:03:48,309 --> 00:03:52,089
+And, and part of the historically speaking, I've not been
+
+94
+00:03:52,270 --> 00:03:52,929
+open
+
+95
+00:03:53,160 --> 00:03:55,970
+talking about what I do with my P GP keys and
+
+96
+00:03:55,979 --> 00:03:58,580
+how I protect them and what I've done because obviously,
+
+97
+00:03:58,910 --> 00:04:00,919
+well, I'll say obscurity.
+
+98
+00:04:01,089 --> 00:04:01,389
+S
+
+99
+00:04:01,610 --> 00:04:02,199
+security.
+
+100
+00:04:02,419 --> 00:04:03,660
+While security,
+
+101
+00:04:04,139 --> 00:04:06,809
+that is a good word. S security that we'll make that one up.
+
+102
+00:04:06,820 --> 00:04:09,839
+But while security through obscurity generally doesn't work.
+
+103
+00:04:10,229 --> 00:04:14,229
+In the case of key management and your processes,
+
+104
+00:04:14,509 --> 00:04:16,220
+it's not something you want to talk about.
+
+105
+00:04:16,230 --> 00:04:20,608
+So anyway, here's what I've done in the past to deal with all of these problems and
+
+106
+00:04:20,968 --> 00:04:24,648
+I created the most ridiculous Rube Goldberg machine one
+
+107
+00:04:24,658 --> 00:04:28,049
+could possibly create for dealing with P GP keys,
+
+108
+00:04:28,058 --> 00:04:28,368
+right?
+
+109
+00:04:28,378 --> 00:04:29,178
+So first of all,
+
+110
+00:04:29,589 --> 00:04:31,480
+I have a computer, I have an old line
+
+111
+00:04:31,649 --> 00:04:34,339
+just to confirm these were your personal keys, right? These weren't like
+
+112
+00:04:34,779 --> 00:04:40,899
+right important corporate keys are like keys used for like nuclear codes or
+
+113
+00:04:41,040 --> 00:04:44,649
+-- signing software or anything like that, right? This was your personal set of
+-- keys.
+
+114
+00:04:44,829 --> 00:04:49,200
+This is the Josh Bresser's P GP keys. You can download off of the key servers
+
+115
+00:04:49,309 --> 00:04:52,179
+like like this is, this is my stuff. Exactly. Just what you,
+
+116
+00:04:52,459 --> 00:04:53,609
+so first of all,
+
+117
+00:04:53,720 --> 00:04:55,299
+I have an old laptop
+
+118
+00:04:55,760 --> 00:04:57,920
+that I've removed the disc out of
+
+119
+00:04:58,519 --> 00:05:03,440
+and all it has ever done is generate and load P GP keys for me.
+
+120
+00:05:03,649 --> 00:05:06,980
+Now, I only, every time I need to do any sort of operations,
+
+121
+00:05:06,989 --> 00:05:10,820
+I burn a new CD live image of a Linux distribution.
+
+122
+00:05:11,529 --> 00:05:13,429
+I boot into this machine
+
+123
+00:05:13,679 --> 00:05:14,829
+with no hard drive.
+
+124
+00:05:14,970 --> 00:05:16,829
+I do my key operations
+
+125
+00:05:17,279 --> 00:05:21,019
+and then I load them. It's gonna get crazier. Don't worry,
+
+126
+00:05:21,350 --> 00:05:21,609
+no stupid
+
+127
+00:05:21,720 --> 00:05:23,440
+question. But where does this machine get entropy?
+
+128
+00:05:23,450 --> 00:05:24,980
+To generate good randomness from
+
+129
+00:05:25,279 --> 00:05:25,359
+no,
+
+130
+00:05:25,959 --> 00:05:25,980
+no
+
+131
+00:05:26,190 --> 00:05:26,309
+network
+
+132
+00:05:26,510 --> 00:05:27,540
+into a,
+
+133
+00:05:27,720 --> 00:05:29,149
+there is no network. That's right.
+
+134
+00:05:29,160 --> 00:05:32,950
+I boot into a, a graphical workstation and then I purposely like,
+
+135
+00:05:32,959 --> 00:05:34,630
+play solitaire for a little while,
+
+136
+00:05:34,730 --> 00:05:38,230
+like, like, like for real, you know, to build the entropy. Um
+
+137
+00:05:39,079 --> 00:05:39,630
+Right.
+
+138
+00:05:39,850 --> 00:05:43,109
+I told you it's gonna get crazier. I'm not done yet. So anyway,
+
+139
+00:05:43,320 --> 00:05:46,459
+machine, not connected to the network. No hard drive.
+
+140
+00:05:46,730 --> 00:05:51,579
+I do my key operations off a live CD. The live CD is then destroyed.
+
+141
+00:05:51,589 --> 00:05:52,950
+I never use it twice.
+
+142
+00:05:53,720 --> 00:05:54,279
+And
+
+143
+00:05:54,450 --> 00:05:54,790
+yeah,
+
+144
+00:05:55,049 --> 00:05:57,000
+seriously. And I'm not done yet
+
+145
+00:05:57,369 --> 00:05:57,779
+because
+
+146
+00:05:57,950 --> 00:06:00,250
+you burned a CD and said it. So it can't be
+
+147
+00:06:01,829 --> 00:06:02,510
+tinfoil tinfoil
+
+148
+00:06:02,690 --> 00:06:02,959
+hat
+
+149
+00:06:03,100 --> 00:06:03,200
+because
+
+150
+00:06:03,350 --> 00:06:06,149
+it's not about using it again elsewhere or anything like that.
+
+151
+00:06:06,160 --> 00:06:07,260
+It's not about writing to it.
+
+152
+00:06:07,700 --> 00:06:12,600
+It's the fact that if the disk somehow has some sort of secret back door on it,
+
+153
+00:06:12,609 --> 00:06:16,579
+I'm not going to use it for the next set of operations I might happen to do
+
+154
+00:06:17,079 --> 00:06:18,950
+with the keys. Right. Exactly. It's
+
+155
+00:06:19,329 --> 00:06:19,779
+in this
+
+156
+00:06:21,369 --> 00:06:22,269
+and for what it's worth.
+
+157
+00:06:22,279 --> 00:06:26,200
+Like, I, I literally sat down and thought, how could I tinfoil have this
+
+158
+00:06:26,670 --> 00:06:29,880
+to an 11? And I, I'd say I've probably done a good job.
+
+159
+00:06:29,970 --> 00:06:32,000
+So anyway, generate the keys on this, right?
+
+160
+00:06:32,209 --> 00:06:34,790
+And then I have my Yuba key now which I store them on
+
+161
+00:06:35,170 --> 00:06:38,399
+and essentially I load the keys into the UB key,
+
+162
+00:06:38,630 --> 00:06:39,109
+right?
+
+163
+00:06:39,459 --> 00:06:42,190
+-- Which is fine.
+-- And what exactly is the up key for our listeners
+
+164
+00:06:42,429 --> 00:06:42,540
+who
+
+165
+00:06:42,750 --> 00:06:43,940
+-- that's fair.
+-- It's, um,
+
+166
+00:06:44,239 --> 00:06:46,609
+it's a little device there on something called UB
+
+167
+00:06:46,839 --> 00:06:47,670
+four. It's,
+
+168
+00:06:48,260 --> 00:06:50,709
+it does Hotp for authentication.
+
+169
+00:06:50,839 --> 00:06:53,390
+It does, it stores RS a
+
+170
+00:06:53,700 --> 00:06:58,910
+private keys for things like P GP and I can, I, I store an sh key on there for logging in,
+
+171
+00:06:58,920 --> 00:06:59,700
+for example.
+
+172
+00:07:00,040 --> 00:07:01,200
+And it does you.
+
+173
+00:07:02,440 --> 00:07:05,950
+Yes, it's a USB device and it's just a super cool little
+
+174
+00:07:06,209 --> 00:07:08,380
+doggy. I'll put it in the show notes. A link to the UBQ
+
+175
+00:07:08,480 --> 00:07:10,420
+four, which if you don't have one,
+
+176
+00:07:10,640 --> 00:07:14,359
+you should certainly get one. They're amazing devices.
+
+177
+00:07:14,369 --> 00:07:17,059
+And for what it's worth these days, I basically use it for
+
+178
+00:07:17,410 --> 00:07:22,140
+my HOTP log in uh U two F for things like github and Google.
+
+179
+00:07:22,410 --> 00:07:23,510
+And then also
+
+180
+00:07:24,220 --> 00:07:26,760
+it does uh uh my SSH key,
+
+181
+00:07:27,239 --> 00:07:31,359
+which is obviously that way I can uh whatever devices I connect to.
+
+182
+00:07:31,369 --> 00:07:34,559
+I never have a key on desk and I can remove the, the key
+
+183
+00:07:35,000 --> 00:07:38,470
+and then I can log in or not log in, I guess if it's not in.
+
+184
+00:07:38,609 --> 00:07:42,540
+So back to my keys. Now things continue to get more bizarre is so
+
+185
+00:07:42,829 --> 00:07:45,920
+I, I obviously I generate keys on this special machine.
+
+186
+00:07:46,109 --> 00:07:47,510
+I load the keys into my UI
+
+187
+00:07:47,670 --> 00:07:49,630
+key, but I still need to back them up.
+
+188
+00:07:49,859 --> 00:07:53,869
+And so what I did is I essentially tar up the
+
+189
+00:07:54,500 --> 00:07:58,559
+uh GP G, what do they call it? A key store keying, keying. It's called the keying.
+
+190
+00:07:59,149 --> 00:07:59,850
+And then
+
+191
+00:08:00,200 --> 00:08:03,429
+I have it encrypted with a password
+
+192
+00:08:03,750 --> 00:08:04,730
+that is
+
+193
+00:08:05,070 --> 00:08:07,980
+incredibly long. I'm talking about like
+
+194
+00:08:08,230 --> 00:08:10,100
+multiple lines long
+
+195
+00:08:10,470 --> 00:08:12,160
+and I don't know the password,
+
+196
+00:08:12,230 --> 00:08:15,359
+but I know how to generate the password because the password is
+
+197
+00:08:15,369 --> 00:08:20,839
+created from some physical objects by putting together the pieces of them
+
+198
+00:08:21,329 --> 00:08:24,010
+and, and certain, you know what I mean? Like like words
+
+199
+00:08:24,630 --> 00:08:24,760
+pages.
+
+200
+00:08:26,220 --> 00:08:26,549
+OK.
+
+201
+00:08:26,559 --> 00:08:28,809
+-- So
+-- you're saying because there's physical objects
+
+202
+00:08:28,820 --> 00:08:30,399
+with words written down on them that you
+
+203
+00:08:30,850 --> 00:08:31,510
+basically,
+
+204
+00:08:32,500 --> 00:08:32,679
+I I
+
+205
+00:08:32,840 --> 00:08:34,909
+there are certain books in the world
+
+206
+00:08:35,210 --> 00:08:37,869
+that have between additions,
+
+207
+00:08:38,359 --> 00:08:42,710
+there are certain words, phrases and things in them that do not change.
+
+208
+00:08:42,719 --> 00:08:43,659
+Like for example,
+
+209
+00:08:43,830 --> 00:08:45,890
+let's say the names of chapters,
+
+210
+00:08:46,000 --> 00:08:47,190
+right? Of your book.
+
+211
+00:08:47,669 --> 00:08:52,289
+And so imagine this, I've basically taken a handful of physical objects
+
+212
+00:08:52,580 --> 00:08:54,530
+in, in my case books. OK?
+
+213
+00:08:54,539 --> 00:08:57,650
+I, I don't even care because like I don't use P GP anymore and I, we're,
+
+214
+00:08:57,659 --> 00:08:58,729
+we're proclaiming it dead.
+
+215
+00:08:58,739 --> 00:08:59,650
+So whatever,
+
+216
+00:09:00,039 --> 00:09:00,659
+essentially,
+
+217
+00:09:00,669 --> 00:09:02,919
+I've taken words out of books and put them together in
+
+218
+00:09:02,929 --> 00:09:05,609
+a certain way that I could not tell you the password,
+
+219
+00:09:05,619 --> 00:09:08,429
+but I know how to put it together and it takes about half an hour to do.
+
+220
+00:09:08,539 --> 00:09:11,429
+So it's like it is expensive for me
+
+221
+00:09:11,630 --> 00:09:14,090
+to decrypt my master keys.
+
+222
+00:09:14,979 --> 00:09:17,960
+And then those are obviously stored at a vault at the bank on
+
+223
+00:09:17,969 --> 00:09:21,289
+a USB drive which I never go get because I don't need.
+
+224
+00:09:21,580 --> 00:09:22,200
+And so
+
+225
+00:09:22,359 --> 00:09:25,590
+I suppose I, I should probably check on it every now and then just to make sure it's not
+
+226
+00:09:25,780 --> 00:09:26,760
+not going missing
+
+227
+00:09:27,219 --> 00:09:28,469
+but yeah, that's my,
+
+228
+00:09:28,849 --> 00:09:30,479
+that's my crazy G GP story.
+
+229
+00:09:30,719 --> 00:09:33,830
+Did you use have master keys and then you generated sub
+
+230
+00:09:33,840 --> 00:09:36,000
+keys that you actually used on a day to day basis?
+
+231
+00:09:36,010 --> 00:09:36,760
+Or?
+
+232
+00:09:38,270 --> 00:09:40,070
+In fact, I, I wrote a blog post about this.
+
+233
+00:09:40,080 --> 00:09:44,260
+I think about all the crazy things I did around the, the sub keys and whatnot because,
+
+234
+00:09:44,409 --> 00:09:46,900
+but again, I mean, this is part of the problem with P GP, right? Is
+
+235
+00:09:47,150 --> 00:09:50,159
+it's not obvious you don't like generate one key and use it.
+
+236
+00:09:50,169 --> 00:09:52,330
+You've got your master key, you've got your encryption key,
+
+237
+00:09:52,340 --> 00:09:53,340
+you've got your signing key,
+
+238
+00:09:53,349 --> 00:09:55,190
+you've got your authentication key and you're supposed
+
+239
+00:09:55,200 --> 00:09:56,539
+to rotate them every now and then one
+
+240
+00:09:56,650 --> 00:09:56,710
+key
+
+241
+00:09:57,500 --> 00:10:00,650
+now nobody does. And it's just, it's so
+
+242
+00:10:01,440 --> 00:10:03,169
+I understand the intent
+
+243
+00:10:03,640 --> 00:10:05,780
+because they wanted perfect.
+
+244
+00:10:06,330 --> 00:10:06,840
+-- But
+-- yeah,
+
+245
+00:10:07,489 --> 00:10:09,929
+-- they want
+-- perfect from, well, here's the problem,
+
+246
+00:10:09,940 --> 00:10:14,070
+I think they want it perfect from a cryptographic security point of view,
+
+247
+00:10:14,080 --> 00:10:17,080
+which is even more insane than a security point of view,
+
+248
+00:10:17,960 --> 00:10:18,390
+right?
+
+249
+00:10:18,520 --> 00:10:19,510
+Probably
+
+250
+00:10:19,900 --> 00:10:21,630
+because like let's face it, right? Like
+
+251
+00:10:21,849 --> 00:10:24,869
+for example, one of the challenges is, let's say, for example,
+
+252
+00:10:24,880 --> 00:10:26,619
+you accept encrypted email,
+
+253
+00:10:27,190 --> 00:10:28,859
+right? And your key expires at some point.
+
+254
+00:10:28,869 --> 00:10:30,510
+Well, you still have to keep that key around
+
+255
+00:10:30,679 --> 00:10:32,599
+to decrypt your old email and look at
+
+256
+00:10:33,250 --> 00:10:34,780
+it, right? Same thing with all these sub keys.
+
+257
+00:10:34,789 --> 00:10:36,820
+If you actually rotate your sub keys a lot,
+
+258
+00:10:37,039 --> 00:10:38,609
+you still have to keep them around.
+
+259
+00:10:38,619 --> 00:10:40,739
+So you can look at your old encrypted data, you know,
+
+260
+00:10:41,150 --> 00:10:43,900
+uh unless you, like, take all your old encrypted data,
+
+261
+00:10:43,909 --> 00:10:46,219
+decrypt it and re encrypt it with a current key and then keep
+
+262
+00:10:46,229 --> 00:10:48,570
+doing that every time you roll keys over which let's face it,
+
+263
+00:10:48,580 --> 00:10:51,359
+like nobody's like that, that would be a level of effort.
+
+264
+00:10:51,369 --> 00:10:52,250
+But, wow,
+
+265
+00:10:52,539 --> 00:10:52,880
+I just
+
+266
+00:10:53,159 --> 00:10:53,260
+think
+
+267
+00:10:53,400 --> 00:10:56,210
+about it. You heard my obscene story about key management?
+
+268
+00:10:56,219 --> 00:10:59,289
+Like there's probably somebody who does that. It's not me.
+
+269
+00:10:59,739 --> 00:11:00,020
+It's
+
+270
+00:11:02,059 --> 00:11:05,000
+see. And, and I think here's what to me is, I think
+
+271
+00:11:05,530 --> 00:11:10,739
+for most of what, and this is sad for most of what P GP was meant to be used for
+
+272
+00:11:10,940 --> 00:11:14,210
+it. It, it's, it's unusable, it's so it's effectively dead.
+
+273
+00:11:14,219 --> 00:11:19,039
+I mean, email being the primary example, right? If I want to
+
+274
+00:11:19,469 --> 00:11:22,219
+uh encrypt email to somebody, the first problem, I mean,
+
+275
+00:11:22,330 --> 00:11:23,909
+how do you find somebody's key? Right.
+
+276
+00:11:23,919 --> 00:11:27,799
+That's the first problem with P GP is they went with this decentralized web of trust,
+
+277
+00:11:27,809 --> 00:11:28,580
+supposedly.
+
+278
+00:11:29,309 --> 00:11:32,770
+And the idea being, you know, is that like people would get together,
+
+279
+00:11:32,780 --> 00:11:34,039
+sign each other's keys.
+
+280
+00:11:34,049 --> 00:11:35,739
+And so I would be able to say
+
+281
+00:11:35,979 --> 00:11:40,450
+I found a key for Bob Smith and Bob Smith's key was signed by Jane Smith
+
+282
+00:11:40,659 --> 00:11:45,239
+and Jane Smith's key was signed by Josh Presser and I trust Josh Presser's key.
+
+283
+00:11:45,659 --> 00:11:48,219
+So there's, you know, this transit of trust property except
+
+284
+00:11:48,520 --> 00:11:51,809
+I have no idea who these people in the middle are. Like I know who Josh is
+
+285
+00:11:52,590 --> 00:11:55,090
+and beyond that I have no clue.
+
+286
+00:11:55,549 --> 00:11:57,650
+So then to deal with that, you know,
+
+287
+00:11:57,659 --> 00:12:00,080
+they have different levels of trust when you sign a key, you know,
+
+288
+00:12:00,090 --> 00:12:03,849
+I ultimately trust this key like or I minimally trust this key.
+
+289
+00:12:04,630 --> 00:12:05,010
+But
+
+290
+00:12:05,159 --> 00:12:08,650
+as far as I know, there's no really good description of what that actually means.
+
+291
+00:12:09,049 --> 00:12:10,679
+No, it's never been clear.
+
+292
+00:12:11,140 --> 00:12:11,369
+Yeah.
+
+293
+00:12:11,380 --> 00:12:14,820
+Well, and then my favorite is when they do have key signing things, they're like
+
+294
+00:12:15,219 --> 00:12:17,489
+you should verify the person's identity.
+
+295
+00:12:17,500 --> 00:12:21,280
+Well, first of all, I don't know of any way to prove somebody's email address.
+
+296
+00:12:21,289 --> 00:12:23,150
+Like I, it's not on your passport,
+
+297
+00:12:23,369 --> 00:12:23,890
+right?
+
+298
+00:12:23,989 --> 00:12:26,179
+Like there's no piece of government ID that has your
+
+299
+00:12:26,190 --> 00:12:28,020
+email address printed on it as far as I know.
+
+300
+00:12:28,169 --> 00:12:28,989
+And more to the point,
+
+301
+00:12:29,390 --> 00:12:30,690
+I don't know how to validate
+
+302
+00:12:30,909 --> 00:12:31,849
+identification.
+
+303
+00:12:32,270 --> 00:12:32,590
+Right?
+
+304
+00:12:32,599 --> 00:12:32,929
+Like I don't,
+
+305
+00:12:32,940 --> 00:12:34,710
+I couldn't even validate my own driver's license or
+
+306
+00:12:34,719 --> 00:12:36,580
+passport that I carry with me all the time.
+
+307
+00:12:36,590 --> 00:12:39,210
+I, I vaguely know they have like a shiny
+
+308
+00:12:39,500 --> 00:12:42,460
+thing of a jigger on them that you can see in the light when you know, it reflects.
+
+309
+00:12:42,469 --> 00:12:42,770
+Right?
+
+310
+00:12:43,359 --> 00:12:45,520
+-- Yes, that's, and I'm pretty sure that can be
+-- fake.
+
+311
+00:12:45,640 --> 00:12:46,080
+Very good.
+
+312
+00:12:46,679 --> 00:12:49,239
+II I could not pick out a fake ID
+
+313
+00:12:49,479 --> 00:12:53,090
+you could probably show up with, with something you drew with crayon. I would,
+
+314
+00:12:53,489 --> 00:12:53,599
+I would,
+
+315
+00:12:53,960 --> 00:12:55,070
+every time those, you know,
+
+316
+00:12:55,080 --> 00:12:58,619
+those door to door sales people come and they have like an ID,
+
+317
+00:12:58,739 --> 00:12:59,520
+I'm like,
+
+318
+00:12:59,650 --> 00:13:02,409
+I, I don't know what ID for this company looks like.
+
+319
+00:13:03,099 --> 00:13:04,419
+Are you kidding me? Like,
+
+320
+00:13:04,650 --> 00:13:06,429
+you know, I know people that work for, like,
+
+321
+00:13:06,440 --> 00:13:09,349
+the cable company locally and if you ask me what their ID looks like,
+
+322
+00:13:09,359 --> 00:13:11,780
+I would have to guess that it probably has the corporate logo on it
+
+323
+00:13:12,309 --> 00:13:15,770
+and their name and that's, that's all I can write reasonably. Yes.
+
+324
+00:13:16,010 --> 00:13:18,849
+You know, but I would have no clue how to validate that ID
+
+325
+00:13:18,979 --> 00:13:21,580
+or where to phone, you know. Anyway. So, moving along.
+
+326
+00:13:21,909 --> 00:13:25,840
+So that's my, you know, that's my first big concern with P GP is it's
+
+327
+00:13:26,130 --> 00:13:27,109
+just right off the bat.
+
+328
+00:13:27,119 --> 00:13:31,049
+If I want to use it to like encrypt email to somebody, I have to go hunt down their key,
+
+329
+00:13:31,059 --> 00:13:33,690
+which means basically I'm gonna go download it from a key server
+
+330
+00:13:34,580 --> 00:13:37,460
+and have absolutely no way to validate it
+
+331
+00:13:37,609 --> 00:13:39,250
+really, you know, unless it's like,
+
+332
+00:13:39,289 --> 00:13:42,400
+unless it's an exceptionally rare well known key, like,
+
+333
+00:13:42,719 --> 00:13:44,219
+you know, some like Linus to
+
+334
+00:13:44,440 --> 00:13:44,940
+vault or something.
+
+335
+00:13:45,169 --> 00:13:46,989
+And the other thing I noticed is I, uh,
+
+336
+00:13:47,000 --> 00:13:50,760
+one time I downloaded my own key from the key server and it was signed by people.
+
+337
+00:13:50,770 --> 00:13:51,400
+I don't know.
+
+338
+00:13:51,640 --> 00:13:51,849
+And
+
+339
+00:13:52,770 --> 00:13:53,940
+it's crazy.
+
+340
+00:13:54,130 --> 00:13:55,000
+Well, and didn't,
+
+341
+00:13:55,320 --> 00:13:58,039
+isn't there a key somewhere that someone has, uh,
+
+342
+00:13:58,409 --> 00:14:00,590
+like, like an obscene asking picture
+
+343
+00:14:00,710 --> 00:14:01,510
+they've attached?
+
+344
+00:14:01,880 --> 00:14:03,599
+Yeah, somebody, uh, yeah. Yeah. Yeah.
+
+345
+00:14:03,609 --> 00:14:06,559
+So what it was, was, um, in a, in a key signature,
+
+346
+00:14:06,570 --> 00:14:08,030
+there's like a line of text or whatever
+
+347
+00:14:08,299 --> 00:14:13,710
+and they basically signed their key like 50 or 60 times
+
+348
+00:14:14,169 --> 00:14:17,780
+generating like these custom signatures to, yeah, have an obscene, ask your art uh,
+
+349
+00:14:17,789 --> 00:14:19,830
+picture, which I guess
+
+350
+00:14:20,280 --> 00:14:21,869
+I guess we should link to in the show notes.
+
+351
+00:14:22,489 --> 00:14:24,510
+-- Are we allowed to do that?
+-- I'm not going to,
+
+352
+00:14:24,719 --> 00:14:25,270
+ok,
+
+353
+00:14:25,679 --> 00:14:28,070
+you'll have to Google it yourself, figure it out. Um
+
+354
+00:14:28,830 --> 00:14:29,940
+But yeah, so anyways,
+
+355
+00:14:30,270 --> 00:14:30,969
+so
+
+356
+00:14:31,309 --> 00:14:32,609
+right off the bat, we essentially,
+
+357
+00:14:32,619 --> 00:14:35,500
+I'm just downloading random keys off the internet that are, you know,
+
+358
+00:14:35,510 --> 00:14:37,489
+associated with an email address.
+
+359
+00:14:37,500 --> 00:14:38,299
+Hopefully
+
+360
+00:14:38,830 --> 00:14:40,609
+yi I do that all the time.
+
+361
+00:14:40,700 --> 00:14:46,210
+The the few times I've used it or I love when someone sends me an a an assigned email
+
+362
+00:14:46,950 --> 00:14:49,109
+and it asked me, do you want to download this key?
+
+363
+00:14:49,119 --> 00:14:51,169
+-- And I'm like, yeah, that sounds great. Download
+-- the key.
+
+364
+00:14:51,369 --> 00:14:51,539
+Yeah,
+
+365
+00:14:51,549 --> 00:14:54,900
+and that always struck me as like the perfect way to insert your
+
+366
+00:14:54,909 --> 00:14:58,010
+key like for an attacker to insert a key into somebody's key ring,
+
+367
+00:14:58,020 --> 00:14:58,570
+right is just,
+
+368
+00:14:59,179 --> 00:14:59,500
+you know,
+
+369
+00:14:59,510 --> 00:15:03,659
+email a whole pile of people as being from the victim you're wanting to intercept
+
+370
+00:15:03,969 --> 00:15:05,739
+and you know, get your fake key put in there.
+
+371
+00:15:05,960 --> 00:15:08,500
+The other problem is with the key signing is that like, you know, it's,
+
+372
+00:15:08,549 --> 00:15:11,960
+it's only in the last year or two that they fixed a bunch of problems that allowed
+
+373
+00:15:12,359 --> 00:15:14,260
+you to make what looked like.
+
+374
+00:15:14,630 --> 00:15:17,150
+Basically you could create keys with the same
+
+375
+00:15:17,630 --> 00:15:21,750
+short ID. So a key has a fingerprint and the full fingerprint
+
+376
+00:15:21,940 --> 00:15:24,640
+that they just told everyone to stop using the show,
+
+377
+00:15:24,789 --> 00:15:27,039
+they didn't actually fix it. They just, well, no, but in,
+
+378
+00:15:27,419 --> 00:15:31,250
+but in GP G, if I remember, right, they now default to using
+
+379
+00:15:31,619 --> 00:15:34,570
+the fingerprint rather than the short ID. I think anyways,
+
+380
+00:15:34,940 --> 00:15:36,450
+the point being is that, you know, you could,
+
+381
+00:15:36,460 --> 00:15:39,799
+you could force a key generation with specific key ID.
+
+382
+00:15:39,809 --> 00:15:43,530
+So you could have a key with the same key D as your victim's key
+
+383
+00:15:44,349 --> 00:15:46,270
+and you could do that for all the signing keys, right?
+
+384
+00:15:46,280 --> 00:15:48,710
+So you could create this key that basically looks exactly the same
+
+385
+00:15:48,859 --> 00:15:50,619
+from a signature point of view and everything and you know,
+
+386
+00:15:50,630 --> 00:15:53,169
+it would be very annoying and difficult to validate.
+
+387
+00:15:53,580 --> 00:15:54,130
+Um
+
+388
+00:15:54,940 --> 00:15:58,299
+Now, uh I know P gp.com used to do this and I don't know if they still do,
+
+389
+00:15:58,309 --> 00:16:00,049
+but they ran a service where you basically
+
+390
+00:16:00,059 --> 00:16:02,840
+could validate your key to a small degree where
+
+391
+00:16:02,960 --> 00:16:05,840
+you'd essentially submit your key to them. And they would email
+
+392
+00:16:06,039 --> 00:16:09,039
+the email addresses like on those keys saying, you know,
+
+393
+00:16:09,049 --> 00:16:10,700
+do you actually control this key?
+
+394
+00:16:10,710 --> 00:16:13,479
+And did you submit it for signing? And you would click? Yes.
+
+395
+00:16:13,489 --> 00:16:14,849
+And then they would sign your key,
+
+396
+00:16:15,119 --> 00:16:18,429
+you know, by the P GP global key signing key or whatever it was.
+
+397
+00:16:18,719 --> 00:16:20,099
+And they would email you,
+
+398
+00:16:20,109 --> 00:16:21,760
+I think every couple of months just to make
+
+399
+00:16:21,770 --> 00:16:23,520
+sure you still had control of that email address,
+
+400
+00:16:23,530 --> 00:16:23,739
+right?
+
+401
+00:16:23,750 --> 00:16:25,950
+And so if you look at like my one of my keys, for example,
+
+402
+00:16:25,960 --> 00:16:29,460
+you'll see there's like several years worth of that, you know, signatures on it,
+
+403
+00:16:29,469 --> 00:16:30,419
+which is kind of handy.
+
+404
+00:16:31,169 --> 00:16:31,609
+Um,
+
+405
+00:16:32,669 --> 00:16:34,739
+so that was kind of, well, basically, and that's the thing, right,
+
+406
+00:16:34,750 --> 00:16:38,260
+that basically boils down to like a domain validated SSL certificate,
+
+407
+00:16:38,750 --> 00:16:39,049
+right?
+
+408
+00:16:39,059 --> 00:16:42,289
+Where you just, you do a minimal amount of verification where it's like,
+
+409
+00:16:42,299 --> 00:16:45,650
+essentially you look like you control this email address and
+
+410
+00:16:45,659 --> 00:16:48,849
+for us to actually validate that you control this email address
+
+411
+00:16:49,299 --> 00:16:50,469
+properly.
+
+412
+00:16:50,580 --> 00:16:54,989
+We we can't really do that short of like coming out and beating you with a hose.
+
+413
+00:16:55,340 --> 00:16:56,780
+Um, because quite frankly,
+
+414
+00:16:56,789 --> 00:16:58,719
+if you can reply from that email address and
+
+415
+00:16:58,729 --> 00:17:00,280
+you can receive email to that email address.
+
+416
+00:17:00,289 --> 00:17:01,789
+How else do you validate that somebody
+
+417
+00:17:02,330 --> 00:17:04,420
+should or should not control that email address?
+
+418
+00:17:04,680 --> 00:17:06,170
+That seems pretty fair, right?
+
+419
+00:17:06,180 --> 00:17:06,319
+Like,
+
+420
+00:17:06,329 --> 00:17:08,530
+do you phone the provider and ask for personal
+
+421
+00:17:08,540 --> 00:17:11,199
+information of which they really shouldn't give you,
+
+422
+00:17:11,209 --> 00:17:11,569
+you know,
+
+423
+00:17:11,689 --> 00:17:12,229
+it's
+
+424
+00:17:12,459 --> 00:17:13,130
+right. I mean,
+
+425
+00:17:13,300 --> 00:17:13,660
+you know,
+
+426
+00:17:14,468 --> 00:17:15,188
+so, ok, well,
+
+427
+00:17:15,198 --> 00:17:17,749
+let's assume for a moment you've managed to find the other person's key.
+
+428
+00:17:17,808 --> 00:17:21,318
+Ok, hold on, hold on. Let's go. Let's back up one step though is
+
+429
+00:17:21,698 --> 00:17:24,729
+when you talk about this service from P gp.com,
+
+430
+00:17:24,739 --> 00:17:29,009
+which I just typed P gp.com into my web browser and it goes to Symantec now.
+
+431
+00:17:29,029 --> 00:17:29,369
+So I
+
+432
+00:17:29,578 --> 00:17:29,999
+assume that's no
+
+433
+00:17:30,178 --> 00:17:30,749
+longer the whole thing.
+
+434
+00:17:31,420 --> 00:17:32,280
+But anyway,
+
+435
+00:17:32,530 --> 00:17:39,060
+the kind of the intent behind all of this was to have no centralized authority.
+
+436
+00:17:39,819 --> 00:17:44,739
+And obviously, once you have this sort of validation system, which,
+
+437
+00:17:45,050 --> 00:17:48,150
+which I think we've reached the point, we kind of agree that
+
+438
+00:17:48,469 --> 00:17:50,079
+it is the right way to go,
+
+439
+00:17:50,280 --> 00:17:52,530
+which will probably get to let's encrypt at some point,
+
+440
+00:17:52,540 --> 00:17:53,880
+which is a great example of this.
+
+441
+00:17:54,670 --> 00:17:55,819
+But I, I think
+
+442
+00:17:56,300 --> 00:17:59,739
+there were legitimate concerns about some of this
+
+443
+00:17:59,959 --> 00:18:01,780
+back in the day when this was
+
+444
+00:18:01,910 --> 00:18:03,380
+when they were attempting to build this.
+
+445
+00:18:03,390 --> 00:18:06,420
+-- But I think we've reached the
+-- point I think was also historically,
+
+446
+00:18:06,430 --> 00:18:10,819
+running a very large global scale service
+
+447
+00:18:11,160 --> 00:18:13,280
+was really difficult.
+
+448
+00:18:13,599 --> 00:18:14,020
+You know what I mean?
+
+449
+00:18:14,030 --> 00:18:19,170
+Like, I mean, like 1520 years ago running, say, well, for the sake of argument,
+
+450
+00:18:19,180 --> 00:18:21,520
+running a public database with say a million
+
+451
+00:18:21,530 --> 00:18:23,979
+entries that could be queried several times a minute
+
+452
+00:18:24,400 --> 00:18:27,579
+was actually a really difficult engineering problem
+
+453
+00:18:28,010 --> 00:18:30,369
+right now. Of course, you could do it for about $5 a month.
+
+454
+00:18:31,069 --> 00:18:35,109
+Well, ok, so I think there's two sides to that is you're right,
+
+455
+00:18:35,119 --> 00:18:36,619
+is it was difficult to do.
+
+456
+00:18:37,410 --> 00:18:40,520
+But I think there was also the concern about
+
+457
+00:18:40,640 --> 00:18:42,109
+what happens when
+
+458
+00:18:42,290 --> 00:18:43,939
+the service goes rogue.
+
+459
+00:18:44,439 --> 00:18:46,670
+And that is, that is always like
+
+460
+00:18:46,859 --> 00:18:49,550
+it has always happened and it will always happen.
+
+461
+00:18:49,849 --> 00:18:53,780
+You look at every service that is basically ever existed.
+
+462
+00:18:54,050 --> 00:18:55,270
+And at some point
+
+463
+00:18:55,489 --> 00:18:59,689
+they go up for sale or they get desperate or something happens
+
+464
+00:19:00,089 --> 00:19:01,430
+and they start making
+
+465
+00:19:01,650 --> 00:19:03,109
+terrible decisions,
+
+466
+00:19:03,500 --> 00:19:08,829
+right? Things that are designed to benefit themselves and damage the users.
+
+467
+00:19:09,739 --> 00:19:10,650
+And so
+
+468
+00:19:10,859 --> 00:19:14,170
+like, like in the instance of let's encrypt someday
+
+469
+00:19:14,540 --> 00:19:16,489
+they will become evil.
+
+470
+00:19:16,790 --> 00:19:17,290
+Ok.
+
+471
+00:19:17,300 --> 00:19:19,530
+Someday I'm gonna say that and,
+
+472
+00:19:19,540 --> 00:19:22,439
+and I will gladly accept the criticism that will come with it.
+
+473
+00:19:22,849 --> 00:19:25,689
+But I think we're also starting to recognize that
+
+474
+00:19:25,959 --> 00:19:28,170
+it's not that hard to change.
+
+475
+00:19:28,180 --> 00:19:32,209
+You know, remember when Source Forge is where everyone was hosting their code,
+
+476
+00:19:32,640 --> 00:19:35,939
+does anyone, you know, still host things on the Source Forge?
+
+477
+00:19:36,770 --> 00:19:39,310
+There's actually still a couple of things that are there by default,
+
+478
+00:19:42,540 --> 00:19:43,790
+but really, right. It's all github
+
+479
+00:19:43,939 --> 00:19:45,619
+now and someday this will happen at github
+
+480
+00:19:45,859 --> 00:19:47,219
+and we'll move to the next thing.
+
+481
+00:19:47,729 --> 00:19:49,689
+And I think that's part of the magic we're
+
+482
+00:19:49,699 --> 00:19:53,270
+starting to see now is the tools and the environment
+
+483
+00:19:53,489 --> 00:19:54,630
+are becoming
+
+484
+00:19:55,069 --> 00:19:58,530
+such that we can move around.
+
+485
+00:19:58,750 --> 00:20:00,170
+Whereas in the past,
+
+486
+00:20:00,180 --> 00:20:03,449
+I think the thought of moving away from some things was
+
+487
+00:20:03,459 --> 00:20:07,119
+completely out of the question and it was crazy talk.
+
+488
+00:20:07,579 --> 00:20:08,170
+I would agree.
+
+489
+00:20:08,180 --> 00:20:11,829
+I mean, if you look at the history for example of instant messengers, what was that?
+
+490
+00:20:11,839 --> 00:20:14,430
+Oh Jeez, I'm blanking. What was the name of that
+
+491
+00:20:14,869 --> 00:20:16,650
+cross application protocol?
+
+492
+00:20:17,489 --> 00:20:18,000
+Jabber
+
+493
+00:20:18,489 --> 00:20:19,500
+-- or X MP
+-- P?
+
+494
+00:20:20,329 --> 00:20:21,170
+Yeah, whatever was
+
+495
+00:20:21,959 --> 00:20:22,560
+actually,
+
+496
+00:20:22,719 --> 00:20:22,920
+yeah.
+
+497
+00:20:22,930 --> 00:20:23,380
+So, well,
+
+498
+00:20:23,390 --> 00:20:25,489
+there was an actual low level protocol that was
+
+499
+00:20:25,500 --> 00:20:28,689
+supposed to be sorted by multiple messenger applications.
+
+500
+00:20:28,829 --> 00:20:32,790
+So that for example, like AOL could talk to Yahoo could talk to whatever else, right?
+
+501
+00:20:32,800 --> 00:20:36,760
+And of course, those things basically like, well, you know, became walled gardens.
+
+502
+00:20:36,979 --> 00:20:39,410
+And when I think about how many different instant
+
+503
+00:20:39,420 --> 00:20:41,969
+messengers we've been through over the last 20 years.
+
+504
+00:20:41,979 --> 00:20:42,189
+Like,
+
+505
+00:20:42,869 --> 00:20:45,050
+you know, does anybody actually remember IC Q?
+
+506
+00:20:45,920 --> 00:20:50,010
+I remember their website was like the biggest train wreck I'd ever.
+
+507
+00:20:50,020 --> 00:20:52,170
+It was so full of garbage. I remember
+
+508
+00:20:52,739 --> 00:20:54,640
+-- the color scheme was, yeah, I remember it was
+-- pretty.
+
+509
+00:20:54,829 --> 00:20:59,709
+No, I do. I, I remember IC Q was hip when I was in college. That was the thing.
+
+510
+00:20:59,719 --> 00:21:02,859
+Everyone, because some people used AOL instant Messenger.
+
+511
+00:21:02,869 --> 00:21:06,680
+But those were like the old lame people. But the new exciting thing was IC Q
+
+512
+00:21:06,910 --> 00:21:08,599
+and of course I'm on IRC being like,
+
+513
+00:21:09,530 --> 00:21:09,660
+you
+
+514
+00:21:09,829 --> 00:21:11,819
+know, I'm way cooler than you guys, you know,
+
+515
+00:21:11,989 --> 00:21:13,000
+jokes on me.
+
+516
+00:21:13,729 --> 00:21:16,270
+-- You were cool before. It
+-- was cool. That's right. That's right.
+
+517
+00:21:17,109 --> 00:21:17,819
+Exactly.
+
+518
+00:21:18,369 --> 00:21:21,810
+So anyway, so, and you know, that's the reality. We've, we've been through
+
+519
+00:21:22,030 --> 00:21:22,040
+a
+
+520
+00:21:22,390 --> 00:21:24,010
+dozen major
+
+521
+00:21:24,349 --> 00:21:24,359
+uh
+
+522
+00:21:24,459 --> 00:21:28,069
+instant messenger platforms. And I mean, a great example now is like signal,
+
+523
+00:21:28,390 --> 00:21:28,890
+you know,
+
+524
+00:21:29,229 --> 00:21:32,489
+uh signal is a new encrypted end to end,
+
+525
+00:21:32,699 --> 00:21:34,170
+you know, messenger app
+
+526
+00:21:34,459 --> 00:21:38,369
+uh that people are using and, you know, when it dies,
+
+527
+00:21:38,380 --> 00:21:39,900
+we'll move to something else most likely.
+
+528
+00:21:40,079 --> 00:21:41,609
+Um But back to P GP, I mean,
+
+529
+00:21:41,729 --> 00:21:43,329
+so the problem is you have this key
+
+530
+00:21:43,619 --> 00:21:46,010
+discovery and validation problem which,
+
+531
+00:21:47,000 --> 00:21:48,410
+you know, they, I
+
+532
+00:21:48,579 --> 00:21:51,479
+here's what frustrates me in the quest to create. Perfect.
+
+533
+00:21:51,630 --> 00:21:52,859
+They like just
+
+534
+00:21:53,099 --> 00:21:54,540
+didn't allow good
+
+535
+00:21:54,780 --> 00:21:57,319
+or, or near perfect to exist, right?
+
+536
+00:21:57,619 --> 00:21:58,180
+Um
+
+537
+00:21:58,910 --> 00:22:01,989
+So there's like no way at all to
+
+538
+00:22:02,640 --> 00:22:05,859
+in many cases get a real decent validation of this key.
+
+539
+00:22:06,109 --> 00:22:10,020
+Um or another great example is, you know, key expiry, right? Keys.
+
+540
+00:22:10,060 --> 00:22:11,729
+A lot of people set their keys to expire
+
+541
+00:22:12,449 --> 00:22:14,180
+and then the majority of P GP,
+
+542
+00:22:14,300 --> 00:22:15,589
+you know, apps and related
+
+543
+00:22:15,709 --> 00:22:18,489
+will then refuse to use that key once it's expired, right?
+
+544
+00:22:18,500 --> 00:22:19,680
+They'll refuse to decrypt stuff,
+
+545
+00:22:19,689 --> 00:22:21,760
+they'll refuse to encrypt stuff and you have to like
+
+546
+00:22:21,939 --> 00:22:24,670
+hit it with a hammer, you know, and get it into submission.
+
+547
+00:22:24,890 --> 00:22:25,500
+Um
+
+548
+00:22:25,800 --> 00:22:28,540
+So I actually remember a case where somebody reported a security
+
+549
+00:22:28,550 --> 00:22:31,609
+issue to us and they wanted to do encrypted emails.
+
+550
+00:22:31,619 --> 00:22:31,979
+So
+
+551
+00:22:32,410 --> 00:22:33,869
+I replied to them,
+
+552
+00:22:33,880 --> 00:22:36,180
+they replied to me and then the next Monday I
+
+553
+00:22:36,189 --> 00:22:38,430
+replied to them and my email client wouldn't let me
+
+554
+00:22:39,979 --> 00:22:41,880
+because their key had expired over the weekend.
+
+555
+00:22:42,569 --> 00:22:43,349
+Nice.
+
+556
+00:22:43,640 --> 00:22:44,109
+You know,
+
+557
+00:22:44,239 --> 00:22:48,229
+and so I was faced with a choice of either bludgeoning this thing into submission
+
+558
+00:22:48,719 --> 00:22:51,540
+or, you know, what, fine we're, I'm doing it plain text
+
+559
+00:22:52,000 --> 00:22:53,550
+and I imagine
+
+560
+00:22:53,719 --> 00:22:54,390
+you
+
+561
+00:22:54,800 --> 00:22:55,810
+did plain text,
+
+562
+00:22:56,030 --> 00:22:57,369
+-- right?
+-- Yeah. Well, I mean, I just,
+
+563
+00:22:57,689 --> 00:22:58,189
+you know,
+
+564
+00:22:58,530 --> 00:23:01,780
+yeah, it's just, I mean, and obviously from, you know,
+
+565
+00:23:01,790 --> 00:23:05,520
+a usability and security perspective, it would be much better to use a
+
+566
+00:23:05,920 --> 00:23:08,989
+key that's been expired for 24 hours than to do clear text.
+
+567
+00:23:09,750 --> 00:23:13,250
+But, you know, in the quest for perfect, they decided that we don't want to,
+
+568
+00:23:13,569 --> 00:23:16,560
+you know, allow any potentially dangerous activity.
+
+569
+00:23:16,670 --> 00:23:18,069
+Uh So we're just gonna block it,
+
+570
+00:23:18,189 --> 00:23:18,689
+you know,
+
+571
+00:23:20,250 --> 00:23:21,640
+and in doing so they, well,
+
+572
+00:23:21,650 --> 00:23:25,500
+they make it very difficult to do something reasonably correct.
+
+573
+00:23:25,510 --> 00:23:26,150
+You either
+
+574
+00:23:26,390 --> 00:23:30,170
+can't do it at all or well, you can ignore it and do clear text, right.
+
+575
+00:23:30,500 --> 00:23:34,189
+Um, and, and there's a lot of other issues too, like for example, there's the, the,
+
+576
+00:23:34,199 --> 00:23:37,189
+the dirty little secret of all the key servers that we do have
+
+577
+00:23:37,359 --> 00:23:39,989
+where for example, if you're checking for key revocation,
+
+578
+00:23:40,000 --> 00:23:41,750
+which you probably should be doing right?
+
+579
+00:23:41,760 --> 00:23:42,310
+Because, you know,
+
+580
+00:23:42,319 --> 00:23:43,839
+maybe the person revoked their key over the
+
+581
+00:23:43,849 --> 00:23:46,170
+last day or two because it got compromised.
+
+582
+00:23:46,439 --> 00:23:49,219
+Well, if you check for key revocation every time you use it, you're now
+
+583
+00:23:49,750 --> 00:23:52,689
+broadcasting to the world somewhat that hey, I'm, you know,
+
+584
+00:23:52,790 --> 00:23:54,630
+I need to know if this key to this person
+
+585
+00:23:54,640 --> 00:23:57,089
+is working because I want to communicate with them.
+
+586
+00:23:57,099 --> 00:23:57,369
+So
+
+587
+00:23:57,650 --> 00:23:57,699
+what
+
+588
+00:23:57,810 --> 00:23:58,020
+is key
+
+589
+00:23:58,209 --> 00:23:58,770
+revocation?
+
+590
+00:23:59,540 --> 00:24:01,680
+-- So
+-- key revocation is well and
+
+591
+00:24:02,180 --> 00:24:05,599
+Josh, you probably did this. But if you have a secret key
+
+592
+00:24:05,810 --> 00:24:10,209
+and it somehow becomes discovered or public or somebody, you know,
+
+593
+00:24:10,219 --> 00:24:11,550
+manages to get a copy of it,
+
+594
+00:24:11,770 --> 00:24:13,930
+you want to tell people to stop using that key.
+
+595
+00:24:14,640 --> 00:24:18,219
+And so you revoke it, you send out essentially a well,
+
+596
+00:24:18,229 --> 00:24:21,390
+it's essentially a signed copy of your key saying that this key is no longer valid,
+
+597
+00:24:21,400 --> 00:24:21,560
+right?
+
+598
+00:24:21,569 --> 00:24:23,780
+Which you know should be on the key servers. And
+
+599
+00:24:24,209 --> 00:24:25,689
+so when you check for that key,
+
+600
+00:24:26,119 --> 00:24:29,219
+you get this key that essentially has a special message saying, you know, hey,
+
+601
+00:24:29,229 --> 00:24:31,900
+it's don't use me, I've been revoked,
+
+602
+00:24:32,150 --> 00:24:35,630
+you know, it's like we do this with uh SSL and TLS certificates, you know,
+
+603
+00:24:35,640 --> 00:24:37,660
+in the form of the uh online certificate
+
+604
+00:24:37,880 --> 00:24:39,630
+status protocol O CS P
+
+605
+00:24:40,420 --> 00:24:41,660
+um and things like that.
+
+606
+00:24:42,119 --> 00:24:43,160
+Well, you want again.
+
+607
+00:24:43,359 --> 00:24:43,500
+So
+
+608
+00:24:43,819 --> 00:24:47,099
+I'll fill you in on some of my dialing up to an 11.
+
+609
+00:24:47,469 --> 00:24:53,020
+I have my revocation certificate for my P GP key printed out
+
+610
+00:24:53,280 --> 00:24:54,020
+at the bank
+
+611
+00:24:54,500 --> 00:24:59,439
+just in case I for some reason lose all access to the digital private key.
+
+612
+00:24:59,760 --> 00:25:03,750
+I have my paper copy that I can then OCR in
+
+613
+00:25:04,170 --> 00:25:06,890
+and then send it to the key servers.
+
+614
+00:25:08,630 --> 00:25:11,780
+See, and, and that kind of goes to, you know, when I think about this.
+
+615
+00:25:11,790 --> 00:25:15,939
+So like we're kind of lucky SSL and TLS is a bit easier in the sense of it's more,
+
+616
+00:25:15,949 --> 00:25:16,420
+you know,
+
+617
+00:25:16,609 --> 00:25:19,150
+temporal data and that it's data that
+
+618
+00:25:19,579 --> 00:25:22,430
+we're not gonna keep encrypted for a long, long time, right?
+
+619
+00:25:22,439 --> 00:25:23,650
+It's only encrypted over the network.
+
+620
+00:25:23,660 --> 00:25:24,660
+Whereas GP G we're,
+
+621
+00:25:24,670 --> 00:25:28,939
+we're using for data that's encrypted at rest and may exist for years or decades,
+
+622
+00:25:29,719 --> 00:25:31,939
+you know, so that is a bit of a more tricky problem space.
+
+623
+00:25:32,510 --> 00:25:33,079
+Um
+
+624
+00:25:33,199 --> 00:25:35,229
+But let's assume for a moment, you managed to find Josh's
+
+625
+00:25:35,510 --> 00:25:37,300
+key and you've now sent him an encrypted email.
+
+626
+00:25:37,599 --> 00:25:40,829
+Uh You know, we we're still not done with the problems like,
+
+627
+00:25:40,939 --> 00:25:43,119
+you know, what do you do when the key expires? Right?
+
+628
+00:25:43,130 --> 00:25:46,569
+You go bug Josh for a new key except it's signed by an expired key.
+
+629
+00:25:46,579 --> 00:25:50,020
+So your software automatically by default doesn't really trust it that much,
+
+630
+00:25:50,030 --> 00:25:50,489
+you know.
+
+631
+00:25:50,500 --> 00:25:51,130
+Um
+
+632
+00:25:51,319 --> 00:25:55,300
+So again, you're stuck with kind of bashing it into submission typically.
+
+633
+00:25:55,569 --> 00:25:58,010
+And then, you know, if you're checking for revocation,
+
+634
+00:25:58,020 --> 00:25:59,839
+you're leaking metadata and,
+
+635
+00:26:00,229 --> 00:26:03,380
+and then there's the key management from the user's perspective, right? Like
+
+636
+00:26:04,130 --> 00:26:06,849
+every time every application I've ever seen that does email
+
+637
+00:26:06,859 --> 00:26:09,329
+signing requires me to sign and trust the key,
+
+638
+00:26:09,339 --> 00:26:12,020
+which means I now have to go get my private key out
+
+639
+00:26:12,420 --> 00:26:14,369
+so I can send you an encrypted email, right?
+
+640
+00:26:14,680 --> 00:26:15,209
+You know,
+
+641
+00:26:15,310 --> 00:26:16,619
+and of course, I end up
+
+642
+00:26:16,819 --> 00:26:21,180
+uh having to set the thing to full trust because I, I don't have a choice, right?
+
+643
+00:26:21,189 --> 00:26:23,750
+Otherwise by default, most email apps will be like, well,
+
+644
+00:26:23,760 --> 00:26:24,880
+you don't fully trust this key.
+
+645
+00:26:24,890 --> 00:26:25,810
+So I'm not gonna
+
+646
+00:26:26,199 --> 00:26:27,119
+email to this guy,
+
+647
+00:26:27,630 --> 00:26:28,869
+you know, and it's like, damn it,
+
+648
+00:26:29,380 --> 00:26:32,290
+you know, anyways, sorry for the language. But uh
+
+649
+00:26:32,709 --> 00:26:36,380
+I think from a, from a usability point of view P GP failed
+
+650
+00:26:36,790 --> 00:26:38,579
+for email terribly. Now,
+
+651
+00:26:38,699 --> 00:26:40,949
+what's funny is I'm actually looking at
+
+652
+00:26:41,510 --> 00:26:45,930
+uh requiring signing of the git commits for
+
+653
+00:26:46,439 --> 00:26:50,770
+all the DWF uh the distributed weakness, filing related work and
+
+654
+00:26:51,030 --> 00:26:52,859
+miter and the CV project
+
+655
+00:26:53,010 --> 00:26:55,170
+are also looking at considering this because
+
+656
+00:26:55,819 --> 00:26:57,800
+it's not that it's 100% secure,
+
+657
+00:26:58,099 --> 00:27:01,640
+but it basically means instead of the attacker, you know,
+
+658
+00:27:01,650 --> 00:27:03,189
+sending false kit commits,
+
+659
+00:27:03,550 --> 00:27:07,239
+they now have to compromise a person's workstation, at least,
+
+660
+00:27:07,630 --> 00:27:10,780
+you know, to send in fake CV. Requests and fake CV S and stuff
+
+661
+00:27:11,050 --> 00:27:13,349
+which let's face it, right? An attacker
+
+662
+00:27:13,859 --> 00:27:17,199
+able to do that will also just send a fishing email which, you know,
+
+663
+00:27:17,209 --> 00:27:20,540
+would you'd have the same end effect even if you're, you know, doing true,
+
+664
+00:27:20,550 --> 00:27:21,719
+proper key security.
+
+665
+00:27:21,729 --> 00:27:25,599
+So we're looking at doing that just to basically add like a significant road bump
+
+666
+00:27:26,060 --> 00:27:27,959
+-- uh for Attackers.
+-- Now, here's what
+
+667
+00:27:28,020 --> 00:27:28,040
+we
+
+668
+00:27:28,180 --> 00:27:28,209
+have
+
+669
+00:27:28,349 --> 00:27:28,489
+to get
+
+670
+00:27:29,770 --> 00:27:31,040
+to, what you're doing
+
+671
+00:27:31,689 --> 00:27:33,150
+is you are
+
+672
+00:27:33,270 --> 00:27:35,349
+you have a central authority,
+
+673
+00:27:36,310 --> 00:27:36,689
+right?
+
+674
+00:27:36,790 --> 00:27:37,969
+And that's why
+
+675
+00:27:38,290 --> 00:27:39,420
+P GP
+
+676
+00:27:39,709 --> 00:27:40,540
+signing
+
+677
+00:27:40,709 --> 00:27:41,099
+with GIT
+
+678
+00:27:41,359 --> 00:27:41,869
+commit
+
+679
+00:27:41,989 --> 00:27:45,770
+is functional. Well, no, you do have a central authority though because
+
+680
+00:27:46,079 --> 00:27:46,770
+you have
+
+681
+00:27:47,410 --> 00:27:47,430
+the
+
+682
+00:27:48,359 --> 00:27:48,699
+right
+
+683
+00:27:49,079 --> 00:27:52,739
+github, you add users, users add their GP G key and then github
+
+684
+00:27:52,869 --> 00:27:55,900
+basically says, holy crap. Where did this signature come from?
+
+685
+00:27:55,910 --> 00:27:57,260
+I don't know anything about this,
+
+686
+00:27:57,849 --> 00:27:58,189
+right?
+
+687
+00:27:58,500 --> 00:27:58,719
+Well,
+
+688
+00:27:58,839 --> 00:27:59,900
+we won't be using github
+
+689
+00:28:00,010 --> 00:28:00,829
+-- strictly. But
+-- yeah,
+
+690
+00:28:01,349 --> 00:28:01,630
+I mean,
+
+691
+00:28:01,650 --> 00:28:05,109
+so essentially part of it is becoming when you become involved with the CV project.
+
+692
+00:28:05,119 --> 00:28:07,670
+One of the things assuming we go with GIT signing is you'll,
+
+693
+00:28:07,680 --> 00:28:08,780
+you'll have to provide a key,
+
+694
+00:28:09,449 --> 00:28:10,160
+right? You know,
+
+695
+00:28:10,560 --> 00:28:11,069
+and
+
+696
+00:28:11,310 --> 00:28:13,500
+so we'll have a copy of key of the key.
+
+697
+00:28:13,510 --> 00:28:15,750
+So we don't have to deal with this discoverability, you know,
+
+698
+00:28:15,930 --> 00:28:18,869
+and, and part of what I'm thinking about is do we require keys to expire?
+
+699
+00:28:18,880 --> 00:28:22,109
+Do we say please don't use keys that expire because,
+
+700
+00:28:22,550 --> 00:28:25,459
+you know, let's face it, you know, this isn't like super secret squirrel
+
+701
+00:28:25,569 --> 00:28:25,959
+stuff,
+
+702
+00:28:26,359 --> 00:28:27,790
+but here's the problem and
+
+703
+00:28:28,209 --> 00:28:29,089
+I, I don't,
+
+704
+00:28:29,219 --> 00:28:30,310
+I have to think about this.
+
+705
+00:28:30,319 --> 00:28:32,160
+I can probably give you some really good advice
+
+706
+00:28:32,170 --> 00:28:33,469
+on this at some point in the near future.
+
+707
+00:28:33,479 --> 00:28:33,750
+But,
+
+708
+00:28:33,869 --> 00:28:36,150
+but the fundamental problem with P GP keys
+
+709
+00:28:36,380 --> 00:28:38,160
+is there is no method
+
+710
+00:28:38,349 --> 00:28:40,000
+to easily revoke them.
+
+711
+00:28:40,439 --> 00:28:44,160
+And so if you, if you don't have the keys expire
+
+712
+00:28:44,339 --> 00:28:46,630
+and the key is compromised, which is certainly,
+
+713
+00:28:46,640 --> 00:28:48,880
+and I don't mean necessarily stolen, I mean,
+
+714
+00:28:49,099 --> 00:28:54,380
+you lose your U key or you lose a USB drive or whatever.
+
+715
+00:28:54,459 --> 00:28:58,630
+And you are concerned that this key material is now in the universe.
+
+716
+00:28:59,180 --> 00:29:02,160
+What do you do if the key never expires?
+
+717
+00:29:03,030 --> 00:29:04,660
+We see and what we, what we can do,
+
+718
+00:29:04,670 --> 00:29:07,780
+of course is because we have a copy of your key in our system,
+
+719
+00:29:08,569 --> 00:29:10,479
+we can just sort of manually expire it.
+
+720
+00:29:11,010 --> 00:29:11,390
+Right.
+
+721
+00:29:11,400 --> 00:29:13,339
+But obviously this doesn't scale all,
+
+722
+00:29:13,349 --> 00:29:16,209
+this wouldn't work at global scale with everybody doing email, for example,
+
+723
+00:29:16,770 --> 00:29:16,910
+you know,
+
+724
+00:29:17,209 --> 00:29:17,520
+-- within
+-- a
+
+725
+00:29:17,589 --> 00:29:20,010
+-- single organization
+-- it'll work. You're absolutely right.
+
+726
+00:29:20,020 --> 00:29:22,160
+And you can just revoke it because you know what G
+
+727
+00:29:22,319 --> 00:29:26,270
+gets you something very similar to the Blockchain
+
+728
+00:29:26,400 --> 00:29:29,150
+because you can't go back in time and change things.
+
+729
+00:29:29,510 --> 00:29:32,449
+Not without monkey. Well, not without breaking all the signatures. Right. Right.
+
+730
+00:29:32,459 --> 00:29:34,520
+Exactly. Exactly. And so,
+
+731
+00:29:34,760 --> 00:29:36,510
+ok, yeah, as long as you have
+
+732
+00:29:36,910 --> 00:29:39,449
+basically everyone signing commits,
+
+733
+00:29:39,939 --> 00:29:42,130
+you will never have to worry about
+
+734
+00:29:42,390 --> 00:29:46,449
+the sort of like a replay attack where someone goes back in time mucks with your repo
+
+735
+00:29:46,869 --> 00:29:49,329
+with with say stolen key material?
+
+736
+00:29:50,319 --> 00:29:53,530
+-- Ok.
+-- Well, see, and here's the secret, right? The dirty secret is, this is
+
+737
+00:29:53,880 --> 00:29:57,810
+simply about adding the requirement that then the attacker
+
+738
+00:29:57,819 --> 00:30:01,050
+has to compromise and break into a person's workstation
+
+739
+00:30:01,989 --> 00:30:04,349
+in order to monkey with our system.
+
+740
+00:30:04,569 --> 00:30:05,800
+Which essentially
+
+741
+00:30:05,920 --> 00:30:06,670
+do you know
+
+742
+00:30:06,780 --> 00:30:09,829
+what my primary reason for requiring key signing is
+
+743
+00:30:10,930 --> 00:30:12,339
+it solves the spam problems?
+
+744
+00:30:13,119 --> 00:30:13,510
+Oh,
+
+745
+00:30:13,619 --> 00:30:13,650
+well,
+
+746
+00:30:13,780 --> 00:30:15,310
+-- yeah,
+-- that solves the spam problem.
+
+747
+00:30:15,719 --> 00:30:16,069
+Right?
+
+748
+00:30:16,280 --> 00:30:18,709
+I don't have to deal with wonky requests.
+
+749
+00:30:18,719 --> 00:30:21,410
+I just check if they're signed, if they're not signed properly, I ignore them.
+
+750
+00:30:21,670 --> 00:30:25,310
+That's, you know, what else actually is as you talk about this is
+
+751
+00:30:25,439 --> 00:30:28,339
+we're calling this the death of P GP and we're talking about the,
+
+752
+00:30:28,349 --> 00:30:30,040
+the ability and use of P GP.
+
+753
+00:30:30,420 --> 00:30:30,719
+So,
+
+754
+00:30:31,839 --> 00:30:35,170
+but, but not only that you've, you've created an artificial
+
+755
+00:30:35,989 --> 00:30:37,609
+uh barrier of entry.
+
+756
+00:30:37,900 --> 00:30:39,140
+So, you know that it's,
+
+757
+00:30:39,729 --> 00:30:42,349
+if someone is serious about working with you,
+
+758
+00:30:42,380 --> 00:30:43,849
+they're gonna learn what they need to know.
+
+759
+00:30:43,859 --> 00:30:47,930
+But if they want to just be one of your typical drive-by trolls, that's too much work,
+
+760
+00:30:48,550 --> 00:30:49,489
+which I guess will span.
+
+761
+00:30:49,930 --> 00:30:50,150
+Right.
+
+762
+00:30:50,709 --> 00:30:51,359
+Exactly.
+
+763
+00:30:51,520 --> 00:30:52,239
+Exactly.
+
+764
+00:30:52,430 --> 00:30:54,689
+Uh Part of it too is, yeah, I mean, like you said, I mean,
+
+765
+00:30:55,069 --> 00:30:58,719
+for people getting involved in the CV project, I want them to have at least, you know,
+
+766
+00:30:58,729 --> 00:30:59,849
+you must be this high
+
+767
+00:31:00,290 --> 00:31:02,520
+to be involved, like to get on the right sort of so to speak
+
+768
+00:31:03,319 --> 00:31:06,099
+and, you know, being able to generate a P GP key
+
+769
+00:31:06,439 --> 00:31:08,479
+and use it minimally, like
+
+770
+00:31:08,599 --> 00:31:10,560
+to configure your g for signing,
+
+771
+00:31:10,739 --> 00:31:14,069
+you know, literally, if you are technologically incapable of doing that,
+
+772
+00:31:14,079 --> 00:31:15,280
+then chances are
+
+773
+00:31:15,589 --> 00:31:17,589
+you're not going to be a good fit for the project.
+
+774
+00:31:17,839 --> 00:31:19,229
+That's pretty fair.
+
+775
+00:31:19,609 --> 00:31:20,180
+So,
+
+776
+00:31:20,410 --> 00:31:20,949
+and like I said,
+
+777
+00:31:20,959 --> 00:31:24,099
+it basically solves the spam problem and sort of the trolling problem in that.
+
+778
+00:31:24,109 --> 00:31:25,880
+It makes it really easy to,
+
+779
+00:31:26,000 --> 00:31:28,030
+you know, if somebody violates community standards,
+
+780
+00:31:28,510 --> 00:31:32,979
+we, when we remove them, we it makes it really easy to, you know,
+
+781
+00:31:32,989 --> 00:31:34,099
+essentially filter them.
+
+782
+00:31:34,380 --> 00:31:34,839
+Right.
+
+783
+00:31:35,510 --> 00:31:36,040
+Sure.
+
+784
+00:31:36,400 --> 00:31:39,479
+Well, I guess so, here's the other thing that, that just came to my mind, right,
+
+785
+00:31:39,489 --> 00:31:42,489
+as you explain this and, and I'm thinking about it is
+
+786
+00:31:43,109 --> 00:31:48,969
+the, the kind of the benefit and purpose behind P GP was that decentralization
+
+787
+00:31:49,189 --> 00:31:49,810
+and
+
+788
+00:31:50,040 --> 00:31:53,530
+treating the user as the authority of themselves.
+
+789
+00:31:53,959 --> 00:31:54,369
+And
+
+790
+00:31:54,520 --> 00:31:58,170
+the model you're talking about is really a lot closer to kind of the,
+
+791
+00:31:58,180 --> 00:32:01,010
+the TLSC a model of.
+
+792
+00:32:01,709 --> 00:32:04,609
+We're, we're going to decide these people are in charge
+
+793
+00:32:05,000 --> 00:32:10,239
+and we're gonna put enough trust in them to just say what they say is OK is OK.
+
+794
+00:32:10,520 --> 00:32:14,020
+Right. And so fundamentally what you're talking about here is
+
+795
+00:32:14,339 --> 00:32:19,589
+I wonder if git has the ability to deal with like X 509 style signatures
+
+796
+00:32:19,709 --> 00:32:22,959
+where then you could do some crazy magic around
+
+797
+00:32:23,239 --> 00:32:25,250
+uh signature chaining or not signature
+
+798
+00:32:25,260 --> 00:32:27,170
+but certificate chaining and verification,
+
+799
+00:32:27,400 --> 00:32:29,079
+which could be really fun to research.
+
+800
+00:32:29,780 --> 00:32:35,209
+Uh Fortunately, I don't need to do that because I have solved that issue
+
+801
+00:32:35,449 --> 00:32:40,250
+in the DWFS process around how CV S are assigned and requested from subsidiaries
+
+802
+00:32:40,819 --> 00:32:45,449
+and, and this doesn't, this without question would be incredible overkill.
+
+803
+00:32:45,459 --> 00:32:45,969
+It's just,
+
+804
+00:32:46,219 --> 00:32:47,010
+it sounds fun.
+
+805
+00:32:47,410 --> 00:32:47,880
+So I try
+
+806
+00:32:48,050 --> 00:32:48,989
+to think about it.
+
+807
+00:32:49,810 --> 00:32:50,270
+Yeah.
+
+808
+00:32:50,520 --> 00:32:51,449
+But,
+
+809
+00:32:51,560 --> 00:32:51,630
+uh,
+
+810
+00:32:51,810 --> 00:32:55,140
+you know, and that's the thing too is I don't want to make this so painful that it,
+
+811
+00:32:55,150 --> 00:32:56,290
+you know, becomes
+
+812
+00:32:57,439 --> 00:32:58,189
+onerous
+
+813
+00:32:58,439 --> 00:33:00,189
+because II I don't want to have to deal with it.
+
+814
+00:33:01,089 --> 00:33:03,089
+So that is one of the advantages
+
+815
+00:33:03,189 --> 00:33:04,949
+that, that GP G brings
+
+816
+00:33:05,160 --> 00:33:08,949
+is you type literally like GP G, you know, what does it generate key?
+
+817
+00:33:09,250 --> 00:33:12,310
+And it asks you what four questions and you get a key.
+
+818
+00:33:12,530 --> 00:33:17,430
+Like that's cool, right? If you've ever had to generate a proper TLS certificate,
+
+819
+00:33:17,849 --> 00:33:19,630
+it's a nightmare unless you use lots of crypt,
+
+820
+00:33:20,040 --> 00:33:20,520
+right? But
+
+821
+00:33:20,640 --> 00:33:26,069
+that thank goodness like put all the horrible problems in someone else's bucket
+
+822
+00:33:26,199 --> 00:33:29,910
+and, and the people just have to wait. You run like one command and magic.
+
+823
+00:33:30,459 --> 00:33:33,180
+Yeah, it's a self updating Python script. That's pretty ugly.
+
+824
+00:33:33,189 --> 00:33:36,979
+-- But you know what it
+-- works? Who cares, man? If it, if it works, it's great.
+
+825
+00:33:37,410 --> 00:33:39,469
+Well, that's, yeah, that's the beauty of it, right is,
+
+826
+00:33:39,969 --> 00:33:42,390
+and that's one of the things with security people, right? Like
+
+827
+00:33:42,520 --> 00:33:44,349
+a lot of security people will
+
+828
+00:33:44,510 --> 00:33:47,310
+are willing to give up usability in favor of like
+
+829
+00:33:47,319 --> 00:33:50,280
+perfect security and we end up with these systems that are
+
+830
+00:33:50,430 --> 00:33:52,069
+so unusable. You end up with an
+
+831
+00:33:52,619 --> 00:33:52,780
+unusable
+
+832
+00:33:53,140 --> 00:33:54,329
+-- from them because nobody
+-- uses them.
+
+833
+00:33:54,439 --> 00:33:55,239
+It's not,
+
+834
+00:33:55,359 --> 00:33:57,819
+you don't give up usability for perfect security.
+
+835
+00:33:57,829 --> 00:34:02,130
+You give up usability and get crap. Like that's what happens.
+
+836
+00:34:03,760 --> 00:34:04,020
+Yeah.
+
+837
+00:34:04,030 --> 00:34:06,520
+Like, uh, many organizations I've dealt with, you know, I,
+
+838
+00:34:06,530 --> 00:34:09,219
+I kind of wish they would sign email because, you know,
+
+839
+00:34:09,228 --> 00:34:10,840
+we're sending around requests and,
+
+840
+00:34:11,199 --> 00:34:13,739
+you know, please do this, you know, sensitive things and
+
+841
+00:34:14,928 --> 00:34:15,228
+-- no,
+-- no,
+
+842
+00:34:15,498 --> 00:34:15,779
+no, no.
+
+843
+00:34:15,789 --> 00:34:17,739
+You say that, you say that, you say,
+
+844
+00:34:17,748 --> 00:34:21,259
+I wish they would sign the emails because I'm doing these sensitive things.
+
+845
+00:34:21,319 --> 00:34:21,628
+You didn't
+
+846
+00:34:21,779 --> 00:34:21,878
+hear the
+
+847
+00:34:22,009 --> 00:34:24,279
+-- second part.
+-- How many times is there a problem?
+
+848
+00:34:24,849 --> 00:34:25,618
+Well, exactly.
+
+849
+00:34:25,628 --> 00:34:29,099
+And so I wish they would sign emails in a way that was super trivial,
+
+850
+00:34:29,108 --> 00:34:31,418
+super easy to verify, super easy to manage.
+
+851
+00:34:31,428 --> 00:34:32,458
+It just doesn't exist.
+
+852
+00:34:32,868 --> 00:34:34,428
+But the alternative is
+
+853
+00:34:34,858 --> 00:34:36,768
+nothing and things are basically doing fine
+
+854
+00:34:36,998 --> 00:34:38,349
+-- so
+-- well, except, you know,
+
+855
+00:34:38,358 --> 00:34:39,839
+when we get those phishing attempts trying to
+
+856
+00:34:39,849 --> 00:34:42,089
+get us to pay $10,000 invoices or whatever,
+
+857
+00:34:42,648 --> 00:34:44,099
+right to some dude and like
+
+858
+00:34:44,550 --> 00:34:47,040
+uh where was it? New Mexico or something?
+
+859
+00:34:48,139 --> 00:34:49,850
+Well, I guess this is where
+
+860
+00:34:50,379 --> 00:34:52,489
+depending upon what you're doing,
+
+861
+00:34:53,638 --> 00:34:58,979
+it kind of dictates how many, how you should position your checks and balances.
+
+862
+00:34:58,989 --> 00:35:01,499
+And in fact, there's a lot of compliance,
+
+863
+00:35:01,829 --> 00:35:04,479
+especially around things like uh PC I
+
+864
+00:35:04,898 --> 00:35:05,549
+and Hipaa
+
+865
+00:35:05,918 --> 00:35:06,218
+and,
+
+866
+00:35:06,229 --> 00:35:08,888
+and even Sarbanes Oxley to a degree where the very
+
+867
+00:35:08,898 --> 00:35:12,858
+sensitive operations have significant checks and balances in them.
+
+868
+00:35:13,009 --> 00:35:16,259
+But the things that are less sensitive, it's like, eh, good enough. Right.
+
+869
+00:35:16,269 --> 00:35:18,259
+And that's kind of the right way to think about it.
+
+870
+00:35:19,689 --> 00:35:21,510
+Well, the problem is you can end up.
+
+871
+00:35:21,520 --> 00:35:25,149
+Uh, so for example, there's a local college, uh, what is it? Northwest College
+
+872
+00:35:25,340 --> 00:35:26,209
+they put, they had an,
+
+873
+00:35:26,219 --> 00:35:27,870
+it guy who was allowed to essentially
+
+874
+00:35:27,879 --> 00:35:31,520
+expense stuff under $50,000 with no oversight.
+
+875
+00:35:31,530 --> 00:35:31,949
+Really.
+
+876
+00:35:32,270 --> 00:35:36,469
+Uh, so it turns out they're missing, I think it's $2 million.
+
+877
+00:35:37,020 --> 00:35:39,669
+Is that all 50,000 is a pretty,
+
+878
+00:35:40,820 --> 00:35:41,679
+that's a pretty
+
+879
+00:35:41,780 --> 00:35:42,909
+crazy ceiling.
+
+880
+00:35:43,719 --> 00:35:44,669
+Yeah. Yeah.
+
+881
+00:35:44,679 --> 00:35:48,820
+So he was, like, expensing, you know, uh, licenses for software that, you know,
+
+882
+00:35:48,909 --> 00:35:51,620
+from a company that he also owned, you know, things like that.
+
+883
+00:35:51,629 --> 00:35:52,050
+So,
+
+884
+00:35:52,320 --> 00:35:54,699
+you know, and, and again, that speaks to the, just the,
+
+885
+00:35:54,709 --> 00:35:57,239
+the ridiculous lack of financial controls because,
+
+886
+00:35:57,479 --> 00:36:00,129
+um, they didn't find out about this until there was
+
+887
+00:36:00,300 --> 00:36:00,310
+a,
+
+888
+00:36:00,790 --> 00:36:03,139
+essentially a privacy related issue.
+
+889
+00:36:03,750 --> 00:36:04,580
+Uh,
+
+890
+00:36:04,909 --> 00:36:06,379
+and then they, um,
+
+891
+00:36:07,399 --> 00:36:10,469
+you know, sort of found out about the accounting issues, right. So they had,
+
+892
+00:36:10,649 --> 00:36:13,489
+anyways, it was just, basically, it was lack of financial controls.
+
+893
+00:36:13,500 --> 00:36:15,979
+Like you read about the, there's been that spear fishing campaign,
+
+894
+00:36:15,989 --> 00:36:17,290
+I forget what they called it.
+
+895
+00:36:17,760 --> 00:36:22,060
+But essentially the bad guys are targeting like CEO S CFO S accounting departments,
+
+896
+00:36:22,270 --> 00:36:23,739
+you know, and, and getting them like,
+
+897
+00:36:23,750 --> 00:36:27,820
+and basically the two main things the tricks they're using, which blows my mind.
+
+898
+00:36:28,020 --> 00:36:29,889
+Number one, here's an invoice. Please pay it
+
+899
+00:36:30,260 --> 00:36:31,659
+and some of these companies do.
+
+900
+00:36:32,169 --> 00:36:34,229
+Right? Just to random bank accounts and stuff.
+
+901
+00:36:34,409 --> 00:36:36,340
+And then the second one is a little more detailed.
+
+902
+00:36:36,350 --> 00:36:39,030
+They go, you know, hi, I'm your existing supplier of X.
+
+903
+00:36:39,139 --> 00:36:42,209
+And our banking account details have changed from this to
+
+904
+00:36:42,219 --> 00:36:45,110
+this other bank account in like some other place with,
+
+905
+00:36:45,120 --> 00:36:46,510
+you know, much less law enforcement.
+
+906
+00:36:47,320 --> 00:36:49,429
+Uh ironically and so
+
+907
+00:36:49,929 --> 00:36:54,389
+people change the banking details and continue to pay invoices, you know, for,
+
+908
+00:36:54,399 --> 00:36:55,189
+I'm guessing
+
+909
+00:36:55,560 --> 00:37:00,500
+3060 whatever the uh payment terms are before the actual supplier goes.
+
+910
+00:37:00,510 --> 00:37:01,750
+Hey, uh where's our money?
+
+911
+00:37:02,909 --> 00:37:05,169
+You know, and then of course, the company goes, well, we've been paying you.
+
+912
+00:37:05,810 --> 00:37:08,689
+I can only imagine those are some awkward email threads
+
+913
+00:37:08,889 --> 00:37:11,129
+and it just blows me away that uh there was one
+
+914
+00:37:11,139 --> 00:37:12,719
+company uh we'll have to put in the show notes,
+
+915
+00:37:12,729 --> 00:37:15,189
+but I think they were taken for $68 million.
+
+916
+00:37:15,399 --> 00:37:16,090
+Oh man.
+
+917
+00:37:16,830 --> 00:37:21,129
+But, but so, so here's the deal, ok. Here's the deal with. This is
+
+918
+00:37:22,300 --> 00:37:27,250
+all of those problems could be avoided if somebody picked up a telephone,
+
+919
+00:37:27,500 --> 00:37:27,969
+if you
+
+920
+00:37:28,070 --> 00:37:31,600
+have a secondary. And, and this is part of this is the important part here is
+
+921
+00:37:31,860 --> 00:37:34,290
+if you're communicating with someone via email,
+
+922
+00:37:34,699 --> 00:37:38,669
+you need another way to contact them, that's out of band.
+
+923
+00:37:38,989 --> 00:37:42,449
+And that's where you don't use the phone number in the email.
+
+924
+00:37:42,459 --> 00:37:46,250
+You know, you go to the rolodex or the phone book, the phone book still exists.
+
+925
+00:37:46,260 --> 00:37:49,489
+But anyway, you know, you go, you find a way to contact them
+
+926
+00:37:49,899 --> 00:37:51,330
+that is out of band
+
+927
+00:37:51,739 --> 00:37:53,800
+and you can verify it. And that's,
+
+928
+00:37:54,129 --> 00:37:56,889
+that's the thing. A lot of people forget is
+
+929
+00:37:57,209 --> 00:38:00,719
+email isn't the only way to get a hold of people and let's face it.
+
+930
+00:38:00,729 --> 00:38:03,760
+Even if we had signed emails
+
+931
+00:38:04,449 --> 00:38:07,379
+and even if the bad guys manage to sign it,
+
+932
+00:38:07,570 --> 00:38:09,590
+that doesn't thwart a phone call.
+
+933
+00:38:09,600 --> 00:38:13,250
+Well, the problem is people would still, for example, you know,
+
+934
+00:38:13,260 --> 00:38:14,860
+because domain names change, for example.
+
+935
+00:38:14,870 --> 00:38:17,550
+So you get an email from company name. Hyphen
+
+936
+00:38:17,810 --> 00:38:21,949
+something.com. Well, you know, how do you know if that's the actual company or not?
+
+937
+00:38:22,709 --> 00:38:24,810
+Uh, you know, that's one of the dirty secrets of, you know,
+
+938
+00:38:24,820 --> 00:38:26,669
+especially things like SSL and TLS is
+
+939
+00:38:27,399 --> 00:38:31,020
+the majority of SSL and TLS certificates are sort of low validation.
+
+940
+00:38:31,030 --> 00:38:34,379
+They're like just the domain name is validated like this is walmart.com.
+
+941
+00:38:34,389 --> 00:38:36,020
+We don't know if it's actually Walmart,
+
+942
+00:38:36,540 --> 00:38:39,530
+right. It's just, it's walmart.com or it's whatever.com,
+
+943
+00:38:39,669 --> 00:38:44,399
+you know, and some companies, well, like say paypal.com, I know for sure
+
+944
+00:38:44,560 --> 00:38:45,340
+they have, uh, you know,
+
+945
+00:38:45,350 --> 00:38:49,260
+the extended validation certificates where they actually have to, uh, submit,
+
+946
+00:38:49,270 --> 00:38:51,050
+I think some business records or like a
+
+947
+00:38:51,060 --> 00:38:53,100
+done in Bradstreet business listing or whatever,
+
+948
+00:38:53,429 --> 00:38:55,959
+you know, to actually verify that we are paypal.
+
+949
+00:38:55,979 --> 00:38:58,550
+Uh, but then of course, that raises issues like, well, I'm sure,
+
+950
+00:38:58,830 --> 00:39:00,570
+you know, trademark lobbying what it is.
+
+951
+00:39:00,580 --> 00:39:00,949
+And, uh,
+
+952
+00:39:00,959 --> 00:39:03,370
+there's probably like countries in the world where
+
+953
+00:39:03,379 --> 00:39:05,239
+you can register paypal without too much trouble.
+
+954
+00:39:05,250 --> 00:39:09,389
+Well, but here's the thing too is EV, two certificates are also very expensive
+
+955
+00:39:09,610 --> 00:39:14,360
+and so a Cron artist is probably going to be less inclined to do that. However,
+
+956
+00:39:14,899 --> 00:39:16,070
+most people don't
+
+957
+00:39:16,360 --> 00:39:20,729
+understand the difference between a regular certificate and an EV certificate.
+
+958
+00:39:20,739 --> 00:39:22,409
+So I don't think that has
+
+959
+00:39:22,770 --> 00:39:23,949
+a huge,
+
+960
+00:39:24,229 --> 00:39:25,750
+I, I guess benefit
+
+961
+00:39:26,070 --> 00:39:27,270
+to the organization.
+
+962
+00:39:27,510 --> 00:39:29,070
+I think it's, uh
+
+963
+00:39:29,469 --> 00:39:31,989
+in many cases more about just shifting the cost of
+
+964
+00:39:32,000 --> 00:39:34,070
+fraud when there is fraud because then you can say,
+
+965
+00:39:34,080 --> 00:39:37,399
+look, we have an EV certificate, you went to the site that does not have one
+
+966
+00:39:37,860 --> 00:39:38,459
+too bad,
+
+967
+00:39:39,709 --> 00:39:41,050
+you know, you should have checked.
+
+968
+00:39:41,629 --> 00:39:42,389
+Um
+
+969
+00:39:43,189 --> 00:39:45,840
+Yeah, so anyways back to P GP, I mean, the,
+
+970
+00:39:45,850 --> 00:39:48,969
+the problem I have with P GP is it's actually, you know, it's good encryption.
+
+971
+00:39:49,260 --> 00:39:49,810
+Um
+
+972
+00:39:50,429 --> 00:39:52,780
+but it's pretty terrible usability,
+
+973
+00:39:52,790 --> 00:39:55,689
+especially when you want to talk to somebody you've never talked to before.
+
+974
+00:39:55,949 --> 00:39:56,489
+Yes,
+
+975
+00:39:57,260 --> 00:39:57,679
+which is
+
+976
+00:39:58,209 --> 00:39:58,320
+the
+
+977
+00:39:58,449 --> 00:40:02,260
+-- point of email
+-- that's still a problem and even things like signal.
+
+978
+00:40:02,270 --> 00:40:05,449
+I mean, that's one of my biggest complaints about signal is I can't
+
+979
+00:40:05,659 --> 00:40:06,689
+easily
+
+980
+00:40:07,110 --> 00:40:11,370
+give someone contact details without handing out my cell phone number, which
+
+981
+00:40:11,540 --> 00:40:15,219
+I mean, in my case, I'm like, well, it's, if you want to call me,
+
+982
+00:40:15,229 --> 00:40:16,909
+it's not that hard to find, right?
+
+983
+00:40:16,919 --> 00:40:18,949
+I've given up on protecting my cell phone number,
+
+984
+00:40:18,959 --> 00:40:21,090
+but I know not everyone feels that way.
+
+985
+00:40:21,810 --> 00:40:23,909
+And so that's one of the challenges I think.
+
+986
+00:40:24,310 --> 00:40:24,659
+Yeah.
+
+987
+00:40:25,409 --> 00:40:27,620
+Well, and the thing is too, uh for example, there, I mean,
+
+988
+00:40:27,629 --> 00:40:29,270
+that's one thing I'm very specifically doing with the
+
+989
+00:40:29,280 --> 00:40:30,889
+DWO from the people that work for it.
+
+990
+00:40:31,199 --> 00:40:34,600
+You have to at a minimum register like a primary
+
+991
+00:40:34,610 --> 00:40:37,350
+working email and a secondary email because let's face it.
+
+992
+00:40:37,360 --> 00:40:37,489
+Right.
+
+993
+00:40:37,500 --> 00:40:39,780
+People's primary address sometimes changes, you know,
+
+994
+00:40:39,790 --> 00:40:42,989
+if people use their corporate account, people do change jobs.
+
+995
+00:40:43,510 --> 00:40:44,219
+Um,
+
+996
+00:40:44,540 --> 00:40:46,469
+and I'm actually thinking of changing that
+
+997
+00:40:46,929 --> 00:40:50,229
+and tying the identity more to something more permanent like a
+
+998
+00:40:50,239 --> 00:40:52,919
+Twitter account or a Facebook account or a linkedin account,
+
+999
+00:40:52,929 --> 00:40:53,629
+which let's face it.
+
+1000
+00:40:53,639 --> 00:40:55,389
+People get those and hold on to them,
+
+1001
+00:40:55,830 --> 00:40:56,379
+you know, that
+
+1002
+00:40:56,600 --> 00:40:56,699
+that's
+
+1003
+00:40:56,830 --> 00:40:57,050
+fair.
+
+1004
+00:40:57,330 --> 00:40:57,620
+Uh
+
+1005
+00:40:57,850 --> 00:41:01,219
+And then the second thing is beyond that, I don't care who or what you are.
+
+1006
+00:41:01,229 --> 00:41:04,110
+I just basically need that email address. So anybody
+
+1007
+00:41:04,360 --> 00:41:06,550
+with questions about what you did can, you know,
+
+1008
+00:41:06,679 --> 00:41:08,580
+contact you with relative ease,
+
+1009
+00:41:09,479 --> 00:41:12,189
+you know, for that transparency piece of what the heck happened.
+
+1010
+00:41:12,929 --> 00:41:13,699
+And,
+
+1011
+00:41:14,090 --> 00:41:15,110
+you know, so I've,
+
+1012
+00:41:15,120 --> 00:41:18,389
+I've essentially taken identity management and fixed it by not doing it
+
+1013
+00:41:19,209 --> 00:41:20,139
+right. And that's,
+
+1014
+00:41:20,739 --> 00:41:23,540
+you know, and, and that's not available to everybody, unfortunately,
+
+1015
+00:41:23,550 --> 00:41:26,979
+but for myself, luckily it is because I, you know, I looked into what it would
+
+1016
+00:41:27,320 --> 00:41:29,550
+take to properly do identity management. And
+
+1017
+00:41:30,090 --> 00:41:30,800
+I mean, basically,
+
+1018
+00:41:30,810 --> 00:41:32,969
+you're the only person that I would be able to actually verify and
+
+1019
+00:41:32,979 --> 00:41:35,600
+that's only because I've worked with you for like over five years,
+
+1020
+00:41:35,610 --> 00:41:35,679
+right?
+
+1021
+00:41:36,590 --> 00:41:37,120
+You know,
+
+1022
+00:41:37,989 --> 00:41:38,399
+you know,
+
+1023
+00:41:38,560 --> 00:41:40,179
+I just discussed
+
+1024
+00:41:40,449 --> 00:41:42,090
+identity management
+
+1025
+00:41:42,399 --> 00:41:46,110
+issues with, with who's going to be my future brother in law.
+
+1026
+00:41:46,239 --> 00:41:48,409
+This weekend we were at a Christmas party and
+
+1027
+00:41:48,419 --> 00:41:51,189
+of course we're sitting in the corner discussing identity management
+
+1028
+00:41:51,340 --> 00:41:54,550
+while everyone else is, you know, drinking beer and, and talking to each other.
+
+1029
+00:41:54,929 --> 00:41:55,040
+But
+
+1030
+00:41:55,270 --> 00:41:55,629
+normal.
+
+1031
+00:41:55,879 --> 00:41:56,389
+Right.
+
+1032
+00:41:57,939 --> 00:42:00,040
+We were normal for our area of the room.
+
+1033
+00:42:00,169 --> 00:42:05,459
+But it, it is, it's such a crazy, horrible, hard problem. And there is
+
+1034
+00:42:05,570 --> 00:42:07,399
+no good answer today
+
+1035
+00:42:07,510 --> 00:42:09,090
+to solving some of this stuff.
+
+1036
+00:42:09,419 --> 00:42:12,610
+Well, and even if you solve identity management, there's still a ton of problems.
+
+1037
+00:42:12,620 --> 00:42:14,850
+Like people's names change all the time.
+
+1038
+00:42:15,679 --> 00:42:17,379
+You know, they get married, they get divorced,
+
+1039
+00:42:17,389 --> 00:42:20,510
+they legally change their name for other reasons.
+
+1040
+00:42:20,520 --> 00:42:20,939
+You know,
+
+1041
+00:42:21,449 --> 00:42:25,310
+identity management is a crazy hard problem.
+
+1042
+00:42:26,110 --> 00:42:26,530
+It, I
+
+1043
+00:42:27,350 --> 00:42:30,639
+don't want to say it's impossible, but it might be impossible.
+
+1044
+00:42:31,070 --> 00:42:33,229
+I think it's one of those diminishing return issues
+
+1045
+00:42:33,239 --> 00:42:36,080
+where you can do it like well enough.
+
+1046
+00:42:36,090 --> 00:42:38,100
+-- Yes,
+-- for most cases.
+
+1047
+00:42:38,419 --> 00:42:39,719
+Well, oh, you know what I mean?
+
+1048
+00:42:39,820 --> 00:42:45,209
+I just realized we're talking about P GP and the fact that the decentralization
+
+1049
+00:42:45,419 --> 00:42:49,810
+of it is what really is its downfall. And once we look at something like
+
+1050
+00:42:50,250 --> 00:42:51,699
+the way you're using signed G
+
+1051
+00:42:51,830 --> 00:42:55,370
+commits and now we have a central authority and it becomes usable.
+
+1052
+00:42:55,620 --> 00:42:58,840
+Identity management is not unlike that where today
+
+1053
+00:42:58,850 --> 00:43:01,840
+we are trying to solve a problem that is
+
+1054
+00:43:02,189 --> 00:43:03,840
+completely disjoint.
+
+1055
+00:43:04,169 --> 00:43:07,639
+But if we had some sort of central identity authority,
+
+1056
+00:43:07,750 --> 00:43:09,879
+which if I said it's the government,
+
+1057
+00:43:09,889 --> 00:43:13,840
+I'm going to have people send me tons of hate mail about how terrible that is.
+
+1058
+00:43:13,850 --> 00:43:15,270
+But you kind of get the idea,
+
+1059
+00:43:15,449 --> 00:43:18,830
+I think without a central authority it is an unsolvable problem.
+
+1060
+00:43:19,770 --> 00:43:24,780
+Well, the reality is outside of my small circle of people. I actually know.
+
+1061
+00:43:24,879 --> 00:43:28,989
+You know, and, and saying, you know, that whole seven degrees of separation thing,
+
+1062
+00:43:29,810 --> 00:43:33,310
+you know, once you get past two or three degrees of separation, it's, uh, you know,
+
+1063
+00:43:33,320 --> 00:43:36,270
+it's really hard, like who's that guy in Guatemala?
+
+1064
+00:43:36,280 --> 00:43:37,310
+I have no idea,
+
+1065
+00:43:37,810 --> 00:43:38,379
+you know,
+
+1066
+00:43:38,699 --> 00:43:39,790
+and the reality is, like I said,
+
+1067
+00:43:39,800 --> 00:43:42,429
+part of it is I'm looking at it from just a pragmatic point of view is
+
+1068
+00:43:43,090 --> 00:43:43,810
+see, for me,
+
+1069
+00:43:43,820 --> 00:43:45,790
+it's less about knowing who they actually are and it's
+
+1070
+00:43:45,800 --> 00:43:49,189
+more about just tying it to an identity to an entity
+
+1071
+00:43:49,639 --> 00:43:50,590
+and essentially saying,
+
+1072
+00:43:50,600 --> 00:43:53,550
+look as long as they do good work and don't violate the community rules,
+
+1073
+00:43:53,560 --> 00:43:54,449
+I'm happy with them.
+
+1074
+00:43:54,459 --> 00:43:57,820
+And if they violate the community rules and do bad work, we kind of, you know,
+
+1075
+00:43:57,830 --> 00:43:58,649
+talk to them
+
+1076
+00:43:58,750 --> 00:44:00,429
+and if they keep doing it, we boot them out.
+
+1077
+00:44:01,260 --> 00:44:02,120
+Yes. Right.
+
+1078
+00:44:02,129 --> 00:44:02,669
+So it's,
+
+1079
+00:44:02,679 --> 00:44:04,899
+I actually care less about their actual identity
+
+1080
+00:44:04,909 --> 00:44:07,729
+and more about just identifying that this identity is
+
+1081
+00:44:08,010 --> 00:44:08,469
+like
+
+1082
+00:44:08,580 --> 00:44:09,469
+this identity.
+
+1083
+00:44:10,070 --> 00:44:12,409
+And like I said, I'm, I'm seriously considering
+
+1084
+00:44:13,540 --> 00:44:15,320
+moving from my previous mindset,
+
+1085
+00:44:15,330 --> 00:44:18,489
+which was like email address was sort of your primary identifier online
+
+1086
+00:44:18,649 --> 00:44:21,969
+and moving to these more social networks like Facebook, Twitter, linkedin,
+
+1087
+00:44:21,979 --> 00:44:22,550
+whatever,
+
+1088
+00:44:22,939 --> 00:44:23,179
+you know,
+
+1089
+00:44:23,189 --> 00:44:26,179
+like I said where people tend to get an account there and they tend to hang on to it.
+
+1090
+00:44:27,649 --> 00:44:28,250
+Yep. Yep.
+
+1091
+00:44:28,909 --> 00:44:30,560
+I would agree completely.
+
+1092
+00:44:30,729 --> 00:44:31,439
+And you know,
+
+1093
+00:44:31,449 --> 00:44:33,590
+the dirty little secret there is essentially what it
+
+1094
+00:44:33,600 --> 00:44:36,389
+boils down to is URL S as identification,
+
+1095
+00:44:36,399 --> 00:44:36,709
+right?
+
+1096
+00:44:36,719 --> 00:44:38,540
+Twitter.com/kurtz
+
+1097
+00:44:38,679 --> 00:44:41,770
+Fried or twitter.com/whatever Bib
+
+1098
+00:44:41,889 --> 00:44:42,350
+Bob.
+
+1099
+00:44:43,070 --> 00:44:46,770
+I, I think though, you also have the advantage of,
+
+1100
+00:44:46,979 --> 00:44:49,689
+you have a very tight scope
+
+1101
+00:44:50,229 --> 00:44:55,010
+and so you're not trying to boil the ocean, which I think is
+
+1102
+00:44:55,659 --> 00:44:57,739
+when you have a clearly defined problem,
+
+1103
+00:44:57,750 --> 00:45:00,520
+you can create a clearly defined solution for it, right?
+
+1104
+00:45:00,530 --> 00:45:03,419
+Is we're seeing that in action here. And
+
+1105
+00:45:03,669 --> 00:45:06,379
+I think that's probably also one of the other problems is
+
+1106
+00:45:06,649 --> 00:45:09,760
+everyone tries to solve the world's problems.
+
+1107
+00:45:09,770 --> 00:45:11,899
+They don't try to solve their problems
+
+1108
+00:45:11,909 --> 00:45:14,120
+when they get to something like identity management
+
+1109
+00:45:14,330 --> 00:45:18,270
+and, and even even P GP kind of fell into this of
+
+1110
+00:45:18,639 --> 00:45:22,840
+instead of solving one nice problem, let's solve all the problems.
+
+1111
+00:45:23,469 --> 00:45:26,139
+Well, I think basically they, they didn't solve any problems.
+
+1112
+00:45:26,149 --> 00:45:29,040
+They built a framework where it's possible to solve these problems.
+
+1113
+00:45:29,919 --> 00:45:30,879
+Maybe
+
+1114
+00:45:31,000 --> 00:45:32,520
+you're a freaking genius.
+
+1115
+00:45:33,010 --> 00:45:36,000
+Yeah, but um they didn't, I mean if you look at it given,
+
+1116
+00:45:36,229 --> 00:45:39,239
+well, let's say for example, P GP with no key servers
+
+1117
+00:45:39,560 --> 00:45:42,300
+you have now really the only people you can
+
+1118
+00:45:42,310 --> 00:45:44,669
+exchange email and stuff with are people that you're,
+
+1119
+00:45:45,080 --> 00:45:47,459
+you have a phone number for or meet in real life.
+
+1120
+00:45:48,080 --> 00:45:50,949
+Uh You know, I remember P GP with no key servers is.
+
+1121
+00:45:50,959 --> 00:45:53,389
+In fact, some of my first uses of it were
+
+1122
+00:45:53,669 --> 00:45:55,290
+via bulletin board systems
+
+1123
+00:45:55,729 --> 00:45:56,429
+where
+
+1124
+00:45:56,590 --> 00:45:57,389
+we would con uh in,
+
+1125
+00:45:57,399 --> 00:46:01,590
+in this was obviously we were setting ourselves up incorrectly to begin with.
+
+1126
+00:46:01,600 --> 00:46:06,300
+But it's essentially, hey, I'm Josh, here's my key, you know, hey, I'm, I'm Bob.
+
+1127
+00:46:06,310 --> 00:46:09,560
+Here's my key and then we could start sending each other messages.
+
+1128
+00:46:09,699 --> 00:46:10,570
+Now, granted,
+
+1129
+00:46:10,989 --> 00:46:15,550
+given it was a local small bulletin board in, you know, Northern Wisconsin,
+
+1130
+00:46:16,179 --> 00:46:21,199
+there was a probably limited trouble of, of anyone really getting in the middle, but
+
+1131
+00:46:21,540 --> 00:46:24,050
+it would not be out of the question for a malicious sis
+
+1132
+00:46:24,179 --> 00:46:24,189
+a
+
+1133
+00:46:24,780 --> 00:46:26,280
+to have done that.
+
+1134
+00:46:26,699 --> 00:46:31,340
+And I, there's no way we would have known and this is someone I've never met in person.
+
+1135
+00:46:31,350 --> 00:46:33,050
+It's just we happen to be
+
+1136
+00:46:33,189 --> 00:46:37,149
+on the same bulletin board and we happen to need to have a private discussion.
+
+1137
+00:46:37,719 --> 00:46:39,860
+Yeah. No, I mean, these are very difficult problems to solve and
+
+1138
+00:46:40,290 --> 00:46:42,000
+I don't wanna say they're unsolvable,
+
+1139
+00:46:42,010 --> 00:46:45,959
+but I don't think they're solvable in an economically viable way
+
+1140
+00:46:46,409 --> 00:46:49,189
+and more to the point. I'm not sure these problems need to be solved.
+
+1141
+00:46:49,439 --> 00:46:54,120
+Um, for example, your bank, once your bank is legally established who you are,
+
+1142
+00:46:54,550 --> 00:46:57,679
+you know, they sort of let you do what you want with your account, especially online,
+
+1143
+00:46:57,689 --> 00:46:57,830
+right?
+
+1144
+00:46:57,840 --> 00:47:00,409
+Anybody that has your password and secret questions
+
+1145
+00:47:00,419 --> 00:47:02,070
+could log into your account and do whatever
+
+1146
+00:47:02,929 --> 00:47:06,010
+and essentially they've done what they have to do legally.
+
+1147
+00:47:06,449 --> 00:47:09,510
+Uh, yeah, it's Oh man, this is such a crazy problem.
+
+1148
+00:47:09,639 --> 00:47:11,360
+So, I mean, for example,
+
+1149
+00:47:11,370 --> 00:47:13,830
+I love now that I can email money to people and all I
+
+1150
+00:47:13,840 --> 00:47:16,550
+need is their email address and then I have to get them,
+
+1151
+00:47:16,560 --> 00:47:18,469
+you know, the answer to a secret question
+
+1152
+00:47:18,939 --> 00:47:23,290
+which I typically send them by email because I have no real other way to contact them.
+
+1153
+00:47:24,969 --> 00:47:25,830
+So
+
+1154
+00:47:26,320 --> 00:47:29,389
+yeah, I mean, but you know, it's convenient, right? And
+
+1155
+00:47:29,889 --> 00:47:32,030
+I'll take convenience over
+
+1156
+00:47:32,159 --> 00:47:34,350
+completely while not having anything,
+
+1157
+00:47:34,750 --> 00:47:36,510
+-- you know, to pay my bills.
+-- That's,
+
+1158
+00:47:36,879 --> 00:47:38,939
+you know, I think that's kind of the lesson here. Right.
+
+1159
+00:47:38,949 --> 00:47:41,879
+And this is, you should probably get this wrapped up at some point. But
+
+1160
+00:47:42,090 --> 00:47:43,590
+it really comes down to
+
+1161
+00:47:43,889 --> 00:47:46,709
+convenience, outweighs security
+
+1162
+00:47:46,969 --> 00:47:47,669
+every time.
+
+1163
+00:47:48,020 --> 00:47:50,199
+And that's really almost always
+
+1164
+00:47:50,600 --> 00:47:55,320
+-- every time
+-- there are things I just won't do because they are, I can't do them safe.
+
+1165
+00:47:55,399 --> 00:47:57,429
+You won't, I will never go base jumping.
+
+1166
+00:47:58,969 --> 00:48:03,159
+That's not convenient. Kurt, like base jumping is less convenient.
+
+1167
+00:48:04,850 --> 00:48:06,629
+That's another conversation
+
+1168
+00:48:06,800 --> 00:48:07,580
+for a different day.
+
+1169
+00:48:08,100 --> 00:48:09,560
+But I think so.
+
+1170
+00:48:09,570 --> 00:48:10,649
+-- So
+-- I guess in general,
+
+1171
+00:48:10,659 --> 00:48:15,139
+-- I would agree 99.8% of the time over
+-- the course of this discussion, we
+
+1172
+00:48:15,449 --> 00:48:17,030
+declared P GP dead.
+
+1173
+00:48:17,219 --> 00:48:19,399
+And now it's not because we're using it with G,
+
+1174
+00:48:20,090 --> 00:48:23,270
+but I, I will agree that I think for private communications,
+
+1175
+00:48:23,280 --> 00:48:25,570
+it is certainly a less than ideal
+
+1176
+00:48:25,679 --> 00:48:26,429
+solution.
+
+1177
+00:48:27,090 --> 00:48:31,719
+And I'm glad to see things now like signal coming out that are making this much,
+
+1178
+00:48:31,729 --> 00:48:32,669
+much easier
+
+1179
+00:48:32,800 --> 00:48:33,550
+to solve.
+
+1180
+00:48:33,729 --> 00:48:35,080
+Well, and more to the point.
+
+1181
+00:48:35,090 --> 00:48:38,969
+Right, is we, if we really want to solve these problems,
+
+1182
+00:48:38,979 --> 00:48:42,110
+we can't just solve them for people who are technologically competent
+
+1183
+00:48:42,439 --> 00:48:45,149
+because that is a really tiny subset of humanity,
+
+1184
+00:48:45,520 --> 00:48:47,629
+you know, even within our industry. Like,
+
+1185
+00:48:47,800 --> 00:48:50,110
+I, there's so much stuff I don't know about how to, you know,
+
+1186
+00:48:51,300 --> 00:48:54,820
+I'm now at the point where I know what, I don't know. And it's like, it's a lot.
+
+1187
+00:48:55,370 --> 00:48:55,439
+That's
+
+1188
+00:48:55,659 --> 00:48:55,689
+right.
+
+1189
+00:48:55,959 --> 00:48:56,409
+Um,
+
+1190
+00:48:56,770 --> 00:48:59,959
+and things like signal, you know, it's like you just need the person's phone number,
+
+1191
+00:48:59,969 --> 00:49:00,560
+end of story.
+
+1192
+00:49:00,570 --> 00:49:02,310
+Now, it's going to be encrypted, end to end.
+
+1193
+00:49:03,899 --> 00:49:05,919
+All right. Well, with that, let's, uh,
+
+1194
+00:49:06,389 --> 00:49:07,639
+let's call it quits for now
+
+1195
+00:49:08,050 --> 00:49:10,169
+and we can all think about P GP
+
+1196
+00:49:10,310 --> 00:49:11,840
+and, and the terrors that come with it.
+
+1197
+00:49:12,620 --> 00:49:14,000
+And I guess until next time, Kurt,
+
+1198
+00:49:14,500 --> 00:49:16,360
+thank you very much, everyone.
+
+1199
+00:49:16,370 --> 00:49:19,040
+Uh, open source security podcast.com, check the show notes
+
+1200
+00:49:19,610 --> 00:49:20,360
+and until
+
+1201
+00:49:21,620 --> 00:49:24,000
+that's right, hashtag Os S podcast,
+
+1202
+00:49:24,209 --> 00:49:27,159
+you can, we'll, we'll keep an eye on it and you can chat us up on Twitter
+
+1203
+00:49:27,879 --> 00:49:29,770
+until next time. Everybody. Thank you much,
+
+1204
+00:49:31,000 --> 00:49:31,439
+Merry
+
+1205
+00:49:31,979 --> 00:49:32,139
+Merry
+
+1206
+00:49:32,879 --> 00:49:33,100
+Christmas.
+
+1207
+00:49:35,260 --> 00:49:36,040
+Bye bye.

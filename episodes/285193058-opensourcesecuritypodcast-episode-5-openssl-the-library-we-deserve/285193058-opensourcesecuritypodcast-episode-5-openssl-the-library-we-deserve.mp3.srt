@@ -1,0 +1,2500 @@
+0
+00:00:05,719 --> 00:00:08,449
+Hello and welcome to the open source security podcast.
+
+1
+00:00:08,460 --> 00:00:10,710
+I'm Kurt Siefried and with me is Josh Bresser.
+
+2
+00:00:10,960 --> 00:00:11,970
+Hey, Kurt, how are you doing?
+
+3
+00:00:12,550 --> 00:00:13,649
+I am doing good.
+
+4
+00:00:14,020 --> 00:00:14,659
+All right, man.
+
+5
+00:00:14,760 --> 00:00:18,860
+The topic on everyone's mind this week. Open SSL. Let's do it.
+
+6
+00:00:19,149 --> 00:00:21,750
+-- Yeah. So do you want to lead us off?
+-- All right. Yeah,
+
+7
+00:00:22,530 --> 00:00:23,059
+this is,
+
+8
+00:00:23,649 --> 00:00:25,090
+this is such a crazy story.
+
+9
+00:00:25,290 --> 00:00:30,450
+So let's start here. What is open SSL? How, how, how do we define that in,
+
+10
+00:00:30,559 --> 00:00:35,069
+in say what's, what's the tweet we could use to explain what open SSL is to people.
+
+11
+00:00:35,400 --> 00:00:39,040
+-- Open
+-- SSL is the thing that does the magic crypto
+
+12
+00:00:39,900 --> 00:00:40,779
+-- and
+-- uh
+
+13
+00:00:41,220 --> 00:00:41,860
+stressing the
+
+14
+00:00:42,069 --> 00:00:42,139
+world
+
+15
+00:00:42,560 --> 00:00:46,150
+-- nobody understands crypto. There's like 10 people on the planet
+-- if we're lucky.
+
+16
+00:00:46,759 --> 00:00:48,419
+Yeah. And they probably all work for the NSA.
+
+17
+00:00:48,930 --> 00:00:49,310
+So yeah,
+
+18
+00:00:49,319 --> 00:00:53,299
+open SSL is a cryptographic library which is a fancy
+
+19
+00:00:53,310 --> 00:00:56,389
+way of saying it's a big pile of building blocks
+
+20
+00:00:56,750 --> 00:00:59,189
+that you can use to build something that, you know,
+
+21
+00:00:59,200 --> 00:01:02,360
+given like a secure web session will as a server,
+
+22
+00:01:02,369 --> 00:01:06,029
+be able to talk to the client or as a client will be able to talk to the server.
+
+23
+00:01:06,540 --> 00:01:08,180
+Uh And so,
+
+24
+00:01:08,559 --> 00:01:08,769
+yeah,
+
+25
+00:01:08,779 --> 00:01:10,599
+it's basically this pile of building blocks that
+
+26
+00:01:10,610 --> 00:01:11,830
+will do pretty much whatever you want.
+
+27
+00:01:11,839 --> 00:01:13,360
+And then the challenge is, you know,
+
+28
+00:01:13,370 --> 00:01:17,629
+making it behave and do things correctly can be a bit of fun.
+
+29
+00:01:17,930 --> 00:01:21,430
+Well, and I, I think there's two really important things that
+
+30
+00:01:21,589 --> 00:01:23,000
+maybe not everybody knows about.
+
+31
+00:01:23,010 --> 00:01:27,430
+This is number one open S SS L is about 100 years old now.
+
+32
+00:01:27,779 --> 00:01:28,319
+It's a
+
+33
+00:01:28,500 --> 00:01:32,849
+very old piece of software. I bet it's, man, it's got to be at least 20. I mean, really,
+
+34
+00:01:33,239 --> 00:01:36,099
+it's II, I can't think of how when it came to be.
+
+35
+00:01:36,110 --> 00:01:39,040
+But anyway, so open SSL is very old but also
+
+36
+00:01:39,169 --> 00:01:42,269
+it powers a nontrivial amount of the internet
+
+37
+00:01:42,650 --> 00:01:44,230
+which makes it a very,
+
+38
+00:01:44,370 --> 00:01:46,550
+we'll say high profile piece of software that,
+
+39
+00:01:46,559 --> 00:01:48,870
+that many others don't necessarily have.
+
+40
+00:01:48,879 --> 00:01:49,239
+Right.
+
+41
+00:01:49,660 --> 00:01:49,870
+Yeah.
+
+42
+00:01:50,040 --> 00:01:53,339
+Well, I mean, just by virtue, it's, it's like a lot of libraries. It was the first
+
+43
+00:01:53,940 --> 00:01:57,480
+decent one with, you know, a good license in this case,
+
+44
+00:01:57,489 --> 00:02:00,139
+-- the Apache license decent
+-- very loosely here.
+
+45
+00:02:00,330 --> 00:02:00,889
+-- Well,
+-- you know,
+
+46
+00:02:00,900 --> 00:02:05,750
+it's like a lot of like there's a lot of these libraries that honestly, you know,
+
+47
+00:02:05,760 --> 00:02:07,309
+somebody wrote them to scratch,
+
+48
+00:02:07,790 --> 00:02:11,029
+uh somebody wrote this library to scratch their own itch and then, you know,
+
+49
+00:02:11,038 --> 00:02:13,410
+a couple of people piled on because it helped them.
+
+50
+00:02:14,190 --> 00:02:15,949
+And then unfortunately at some point
+
+51
+00:02:16,169 --> 00:02:19,529
+everybody was using it and, you know, and of course, being open source,
+
+52
+00:02:19,539 --> 00:02:21,970
+it's not like we know that until it happens,
+
+53
+00:02:22,970 --> 00:02:23,839
+-- you know,
+-- it sort of sneaks
+
+54
+00:02:24,179 --> 00:02:24,889
+up also
+
+55
+00:02:25,130 --> 00:02:29,809
+in the case of open SSL. This is a great example of 20 years of adding
+
+56
+00:02:29,949 --> 00:02:31,649
+and very little removing.
+
+57
+00:02:31,850 --> 00:02:33,229
+All right. So anyway,
+
+58
+00:02:33,330 --> 00:02:33,339
+I,
+
+59
+00:02:33,350 --> 00:02:35,320
+I guess here's where we stand now and here's what makes
+
+60
+00:02:35,330 --> 00:02:39,770
+it so interesting is last week on the 22nd of September,
+
+61
+00:02:40,220 --> 00:02:42,320
+there is a security update to open SSL
+
+62
+00:02:42,960 --> 00:02:47,130
+and the security update fixed a couple of issues. Nothing was very exciting.
+
+63
+00:02:47,139 --> 00:02:48,639
+One of them did have a logo.
+
+64
+00:02:49,059 --> 00:02:52,539
+It was not super exciting issue once again
+
+65
+00:02:52,550 --> 00:02:55,539
+proving that having a logo does not mean anything
+
+66
+00:02:55,740 --> 00:02:57,559
+as to the quality of your issue.
+
+67
+00:02:57,899 --> 00:02:58,529
+But the,
+
+68
+00:02:58,539 --> 00:03:03,570
+the point is they released an update and it was done in the typical embargoed manner,
+
+69
+00:03:03,929 --> 00:03:06,130
+which will we get to embargoes in a minute
+
+70
+00:03:06,610 --> 00:03:10,419
+and then they, they released their update and then not
+
+71
+00:03:10,610 --> 00:03:11,779
+four days later,
+
+72
+00:03:12,300 --> 00:03:13,970
+they released another update
+
+73
+00:03:14,130 --> 00:03:17,610
+because it turned out that the patch the first time around
+
+74
+00:03:18,000 --> 00:03:22,089
+actually added a new security flaw and a much worse security flaw
+
+75
+00:03:22,589 --> 00:03:24,179
+than the one they had just fixed,
+
+76
+00:03:24,300 --> 00:03:28,350
+which that also happens from time to time when you're fixing security issues.
+
+77
+00:03:28,360 --> 00:03:31,020
+But let's let's back it up and start at
+
+78
+00:03:31,259 --> 00:03:34,029
+embargo doesn't mean anything to everybody.
+
+79
+00:03:34,330 --> 00:03:37,300
+So why don't you tell us what is an embargo? Kurt?
+
+80
+00:03:37,559 --> 00:03:39,570
+Well, so generally speaking,
+
+81
+00:03:39,580 --> 00:03:44,910
+an embargo is the idea where you keep a security vulnerability private
+
+82
+00:03:45,199 --> 00:03:48,800
+until you are ready to fully release a fix.
+
+83
+00:03:48,809 --> 00:03:52,839
+Uh And actually what an embargo is means different things to different people. But
+
+84
+00:03:52,979 --> 00:03:55,589
+fundamentally, the idea is you want to reduce
+
+85
+00:03:56,029 --> 00:03:59,080
+the gap between bad guys knowing about the flaw
+
+86
+00:03:59,339 --> 00:04:01,850
+and the good guys having access to an update that
+
+87
+00:04:01,860 --> 00:04:04,639
+they can use to prevent exploitation of the flaw.
+
+88
+00:04:04,690 --> 00:04:06,289
+And to be honest, it's,
+
+89
+00:04:06,300 --> 00:04:09,630
+it's something that's become a bit of a bad habit in the security industry.
+
+90
+00:04:09,949 --> 00:04:10,529
+Um,
+
+91
+00:04:10,539 --> 00:04:12,339
+I think part of it is because back in the day we used
+
+92
+00:04:12,350 --> 00:04:15,929
+to not have as many flaws as we do now to deal with.
+
+93
+00:04:16,640 --> 00:04:19,480
+And we, we generally tended to embargo everything.
+
+94
+00:04:19,869 --> 00:04:20,410
+You know,
+
+95
+00:04:21,100 --> 00:04:22,209
+I remember those days man,
+
+96
+00:04:23,140 --> 00:04:26,649
+-- even
+-- trivial things like cross site scripting vulnerabilities, you know,
+
+97
+00:04:26,660 --> 00:04:28,290
+only one or two of those now.
+
+98
+00:04:28,910 --> 00:04:29,440
+Yeah.
+
+99
+00:04:29,820 --> 00:04:33,959
+And so, so the challenge with an embargo is that well, by definition,
+
+100
+00:04:33,970 --> 00:04:36,690
+you're trying to restrict who knows about the vulnerability.
+
+101
+00:04:37,369 --> 00:04:41,239
+Uh And this can also vary like sometimes the embargo will be
+
+102
+00:04:41,339 --> 00:04:45,149
+any mention of the issue at all. Sometimes the embargo will be
+
+103
+00:04:45,350 --> 00:04:48,299
+just the specific technical details. Uh
+
+104
+00:04:48,510 --> 00:04:50,630
+Sometimes the embargo will be,
+
+105
+00:04:50,850 --> 00:04:52,709
+you know, just the exploit code, right?
+
+106
+00:04:53,420 --> 00:04:53,950
+So and
+
+107
+00:04:54,179 --> 00:04:55,540
+-- so,
+-- but hang on, hang on
+
+108
+00:04:55,910 --> 00:04:58,519
+open SSL is an open source project.
+
+109
+00:04:58,579 --> 00:05:01,970
+How can an open source project possibly keep anything secret?
+
+110
+00:05:02,130 --> 00:05:05,070
+Well, see, and there's the problem is generally speaking,
+
+111
+00:05:05,079 --> 00:05:06,920
+open source projects are not
+
+112
+00:05:07,179 --> 00:05:11,929
+built for secrecy and privacy of the code.
+
+113
+00:05:11,940 --> 00:05:13,910
+I mean, the whole point is to be open source and
+
+114
+00:05:14,070 --> 00:05:15,549
+you know, let people collaborate.
+
+115
+00:05:15,980 --> 00:05:18,730
+So the problem with an embargo becomes,
+
+116
+00:05:18,739 --> 00:05:22,559
+how do you do your job building open source software
+
+117
+00:05:22,980 --> 00:05:28,100
+without doing it the open source way. And so essentially, what usually happens
+
+118
+00:05:28,299 --> 00:05:30,040
+is people have to
+
+119
+00:05:30,299 --> 00:05:33,839
+abandon all the workflow and all the tool chain
+
+120
+00:05:33,950 --> 00:05:35,079
+that they currently use.
+
+121
+00:05:35,299 --> 00:05:39,130
+And essentially nine times out of 10, they end up emailing patches around,
+
+122
+00:05:39,359 --> 00:05:42,480
+but developers then build on their local workstation to see if it works or
+
+123
+00:05:42,489 --> 00:05:45,799
+not and then maybe try and test it locally on their workstation and,
+
+124
+00:05:46,140 --> 00:05:49,519
+you know, if it doesn't catch fire, then it's probably ok to ship.
+
+125
+00:05:49,529 --> 00:05:53,630
+So it sounds like you're telling me that because of an embargo, a
+
+126
+00:05:53,779 --> 00:05:57,679
+project might not get quite the testing. It would normally have
+
+127
+00:05:57,890 --> 00:06:02,359
+as a regular update and could maybe introduce a much, much,
+
+128
+00:06:02,369 --> 00:06:05,260
+much worse security flaw with their security update.
+
+129
+00:06:05,459 --> 00:06:05,549
+Yeah.
+
+130
+00:06:05,559 --> 00:06:07,019
+And I think part of the challenge too is,
+
+131
+00:06:07,029 --> 00:06:10,350
+is when you are dealing with a security vulnerability.
+
+132
+00:06:10,540 --> 00:06:13,239
+Uh people, you know, people, when they're dealing with problems,
+
+133
+00:06:13,250 --> 00:06:14,399
+they tend to tunnel vision,
+
+134
+00:06:14,709 --> 00:06:15,119
+right?
+
+135
+00:06:15,529 --> 00:06:18,549
+And this seems to happen sometimes where people, you know,
+
+136
+00:06:18,559 --> 00:06:20,980
+tunnel vision on the vulnerability they're trying to fix
+
+137
+00:06:21,339 --> 00:06:22,779
+and, you know, they,
+
+138
+00:06:22,790 --> 00:06:26,980
+they end up doing something that actually makes things worse or just as bad.
+
+139
+00:06:27,359 --> 00:06:29,149
+Uh Like if you look at the CV database,
+
+140
+00:06:29,160 --> 00:06:32,320
+there's over 200 vulnerabilities that essentially have the text,
+
+141
+00:06:32,500 --> 00:06:35,029
+uh you know, an incomplete fix for,
+
+142
+00:06:35,290 --> 00:06:38,649
+you know, where they've tried to patch something and then a day or a week later,
+
+143
+00:06:38,660 --> 00:06:39,390
+come back to it.
+
+144
+00:06:39,399 --> 00:06:41,660
+-- And whoops,
+-- I'm skeptical
+
+145
+00:06:41,869 --> 00:06:43,260
+that it's only 200.
+
+146
+00:06:43,869 --> 00:06:44,339
+However,
+
+147
+00:06:44,799 --> 00:06:47,269
+I, I think there's, there's kind of two things that number one,
+
+148
+00:06:47,420 --> 00:06:48,890
+not fixing something
+
+149
+00:06:49,140 --> 00:06:50,130
+correctly.
+
+150
+00:06:50,450 --> 00:06:55,140
+Incomplete fix. Right? Is not what happened in this instance with open SSL.
+
+151
+00:06:56,299 --> 00:06:57,630
+Well, it's a generic text they use.
+
+152
+00:06:58,290 --> 00:07:01,170
+Would they, I wonder if they're gonna use it in this case, if it's,
+
+153
+00:07:01,380 --> 00:07:01,950
+I don't know.
+
+154
+00:07:02,070 --> 00:07:02,899
+That's a good question.
+
+155
+00:07:02,910 --> 00:07:06,600
+Um But anyway, regardless, this is not an incomplete fix,
+
+156
+00:07:06,609 --> 00:07:11,940
+this was a brand new problem that got found and funny enough, it got found because
+
+157
+00:07:12,269 --> 00:07:13,369
+they released their update.
+
+158
+00:07:13,380 --> 00:07:16,489
+And then some researchers started doing testing that I imagine
+
+159
+00:07:16,750 --> 00:07:20,880
+they would do in any normal situation and had they had access to this software
+
+160
+00:07:21,100 --> 00:07:23,049
+beforehand, they, they could have done it then.
+
+161
+00:07:23,450 --> 00:07:24,220
+So
+
+162
+00:07:24,440 --> 00:07:29,820
+I think if we look at this one singular instance, it sounds like embargoes are bad
+
+163
+00:07:30,079 --> 00:07:31,140
+and we don't want them.
+
+164
+00:07:31,350 --> 00:07:33,339
+Well, embargoes definitely, you,
+
+165
+00:07:33,350 --> 00:07:37,690
+you're basically trading a variety of risks uh off against each other.
+
+166
+00:07:37,700 --> 00:07:38,019
+You know,
+
+167
+00:07:38,179 --> 00:07:41,019
+there is definitely a risk that bad guys, you know,
+
+168
+00:07:41,029 --> 00:07:44,220
+find out about a vulnerability and use it to exploit users.
+
+169
+00:07:44,950 --> 00:07:46,739
+On the other hand, there's also a risk that, you know,
+
+170
+00:07:46,750 --> 00:07:49,179
+you write a software patch that introduces
+
+171
+00:07:49,339 --> 00:07:51,700
+an even worse vulnerability, you know, and
+
+172
+00:07:52,109 --> 00:07:54,549
+the challenge is we don't really have any
+
+173
+00:07:54,559 --> 00:07:57,019
+data to make good decisions about these risks.
+
+174
+00:07:57,029 --> 00:07:58,579
+So we tend to go with our gut
+
+175
+00:07:58,829 --> 00:08:01,640
+which, in our case, nine times out of 10 means we go with, you know,
+
+176
+00:08:01,649 --> 00:08:04,760
+historical trends, which is embargo everything.
+
+177
+00:08:05,160 --> 00:08:07,359
+Sure. Sure. So when you said
+
+178
+00:08:07,519 --> 00:08:11,980
+we trade risk, I had a vision of the uh risk trading market,
+
+179
+00:08:12,459 --> 00:08:16,040
+which sounds hilarious to me in all the wrong ways. But,
+
+180
+00:08:16,220 --> 00:08:18,839
+ok, so, so that's a really good point I think is
+
+181
+00:08:19,250 --> 00:08:23,290
+it is easy for us to want to embargo everything. And additionally,
+
+182
+00:08:23,529 --> 00:08:25,309
+I don't think there's a researcher out there
+
+183
+00:08:25,320 --> 00:08:27,869
+who doesn't want to think whatever they found,
+
+184
+00:08:27,880 --> 00:08:31,660
+whatever they're doing isn't the most important security issue in the
+
+185
+00:08:31,859 --> 00:08:35,200
+history of security issues, right? And so
+
+186
+00:08:35,539 --> 00:08:38,710
+I'm sure these researchers love embargo their stuff and let's face it.
+
+187
+00:08:38,719 --> 00:08:39,640
+When you're a researcher,
+
+188
+00:08:39,650 --> 00:08:43,479
+you can also request an embargo and say here's something I found,
+
+189
+00:08:43,570 --> 00:08:45,039
+I want it embargoed.
+
+190
+00:08:45,049 --> 00:08:48,609
+And so that, I mean, what's the challenger? How do we, what do we do here?
+
+191
+00:08:48,619 --> 00:08:50,369
+How do we step back and look at
+
+192
+00:08:50,679 --> 00:08:53,969
+something like an embargo, especially in the open source universe,
+
+193
+00:08:53,979 --> 00:08:55,840
+kind of with the, the, the we'll say
+
+194
+00:08:55,960 --> 00:08:58,520
+the, the glasses of sensibility on.
+
+195
+00:08:58,700 --> 00:08:58,820
+Yeah.
+
+196
+00:08:59,270 --> 00:09:03,760
+Well, to me, it's one of the fundamental questions is why are we embargo this issue?
+
+197
+00:09:04,020 --> 00:09:08,580
+Are we embargo this issue because it actually presents a high degree of risk to,
+
+198
+00:09:08,590 --> 00:09:11,210
+you know, end users and maybe the internet as a whole
+
+199
+00:09:11,320 --> 00:09:14,760
+or are we embargo this issue because we want it to be kind of cool
+
+200
+00:09:15,289 --> 00:09:19,090
+uh or in some cases, you know, uh, especially with some commercial vendors,
+
+201
+00:09:19,099 --> 00:09:21,859
+they want embargoed issues because it
+
+202
+00:09:22,119 --> 00:09:25,520
+lets them take a long time to fix things without, you know,
+
+203
+00:09:25,530 --> 00:09:27,450
+kind of being caught out as doing that.
+
+204
+00:09:27,719 --> 00:09:29,479
+What if I give my issue a logo,
+
+205
+00:09:29,840 --> 00:09:31,979
+-- then it should totally get an embargo.
+-- Right.
+
+206
+00:09:32,440 --> 00:09:35,239
+Well, exactly, because you need time to get the designer to do the logo.
+
+207
+00:09:35,250 --> 00:09:36,419
+You need time to think of the,
+
+208
+00:09:36,770 --> 00:09:37,210
+yeah,
+
+209
+00:09:37,630 --> 00:09:39,400
+exactly. That's right. That's right.
+
+210
+00:09:40,950 --> 00:09:43,210
+You know, that, that, that's a good point actually is,
+
+211
+00:09:43,549 --> 00:09:44,409
+I wonder
+
+212
+00:09:44,729 --> 00:09:48,460
+if you're getting AAA logo for your security issue?
+
+213
+00:09:48,469 --> 00:09:51,429
+How much information do you want to give your designer so they
+
+214
+00:09:51,440 --> 00:09:55,580
+can design you an appropriate logo for an embargoed security issue.
+
+215
+00:09:55,590 --> 00:09:56,039
+That's,
+
+216
+00:09:56,289 --> 00:09:57,630
+it will be hilarious.
+
+217
+00:09:57,840 --> 00:09:58,409
+When
+
+218
+00:09:58,590 --> 00:09:59,929
+did that, that happened though?
+
+219
+00:09:59,940 --> 00:10:04,609
+-- Wasn't there a logo issue that, that some, like third party pr firm ended up
+-- leaking
+
+220
+00:10:04,760 --> 00:10:08,950
+the, yeah, the company had hired APR firm to handle the,
+
+221
+00:10:08,960 --> 00:10:11,219
+the disclosure of this issue on their end.
+
+222
+00:10:11,229 --> 00:10:11,650
+And, yeah,
+
+223
+00:10:11,880 --> 00:10:14,869
+the pr firm leaked it. I think it was like half an hour, an hour early,
+
+224
+00:10:15,330 --> 00:10:15,710
+you know,
+
+225
+00:10:15,719 --> 00:10:20,010
+and it would just sort of prove the whole thing is largely a bit of a farcical,
+
+226
+00:10:20,169 --> 00:10:23,349
+uh just sort of proves the whole thing is a bit of a farcical circus
+
+227
+00:10:23,580 --> 00:10:24,429
+sometimes.
+
+228
+00:10:27,210 --> 00:10:29,440
+Yeah. So, so back to embargoes,
+
+229
+00:10:29,750 --> 00:10:32,830
+the, the real problem is, you know, open source projects,
+
+230
+00:10:32,840 --> 00:10:37,080
+spend a lot of time building process and infrastructure and, you know,
+
+231
+00:10:37,090 --> 00:10:39,059
+getting the right people involved
+
+232
+00:10:39,390 --> 00:10:44,369
+so that they can build good software and build good patches and test them and,
+
+233
+00:10:44,380 --> 00:10:47,270
+you know, and then release stuff that works really well,
+
+234
+00:10:47,679 --> 00:10:51,289
+you know, and, and 99 times out of 100 that's what happens and it works great.
+
+235
+00:10:51,299 --> 00:10:52,820
+So, yeah, I mean, obviously if you,
+
+236
+00:10:52,830 --> 00:10:55,929
+if you force them to essentially give up all
+
+237
+00:10:55,940 --> 00:10:57,580
+that stuff that they've worked so hard to create,
+
+238
+00:10:57,590 --> 00:10:59,250
+you know, by embargo the issue and you know,
+
+239
+00:10:59,260 --> 00:11:02,679
+them having them email patches around and build it locally.
+
+240
+00:11:02,840 --> 00:11:05,869
+Well, it's hard to do the, the quality work that they're used to doing.
+
+241
+00:11:06,510 --> 00:11:09,979
+Yeah, I mean, that, that's a really good point. And I think it's also worth noting
+
+242
+00:11:10,299 --> 00:11:14,409
+embargo. I mean, regardless of open source or not embargoes are
+
+243
+00:11:14,549 --> 00:11:16,119
+very expensive
+
+244
+00:11:16,260 --> 00:11:17,869
+in terms of sanity
+
+245
+00:11:18,369 --> 00:11:20,619
+because it's a lot of work to get all this stuff, right?
+
+246
+00:11:20,630 --> 00:11:23,520
+And just in terms of resources because now instead of shooting
+
+247
+00:11:23,530 --> 00:11:24,960
+a quick email or picking up the phone and again,
+
+248
+00:11:24,979 --> 00:11:25,880
+a quick call,
+
+249
+00:11:26,369 --> 00:11:29,010
+you might need to GP G encrypt something or make
+
+250
+00:11:29,020 --> 00:11:32,099
+sure you're talking about something using certain words or make
+
+251
+00:11:32,109 --> 00:11:35,510
+sure that only this developer can see this patch or
+
+252
+00:11:35,520 --> 00:11:37,989
+only this Q A person can see this bug.
+
+253
+00:11:38,190 --> 00:11:41,049
+And so it's, it's very difficult dealing with this though.
+
+254
+00:11:41,059 --> 00:11:44,330
+I mean, I remember when I used to do them all the time, it was,
+
+255
+00:11:44,520 --> 00:11:48,109
+oh, it was such a nightmare. But at the same time back in the day,
+
+256
+00:11:48,289 --> 00:11:51,669
+I never thought twice about embargo something. It's just kind of what we did
+
+257
+00:11:51,880 --> 00:11:53,349
+and, and in hindsight,
+
+258
+00:11:53,640 --> 00:11:57,869
+I won't say they, they should never happen, but they should be very sparing, like,
+
+259
+00:11:57,880 --> 00:11:59,190
+less than 10 a year.
+
+260
+00:11:59,200 --> 00:11:59,469
+Right.
+
+261
+00:11:59,710 --> 00:12:00,090
+Yeah,
+
+262
+00:12:00,270 --> 00:12:03,340
+I think also one of the, it's, you know, it's like the goalkeeper's dilemma. Right.
+
+263
+00:12:03,349 --> 00:12:05,809
+When a goalkeeper in soccer takes a penalty shot,
+
+264
+00:12:06,179 --> 00:12:08,159
+they have to be seen to be doing something, right.
+
+265
+00:12:08,169 --> 00:12:11,179
+So they dive to the side even though statistically they're,
+
+266
+00:12:11,190 --> 00:12:13,020
+they're way better off standing in the middle,
+
+267
+00:12:13,599 --> 00:12:14,580
+you know, and
+
+268
+00:12:14,849 --> 00:12:18,359
+instead of picking one side and diving, but the problem is, you know,
+
+269
+00:12:18,369 --> 00:12:21,309
+if you're not seen to be doing something and, you know, you know,
+
+270
+00:12:21,320 --> 00:12:25,049
+you're not taking it seriously, we didn't keep it secret, we didn't embargo it.
+
+271
+00:12:25,270 --> 00:12:26,539
+You know, people may complain
+
+272
+00:12:27,270 --> 00:12:31,309
+and 11 annoyance I have is on the flip side by embargo everything.
+
+273
+00:12:31,320 --> 00:12:34,530
+You're also reducing customers ability to protect themselves.
+
+274
+00:12:34,880 --> 00:12:35,840
+Uh, because let's face it.
+
+275
+00:12:35,849 --> 00:12:40,250
+A lot of these embargoed issues are not as secret as we would like. Quite often.
+
+276
+00:12:40,260 --> 00:12:41,450
+They were known,
+
+277
+00:12:41,710 --> 00:12:44,770
+you know, uh by some bad guys, you know, it turns out
+
+278
+00:12:44,960 --> 00:12:45,929
+or,
+
+279
+00:12:46,469 --> 00:12:48,510
+uh, the reality is for a lot of these places,
+
+280
+00:12:48,520 --> 00:12:50,070
+they're gonna take so long to patch anyways.
+
+281
+00:12:50,080 --> 00:12:51,799
+I mean, very few places are gonna,
+
+282
+00:12:51,900 --> 00:12:54,690
+you know, open SSL ships, an update and, you know,
+
+283
+00:12:54,700 --> 00:12:57,140
+five minutes later people have deployed the update,
+
+284
+00:12:57,440 --> 00:13:01,299
+right, which I suspect is what makes in this case, this issue,
+
+285
+00:13:01,309 --> 00:13:02,830
+even though it was very critical
+
+286
+00:13:03,260 --> 00:13:06,179
+in the kind of grand scheme of things in reality,
+
+287
+00:13:06,679 --> 00:13:08,599
+it's probably not a big deal because I would
+
+288
+00:13:08,609 --> 00:13:12,570
+be surprised if hardly anyone has deployed that code
+
+289
+00:13:12,719 --> 00:13:14,109
+in production yet.
+
+290
+00:13:14,369 --> 00:13:14,559
+Yeah.
+
+291
+00:13:14,570 --> 00:13:20,510
+I mean, it's gonna take at least a few hours or days for even an agile organization.
+
+292
+00:13:20,599 --> 00:13:24,280
+Well, no, you know, even like some sort of mythical agile organization
+
+293
+00:13:24,409 --> 00:13:27,150
+and the reality is especially something like openness ell. Right? If you,
+
+294
+00:13:27,559 --> 00:13:28,849
+if you update
+
+295
+00:13:29,059 --> 00:13:32,109
+Open SSL and there's a problem, like, you have a big problem,
+
+296
+00:13:33,359 --> 00:13:34,580
+it's on your network
+
+297
+00:13:34,989 --> 00:13:37,760
+and, and I would say that any reasonable,
+
+298
+00:13:38,309 --> 00:13:41,070
+I guess, even if you say bleeding edge DEV
+
+299
+00:13:41,260 --> 00:13:43,739
+ops agile, pick whatever word you want to use,
+
+300
+00:13:44,150 --> 00:13:47,270
+I would hope that Open SSL isn't one of those things.
+
+301
+00:13:47,280 --> 00:13:49,580
+You're, you're constantly upgrading
+
+302
+00:13:49,880 --> 00:13:51,049
+to stay current. Right?
+
+303
+00:13:51,059 --> 00:13:54,359
+Once you have a version that basically works, you're never going to touch it.
+
+304
+00:13:54,549 --> 00:13:54,780
+Yeah.
+
+305
+00:13:54,789 --> 00:13:59,219
+I mean, the reality is Open SSL by and large is a very nice, boring,
+
+306
+00:13:59,229 --> 00:14:01,500
+stable piece of software that works,
+
+307
+00:14:01,750 --> 00:14:01,979
+you know?
+
+308
+00:14:01,989 --> 00:14:05,219
+And, and, I mean, yeah, they do introduce new features which we definitely do need,
+
+309
+00:14:05,229 --> 00:14:08,169
+like, you know, when they, uh, like, say TLS 1.3
+
+310
+00:14:08,549 --> 00:14:10,539
+you know, we're gonna definitely wanna upgrade
+
+311
+00:14:10,710 --> 00:14:16,020
+Open SSL to get TLS 1.3 or, or TLS 2.0 or whatever comes down the road,
+
+312
+00:14:16,030 --> 00:14:18,090
+1.3 should be out very soon.
+
+313
+00:14:18,239 --> 00:14:18,700
+It's,
+
+314
+00:14:19,159 --> 00:14:21,219
+it's, I, I feel like
+
+315
+00:14:21,580 --> 00:14:24,880
+the, the draft is nearly complete but don't, don't quote me on that.
+
+316
+00:14:24,890 --> 00:14:26,280
+It's been a while since I've looked at it.
+
+317
+00:14:26,580 --> 00:14:26,859
+Yeah.
+
+318
+00:14:27,080 --> 00:14:29,539
+So, I mean, that, that is a good case for people to upgrade.
+
+319
+00:14:29,549 --> 00:14:33,489
+But even then, you know, it's gonna take a minimum of a few days or weeks because,
+
+320
+00:14:33,640 --> 00:14:34,219
+you know,
+
+321
+00:14:34,719 --> 00:14:35,250
+uh,
+
+322
+00:14:35,429 --> 00:14:38,030
+not all your clients are also running open SSL. Right.
+
+323
+00:14:38,039 --> 00:14:41,780
+We've also got good new tlsnss and then of course, there's a whole host of, you know,
+
+324
+00:14:41,789 --> 00:14:45,489
+closed source libraries which God only knows what they're doing with TLS 1.3.
+
+325
+00:14:46,539 --> 00:14:47,280
+Right. Right.
+
+326
+00:14:47,340 --> 00:14:52,049
+Well, and I think another interesting thing that people don't always realize is
+
+327
+00:14:52,320 --> 00:14:55,809
+in the case of open SSL, they recently broke the API.
+
+328
+00:14:56,109 --> 00:14:57,590
+So if you're using an old version,
+
+329
+00:14:57,599 --> 00:15:00,929
+you can't just like dump the new one in place when TLS 13 comes out,
+
+330
+00:15:00,940 --> 00:15:03,330
+you have to actually rearchitect your software
+
+331
+00:15:03,460 --> 00:15:06,169
+to be able to use the newer version, which I mean, that's,
+
+332
+00:15:06,859 --> 00:15:08,460
+that's not a small feat for most people.
+
+333
+00:15:08,469 --> 00:15:11,710
+I mean, especially given this is an extremely difficult API,
+
+334
+00:15:11,859 --> 00:15:14,559
+well, you're also assuming they still have the source code and,
+
+335
+00:15:14,570 --> 00:15:18,590
+or they still have the developers with the expertise to, you know, to fix this thing,
+
+336
+00:15:18,599 --> 00:15:18,840
+right?
+
+337
+00:15:18,849 --> 00:15:19,159
+Like
+
+338
+00:15:19,609 --> 00:15:22,190
+I've, I've seen more than a few places where,
+
+339
+00:15:22,580 --> 00:15:24,440
+you know, they have like one or two,
+
+340
+00:15:25,179 --> 00:15:27,919
+uh where they have one or two devs who
+
+341
+00:15:27,929 --> 00:15:30,260
+originally wrote it and everybody else is new and,
+
+342
+00:15:30,270 --> 00:15:33,849
+you know, works on the front end because the back end is boring and stable.
+
+343
+00:15:34,369 --> 00:15:38,450
+And, uh, yeah, so, yeah, definitely an A B I or API change in open SSL is,
+
+344
+00:15:38,460 --> 00:15:39,919
+is a very big deal and,
+
+345
+00:15:40,049 --> 00:15:41,960
+and quite frankly, personally, I kind of,
+
+346
+00:15:42,450 --> 00:15:45,650
+I kind of like it in a way because hopefully it kills off some of this old software.
+
+347
+00:15:45,900 --> 00:15:48,109
+Right, because the reality is if software is old enough
+
+348
+00:15:48,890 --> 00:15:50,030
+that you can't,
+
+349
+00:15:50,390 --> 00:15:52,890
+like, use a newer version of open SSL,
+
+350
+00:15:53,000 --> 00:15:55,070
+you know, it might be time for that software to die.
+
+351
+00:15:55,489 --> 00:15:56,789
+I totally agree with that.
+
+352
+00:15:56,950 --> 00:16:01,849
+That I, I never really thought of that angle before, but that makes a ton of sense
+
+353
+00:16:02,270 --> 00:16:02,989
+because,
+
+354
+00:16:03,090 --> 00:16:05,390
+yeah, there's, oh, man, there's some garbage out there.
+
+355
+00:16:05,690 --> 00:16:06,270
+Oh, well.
+
+356
+00:16:06,280 --> 00:16:06,710
+And, and,
+
+357
+00:16:06,719 --> 00:16:09,140
+but what's worse though is by definition pretty
+
+358
+00:16:09,150 --> 00:16:11,109
+much anything using the openness of celebrity.
+
+359
+00:16:11,119 --> 00:16:14,419
+It's probably talking to the network either as a server or a client.
+
+360
+00:16:14,750 --> 00:16:16,690
+That is the sad truth, isn't it?
+
+361
+00:16:16,960 --> 00:16:20,869
+Now, I, I wanna bring up one other thing is there is a
+
+362
+00:16:21,190 --> 00:16:22,669
+news article I saw
+
+363
+00:16:22,770 --> 00:16:26,020
+the other day about all of this kind of crazy going on
+
+364
+00:16:26,840 --> 00:16:28,049
+and they said that
+
+365
+00:16:28,270 --> 00:16:32,619
+the reason this happened to open SSL was sloppy programming.
+
+366
+00:16:33,859 --> 00:16:34,799
+What do you think of that?
+
+367
+00:16:35,929 --> 00:16:36,469
+I,
+
+368
+00:16:37,059 --> 00:16:39,900
+well, it's, it's easy to accuse people of sloppy programming, you know,
+
+369
+00:16:39,909 --> 00:16:41,210
+like an off by one,
+
+370
+00:16:41,530 --> 00:16:44,309
+you know? Oh, you should have, you know, paid more attention.
+
+371
+00:16:44,599 --> 00:16:46,320
+I, the reality is crypto.
+
+372
+00:16:46,330 --> 00:16:49,469
+Well, the reality is software in general is hard,
+
+373
+00:16:49,479 --> 00:16:52,309
+especially with a low level language like C or C++, right?
+
+374
+00:16:52,320 --> 00:16:55,309
+Like you have to do all kinds of crazy memory management.
+
+375
+00:16:55,750 --> 00:16:57,270
+Whatever, man, I love that.
+
+376
+00:16:57,830 --> 00:16:58,429
+Yeah, this is,
+
+377
+00:16:58,440 --> 00:17:02,419
+this is why I generally won't use anything less high level
+
+378
+00:17:02,429 --> 00:17:04,719
+than Python or Bash because I'm not smart enough to do.
+
+379
+00:17:05,050 --> 00:17:08,780
+Don't use Bash. Bash is never the solution no matter what your problem is.
+
+380
+00:17:09,118 --> 00:17:11,770
+It's not a high level language. It's crazy.
+
+381
+00:17:12,180 --> 00:17:12,880
+Don't use bash.
+
+382
+00:17:13,199 --> 00:17:14,709
+Kids don't use Bash.
+
+383
+00:17:15,699 --> 00:17:16,459
+You probably
+
+384
+00:17:17,020 --> 00:17:20,290
+don't let friends use Bash Curt. That's, that's the way we got to look at that.
+
+385
+00:17:20,650 --> 00:17:21,069
+Yeah.
+
+386
+00:17:21,339 --> 00:17:24,199
+But I mean, the reality is I've been in this industry for 20 years,
+
+387
+00:17:24,209 --> 00:17:26,640
+I've assigned 5000 CV S and I know for a
+
+388
+00:17:26,650 --> 00:17:29,290
+fact I am not smart enough to do memory management like
+
+389
+00:17:29,630 --> 00:17:31,069
+almost nobody is. And so,
+
+390
+00:17:31,579 --> 00:17:33,599
+you know, these tools like C and C++,
+
+391
+00:17:33,609 --> 00:17:35,910
+even if you're paying attention and even if you know what you're doing,
+
+392
+00:17:35,920 --> 00:17:37,300
+it's still easy to make a mistake.
+
+393
+00:17:37,310 --> 00:17:38,650
+And then especially with crypto
+
+394
+00:17:38,780 --> 00:17:39,750
+code. I mean, crypto
+
+395
+00:17:39,869 --> 00:17:40,390
+code,
+
+396
+00:17:40,729 --> 00:17:45,979
+you know, that's, you're taking some pretty complicated mathematical concepts
+
+397
+00:17:46,599 --> 00:17:47,189
+and
+
+398
+00:17:47,400 --> 00:17:50,250
+you have to break them down completely for the computer to understand.
+
+399
+00:17:50,520 --> 00:17:53,709
+I mean, in this case, you can put that problem aside
+
+400
+00:17:53,959 --> 00:17:55,369
+it, it wasn't crypto
+
+401
+00:17:55,510 --> 00:17:56,630
+code. That was the issue,
+
+402
+00:17:56,760 --> 00:17:59,609
+let's face it, it was, it was a memory management mistake. And see,
+
+403
+00:17:59,770 --> 00:18:00,219
+I mean, and
+
+404
+00:18:00,479 --> 00:18:04,550
+as you pointed out that that's more common than anyone would ever like to admit,
+
+405
+00:18:04,560 --> 00:18:05,709
+especially with
+
+406
+00:18:05,989 --> 00:18:08,349
+kind of some of the best in the world. And this is
+
+407
+00:18:08,589 --> 00:18:10,560
+so I kind of have two things to say about.
+
+408
+00:18:10,569 --> 00:18:14,589
+This is number one, it wasn't sloppy, it was just bugs happen, right? It is like
+
+409
+00:18:15,079 --> 00:18:18,300
+the real issue was the embargo prevented proper testing,
+
+410
+00:18:18,599 --> 00:18:19,020
+right?
+
+411
+00:18:19,150 --> 00:18:22,449
+And that's easy enough to understand. But then secondly, is the fact that
+
+412
+00:18:22,800 --> 00:18:27,540
+open SSL has some of the better developers in the world working on it.
+
+413
+00:18:28,359 --> 00:18:33,339
+If these guys can't get it right? Every time, which let's face it, they can't.
+
+414
+00:18:33,349 --> 00:18:34,459
+And that's no secret.
+
+415
+00:18:35,099 --> 00:18:40,719
+Is there any hope for a normal programmer to not make security mistakes?
+
+416
+00:18:40,939 --> 00:18:46,160
+I would say as an absolutely not. I mean, and my perfect, my favorite example
+
+417
+00:18:46,390 --> 00:18:49,800
+is CV 2016 0 triple seven, which is,
+
+418
+00:18:49,810 --> 00:18:54,000
+I don't know if you remember it's the open SSH bug with the uh key disclosure stuff.
+
+419
+00:18:54,489 --> 00:18:55,680
+And that was
+
+420
+00:18:56,290 --> 00:19:00,050
+in code that was not only not active and not used,
+
+421
+00:19:00,150 --> 00:19:05,650
+it wasn't documented, it was in the config like it was in the dot C dot H config files,
+
+422
+00:19:05,660 --> 00:19:07,640
+but it wasn't even in the man page, right?
+
+423
+00:19:08,469 --> 00:19:12,939
+And so, you know, by any notion of normal software hygiene, right?
+
+424
+00:19:12,949 --> 00:19:17,619
+You remove dead code or unused code, right? You just don't keep stuff around,
+
+425
+00:19:18,589 --> 00:19:21,250
+you know, you, you, you delete it, you get rid of it
+
+426
+00:19:21,689 --> 00:19:24,989
+because it's probably gonna cause a problem at some point which, well as it,
+
+427
+00:19:25,000 --> 00:19:26,089
+we found out it did
+
+428
+00:19:26,500 --> 00:19:29,050
+and I remember when that flaw came out, it was so funny. Right?
+
+429
+00:19:29,060 --> 00:19:29,310
+Because I,
+
+430
+00:19:29,319 --> 00:19:31,319
+I remember gripping the source code for
+
+431
+00:19:31,329 --> 00:19:33,479
+whatever the configuration directive was and OK,
+
+432
+00:19:33,489 --> 00:19:34,459
+I see it in the dots here.
+
+433
+00:19:34,469 --> 00:19:35,800
+The dot H file. I forget which,
+
+434
+00:19:36,280 --> 00:19:38,000
+but it's not the man page. Oh, ok. That's weird.
+
+435
+00:19:38,010 --> 00:19:39,839
+So then I was like, well, I wonder if there's anything else.
+
+436
+00:19:39,849 --> 00:19:41,500
+So I took, I pulled up the man page
+
+437
+00:19:41,819 --> 00:19:45,449
+in one terminal and I pulled up the, you know, the, the source code and
+
+438
+00:19:45,670 --> 00:19:49,349
+that defines all the options. And I, I went through,
+
+439
+00:19:49,880 --> 00:19:50,819
+uh, and like,
+
+440
+00:19:50,829 --> 00:19:53,420
+made sure every single one matched up that there wasn't something in
+
+441
+00:19:53,430 --> 00:19:55,520
+the man page that wasn't in the source code and vice versa.
+
+442
+00:19:55,530 --> 00:19:56,250
+And luckily, you know,
+
+443
+00:19:57,020 --> 00:20:00,229
+and then I also emailed, you know, the devs to say, did, did we have,
+
+444
+00:20:00,239 --> 00:20:02,400
+we made absolutely certain there's no more hidden
+
+445
+00:20:02,410 --> 00:20:03,770
+surprises in here and they were like,
+
+446
+00:20:03,780 --> 00:20:04,510
+yeah, we've done that.
+
+447
+00:20:04,900 --> 00:20:06,000
+So that was good.
+
+448
+00:20:06,239 --> 00:20:06,739
+But,
+
+449
+00:20:06,880 --> 00:20:09,890
+you know, how many other software programs haven't done that little, you know,
+
+450
+00:20:09,900 --> 00:20:11,640
+these kind of spring cleaning tasks.
+
+451
+00:20:11,849 --> 00:20:15,319
+I would be surprised if more than 10%
+
+452
+00:20:15,540 --> 00:20:16,349
+have done it.
+
+453
+00:20:16,609 --> 00:20:18,599
+And I think that is optimistic.
+
+454
+00:20:19,250 --> 00:20:20,300
+Yeah, I would agree
+
+455
+00:20:20,680 --> 00:20:23,510
+because when you look at, you know, some of these like, uh, I mean,
+
+456
+00:20:23,660 --> 00:20:25,630
+something like send mail or Apache, you know,
+
+457
+00:20:25,640 --> 00:20:28,630
+the number of configuration directives and bits of code it supports
+
+458
+00:20:29,290 --> 00:20:30,790
+versus what's actually in the code base.
+
+459
+00:20:30,800 --> 00:20:34,030
+I mean, matching that all up would take dozens if not hundreds of hours.
+
+460
+00:20:35,910 --> 00:20:37,030
+All right. So number one,
+
+461
+00:20:37,310 --> 00:20:40,630
+I think it is safe to say send mail is mostly dead at this point,
+
+462
+00:20:40,640 --> 00:20:44,170
+which pleases me because as an ex recovering
+
+463
+00:20:44,310 --> 00:20:45,050
+send mail
+
+464
+00:20:45,150 --> 00:20:45,239
+cis
+
+465
+00:20:45,439 --> 00:20:45,790
+man,
+
+466
+00:20:46,469 --> 00:20:50,079
+it is not the most pleasant thing in the world. But the real problem Send Mill had is
+
+467
+00:20:50,189 --> 00:20:53,540
+you had to write all of the configuration in something called M four,
+
+468
+00:20:53,550 --> 00:20:57,209
+which was a macro language and M four I believe is turn complete.
+
+469
+00:20:57,709 --> 00:20:57,989
+So
+
+470
+00:20:58,300 --> 00:21:02,250
+you have a mail system whose configuration files are essentially, you know,
+
+471
+00:21:02,260 --> 00:21:03,079
+self aware.
+
+472
+00:21:03,339 --> 00:21:04,810
+And that's terrifying.
+
+473
+00:21:05,130 --> 00:21:07,510
+I mean, how do you, how do you possibly not screw that up?
+
+474
+00:21:07,709 --> 00:21:09,050
+Well, you know, I remember because I,
+
+475
+00:21:09,060 --> 00:21:12,849
+I actually at one point had to write a custom send mail to facts, Gateway and,
+
+476
+00:21:12,859 --> 00:21:15,050
+you know, I, I had to go out and buy the bat book,
+
+477
+00:21:15,060 --> 00:21:18,189
+which if anybody remembers was the 900 page send mail book.
+
+478
+00:21:18,199 --> 00:21:20,160
+You could kill a person with that book. It was
+
+479
+00:21:20,270 --> 00:21:20,609
+a weapon.
+
+480
+00:21:20,819 --> 00:21:23,989
+-- I
+-- remember, I think it was the thickest o'reilly book.
+
+481
+00:21:24,000 --> 00:21:26,739
+-- Like for pretty much ever, I can't think
+-- of any other
+
+482
+00:21:27,150 --> 00:21:28,069
+wide, right?
+
+483
+00:21:28,680 --> 00:21:29,150
+Yeah.
+
+484
+00:21:29,530 --> 00:21:31,540
+And, and I remember, you know, just,
+
+485
+00:21:31,880 --> 00:21:34,319
+and I got the thing working and that was it.
+
+486
+00:21:34,329 --> 00:21:39,550
+And I, I literally told the client that like if you touch this mail system in any way,
+
+487
+00:21:39,560 --> 00:21:40,819
+shape or form
+
+488
+00:21:41,280 --> 00:21:42,680
+the warranty is void. I will not.
+
+489
+00:21:44,130 --> 00:21:47,530
+Yeah, it's like, and, you know, and then luckily at some point they went to, like,
+
+490
+00:21:47,540 --> 00:21:50,339
+a phone based, you know, phone company based fax solution.
+
+491
+00:21:50,349 --> 00:21:50,939
+Thank God.
+
+492
+00:21:51,349 --> 00:21:55,260
+But, um, yeah, no, like, and that's the thing, right. These, these are
+
+493
+00:21:55,560 --> 00:22:00,150
+large, complicated, capable, powerful pieces of software, you know,
+
+494
+00:22:00,160 --> 00:22:03,800
+openness sl is, it's not the Swiss army knife of encryption software.
+
+495
+00:22:03,810 --> 00:22:07,140
+It's like the, you know, it's the nuclear warhead of encryption software.
+
+496
+00:22:09,890 --> 00:22:10,270
+Right.
+
+497
+00:22:10,630 --> 00:22:13,739
+No, no, that's not accurate either. It's the Swiss army nuclear warhead.
+
+498
+00:22:13,890 --> 00:22:14,040
+It
+
+499
+00:22:14,780 --> 00:22:17,099
+can explode but it also has a spoon.
+
+500
+00:22:17,640 --> 00:22:18,140
+Yeah.
+
+501
+00:22:18,420 --> 00:22:19,780
+You know, you need to encrypt a disc.
+
+502
+00:22:19,790 --> 00:22:21,780
+It'll do it, you need to talk to an encrypted network.
+
+503
+00:22:21,790 --> 00:22:24,420
+It'll do it, you need to handle certificates, it'll do it, you know, it'll,
+
+504
+00:22:24,430 --> 00:22:25,819
+it'll do literally
+
+505
+00:22:26,229 --> 00:22:28,569
+every crypt operation
+
+506
+00:22:28,839 --> 00:22:29,660
+you can think of
+
+507
+00:22:29,790 --> 00:22:32,219
+including, uh, nearly ruined the internet.
+
+508
+00:22:32,369 --> 00:22:33,079
+Right. With her.
+
+509
+00:22:34,430 --> 00:22:35,410
+Yeah. So,
+
+510
+00:22:36,430 --> 00:22:38,890
+yeah. No, it's tough. I mean, I, I think
+
+511
+00:22:39,109 --> 00:22:42,900
+the reality is, I think what would help a lot is if we only, honestly,
+
+512
+00:22:42,910 --> 00:22:46,869
+if we only used embargoes when we needed to use embargoes, right.
+
+513
+00:22:47,290 --> 00:22:50,239
+The majority of the sort of low and moderate stuff, you know.
+
+514
+00:22:50,310 --> 00:22:52,729
+Yeah, it poses a risk to people, but
+
+515
+00:22:52,869 --> 00:22:56,650
+quite often too, a lot of these issues you can put in compensating controls,
+
+516
+00:22:56,660 --> 00:22:58,609
+you know, you can firewall for them or you can,
+
+517
+00:22:59,119 --> 00:23:02,819
+you know, you use rate limiting or, you know, whatever there's,
+
+518
+00:23:02,829 --> 00:23:05,680
+there's usually things you can do to minimize the risk.
+
+519
+00:23:05,920 --> 00:23:09,979
+Uh, and in general these are things you should probably be doing because regardless
+
+520
+00:23:10,150 --> 00:23:13,219
+of what you do there's, there's always gonna be flaws in your software.
+
+521
+00:23:13,479 --> 00:23:15,510
+It's true. It's true. Yeah. I mean, that's fair.
+
+522
+00:23:15,520 --> 00:23:22,920
+That funny enough I keep seeing with microservices and containers and dev
+
+523
+00:23:23,180 --> 00:23:24,339
+ops and just kind of
+
+524
+00:23:24,500 --> 00:23:26,439
+the way the universe is starting to look,
+
+525
+00:23:26,810 --> 00:23:31,609
+we're going back to that old UNIX model of do one thing and do it well.
+
+526
+00:23:31,869 --> 00:23:32,030
+Yeah.
+
+527
+00:23:32,400 --> 00:23:34,270
+Oh, yeah. No, I, I actually really like it
+
+528
+00:23:34,890 --> 00:23:37,239
+but the challenge is, you know, instead of piping
+
+529
+00:23:37,439 --> 00:23:40,250
+one output from one program to another over a command line,
+
+530
+00:23:40,479 --> 00:23:44,300
+we're now doing it over networks that are software to find networks that are
+
+531
+00:23:44,439 --> 00:23:45,750
+running. God knows where.
+
+532
+00:23:45,869 --> 00:23:46,219
+Yeah.
+
+533
+00:23:47,040 --> 00:23:47,479
+And
+
+534
+00:23:47,689 --> 00:23:48,609
+on the flip side,
+
+535
+00:23:48,619 --> 00:23:50,260
+that's actually really cool because it gives us
+
+536
+00:23:50,270 --> 00:23:53,310
+really well defined boundaries between pieces of software,
+
+537
+00:23:53,319 --> 00:23:53,699
+you know,
+
+538
+00:23:53,869 --> 00:23:55,349
+and if your interface is a
+
+539
+00:23:55,540 --> 00:23:55,849
+json,
+
+540
+00:23:56,619 --> 00:23:58,000
+you know, rest api
+
+541
+00:23:58,670 --> 00:24:00,000
+it's really,
+
+542
+00:24:00,180 --> 00:24:02,089
+you can actually filter what's going through that,
+
+543
+00:24:02,760 --> 00:24:04,180
+you know, to a relatively,
+
+544
+00:24:04,609 --> 00:24:05,530
+you know, there, there's a,
+
+545
+00:24:05,540 --> 00:24:09,280
+actually a pretty restricted character set and to
+
+546
+00:24:09,290 --> 00:24:11,579
+test whether or not the input is well formed
+
+547
+00:24:11,839 --> 00:24:16,079
+is actually doable, you know, versus something like a binary protocol where,
+
+548
+00:24:16,290 --> 00:24:17,670
+yeah, good luck with that.
+
+549
+00:24:18,040 --> 00:24:18,739
+No, I really,
+
+550
+00:24:18,750 --> 00:24:21,760
+I like this idea because it gives us well defined boundaries and you can,
+
+551
+00:24:22,000 --> 00:24:26,180
+-- there are you know, web based firewalls that can handle this stuff already
+-- today.
+
+552
+00:24:26,359 --> 00:24:29,579
+Well, I mean, regardless of that is,
+
+553
+00:24:29,589 --> 00:24:33,180
+I wonder if there are any Jason firewalls that exist today.
+
+554
+00:24:33,280 --> 00:24:34,540
+I, I've never looked for this.
+
+555
+00:24:36,390 --> 00:24:39,829
+The latest mod security which runs on Apache is and
+
+556
+00:24:40,069 --> 00:24:40,260
+X
+
+557
+00:24:40,640 --> 00:24:42,349
+uh can call in, I forget which
+
+558
+00:24:42,479 --> 00:24:43,609
+JSON library, but you can,
+
+559
+00:24:43,900 --> 00:24:44,709
+you can filter
+
+560
+00:24:44,859 --> 00:24:45,810
+json and you can filter it.
+
+561
+00:24:45,819 --> 00:24:50,199
+Like you can say things like only allow an array called customer or do
+
+562
+00:24:50,209 --> 00:24:54,410
+not allow an array called customer or do not allow a data name of SSN
+
+563
+00:24:54,650 --> 00:24:57,199
+-- or
+-- don't allow 64 gigabytes of
+
+564
+00:24:57,550 --> 00:24:58,339
+JSON data to pass
+
+565
+00:24:58,589 --> 00:24:58,849
+through this
+
+566
+00:24:58,969 --> 00:24:59,579
+firewall.
+
+567
+00:25:00,449 --> 00:25:02,760
+So it's actually, it, it can parse the
+
+568
+00:25:03,109 --> 00:25:03,719
+JSON data
+
+569
+00:25:03,890 --> 00:25:07,359
+and you know, filter on content, filter on
+
+570
+00:25:07,459 --> 00:25:08,599
+types and all that.
+
+571
+00:25:08,979 --> 00:25:09,979
+Um So in theory,
+
+572
+00:25:09,989 --> 00:25:13,199
+you could write like a white list for what your application should be accepting and
+
+573
+00:25:13,469 --> 00:25:15,630
+in theory that would prevent a lot of problems long term.
+
+574
+00:25:15,979 --> 00:25:18,250
+And heck you're probably going to find a ton of bugs because you know,
+
+575
+00:25:18,260 --> 00:25:20,189
+somebody's gonna do something dumb at some point.
+
+576
+00:25:20,489 --> 00:25:23,459
+Wow, that's fantastic. All right. So let's sum it up open
+
+577
+00:25:23,630 --> 00:25:24,829
+SSL good or bad.
+
+578
+00:25:25,160 --> 00:25:26,569
+-- It's a great piece of software.
+-- In my
+
+579
+00:25:26,670 --> 00:25:28,510
+opinion, I would say it's great, but it's good.
+
+580
+00:25:28,750 --> 00:25:29,180
+It's,
+
+581
+00:25:29,709 --> 00:25:29,829
+it
+
+582
+00:25:29,959 --> 00:25:30,160
+runs the
+
+583
+00:25:30,369 --> 00:25:31,469
+-- what
+-- choice do we have?
+
+584
+00:25:31,560 --> 00:25:32,979
+We have no choice.
+
+585
+00:25:33,849 --> 00:25:34,229
+It's,
+
+586
+00:25:34,599 --> 00:25:35,229
+it's,
+
+587
+00:25:35,239 --> 00:25:37,729
+it's the encryption library we deserve not the one
+
+588
+00:25:37,739 --> 00:25:40,150
+-- we need right
+-- much like everything we have.
+
+589
+00:25:40,709 --> 00:25:42,589
+Oh, my goodness. That's so true.
+
+590
+00:25:42,839 --> 00:25:43,410
+All right.
+
+591
+00:25:43,420 --> 00:25:47,229
+So, and I guess at the same time for those of you out there don't give these guys too,
+
+592
+00:25:47,239 --> 00:25:49,349
+too much flack for this because
+
+593
+00:25:49,800 --> 00:25:54,599
+it, it, it's an honest mistake. Anyone can make it. It's hard to do software.
+
+594
+00:25:54,609 --> 00:25:56,790
+And if you've never released, you know, in an internet,
+
+595
+00:25:56,800 --> 00:25:59,219
+driving gigantic piece of C code,
+
+596
+00:25:59,469 --> 00:26:02,619
+I suggest you start such a project and see how it works out at the end.
+
+597
+00:26:02,819 --> 00:26:05,119
+I would challenge most people to even read the Man page.
+
+598
+00:26:05,619 --> 00:26:05,739
+Ah
+
+599
+00:26:06,750 --> 00:26:07,260
+No,
+
+600
+00:26:07,439 --> 00:26:07,989
+no.
+
+601
+00:26:08,170 --> 00:26:08,910
+Well, open us.
+
+602
+00:26:08,920 --> 00:26:11,859
+It has about 100 man pages because every one of those
+
+603
+00:26:11,869 --> 00:26:14,800
+esoteric commands it chips with has its own man page.
+
+604
+00:26:14,810 --> 00:26:17,849
+It's oh man. Just my head starting to hurt thinking about it. I
+
+605
+00:26:18,199 --> 00:26:18,810
+I'm done.
+
+606
+00:26:18,939 --> 00:26:19,849
+But no. Anyway.
+
+607
+00:26:20,660 --> 00:26:23,270
+All right, Kurt. Well, this has been a treat as always
+
+608
+00:26:23,449 --> 00:26:24,939
+until next time, folks. Thank you.
+
+609
+00:26:24,949 --> 00:26:25,719
+01 other thing though,
+
+610
+00:26:25,729 --> 00:26:28,599
+one other thing before we go is we have a proper website
+
+611
+00:26:28,609 --> 00:26:30,560
+set up now where you can go for the show notes and,
+
+612
+00:26:30,569 --> 00:26:31,099
+and whatnot.
+
+613
+00:26:31,109 --> 00:26:33,520
+There's uh open source security podcast.com
+
+614
+00:26:34,020 --> 00:26:37,599
+and this episode will obviously be there along with all of our other episodes
+
+615
+00:26:37,609 --> 00:26:40,739
+and any of the links we might mention any of the interesting tidbits.
+
+616
+00:26:40,750 --> 00:26:43,310
+If you're wondering where to find it, we'll post a link there.
+
+617
+00:26:43,319 --> 00:26:46,239
+So I guess, hey, thanks for listening, everybody. Until next time.
+
+618
+00:26:46,520 --> 00:26:48,160
+-- All
+-- right. Thank you. Stay shiny.
+
+619
+00:26:48,349 --> 00:26:49,989
+-- Stay
+-- shiny. I like curry.

@@ -1,0 +1,2846 @@
+0
+00:00:05,400 --> 00:00:08,479
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,489 --> 00:00:10,329
+Josh Pressers and my partner in Thought Crime.
+
+2
+00:00:10,340 --> 00:00:10,930
+Curtsy Fried.
+
+3
+00:00:11,119 --> 00:00:13,090
+Oh, my goodness. It's not even funny.
+
+4
+00:00:13,310 --> 00:00:14,689
+It's not meant to be funny.
+
+5
+00:00:16,229 --> 00:00:16,920
+The point is I'm
+
+6
+00:00:17,079 --> 00:00:17,389
+Josh Press
+
+7
+00:00:18,180 --> 00:00:18,840
+and I
+
+8
+00:00:19,000 --> 00:00:19,059
+said,
+
+9
+00:00:20,200 --> 00:00:24,459
+yeah, and why shouldn't we believe you is probably the right question. So
+
+10
+00:00:24,870 --> 00:00:26,899
+now people are wondering what's happening.
+
+11
+00:00:26,909 --> 00:00:31,930
+We're gonna talk about B GP today and the insecurity and madness of it all.
+
+12
+00:00:32,040 --> 00:00:34,209
+And apparently I'm KT now.
+
+13
+00:00:34,599 --> 00:00:35,130
+So
+
+14
+00:00:35,599 --> 00:00:36,909
+let me, let me,
+
+15
+00:00:37,049 --> 00:00:41,919
+let me make all the terrible noises you generally make, I'll just smack my mouth and,
+
+16
+00:00:41,930 --> 00:00:43,700
+and say like too much.
+
+17
+00:00:43,880 --> 00:00:45,720
+So, one of the funny things, actually, I mean,
+
+18
+00:00:45,729 --> 00:00:50,310
+just kind of to change the subject for just a second is that it always amuses me when I
+
+19
+00:00:50,319 --> 00:00:52,360
+listen to a podcast and then I listen to a
+
+20
+00:00:52,369 --> 00:00:55,060
+real person and it's like if it's been edited,
+
+21
+00:00:55,069 --> 00:00:55,459
+right?
+
+22
+00:00:55,470 --> 00:00:57,009
+You take out all the little ticks.
+
+23
+00:00:57,450 --> 00:01:01,990
+We all have various words we use too much when I edit the show. I take a lot of that out.
+
+24
+00:01:02,000 --> 00:01:03,000
+I take out weird pauses.
+
+25
+00:01:03,009 --> 00:01:05,639
+I take out we have certain men will make little
+
+26
+00:01:05,650 --> 00:01:08,540
+clicky noises with our mouth occasionally and that's all gone.
+
+27
+00:01:08,589 --> 00:01:12,139
+But when you talk to someone in real life, it's all there. And I love it.
+
+28
+00:01:12,150 --> 00:01:13,180
+But anyway, anyway,
+
+29
+00:01:13,300 --> 00:01:20,099
+-- I digress B GP. Tell us about B GP,
+-- Josh. So, back in the day you had one computer
+
+30
+00:01:20,209 --> 00:01:21,379
+and the computer was happy
+
+31
+00:01:22,250 --> 00:01:25,699
+and then we had more than one computer and the computers wanted to talk to each other.
+
+32
+00:01:25,709 --> 00:01:28,019
+So we had routing and we ended up with TCP/IP.
+
+33
+00:01:28,029 --> 00:01:30,800
+Thank God and not like some BS like Net Boy,
+
+34
+00:01:30,989 --> 00:01:33,220
+right? So TP IP supports routing.
+
+35
+00:01:33,230 --> 00:01:36,099
+Now, the question is, how do you handle routing when you have
+
+36
+00:01:36,519 --> 00:01:40,970
+not just millions of computers but millions of networks under the control of,
+
+37
+00:01:40,980 --> 00:01:43,540
+you know, thousands or tens of thousands of different people.
+
+38
+00:01:43,550 --> 00:01:45,900
+I think we just have a static text file
+
+39
+00:01:46,290 --> 00:01:49,209
+-- that actually worked for a while.
+-- It did work. Yeah.
+
+40
+00:01:49,959 --> 00:01:50,459
+So when
+
+41
+00:01:50,959 --> 00:01:53,860
+long story short, we end up with this thing called border gateway protocol.
+
+42
+00:01:53,870 --> 00:01:55,779
+And the principle basically boils down to
+
+43
+00:01:56,010 --> 00:01:58,339
+you have autonomous system networks.
+
+44
+00:01:58,349 --> 00:02:02,180
+So an autonomous system network is, is generally speaking a single entity,
+
+45
+00:02:02,190 --> 00:02:07,419
+like say my ISP tell us or Verizon or Comcast or the big boys that are, you know,
+
+46
+00:02:07,430 --> 00:02:08,639
+like level three.
+
+47
+00:02:09,470 --> 00:02:12,800
+and also some providers are big enough now, you know,
+
+48
+00:02:12,809 --> 00:02:15,320
+like Amazon Microsoft right there, you know,
+
+49
+00:02:15,330 --> 00:02:18,940
+they have enough IP space that they get to play the routing and transit game.
+
+50
+00:02:19,309 --> 00:02:24,690
+So basically you have an entity like say Amazon and they announce routes for
+
+51
+00:02:24,699 --> 00:02:29,729
+their various sites either in aggregate or broken up depending on what they want.
+
+52
+00:02:30,059 --> 00:02:33,580
+-- Right.
+-- Right. Well, you should say sites, you should say I
+
+53
+00:02:33,820 --> 00:02:36,130
+blocks networks. Networks is better. Yes.
+
+54
+00:02:36,139 --> 00:02:36,570
+No,
+
+55
+00:02:36,580 --> 00:02:38,990
+because you can do any cast and you can
+
+56
+00:02:39,000 --> 00:02:42,369
+announce a network block multiple times for multiple sites.
+
+57
+00:02:42,740 --> 00:02:43,830
+I mean, that's true.
+
+58
+00:02:44,039 --> 00:02:47,800
+That's what Cloudflare does. And that's why, you know, cloud flare has 200 sites.
+
+59
+00:02:47,809 --> 00:02:49,020
+So when you look up
+
+60
+00:02:49,179 --> 00:02:52,000
+cre.org and you get the cloud flare IP of whatever it is,
+
+61
+00:02:52,009 --> 00:02:53,940
+you end up going to the closest cloud flare network,
+
+62
+00:02:54,830 --> 00:02:56,600
+which is great because it's faster.
+
+63
+00:02:56,770 --> 00:03:00,399
+So the idea basically is you own a network block
+
+64
+00:03:00,410 --> 00:03:02,899
+and you get to decide how you advertise it.
+
+65
+00:03:02,910 --> 00:03:03,100
+You know,
+
+66
+00:03:03,110 --> 00:03:04,759
+you could advertise it in one location for
+
+67
+00:03:04,770 --> 00:03:07,160
+one network link only or multiple network links or
+
+68
+00:03:07,440 --> 00:03:12,210
+you can do any cast. And anyways, and this was fine like this works absolutely great.
+
+69
+00:03:12,339 --> 00:03:12,789
+Still
+
+70
+00:03:13,000 --> 00:03:16,250
+so malicious comes along and goes, hey, I want to, for example,
+
+71
+00:03:16,259 --> 00:03:19,080
+see all of the traffic coming from, say Google's network.
+
+72
+00:03:19,089 --> 00:03:20,289
+So they pretend to be Google,
+
+73
+00:03:20,300 --> 00:03:23,270
+they announce I am whatever Google's IP network blocks are.
+
+74
+00:03:23,910 --> 00:03:27,759
+And of course, these networks go OK, like you have
+
+75
+00:03:28,160 --> 00:03:30,020
+announce this and I trust you. So
+
+76
+00:03:30,210 --> 00:03:31,470
+here's my Google traffic.
+
+77
+00:03:31,479 --> 00:03:34,289
+And of course, back in the day that that was pretty rare,
+
+78
+00:03:34,300 --> 00:03:36,860
+it was more of a fat finger type of situation or you know,
+
+79
+00:03:36,869 --> 00:03:37,899
+somebody did something stupid.
+
+80
+00:03:37,910 --> 00:03:40,619
+It wasn't really malicious. Typically
+
+81
+00:03:40,720 --> 00:03:43,740
+it was very difficult to mount that attack because you
+
+82
+00:03:43,750 --> 00:03:46,740
+needed a certain amount of hardware that nobody had.
+
+83
+00:03:46,750 --> 00:03:48,684
+And you know what this actually reminds me of,
+
+84
+00:03:48,695 --> 00:03:50,854
+I was just thinking about what you were talking is we
+
+85
+00:03:50,865 --> 00:03:53,934
+talked about hacking Voyager one a couple of episodes ago.
+
+86
+00:03:54,324 --> 00:03:57,854
+And yeah, it's very similar where if you have an enormous,
+
+87
+00:03:58,024 --> 00:04:02,695
+-- nobody would own a satellite dish that big.
+-- Well, ironically if someone did,
+
+88
+00:04:03,035 --> 00:04:04,815
+the spy satellites would find it.
+
+89
+00:04:05,054 --> 00:04:05,725
+Right.
+
+90
+00:04:06,449 --> 00:04:11,380
+But obviously in this case, we're approaching a universe where it is practical,
+
+91
+00:04:11,389 --> 00:04:16,600
+impossible for literally anyone to stand up enough infrastructure to accept,
+
+92
+00:04:16,608 --> 00:04:18,380
+say Google's traffic and,
+
+93
+00:04:18,670 --> 00:04:21,760
+-- you know, falsely reroute it to Google even
+-- worse than that.
+
+94
+00:04:21,769 --> 00:04:24,329
+You don't even have to stand up infrastructure, you can just rent it
+
+95
+00:04:24,570 --> 00:04:26,450
+well. Right. That's what I mean. Exactly.
+
+96
+00:04:26,630 --> 00:04:29,809
+There were a variety of proposals to fix this
+
+97
+00:04:29,820 --> 00:04:32,750
+and basically what we boiled down to is classic,
+
+98
+00:04:32,760 --> 00:04:33,339
+you know, PK
+
+99
+00:04:33,459 --> 00:04:37,489
+I layered on top so that, you know, the routes are signed, you drop out routes,
+
+100
+00:04:37,670 --> 00:04:38,450
+blah, blah, blah.
+
+101
+00:04:39,119 --> 00:04:40,660
+Honestly, it's not
+
+102
+00:04:40,790 --> 00:04:41,649
+easy,
+
+103
+00:04:41,970 --> 00:04:43,380
+but it's also not impossible.
+
+104
+00:04:43,390 --> 00:04:47,100
+I would say it's ba it's basically on a pretty much the same level as DNS Sec.
+
+105
+00:04:47,109 --> 00:04:48,230
+No, no, no,
+
+106
+00:04:48,239 --> 00:04:53,010
+let's not compare it to that because DNS Sec has its own set of ridiculous problems.
+
+107
+00:04:53,200 --> 00:04:54,350
+But I'm saying from a,
+
+108
+00:04:54,359 --> 00:04:59,450
+from a perspective of complexity and for the effort to stand it up, it's, it's on par.
+
+109
+00:04:59,459 --> 00:05:00,619
+-- I mean,
+-- that's probably fair.
+
+110
+00:05:00,630 --> 00:05:03,420
+And, and so actually, here's why we're talking about this though.
+
+111
+00:05:03,519 --> 00:05:08,059
+Cloud flare, they started this kind of marketing push to
+
+112
+00:05:08,190 --> 00:05:09,190
+point out
+
+113
+00:05:09,459 --> 00:05:13,170
+large networks that aren't signing B GP.
+
+114
+00:05:13,420 --> 00:05:18,220
+Well, not just not signing B GP, but also accepting improperly signed routes,
+
+115
+00:05:18,420 --> 00:05:19,619
+which is even worse.
+
+116
+00:05:19,790 --> 00:05:23,609
+Ok. Right. Right. Yeah, because that's true. There's, there's two sides to it and
+
+117
+00:05:23,850 --> 00:05:25,940
+functionally what they're doing is they're
+
+118
+00:05:25,950 --> 00:05:28,369
+trying to exert public pressure against
+
+119
+00:05:28,750 --> 00:05:32,049
+pretty much anyone not doing this and they have a little tool you can run.
+
+120
+00:05:32,059 --> 00:05:34,170
+That'll tell you is your ISP doing the right thing.
+
+121
+00:05:34,179 --> 00:05:36,570
+-- Are they not doing the right thing?
+-- Well, it's even simpler than that.
+
+122
+00:05:36,579 --> 00:05:40,619
+It's a website that has a couple of elements and basically, if you can contact
+
+123
+00:05:40,790 --> 00:05:42,260
+the one element that means it correct.
+
+124
+00:05:42,269 --> 00:05:44,989
+And if you can contact the other element that means it's being done wrong.
+
+125
+00:05:45,000 --> 00:05:48,899
+Like it's, it's hosted off a network that you should not be routing to.
+
+126
+00:05:49,000 --> 00:05:51,619
+And, and so, I mean, essentially
+
+127
+00:05:51,839 --> 00:05:56,880
+they're making all this noise about it and ironically, people are pushing back for,
+
+128
+00:05:56,890 --> 00:05:58,429
+we'll say hilarious reasons.
+
+129
+00:05:58,450 --> 00:05:58,459
+Oh,
+
+130
+00:05:58,579 --> 00:05:58,600
+my
+
+131
+00:05:58,750 --> 00:05:59,910
+God. Yeah. So
+
+132
+00:06:00,399 --> 00:06:01,959
+where do you even begin with? This
+
+133
+00:06:02,170 --> 00:06:04,970
+is ok. Well, let's, let's first do
+
+134
+00:06:05,459 --> 00:06:10,320
+is this whole B GP RO signing and RPK I and all that stuff totally secure.
+
+135
+00:06:10,329 --> 00:06:14,140
+No, of course not. It's PK I, you can subvert it, you can attack it, you can hijack it,
+
+136
+00:06:14,309 --> 00:06:16,140
+but it raises the bar significantly.
+
+137
+00:06:16,725 --> 00:06:20,725
+Just like with websites is http S the be all, end all for, you know,
+
+138
+00:06:20,894 --> 00:06:23,665
+ensuring that you're actually talking to walmart.com and that
+
+139
+00:06:23,674 --> 00:06:26,065
+your traffic is 100% safe between you and Walmart.
+
+140
+00:06:26,075 --> 00:06:27,385
+No, of course not.
+
+141
+00:06:27,644 --> 00:06:30,165
+But it's good enough. And honestly,
+
+142
+00:06:30,595 --> 00:06:33,035
+it's the whole B GP security thing.
+
+143
+00:06:33,225 --> 00:06:35,855
+If you're running a network big enough that it
+
+144
+00:06:35,994 --> 00:06:40,704
+sends out and consumes B GP routing information and you are
+
+145
+00:06:40,714 --> 00:06:43,424
+not competent to do this or set this up reasonably,
+
+146
+00:06:43,869 --> 00:06:46,929
+then you're really not that competent to run that network.
+
+147
+00:06:46,940 --> 00:06:48,850
+I would agree with that 100%.
+
+148
+00:06:49,019 --> 00:06:49,410
+Right.
+
+149
+00:06:50,179 --> 00:06:52,119
+I'm sorry. It's just that simple. Like,
+
+150
+00:06:52,260 --> 00:06:54,980
+like if you can't get a website up and running without HTTP S
+
+151
+00:06:54,989 --> 00:06:58,690
+in this day and age with like LS encrypt and free SSL hosting
+
+152
+00:06:59,480 --> 00:07:02,679
+like 20 years ago when it cost 20 grand for a secure web server. I get it.
+
+153
+00:07:02,690 --> 00:07:04,529
+It was not easy. But now it's, you know,
+
+154
+00:07:05,160 --> 00:07:07,899
+IOT devices have a secure web server built into them. So,
+
+155
+00:07:08,089 --> 00:07:10,899
+right. First argument that, oh, it's not completely secure.
+
+156
+00:07:11,239 --> 00:07:15,980
+Well, no, it's not completely secure, but it will keep out
+
+157
+00:07:16,109 --> 00:07:17,700
+99% of Attackers.
+
+158
+00:07:17,750 --> 00:07:21,929
+I've been harping about this for years and I will probably harp about it until I die.
+
+159
+00:07:22,109 --> 00:07:27,820
+Is saying something isn't completely secure is the same as saying we're not going to
+
+160
+00:07:27,920 --> 00:07:31,290
+do anything because nothing is completely secure and you have
+
+161
+00:07:31,299 --> 00:07:34,859
+to make various steps along the way to improving security
+
+162
+00:07:35,049 --> 00:07:36,640
+and just saying all or nothing,
+
+163
+00:07:36,750 --> 00:07:39,880
+you just pick nothing. There is no such thing as picking all.
+
+164
+00:07:39,890 --> 00:07:41,820
+So anyone who uses that argument
+
+165
+00:07:41,940 --> 00:07:44,420
+either knows what they're doing and they know
+
+166
+00:07:44,429 --> 00:07:46,820
+that nothing is the outcome or they're just,
+
+167
+00:07:46,829 --> 00:07:50,760
+like, functionally, not aware enough to be making any decision at all.
+
+168
+00:07:51,070 --> 00:07:52,529
+Well, and it's worse than that in that
+
+169
+00:07:53,010 --> 00:07:56,299
+you have to make these baby steps that are often wrong
+
+170
+00:07:57,089 --> 00:07:58,940
+in order to figure out what's right.
+
+171
+00:07:58,950 --> 00:08:01,869
+Well, unless you're DNS se and then they're just all wrong. But that's,
+
+172
+00:08:02,570 --> 00:08:06,510
+but, um, anyway, so, is it 100% secure? No, but it's like 99% secure.
+
+173
+00:08:06,519 --> 00:08:06,890
+Which is good enough.
+
+174
+00:08:07,029 --> 00:08:11,019
+Second argument. Oh, it's too hard and complex. Yeah. Sorry. No, I don't buy that
+
+175
+00:08:11,290 --> 00:08:15,089
+-- the fact that
+-- B GP is hard and complain. Yeah.
+
+176
+00:08:15,160 --> 00:08:17,790
+Like the Wikimedia Foundation has done this.
+
+177
+00:08:17,899 --> 00:08:20,429
+-- I bet
+-- they're more competent than most networks.
+
+178
+00:08:20,440 --> 00:08:21,309
+True. But, I mean,
+
+179
+00:08:21,480 --> 00:08:26,450
+when you see the ones that are not doing it at all, some of them, ok.
+
+180
+00:08:26,459 --> 00:08:28,459
+Apparently a Hurricane Electric is on there.
+
+181
+00:08:28,470 --> 00:08:30,950
+But apparently they are doing some of this but they're not,
+
+182
+00:08:30,959 --> 00:08:33,989
+they basically just haven't turned on certain aspects of it completely yet.
+
+183
+00:08:34,000 --> 00:08:37,630
+-- And
+-- look in the case of someone like Hurricane Electric, they, they're a very
+
+184
+00:08:37,734 --> 00:08:38,914
+large backbone provider.
+
+185
+00:08:38,924 --> 00:08:41,513
+Most of people have never heard of them because why would you?
+
+186
+00:08:41,523 --> 00:08:44,174
+-- Well,
+-- and they're traditionally known for being very competent, right.
+
+187
+00:08:44,183 --> 00:08:47,223
+They were the ones running the Six Bone tunnels and doing a lot of, you know,
+
+188
+00:08:47,234 --> 00:08:49,554
+experimental I PV six stuff to push it ahead.
+
+189
+00:08:49,564 --> 00:08:50,203
+Thank goodness.
+
+190
+00:08:50,213 --> 00:08:53,403
+My, my suspicion is if they haven't turned something like this on,
+
+191
+00:08:53,414 --> 00:08:54,713
+it's not because they don't want to,
+
+192
+00:08:54,723 --> 00:08:57,124
+it's because they're very careful and methodical of
+
+193
+00:08:57,133 --> 00:08:59,184
+what they do and obviously just flipping the
+
+194
+00:08:59,193 --> 00:09:03,234
+switch one day is the best way to make sure your whole network goes down.
+
+195
+00:09:03,244 --> 00:09:07,340
+Well, and this is a, it's a case of this is one of those security things of when it does,
+
+196
+00:09:07,349 --> 00:09:09,609
+when somebody does do BG P routing attacks,
+
+197
+00:09:09,739 --> 00:09:10,109
+it
+
+198
+00:09:10,280 --> 00:09:14,169
+usually gets noticed reasonably quickly and then gets shut down, right?
+
+199
+00:09:14,369 --> 00:09:18,200
+But there have been documented cases of B GP attacks where, you know,
+
+200
+00:09:18,210 --> 00:09:20,409
+some bad things did happen because,
+
+201
+00:09:20,549 --> 00:09:25,479
+you know, a few minutes of traffic is, is enough in some cases to launch your attack.
+
+202
+00:09:25,489 --> 00:09:26,820
+I'll dig up the story,
+
+203
+00:09:26,830 --> 00:09:30,500
+but somebody essentially rerouted a bunch of traffic from a crypt
+
+204
+00:09:30,625 --> 00:09:31,484
+exchange
+
+205
+00:09:31,695 --> 00:09:35,085
+in order to steal Bitcoin. And like the attack, technically speaking,
+
+206
+00:09:35,244 --> 00:09:38,255
+is very sophisticated and extremely impressive.
+
+207
+00:09:38,265 --> 00:09:41,734
+And in fact, prior to that story, I was like EB GP,
+
+208
+00:09:41,854 --> 00:09:44,405
+we maybe we'll fix it someday, whatever. It's not that big of a deal.
+
+209
+00:09:44,414 --> 00:09:48,604
+But after that, I'm like, holy crap. We need to fix B GP right now.
+
+210
+00:09:49,184 --> 00:09:52,195
+And the, the thing that really frustrates me is that well,
+
+211
+00:09:52,205 --> 00:09:53,664
+they fixed B GPA couple of years ago.
+
+212
+00:09:53,674 --> 00:09:56,965
+-- Just people need to turn this on. Well, ok.
+-- No, no you can't,
+
+213
+00:09:57,799 --> 00:10:00,770
+that's a complicated answer because you can't say it was fixed a couple
+
+214
+00:10:00,780 --> 00:10:02,260
+of years ago because any time you
+
+215
+00:10:02,270 --> 00:10:05,450
+propose changes to like fundamental infrastructure,
+
+216
+00:10:05,739 --> 00:10:10,250
+-- it takes years, sometimes decades to deploy this stuff.
+-- True.
+
+217
+00:10:10,260 --> 00:10:14,169
+But at this point all working from home now, so there's no longer the case of,
+
+218
+00:10:14,179 --> 00:10:14,609
+you know,
+
+219
+00:10:14,849 --> 00:10:16,840
+the internet has gone from,
+
+220
+00:10:16,989 --> 00:10:19,609
+-- nice to have to absolutely critical for the world
+-- to
+
+221
+00:10:19,619 --> 00:10:21,650
+fight whatever it's been critical for a long time.
+
+222
+00:10:21,659 --> 00:10:22,460
+Now. We just know.
+
+223
+00:10:24,140 --> 00:10:26,559
+My favorite thing is the argument.
+
+224
+00:10:26,570 --> 00:10:29,109
+Oh, now is not a good time to start messing with our networks.
+
+225
+00:10:29,119 --> 00:10:31,640
+You know, there's this pandemic on and I'm sorry,
+
+226
+00:10:31,650 --> 00:10:34,039
+but there's never a good time for stuff like this.
+
+227
+00:10:34,270 --> 00:10:35,400
+Right. Right.
+
+228
+00:10:35,570 --> 00:10:38,840
+Like I need to get my yard fixed and so it's basically a case of, ok,
+
+229
+00:10:38,849 --> 00:10:41,979
+as soon as it dries out out there, I'm having a guy come by to dethatch
+
+230
+00:10:42,109 --> 00:10:43,950
+it and, like, do as much as he can
+
+231
+00:10:44,219 --> 00:10:46,880
+and then I'm going to, like, seed it and you know what I mean? There's
+
+232
+00:10:47,010 --> 00:10:49,960
+the best time to plant a tree was 20 years ago or, you know, now.
+
+233
+00:10:50,070 --> 00:10:55,280
+-- Yeah.
+-- Yeah. I, yes, I will agree with that 100% in the context of this conversation.
+
+234
+00:10:55,409 --> 00:10:58,520
+I just, I still can't get over some of these people, like the,
+
+235
+00:10:58,750 --> 00:11:02,890
+this major ISP came out against it and it's just, you know, let me put it this way.
+
+236
+00:11:02,900 --> 00:11:06,580
+Would you buy email service from somebody who doesn't
+
+237
+00:11:06,590 --> 00:11:09,679
+do spam filtering and refuses to provide spam filtering.
+
+238
+00:11:09,690 --> 00:11:11,869
+-- Does
+-- that
+-- even exist anymore?
+
+239
+00:11:12,172 --> 00:11:15,643
+It doesn't because it would make email completely unusable.
+
+240
+00:11:15,653 --> 00:11:18,672
+-- It would be completely unusable.
+-- And,
+
+241
+00:11:18,922 --> 00:11:19,603
+and see, that's the thing,
+
+242
+00:11:19,612 --> 00:11:22,913
+it's not like you can take additional corrective action to protect yourself.
+
+243
+00:11:22,932 --> 00:11:23,172
+Right?
+
+244
+00:11:23,182 --> 00:11:25,473
+And that's the other thing is this is a situation where
+
+245
+00:11:25,482 --> 00:11:27,992
+you have to rely on your network provider to do this.
+
+246
+00:11:28,122 --> 00:11:29,002
+You cannot do this.
+
+247
+00:11:29,013 --> 00:11:30,752
+This isn't like email spam filtering where you
+
+248
+00:11:30,763 --> 00:11:31,953
+could do it yourself on your own machine
+
+249
+00:11:31,963 --> 00:11:34,822
+or you could firewall on your own machine or run a V on your own machine.
+
+250
+00:11:34,833 --> 00:11:40,023
+-- But
+-- Kurt, it's not a valid comparison because I, I don't know anything about B GP. My,
+
+251
+00:11:40,125 --> 00:11:40,255
+my,
+
+252
+00:11:40,486 --> 00:11:45,495
+my network providers B GP route could all be hijacked right now and all of this
+
+253
+00:11:45,505 --> 00:11:48,435
+whole conversation could be routed to some foreign
+
+254
+00:11:48,445 --> 00:11:50,075
+country while they're laughing at us for being
+
+255
+00:11:50,226 --> 00:11:50,375
+idiots.
+
+256
+00:11:50,955 --> 00:11:52,306
+I would have no idea.
+
+257
+00:11:52,515 --> 00:11:58,705
+And it honestly, for like 99.999% of people, it wouldn't affect me in any way.
+
+258
+00:11:58,716 --> 00:12:00,346
+Spam affects me.
+
+259
+00:12:00,356 --> 00:12:04,466
+Well, until they use attack crypto exchange or until they, you know,
+
+260
+00:12:04,476 --> 00:12:07,935
+um what was that case where I think China did a major
+
+261
+00:12:08,989 --> 00:12:11,809
+a hijack a few months ago.
+
+262
+00:12:12,590 --> 00:12:16,299
+Yeah. But how did it actually negatively affect people? Right? Like
+
+263
+00:12:16,450 --> 00:12:19,760
+-- how many crypto exchange users were there actually
+-- all
+
+264
+00:12:19,770 --> 00:12:20,909
+-- of
+-- European like or
+
+265
+00:12:20,919 --> 00:12:24,460
+a major chunk of European mobile traffic was sent through China last summer.
+
+266
+00:12:24,580 --> 00:12:27,289
+-- And
+-- how did that affect people? Realistically speaking?
+
+267
+00:12:27,299 --> 00:12:29,260
+I bet very few people were affected.
+
+268
+00:12:29,270 --> 00:12:33,239
+Well, I mean, ok, so how does it affect people if I get a complete database of,
+
+269
+00:12:33,250 --> 00:12:34,330
+you know, everybody's P I?
+
+270
+00:12:34,340 --> 00:12:37,799
+Well, it doesn't affect them right now but it allows me to do bad things later.
+
+271
+00:12:37,976 --> 00:12:38,656
+I mean, yes,
+
+272
+00:12:38,666 --> 00:12:42,306
+but that's part of the problem is human beings
+
+273
+00:12:42,315 --> 00:12:45,395
+are terrible at saying this will matter later.
+
+274
+00:12:45,406 --> 00:12:48,885
+We're like, no, it affects me right now or it doesn't exist.
+
+275
+00:12:48,895 --> 00:12:51,786
+There's nothing else in between. I mean, look at literally
+
+276
+00:12:51,926 --> 00:12:55,875
+every crisis that has ever happened in the history of humanity.
+
+277
+00:12:55,885 --> 00:12:59,335
+How many, I mean, every one of them is, it's kind of like, you know,
+
+278
+00:12:59,346 --> 00:13:00,556
+you know what's funny is there have been a lot
+
+279
+00:13:00,565 --> 00:13:03,325
+of tweets lately that talk about every disaster movie starts,
+
+280
+00:13:03,392 --> 00:13:04,771
+the scientists being ignored.
+
+281
+00:13:04,781 --> 00:13:08,752
+And now I understand and like that is every crisis ever in the
+
+282
+00:13:08,762 --> 00:13:13,271
+history of humanity started with someone being ignored every one of them.
+
+283
+00:13:13,341 --> 00:13:14,651
+And, and I think that, I mean,
+
+284
+00:13:14,661 --> 00:13:17,671
+this is one of the challenges with B GP is it's not in your face.
+
+285
+00:13:17,682 --> 00:13:20,771
+And that's what cloud FFL is doing with this site actually is they're making it in
+
+286
+00:13:20,781 --> 00:13:22,932
+your face and I think people are getting
+
+287
+00:13:22,942 --> 00:13:26,151
+angry because now they're getting questions asked.
+
+288
+00:13:26,341 --> 00:13:28,731
+You know what it reminds me of is, it reminds me of CVS and that
+
+289
+00:13:28,979 --> 00:13:30,479
+vendor has a security flaw,
+
+290
+00:13:30,489 --> 00:13:34,309
+cool vendor has a security flaw and somebody assigns a CV to it and, oh, crap.
+
+291
+00:13:34,320 --> 00:13:36,659
+Now it's public and the clock starts ticking at a lot of companies
+
+292
+00:13:37,030 --> 00:13:37,640
+and they get,
+
+293
+00:13:37,750 --> 00:13:38,330
+like,
+
+294
+00:13:38,789 --> 00:13:42,580
+so many organizations I dealt with, like, literally if it has a CV, then, ok,
+
+295
+00:13:42,590 --> 00:13:44,359
+we need remediation in 30 days or whatever
+
+296
+00:13:44,890 --> 00:13:45,140
+and,
+
+297
+00:13:45,659 --> 00:13:48,750
+-- but no CV, whatever, it doesn't matter, it doesn't exist.
+-- Right. Right.
+
+298
+00:13:48,760 --> 00:13:53,950
+And I understand that completely because once it's visible and let's face it,
+
+299
+00:13:53,960 --> 00:13:57,419
+getting a security flaw, a CVE makes it visible now that I
+
+300
+00:13:58,030 --> 00:13:59,130
+Ocean can focus on it.
+
+301
+00:13:59,469 --> 00:14:00,530
+And without that,
+
+302
+00:14:00,679 --> 00:14:02,750
+it's just a fuzzy thing off in the distance.
+
+303
+00:14:02,760 --> 00:14:06,960
+And, and I think this B GP thing is the same cloud flare is, you know,
+
+304
+00:14:06,969 --> 00:14:09,200
+they're standing up yelling, hey, everyone, look over here, look at me,
+
+305
+00:14:09,210 --> 00:14:11,929
+look at me and the guys we're not looking at that aren't doing anything.
+
+306
+00:14:11,940 --> 00:14:14,289
+They're like, wait, this isn't fair. You're, you're playing dirty.
+
+307
+00:14:14,299 --> 00:14:17,929
+It's like, you know what? They're not playing dirty. They figured it out.
+
+308
+00:14:17,940 --> 00:14:22,489
+Well, and it especially annoys me because these are not small mom and pop shops that
+
+309
+00:14:22,739 --> 00:14:24,739
+don't have a few bucks to put on this.
+
+310
+00:14:24,859 --> 00:14:25,840
+Like
+
+311
+00:14:26,559 --> 00:14:28,549
+that's not what they want you to believe.
+
+312
+00:14:28,869 --> 00:14:30,080
+You know, I mean, these are,
+
+313
+00:14:30,090 --> 00:14:34,539
+these are I SPS that are literally entire countries or while spanning many,
+
+314
+00:14:34,549 --> 00:14:35,450
+many countries.
+
+315
+00:14:35,469 --> 00:14:35,500
+And
+
+316
+00:14:35,979 --> 00:14:40,710
+so one of the other funny things about this is the gear that routes, network,
+
+317
+00:14:40,719 --> 00:14:43,869
+traffic costs millions of dollars for the box.
+
+318
+00:14:43,880 --> 00:14:48,109
+Right. We're not talking about the $200 router you bought at Best Buy last weekend.
+
+319
+00:14:48,119 --> 00:14:51,359
+No, no, these are enormous machines.
+
+320
+00:14:51,369 --> 00:14:54,109
+Well, and we're, we're talking about rack mounted
+
+321
+00:14:54,630 --> 00:14:58,330
+equipment that it's not. How many units of rack does it occupy?
+
+322
+00:14:58,340 --> 00:15:00,450
+It's how many racks does it occupy?
+
+323
+00:15:00,630 --> 00:15:01,489
+Right.
+
+324
+00:15:02,299 --> 00:15:04,520
+-- Exactly. Exactly.
+-- Yeah.
+
+325
+00:15:04,530 --> 00:15:06,900
+You know, things where, yeah, the amount of,
+
+326
+00:15:06,909 --> 00:15:09,440
+like ra M is measured in the hundreds of gigabytes.
+
+327
+00:15:09,559 --> 00:15:10,119
+Yes,
+
+328
+00:15:10,130 --> 00:15:14,359
+this is one of the challenges I think is why we're seeing some of this pushback is
+
+329
+00:15:14,369 --> 00:15:19,440
+I have no doubt that some of this gear is probably too old to sign B GP,
+
+330
+00:15:19,450 --> 00:15:22,549
+which means some of these organizations are now going to have to pony up
+
+331
+00:15:22,650 --> 00:15:24,549
+-- new gear.
+-- I'd say it's worse than that.
+
+332
+00:15:24,559 --> 00:15:26,859
+It's a lot of the gear will support it, but they'd have to, you know,
+
+333
+00:15:26,869 --> 00:15:30,109
+actually pay for their maintenance contracts or upgrade the software.
+
+334
+00:15:30,119 --> 00:15:30,770
+Which is,
+
+335
+00:15:30,890 --> 00:15:32,150
+that could be too.
+
+336
+00:15:32,500 --> 00:15:35,270
+You think people that run databases hate upgrading software,
+
+337
+00:15:35,289 --> 00:15:37,630
+go talk to your core network engineers.
+
+338
+00:15:37,640 --> 00:15:42,900
+Oh, man, I, I, no, I remember this so many years ago. I worked at a very small
+
+339
+00:15:43,000 --> 00:15:45,390
+ISP and this, I mean, this is back in dial up days,
+
+340
+00:15:45,400 --> 00:15:50,270
+we had a one line that serviced the whole ISP, which now is hilariously small.
+
+341
+00:15:50,280 --> 00:15:54,340
+-- That's 1.544 megabits per second. Yeah.
+-- Right. Right. And
+
+342
+00:15:54,520 --> 00:15:56,380
+now it's ridiculous to think about,
+
+343
+00:15:56,390 --> 00:15:59,969
+but back then it sort like I think we had probably thousands
+
+344
+00:15:59,979 --> 00:16:02,530
+of users all on like 14 to 4 dial up modems.
+
+345
+00:16:02,539 --> 00:16:03,219
+So it was fine.
+
+346
+00:16:03,539 --> 00:16:04,119
+And,
+
+347
+00:16:04,380 --> 00:16:04,590
+yeah.
+
+348
+00:16:04,599 --> 00:16:07,919
+Yeah, I, I remember our network gear once that was working,
+
+349
+00:16:07,929 --> 00:16:10,869
+nobody touched it because if you touched it,
+
+350
+00:16:10,880 --> 00:16:14,859
+it broke guaranteed and there was nothing worse than breaking the internet.
+
+351
+00:16:14,960 --> 00:16:16,919
+I personally really like this because there's been
+
+352
+00:16:16,929 --> 00:16:19,500
+a number of network testing sites to see.
+
+353
+00:16:19,510 --> 00:16:20,250
+For example, you know,
+
+354
+00:16:20,260 --> 00:16:23,150
+does your ISP support DNS E queries or is
+
+355
+00:16:23,159 --> 00:16:26,070
+your ISP monkeying with your traffic in some way,
+
+356
+00:16:26,080 --> 00:16:28,179
+you know, for example, doing ad injection or?
+
+357
+00:16:28,640 --> 00:16:29,280
+Right. Right.
+
+358
+00:16:29,289 --> 00:16:30,909
+Oh, my all time favorite is, you know, oh,
+
+359
+00:16:30,919 --> 00:16:33,159
+you made a DNS query to something that doesn't exist.
+
+360
+00:16:33,273 --> 00:16:34,543
+Let me show you this helpful page.
+
+361
+00:16:34,552 --> 00:16:37,043
+You know, I ran into this problem where my, my code just
+
+362
+00:16:37,213 --> 00:16:41,252
+wouldn't air out on bad DNS. And I'm like, what like did
+
+363
+00:16:41,523 --> 00:16:42,112
+I mean
+
+364
+00:16:42,343 --> 00:16:43,413
+that how
+
+365
+00:16:43,583 --> 00:16:47,312
+like I literally couldn't understand what I was doing wrong until I,
+
+366
+00:16:47,322 --> 00:16:51,083
+I finally figured out like at some point that ISP had started serving
+
+367
+00:16:51,283 --> 00:16:54,982
+all the DNS no matter what right. NX domain is no longer an option.
+
+368
+00:16:54,992 --> 00:16:56,322
+Well, not with them.
+
+369
+00:16:56,333 --> 00:16:56,763
+I mean, this is,
+
+370
+00:16:56,773 --> 00:17:01,562
+I think why the popularity of things like 1.1 0.1 0.1 which Claude Flair also does
+
+371
+00:17:01,713 --> 00:17:02,893
+is such a big deal.
+
+372
+00:17:03,005 --> 00:17:05,105
+Well, even Google, like as much as I know,
+
+373
+00:17:05,115 --> 00:17:07,826
+Google is trying to like learn everything about me.
+
+374
+00:17:07,875 --> 00:17:11,375
+I trust my ISP less than I trust Google, which that says,
+
+375
+00:17:11,875 --> 00:17:12,615
+I agree.
+
+376
+00:17:13,395 --> 00:17:14,974
+I agree. 100%.
+
+377
+00:17:15,195 --> 00:17:18,005
+I might trust Facebook more than my ISP.
+
+378
+00:17:18,385 --> 00:17:19,786
+I mean, that's how bad it is.
+
+379
+00:17:20,015 --> 00:17:20,556
+Oh, I'd have
+
+380
+00:17:24,326 --> 00:17:28,145
+regardless the fact that we can't come up with a quick answer to that question,
+
+381
+00:17:28,156 --> 00:17:29,855
+I think, says everything like that.
+
+382
+00:17:30,365 --> 00:17:31,985
+This should not be a contest.
+
+383
+00:17:33,260 --> 00:17:37,719
+I, I like this because it, it makes it concrete, it makes it understandable and it's,
+
+384
+00:17:37,729 --> 00:17:39,140
+I, I hate to say this but
+
+385
+00:17:39,359 --> 00:17:43,280
+cloud flare is technically correct, which is, as we all know, the best kind.
+
+386
+00:17:43,329 --> 00:17:49,199
+Absolutely. I hope that they get more providers on that is B GP Safe yet.com list.
+
+387
+00:17:49,209 --> 00:17:52,199
+You know, it reminds me of the, uh, the two factor authentication site.
+
+388
+00:17:52,209 --> 00:17:54,089
+There's a really great website, two factor
+
+389
+00:17:54,406 --> 00:17:54,885
+dot org.
+
+390
+00:17:55,336 --> 00:17:57,656
+And it's got a pretty comprehensive list of
+
+391
+00:17:57,666 --> 00:18:00,885
+all the things from like banking to finance,
+
+392
+00:18:00,895 --> 00:18:04,725
+to hosting, to legal, to whatever, if they support, uh, two factor
+
+393
+00:18:04,855 --> 00:18:07,145
+off or not and even some information on it.
+
+394
+00:18:07,156 --> 00:18:10,495
+You know, what kind of like is it S MS, is it a phone call? Is it email?
+
+395
+00:18:10,505 --> 00:18:12,546
+Is it a hardware token? Is it a software token?
+
+396
+00:18:12,556 --> 00:18:16,121
+And, you know, you can make a much more informed decision and as to, you know,
+
+397
+00:18:16,131 --> 00:18:17,952
+which provider do you use, which, you know, for some of these, like,
+
+398
+00:18:17,962 --> 00:18:18,852
+say online betting.
+
+399
+00:18:18,881 --> 00:18:21,491
+Yeah, there's real money there. You will get attacked.
+
+400
+00:18:21,911 --> 00:18:21,921
+Oh,
+
+401
+00:18:22,062 --> 00:18:23,082
+yeah, totally.
+
+402
+00:18:23,232 --> 00:18:26,921
+So, I, I like this because, so much, well, not so much,
+
+403
+00:18:27,202 --> 00:18:29,031
+too much security is
+
+404
+00:18:29,342 --> 00:18:31,241
+just not being done because, well,
+
+405
+00:18:31,251 --> 00:18:34,021
+they can get away with it not being done because it's really hard to expose,
+
+406
+00:18:34,031 --> 00:18:35,891
+like for a person like you or me
+
+407
+00:18:36,250 --> 00:18:39,719
+to figure out if an ISP is doing this B GP security
+
+408
+00:18:39,729 --> 00:18:42,349
+or not like to stand that stuff up to test it is,
+
+409
+00:18:42,560 --> 00:18:43,589
+I don't want to say impossible.
+
+410
+00:18:43,599 --> 00:18:46,869
+Basically, like the amount of effort it would take is ridiculous.
+
+411
+00:18:47,290 --> 00:18:51,780
+It is. Right. Right. And, and additionally, as an end user,
+
+412
+00:18:52,229 --> 00:18:56,989
+I'm never going to see the results of them doing or not doing this.
+
+413
+00:18:57,160 --> 00:19:01,630
+But if cloud flare points me at it and says, hey, look over here, I can say, oh,
+
+414
+00:19:01,640 --> 00:19:02,489
+that's neat.
+
+415
+00:19:02,560 --> 00:19:06,489
+And, and actually, I was almost sad because my ISP has the, the,
+
+416
+00:19:06,500 --> 00:19:09,239
+the fancy good job for Cloud flare.
+
+417
+00:19:09,469 --> 00:19:12,260
+And I was like, man, I was really hoping to write some letters or something.
+
+418
+00:19:12,270 --> 00:19:12,839
+You know, I was,
+
+419
+00:19:13,160 --> 00:19:15,609
+you know what, this reminds me of his I PV six support back in the day.
+
+420
+00:19:15,619 --> 00:19:17,420
+I literally remember phoning my VPs,
+
+421
+00:19:17,430 --> 00:19:19,550
+like my hosting provider and it wasn't VPs
+
+422
+00:19:19,560 --> 00:19:21,280
+rather it was actual physical co location.
+
+423
+00:19:21,479 --> 00:19:25,619
+And like, they were like, basically their response was what's I PV six? And I'm like,
+
+424
+00:19:26,329 --> 00:19:29,020
+and in fairness, they did start supporting it about two years later.
+
+425
+00:19:29,030 --> 00:19:33,300
+But like my then ISP Shaw again, they were like, we, we have no plans to support this.
+
+426
+00:19:33,310 --> 00:19:37,810
+-- Why would we,
+-- there's plenty of IP addresses and I PV four, we'll never go
+
+427
+00:19:38,260 --> 00:19:38,900
+-- there
+-- again.
+
+428
+00:19:38,910 --> 00:19:39,579
+You know, it, it,
+
+429
+00:19:39,949 --> 00:19:41,459
+I PV six is a little bit different
+
+430
+00:19:41,526 --> 00:19:43,485
+and that there was actually something pushing like,
+
+431
+00:19:43,495 --> 00:19:46,306
+yeah, there is no, I PV four space to buy anymore.
+
+432
+00:19:46,375 --> 00:19:47,125
+Or rather
+
+433
+00:19:47,326 --> 00:19:48,306
+the fact that
+
+434
+00:19:48,416 --> 00:19:52,505
+you have to buy it now you can't just go and get a network block from one of the,
+
+435
+00:19:52,515 --> 00:19:53,135
+you know, a PN.
+
+436
+00:19:53,515 --> 00:19:56,245
+Yeah, whatever you've had to buy it for a long time. Yeah.
+
+437
+00:19:56,276 --> 00:19:59,296
+-- But now the price has actually gone up.
+-- Well, yes, it's real money now.
+
+438
+00:19:59,306 --> 00:20:03,745
+-- It used to be basically
+-- free and B GP, you know, the, the B GP security stuff there,
+
+439
+00:20:03,755 --> 00:20:04,505
+there's no,
+
+440
+00:20:05,056 --> 00:20:08,345
+there's no push, there's no incentive like that other than people, you know,
+
+441
+00:20:08,355 --> 00:20:09,776
+banging on pots and pans and yell
+
+442
+00:20:09,911 --> 00:20:10,232
+at their
+
+443
+00:20:10,572 --> 00:20:10,791
+isps.
+
+444
+00:20:10,881 --> 00:20:15,511
+I mean, functionally, yes, until, like people start doing mass B GB hijackings and,
+
+445
+00:20:15,521 --> 00:20:17,592
+you know, make it so bad that we notice it.
+
+446
+00:20:17,602 --> 00:20:18,972
+-- Even
+-- if they did that
+
+447
+00:20:19,092 --> 00:20:19,552
+even,
+
+448
+00:20:19,562 --> 00:20:20,962
+I don't think you'd ever notice it because
+
+449
+00:20:20,972 --> 00:20:22,911
+obviously the whole point of hijacking the traffic
+
+450
+00:20:22,921 --> 00:20:25,251
+is to make sure no one does notice it because as soon as they do,
+
+451
+00:20:25,261 --> 00:20:26,222
+they shut you down.
+
+452
+00:20:26,232 --> 00:20:29,881
+But then more importantly is it's the typical human problem of
+
+453
+00:20:29,891 --> 00:20:33,991
+the negative implications from this activity will be in the future.
+
+454
+00:20:34,001 --> 00:20:38,192
+-- So I don't care.
+-- Well, or it's, you know, it's part of such a targeted attack that
+
+455
+00:20:38,550 --> 00:20:42,410
+those entities assuming they even notice again, they can't really, you know,
+
+456
+00:20:42,589 --> 00:20:43,930
+I hate to say this but even,
+
+457
+00:20:44,630 --> 00:20:46,609
+let's assume tomorrow the US government said, look,
+
+458
+00:20:46,619 --> 00:20:49,359
+all of our I SPS have to do B GP security.
+
+459
+00:20:49,520 --> 00:20:50,849
+What? You know, how long would
+
+460
+00:20:50,949 --> 00:20:54,160
+it? No, that, that isn't even enough to push it,
+
+461
+00:20:54,359 --> 00:20:54,890
+-- you
+-- know.
+
+462
+00:20:54,900 --> 00:20:55,670
+Well, you could,
+
+463
+00:20:55,680 --> 00:20:58,459
+but it would still be like a two year roll out period because that's what,
+
+464
+00:20:58,469 --> 00:21:00,770
+probably what they need is my guess.
+
+465
+00:21:01,189 --> 00:21:01,670
+I don't know.
+
+466
+00:21:01,699 --> 00:21:06,050
+And, and, but even then, even then, let's say the US said we're going to do this,
+
+467
+00:21:06,359 --> 00:21:10,050
+the US is just part of a large network. And so,
+
+468
+00:21:10,260 --> 00:21:13,963
+for example, I guarantee that I do things where
+
+469
+00:21:14,282 --> 00:21:17,322
+the traffic ends up in another country, let's say, or,
+
+470
+00:21:17,333 --> 00:21:20,162
+or region that maybe wouldn't fall under that jurisdiction.
+
+471
+00:21:20,172 --> 00:21:22,802
+And so that's how you, that's how you do it, you know, true.
+
+472
+00:21:22,812 --> 00:21:27,703
+But it would vastly reduce the incidence of either the, well within the US.
+
+473
+00:21:27,713 --> 00:21:30,853
+Nobody would be a, would be affected by US
+
+474
+00:21:31,103 --> 00:21:32,682
+prefixes being hijacked,
+
+475
+00:21:33,062 --> 00:21:34,353
+right? Because they'd all be secured
+
+476
+00:21:34,522 --> 00:21:35,802
+-- in,
+-- in the US, right?
+
+477
+00:21:35,812 --> 00:21:38,363
+But obviously, even once you left, you could start, you know,
+
+478
+00:21:38,373 --> 00:21:40,316
+gobbling things from other countries.
+
+479
+00:21:40,326 --> 00:21:44,115
+And so, I mean, yeah, it's got to be a worldwide effort for sure.
+
+480
+00:21:44,125 --> 00:21:47,395
+I think this is very much an all or none is where we have to be.
+
+481
+00:21:47,406 --> 00:21:49,615
+I disagree because the thing is there are,
+
+482
+00:21:49,625 --> 00:21:53,615
+let's say you've got every major transit network and every major cloud provider,
+
+483
+00:21:53,625 --> 00:21:54,076
+right?
+
+484
+00:21:54,086 --> 00:21:54,336
+That,
+
+485
+00:21:54,345 --> 00:21:58,515
+that is a major chunk of the traffic and that would prevent a lot of the propagation.
+
+486
+00:21:58,526 --> 00:21:59,725
+Sure. Right.
+
+487
+00:21:59,735 --> 00:22:04,286
+The brutal truth is with this BG P security stuff is you where you really, really,
+
+488
+00:22:04,296 --> 00:22:06,235
+really need it is those core networks,
+
+489
+00:22:06,609 --> 00:22:10,819
+the ones that connect to the networks that's fair. Not like my dinky little.
+
+490
+00:22:10,829 --> 00:22:13,510
+And when I say dinky little, I mean, tell us is, you know, there,
+
+491
+00:22:13,520 --> 00:22:16,150
+I do a trace route and it like pops out in the US
+
+492
+00:22:16,270 --> 00:22:16,770
+with,
+
+493
+00:22:16,780 --> 00:22:21,069
+tell us names like they own a network that spans North America and goes to Europe
+
+494
+00:22:21,500 --> 00:22:23,390
+and I would consider tell us small because they, you know,
+
+495
+00:22:23,400 --> 00:22:25,260
+they're not like level three or, you know,
+
+496
+00:22:25,270 --> 00:22:29,670
+one of those people that own transatlantic cables like Google does
+
+497
+00:22:30,369 --> 00:22:31,630
+that, you know of,
+
+498
+00:22:31,790 --> 00:22:35,550
+-- I don't know their names offhand.
+-- Yeah. Yeah, I'm glad I don't anymore.
+
+499
+00:22:35,560 --> 00:22:37,410
+I'm just glad that network mostly works.
+
+500
+00:22:37,619 --> 00:22:40,310
+I, I, I'm happy with networks these days.
+
+501
+00:22:40,319 --> 00:22:43,050
+I remember running Cisco routers a long time ago and
+
+502
+00:22:43,060 --> 00:22:45,189
+I won't say I was ever particularly good at it.
+
+503
+00:22:45,199 --> 00:22:48,900
+I was functional, I'll say, but it was definitely one of those things that
+
+504
+00:22:49,050 --> 00:22:53,189
+I feel like networking is for a certain kind of person. And I'm not one of them
+
+505
+00:22:53,310 --> 00:22:53,640
+like Sudoku,
+
+506
+00:22:54,079 --> 00:22:54,760
+maybe, you know,
+
+507
+00:22:54,770 --> 00:22:57,469
+you know what actually I started playing some time ago was
+
+508
+00:22:57,479 --> 00:23:00,250
+there's another game called Ken Ken which is similar to Sudoku,
+
+509
+00:23:00,260 --> 00:23:01,969
+but it involves like math
+
+510
+00:23:02,130 --> 00:23:02,589
+and
+
+511
+00:23:02,760 --> 00:23:04,420
+-- that one where? Yeah. Yeah.
+-- Yeah. Yeah,
+
+512
+00:23:04,560 --> 00:23:05,709
+you got, like, the plus sign.
+
+513
+00:23:05,810 --> 00:23:08,540
+Like, this line needs to be six and this line needs to be
+
+514
+00:23:08,670 --> 00:23:08,930
+right.
+
+515
+00:23:09,280 --> 00:23:10,339
+It's so,
+
+516
+00:23:10,500 --> 00:23:14,140
+it's so difficult to find though because for whatever reason,
+
+517
+00:23:14,150 --> 00:23:15,540
+it's just not very popular
+
+518
+00:23:15,729 --> 00:23:20,150
+and, like, I do enjoy Sudoku. Don't get me wrong. It's a fantastic game.
+
+519
+00:23:20,229 --> 00:23:22,640
+But, yeah, Ken Ken is my new favorite and
+
+520
+00:23:22,750 --> 00:23:27,280
+I can never find it anywhere and I, I prefer paper because,
+
+521
+00:23:27,530 --> 00:23:29,229
+oh, first of all, I don't want to print off copy.
+
+522
+00:23:29,239 --> 00:23:32,949
+So please don't send me like some, some Ken Ken website. Like I'm too lazy to do that.
+
+523
+00:23:32,959 --> 00:23:35,270
+I want one of those books I wanted in the newspaper or something.
+
+524
+00:23:35,530 --> 00:23:38,150
+Oh, yeah. You want the old people book of time waste.
+
+525
+00:23:38,160 --> 00:23:40,520
+I like those though because I can write all my weird little
+
+526
+00:23:40,530 --> 00:23:42,589
+notes down about what I think things are going to be.
+
+527
+00:23:42,790 --> 00:23:43,550
+I know there's soft,
+
+528
+00:23:43,560 --> 00:23:45,910
+like I was actually watching sadly a guy
+
+529
+00:23:45,920 --> 00:23:48,270
+do a really tough Sudoku puzzle and they've got
+
+530
+00:23:48,479 --> 00:23:52,699
+dedicated software that allows you to set like the value in the square or to set,
+
+531
+00:23:52,709 --> 00:23:54,670
+you know, provisional values in a small font.
+
+532
+00:23:55,219 --> 00:23:57,430
+I would assume somebody has that for Ken Ken,
+
+533
+00:23:57,750 --> 00:23:59,109
+the Sudoku on.
+
+534
+00:23:59,119 --> 00:24:01,689
+I haven't found it yet but the Sudoku game
+
+535
+00:24:01,699 --> 00:24:05,520
+on Brain Age for the Nintendo DS is phenomenal.
+
+536
+00:24:05,530 --> 00:24:08,910
+It is by far the best because you get to use a pen, which is hugely important,
+
+537
+00:24:08,920 --> 00:24:09,579
+in my opinion.
+
+538
+00:24:09,739 --> 00:24:14,010
+You get to use a pen and you can click around and actually draw like you, like,
+
+539
+00:24:14,020 --> 00:24:18,209
+if I want it to be a one, I draw the number one and it turns it into a one.
+
+540
+00:24:18,219 --> 00:24:21,130
+-- It's
+-- marvelous. There's something to be said for that physicality.
+
+541
+00:24:21,140 --> 00:24:21,530
+Like I,
+
+542
+00:24:21,540 --> 00:24:23,660
+there are papers I print out and go through with
+
+543
+00:24:23,670 --> 00:24:26,329
+a red or blue pen to more actively read,
+
+544
+00:24:26,439 --> 00:24:28,479
+interact with because I just can't do it on the screen.
+
+545
+00:24:28,530 --> 00:24:32,420
+I don't even like printouts of stuff. I like having,
+
+546
+00:24:32,760 --> 00:24:33,880
+I don't know what it is.
+
+547
+00:24:33,890 --> 00:24:36,439
+There's something about, like, for example, let's say I want a book,
+
+548
+00:24:36,449 --> 00:24:38,560
+like I want a paperback of something and I could
+
+549
+00:24:38,569 --> 00:24:40,380
+say print it out and I've done that before.
+
+550
+00:24:40,390 --> 00:24:45,540
+You print like a couple 100 pages or whatever. I still prefer the bound nice book.
+
+551
+00:24:45,560 --> 00:24:47,790
+There's a, there's a certain feel to the pages,
+
+552
+00:24:47,800 --> 00:24:50,979
+the ink looks a certain way and there's just, I'm a sucker for that and like,
+
+553
+00:24:50,989 --> 00:24:53,989
+even newspapers, I read my newspaper online now because it's
+
+554
+00:24:54,189 --> 00:24:54,849
+like
+
+555
+00:24:54,979 --> 00:24:54,989
+a
+
+556
+00:24:55,130 --> 00:24:58,150
+-- 10th of the price.
+-- Can you even get it delivered?
+
+557
+00:24:58,160 --> 00:24:59,010
+Yeah, I can.
+
+558
+00:24:59,020 --> 00:25:02,250
+But it's literally 10 times more expensive than what I'm paying online.
+
+559
+00:25:02,339 --> 00:25:05,810
+And so just from a financial perspective, I didn't want to justify the cost.
+
+560
+00:25:05,819 --> 00:25:10,000
+But like, I miss sitting down and opening a real newspaper,
+
+561
+00:25:10,010 --> 00:25:12,750
+-- I think it is one of the true joys
+-- I will admit like,
+
+562
+00:25:12,760 --> 00:25:15,469
+something like the few times I got a copy of, what was it?
+
+563
+00:25:15,479 --> 00:25:17,349
+The New York Sunday Times. I mean, that is just,
+
+564
+00:25:17,459 --> 00:25:21,859
+-- that's, that's a satisfying way to spend a couple hours on Sunday.
+-- It absolutely is.
+
+565
+00:25:21,869 --> 00:25:23,709
+And I love it. I absolutely
+
+566
+00:25:23,819 --> 00:25:27,150
+love reading the newspaper and I don't anymore.
+
+567
+00:25:27,160 --> 00:25:29,920
+But again, like playing the weird little puzzles.
+
+568
+00:25:29,930 --> 00:25:34,239
+I used to love playing Sudoku in the newspaper specifically in the newspaper.
+
+569
+00:25:34,250 --> 00:25:35,239
+Right. Not,
+
+570
+00:25:35,500 --> 00:25:38,890
+not online, not print off the sheets or whatever. But I don't know.
+
+571
+00:25:38,900 --> 00:25:42,319
+I'm a weirdo like that. It is. Everyone's got their thing. Right. That's mine.
+
+572
+00:25:42,329 --> 00:25:44,239
+So, ok. Anyway, we should get back on track.
+
+573
+00:25:44,359 --> 00:25:45,390
+B GP.
+
+574
+00:25:45,400 --> 00:25:49,619
+We are obviously in complete agreement that everyone should sign their B
+
+575
+00:25:49,630 --> 00:25:54,500
+-- GP routes and
+-- also ensure the routes consuming are signed and correct.
+
+576
+00:25:54,510 --> 00:25:58,140
+-- Well, I think that goes hand in hand, right? If, yeah,
+-- you say that.
+
+577
+00:25:58,150 --> 00:26:03,619
+-- But again, we also tell people to floss, I
+-- floss every day.
+
+578
+00:26:03,869 --> 00:26:06,140
+Yeah. And you're like literally the only human being I know
+
+579
+00:26:06,410 --> 00:26:07,209
+that does that.
+
+580
+00:26:07,229 --> 00:26:08,140
+I especially,
+
+581
+00:26:08,150 --> 00:26:11,000
+I'm especially particular about my teeth right now because I really don't
+
+582
+00:26:11,010 --> 00:26:13,469
+want to have to try to find a dentist right now.
+
+583
+00:26:14,060 --> 00:26:15,349
+-- Yeah,
+-- that is a good point.
+
+584
+00:26:15,359 --> 00:26:16,829
+Yes, I was thinking about that.
+
+585
+00:26:16,839 --> 00:26:21,130
+-- I thought, what would I even do?
+-- I had that cracked tooth earlier or last year rather.
+
+586
+00:26:21,359 --> 00:26:24,719
+And luckily I got in like four days, they had a cancellation. I got in four days.
+
+587
+00:26:24,729 --> 00:26:25,489
+But like that,
+
+588
+00:26:25,689 --> 00:26:28,510
+I'll be honest, I've had like my appendix try to kill me as an adult.
+
+589
+00:26:28,520 --> 00:26:30,739
+I've had my tonsils out as an adult
+
+590
+00:26:31,250 --> 00:26:34,449
+and I mean, with my cracked tooth,
+
+591
+00:26:34,459 --> 00:26:38,060
+the amount of Tylenol three they prescribed to me after the surgery.
+
+592
+00:26:38,069 --> 00:26:42,030
+I was like, I'm not sure this is like safe and I ended up only taking three.
+
+593
+00:26:42,040 --> 00:26:46,160
+-- Yeah, like it, that was the worst pain I've ever experienced.
+-- That's wild man.
+
+594
+00:26:46,430 --> 00:26:50,380
+I have been very lucky with my teeth and I hope to stay that way.
+
+595
+00:26:50,530 --> 00:26:53,939
+So I'm very particular now about caring for them
+
+596
+00:26:54,260 --> 00:26:55,079
+because
+
+597
+00:26:55,209 --> 00:26:59,050
+it is one of those instances where as a human, it's easy to be like, oh,
+
+598
+00:26:59,060 --> 00:27:00,500
+I don't need to worry about this right now.
+
+599
+00:27:00,510 --> 00:27:01,920
+And then my brain says, yes,
+
+600
+00:27:01,930 --> 00:27:04,400
+I do because in 40 years you're going to have
+
+601
+00:27:04,410 --> 00:27:07,199
+the same teeth in your head you have today.
+
+602
+00:27:07,209 --> 00:27:08,479
+So take care of them.
+
+603
+00:27:08,609 --> 00:27:10,410
+-- But it's hard man,
+-- every day,
+
+604
+00:27:10,550 --> 00:27:11,839
+all knocked out in dentures.
+
+605
+00:27:12,010 --> 00:27:12,699
+Well,
+
+606
+00:27:13,770 --> 00:27:16,280
+there's days I think about that, but like seriously, every,
+
+607
+00:27:16,290 --> 00:27:19,650
+every day I go in the bathroom and I think, oh, I won't floss today then I think.
+
+608
+00:27:19,660 --> 00:27:21,420
+No, you have to floss. Like it's,
+
+609
+00:27:21,670 --> 00:27:25,800
+there's like a battle in me every day, every day and it never gets easier.
+
+610
+00:27:25,810 --> 00:27:26,520
+I won't lie to you.
+
+611
+00:27:26,530 --> 00:27:26,780
+Well,
+
+612
+00:27:26,790 --> 00:27:28,800
+my understanding is this is one of the leading
+
+613
+00:27:28,810 --> 00:27:31,540
+reasons for death in a lot of wild animals is
+
+614
+00:27:32,750 --> 00:27:33,290
+really,
+
+615
+00:27:33,530 --> 00:27:35,790
+I mean, that doesn't shock me in any way.
+
+616
+00:27:35,800 --> 00:27:38,369
+Well, if you're a lion and you got a broken tooth,
+
+617
+00:27:38,920 --> 00:27:40,500
+it's going to get infected and you're going to die. Yeah.
+
+618
+00:27:40,589 --> 00:27:43,849
+Well, even if it doesn't get infected, if you can't eat right, you die.
+
+619
+00:27:43,859 --> 00:27:46,010
+And you figure if, if you're one of these
+
+620
+00:27:46,199 --> 00:27:46,689
+large,
+
+621
+00:27:47,000 --> 00:27:47,689
+my
+
+622
+00:27:47,800 --> 00:27:48,449
+cat,
+
+623
+00:27:48,619 --> 00:27:49,770
+my previous cat
+
+624
+00:27:50,160 --> 00:27:51,540
+had at the end,
+
+625
+00:27:51,550 --> 00:27:55,619
+one good tooth and it was so cute because when she slept the one tooth would stick out,
+
+626
+00:27:55,630 --> 00:27:57,099
+it was one of her incisors.
+
+627
+00:27:57,109 --> 00:28:00,869
+It was either the top left or top right and a little bead of drool would form.
+
+628
+00:28:01,319 --> 00:28:02,300
+That's awesome. And it was so cute.
+
+629
+00:28:02,310 --> 00:28:05,880
+But the point is if she wasn't a house cat with full medical and dental and soft food,
+
+630
+00:28:05,890 --> 00:28:06,609
+she'd be dead.
+
+631
+00:28:06,619 --> 00:28:07,949
+Right. Exactly. Exactly.
+
+632
+00:28:07,959 --> 00:28:11,369
+Because I imagine if a lion doesn't eat for probably
+
+633
+00:28:11,380 --> 00:28:14,079
+-- a week
+-- most house cats after three or four days,
+
+634
+00:28:14,089 --> 00:28:15,229
+their kidneys get all messed up.
+
+635
+00:28:15,239 --> 00:28:16,609
+Oh, really? That could be,
+
+636
+00:28:17,089 --> 00:28:19,599
+yeah, if your cat doesn't eat for three or four days, like,
+
+637
+00:28:20,260 --> 00:28:23,329
+I did not know that I know nothing about cats.
+
+638
+00:28:23,439 --> 00:28:27,150
+I've had one cat and it unfortunately had a genetic disorder that
+
+639
+00:28:27,359 --> 00:28:29,869
+came to an untimely demise. And,
+
+640
+00:28:30,089 --> 00:28:34,290
+yeah, I've, I've, I have dogs, I like dogs. They can eat garbage and they're fine.
+
+641
+00:28:36,359 --> 00:28:37,520
+I'm a dog person. Right.
+
+642
+00:28:37,530 --> 00:28:40,250
+Because if he accidentally eats trash, I'm like, he'll be ok.
+
+643
+00:28:40,359 --> 00:28:41,369
+It's no big deal,
+
+644
+00:28:41,780 --> 00:28:42,050
+you know,
+
+645
+00:28:42,760 --> 00:28:45,780
+maybe call the vet and be like, hey, the dog just ate garbage again. Should I wear it?
+
+646
+00:28:46,719 --> 00:28:50,729
+My, my one cousin had a dog that ate a septic puck for a toilet.
+
+647
+00:28:50,910 --> 00:28:51,420
+That's cool.
+
+648
+00:28:51,880 --> 00:28:53,939
+And she, like, literally phoned poison control.
+
+649
+00:28:53,949 --> 00:28:55,790
+And they're like, well, if a human did that,
+
+650
+00:28:55,800 --> 00:28:58,219
+we would tell them to go to the hospital so they don't die.
+
+651
+00:28:58,619 --> 00:29:01,790
+And she phoned the vet and the vet's like, e just keep an eye on him.
+
+652
+00:29:02,630 --> 00:29:02,959
+Yeah.
+
+653
+00:29:04,420 --> 00:29:06,609
+That's like the most dog thing ever. I love it.
+
+654
+00:29:06,619 --> 00:29:10,079
+And the thing I remember with this dog is we put a pint or not a pint, sorry,
+
+655
+00:29:10,089 --> 00:29:14,500
+a gallon tub of ice cream outside to freeze it faster because it was, it was in winter.
+
+656
+00:29:14,640 --> 00:29:15,339
+But anyways
+
+657
+00:29:15,599 --> 00:29:17,250
+and, yeah, of course, then somebody's like,
+
+658
+00:29:17,260 --> 00:29:19,109
+why is that dog running around with a cardboard thing?
+
+659
+00:29:19,119 --> 00:29:21,069
+-- That, that was a lab,
+-- wasn't it?
+
+660
+00:29:21,079 --> 00:29:22,469
+It was part lab.
+
+661
+00:29:22,920 --> 00:29:23,089
+That
+
+662
+00:29:23,500 --> 00:29:24,540
+lab. That's,
+
+663
+00:29:25,349 --> 00:29:25,369
+I
+
+664
+00:29:25,589 --> 00:29:28,250
+love labs. They're so awesomely stupid.
+
+665
+00:29:29,819 --> 00:29:31,410
+But they mean, well, they mean, well,
+
+666
+00:29:31,420 --> 00:29:33,650
+so I was talking to my kids about this actually because we have
+
+667
+00:29:33,660 --> 00:29:36,449
+some friends with labs that are always up to shenanigans and it's,
+
+668
+00:29:36,459 --> 00:29:39,770
+it's hilarious because they're smart enough to get into trouble,
+
+669
+00:29:39,780 --> 00:29:42,640
+but dumb enough to still get in it, you know, I love it.
+
+670
+00:29:42,920 --> 00:29:46,550
+Yeah. Well, just like my, my kids were like, feeling they were using the, the Google
+
+671
+00:29:46,719 --> 00:29:49,300
+comment function on documents to talk with each other
+
+672
+00:29:49,310 --> 00:29:50,930
+in class and then their teacher caught them.
+
+673
+00:29:50,939 --> 00:29:52,369
+Oh, that's sneaky.
+
+674
+00:29:52,380 --> 00:29:53,650
+But what I love is, well, no,
+
+675
+00:29:53,660 --> 00:29:55,890
+it's not because every time you leave a comment on the school box,
+
+676
+00:29:55,900 --> 00:29:56,959
+the teacher gets an email.
+
+677
+00:29:56,969 --> 00:29:59,839
+Ok. Ok. So, no, they figured that out weirdly.
+
+678
+00:29:59,900 --> 00:30:03,020
+And, but the best part is Felix's one comment was like, hey, guys,
+
+679
+00:30:03,030 --> 00:30:04,540
+I think the teacher might catch us.
+
+680
+00:30:08,489 --> 00:30:10,739
+Never admit that. That's admitting guilt.
+
+681
+00:30:10,930 --> 00:30:13,640
+I guess the moral of the story is if you're clever enough to get into trouble,
+
+682
+00:30:13,650 --> 00:30:15,520
+don't get into trouble you can't get out of.
+
+683
+00:30:15,530 --> 00:30:18,030
+And I would say this is the B GP people. Like
+
+684
+00:30:18,310 --> 00:30:20,040
+if you're going to run the B GP network,
+
+685
+00:30:20,290 --> 00:30:22,640
+-- run it securely, please. And thank you.
+-- I agree.
+
+686
+00:30:22,650 --> 00:30:26,689
+And secondly, uh, send us your hilarious dog stories about them eating things.
+
+687
+00:30:26,699 --> 00:30:27,890
+They shouldn't because
+
+688
+00:30:28,000 --> 00:30:30,099
+we could all use some shearing up today.
+
+689
+00:30:30,270 --> 00:30:34,310
+All right, the security of dogs. That sounds like a marvelous future topic anyway.
+
+690
+00:30:35,180 --> 00:30:36,599
+And that's why we domesticated them.
+
+691
+00:30:37,010 --> 00:30:39,579
+That's a fascinating story too.
+
+692
+00:30:39,750 --> 00:30:41,579
+But, ok, so thank you, Kurt. Thank you
+
+693
+00:30:41,680 --> 00:30:42,640
+for listening. Go to open
+
+694
+00:30:42,770 --> 00:30:45,290
+source Security podcast.com. I'll put in all the show notes you can use ipos
+
+695
+00:30:45,829 --> 00:30:49,349
+podcast hashtag to send us your hilarious dog stories
+
+696
+00:30:49,439 --> 00:30:52,140
+and Kurt have a fantastic rest of your day.
+
+697
+00:30:52,250 --> 00:30:54,810
+-- You too. Thanks everybody. Thanks
+-- everyone. Bye bye
+
+698
+00:30:59,500 --> 00:30:59,689
+going.

@@ -1,0 +1,2756 @@
+0
+00:00:05,650 --> 00:00:08,270
+Hello and welcome to the open source security podcast.
+
+1
+00:00:08,279 --> 00:00:11,609
+Episode zero with myself Kurtz Fried and my partner in Thought Crime.
+
+2
+00:00:11,619 --> 00:00:15,050
+Josh Pressers. Is it episode zero? Yeah, it would be zero, wouldn't it?
+
+3
+00:00:15,060 --> 00:00:16,299
+Yeah, it's zero.
+
+4
+00:00:16,889 --> 00:00:20,889
+Assuming we have an eight bit counter, we started counting at one. Now we're at 256.
+
+5
+00:00:20,899 --> 00:00:21,770
+So it's zero. Yeah,
+
+6
+00:00:21,899 --> 00:00:22,629
+eight bit counter.
+
+7
+00:00:22,639 --> 00:00:24,739
+It would, it would wrap around because if we're,
+
+8
+00:00:24,834 --> 00:00:29,715
+if we're counting an eight bit integer, that means we are unsigned.
+
+9
+00:00:29,854 --> 00:00:34,735
+So it does not support negative values. So happy episode 256 everybody.
+
+10
+00:00:34,845 --> 00:00:38,814
+You mean zero? It depends how many bits I can't count that high. I have nine bits.
+
+11
+00:00:38,825 --> 00:00:42,014
+Now you're a nine bit episode Kurt. Oh, we're trinary.
+
+12
+00:00:42,654 --> 00:00:43,935
+Trinary is hot.
+
+13
+00:00:44,250 --> 00:00:45,340
+Is trinary hot.
+
+14
+00:00:45,349 --> 00:00:49,669
+I've, I've, I'm no, the Russians experimented with it and there's been some,
+
+15
+00:00:49,680 --> 00:00:52,450
+some stuff with like data storage.
+
+16
+00:00:52,459 --> 00:00:55,110
+What is trinary for anyone who has no idea what you just said?
+
+17
+00:00:55,119 --> 00:00:59,349
+Oh, it's three, it's three bit computing instead of two bit computing. No, no, no.
+
+18
+00:00:59,360 --> 00:01:00,630
+Well, ok. Sort of
+
+19
+00:01:00,819 --> 00:01:05,580
+three bits means, but three bits means something a bit is a zero or a one. Well, ok.
+
+20
+00:01:05,589 --> 00:01:07,089
+Sorry, sorry. Three states.
+
+21
+00:01:07,294 --> 00:01:10,474
+Yes. Sorry. States not bits. I'm, I'm so used to a bit.
+
+22
+00:01:11,165 --> 00:01:11,305
+Yeah.
+
+23
+00:01:11,315 --> 00:01:13,074
+So, the idea is in, in, well,
+
+24
+00:01:13,084 --> 00:01:15,794
+basically it boils down to what's the smallest piece of information.
+
+25
+00:01:15,824 --> 00:01:18,194
+Yes. No. Cold hot on off
+
+26
+00:01:18,714 --> 00:01:19,724
+two states.
+
+27
+00:01:19,944 --> 00:01:20,355
+Right?
+
+28
+00:01:20,495 --> 00:01:22,474
+Because one state is, well,
+
+29
+00:01:22,485 --> 00:01:25,724
+you can't change state and that makes your computer slightly useless.
+
+30
+00:01:26,175 --> 00:01:28,315
+And so the idea with trinary computing was that
+
+31
+00:01:28,324 --> 00:01:30,235
+you'd have a possibility of three states and you
+
+32
+00:01:30,339 --> 00:01:33,160
+could hold bigger numbers and less space and blah, blah, blah.
+
+33
+00:01:33,169 --> 00:01:38,559
+And it turns out, yeah, it's just not a great idea. It had some physical limitations.
+
+34
+00:01:38,569 --> 00:01:40,849
+I looked into this when I was in college because
+
+35
+00:01:40,860 --> 00:01:42,870
+it came up in one of my engineering courses.
+
+36
+00:01:42,879 --> 00:01:47,110
+And I'm like, wow, this sounds amazing. And then I was like, nope, just, no.
+
+37
+00:01:47,290 --> 00:01:48,940
+Anyway, and I apologize. It's not
+
+38
+00:01:49,040 --> 00:01:49,889
+trinary, it's
+
+39
+00:01:50,160 --> 00:01:50,480
+ternary,
+
+40
+00:01:50,809 --> 00:01:52,680
+whatever. Who cares? Nerds.
+
+41
+00:01:52,970 --> 00:01:53,220
+Yeah.
+
+42
+00:01:54,065 --> 00:01:54,925
+So, anyway,
+
+43
+00:01:55,105 --> 00:02:00,144
+I am so excited that we made it to nine bits of episode numbers.
+
+44
+00:02:00,985 --> 00:02:04,625
+But however, well, technically, I mean, if we get hit by a bus after this episode,
+
+45
+00:02:04,635 --> 00:02:05,745
+we never made it to nine bits.
+
+46
+00:02:05,754 --> 00:02:06,675
+But next time
+
+47
+00:02:06,785 --> 00:02:10,264
+I will make sure I edit and stage it quickly.
+
+48
+00:02:10,274 --> 00:02:13,035
+So there will be minimal chances of that happening.
+
+49
+00:02:13,274 --> 00:02:16,225
+I think just after the pneumonia, I'm a little bit more aware of my mortality.
+
+50
+00:02:17,179 --> 00:02:21,009
+Yeah. Right. I could have gone all the way wrong. I need a backup podcast host.
+
+51
+00:02:21,020 --> 00:02:22,080
+Now, that's what we need.
+
+52
+00:02:22,690 --> 00:02:26,470
+I'm pretty sure you could just rehash recordings of me through an A IML
+
+53
+00:02:27,289 --> 00:02:29,229
+thing and love it and then it could just be like
+
+54
+00:02:29,339 --> 00:02:31,919
+a random noise generator or something. It sounds great.
+
+55
+00:02:31,929 --> 00:02:33,529
+I believe I already qualify as one of them. I
+
+56
+00:02:34,179 --> 00:02:38,240
+want my co host to be a speak and spell. There you go. Oh, like Toy Story.
+
+57
+00:02:38,350 --> 00:02:43,020
+So, actually I have a speak and spell one of the originals. They, they re releases it
+
+58
+00:02:43,139 --> 00:02:46,229
+and the voice is different and they're like, oh original voice live.
+
+59
+00:02:46,250 --> 00:02:47,690
+And the thing is,
+
+60
+00:02:47,699 --> 00:02:51,623
+I love like the terribleness of the voice because it's so hilariously awesome.
+
+61
+00:02:51,852 --> 00:02:56,302
+I remember using speech recognition software dragon dictate 20 years ago
+
+62
+00:02:56,432 --> 00:02:57,143
+when you, you know,
+
+63
+00:02:57,152 --> 00:03:00,462
+bought a special headset with a special microphone and
+
+64
+00:03:00,473 --> 00:03:03,302
+it was terrible and useless and speech generation.
+
+65
+00:03:03,313 --> 00:03:07,503
+Of course, you know, oh, I, my first sound cards came with doctor Spa.
+
+66
+00:03:07,783 --> 00:03:11,382
+So, you know, dad and me how you feel. Those are awesome.
+
+67
+00:03:11,552 --> 00:03:15,052
+I love the voice of the, the text to speech. Anyway. Anyway,
+
+68
+00:03:15,272 --> 00:03:18,735
+we're not talking about synthesized speech today. Maybe another day.
+
+69
+00:03:18,746 --> 00:03:20,725
+I keep meaning to hack my speak and spell,
+
+70
+00:03:20,735 --> 00:03:23,065
+but we should do a deep fakes episode at some
+
+71
+00:03:23,076 --> 00:03:25,115
+point because that has really gone all the way wild.
+
+72
+00:03:25,345 --> 00:03:29,916
+It's fascinating. I keep meaning to try to deep fake you someday, but I'm lazy.
+
+73
+00:03:29,925 --> 00:03:33,936
+So it doesn't happen if anyone wants to be podcast famous, just deep fake.
+
+74
+00:03:33,945 --> 00:03:35,936
+Kurt send it to us. There you go.
+
+75
+00:03:36,485 --> 00:03:37,636
+Please don't make it too embarrassing.
+
+76
+00:03:37,645 --> 00:03:40,255
+We'll mention you potentially on one or more episodes.
+
+77
+00:03:40,266 --> 00:03:43,326
+No, I mean, technically I'll be mentioning them whether I like it or not.
+
+78
+00:03:44,470 --> 00:03:45,360
+Anyway. Anyway,
+
+79
+00:03:45,509 --> 00:03:50,080
+I'm excited to talk about eight bits and this sounds like a weird topic,
+
+80
+00:03:50,089 --> 00:03:53,050
+but it is something close to my heart for a variety of reasons.
+
+81
+00:03:53,059 --> 00:03:56,679
+And most importantly, we are now at 256 episodes.
+
+82
+00:03:56,690 --> 00:03:58,490
+And you know what I keep thinking of in my brain
+
+83
+00:03:58,600 --> 00:04:02,360
+is when you zero index something because obviously when you have eight bits,
+
+84
+00:04:02,369 --> 00:04:06,289
+you can actually represent the numbers 0 to 255.
+
+85
+00:04:06,300 --> 00:04:07,130
+And so I like,
+
+86
+00:04:07,139 --> 00:04:09,139
+I've literally been thinking about this all week is
+
+87
+00:04:09,149 --> 00:04:11,360
+should we have done this in episode 255?
+
+88
+00:04:11,369 --> 00:04:11,970
+Instead,
+
+89
+00:04:12,320 --> 00:04:13,089
+I'm like
+
+90
+00:04:13,587 --> 00:04:16,798
+too late. It doesn't matter, it's too late because it's 256 day.
+
+91
+00:04:16,817 --> 00:04:17,947
+And that's one thing I love is I,
+
+92
+00:04:17,958 --> 00:04:22,608
+I think I actually successfully explained counting from zero versus one
+
+93
+00:04:22,738 --> 00:04:25,488
+to my son. Basically saying, look in classic math terms,
+
+94
+00:04:25,618 --> 00:04:30,028
+you're counting the end of an object. I have one apple, I have two apples.
+
+95
+00:04:30,037 --> 00:04:32,558
+But in computer terms, we're, we're basically,
+
+96
+00:04:32,877 --> 00:04:36,388
+it's more like a street address in that I need to go there and then
+
+97
+00:04:36,597 --> 00:04:39,648
+read or put something, which is why we start at zero.
+
+98
+00:04:39,657 --> 00:04:43,355
+I'm not talking about a ray addressing this episode.
+
+99
+00:04:43,735 --> 00:04:47,015
+This ties into the thing I like about eight bit computing is,
+
+100
+00:04:47,026 --> 00:04:51,406
+it's something a human can actually understand versus a modern CPU.
+
+101
+00:04:51,415 --> 00:04:54,665
+No. Like if you pretend to understand a modern computer
+
+102
+00:04:54,776 --> 00:04:58,045
+the other day, I, I hit the keyboard combo function.
+
+103
+00:04:58,055 --> 00:05:01,545
+Sound up to turn up the volume on the computer and on my computer when you do that,
+
+104
+00:05:01,555 --> 00:05:04,696
+it brings up the volume thing and whatever is currently playing noise.
+
+105
+00:05:04,705 --> 00:05:06,235
+So if like youtube's on playing noise, it,
+
+106
+00:05:06,246 --> 00:05:09,006
+it shows youtube and I can pause and start it using the mouse.
+
+107
+00:05:09,015 --> 00:05:11,716
+Like it brings that up in the corner anyways, it brought up Spotify.
+
+108
+00:05:11,824 --> 00:05:13,623
+I'm like, but I'm not playing Spotify on my computer.
+
+109
+00:05:13,634 --> 00:05:16,514
+But then I realized I had been playing Spotify on my phone while I
+
+110
+00:05:16,523 --> 00:05:19,884
+was in the car and I just paused it and walked in the house.
+
+111
+00:05:19,954 --> 00:05:23,074
+So the computer basically talked to the Spotify app,
+
+112
+00:05:23,084 --> 00:05:26,183
+Spotify app knew that I was playing Spotify on another device and was like,
+
+113
+00:05:26,194 --> 00:05:27,444
+do you want to continue playing your music?
+
+114
+00:05:27,454 --> 00:05:29,104
+And I'm like, yeah, hit play magic.
+
+115
+00:05:29,114 --> 00:05:32,084
+We're talking networks, we're talking wireless, we're talking
+
+116
+00:05:32,194 --> 00:05:35,354
+two completely different computing platforms plus whatever's on the server side.
+
+117
+00:05:35,364 --> 00:05:36,194
+I don't know.
+
+118
+00:05:36,204 --> 00:05:38,313
+So that I can basically hit volume up and be like, oh yeah,
+
+119
+00:05:38,324 --> 00:05:39,683
+I want to keep hearing my music.
+
+120
+00:05:39,753 --> 00:05:40,523
+It's all magic
+
+121
+00:05:40,941 --> 00:05:43,161
+that, that's too complicated for me to understand.
+
+122
+00:05:43,171 --> 00:05:46,731
+I would be shocked if any one person could explain how that works.
+
+123
+00:05:46,861 --> 00:05:50,522
+I think there's lots of people who think they could. But I bet you realistically.
+
+124
+00:05:50,532 --> 00:05:51,481
+No, no, you can't.
+
+125
+00:05:51,492 --> 00:05:54,752
+So, anyway, but eight bit computing, you can totally explain that. Right.
+
+126
+00:05:54,761 --> 00:05:56,772
+Well, you can build it on a breadboard yourself.
+
+127
+00:05:56,802 --> 00:06:00,372
+Well, ok, there's that I was even, I wasn't even thinking of that aspect of it.
+
+128
+00:06:00,381 --> 00:06:03,161
+I was thinking if you look at this in the context
+
+129
+00:06:03,171 --> 00:06:07,962
+of like the Commodore 64 or the Nintendo Entertainment system or,
+
+130
+00:06:07,971 --> 00:06:09,932
+you know, pick one of these really old
+
+131
+00:06:10,399 --> 00:06:12,380
+just computing platforms.
+
+132
+00:06:12,559 --> 00:06:13,260
+And I'm going to,
+
+133
+00:06:13,269 --> 00:06:15,190
+I'm going to pick on the Nintendo entertainment system
+
+134
+00:06:15,200 --> 00:06:17,899
+here just because I have much knowledge in this
+
+135
+00:06:17,910 --> 00:06:20,540
+space because I love learning about it because that
+
+136
+00:06:20,549 --> 00:06:22,350
+was my first console when I was a kid.
+
+137
+00:06:22,359 --> 00:06:23,700
+That's how old I am. Everybody.
+
+138
+00:06:23,709 --> 00:06:26,859
+The thing is so one of the really cool things that's starting to happen now in this
+
+139
+00:06:26,959 --> 00:06:29,700
+space is there's all these games and I'm going to pick on the legend of
+
+140
+00:06:29,709 --> 00:06:33,470
+Zelda because I literally watched a video about this last night is so for example,
+
+141
+00:06:33,480 --> 00:06:37,470
+when you play the game, the legend of Zelda and you defeating enemies,
+
+142
+00:06:37,480 --> 00:06:41,890
+enemies sometimes drop money or life or whatever, right?
+
+143
+00:06:41,899 --> 00:06:43,410
+Random drops, drop loot,
+
+144
+00:06:43,670 --> 00:06:45,640
+you know, loot. Yeah, we call it loot today.
+
+145
+00:06:45,649 --> 00:06:47,640
+I thought we called, no, it's been called Loot since D and D
+
+146
+00:06:47,809 --> 00:06:51,130
+it was, did we ever call it loot? I don't know if you ever called it loot.
+
+147
+00:06:51,140 --> 00:06:52,779
+Well, I didn't but sure
+
+148
+00:06:53,010 --> 00:06:54,329
+it doesn't matter. And,
+
+149
+00:06:54,459 --> 00:06:57,850
+and D and D came out at what, like 7775 probably give or take.
+
+150
+00:06:58,059 --> 00:06:58,839
+It was
+
+151
+00:06:59,190 --> 00:06:59,450
+different.
+
+152
+00:06:59,755 --> 00:06:59,994
+But, yeah.
+
+153
+00:07:00,135 --> 00:07:00,584
+Right. Right.
+
+154
+00:07:00,595 --> 00:07:01,385
+Anyway, anyway,
+
+155
+00:07:01,464 --> 00:07:04,565
+so what these people have done now is they're taking
+
+156
+00:07:04,575 --> 00:07:09,404
+these old eight bit programs and they're doing this amazing
+
+157
+00:07:09,415 --> 00:07:12,515
+analysis of them to say this is exactly what is
+
+158
+00:07:12,524 --> 00:07:15,325
+happening inside of the application while it is running.
+
+159
+00:07:15,579 --> 00:07:17,880
+And it's absolutely fascinating because they've got
+
+160
+00:07:17,890 --> 00:07:20,239
+these emulators and you can put information
+
+161
+00:07:20,250 --> 00:07:23,549
+up on the screen and you can pay attention to certain memory addresses.
+
+162
+00:07:23,559 --> 00:07:23,839
+You can.
+
+163
+00:07:23,970 --> 00:07:27,570
+And it's super easy to understand what's going on. Which I think from
+
+164
+00:07:27,720 --> 00:07:32,720
+the angle of I want to say, write an exploit that runs machine code.
+
+165
+00:07:32,730 --> 00:07:36,440
+This kind of knowledge is invaluable. I, I've been playing,
+
+166
+00:07:36,605 --> 00:07:39,244
+I have six on my computer and I have a pretty beefy computer
+
+167
+00:07:39,394 --> 00:07:41,214
+and it still takes a while for each turn
+
+168
+00:07:41,225 --> 00:07:43,464
+to complete like the computer is doing and I check
+
+169
+00:07:43,475 --> 00:07:48,385
+my CPU graphs and like all eight cores are like at 80% and you're playing on easy mode,
+
+170
+00:07:48,394 --> 00:07:48,665
+right?
+
+171
+00:07:48,674 --> 00:07:50,605
+Prints or Chieftain or whatever.
+
+172
+00:07:50,614 --> 00:07:54,135
+But yeah, basically three levels up from like I'm a child and on hard mode.
+
+173
+00:07:54,144 --> 00:07:57,375
+I don't even want to think about how long a turn will take on hard mode. I
+
+174
+00:07:58,315 --> 00:08:00,785
+assuming you just don't die in the third round.
+
+175
+00:08:01,410 --> 00:08:01,500
+Yeah, the,
+
+176
+00:08:01,739 --> 00:08:07,070
+the A I is in civilization are freakishly smart. It is ridiculous.
+
+177
+00:08:07,140 --> 00:08:10,179
+And the bat played on an ipad and it runs the battery
+
+178
+00:08:10,190 --> 00:08:12,769
+down in an hour and then get a little surprised by that.
+
+179
+00:08:12,859 --> 00:08:15,820
+I've specifically warned my son, he wants to play it on his mobile devices.
+
+180
+00:08:15,829 --> 00:08:18,000
+I'm like this will kill your mobile device battery.
+
+181
+00:08:18,010 --> 00:08:19,690
+You need to play it plugged in and even then
+
+182
+00:08:19,890 --> 00:08:23,369
+the battery will slowly lose charge because it's using that much.
+
+183
+00:08:23,700 --> 00:08:24,410
+That's amazing.
+
+184
+00:08:24,700 --> 00:08:28,519
+Yeah, like my ipad gets warm to the touch. Like I got an ipad pro.
+
+185
+00:08:28,529 --> 00:08:30,160
+Like, it's not some old ipad.
+
+186
+00:08:30,799 --> 00:08:31,619
+So, yeah,
+
+187
+00:08:31,779 --> 00:08:32,590
+that's awesome.
+
+188
+00:08:32,859 --> 00:08:36,369
+That's awesome. No, I haven't played Civilization in years. It is.
+
+189
+00:08:36,429 --> 00:08:39,299
+Civilization is one of those games that I is,
+
+190
+00:08:39,308 --> 00:08:43,690
+is a danger because it will consume my life if I touch it.
+
+191
+00:08:43,789 --> 00:08:46,340
+And so I purposely avoid it at all costs.
+
+192
+00:08:46,450 --> 00:08:47,859
+The other thing that's annoying is you watch, like,
+
+193
+00:08:47,869 --> 00:08:51,179
+the spiffing brit play it and he just abuses the heck out of the game and wins,
+
+194
+00:08:51,190 --> 00:08:54,260
+you know, with one city and not doing anything other than
+
+195
+00:08:54,469 --> 00:08:56,900
+some game hack. I'm ok with abuse. That's
+
+196
+00:08:57,010 --> 00:09:01,120
+fine. It's, you're just hacking the game, right? That's, that's cool.
+
+197
+00:09:01,130 --> 00:09:04,750
+But it's also really hard because you have to learn a lot of weird tricks
+
+198
+00:09:04,851 --> 00:09:06,760
+that no normal person would ever do.
+
+199
+00:09:06,870 --> 00:09:10,630
+So anyway, we're talking about eight bit computing today and back to the,
+
+200
+00:09:10,640 --> 00:09:14,791
+actually understanding the entire state of the system.
+
+201
+00:09:15,031 --> 00:09:16,630
+And that's one of the biggest things in security is
+
+202
+00:09:16,640 --> 00:09:19,161
+people think they understand the entire state of the system,
+
+203
+00:09:19,171 --> 00:09:23,111
+but there's some mismatch or some glitch somewhere or something,
+
+204
+00:09:23,221 --> 00:09:25,512
+not quite behaving as they expected.
+
+205
+00:09:25,692 --> 00:09:28,291
+Yeah. And, and then the attacker finds that in game over.
+
+206
+00:09:28,302 --> 00:09:32,281
+Let's just be clear, I think in any modern computing platform,
+
+207
+00:09:32,291 --> 00:09:38,601
+even what we would think of as the absolute simplest, it is impossible for any.
+
+208
+00:09:38,911 --> 00:09:41,591
+I would even say a single team to have a
+
+209
+00:09:41,601 --> 00:09:44,721
+grasp of what's actually happening in the environment because we've
+
+210
+00:09:44,731 --> 00:09:47,252
+just reached a point of complexity that you have to
+
+211
+00:09:47,262 --> 00:09:49,322
+draw a line and say I will care about every
+
+212
+00:09:49,432 --> 00:09:50,672
+from this line forward.
+
+213
+00:09:50,682 --> 00:09:53,833
+And I cannot like, do you know what kernel version you're running?
+
+214
+00:09:53,843 --> 00:09:56,393
+Do you know what the libraries are in your container orchestrator?
+
+215
+00:09:56,403 --> 00:09:58,533
+Do you have a container orchestrator? You know what I mean?
+
+216
+00:09:58,543 --> 00:10:00,773
+There's literally millions of questions.
+
+217
+00:10:00,783 --> 00:10:04,793
+How many people think they understand a bug, write a patch and it's not
+
+218
+00:10:04,963 --> 00:10:08,293
+the full solution. Oh my gosh, that's one of my favorite things I have.
+
+219
+00:10:08,302 --> 00:10:13,153
+I have one of my favorite stories I have on that is so I remember a long time ago I,
+
+220
+00:10:13,163 --> 00:10:15,432
+when fuzzing was brand new, I wrote my own fuzz
+
+221
+00:10:15,643 --> 00:10:18,823
+because it was the cool thing to do. And I started fuzzing fonts
+
+222
+00:10:19,033 --> 00:10:22,143
+and there's a font library in the Linux world called free type.
+
+223
+00:10:22,713 --> 00:10:25,383
+And so I start fuzzing fonts and I had
+
+224
+00:10:25,633 --> 00:10:29,184
+a ridiculous number of crashes and I did the right thing where I was like, OK,
+
+225
+00:10:29,193 --> 00:10:30,754
+this font crash is here.
+
+226
+00:10:30,763 --> 00:10:32,104
+This font crashes you know what I mean?
+
+227
+00:10:32,114 --> 00:10:34,364
+I was making sure they weren't duplicates because obviously when
+
+228
+00:10:34,374 --> 00:10:36,343
+you fuzz something you're gonna get lots of duplicates.
+
+229
+00:10:36,354 --> 00:10:41,383
+I tried to do the right thing and I send this incredibly detailed write up end of patch
+
+230
+00:10:41,854 --> 00:10:43,275
+to the free type people, right?
+
+231
+00:10:43,284 --> 00:10:44,835
+With basically like here's what I found,
+
+232
+00:10:44,844 --> 00:10:47,304
+here's reproduce or here's a patch that makes it go away step.
+
+233
+00:10:47,315 --> 00:10:47,755
+And they're like,
+
+234
+00:10:47,765 --> 00:10:50,525
+oh all of these problems are caused by a missing
+
+235
+00:10:50,534 --> 00:10:53,794
+check way over here in this particular bit of code.
+
+236
+00:10:53,804 --> 00:10:57,405
+Whereas it was obviously like three function calls beneath where I was at.
+
+237
+00:10:57,565 --> 00:10:58,474
+And I'm like,
+
+238
+00:10:58,784 --> 00:11:02,835
+they're all the same bug every one of them. And it was hilarious.
+
+239
+00:11:02,885 --> 00:11:04,955
+One good quote I heard was a programmer needs
+
+240
+00:11:04,965 --> 00:11:06,825
+to understand the abstraction above and below them.
+
+241
+00:11:06,835 --> 00:11:07,994
+In other words, you need to,
+
+242
+00:11:08,195 --> 00:11:09,424
+you have your little kingdom
+
+243
+00:11:09,780 --> 00:11:12,919
+and you go to the walls of your kingdom and talk to the other kingdom next to you.
+
+244
+00:11:13,330 --> 00:11:16,179
+And yeah, I like that. And so quite frankly, like,
+
+245
+00:11:16,289 --> 00:11:19,080
+I will never care about my colonel again.
+
+246
+00:11:19,530 --> 00:11:22,909
+I, no, I just won't. I mean, I barely, but I don't have to,
+
+247
+00:11:23,140 --> 00:11:25,030
+I run a mix of Windows,
+
+248
+00:11:25,039 --> 00:11:30,530
+Linux and Mac Os and you know what I don't care because they all support bash,
+
+249
+00:11:30,710 --> 00:11:31,549
+they all support
+
+250
+00:11:31,830 --> 00:11:32,340
+new set and a
+
+251
+00:11:32,599 --> 00:11:37,299
+they all support like the tools I actually want to run like chrome web browser,
+
+252
+00:11:37,309 --> 00:11:38,270
+Firefox,
+
+253
+00:11:38,700 --> 00:11:42,280
+uh an email. Well, I don't run an email client anymore. I use the webinar face to join.
+
+254
+00:11:43,000 --> 00:11:44,070
+It's magic. Yeah.
+
+255
+00:11:44,289 --> 00:11:46,919
+So why would I care what operating system I run when
+
+256
+00:11:47,004 --> 00:11:48,544
+I'm just sitting in a web browser all the time.
+
+257
+00:11:48,713 --> 00:11:49,504
+That is fair.
+
+258
+00:11:49,513 --> 00:11:53,143
+The only time I know what my kernel is is I own a pine
+
+259
+00:11:53,153 --> 00:11:57,104
+Book Pro which is a little arm laptop and it is always broken.
+
+260
+00:11:57,114 --> 00:11:57,734
+So
+
+261
+00:11:58,434 --> 00:12:00,804
+I have to pay attention to my kernel because it's like, oh,
+
+262
+00:12:00,814 --> 00:12:01,953
+I'm running this kernel now.
+
+263
+00:12:01,963 --> 00:12:04,184
+I need to downgrade to that kernel or whatever.
+
+264
+00:12:04,213 --> 00:12:09,104
+And it's really funny because it's, it's one of those things where like, I'll,
+
+265
+00:12:09,114 --> 00:12:11,713
+I'll turn it on and everything works and then I'll literally like,
+
+266
+00:12:11,723 --> 00:12:14,374
+turn it off and turn it back on a little while later and like, nothing
+
+267
+00:12:14,478 --> 00:12:14,848
+works.
+
+268
+00:12:14,857 --> 00:12:18,098
+And I'm like, I didn't even change anything on this stupid computer, which is,
+
+269
+00:12:18,107 --> 00:12:21,607
+it's very much like running Linux in the nineties.
+
+270
+00:12:21,927 --> 00:12:22,288
+You
+
+271
+00:12:22,677 --> 00:12:24,567
+no idea what's going to happen. I love it.
+
+272
+00:12:24,598 --> 00:12:27,158
+The other thing I love too is I'm running software
+
+273
+00:12:27,168 --> 00:12:31,898
+that runs seamlessly on three very different operating system platforms.
+
+274
+00:12:31,908 --> 00:12:36,778
+And actually I ordered a Mac M one, the Mac mini M one which has an arm chip,
+
+275
+00:12:36,788 --> 00:12:40,007
+exciting totally different architecture at the CPU level.
+
+276
+00:12:40,018 --> 00:12:41,617
+And I know that everything will just work.
+
+277
+00:12:42,382 --> 00:12:44,711
+Yeah. Well, everything I use will just work well.
+
+278
+00:12:44,721 --> 00:12:46,351
+But the beauty is here from a security point of view and
+
+279
+00:12:46,361 --> 00:12:49,601
+this has been proven many times is that by supporting multiple architectures.
+
+280
+00:12:49,611 --> 00:12:52,041
+You pop out weird bugs. That is very true.
+
+281
+00:12:52,052 --> 00:12:55,401
+I remember the GEN two crew was really good at this
+
+282
+00:12:55,411 --> 00:12:58,151
+back in the day because you not only had weird architecture,
+
+283
+00:12:58,161 --> 00:12:58,442
+it's,
+
+284
+00:12:58,601 --> 00:13:02,851
+but you also had weird combinations of things because with Gen two,
+
+285
+00:13:02,861 --> 00:13:04,992
+for those who don't know, Gen two was a Linux.
+
+286
+00:13:05,002 --> 00:13:08,562
+I think Gen two is still around. Oh Yeah. Yeah. Slack. We still around. That's true.
+
+287
+00:13:08,822 --> 00:13:08,981
+But
+
+288
+00:13:09,091 --> 00:13:09,111
+if
+
+289
+00:13:09,221 --> 00:13:09,242
+you
+
+290
+00:13:09,426 --> 00:13:11,125
+that actually died was the D razzle.
+
+291
+00:13:11,296 --> 00:13:12,565
+I don't even know.
+
+292
+00:13:12,575 --> 00:13:13,276
+But anyway,
+
+293
+00:13:13,286 --> 00:13:17,986
+so Gen two was a Linux distribution that you basically built everything yourself.
+
+294
+00:13:17,995 --> 00:13:21,406
+And so you could say like, oh, I want to support this but not that or this and that.
+
+295
+00:13:21,416 --> 00:13:25,406
+And so depending upon the features you would add to what was called your use flags,
+
+296
+00:13:25,416 --> 00:13:27,825
+you would build applications in different ways.
+
+297
+00:13:27,835 --> 00:13:29,445
+And so obviously you can end up with
+
+298
+00:13:29,455 --> 00:13:31,986
+these bizarre combinations of libraries that no one
+
+299
+00:13:31,995 --> 00:13:35,046
+ever imagined a contractor pointed out once he
+
+300
+00:13:35,056 --> 00:13:36,806
+loved Gen Two from a security point of view
+
+301
+00:13:37,320 --> 00:13:41,619
+because every single system, even if you configured them all the same,
+
+302
+00:13:41,630 --> 00:13:43,739
+every single one had different return addresses.
+
+303
+00:13:43,750 --> 00:13:47,900
+That's true. Now though, thanks to address space randomization.
+
+304
+00:13:47,909 --> 00:13:50,900
+Well, and now that nowadays that wouldn't matter,
+
+305
+00:13:50,909 --> 00:13:54,460
+but back in the day 20 some years ago, that it made a difference.
+
+306
+00:13:54,489 --> 00:13:58,020
+I mean, I guess you could argue that because, you know,
+
+307
+00:13:58,030 --> 00:14:01,739
+calm exploit codes would just fail on your Gen two machines all the time.
+
+308
+00:14:02,929 --> 00:14:06,349
+Well, they were hard coded to only work on, you know, one vendor package.
+
+309
+00:14:06,359 --> 00:14:07,510
+That's how things used to work.
+
+310
+00:14:07,520 --> 00:14:10,369
+Those were the good old days when ex flight writing was easy.
+
+311
+00:14:10,690 --> 00:14:13,849
+Yeah. No, that, that time is done. But I mean, while it was there it was,
+
+312
+00:14:13,979 --> 00:14:14,219
+yeah.
+
+313
+00:14:14,489 --> 00:14:14,719
+Two.
+
+314
+00:14:14,729 --> 00:14:16,179
+Yeah, that, I remember gen two,
+
+315
+00:14:16,190 --> 00:14:20,190
+like just the weirdest freaking bugs because of those weird combinations.
+
+316
+00:14:21,119 --> 00:14:21,479
+And
+
+317
+00:14:21,859 --> 00:14:22,599
+so, ok,
+
+318
+00:14:22,609 --> 00:14:25,719
+so I want to use this to pivot us back into eight
+
+319
+00:14:25,729 --> 00:14:28,530
+bit computing because that's what we're supposed to be talking about.
+
+320
+00:14:29,309 --> 00:14:29,510
+And
+
+321
+00:14:30,070 --> 00:14:33,140
+for some reason we got off topic. So OK. OK.
+
+322
+00:14:33,229 --> 00:14:36,219
+So I think you bring up an interesting point when you talk
+
+323
+00:14:36,229 --> 00:14:39,880
+about kind of weird combinations and different architectures and all this stuff.
+
+324
+00:14:39,890 --> 00:14:40,250
+And
+
+325
+00:14:40,359 --> 00:14:42,739
+so, I mean, you have to imagine so in the eight bit world,
+
+326
+00:14:42,750 --> 00:14:46,169
+a significant amount of what was done was written in assembly, right?
+
+327
+00:14:46,179 --> 00:14:46,840
+Which is
+
+328
+00:14:47,159 --> 00:14:50,659
+bananas to think about today. Well, because what other tool did they have?
+
+329
+00:14:50,669 --> 00:14:53,679
+I mean, there were, you could use C to a degree for some of this.
+
+330
+00:14:53,690 --> 00:14:54,750
+They had basic, actually,
+
+331
+00:14:54,760 --> 00:14:57,940
+most of the eight bit computers came with a basic interpreter
+
+332
+00:14:58,489 --> 00:15:01,469
+and a not like if you're into Commodore 60 fours,
+
+333
+00:15:01,479 --> 00:15:05,390
+a nontrivial amount of the software for the Commodore 64 was just literally
+
+334
+00:15:05,400 --> 00:15:09,289
+written in basic and then stored on a literal audio cassette tape.
+
+335
+00:15:11,409 --> 00:15:16,000
+Anyway. Anyway, and so you have to think about it. So today you have a web browser that
+
+336
+00:15:16,200 --> 00:15:17,400
+will work on
+
+337
+00:15:17,729 --> 00:15:19,380
+almost any computer you can touch.
+
+338
+00:15:19,580 --> 00:15:21,479
+And I don't even like calling it a web browser anymore.
+
+339
+00:15:21,489 --> 00:15:25,840
+Because for example, it has a virtual machine capable implementation
+
+340
+00:15:26,169 --> 00:15:26,359
+of
+
+341
+00:15:26,690 --> 00:15:27,619
+javascript. Like
+
+342
+00:15:27,729 --> 00:15:29,619
+you can run Linux in your web browser.
+
+343
+00:15:29,780 --> 00:15:32,859
+It's a higher level operating system, it is what it is.
+
+344
+00:15:32,969 --> 00:15:37,440
+But the point is so in the, in the, in the olden days in the eight bit universe, right?
+
+345
+00:15:37,450 --> 00:15:37,710
+Like
+
+346
+00:15:37,960 --> 00:15:41,299
+if you wrote a piece of software for say, the Nintendo Entertainment system,
+
+347
+00:15:41,309 --> 00:15:43,700
+the Nes, I'm just going to try to call it Nes from now on.
+
+348
+00:15:43,710 --> 00:15:47,479
+That's the only place it ran, right? You couldn't port it to something else.
+
+349
+00:15:47,489 --> 00:15:50,770
+Like when people ported software and this is, this is fascinating
+
+350
+00:15:50,979 --> 00:15:52,780
+when you ported software,
+
+351
+00:15:52,950 --> 00:15:57,020
+you didn't like start with a code and then make it work on another platform.
+
+352
+00:15:57,049 --> 00:16:02,210
+You usually looked at it, you took the graphics and you rewrote it from scratch.
+
+353
+00:16:02,659 --> 00:16:07,650
+Like there was no that, that, that's what we call parting. That was, that's bananas.
+
+354
+00:16:07,960 --> 00:16:08,890
+Yeah, but I mean,
+
+355
+00:16:09,669 --> 00:16:12,729
+well, a part of that is this whole ecosystem thing, right?
+
+356
+00:16:12,739 --> 00:16:14,929
+Like I looked into this in Rocketry and we had all
+
+357
+00:16:14,940 --> 00:16:17,369
+the ideas to make Rocketry work for quite a while.
+
+358
+00:16:17,409 --> 00:16:19,510
+But for example, we didn't have the alloys,
+
+359
+00:16:19,690 --> 00:16:21,679
+you know, to make engines that wouldn't melt
+
+360
+00:16:21,869 --> 00:16:27,950
+or we didn't have the flight control understanding to make things not veer off
+
+361
+00:16:27,960 --> 00:16:29,719
+course you mentioned alloy and I have
+
+362
+00:16:29,729 --> 00:16:31,830
+something fascinating for everyone to think about.
+
+363
+00:16:31,840 --> 00:16:36,520
+So I love space and I watch as much space content
+
+364
+00:16:36,530 --> 00:16:39,260
+and news and I listen to space podcasts and it's like,
+
+365
+00:16:39,270 --> 00:16:42,510
+it's my side hobby that I adore and
+
+366
+00:16:42,619 --> 00:16:44,880
+there was, I think it was,
+
+367
+00:16:45,200 --> 00:16:46,359
+I forget which
+
+368
+00:16:46,549 --> 00:16:51,640
+one of the up and coming commercial space companies was testing a rocket.
+
+369
+00:16:51,929 --> 00:16:53,030
+And in the video,
+
+370
+00:16:53,159 --> 00:16:57,190
+the fire was coming up green and the people were like, oh, look green fire,
+
+371
+00:16:57,200 --> 00:16:59,390
+that means it's burning itself up from the inside.
+
+372
+00:16:59,400 --> 00:17:00,590
+I'm like, that is,
+
+373
+00:17:01,080 --> 00:17:04,540
+that's wild. Like that old advice where, you know, you can throw your old night
+
+374
+00:17:04,699 --> 00:17:07,030
+a batteries in the fire to make pretty colors. Right.
+
+375
+00:17:07,280 --> 00:17:09,520
+But, yeah, I mean, they, they saw the green and of course,
+
+376
+00:17:09,530 --> 00:17:12,020
+they were super calm about it, which I think is always funny because
+
+377
+00:17:12,209 --> 00:17:14,569
+you're standing in a bunker at a safe distance, hopefully.
+
+378
+00:17:14,579 --> 00:17:16,819
+And the rocket is literally burning itself up for
+
+379
+00:17:16,977 --> 00:17:19,126
+inside and they're like, oh, it's green
+
+380
+00:17:19,337 --> 00:17:22,366
+and it was just like, ah, it's, it's one of those things that it,
+
+381
+00:17:22,376 --> 00:17:25,347
+until you hear someone say it, you're like, holy crap.
+
+382
+00:17:25,357 --> 00:17:26,926
+That's true. I mean, there's,
+
+383
+00:17:27,165 --> 00:17:29,467
+there's fire coming out of the bottom of this thing.
+
+384
+00:17:29,477 --> 00:17:31,227
+Of course, it's going to burn itself up.
+
+385
+00:17:31,237 --> 00:17:31,697
+Well,
+
+386
+00:17:31,707 --> 00:17:35,177
+not necessarily because they do clever hacks like alloys that don't melt as much,
+
+387
+00:17:35,187 --> 00:17:38,677
+or they run the fuel in a tube around the,
+
+388
+00:17:38,687 --> 00:17:44,286
+the nozzle to pre heat the fuel and to cool down the nozzle so it doesn't melt itself.
+
+389
+00:17:44,296 --> 00:17:47,745
+Like that's one thing they had to do with those, um, those, what are they slam jets?
+
+390
+00:17:47,755 --> 00:17:47,885
+You know,
+
+391
+00:17:47,895 --> 00:17:51,776
+the ones that basically just have an air engine intake that compresses the air,
+
+392
+00:17:51,786 --> 00:17:54,715
+they shoot the fuel and because the pressure is so high it auto ignites,
+
+393
+00:17:54,836 --> 00:17:57,056
+you know, we're talking speeds of mach 10 to 20
+
+394
+00:17:57,755 --> 00:18:00,296
+scramjet scramjets. Yeah. Anyways.
+
+395
+00:18:00,306 --> 00:18:00,946
+And so, you know,
+
+396
+00:18:00,956 --> 00:18:04,625
+they were doing things like running the fuel through the nose of the vehicle to
+
+397
+00:18:04,635 --> 00:18:07,904
+pre heat the fuel but to also prevent the nose of the vehicle from melting.
+
+398
+00:18:07,923 --> 00:18:10,894
+I remember learning of this when there was a
+
+399
+00:18:10,904 --> 00:18:14,443
+time in my youth when I adored conspiracy theories,
+
+400
+00:18:14,634 --> 00:18:17,754
+which I would not suggest anyone do anymore, but there was a,
+
+401
+00:18:17,764 --> 00:18:21,744
+supposedly an aircraft faster than the sr 71
+
+402
+00:18:21,923 --> 00:18:24,043
+that people were talking about at the time.
+
+403
+00:18:24,053 --> 00:18:26,604
+And I don't think it ever came out if there was or wasn't,
+
+404
+00:18:26,614 --> 00:18:29,134
+but it was fascinating to learn about all the crazy things
+
+405
+00:18:29,144 --> 00:18:31,654
+they have to do to run an aircraft at that speed.
+
+406
+00:18:32,261 --> 00:18:36,621
+I just love that the sr 71 fuel tanks can't be properly sealed.
+
+407
+00:18:36,631 --> 00:18:39,462
+So they just leak when it's on the ground and then once it gets up to speed,
+
+408
+00:18:39,472 --> 00:18:41,862
+the metal expands and it seals that whole
+
+409
+00:18:41,871 --> 00:18:44,371
+airplane and they build it with slide rules.
+
+410
+00:18:44,381 --> 00:18:45,332
+I mean, it's
+
+411
+00:18:46,741 --> 00:18:47,771
+ridiculous.
+
+412
+00:18:47,781 --> 00:18:49,222
+Well, and Titanium, you know,
+
+413
+00:18:49,232 --> 00:18:52,312
+purchased from the Russians through intermediaries, but everything's fine.
+
+414
+00:18:52,322 --> 00:18:53,121
+Here everybody.
+
+415
+00:18:53,692 --> 00:18:53,761
+It's,
+
+416
+00:18:54,141 --> 00:18:54,342
+yeah.
+
+417
+00:18:54,671 --> 00:18:56,741
+Well, on the 747 slide rules,
+
+418
+00:18:57,400 --> 00:19:01,020
+I know. I know. It's amazing. And I guess so, actually that's a good point.
+
+419
+00:19:01,069 --> 00:19:04,359
+Like you can do a lot with a bit computing if you know, you like the Apollo,
+
+420
+00:19:04,369 --> 00:19:06,000
+the Apollo missions.
+
+421
+00:19:06,209 --> 00:19:08,060
+I wonder, did they even have a bits?
+
+422
+00:19:08,069 --> 00:19:12,339
+I have no idea what that their computer was an amazing creation for sure.
+
+423
+00:19:12,349 --> 00:19:12,910
+And there's,
+
+424
+00:19:12,920 --> 00:19:16,989
+there's fascinating stories and videos about it out on the internet
+
+425
+00:19:17,000 --> 00:19:21,160
+that I'd encourage everyone to go just read 15 data bits
+
+426
+00:19:21,329 --> 00:19:21,699
+and one.
+
+427
+00:19:22,715 --> 00:19:24,615
+So, actually that's a funny topic to us.
+
+428
+00:19:24,625 --> 00:19:27,326
+So, back in the day of the eight bit universe,
+
+429
+00:19:27,336 --> 00:19:31,156
+it would not be uncommon for a computer to have a weird number of bits.
+
+430
+00:19:31,166 --> 00:19:34,156
+Like, I think there was an old mainframe that had 13 bits,
+
+431
+00:19:34,166 --> 00:19:39,276
+just like weird bizarre combinations and it was just because it was add a few bits.
+
+432
+00:19:39,286 --> 00:19:40,595
+It's fine. Right.
+
+433
+00:19:40,745 --> 00:19:43,855
+Well, look at your askew table. You actually only need half your
+
+434
+00:19:43,995 --> 00:19:45,826
+Asy table. Seven bits, man.
+
+435
+00:19:45,985 --> 00:19:49,781
+Yeah. Like, I remember finding out about the stuff above 128 and I was like, what?
+
+436
+00:19:49,982 --> 00:19:50,011
+It's
+
+437
+00:19:50,442 --> 00:19:52,692
+got the little smiley face who doesn't like that
+
+438
+00:19:53,222 --> 00:19:55,972
+and the bell, everyone liked the bell. Yeah.
+
+439
+00:19:55,982 --> 00:20:01,121
+And the pound sign and the little, the single and double lines to make your menus.
+
+440
+00:20:01,131 --> 00:20:01,621
+Oh, yes.
+
+441
+00:20:01,631 --> 00:20:05,371
+I remember those, like, straight up when I discovered that I was like, just,
+
+442
+00:20:05,381 --> 00:20:08,322
+it literally blew my mind, you just use dashes and pluses.
+
+443
+00:20:08,332 --> 00:20:10,171
+It's fine. Exactly. Ask you.
+
+444
+00:20:11,680 --> 00:20:11,699
+Oh,
+
+445
+00:20:11,890 --> 00:20:12,900
+my goodness.
+
+446
+00:20:13,150 --> 00:20:15,680
+That brings it back anyway. Anyway, a bit,
+
+447
+00:20:15,829 --> 00:20:15,900
+a bit.
+
+448
+00:20:16,329 --> 00:20:20,540
+I think it's the reason this is sort of important is by knowing where you come from.
+
+449
+00:20:20,550 --> 00:20:22,770
+It gives you an understanding of where we are and how
+
+450
+00:20:22,780 --> 00:20:25,739
+we got here because there's so many security things that have,
+
+451
+00:20:25,750 --> 00:20:29,579
+like, people complain about things, say with certificates and I'm like,
+
+452
+00:20:29,589 --> 00:20:30,579
+when they built this 20
+
+453
+00:20:30,685 --> 00:20:34,425
+years ago you couldn't do that 20 years ago
+
+454
+00:20:34,755 --> 00:20:35,625
+or more. Yeah.
+
+455
+00:20:35,885 --> 00:20:38,354
+Uh, you know, things like, oh,
+
+456
+00:20:38,364 --> 00:20:39,984
+you just want to run a website that's
+
+457
+00:20:39,994 --> 00:20:42,625
+globally available 100% of the time to everybody.
+
+458
+00:20:42,635 --> 00:20:45,734
+You couldn't do that 10 years ago with less than a billion dollars.
+
+459
+00:20:45,744 --> 00:20:47,675
+And now it's, I think you have to pay klopper
+
+460
+00:20:48,324 --> 00:20:49,555
+$0 a month
+
+461
+00:20:50,510 --> 00:20:53,750
+and I think you get the always on thing or maybe it's 20 bucks a month.
+
+462
+00:20:53,760 --> 00:20:55,589
+I mean, pretty much.
+
+463
+00:20:55,880 --> 00:20:58,469
+Ok. Ok. Here's what I want to talk about.
+
+464
+00:20:58,609 --> 00:21:01,099
+We talk about, you know, knowing where you came from,
+
+465
+00:21:01,109 --> 00:21:02,619
+being able to learn and do things.
+
+466
+00:21:02,630 --> 00:21:07,670
+And so I want to use this and I have a great example. What is the largest number you can,
+
+467
+00:21:08,050 --> 00:21:09,709
+I guess, just store
+
+468
+00:21:09,920 --> 00:21:11,479
+in eight bits, right?
+
+469
+00:21:11,670 --> 00:21:13,390
+You have eight bits.
+
+470
+00:21:13,400 --> 00:21:19,569
+Well, I mean, if you start counting in multiples of one then theoretically 256
+
+471
+00:21:19,670 --> 00:21:22,449
+right? But I know that you can go higher but, but well. Ok.
+
+472
+00:21:22,459 --> 00:21:26,229
+Yeah, you can combine the integers and bits and whatever. I don't care about that.
+
+473
+00:21:26,439 --> 00:21:29,630
+So, now that, but that's an unsigned integer, right? And
+
+474
+00:21:29,910 --> 00:21:33,829
+so there's signed and unsigned integers and signed integers I would
+
+475
+00:21:33,839 --> 00:21:36,709
+say are probably more common and useful to most people.
+
+476
+00:21:36,719 --> 00:21:40,369
+So, what's the largest signed integer you can represent with eight bits?
+
+477
+00:21:40,380 --> 00:21:40,609
+Well,
+
+478
+00:21:40,619 --> 00:21:45,489
+depending on where you start counting negative because it's going to be 127 or 128.
+
+479
+00:21:45,500 --> 00:21:45,630
+Yeah,
+
+480
+00:21:45,640 --> 00:21:48,170
+that's true because there's different ways to portray
+
+481
+00:21:48,180 --> 00:21:50,010
+negative numbers and we won't get into that.
+
+482
+00:21:50,250 --> 00:21:51,189
+Well, it also depends.
+
+483
+00:21:51,199 --> 00:21:56,150
+Do you negative 127 to positive 128 or negative 128 to positive 127 because
+
+484
+00:21:56,160 --> 00:21:59,770
+you've got that zero in the middle splitting it generally raps to the negative
+
+485
+00:21:59,873 --> 00:22:00,733
+largest number.
+
+486
+00:22:00,983 --> 00:22:04,633
+Well, what I'm saying is you can't have it 120 to 128 because you also need zero.
+
+487
+00:22:04,642 --> 00:22:08,262
+Well, is there a negative zero in your counting method as well? There are,
+
+488
+00:22:08,392 --> 00:22:11,863
+there's ways to represent numbers that have negative zero and positive zero, but
+
+489
+00:22:12,032 --> 00:22:14,572
+we're not going to get into that. We're not, we're going to pretend like normal,
+
+490
+00:22:15,032 --> 00:22:16,772
+we're just going to pretend it's fine, it's fine.
+
+491
+00:22:16,863 --> 00:22:18,412
+Like here's my favorite example, right
+
+492
+00:22:18,682 --> 00:22:21,453
+on an Nes Super Mario brothers, right
+
+493
+00:22:21,792 --> 00:22:25,532
+in level 3-1 there is a famous trick we call
+
+494
+00:22:25,542 --> 00:22:28,282
+turtle topping that lets you get essentially infinite lives.
+
+495
+00:22:28,292 --> 00:22:29,733
+So, if you can't have infinite lives because
+
+496
+00:22:29,836 --> 00:22:34,536
+guess what happens when you cross the 127 mark of number of lives you have,
+
+497
+00:22:34,595 --> 00:22:38,135
+you get negative lives, I guess for the game things when you have negative lives
+
+498
+00:22:38,426 --> 00:22:41,776
+game over. Yeah, same thing in SIV. Nuclear Gandhi.
+
+499
+00:22:41,786 --> 00:22:46,215
+Oh, nuclear Gandhi is the greatest bug in the history of video games.
+
+500
+00:22:46,225 --> 00:22:49,036
+Explain what that is for people who don't know in SI,
+
+501
+00:22:49,566 --> 00:22:53,105
+I forget, oh, this is SI five. Wow, that is a long time ago.
+
+502
+00:22:53,115 --> 00:22:55,635
+I forgot how long it was between these games. Anyway, in SI
+
+503
+00:22:55,816 --> 00:22:59,676
+51 of the characters is Gandhi. Although I think he's been a character since ever
+
+504
+00:23:00,199 --> 00:23:00,670
+and
+
+505
+00:23:00,880 --> 00:23:04,069
+Gandhi is, yeah, he's very peaceful. Very nice. Nice man.
+
+506
+00:23:04,219 --> 00:23:06,479
+Right. Exactly. His peace score increases
+
+507
+00:23:06,660 --> 00:23:09,349
+until it integer overflows and becomes
+
+508
+00:23:09,540 --> 00:23:12,030
+that one actually. Underflow. Oh, underflow. Sorry.
+
+509
+00:23:12,079 --> 00:23:15,109
+It's an aggression score and his is like zero.
+
+510
+00:23:15,530 --> 00:23:15,770
+Yeah.
+
+511
+00:23:15,780 --> 00:23:20,560
+Sorry and well, yeah, he basically goes from very, very, very nice to very, very,
+
+512
+00:23:20,569 --> 00:23:21,939
+very, not nice.
+
+513
+00:23:21,949 --> 00:23:25,180
+It basically goes from 0 to 255.
+
+514
+00:23:25,229 --> 00:23:30,859
+And usually at that point in the game he has nukes, right? And he nukes everybody.
+
+515
+00:23:32,040 --> 00:23:35,400
+Although in fairness, if you may, if you survive the game that long,
+
+516
+00:23:35,410 --> 00:23:36,579
+you're doing pretty well.
+
+517
+00:23:36,589 --> 00:23:40,189
+Yeah, but the bug is still there. I guess they was not a bug anymore.
+
+518
+00:23:40,199 --> 00:23:41,040
+It's like a feature
+
+519
+00:23:41,150 --> 00:23:45,660
+but there's still the ability for, for Gandhi to become like super aggressive,
+
+520
+00:23:45,670 --> 00:23:50,214
+which I think is one of the greatest features in any video game ever love it.
+
+521
+00:23:50,224 --> 00:23:52,234
+It makes me smile every time I think of it.
+
+522
+00:23:52,574 --> 00:23:57,964
+I just, I like that. It reflects the reality of things just sometimes go sideways.
+
+523
+00:23:57,974 --> 00:24:01,824
+But, and so here's the thing, right is when we talk about video games,
+
+524
+00:24:01,834 --> 00:24:05,265
+you can have these weird bugs, you can have integer, overflows, integer underflow,
+
+525
+00:24:05,275 --> 00:24:07,704
+whatever buffer overflows doesn't matter.
+
+526
+00:24:07,930 --> 00:24:08,790
+And it's funny,
+
+527
+00:24:08,930 --> 00:24:11,839
+well, you know, it does matter because like, for example,
+
+528
+00:24:11,849 --> 00:24:15,459
+it used to be people played against the computer and if you abuse the game cool.
+
+529
+00:24:15,469 --> 00:24:18,040
+I watch these massively multiplayer online role playing
+
+530
+00:24:18,050 --> 00:24:20,589
+games or like things like Rust or,
+
+531
+00:24:20,599 --> 00:24:21,739
+you know, escape from Tarko
+
+532
+00:24:22,339 --> 00:24:25,020
+and the cheaters make the game suck.
+
+533
+00:24:25,180 --> 00:24:26,579
+Yeah. Oh, yeah. Yeah, definitely.
+
+534
+00:24:26,680 --> 00:24:30,074
+You know, and so they get back banded or whatever. So I would argue
+
+535
+00:24:30,194 --> 00:24:31,755
+when you're just playing against your own
+
+536
+00:24:31,765 --> 00:24:33,665
+computer or fiddling against your own computer.
+
+537
+00:24:33,675 --> 00:24:36,385
+It's like a test lab situation. Who cares what you think? We're talking about.
+
+538
+00:24:36,395 --> 00:24:39,324
+Eight bit, eight bit video games, right? Big deal.
+
+539
+00:24:39,375 --> 00:24:40,204
+But, well, and that's the thing,
+
+540
+00:24:40,214 --> 00:24:43,555
+eight bit video games didn't have to deal with multiplayer games except
+
+541
+00:24:43,564 --> 00:24:46,165
+when you were playing Mario Kart with your little brother or something,
+
+542
+00:24:46,175 --> 00:24:46,444
+you know.
+
+543
+00:24:46,454 --> 00:24:46,724
+But
+
+544
+00:24:47,574 --> 00:24:49,885
+then he can just punch you in the arm. That's true.
+
+545
+00:24:50,390 --> 00:24:52,089
+Stop looking at my screen.
+
+546
+00:24:52,099 --> 00:24:55,150
+Oh, my favorite is all those ones where the people have the cardboard rigged up.
+
+547
+00:24:55,369 --> 00:24:55,530
+Like, I
+
+548
+00:24:55,660 --> 00:24:59,410
+never did that. But the first time I saw that I thought, why didn't I think of that?
+
+549
+00:25:00,569 --> 00:25:00,739
+Yeah.
+
+550
+00:25:00,780 --> 00:25:04,369
+So the deal is basically you just, you tape cardboard, like to the ends of the TV,
+
+551
+00:25:04,380 --> 00:25:07,010
+either horizontally or vertically to split the screen
+
+552
+00:25:07,189 --> 00:25:10,969
+and so that you can't be technically stream sniping, I guess
+
+553
+00:25:11,579 --> 00:25:11,880
+the time
+
+554
+00:25:12,000 --> 00:25:14,709
+for it now. Yeah, I guess, I guess anyway, anyway,
+
+555
+00:25:14,989 --> 00:25:15,469
+like
+
+556
+00:25:15,619 --> 00:25:17,989
+those kind of bugs are funny though, right?
+
+557
+00:25:18,536 --> 00:25:19,607
+Learn though as well.
+
+558
+00:25:19,616 --> 00:25:22,996
+Sometimes like I didn't even know what an integer
+
+559
+00:25:23,006 --> 00:25:26,057
+overflow was when I was playing Super Mario Brothers.
+
+560
+00:25:26,067 --> 00:25:29,116
+And then when you start understanding what this stuff means,
+
+561
+00:25:29,126 --> 00:25:34,327
+it's a fascinating way to learn what is happening inside of the computer, right?
+
+562
+00:25:34,337 --> 00:25:38,526
+In a way that you can understand because in 64 bit computing, when you overflow,
+
+563
+00:25:38,536 --> 00:25:42,036
+an integer, you're talking about like an unreasonably large number,
+
+564
+00:25:42,156 --> 00:25:44,276
+I just keep coming back to the whole
+
+565
+00:25:44,286 --> 00:25:47,744
+understanding what's going on also having language for it
+
+566
+00:25:48,004 --> 00:25:51,394
+and not just words for it, but what do those words mean?
+
+567
+00:25:51,404 --> 00:25:54,163
+And that's something I'm seeing with a lot of newer security stuff,
+
+568
+00:25:54,173 --> 00:25:54,923
+especially around.
+
+569
+00:25:54,933 --> 00:25:57,583
+Give me an example, what is an integer overflow?
+
+570
+00:25:57,593 --> 00:25:57,734
+Well,
+
+571
+00:25:57,744 --> 00:26:02,793
+there's a formal definition for that versus an integer underflow versus a buffer,
+
+572
+00:26:02,803 --> 00:26:05,423
+a buffer overflow versus buffer underflow versus
+
+573
+00:26:05,433 --> 00:26:07,663
+buffer overread versus buffer under read,
+
+574
+00:26:07,673 --> 00:26:07,874
+right?
+
+575
+00:26:07,884 --> 00:26:10,624
+Those four things in the buffer world are very, very different
+
+576
+00:26:10,754 --> 00:26:14,144
+and they're formally cataloged and classified, for example, in the CWE project.
+
+577
+00:26:14,154 --> 00:26:14,744
+But for example,
+
+578
+00:26:14,890 --> 00:26:16,831
+in the Blockchain space and the cloud space,
+
+579
+00:26:16,840 --> 00:26:19,211
+there's a whole bunch of stuff that we don't even have words for,
+
+580
+00:26:19,220 --> 00:26:20,490
+let alone definitions.
+
+581
+00:26:20,500 --> 00:26:23,901
+And so security's a bit of a disaster there because how do we even talk about
+
+582
+00:26:24,081 --> 00:26:26,691
+it? That's an interesting observation actually.
+
+583
+00:26:26,701 --> 00:26:29,961
+And I think it's a good point to kind of work ourselves out of
+
+584
+00:26:29,970 --> 00:26:34,370
+this on is you're correct when you don't have words to describe things,
+
+585
+00:26:34,380 --> 00:26:35,811
+it changes everything.
+
+586
+00:26:35,821 --> 00:26:38,711
+You can't fix a problem when you can't describe the problem.
+
+587
+00:26:38,720 --> 00:26:41,911
+I have something even more fascinating for you and I will try to dig this up.
+
+588
+00:26:41,921 --> 00:26:46,267
+There is a video, the internet where someone was discussing colors
+
+589
+00:26:46,378 --> 00:26:51,598
+and the names of colors. There is a group of people in, I think it's in Africa
+
+590
+00:26:51,817 --> 00:26:56,037
+that their native language doesn't have a name for. I think it's green or blue.
+
+591
+00:26:56,047 --> 00:26:57,017
+I forget which color.
+
+592
+00:26:57,447 --> 00:27:01,958
+And you can like, if you showed us a picture with like a bunch of green and blue on,
+
+593
+00:27:01,968 --> 00:27:05,647
+say a wheel, we'll instantly say like that one's blue, that one's green, right?
+
+594
+00:27:05,657 --> 00:27:06,708
+No questions asked.
+
+595
+00:27:06,718 --> 00:27:10,147
+And if you show this to these people, they'll tell you they're all the same color.
+
+596
+00:27:10,157 --> 00:27:14,104
+And so it's, it's looking like as you have names for things,
+
+597
+00:27:14,114 --> 00:27:17,864
+our brains change the way we even see them and understand them,
+
+598
+00:27:17,875 --> 00:27:23,344
+which is absolutely fascinating having names for things I think changes the entire
+
+599
+00:27:23,354 --> 00:27:26,324
+universe in the way we see it and how we interact with it.
+
+600
+00:27:26,334 --> 00:27:29,185
+Well, and so in western music it's mostly what,
+
+601
+00:27:29,194 --> 00:27:31,675
+like four time beat or maybe a three time beat,
+
+602
+00:27:31,685 --> 00:27:34,114
+if it's a waltz and I forget there's an
+
+603
+00:27:34,125 --> 00:27:36,564
+eastern European country where they have seven time music.
+
+604
+00:27:36,625 --> 00:27:37,665
+I've never heard of that.
+
+605
+00:27:37,675 --> 00:27:40,852
+And so, well, they did a study and essentially to us it sounds like noise
+
+606
+00:27:41,171 --> 00:27:43,781
+But to the people with that grew up with the seven time music,
+
+607
+00:27:43,791 --> 00:27:46,072
+not only do they understand and hear the seven time music,
+
+608
+00:27:46,082 --> 00:27:49,052
+but they can also very easily parse the four time music
+
+609
+00:27:49,202 --> 00:27:51,732
+because in a way it's very, it's simpler, interesting.
+
+610
+00:27:51,982 --> 00:27:55,212
+And so I, I like, like I keep coming back to this.
+
+611
+00:27:55,222 --> 00:27:59,202
+How do we discuss a problem, let alone try and solve a problem if we can't even discuss
+
+612
+00:28:00,381 --> 00:28:02,232
+the problem and have words to identify it.
+
+613
+00:28:02,241 --> 00:28:07,291
+You know, there's new words now that I have had to learn as an adult unconscious bias.
+
+614
+00:28:07,560 --> 00:28:11,619
+The, these are not words I grew up with, they didn't exist when I grew up. It's true.
+
+615
+00:28:11,750 --> 00:28:16,900
+And, and so it, I, I have had to change how I think about a lot of things in the world,
+
+616
+00:28:17,109 --> 00:28:20,900
+you know, and it's possible now I couldn't have done this 20 years ago because, well,
+
+617
+00:28:20,910 --> 00:28:23,410
+to go on 1984 you know, with Orwellian double
+
+618
+00:28:23,520 --> 00:28:25,060
+or what is it good speak or whatever it was.
+
+619
+00:28:25,069 --> 00:28:27,939
+Called, you can't discuss a revolution if you don't have the word revolution.
+
+620
+00:28:28,250 --> 00:28:29,189
+That is true.
+
+621
+00:28:29,319 --> 00:28:31,189
+And so I'm really glad to see now that we're,
+
+622
+00:28:31,199 --> 00:28:33,780
+we're aware of this problem and people are fixing it.
+
+623
+00:28:33,790 --> 00:28:36,750
+You know, people are coming out with these terms. What do they mean?
+
+624
+00:28:36,760 --> 00:28:37,989
+How do they apply?
+
+625
+00:28:38,099 --> 00:28:41,079
+You know, and in computer security we've had that happen right now,
+
+626
+00:28:41,089 --> 00:28:46,109
+20 years ago it was all Black magic and now there's courses and really nice books.
+
+627
+00:28:46,130 --> 00:28:49,939
+There are, there are, it's so easy now, compared to 20 years ago,
+
+628
+00:28:49,959 --> 00:28:53,229
+there is one thing I want to end this on that.
+
+629
+00:28:53,239 --> 00:28:55,849
+I've been thinking about a lot lately and this is,
+
+630
+00:28:55,859 --> 00:29:01,250
+this is related to open source licenses which we will discuss in the future.
+
+631
+00:29:01,260 --> 00:29:03,390
+But Kurt and I are still hashing out ideas.
+
+632
+00:29:03,400 --> 00:29:06,130
+But when we talk about language and we talk about
+
+633
+00:29:06,140 --> 00:29:08,569
+what the definition of things are and you know,
+
+634
+00:29:08,579 --> 00:29:12,689
+what, what the, what you mean by what the definition of is is sort of thing.
+
+635
+00:29:14,160 --> 00:29:14,599
+I know
+
+636
+00:29:15,030 --> 00:29:15,790
+I went there
+
+637
+00:29:16,160 --> 00:29:17,589
+for anybody under the age of 30
+
+638
+00:29:17,810 --> 00:29:18,010
+let them
+
+639
+00:29:18,290 --> 00:29:20,819
+look it up, let them look it up, look it up anyway.
+
+640
+00:29:21,239 --> 00:29:22,920
+So, but here's the thing, right? Is
+
+641
+00:29:23,079 --> 00:29:25,859
+there are powerful forces
+
+642
+00:29:26,170 --> 00:29:27,609
+in charge of almost everything now.
+
+643
+00:29:27,619 --> 00:29:30,510
+And this is if you look at basically every foundation on the planet,
+
+644
+00:29:30,520 --> 00:29:31,750
+look at the members, right?
+
+645
+00:29:32,209 --> 00:29:33,949
+It's all the same members and all the same
+
+646
+00:29:33,959 --> 00:29:36,660
+foundations and they're basically all driving the bus.
+
+647
+00:29:36,790 --> 00:29:41,239
+And I think this is one of the challenges for us as practitioners is
+
+648
+00:29:41,250 --> 00:29:44,969
+we have to be prepared to define things in a way that is accurate
+
+649
+00:29:45,130 --> 00:29:46,209
+and make sense.
+
+650
+00:29:46,310 --> 00:29:48,729
+Because there are other people who want to define
+
+651
+00:29:48,739 --> 00:29:52,630
+things in a way that accommodates their worldview.
+
+652
+00:29:52,699 --> 00:29:56,489
+You can absolutely manipulate language to get what you want. Exactly.
+
+653
+00:29:56,640 --> 00:29:58,589
+And we see that all the time in the news cycle,
+
+654
+00:29:58,599 --> 00:30:01,910
+you look at various news channels and the way they use words and how they,
+
+655
+00:30:01,920 --> 00:30:02,969
+and which words they use.
+
+656
+00:30:02,979 --> 00:30:03,709
+It's shocking
+
+657
+00:30:04,040 --> 00:30:06,000
+and security is no different.
+
+658
+00:30:06,010 --> 00:30:11,540
+There are things that aren't defined or are defined incorrectly or are used wrong.
+
+659
+00:30:11,550 --> 00:30:13,900
+And sometimes it's because people are confused and
+
+660
+00:30:13,910 --> 00:30:15,760
+sometimes it's because people have an agenda,
+
+661
+00:30:15,770 --> 00:30:17,180
+they're pushing marketing.
+
+662
+00:30:17,829 --> 00:30:20,380
+Right. I would say that's agenda you're pushing.
+
+663
+00:30:20,609 --> 00:30:25,650
+But. Right. Right. Exactly. And so it's a unique challenge we have. It's not unique.
+
+664
+00:30:25,660 --> 00:30:28,630
+It's, it's pretty global, I would say to everything.
+
+665
+00:30:28,640 --> 00:30:31,650
+It's the story of humans instead of creating
+
+666
+00:30:31,660 --> 00:30:33,079
+value and making the world a better place.
+
+667
+00:30:33,089 --> 00:30:35,890
+There's a bunch of people who just want to capture existing value and sit on it.
+
+668
+00:30:36,060 --> 00:30:38,589
+Yeah. And that's exactly right. Right. Change is hard.
+
+669
+00:30:38,599 --> 00:30:39,619
+And I guess that's,
+
+670
+00:30:39,660 --> 00:30:43,709
+and thank goodness we've changed from eight bit computing because holy crap,
+
+671
+00:30:43,930 --> 00:30:46,180
+it's, I love talking about it with nostalgia,
+
+672
+00:30:46,270 --> 00:30:49,056
+but I'm so really glad I don't develop on AIC computers.
+
+673
+00:30:49,066 --> 00:30:51,635
+I love that systems on a chip now that run on like a
+
+674
+00:30:51,645 --> 00:30:54,975
+watt of power are more powerful than my desktop 20 years ago.
+
+675
+00:30:55,066 --> 00:30:55,995
+They just run Linux
+
+676
+00:30:56,095 --> 00:30:57,296
+now. It's awesome.
+
+677
+00:30:57,676 --> 00:31:01,895
+Like my, my legal control brick boots up and says Linux kernel version,
+
+678
+00:31:01,906 --> 00:31:04,265
+some ridiculously small version and I'm like,
+
+679
+00:31:04,375 --> 00:31:06,615
+whatever. Exactly. I don't have to worry about.
+
+680
+00:31:06,625 --> 00:31:11,656
+Oh, this loop needs 1000 instructions, but I can only give it 800. So, how am I gonna?
+
+681
+00:31:11,666 --> 00:31:12,895
+Like, I don't care.
+
+682
+00:31:13,342 --> 00:31:17,881
+It doesn't matter. I have infinite resources at my disposal. Now.
+
+683
+00:31:17,972 --> 00:31:20,472
+Anyway, anyway, I'm, I'm going to call this.
+
+684
+00:31:20,482 --> 00:31:26,442
+This was a lovely trip down a bizarre memory lane. We'll call it. So, thank you, Kurt.
+
+685
+00:31:26,452 --> 00:31:28,962
+Thank you everyone for listening. Go to open source security podcast.com.
+
+686
+00:31:28,972 --> 00:31:31,401
+Hit up the show notes, use the Pound Os S Podcast.
+
+687
+00:31:31,411 --> 00:31:36,001
+Hashtag Do hit us up on social media and Kurt have a fantastic rest of your day.
+
+688
+00:31:36,062 --> 00:31:39,072
+-- You too. Thanks everybody. Thanks everybody. Bye
+-- bye.

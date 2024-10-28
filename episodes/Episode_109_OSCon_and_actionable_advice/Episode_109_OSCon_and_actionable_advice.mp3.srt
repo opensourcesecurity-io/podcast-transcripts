@@ -1,0 +1,3461 @@
+0
+00:00:05,300 --> 00:00:09,880
+Hello and welcome to episode 109 of the Open source Security podcast with myself,
+
+1
+00:00:09,890 --> 00:00:11,640
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:11,649 --> 00:00:12,409
+Josh Bresser.
+
+3
+00:00:12,810 --> 00:00:13,800
+What's new man?
+
+4
+00:00:13,979 --> 00:00:15,100
+-- Not
+-- a whole lot?
+
+5
+00:00:15,569 --> 00:00:18,229
+There really isn't. I mean, I mean, there isn't at all.
+
+6
+00:00:18,239 --> 00:00:22,379
+I, I'm quite pleased by the relative lack of horrible
+
+7
+00:00:22,729 --> 00:00:22,959
+news,
+
+8
+00:00:23,129 --> 00:00:23,600
+which is
+
+9
+00:00:23,899 --> 00:00:24,950
+at least insecurity
+
+10
+00:00:26,579 --> 00:00:28,709
+maybe because everything else is on fire.
+
+11
+00:00:28,930 --> 00:00:31,629
+But in, in, in fact, now I will say
+
+12
+00:00:31,780 --> 00:00:35,790
+one of the disadvantages to a slow news week is when you have a podcast.
+
+13
+00:00:35,799 --> 00:00:37,709
+It's like, what do we talk about now?
+
+14
+00:00:38,090 --> 00:00:41,349
+And luckily for us, we will never run out of topics.
+
+15
+00:00:41,520 --> 00:00:42,900
+And, and so anyway,
+
+16
+00:00:43,000 --> 00:00:44,529
+so for, for you listener,
+
+17
+00:00:44,650 --> 00:00:48,939
+Kurt and I were going to discuss. So we still will. But I, uh I recently spoke at
+
+18
+00:00:49,250 --> 00:00:52,680
+OCON the open o'reilly, Open Source Security or Open source convention.
+
+19
+00:00:52,689 --> 00:00:55,099
+I put security in all the time to everything.
+
+20
+00:00:55,159 --> 00:00:59,389
+Anyway, it's a nonsecurity convention and it was really cool to go and speak
+
+21
+00:00:59,889 --> 00:01:03,349
+as a security person because I generally only go to security events.
+
+22
+00:01:03,360 --> 00:01:04,550
+But, but anyway, anyway,
+
+23
+00:01:04,569 --> 00:01:06,870
+so I was walking my dog this morning thinking
+
+24
+00:01:06,879 --> 00:01:08,830
+about what kind of things we should talk about
+
+25
+00:01:09,180 --> 00:01:13,699
+and something occurred to me while I was also kind of thinking
+
+26
+00:01:13,709 --> 00:01:19,269
+about and also listening to some security podcast before I walk the dog
+
+27
+00:01:19,699 --> 00:01:20,760
+about fishing.
+
+28
+00:01:21,080 --> 00:01:23,620
+And the reason fishing is in the last episode,
+
+29
+00:01:23,629 --> 00:01:27,069
+we talk about Google claims none of their employees have been fished for a year
+
+30
+00:01:27,690 --> 00:01:30,389
+and we kind of talk about that. But then something occurred to me
+
+31
+00:01:30,830 --> 00:01:34,279
+with, with what Google got to say, Google said none of their employees got fished.
+
+32
+00:01:34,629 --> 00:01:35,389
+Now,
+
+33
+00:01:35,500 --> 00:01:36,980
+we love talking about things like, oh,
+
+34
+00:01:36,989 --> 00:01:39,510
+let's do fishing training and we'll reduce the number
+
+35
+00:01:39,519 --> 00:01:42,669
+of fishes that are successful from 30% to 20%.
+
+36
+00:01:43,220 --> 00:01:48,120
+And here's the thing that I kept thinking about is if 20% of your users can be fished,
+
+37
+00:01:48,129 --> 00:01:49,959
+that's still 100% success rate.
+
+38
+00:01:49,970 --> 00:01:54,120
+That's, that's terrible. Right? A success rate of 100% is unacceptable.
+
+39
+00:01:54,339 --> 00:01:56,069
+Well, what I love about all this, what,
+
+40
+00:01:56,080 --> 00:01:58,680
+what people seem to always forget about all these online attacks is
+
+41
+00:01:59,010 --> 00:02:02,559
+I can execute like 10 million online attacks and nothing bad happens to me.
+
+42
+00:02:02,569 --> 00:02:04,540
+Whereas for example, if I,
+
+43
+00:02:04,639 --> 00:02:08,038
+if I walk around the city trying every single doorknob to see if it's locked or not,
+
+44
+00:02:08,050 --> 00:02:11,050
+eventually, hopefully somebody will call the cops and be like,
+
+45
+00:02:11,059 --> 00:02:13,500
+this guy is like walking down the street, trying every single doorknob
+
+46
+00:02:13,850 --> 00:02:17,630
+and the cops will at least like come up to me and ask me, what the heck are you doing?
+
+47
+00:02:17,639 --> 00:02:20,669
+You know, can you please knock that off otherwise we're going to arrest you for,
+
+48
+00:02:20,800 --> 00:02:23,309
+uh, whatever attempt to break and enter or something.
+
+49
+00:02:23,789 --> 00:02:23,889
+But,
+
+50
+00:02:24,360 --> 00:02:24,929
+I don't know,
+
+51
+00:02:25,380 --> 00:02:27,350
+well, attempt to break and enter. Right. Like,
+
+52
+00:02:27,639 --> 00:02:29,570
+um, or, you know, they just talk to the person,
+
+53
+00:02:29,580 --> 00:02:31,630
+put the scare in them or get them to move on or whatever,
+
+54
+00:02:31,919 --> 00:02:34,320
+but fundamentally right. There's no consequence.
+
+55
+00:02:34,330 --> 00:02:36,139
+See, that's the thing, there's no
+
+56
+00:02:36,350 --> 00:02:38,570
+downside for a failed attack
+
+57
+00:02:38,960 --> 00:02:39,869
+in most cases.
+
+58
+00:02:40,039 --> 00:02:40,419
+Right.
+
+59
+00:02:40,490 --> 00:02:43,199
+And I don't mean even that, that like, there's a chance to go to jail, I mean,
+
+60
+00:02:43,210 --> 00:02:44,979
+like the attacks are so cheap to execute.
+
+61
+00:02:44,990 --> 00:02:45,529
+It's like
+
+62
+00:02:45,910 --> 00:02:47,539
+how much does it cost to send out
+
+63
+00:02:47,729 --> 00:02:50,059
+one email to every single person of the company?
+
+64
+00:02:50,339 --> 00:02:51,639
+Like a dollar
+
+65
+00:02:52,720 --> 00:02:55,380
+mostly in your time in writing the template?
+
+66
+00:02:56,350 --> 00:02:57,850
+Right? Like that's, you know what I mean?
+
+67
+00:02:58,389 --> 00:03:01,860
+And if you're doing this at scale, like the incremental cost is basically zero.
+
+68
+00:03:01,869 --> 00:03:02,839
+And so, yeah, I mean,
+
+69
+00:03:02,850 --> 00:03:07,279
+if there's no real cost to attacking a whole pile of people and there's almost,
+
+70
+00:03:07,729 --> 00:03:09,649
+if any downside to doing it
+
+71
+00:03:10,619 --> 00:03:13,020
+go nuts and keep trying, you know?
+
+72
+00:03:13,339 --> 00:03:14,059
+Right. Right.
+
+73
+00:03:14,160 --> 00:03:18,119
+-- No, I agree completely. And so are they
+-- gonna block every email domain? No.
+
+74
+00:03:20,419 --> 00:03:24,369
+Right. Exactly. Exactly. And so I guess
+
+75
+00:03:24,529 --> 00:03:28,619
+this is where, what Google is doing is so powerful is it, it's not about
+
+76
+00:03:28,809 --> 00:03:30,990
+fishing training and reducing your net,
+
+77
+00:03:31,000 --> 00:03:35,039
+-- like 0% is the goal
+-- we can't get people
+
+78
+00:03:35,050 --> 00:03:37,660
+to parallel park properly or stop at stop signs,
+
+79
+00:03:37,899 --> 00:03:38,199
+I can't
+
+80
+00:03:38,440 --> 00:03:39,220
+parallel. Right. So
+
+81
+00:03:39,570 --> 00:03:42,940
+I look at like driver training and we talk about, like, people talk about drivers and
+
+82
+00:03:43,119 --> 00:03:44,380
+it's weird to me that
+
+83
+00:03:44,630 --> 00:03:45,449
+we have this like
+
+84
+00:03:46,270 --> 00:03:48,970
+several 1000 people a year or thousands actually,
+
+85
+00:03:48,979 --> 00:03:50,949
+of people a year dying in car accidents
+
+86
+00:03:51,229 --> 00:03:54,110
+and you never hear people going. Oh, well, we just need better driver training.
+
+87
+00:03:54,300 --> 00:03:54,520
+No.
+
+88
+00:03:54,529 --> 00:03:56,179
+Like we need people to actually stop and stop
+
+89
+00:03:56,190 --> 00:03:59,250
+signs and if driver training hasn't accomplished that today,
+
+90
+00:03:59,479 --> 00:04:03,580
+-- it, it never will.
+-- You have to pass the driving test to get your license.
+
+91
+00:04:03,589 --> 00:04:08,529
+Imagine the train wreck, the roads would be if you didn't need that.
+
+92
+00:04:08,860 --> 00:04:09,770
+Yeah, exactly.
+
+93
+00:04:10,020 --> 00:04:14,369
+So, no, I, I, you know, yeah, these systems where it's just like, ok, look,
+
+94
+00:04:15,039 --> 00:04:19,059
+humans suck at this. We can sort of train them to be a little bit less sucky.
+
+95
+00:04:19,350 --> 00:04:20,459
+Ok. That's one way to do it.
+
+96
+00:04:20,470 --> 00:04:21,540
+Or you can, like,
+
+97
+00:04:21,548 --> 00:04:24,519
+fix the problem some other way technologically or just
+
+98
+00:04:24,529 --> 00:04:26,559
+take the problem away even in some cases.
+
+99
+00:04:26,570 --> 00:04:28,769
+-- Right.
+-- I, exactly. And I think
+
+100
+00:04:28,920 --> 00:04:33,619
+it's kind of like, let's say we start training people to stop at stop signs
+
+101
+00:04:34,450 --> 00:04:36,570
+and let's say 10% of people still don't.
+
+102
+00:04:36,790 --> 00:04:38,179
+That's still a huge number.
+
+103
+00:04:38,510 --> 00:04:42,260
+Well, we have red light cameras in the city that send out a lot of tickets.
+
+104
+00:04:42,619 --> 00:04:44,500
+Those things are money trees.
+
+105
+00:04:44,839 --> 00:04:47,679
+Yeah. And they should be like you, it's real simple.
+
+106
+00:04:47,690 --> 00:04:50,459
+If you don't want a red light ticket, don't run a red light.
+
+107
+00:04:50,950 --> 00:04:54,769
+Oh, man. So I, I have an awesome related story to that is
+
+108
+00:04:55,049 --> 00:04:56,190
+so where I live
+
+109
+00:04:56,440 --> 00:05:00,109
+you're supposed to yield to pedestrians crossing the street in a crosswalk.
+
+110
+00:05:00,220 --> 00:05:02,510
+-- That's pretty much all of the western world.
+-- Ok.
+
+111
+00:05:02,579 --> 00:05:03,380
+Nobody does
+
+112
+00:05:03,500 --> 00:05:03,950
+wait on a, on a
+
+113
+00:05:04,200 --> 00:05:04,989
+crosswalk.
+
+114
+00:05:06,350 --> 00:05:09,589
+-- Mark crosswalk. No light. Then
+-- they have the right of way. End of story.
+
+115
+00:05:09,600 --> 00:05:12,079
+-- That's how traffic rules work.
+-- Well, that, right.
+
+116
+00:05:12,089 --> 00:05:15,579
+Anyway, but you've clearly never crossed the street in America.
+
+117
+00:05:15,720 --> 00:05:19,809
+Pedestrians always have the right of way, especially in a crosswalk.
+
+118
+00:05:19,820 --> 00:05:21,570
+Oh, no, no, no, you'll get run over here too.
+
+119
+00:05:21,859 --> 00:05:22,829
+Right? Ok.
+
+120
+00:05:23,750 --> 00:05:25,579
+Ok. Good. I'm glad we're on the same page.
+
+121
+00:05:25,940 --> 00:05:26,200
+Oh, yeah.
+
+122
+00:05:26,209 --> 00:05:26,339
+No,
+
+123
+00:05:26,350 --> 00:05:28,260
+the drivers here don't know what to do with pedestrians other
+
+124
+00:05:28,269 --> 00:05:29,750
+than to try and run them over and see if they're
+
+125
+00:05:30,109 --> 00:05:34,940
+-- right.
+-- Right. Um, anyway, so the police are doing this test where they have a guy
+
+126
+00:05:35,140 --> 00:05:37,660
+in a bright green vest,
+
+127
+00:05:37,950 --> 00:05:41,179
+right, just crossing the street and as people don't stop,
+
+128
+00:05:41,399 --> 00:05:43,369
+there's a police officer pulling him over and they were
+
+129
+00:05:43,380 --> 00:05:45,410
+basically pulling over people as fast as they could.
+
+130
+00:05:45,420 --> 00:05:48,420
+And I'm, I'm sitting there watching this and laughing hysterically
+
+131
+00:05:48,739 --> 00:05:50,450
+because I'm, that's one thing I do.
+
+132
+00:05:50,459 --> 00:05:53,630
+I try really hard to always stop because I walk a lot. So it's a big deal to me.
+
+133
+00:05:53,730 --> 00:05:54,720
+But anyway, anyway,
+
+134
+00:05:55,209 --> 00:05:55,899
+and, and
+
+135
+00:05:56,540 --> 00:05:57,720
+I just kept thinking
+
+136
+00:05:58,160 --> 00:06:00,829
+nobody is going to change their behavior because of this.
+
+137
+00:06:00,839 --> 00:06:02,799
+I wish I could say this is going to fix the problem.
+
+138
+00:06:02,809 --> 00:06:06,279
+But all it really does is probably makes a crap load of money for the city.
+
+139
+00:06:06,369 --> 00:06:07,320
+-- I mean,
+-- really?
+
+140
+00:06:07,329 --> 00:06:09,410
+Well, so there was an even better one,
+
+141
+00:06:09,440 --> 00:06:12,790
+in L A where they had the cop dressed up as an orange traffic cone.
+
+142
+00:06:15,350 --> 00:06:17,489
+Right. And I, I've put a link in the show notes,
+
+143
+00:06:17,959 --> 00:06:20,980
+but straight up, they had this guy wearing an orange traffic cone costume,
+
+144
+00:06:20,989 --> 00:06:22,000
+like bright orange.
+
+145
+00:06:22,010 --> 00:06:26,679
+So this guy's about 6 ft tall. So we're talking like a 4 ft traffic cone walking across
+
+146
+00:06:27,070 --> 00:06:30,399
+and like drivers are literally like, I do not see the because what happens,
+
+147
+00:06:30,410 --> 00:06:32,529
+right is that these cops pull these people around, like, did you see the p
+
+148
+00:06:32,690 --> 00:06:34,649
+they're like, oh no, I never know this pedestrian. They're like, well, too bad.
+
+149
+00:06:34,660 --> 00:06:35,309
+-- Here's your ticket,
+-- right?
+
+150
+00:06:35,320 --> 00:06:35,559
+-- And then
+-- they
+
+151
+00:06:35,570 --> 00:06:35,730
+go to
+
+152
+00:06:35,920 --> 00:06:38,579
+-- you and
+-- says that it's like, do you know how fast you were going?
+
+153
+00:06:39,049 --> 00:06:40,179
+Well, here it's like
+
+154
+00:06:40,500 --> 00:06:43,000
+you didn't see the pedestrian. No, he look over there.
+
+155
+00:06:43,010 --> 00:06:47,100
+He's in this bright orange traffic cone costume and they're like, oh, yeah.
+
+156
+00:06:47,109 --> 00:06:48,579
+No, I didn't see him and it's like, well,
+
+157
+00:06:49,070 --> 00:06:49,630
+you should have,
+
+158
+00:06:50,410 --> 00:06:53,160
+-- I was checking my text messages.
+-- Yeah.
+
+159
+00:06:53,369 --> 00:06:54,040
+Yeah, exactly.
+
+160
+00:06:54,049 --> 00:06:57,720
+I fe I, yeah, so no, they've done all sorts of things like this and yeah, um
+
+161
+00:06:57,950 --> 00:07:01,279
+I was on uh we have a street car locally that goes from White Avenue just
+
+162
+00:07:01,290 --> 00:07:04,769
+south of the river across the river on the old high uh high level bridge.
+
+163
+00:07:04,779 --> 00:07:06,160
+It's a former rail bridge.
+
+164
+00:07:06,790 --> 00:07:10,410
+It goes a little bit downtown. A few blocks, stops, turns around, comes back, right.
+
+165
+00:07:11,119 --> 00:07:14,739
+And it has to cross a pretty busy street at 1.100 and ninth street.
+
+166
+00:07:15,079 --> 00:07:16,429
+And it's not
+
+167
+00:07:16,549 --> 00:07:17,869
+because the street car only runs like,
+
+168
+00:07:17,880 --> 00:07:20,309
+once every 40 minutes for like a few months of summer.
+
+169
+00:07:20,320 --> 00:07:22,459
+They don't have like crossing barriers and lights and stuff.
+
+170
+00:07:22,470 --> 00:07:24,980
+They just have like a sign saying, you know, railroad crossing
+
+171
+00:07:25,269 --> 00:07:26,950
+and you're expected as a car to, like,
+
+172
+00:07:27,440 --> 00:07:29,350
+when you're driving towards the thing to look for,
+
+173
+00:07:29,559 --> 00:07:32,980
+you know, the 3040 ton street car and if it's there maybe stop,
+
+174
+00:07:33,239 --> 00:07:36,059
+right? Because it's, if you hit the street car, you're gonna smash
+
+175
+00:07:36,429 --> 00:07:39,269
+your car up and the street car will get a little bit damaged, but not much
+
+176
+00:07:40,089 --> 00:07:43,489
+because it's like a train car. Yeah. You know, and it's anyways
+
+177
+00:07:43,589 --> 00:07:46,109
+and, you know, so we're sitting at the front, me and my kids and like,
+
+178
+00:07:46,119 --> 00:07:48,619
+we're coming up on the thing and the guy slows way down
+
+179
+00:07:49,119 --> 00:07:51,339
+and like, yeah, these cars just keep coming through
+
+180
+00:07:51,809 --> 00:07:53,579
+and we're like, you know, 10 ft away from the road
+
+181
+00:07:54,429 --> 00:07:57,359
+and then finally somebody stops and somebody else stops and it's, I'm like,
+
+182
+00:07:57,470 --> 00:08:00,029
+I'm like, wow, they, because he's also dinging, like,
+
+183
+00:08:00,040 --> 00:08:02,390
+they have this really loud bell and horn on the thing, right?
+
+184
+00:08:02,399 --> 00:08:03,980
+And he's making noise and
+
+185
+00:08:04,369 --> 00:08:06,790
+I'm like, wow, they really don't see you do. They, and he's like, nope.
+
+186
+00:08:06,829 --> 00:08:08,850
+And it's even worse with ambulances and cops.
+
+187
+00:08:09,399 --> 00:08:11,950
+Right. Because they get that tunnel vision when they're, you know,
+
+188
+00:08:12,160 --> 00:08:15,279
+because it's just such an oddity. Right. Having an uncontrolled inter
+
+189
+00:08:15,420 --> 00:08:17,690
+rail crossing in the city.
+
+190
+00:08:17,859 --> 00:08:21,440
+Right. That's rarely used. So people just don't know how to react to it. Right.
+
+191
+00:08:22,070 --> 00:08:22,540
+But,
+
+192
+00:08:22,690 --> 00:08:24,399
+yeah, it was just, it was wild to see, like,
+
+193
+00:08:24,410 --> 00:08:26,540
+because II I suspected one or two people wouldn't see it.
+
+194
+00:08:26,549 --> 00:08:27,459
+No. Like
+
+195
+00:08:27,940 --> 00:08:31,390
+finally somebody kind of noticed this like large green street
+
+196
+00:08:31,399 --> 00:08:34,070
+car making noise trying to cross the road and stopped.
+
+197
+00:08:34,210 --> 00:08:35,099
+That's crazy man.
+
+198
+00:08:35,909 --> 00:08:40,380
+You got to just pull like a Boston move and slowly inch your way out until you,
+
+199
+00:08:40,390 --> 00:08:41,979
+you're blocking all the traffic.
+
+200
+00:08:41,989 --> 00:08:43,049
+-- It was
+-- basically
+
+201
+00:08:43,058 --> 00:08:45,179
+what he did. That's what he did, right?
+
+202
+00:08:45,190 --> 00:08:47,099
+And being a train, they can get away with that,
+
+203
+00:08:47,320 --> 00:08:48,059
+right?
+
+204
+00:08:48,369 --> 00:08:49,929
+Oh my goodness. It's
+
+205
+00:08:50,080 --> 00:08:51,619
+again, again,
+
+206
+00:08:51,989 --> 00:08:53,679
+we think we can train people
+
+207
+00:08:55,900 --> 00:08:58,510
+even better. We'll train developers to secure code,
+
+208
+00:09:00,849 --> 00:09:03,059
+you can train a few developers to secure code
+
+209
+00:09:03,070 --> 00:09:05,489
+and hopefully they write the framework everybody else uses.
+
+210
+00:09:05,659 --> 00:09:06,450
+That's the solution you
+
+211
+00:09:06,859 --> 00:09:10,580
+-- can,
+-- I'm gonna say you can't and I'm, I'm I do this in. Every talk
+
+212
+00:09:10,909 --> 00:09:15,789
+on this topic is I'm going to point at the open SSH developers. They are literally
+
+213
+00:09:15,929 --> 00:09:19,599
+the brightest security developers on the planet and they still make mistakes,
+
+214
+00:09:19,609 --> 00:09:20,760
+-- end of story,
+-- but
+
+215
+00:09:21,020 --> 00:09:25,200
+-- they make fewer mistakes than the average.
+-- And that's true. I will agree with that.
+
+216
+00:09:25,770 --> 00:09:28,869
+Like the Linux kernel is a great example of, you know, where Linus Torvalds is like,
+
+217
+00:09:29,080 --> 00:09:31,460
+yeah, don't break Userland because if you break user land,
+
+218
+00:09:31,469 --> 00:09:32,770
+you break everything on the planet.
+
+219
+00:09:32,929 --> 00:09:34,789
+And yeah, I can kind of get behind that,
+
+220
+00:09:35,000 --> 00:09:35,500
+you know,
+
+221
+00:09:35,679 --> 00:09:39,619
+and he's also like, we can't like break systems, we can't do stuff that like,
+
+222
+00:09:39,630 --> 00:09:42,950
+you know, even if only 1/100 of 1/100 of a percent of people
+
+223
+00:09:43,224 --> 00:09:46,724
+install this reboot and it doesn't work. That's thousands. You know what I mean?
+
+224
+00:09:46,775 --> 00:09:48,325
+That's a lot of people inconvenience.
+
+225
+00:09:48,794 --> 00:09:49,375
+It's huge, man.
+
+226
+00:09:49,515 --> 00:09:51,025
+That's why I'm thinking with the IOT, right?
+
+227
+00:09:51,034 --> 00:09:52,765
+Even if your failure rate is one in a million.
+
+228
+00:09:52,775 --> 00:09:56,255
+Well, like when you're talking about light bulbs, that's a lot of people in the dark
+
+229
+00:09:56,494 --> 00:10:00,325
+and that's why just doing nothing is cheaper than doing anything else.
+
+230
+00:10:00,575 --> 00:10:01,034
+Yeah.
+
+231
+00:10:01,525 --> 00:10:02,284
+And safer.
+
+232
+00:10:03,465 --> 00:10:04,164
+Seriously, man.
+
+233
+00:10:05,580 --> 00:10:07,159
+And safer. I like it.
+
+234
+00:10:07,840 --> 00:10:08,590
+I like it.
+
+235
+00:10:08,830 --> 00:10:09,510
+-- Yeah,
+-- whatever.
+
+236
+00:10:10,849 --> 00:10:11,659
+So what happened at Os
+
+237
+00:10:11,830 --> 00:10:12,179
+Con?
+
+238
+00:10:12,280 --> 00:10:14,469
+It was a fun show.
+
+239
+00:10:14,479 --> 00:10:14,570
+I,
+
+240
+00:10:14,580 --> 00:10:17,270
+I must say there's a certain amusement
+
+241
+00:10:17,280 --> 00:10:20,070
+I get from hanging out with nonsecurity people
+
+242
+00:10:20,429 --> 00:10:24,570
+because first of all, they expect me to be terrible to them,
+
+243
+00:10:24,820 --> 00:10:26,090
+which I'm, I'm not.
+
+244
+00:10:26,280 --> 00:10:26,580
+So,
+
+245
+00:10:27,739 --> 00:10:32,049
+I mean, I, I know I, I address this in my, in my talk and I,
+
+246
+00:10:32,380 --> 00:10:34,969
+I started out with, uh my name is Josh,
+
+247
+00:10:34,979 --> 00:10:37,239
+I'm a recovering security person and it's been
+
+248
+00:10:37,250 --> 00:10:39,330
+two years since I yelled at a developer
+
+249
+00:10:39,799 --> 00:10:43,849
+and I don't, I don't think it's really been two years, probably less. But it's funny.
+
+250
+00:10:44,309 --> 00:10:44,859
+So, a
+
+251
+00:10:45,979 --> 00:10:46,960
+couple of hours.
+
+252
+00:10:48,909 --> 00:10:52,869
+But anyway, anyway, no, it's, it's good and the craziest thing.
+
+253
+00:10:52,880 --> 00:10:55,599
+So, for anyone who doesn't know, because I know
+
+254
+00:10:55,919 --> 00:10:56,960
+Ocon is,
+
+255
+00:10:57,280 --> 00:10:59,729
+if you're not in the open source world, you might not know about it.
+
+256
+00:10:59,739 --> 00:11:03,320
+So o'reilly are the book people that make the books
+
+257
+00:11:03,330 --> 00:11:06,109
+with like the weird kind of pencil drawing of animals,
+
+258
+00:11:06,119 --> 00:11:07,109
+wood block cuttings,
+
+259
+00:11:07,359 --> 00:11:09,900
+OK. Wood block cuttings, whatever those things.
+
+260
+00:11:10,130 --> 00:11:13,330
+And, and obviously, they're probably most famous for,
+
+261
+00:11:13,340 --> 00:11:17,070
+like back in the day they wrote the pearl book which had the camel on it, which is,
+
+262
+00:11:17,080 --> 00:11:17,429
+you know,
+
+263
+00:11:18,739 --> 00:11:20,580
+and which one's the bad book
+
+264
+00:11:20,869 --> 00:11:21,280
+mail?
+
+265
+00:11:21,719 --> 00:11:23,489
+It was the 850 page one that you could
+
+266
+00:11:23,599 --> 00:11:23,760
+someone
+
+267
+00:11:24,229 --> 00:11:24,270
+to
+
+268
+00:11:24,770 --> 00:11:27,849
+kill someone with that book. I remember that book. I remember using that.
+
+269
+00:11:29,030 --> 00:11:31,809
+I spent over $5000 on o'reilly books.
+
+270
+00:11:32,809 --> 00:11:33,169
+I used to.
+
+271
+00:11:35,059 --> 00:11:36,450
+Yeah, that's how I learned all my stuff.
+
+272
+00:11:36,460 --> 00:11:39,770
+I had, I had 1.5 bankers boxes full of these o'reilly books.
+
+273
+00:11:40,400 --> 00:11:42,489
+I read cover to cover and made notes in.
+
+274
+00:11:42,840 --> 00:11:43,960
+They were great books.
+
+275
+00:11:44,190 --> 00:11:44,690
+They,
+
+276
+00:11:45,020 --> 00:11:46,640
+they still publish good books.
+
+277
+00:11:46,799 --> 00:11:48,090
+It's just, I think
+
+278
+00:11:48,539 --> 00:11:51,450
+when I learn something new, I don't turn to a book like
+
+279
+00:11:51,650 --> 00:11:55,335
+a to, I just find that, you know, online tutorials. But, but anyway, so o'reilly,
+
+280
+00:11:55,575 --> 00:11:56,864
+they, they do something called
+
+281
+00:11:57,215 --> 00:11:59,604
+Ocon, which is an open source convention essentially.
+
+282
+00:11:59,614 --> 00:12:03,044
+And obviously it's the usual convention. You've got the Expo Hall.
+
+283
+00:12:03,054 --> 00:12:04,784
+You've got speakers, you've got, you know,
+
+284
+00:12:04,794 --> 00:12:08,354
+whatever the parties and the dinners and, and all that kind of stuff.
+
+285
+00:12:08,835 --> 00:12:09,505
+And
+
+286
+00:12:09,744 --> 00:12:13,604
+I've, I've been to a couple of these, my last one was actually five years ago
+
+287
+00:12:14,150 --> 00:12:14,809
+and
+
+288
+00:12:15,150 --> 00:12:15,450
+it,
+
+289
+00:12:15,460 --> 00:12:18,409
+it was remarkable how different it's become in the
+
+290
+00:12:18,419 --> 00:12:21,690
+last five years because last time I was there
+
+291
+00:12:22,099 --> 00:12:25,929
+it was, I don't remember, I gave a talk on some open source security thing.
+
+292
+00:12:25,940 --> 00:12:28,799
+I don't even remember what, but I remember going into the hall,
+
+293
+00:12:29,140 --> 00:12:30,890
+it was primarily
+
+294
+00:12:31,200 --> 00:12:37,409
+like, like your Red Hats and Debian and, you know, just open source kind of users
+
+295
+00:12:37,719 --> 00:12:41,309
+that were either kind of selling something or maybe just showing off.
+
+296
+00:12:41,320 --> 00:12:44,419
+And there were a handful of companies hiring, like an example is
+
+297
+00:12:44,659 --> 00:12:48,599
+I still have a Spotify t-shirt. I got from them and Spotify was trying to hire people.
+
+298
+00:12:48,609 --> 00:12:50,979
+I was like, well, I don't really want to work for you, but can I have a shirt
+
+299
+00:12:51,130 --> 00:12:51,900
+and they gave me
+
+300
+00:12:52,539 --> 00:12:54,989
+and I still wear it? It's still in really good shape. Actually,
+
+301
+00:12:55,250 --> 00:12:58,809
+this annoys me because my partner, she really gets annoyed and she's like,
+
+302
+00:12:58,820 --> 00:13:00,320
+do you only have computer shirts?
+
+303
+00:13:00,330 --> 00:13:01,200
+I'm like, yes,
+
+304
+00:13:01,830 --> 00:13:03,640
+they're free. Where else do you like?
+
+305
+00:13:04,039 --> 00:13:06,159
+What, how do you, how do you get T shirts?
+
+306
+00:13:06,400 --> 00:13:09,559
+Not only that, I worked for Red Hat for 12 years
+
+307
+00:13:09,820 --> 00:13:10,799
+and I have
+
+308
+00:13:11,000 --> 00:13:13,270
+probably 100 Red hat t-shirts
+
+309
+00:13:13,989 --> 00:13:14,960
+I actually bought.
+
+310
+00:13:15,219 --> 00:13:15,289
+It's
+
+311
+00:13:15,849 --> 00:13:15,969
+great
+
+312
+00:13:16,219 --> 00:13:18,309
+because they were three bucks each in the fruit of the loom. They are
+
+313
+00:13:18,469 --> 00:13:18,969
+yous.
+
+314
+00:13:20,830 --> 00:13:21,739
+Yeah. From the cool stuff store.
+
+315
+00:13:21,750 --> 00:13:25,440
+Because I wanted, I wanted 20 identical shirts for going to the gym and stuff.
+
+316
+00:13:25,450 --> 00:13:27,890
+So that, and it's funny because I think all the people at the gym thought I was, like,
+
+317
+00:13:27,900 --> 00:13:31,590
+borderline homeless because I wore the same t-shirt every day for, like,
+
+318
+00:13:31,599 --> 00:13:34,219
+a year until I explained that I had 20 of these.
+
+319
+00:13:34,229 --> 00:13:35,400
+Yeah, that's great.
+
+320
+00:13:35,510 --> 00:13:37,640
+Now I'll give elastic a lot of credit here.
+
+321
+00:13:37,650 --> 00:13:41,219
+They're really good about giving me shirts and II I have more
+
+322
+00:13:41,229 --> 00:13:44,179
+elastic shirts than I can wear between laundry at this point.
+
+323
+00:13:44,190 --> 00:13:44,630
+So
+
+324
+00:13:44,770 --> 00:13:45,580
+it's quite nice.
+
+325
+00:13:46,080 --> 00:13:47,640
+Uh Anyway, anyway,
+
+326
+00:13:47,799 --> 00:13:48,479
+so,
+
+327
+00:13:48,849 --> 00:13:49,489
+and, and Oscar,
+
+328
+00:13:49,690 --> 00:13:51,469
+now you go in there
+
+329
+00:13:51,760 --> 00:13:52,429
+and
+
+330
+00:13:53,000 --> 00:13:55,710
+it was Red Hat was there, of course, as you can imagine.
+
+331
+00:13:55,719 --> 00:13:57,559
+And like Google was there, there was,
+
+332
+00:13:57,710 --> 00:14:00,969
+uh paypal was there talking about their framework.
+
+333
+00:14:00,979 --> 00:14:04,460
+The Home Depot was there, obviously talking about the open source. They do.
+
+334
+00:14:04,469 --> 00:14:05,020
+There was
+
+335
+00:14:05,729 --> 00:14:09,159
+uh someone from the NSA was there. I got a bunch of stickers from them.
+
+336
+00:14:09,169 --> 00:14:10,130
+That was really cool.
+
+337
+00:14:10,409 --> 00:14:10,929
+There was like,
+
+338
+00:14:10,940 --> 00:14:14,080
+Huawei was there showing off their hardware and open source project.
+
+339
+00:14:14,090 --> 00:14:14,880
+It was just like,
+
+340
+00:14:15,159 --> 00:14:17,869
+it's so different now because
+
+341
+00:14:18,039 --> 00:14:20,809
+everybody is using open source. Right.
+
+342
+00:14:20,820 --> 00:14:25,309
+-- It's, it's nothing like it used to be back in the day.
+-- Well, you, you can't not
+
+343
+00:14:25,570 --> 00:14:26,469
+use it.
+
+344
+00:14:26,650 --> 00:14:28,070
+-- Right. Right.
+-- Because
+
+345
+00:14:28,190 --> 00:14:28,380
+like,
+
+346
+00:14:29,489 --> 00:14:33,340
+I mean, literally the only way you could avoid open source is by being, well,
+
+347
+00:14:33,369 --> 00:14:35,619
+100% Microsoft, they're really the only
+
+348
+00:14:36,419 --> 00:14:38,619
+-- Microsoft is there.
+-- Exactly.
+
+349
+00:14:38,630 --> 00:14:42,830
+Well, and I was gonna say, like, in theory you could be 100% close source by, like,
+
+350
+00:14:42,840 --> 00:14:44,400
+just sticking 100% of Microsoft.
+
+351
+00:14:44,409 --> 00:14:45,450
+But even Microsoft
+
+352
+00:14:45,919 --> 00:14:47,229
+is, yeah, I mean,
+
+353
+00:14:49,460 --> 00:14:51,840
+even they have fully embraced open
+
+354
+00:14:52,020 --> 00:14:52,679
+source, like,
+
+355
+00:14:52,909 --> 00:14:53,539
+hard.
+
+356
+00:14:53,979 --> 00:14:56,690
+Yeah. And they were not just that and, and
+
+357
+00:14:56,859 --> 00:14:59,989
+Ocon Microsoft is giving away arduinos.
+
+358
+00:15:00,119 --> 00:15:00,650
+I mean,
+
+359
+00:15:01,380 --> 00:15:05,890
+what, what has happened to the world? Like this is not the world I grew up in.
+
+360
+00:15:05,919 --> 00:15:07,609
+Well, Microsoft has their own Linux.
+
+361
+00:15:08,099 --> 00:15:08,809
+Do they
+
+362
+00:15:09,159 --> 00:15:10,109
+for IOT?
+
+363
+00:15:10,369 --> 00:15:10,929
+Oh,
+
+364
+00:15:11,119 --> 00:15:11,969
+well, that's cool.
+
+365
+00:15:12,299 --> 00:15:14,349
+Yeah, and it talks to the manager and it,
+
+366
+00:15:14,549 --> 00:15:17,820
+yeah, they have a, they have their, sorry when I say their own custom links.
+
+367
+00:15:17,830 --> 00:15:21,030
+I don't mean like some lame like, oh we built the distro on top of something.
+
+368
+00:15:21,039 --> 00:15:24,150
+No, no, no. They have their own custom Linux kernel
+
+369
+00:15:24,789 --> 00:15:27,940
+for their Linux IOT stuff. So it's like part of their SDP. It's like
+
+370
+00:15:28,080 --> 00:15:32,219
+here basically is a pile of software and documents and like
+
+371
+00:15:32,619 --> 00:15:35,369
+you want to build like an IOT device that does XY and Z cool.
+
+372
+00:15:35,380 --> 00:15:37,580
+Like you do a little bit of data processing locally
+
+373
+00:15:37,590 --> 00:15:39,210
+if you want and then you ship it off to Azure
+
+374
+00:15:39,349 --> 00:15:44,090
+and you get a nice web portal for the users and you know, back like basically it's,
+
+375
+00:15:44,099 --> 00:15:44,440
+it's
+
+376
+00:15:44,659 --> 00:15:48,890
+everything from A to Z just plug and play. Boom off. You go
+
+377
+00:15:49,489 --> 00:15:49,599
+oh
+
+378
+00:15:50,090 --> 00:15:53,289
+And it's an arm. Linux not like some easy Intel.
+
+379
+00:15:53,299 --> 00:15:55,890
+Linux, like it's, it's proper iot Linux on an arm.
+
+380
+00:15:56,099 --> 00:15:57,299
+So, no, like, yeah, Linux
+
+381
+00:15:57,549 --> 00:15:59,820
+or Microsoft has their own.
+
+382
+00:16:00,049 --> 00:16:00,530
+Linux
+
+383
+00:16:00,919 --> 00:16:03,799
+like kernels. Userland everything.
+
+384
+00:16:04,030 --> 00:16:07,780
+Yeah, it was uh what? Yeah, in April or earlier of this year.
+
+385
+00:16:08,099 --> 00:16:10,260
+Right. So, it's been around for only a few months but still. Yeah.
+
+386
+00:16:10,270 --> 00:16:12,809
+No, clearly Microsoft does open source,
+
+387
+00:16:14,289 --> 00:16:14,669
+open
+
+388
+00:16:14,869 --> 00:16:17,789
+source one. Right. I, I keep saying that but
+
+389
+00:16:18,090 --> 00:16:19,570
+I don't know, it amuses
+
+390
+00:16:19,880 --> 00:16:20,039
+me.
+
+391
+00:16:20,289 --> 00:16:23,770
+I think a lot of people don't think that yet because open source one everywhere,
+
+392
+00:16:23,780 --> 00:16:28,000
+but a lot of it is still like way on the back end or like deeply embedded or,
+
+393
+00:16:28,010 --> 00:16:28,570
+you know what I mean?
+
+394
+00:16:28,739 --> 00:16:29,479
+Like you don't see
+
+395
+00:16:30,609 --> 00:16:32,200
+like a great example is
+
+396
+00:16:32,309 --> 00:16:34,450
+uh, yeah, last night we went to the Italian Center.
+
+397
+00:16:34,460 --> 00:16:37,969
+It's an Italian store that sells Italian stuff, food.
+
+398
+00:16:38,340 --> 00:16:38,919
+Um,
+
+399
+00:16:39,109 --> 00:16:42,729
+and they have this like really good selection of cheese and meat, like,
+
+400
+00:16:42,739 --> 00:16:45,309
+like over like, I think it's about 100 kinds of cheese.
+
+401
+00:16:45,440 --> 00:16:46,770
+Like, it's pretty fantastic.
+
+402
+00:16:47,030 --> 00:16:48,770
+And so they have these giant display boards
+
+403
+00:16:48,780 --> 00:16:51,250
+showing all the cheeses the cost per kilogram
+
+404
+00:16:51,510 --> 00:16:55,530
+and like sort of, you know, if it's available or not. Right.
+
+405
+00:16:55,840 --> 00:16:56,710
+And um,
+
+406
+00:16:56,830 --> 00:16:59,619
+there was like an error on one of the boards. I took a picture of it
+
+407
+00:16:59,830 --> 00:17:02,859
+and I looked a little closer and I'm like, OK, this isn't a windows air,
+
+408
+00:17:02,869 --> 00:17:03,919
+this isn't a Mac Os.
+
+409
+00:17:03,929 --> 00:17:05,540
+It's, oh, it's Ubuntu Linux. OK.
+
+410
+00:17:05,719 --> 00:17:07,500
+So they have like an Ubuntu Linux machine.
+
+411
+00:17:07,510 --> 00:17:10,858
+Running these like six or seven giant, you know, TV,
+
+412
+00:17:10,868 --> 00:17:12,660
+s displaying their cheese prices.
+
+413
+00:17:12,949 --> 00:17:13,660
+Nice.
+
+414
+00:17:14,078 --> 00:17:14,499
+Right?
+
+415
+00:17:14,509 --> 00:17:17,739
+It's, and so yeah, I mean, because if you went to the store and asked like, hey,
+
+416
+00:17:17,749 --> 00:17:18,769
+are you guys Linux users?
+
+417
+00:17:18,779 --> 00:17:20,138
+They'd be like, what, what's Linux?
+
+418
+00:17:20,788 --> 00:17:23,058
+Right? Can you just buy your cheese and leave?
+
+419
+00:17:23,667 --> 00:17:25,078
+You know, you're making us nervous
+
+420
+00:17:25,358 --> 00:17:28,298
+and, and part of me was like, can you guys please just hit the ok on that air?
+
+421
+00:17:28,308 --> 00:17:30,058
+Like, because it wants to install some updates and just,
+
+422
+00:17:30,068 --> 00:17:30,869
+it's really annoying because
+
+423
+00:17:31,098 --> 00:17:33,458
+was covering a cheese I wanted to buy and I wanted to see how much it was.
+
+424
+00:17:34,670 --> 00:17:36,060
+But yeah, I mean, it's just funny.
+
+425
+00:17:36,069 --> 00:17:38,060
+Right, because it's like they're Linux users, like
+
+426
+00:17:38,189 --> 00:17:38,930
+-- they wouldn't
+-- know that
+
+427
+00:17:39,119 --> 00:17:42,219
+and they don't even know it, it's, it's hilarious.
+
+428
+00:17:42,500 --> 00:17:42,819
+I,
+
+429
+00:17:42,939 --> 00:17:43,229
+yeah,
+
+430
+00:17:43,500 --> 00:17:46,329
+-- that's awesome, man.
+-- That's how technology should be. It should just work.
+
+431
+00:17:46,339 --> 00:17:47,800
+-- No,
+-- I agree completely.
+
+432
+00:17:47,810 --> 00:17:51,569
+And, and so anyway, it was, it was amusing to me seeing all this.
+
+433
+00:17:51,579 --> 00:17:53,239
+It was, you know what the craziest part was.
+
+434
+00:17:53,250 --> 00:17:56,160
+And this is something I didn't really, it didn't sink in
+
+435
+00:17:56,359 --> 00:17:58,290
+until my plane ride home is.
+
+436
+00:17:58,689 --> 00:18:00,910
+I, I go to a lot of security events
+
+437
+00:18:01,250 --> 00:18:02,910
+and I'm obviously representative
+
+438
+00:18:03,089 --> 00:18:04,000
+of elastic
+
+439
+00:18:04,109 --> 00:18:08,780
+and I get asked questions about logging in Sims constantly because basically in
+
+440
+00:18:08,949 --> 00:18:09,060
+the
+
+441
+00:18:09,189 --> 00:18:09,589
+security,
+
+442
+00:18:10,300 --> 00:18:12,020
+like, si em, security incident
+
+443
+00:18:14,130 --> 00:18:15,989
+and logs as well, which are related
+
+444
+00:18:16,829 --> 00:18:17,750
+and a lot of people use a lot
+
+445
+00:18:18,180 --> 00:18:18,599
+for this.
+
+446
+00:18:19,089 --> 00:18:20,589
+Right. Exactly.
+
+447
+00:18:21,089 --> 00:18:23,390
+Nobody asked me any of those questions at
+
+448
+00:18:23,660 --> 00:18:28,400
+Ocon. And it was, it was, it was so weird to me because that's all I usually talk about.
+
+449
+00:18:28,410 --> 00:18:31,780
+And this time I got to actually talk about other cool stuff and people would ask like,
+
+450
+00:18:31,920 --> 00:18:33,520
+programming questions and,
+
+451
+00:18:33,530 --> 00:18:35,839
+and we could talk about using Python and how
+
+452
+00:18:35,849 --> 00:18:37,780
+that works to solve your problems and stuff.
+
+453
+00:18:37,790 --> 00:18:38,339
+And it was,
+
+454
+00:18:38,510 --> 00:18:42,160
+it was very pleasant. I really did enjoy it. It was, it was good. And then
+
+455
+00:18:42,719 --> 00:18:47,420
+uh I gave a talk about what did I call it? Security as an MVP is the name of my talk.
+
+456
+00:18:47,430 --> 00:18:50,750
+It will eventually be published. I'll tweet it out when it is.
+
+457
+00:18:51,199 --> 00:18:54,540
+And I will say the thing that I found the most amazing
+
+458
+00:18:54,709 --> 00:18:58,060
+was I brought my chromebook I presented off of my chromebook
+
+459
+00:18:58,410 --> 00:19:04,229
+and when I showed up, they had one USB C cable on the table. I plugged it in
+
+460
+00:19:04,369 --> 00:19:06,109
+and everything just magically worked.
+
+461
+00:19:06,239 --> 00:19:07,849
+And I was, I was, I didn't even know
+
+462
+00:19:07,949 --> 00:19:07,969
+you
+
+463
+00:19:08,150 --> 00:19:09,260
+-- mean for the
+-- display like the
+
+464
+00:19:09,329 --> 00:19:09,520
+USB,
+
+465
+00:19:09,880 --> 00:19:13,069
+the display, it was one USB C cable. I plugged it in
+
+466
+00:19:13,329 --> 00:19:17,800
+my chromebook appeared on the display and I presented it was crazy.
+
+467
+00:19:18,569 --> 00:19:19,839
+Yeah, seriously, man, I,
+
+468
+00:19:20,339 --> 00:19:20,400
+I
+
+469
+00:19:20,619 --> 00:19:20,890
+still,
+
+470
+00:19:21,150 --> 00:19:21,790
+we are in the future.
+
+471
+00:19:22,680 --> 00:19:24,650
+So you're saying just because I'm having a hard time
+
+472
+00:19:24,660 --> 00:19:26,189
+processing this and I just want to be clear,
+
+473
+00:19:26,199 --> 00:19:31,510
+you had effectively a laptop and you plugged one cable into it and it's worked
+
+474
+00:19:32,119 --> 00:19:32,790
+without like
+
+475
+00:19:32,939 --> 00:19:38,199
+working with display settings or changing the inputs or the aspect ratio,
+
+476
+00:19:38,209 --> 00:19:39,469
+it didn't catch fire,
+
+477
+00:19:40,310 --> 00:19:40,369
+it
+
+478
+00:19:40,520 --> 00:19:40,609
+just
+
+479
+00:19:40,810 --> 00:19:40,969
+worked
+
+480
+00:19:41,479 --> 00:19:43,339
+it in. I've literally never had that happen to me.
+
+481
+00:19:43,349 --> 00:19:47,410
+I know seriously, even with, with Windows or Mac or Linux, especially Linux
+
+482
+00:19:48,290 --> 00:19:48,719
+something
+
+483
+00:19:49,260 --> 00:19:49,569
+right.
+
+484
+00:19:49,800 --> 00:19:53,150
+In this one, I plugged it into the chromebook. It extended the screen.
+
+485
+00:19:53,160 --> 00:19:55,540
+I dragged my window over to the big screen.
+
+486
+00:19:55,660 --> 00:19:56,959
+I clicked the present button
+
+487
+00:19:57,119 --> 00:19:57,640
+and
+
+488
+00:19:58,060 --> 00:19:58,719
+that was all
+
+489
+00:19:59,089 --> 00:19:59,709
+it was Mandi
+
+490
+00:19:59,930 --> 00:20:00,170
+man.
+
+491
+00:20:00,280 --> 00:20:00,479
+I'm not
+
+492
+00:20:00,589 --> 00:20:02,319
+sure I would know what to do in that situation.
+
+493
+00:20:02,430 --> 00:20:04,680
+I, I showed up like 10 minutes early.
+
+494
+00:20:06,119 --> 00:20:09,699
+-- Yeah, I know.
+-- Right. I stood there staring at the poor A V guy.
+
+495
+00:20:09,810 --> 00:20:12,199
+-- I
+-- travel with four display adapters.
+
+496
+00:20:12,209 --> 00:20:16,319
+-- I, I travel with four display adapters for my laptop.
+-- Seriously, man.
+
+497
+00:20:16,329 --> 00:20:17,640
+Like it was, it was amazing.
+
+498
+00:20:17,650 --> 00:20:19,780
+It was so crazy and, and then of course, you know,
+
+499
+00:20:19,790 --> 00:20:24,800
+III I did the talk and make fun of security people a lot because it is easy to do
+
+500
+00:20:25,439 --> 00:20:26,040
+and,
+
+501
+00:20:26,050 --> 00:20:27,430
+and then there were a bunch of questions at the
+
+502
+00:20:27,439 --> 00:20:30,489
+end and it was really interesting actually listening to people because
+
+503
+00:20:30,660 --> 00:20:34,089
+the one thing that really came across and this is in
+
+504
+00:20:34,099 --> 00:20:37,150
+the Q and A as well as just people talking afterwards is
+
+505
+00:20:37,689 --> 00:20:41,089
+people just want, they want me to tell them what to do, right.
+
+506
+00:20:41,099 --> 00:20:44,540
+Someone will say like, tell me which password manager I should use.
+
+507
+00:20:44,719 --> 00:20:47,130
+And of course, I can't answer that because it's like, well,
+
+508
+00:20:47,140 --> 00:20:49,280
+they do all different things and blah, blah, blah, blah, blah,
+
+509
+00:20:50,089 --> 00:20:51,229
+I'm getting over that
+
+510
+00:20:51,420 --> 00:20:53,400
+where I'm just making a declarative because honestly,
+
+511
+00:20:53,410 --> 00:20:54,910
+even if you give them not a great answer,
+
+512
+00:20:54,920 --> 00:20:57,810
+an 80% answer is better than them being stuck in indecision
+
+513
+00:20:57,959 --> 00:20:58,689
+maybe.
+
+514
+00:20:58,699 --> 00:21:00,780
+And so the way I addressed that was I basically
+
+515
+00:21:00,790 --> 00:21:03,229
+said I use last pass for example and then I
+
+516
+00:21:03,239 --> 00:21:05,439
+explained why I use it because I have some very
+
+517
+00:21:05,449 --> 00:21:08,150
+specific reasons around the family plan and things like that.
+
+518
+00:21:08,890 --> 00:21:11,489
+And I don't know, I mean, I guess this is,
+
+519
+00:21:12,209 --> 00:21:13,670
+I need to think about this because you might
+
+520
+00:21:13,680 --> 00:21:16,030
+be right that just telling people what to do
+
+521
+00:21:16,239 --> 00:21:19,030
+and, and if it's 80% good enough that
+
+522
+00:21:19,199 --> 00:21:20,630
+I generally won't tell them what to do.
+
+523
+00:21:20,640 --> 00:21:21,060
+But like you,
+
+524
+00:21:21,069 --> 00:21:23,469
+I will coach it in terms of here's what I do or here's
+
+525
+00:21:23,479 --> 00:21:26,609
+what I would do or you know what I would recommend or,
+
+526
+00:21:26,719 --> 00:21:27,469
+you know, at least
+
+527
+00:21:27,599 --> 00:21:30,430
+because for example, I mean, part of the problem now is, is like
+
+528
+00:21:30,555 --> 00:21:33,474
+there are so many potential solutions, right? Which cloud providers
+
+529
+00:21:33,925 --> 00:21:34,114
+are?
+
+530
+00:21:34,224 --> 00:21:34,954
+I'll be blunt,
+
+531
+00:21:35,104 --> 00:21:37,015
+it's going to be Google Amazon or Microsoft unless
+
+532
+00:21:37,025 --> 00:21:40,484
+you have some really ridiculous crazy corner case need
+
+533
+00:21:40,604 --> 00:21:42,954
+for some local player or a vertical player
+
+534
+00:21:43,064 --> 00:21:46,344
+that does whatever it is you need to do. But fundamentally, you,
+
+535
+00:21:46,564 --> 00:21:48,915
+you pick one of those three players because
+
+536
+00:21:49,405 --> 00:21:52,255
+you know what, like life's too short to, you know,
+
+537
+00:21:52,265 --> 00:21:54,655
+I was talking with somebody and like, well, you know, didn't,
+
+538
+00:21:54,665 --> 00:21:55,875
+didn't you do all this research?
+
+539
+00:21:55,885 --> 00:21:57,324
+And I'm like, no, no, I absolutely didn't.
+
+540
+00:21:57,334 --> 00:21:59,055
+I picked Amazon because they were the biggest one.
+
+541
+00:21:59,390 --> 00:22:00,199
+They still are.
+
+542
+00:22:00,209 --> 00:22:03,670
+I'm pretty much locked into them at this point, but they keep lowering my bill.
+
+543
+00:22:04,280 --> 00:22:06,410
+So, like, I'm locked into a provider that keeps
+
+544
+00:22:06,640 --> 00:22:09,660
+me more services and a lower bill every month. So, like, yeah, cool. Whatever.
+
+545
+00:22:09,719 --> 00:22:10,430
+I don't care.
+
+546
+00:22:11,369 --> 00:22:13,339
+The cable company should take note of that.
+
+547
+00:22:14,119 --> 00:22:15,380
+No, I hear you, man.
+
+548
+00:22:15,390 --> 00:22:18,489
+I totally understand where you're coming from and, and so all right.
+
+549
+00:22:18,500 --> 00:22:21,640
+So let me ask you this then is one of the questions somebody asked me was
+
+550
+00:22:21,780 --> 00:22:25,619
+which like like software security scanner
+
+551
+00:22:25,819 --> 00:22:29,579
+would I recommend for, you know, doing like standard code analysis?
+
+552
+00:22:29,589 --> 00:22:30,579
+And my answer was there.
+
+553
+00:22:30,770 --> 00:22:30,910
+It
+
+554
+00:22:31,239 --> 00:22:33,170
+-- doesn't matter.
+-- I would say
+
+555
+00:22:34,339 --> 00:22:37,390
+Coity because that seems to be the most popular one and more to the point they'll
+
+556
+00:22:37,400 --> 00:22:39,810
+-- be able to find people who know how to use it and what the results
+-- mean.
+
+557
+00:22:39,949 --> 00:22:42,089
+That that might be fair. I don't, I don't know, does Coity
+
+558
+00:22:42,430 --> 00:22:45,969
+still back when I used it last? I think it only did C and C++.
+
+559
+00:22:45,979 --> 00:22:47,630
+I don't know if it does anything else. Oh,
+
+560
+00:22:47,839 --> 00:22:49,410
+it does a whole bunch of stuff now. But
+
+561
+00:22:49,589 --> 00:22:50,339
+more to the point.
+
+562
+00:22:50,540 --> 00:22:53,250
+Well, yeah, without even knowing what language they're using and stuff,
+
+563
+00:22:53,260 --> 00:22:54,010
+I'm just guessing.
+
+564
+00:22:54,020 --> 00:22:54,770
+But I would say Colver
+
+565
+00:22:55,060 --> 00:22:56,930
+because it's got a big company backing it
+
+566
+00:22:57,380 --> 00:22:57,890
+and
+
+567
+00:22:58,849 --> 00:23:00,579
+CAV
+
+568
+00:23:01,030 --> 00:23:03,069
+BC I think, and then C A but,
+
+569
+00:23:04,359 --> 00:23:06,119
+-- but yeah, so I think C
+-- A owns them
+
+570
+00:23:06,130 --> 00:23:08,829
+part of it honestly, for most businesses is like,
+
+571
+00:23:08,859 --> 00:23:10,810
+businesses have a problem and you know what,
+
+572
+00:23:10,819 --> 00:23:14,540
+there is probably like a really good optimal solution that's only going to cost $7
+
+573
+00:23:15,099 --> 00:23:16,089
+or they can just, like,
+
+574
+00:23:16,099 --> 00:23:18,239
+pay this consultant to come in and fix it for 10 grand
+
+575
+00:23:18,250 --> 00:23:20,010
+and be done with it and not have to think about it.
+
+576
+00:23:21,170 --> 00:23:22,790
+Right. I, I agree with that.
+
+577
+00:23:22,890 --> 00:23:23,270
+Yeah.
+
+578
+00:23:23,400 --> 00:23:26,270
+You know, I, I had a small drip in my basement.
+
+579
+00:23:26,459 --> 00:23:26,589
+Yeah.
+
+580
+00:23:26,599 --> 00:23:30,819
+Paid the epoxy concrete guy, like 450 bucks problem solved because, like,
+
+581
+00:23:30,829 --> 00:23:32,380
+what do I know about fishing concrete?
+
+582
+00:23:32,719 --> 00:23:34,829
+And as it turns out there was a crack in there, right?
+
+583
+00:23:34,839 --> 00:23:37,180
+So he did the epoxy the injection and then he's like, oh, yeah,
+
+584
+00:23:37,189 --> 00:23:38,569
+I can see the stuff is coming out here.
+
+585
+00:23:38,579 --> 00:23:41,020
+That means you have a crack, I'm gonna have to charge you like a little bit more.
+
+586
+00:23:41,030 --> 00:23:43,589
+It's like 50 bucks more. And I'm like, yeah, I'm ok with that,
+
+587
+00:23:44,079 --> 00:23:46,660
+you know, and he's like, ok, we, you know, I'm pretty sure it's fixed.
+
+588
+00:23:46,670 --> 00:23:50,459
+Can you run the hose outside for, you know, like half an hour to soak it like, yeah,
+
+589
+00:23:50,589 --> 00:23:52,369
+no water came in. Ok, thank you.
+
+590
+00:23:52,599 --> 00:23:56,020
+Sweet. You know, he emailed me an invoice. I emailed him his money.
+
+591
+00:23:56,219 --> 00:23:56,780
+Thank you.
+
+592
+00:23:58,810 --> 00:24:00,060
+Right. I mean, and that's,
+
+593
+00:24:00,270 --> 00:24:01,380
+and, but see, here's the thing,
+
+594
+00:24:01,500 --> 00:24:04,199
+that's what normal people want with their security problem.
+
+595
+00:24:04,530 --> 00:24:08,119
+I called the guy. He came, he poked it, he fixed it,
+
+596
+00:24:08,339 --> 00:24:09,839
+he emailed me a bill
+
+597
+00:24:10,089 --> 00:24:12,000
+and like, it was done in two days.
+
+598
+00:24:12,010 --> 00:24:14,579
+It, it only took two days because he had to do, like, the epoxy,
+
+599
+00:24:14,589 --> 00:24:17,030
+let it dry overnight and then do the injection stuff.
+
+600
+00:24:17,060 --> 00:24:18,839
+Otherwise it would have been done in like, three hours.
+
+601
+00:24:18,849 --> 00:24:22,064
+-- This
+-- is, this is an interesting analogy.
+
+602
+00:24:22,194 --> 00:24:24,714
+-- Right. That's what people want.
+-- You. You're absolutely right.
+
+603
+00:24:24,724 --> 00:24:27,415
+It's what they want and it's exactly what we can't give them.
+
+604
+00:24:27,425 --> 00:24:28,685
+It's like changing my oil.
+
+605
+00:24:28,864 --> 00:24:30,185
+I could change my oil.
+
+606
+00:24:30,395 --> 00:24:34,665
+I could go buy all the stuff I need to change my oil or I can go literally two blocks away
+
+607
+00:24:34,864 --> 00:24:38,185
+and some guys will do it for 70 bucks and I get to sit in my car and not get dirty
+
+608
+00:24:38,925 --> 00:24:40,425
+and it takes like, 15 minutes
+
+609
+00:24:40,525 --> 00:24:42,584
+and, and it costs the same price.
+
+610
+00:24:43,074 --> 00:24:43,165
+You just
+
+611
+00:24:43,484 --> 00:24:43,675
+buy it
+
+612
+00:24:43,915 --> 00:24:44,305
+yourself.
+
+613
+00:24:44,484 --> 00:24:44,635
+Yeah.
+
+614
+00:24:45,104 --> 00:24:45,255
+Yeah,
+
+615
+00:24:46,000 --> 00:24:46,300
+I know.
+
+616
+00:24:46,310 --> 00:24:48,780
+I occasionally change my own oil in my,
+
+617
+00:24:48,790 --> 00:24:52,260
+my truck because I like to show the kids how to do it.
+
+618
+00:24:52,709 --> 00:24:53,630
+And, yeah,
+
+619
+00:24:53,640 --> 00:24:57,310
+I think it's actually more expensive for me to change that oil than it is for me
+
+620
+00:24:57,410 --> 00:24:57,849
+to bring it.
+
+621
+00:24:58,709 --> 00:25:00,959
+So, you know, that's what people want from a security point of view. Right.
+
+622
+00:25:00,969 --> 00:25:01,660
+Like, my mom
+
+623
+00:25:01,869 --> 00:25:03,530
+wanted a new lock for her, like,
+
+624
+00:25:03,540 --> 00:25:06,630
+a gym locker because we were at the store actually buying a little safer.
+
+625
+00:25:06,819 --> 00:25:08,900
+She's like, oh, I should also get a new lock, you know which one's secure.
+
+626
+00:25:08,910 --> 00:25:10,569
+And I'm like, I started laughing. Right.
+
+627
+00:25:11,449 --> 00:25:13,270
+-- And she's like,
+-- there is an answer to this.
+
+628
+00:25:13,959 --> 00:25:14,469
+Well,
+
+629
+00:25:16,040 --> 00:25:17,949
+-- tell me what you told her and then I'll tell you the
+-- right.
+
+630
+00:25:18,060 --> 00:25:20,719
+I started laughing and I basically said none of them are secure.
+
+631
+00:25:20,729 --> 00:25:22,719
+The only way to get a secure lock to spend at least
+
+632
+00:25:22,939 --> 00:25:26,109
+is to spend at least a couple 100 bucks and even those get picked easily.
+
+633
+00:25:26,119 --> 00:25:26,979
+And I showed her the lock
+
+634
+00:25:27,199 --> 00:25:28,150
+lawyer where he does
+
+635
+00:25:28,390 --> 00:25:29,609
+where the lockpicking lawyer did.
+
+636
+00:25:29,619 --> 00:25:32,229
+Uh, what was it, like, 15 master locks in two minutes or something?
+
+637
+00:25:32,599 --> 00:25:34,619
+And so I'm like, whatever, just pick this one. It's fine.
+
+638
+00:25:34,630 --> 00:25:37,939
+-- It's like six bucks and it'll keep normal people out of your locker
+-- and,
+
+639
+00:25:37,949 --> 00:25:41,910
+and there's that, but did you, have you ever seen the, the master lock makes them,
+
+640
+00:25:41,920 --> 00:25:45,339
+they have like an up down left, right kind of thing on their face?
+
+641
+00:25:45,650 --> 00:25:46,709
+Yes, I've seen those
+
+642
+00:25:46,989 --> 00:25:49,410
+so of, of all the locks
+
+643
+00:25:49,680 --> 00:25:52,699
+that I've ever picked and done research on
+
+644
+00:25:52,959 --> 00:25:55,709
+that is the one that we still have not found a way.
+
+645
+00:25:55,719 --> 00:25:58,420
+Well, as of, as of this recording and the research I've done.
+
+646
+00:25:58,750 --> 00:26:00,530
+I, I will say that because I, I imagine
+
+647
+00:26:00,890 --> 00:26:02,930
+I'm going to learn if that's not true,
+
+648
+00:26:03,170 --> 00:26:03,699
+but
+
+649
+00:26:03,819 --> 00:26:06,170
+that is the one lock you can't break into or
+
+650
+00:26:06,180 --> 00:26:08,589
+pick without drilling a hole in it to look inside.
+
+651
+00:26:09,069 --> 00:26:11,209
+Uh, there's a speed dial option.
+
+652
+00:26:11,219 --> 00:26:12,569
+-- What's a speed
+-- dial option
+
+653
+00:26:12,619 --> 00:26:14,089
+where you can, like, try, well,
+
+654
+00:26:14,099 --> 00:26:16,410
+what you basically try all the combinations quickly
+
+655
+00:26:16,939 --> 00:26:17,300
+but it,
+
+656
+00:26:17,540 --> 00:26:20,569
+it holds like an insane number of combinations.
+
+657
+00:26:21,869 --> 00:26:25,250
+It's, I'm, I'm, I don't know, it is conceivable,
+
+658
+00:26:25,459 --> 00:26:27,930
+but this is all, this also comes back to your point.
+
+659
+00:26:28,140 --> 00:26:31,050
+-- It's like, that's just a brute force attack though. That's not picking it.
+-- Right.
+
+660
+00:26:31,260 --> 00:26:31,560
+That's,
+
+661
+00:26:32,300 --> 00:26:35,270
+you know, and you can always brute force attack a combination
+
+662
+00:26:35,390 --> 00:26:36,079
+given enough time
+
+663
+00:26:36,689 --> 00:26:37,589
+and somebody who doesn't like
+
+664
+00:26:38,599 --> 00:26:42,359
+and, and my combination on my up, down left, right.
+
+665
+00:26:42,670 --> 00:26:43,739
+Deo is like,
+
+666
+00:26:43,859 --> 00:26:47,689
+it's fairly long anyone who is trying to pick it, it would take
+
+667
+00:26:47,819 --> 00:26:47,859
+the
+
+668
+00:26:48,410 --> 00:26:48,930
+code.
+
+669
+00:26:49,839 --> 00:26:51,030
+That would be glorious.
+
+670
+00:26:51,040 --> 00:26:53,109
+I didn't even think of that, but that would have been awesome.
+
+671
+00:26:53,400 --> 00:26:53,640
+All
+
+672
+00:26:54,170 --> 00:26:58,069
+-- that was like the 1234 that jumped into my mind for that.
+-- I bet it is.
+
+673
+00:26:58,079 --> 00:27:01,910
+I bet that's the, I bet if you go to a gym with those, you could try the
+
+674
+00:27:02,209 --> 00:27:04,849
+Kami code and half of them are going to be the
+
+675
+00:27:05,290 --> 00:27:06,189
+Kami code.
+
+676
+00:27:06,800 --> 00:27:09,719
+You just need to glue a BN A button on the side and
+
+677
+00:27:10,010 --> 00:27:10,239
+good
+
+678
+00:27:10,359 --> 00:27:10,380
+to
+
+679
+00:27:10,550 --> 00:27:10,569
+go
+
+680
+00:27:12,689 --> 00:27:14,310
+anyway. Anyway.
+
+681
+00:27:14,599 --> 00:27:17,099
+All right. So we were talking about Os
+
+682
+00:27:17,270 --> 00:27:17,670
+Con
+
+683
+00:27:18,069 --> 00:27:18,660
+and,
+
+684
+00:27:18,949 --> 00:27:22,920
+and I mean, we're, we're kind of, we're running ourselves out of time here.
+
+685
+00:27:22,930 --> 00:27:27,900
+But I guess this is the thing I will say is I feel like people
+
+686
+00:27:28,189 --> 00:27:29,569
+normal developers
+
+687
+00:27:29,719 --> 00:27:31,829
+understand the importance of security
+
+688
+00:27:32,170 --> 00:27:36,300
+and I think they want to do the right thing and I think we're not telling them what it is
+
+689
+00:27:36,569 --> 00:27:38,540
+and that's basically what it comes down to.
+
+690
+00:27:38,550 --> 00:27:40,760
+-- No,
+-- it's worse that we don't tell them, we tell them things.
+
+691
+00:27:40,770 --> 00:27:43,160
+Like, well, you should develop securely and not make bugs.
+
+692
+00:27:43,750 --> 00:27:44,520
+Oh. Right.
+
+693
+00:27:44,699 --> 00:27:45,219
+That's
+
+694
+00:27:46,459 --> 00:27:50,050
+exactly. Exactly. Well, it works. It's telling them something of
+
+695
+00:27:50,150 --> 00:27:53,510
+no value because it's so open ended. The only way
+
+696
+00:27:53,619 --> 00:27:55,280
+is failure. Right. Like,
+
+697
+00:27:55,650 --> 00:27:59,520
+you know, we're saying, like, so many security people, mostly in my experience,
+
+698
+00:27:59,530 --> 00:28:00,709
+I don't not,
+
+699
+00:28:01,199 --> 00:28:03,619
+oh, here's the, here's what you should be doing,
+
+700
+00:28:03,800 --> 00:28:04,209
+right?
+
+701
+00:28:04,319 --> 00:28:07,140
+Like uh the CS A developers came to me and they're like, we should be,
+
+702
+00:28:07,150 --> 00:28:08,790
+we want to start tracking CV numbers for all the
+
+703
+00:28:08,800 --> 00:28:10,130
+Ruby Gems and stuff we use and I'm like,
+
+704
+00:28:10,140 --> 00:28:10,579
+ok,
+
+705
+00:28:10,800 --> 00:28:12,900
+no, you really don't. And they're like, what?
+
+706
+00:28:12,910 --> 00:28:15,439
+Yeah, we, we, we, we care about security and I'm like, oh, yeah.
+
+707
+00:28:15,449 --> 00:28:17,540
+No, I know you care about security but I'm like, I'm like,
+
+708
+00:28:17,550 --> 00:28:19,280
+how often are you guys doing new builds
+
+709
+00:28:19,290 --> 00:28:20,810
+of the software and deploying it to production?
+
+710
+00:28:20,819 --> 00:28:23,359
+He's like, well, you know, like at least once a week, sometimes more.
+
+711
+00:28:23,369 --> 00:28:25,270
+If there's a really bad CV,
+
+712
+00:28:25,280 --> 00:28:27,560
+we'll hear about it in the news and you guys will push an update, right?
+
+713
+00:28:27,569 --> 00:28:30,660
+And he's like, well, yeah, obviously and I'm like, ok, cool, thanks. Right.
+
+714
+00:28:30,670 --> 00:28:32,739
+Everything else, I assume they just pick up
+
+715
+00:28:33,060 --> 00:28:34,930
+-- every time they do a build, right?
+-- Yeah.
+
+716
+00:28:34,939 --> 00:28:37,099
+Yeah, they always just run whatever is the latest.
+
+717
+00:28:37,109 --> 00:28:37,670
+So I mean,
+
+718
+00:28:37,680 --> 00:28:41,900
+there is in theory the possibility of like a flaw being introduced in a newer jam
+
+719
+00:28:42,390 --> 00:28:43,339
+that is not fixed.
+
+720
+00:28:43,349 --> 00:28:46,819
+And so like if you know about it, you could roll back to an older version of the gem.
+
+721
+00:28:47,300 --> 00:28:49,189
+But the more common corner case is like, oh,
+
+722
+00:28:49,199 --> 00:28:51,890
+I found this flaw in the gem and we fixed it in the latest version.
+
+723
+00:28:52,300 --> 00:28:55,449
+That's like 99% of security flaws in my experience,
+
+724
+00:28:55,849 --> 00:28:57,010
+right? Somebody finds a flaw.
+
+725
+00:28:57,400 --> 00:28:57,719
+It was,
+
+726
+00:28:57,750 --> 00:29:02,250
+it was introduced at some point either at the very beginning or between now and then,
+
+727
+00:29:02,260 --> 00:29:04,040
+you know, when a new feature was introduced or
+
+728
+00:29:04,280 --> 00:29:05,739
+like the Linux kernel is great for this, right?
+
+729
+00:29:05,750 --> 00:29:09,050
+It's like, oh, we added this like uh SCTP protocol and
+
+730
+00:29:09,280 --> 00:29:11,380
+well, you know, there's a bunch of flaws in it.
+
+731
+00:29:11,390 --> 00:29:14,760
+And so as people extended the protocol and added more and more support for it,
+
+732
+00:29:14,770 --> 00:29:15,430
+you know, there's
+
+733
+00:29:15,699 --> 00:29:18,099
+this flaw was added a year ago, two years ago, whatever.
+
+734
+00:29:18,109 --> 00:29:20,459
+So essentially it's been there forever realistically, right?
+
+735
+00:29:20,920 --> 00:29:25,060
+And you know, we found it, we fixed it so the news version isn't flawed. Great. So,
+
+736
+00:29:25,229 --> 00:29:28,660
+yeah, like especially in the open source world, especially with this like,
+
+737
+00:29:28,670 --> 00:29:31,849
+you know, sort of ruby jams, you know, Pearl C Pan,
+
+738
+00:29:32,069 --> 00:29:33,339
+no Js type thing.
+
+739
+00:29:33,719 --> 00:29:36,500
+Yeah, if you're running the latest of everything,
+
+740
+00:29:36,630 --> 00:29:38,819
+basically, statistically, that's
+
+741
+00:29:39,140 --> 00:29:40,459
+how you are secure
+
+742
+00:29:40,780 --> 00:29:42,520
+as far as playing CD whacko.
+
+743
+00:29:44,060 --> 00:29:44,189
+Totally,
+
+744
+00:29:44,689 --> 00:29:46,349
+totally. And so I'm like, Yeah. You know,
+
+745
+00:29:46,510 --> 00:29:48,819
+if there's something really bad, I'll ask you to do an update.
+
+746
+00:29:48,829 --> 00:29:51,000
+But by and large you guys are doing these updates fast
+
+747
+00:29:51,010 --> 00:29:52,859
+enough that it's not really going to be a problem.
+
+748
+00:29:52,869 --> 00:29:55,319
+Plus we have a bunch of layers of other security like cloud flaring,
+
+749
+00:29:55,329 --> 00:29:57,329
+like other filtering and stuff to prevent, you know,
+
+750
+00:29:57,479 --> 00:30:00,589
+people from doing shenanigans to our web servers in the first place
+
+751
+00:30:00,750 --> 00:30:02,140
+regardless of what's running on it.
+
+752
+00:30:02,400 --> 00:30:04,540
+-- Yeah. No, I, I totally get it,
+-- man.
+
+753
+00:30:04,640 --> 00:30:04,910
+You know,
+
+754
+00:30:04,920 --> 00:30:07,900
+and I get for like larger applications or stuff you're shipping to customers,
+
+755
+00:30:07,910 --> 00:30:10,900
+you probably want better, more official CV tracking, right?
+
+756
+00:30:10,910 --> 00:30:13,660
+Because you can't just be like whatever ship an update and you know,
+
+757
+00:30:13,670 --> 00:30:15,060
+enforce everybody to use it.
+
+758
+00:30:15,069 --> 00:30:17,520
+Right. That's the beauty of a service, right. With a service. Oh,
+
+759
+00:30:17,739 --> 00:30:20,739
+yeah, 100% of customers upgraded. Why? Because we did,
+
+760
+00:30:21,260 --> 00:30:22,369
+-- right.
+-- It's that simple.
+
+761
+00:30:22,380 --> 00:30:23,150
+-- Right.
+-- It's
+
+762
+00:30:23,160 --> 00:30:24,130
+-- true.
+-- You know.
+
+763
+00:30:24,790 --> 00:30:27,900
+So, so anyway, anyway, kind of back to the topic is
+
+764
+00:30:28,729 --> 00:30:34,020
+people want actionable useful advice and we suck at that.
+
+765
+00:30:34,030 --> 00:30:36,380
+And so now this is something I'm starting to think about it,
+
+766
+00:30:37,180 --> 00:30:39,099
+but cost effective and realistic.
+
+767
+00:30:39,239 --> 00:30:42,500
+Yeah, that's true. True because I can give insane actionable advice.
+
+768
+00:30:42,510 --> 00:30:46,060
+But it needs to be practical. That that's a very good point actually. And I have to,
+
+769
+00:30:46,699 --> 00:30:48,390
+-- I have to consider that
+-- in some meaningful way.
+
+770
+00:30:50,060 --> 00:30:50,939
+Right.
+
+771
+00:30:51,839 --> 00:30:54,660
+As we found out last episode that totally works.
+
+772
+00:30:55,420 --> 00:30:56,020
+So
+
+773
+00:30:57,300 --> 00:30:58,339
+it works all the time.
+
+774
+00:31:03,660 --> 00:31:06,209
+It's like fishing training anyway anyway. All right.
+
+775
+00:31:06,380 --> 00:31:09,689
+So, yeah, I guess in summary it's
+
+776
+00:31:10,020 --> 00:31:14,479
+open source one and people want to be secure but they don't know what to do and,
+
+777
+00:31:14,489 --> 00:31:16,329
+and quite frankly we don't know what to tell them.
+
+778
+00:31:16,359 --> 00:31:16,869
+So,
+
+779
+00:31:17,400 --> 00:31:17,699
+you know,
+
+780
+00:31:18,619 --> 00:31:21,199
+I guess, well, actually, so here's one of the other things.
+
+781
+00:31:21,209 --> 00:31:22,920
+So the talk I gave, I took the O
+
+782
+00:31:23,099 --> 00:31:23,109
+A
+
+783
+00:31:23,229 --> 00:31:24,959
+top 10 and I also showed the old O
+
+784
+00:31:25,180 --> 00:31:28,810
+A top 10 and the new one. And I'm like, this is what failure looks like essentially.
+
+785
+00:31:29,329 --> 00:31:32,699
+-- And I can't wait for the hate mail for saying that
+-- it's, well, it's the same list,
+
+786
+00:31:32,709 --> 00:31:32,910
+right?
+
+787
+00:31:32,920 --> 00:31:35,170
+-- Every
+-- year. It's almost exactly the same
+
+788
+00:31:35,650 --> 00:31:36,260
+and,
+
+789
+00:31:36,560 --> 00:31:40,260
+-- and I, I turned it into,
+-- well, people keep making the same mistakes though.
+
+790
+00:31:40,270 --> 00:31:44,459
+So it's, it is the same list because, well, it's like driver training.
+
+791
+00:31:44,469 --> 00:31:47,410
+People still don't stop at red lights and they still can't parallel park.
+
+792
+00:31:47,550 --> 00:31:49,630
+-- Sure.
+-- Like it just doesn't change.
+
+793
+00:31:50,020 --> 00:31:53,290
+Exactly. And so basically I said 10 is too many as it is.
+
+794
+00:31:53,300 --> 00:31:55,650
+And I told them like, here's three things you can do.
+
+795
+00:31:55,660 --> 00:31:59,390
+Number one was use and like a framework, right?
+
+796
+00:31:59,400 --> 00:32:02,770
+Don't, don't like, don't do your own html escaping, for example,
+
+797
+00:32:02,780 --> 00:32:04,800
+just find a framework and use it,
+
+798
+00:32:05,089 --> 00:32:05,609
+right?
+
+799
+00:32:05,780 --> 00:32:08,930
+That takes care of like four of the top 10. Basically,
+
+800
+00:32:09,219 --> 00:32:11,400
+the second one was like, don't do your own.
+
+801
+00:32:11,640 --> 00:32:11,650
+A
+
+802
+00:32:11,760 --> 00:32:12,839
+right? There's things like a
+
+803
+00:32:13,180 --> 00:32:15,770
+zero, there's like Google, there's Microsoft,
+
+804
+00:32:15,780 --> 00:32:18,119
+there's everyone has like their ability to
+
+805
+00:32:18,130 --> 00:32:19,890
+do authentication and they have libraries to
+
+806
+00:32:19,900 --> 00:32:23,910
+-- hook into
+-- and more to the point most frameworks have that capability now,
+
+807
+00:32:24,560 --> 00:32:26,900
+weirdly, most web frameworks, you know, yeah,
+
+808
+00:32:26,930 --> 00:32:28,359
+they realize they need authentication.
+
+809
+00:32:28,849 --> 00:32:29,910
+Who knew? Right?
+
+810
+00:32:30,635 --> 00:32:33,015
+And then the last one was basically like, don't,
+
+811
+00:32:33,025 --> 00:32:35,405
+don't let humans do your infrastructure, right?
+
+812
+00:32:35,415 --> 00:32:38,354
+Use like tools and things like containers and answerable
+
+813
+00:32:38,364 --> 00:32:40,974
+scripts and whatever because obviously if humans touch it,
+
+814
+00:32:40,984 --> 00:32:41,625
+they screw it up.
+
+815
+00:32:41,635 --> 00:32:45,175
+But if you let a script do it, you're, it's going to be the same every time. And like,
+
+816
+00:32:45,464 --> 00:32:48,375
+and for real, like those three things, if everyone did those, you could,
+
+817
+00:32:48,385 --> 00:32:49,844
+you could almost get rid of the O
+
+818
+00:32:50,005 --> 00:32:51,935
+A top 10. But again, like
+
+819
+00:32:52,459 --> 00:32:55,349
+it, it's of course easy to say that it's hard to do,
+
+820
+00:32:55,359 --> 00:32:57,010
+but at least it's something people can think
+
+821
+00:32:57,020 --> 00:32:59,310
+about instead of saying here's 10 problems.
+
+822
+00:32:59,319 --> 00:33:02,709
+-- Good freaking luck.
+-- Part of the challenge is, you know, people need
+
+823
+00:33:02,939 --> 00:33:06,479
+more good generic solutions, not some hyper specific.
+
+824
+00:33:06,489 --> 00:33:09,489
+Well, like, don't ever write this specific line of code ever again,
+
+825
+00:33:10,369 --> 00:33:11,079
+right?
+
+826
+00:33:11,959 --> 00:33:13,199
+Because I've seen that I've literally
+
+827
+00:33:13,209 --> 00:33:15,310
+seen where people do developer security training
+
+828
+00:33:15,510 --> 00:33:17,430
+and they're like, don't ever do this, like, you know,
+
+829
+00:33:17,439 --> 00:33:20,709
+forget the html escape output to your web server.
+
+830
+00:33:20,739 --> 00:33:22,030
+Well, yeah, but no,
+
+831
+00:33:22,040 --> 00:33:23,859
+but kind of it doesn't work that way sometimes
+
+832
+00:33:23,869 --> 00:33:26,829
+because sometimes you actually have to send HTML out,
+
+833
+00:33:27,150 --> 00:33:27,619
+right?
+
+834
+00:33:27,739 --> 00:33:30,219
+And sometimes that's appropriate, you know, and so,
+
+835
+00:33:30,489 --> 00:33:33,060
+but if you have a framework, right? And the framework is smart.
+
+836
+00:33:33,069 --> 00:33:35,199
+It's like, well, that's user input. So I'm going to escape that.
+
+837
+00:33:35,209 --> 00:33:38,380
+Whereas this is something I generated, therefore it's OK.
+
+838
+00:33:38,709 --> 00:33:41,599
+-- You know.
+-- Exactly. Exactly. All right, man,
+
+839
+00:33:41,770 --> 00:33:43,300
+I, I dig it. So,
+
+840
+00:33:43,540 --> 00:33:44,400
+yeah, I guess
+
+841
+00:33:44,699 --> 00:33:47,380
+acon was fun. I, I hope to go again soon
+
+842
+00:33:47,550 --> 00:33:48,050
+and
+
+843
+00:33:49,189 --> 00:33:50,650
+yeah, I guess
+
+844
+00:33:51,260 --> 00:33:53,390
+that that is all. So let's
+
+845
+00:33:53,599 --> 00:33:55,410
+thank you, Kurt. Thank you everyone for listening.
+
+846
+00:33:55,420 --> 00:33:58,439
+You can go to open source security podcast.com, check out the show notes,
+
+847
+00:33:58,449 --> 00:34:01,010
+you can hit us up on Twitter at the Pound and Os S Podcast.
+
+848
+00:34:01,020 --> 00:34:01,729
+Hashtag
+
+849
+00:34:02,380 --> 00:34:03,189
+you can.
+
+850
+00:34:03,439 --> 00:34:07,329
+Yeah, and I guess if nothing else, Kurt have a fantastic rest of your day.
+
+851
+00:34:08,129 --> 00:34:09,389
+You too. Thanks everybody.

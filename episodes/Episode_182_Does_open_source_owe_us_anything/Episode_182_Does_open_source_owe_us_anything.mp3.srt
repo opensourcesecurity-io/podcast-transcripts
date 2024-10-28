@@ -1,0 +1,2635 @@
+0
+00:00:05,429 --> 00:00:10,170
+Hello and welcome to the open source security podcast episode 182 with myself,
+
+1
+00:00:10,180 --> 00:00:11,770
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:11,779 --> 00:00:12,279
+Josh Bresser.
+
+3
+00:00:12,710 --> 00:00:13,770
+How you doing, man?
+
+4
+00:00:13,909 --> 00:00:17,250
+Better. The cold snaps over and it's actually kind of nice winter now
+
+5
+00:00:18,430 --> 00:00:18,889
+and again,
+
+6
+00:00:18,899 --> 00:00:23,260
+we talk of the weather for people who live in strange places and potentially are
+
+7
+00:00:23,270 --> 00:00:26,770
+listening through the sands of time and it's the middle of summer for them.
+
+8
+00:00:26,959 --> 00:00:27,530
+So,
+
+9
+00:00:28,899 --> 00:00:31,860
+and maybe it's snowy where they live in the middle of summer. It is possible.
+
+10
+00:00:31,920 --> 00:00:34,659
+That's true. There is there anywhere that snows in the summer?
+
+11
+00:00:34,669 --> 00:00:36,450
+Probably some places in South America. Right.
+
+12
+00:00:36,459 --> 00:00:39,029
+Well, if you live high up enough in the mountains. Yeah, that's probably true.
+
+13
+00:00:39,189 --> 00:00:41,569
+Like we once almost got snowed on at summer camp.
+
+14
+00:00:43,200 --> 00:00:43,250
+Yeah.
+
+15
+00:00:44,380 --> 00:00:46,349
+Like I remember us having a snowball fight that
+
+16
+00:00:46,810 --> 00:00:48,229
+I'm not even gonna
+
+17
+00:00:48,430 --> 00:00:50,189
+comment on that. There's,
+
+18
+00:00:50,849 --> 00:00:53,349
+there's so much there, Kurt, I feel like
+
+19
+00:00:54,119 --> 00:00:57,439
+I went to summer camp like a normal person. I am completely normal. I do
+
+20
+00:00:57,549 --> 00:00:58,529
+normal things. Right.
+
+21
+00:00:58,630 --> 00:00:59,229
+Right.
+
+22
+00:00:59,340 --> 00:01:00,389
+Anyway.
+
+23
+00:01:01,400 --> 00:01:03,590
+Oh, my God. I didn't even know how to transition out of this.
+
+24
+00:01:05,519 --> 00:01:07,059
+That I'm normal, normal.
+
+25
+00:01:07,360 --> 00:01:07,779
+But,
+
+26
+00:01:07,879 --> 00:01:08,209
+well,
+
+27
+00:01:08,519 --> 00:01:10,349
+ok, normal. Human behavior
+
+28
+00:01:10,680 --> 00:01:11,830
+anyway.
+
+29
+00:01:13,720 --> 00:01:14,410
+OK.
+
+30
+00:01:14,589 --> 00:01:20,809
+So we have a special episode planned today and this one normalizing Eval code
+
+31
+00:01:21,089 --> 00:01:21,419
+it.
+
+32
+00:01:21,900 --> 00:01:22,389
+No.
+
+33
+00:01:22,919 --> 00:01:23,660
+So
+
+34
+00:01:24,260 --> 00:01:30,050
+I have a couple of stories that have come to my attention recently and,
+
+35
+00:01:30,059 --> 00:01:33,110
+and one of them I'm involved with more than I wish I was.
+
+36
+00:01:33,120 --> 00:01:33,550
+But
+
+37
+00:01:33,769 --> 00:01:34,540
+it is
+
+38
+00:01:35,029 --> 00:01:37,569
+something that's been on the back of my mind now for a while.
+
+39
+00:01:37,580 --> 00:01:41,599
+And this is kind of the question I will pose to you is a very general idea is,
+
+40
+00:01:41,900 --> 00:01:43,910
+does the maintainer
+
+41
+00:01:44,040 --> 00:01:45,970
+of an open source project
+
+42
+00:01:46,139 --> 00:01:47,440
+owe you anything?
+
+43
+00:01:47,680 --> 00:01:50,220
+I would say that's a complicated question.
+
+44
+00:01:50,230 --> 00:01:54,629
+And it depends, and I would say one of the biggest it depends on is
+
+45
+00:01:55,269 --> 00:01:57,050
+what have they publicly said.
+
+46
+00:01:57,220 --> 00:02:00,260
+Because for example, if I download a piece of source code
+
+47
+00:02:00,599 --> 00:02:04,209
+and obviously it has the standard licensing terms of, you know,
+
+48
+00:02:04,220 --> 00:02:06,250
+this software isn't good for anything.
+
+49
+00:02:06,349 --> 00:02:07,750
+And if it eats your cat,
+
+50
+00:02:07,879 --> 00:02:09,050
+that's too bad,
+
+51
+00:02:09,690 --> 00:02:12,199
+right? That's generally accepted software clause.
+
+52
+00:02:12,210 --> 00:02:14,910
+You know, if it causes any damage or problems, it's, that's on you
+
+53
+00:02:15,160 --> 00:02:16,929
+on the flip side. If
+
+54
+00:02:17,440 --> 00:02:20,979
+the developer or developer plural, if it's big enough to be a project,
+
+55
+00:02:21,210 --> 00:02:24,490
+have made some sort of commitment to the software,
+
+56
+00:02:24,669 --> 00:02:25,630
+what do I want to say?
+
+57
+00:02:25,639 --> 00:02:29,270
+Sort of actually, you know, in writing where they've said, like we,
+
+58
+00:02:29,529 --> 00:02:32,350
+we will support this version and the last version or,
+
+59
+00:02:32,460 --> 00:02:34,919
+you know, we are committed to improving the software.
+
+60
+00:02:35,089 --> 00:02:37,210
+Well, then I would say
+
+61
+00:02:37,789 --> 00:02:39,759
+ideally they keep their word ok.
+
+62
+00:02:39,770 --> 00:02:42,960
+So let's take the large organizations, like obviously there,
+
+63
+00:02:42,970 --> 00:02:46,389
+there's places like Apache or the open SSL group or Mozilla,
+
+64
+00:02:46,729 --> 00:02:47,679
+take them away
+
+65
+00:02:47,820 --> 00:02:50,399
+because they're, that's a different conversation.
+
+66
+00:02:50,789 --> 00:02:52,960
+Yeah. So, ok. Well, actually let's even take one
+
+67
+00:02:53,270 --> 00:02:55,009
+people who actually
+
+68
+00:02:55,240 --> 00:02:55,940
+make
+
+69
+00:02:56,160 --> 00:02:58,559
+money directly off of their software.
+
+70
+00:02:58,570 --> 00:03:02,580
+Not necessarily, I don't, I wouldn't even say that because I would say if I'm,
+
+71
+00:03:02,589 --> 00:03:05,339
+for example, I have a bunch of github
+
+72
+00:03:05,520 --> 00:03:06,490
+repos
+
+73
+00:03:06,710 --> 00:03:09,119
+and I don't make money off them.
+
+74
+00:03:09,279 --> 00:03:13,210
+They're in my case, they're not widely used by any means, but
+
+75
+00:03:13,500 --> 00:03:14,729
+they exist.
+
+76
+00:03:15,000 --> 00:03:20,619
+And the question I have is do I owe the people using my software anything?
+
+77
+00:03:20,960 --> 00:03:22,940
+So my thinking here is,
+
+78
+00:03:23,240 --> 00:03:26,820
+for example, if your software does have
+
+79
+00:03:27,539 --> 00:03:29,559
+some dangerous or pointy or sharp edges,
+
+80
+00:03:29,570 --> 00:03:31,660
+you should probably document or make those known.
+
+81
+00:03:31,759 --> 00:03:34,009
+Like one of my favorite examples is Python Pickle, right?
+
+82
+00:03:34,020 --> 00:03:37,089
+If you go to the Python Pickle web page and giant red text
+
+83
+00:03:37,250 --> 00:03:39,179
+use that it has, you know,
+
+84
+00:03:39,330 --> 00:03:43,399
+it says like, do not use this to take data from unknown sources because basically,
+
+85
+00:03:43,410 --> 00:03:44,100
+like we're going to,
+
+86
+00:03:44,229 --> 00:03:46,960
+we're going to unpick this thing and it's going to like
+
+87
+00:03:47,110 --> 00:03:50,419
+it can modify your, your code, like you in memory,
+
+88
+00:03:50,559 --> 00:03:51,970
+it will eat your dog.
+
+89
+00:03:52,169 --> 00:03:52,500
+Yeah.
+
+90
+00:03:52,570 --> 00:03:53,009
+But you know,
+
+91
+00:03:53,020 --> 00:03:58,559
+Python Pickle does have a place in the in Python in the use for various reasons.
+
+92
+00:03:58,570 --> 00:03:59,740
+I would say essentially
+
+93
+00:04:00,179 --> 00:04:02,380
+ideally, I'd like to see the developers
+
+94
+00:04:02,529 --> 00:04:03,190
+make
+
+95
+00:04:03,380 --> 00:04:06,750
+a reasonable best effort and I'm not going to
+
+96
+00:04:06,759 --> 00:04:08,710
+qualify that with the usual term that we use,
+
+97
+00:04:08,720 --> 00:04:11,839
+which is, you know, I will make every commercially reasonable effort to blah, blah,
+
+98
+00:04:11,850 --> 00:04:12,369
+blah, blah, blah.
+
+99
+00:04:12,380 --> 00:04:14,220
+Right. Because these people aren't commercial.
+
+100
+00:04:14,419 --> 00:04:17,019
+Yeah. Yeah. Yeah, that's fine. We're not lawyers. There's no
+
+101
+00:04:17,338 --> 00:04:18,728
+commercial relationship. It's,
+
+102
+00:04:18,978 --> 00:04:19,848
+and even broader.
+
+103
+00:04:19,858 --> 00:04:23,799
+For example, if I do a youtube video tutorial on how to say, take something apart
+
+104
+00:04:24,098 --> 00:04:25,359
+and I do it in a way that
+
+105
+00:04:25,639 --> 00:04:28,398
+you're going to damage it and there's a better way to do it without damaging it.
+
+106
+00:04:28,408 --> 00:04:31,209
+Do I have a duty to take down that video when somebody points out, hey, you know,
+
+107
+00:04:31,248 --> 00:04:32,699
+here's a better video that shows you how
+
+108
+00:04:32,709 --> 00:04:34,479
+to take this thing apart without damaging it.
+
+109
+00:04:34,859 --> 00:04:39,160
+I think that is a reasonable comparison and I would argue yes,
+
+110
+00:04:39,170 --> 00:04:42,209
+you should take that video down or at least note it and say, look,
+
+111
+00:04:42,220 --> 00:04:43,369
+there's an updated video that bla
+
+112
+00:04:44,209 --> 00:04:46,519
+yeah, and that's probably better even, actually
+
+113
+00:04:46,640 --> 00:04:48,920
+I've several times looked for videos on like
+
+114
+00:04:49,160 --> 00:04:52,579
+how to sort of do some little plumbing thing or take something apart.
+
+115
+00:04:52,589 --> 00:04:55,709
+And it's like, well, it's like the classic thing, you know, the first tear down.
+
+116
+00:04:55,720 --> 00:04:57,290
+Well, actually I fix it does this, you know,
+
+117
+00:04:57,299 --> 00:04:59,269
+where they tear something apart and then they're like, oh,
+
+118
+00:04:59,410 --> 00:05:01,369
+and once we tore the first one apart,
+
+119
+00:05:01,640 --> 00:05:04,170
+that's when we figured out how you actually take it apart without, you know,
+
+120
+00:05:04,179 --> 00:05:05,859
+snapping this piece off or whatever.
+
+121
+00:05:05,869 --> 00:05:06,140
+Right.
+
+122
+00:05:06,149 --> 00:05:08,059
+And, and that's fair, you know, because,
+
+123
+00:05:08,089 --> 00:05:10,369
+and then quite often they will actually have like
+
+124
+00:05:10,380 --> 00:05:12,480
+a corrected video or at least a warning saying,
+
+125
+00:05:12,489 --> 00:05:12,809
+you know,
+
+126
+00:05:13,070 --> 00:05:15,869
+uh, this step where we said this, don't actually do this, do this other thing.
+
+127
+00:05:15,880 --> 00:05:16,950
+And, like, what was it?
+
+128
+00:05:16,959 --> 00:05:20,429
+I bought a, yeah, a replacement battery from my iphone se and of course, you know,
+
+129
+00:05:20,779 --> 00:05:21,040
+I'm,
+
+130
+00:05:21,049 --> 00:05:23,140
+I'm pretty sure the first person to crack open an iphone
+
+131
+00:05:23,149 --> 00:05:25,290
+se there's a couple of spots where you can easily,
+
+132
+00:05:25,299 --> 00:05:27,170
+like, mess things up pretty bad.
+
+133
+00:05:27,350 --> 00:05:28,040
+Right. Right.
+
+134
+00:05:28,200 --> 00:05:30,089
+Anyways, but back to the software thing,
+
+135
+00:05:30,100 --> 00:05:32,739
+I would say people should ideally make a best effort.
+
+136
+00:05:32,980 --> 00:05:34,369
+The other thing,
+
+137
+00:05:34,720 --> 00:05:35,230
+well,
+
+138
+00:05:35,239 --> 00:05:36,809
+the other challenge too is we don't
+
+139
+00:05:36,820 --> 00:05:39,279
+necessarily know the circumstances of these people.
+
+140
+00:05:39,660 --> 00:05:44,619
+And I would say that also affects it because for example, sort of, uh in some cases,
+
+141
+00:05:44,630 --> 00:05:46,660
+these people are paid to work on this software, right?
+
+142
+00:05:46,670 --> 00:05:50,410
+They, they, they work for a company that's like we need a piece of software that does X
+
+143
+00:05:50,750 --> 00:05:53,950
+and so somebody writes an open source version implementation of it and releases it.
+
+144
+00:05:53,959 --> 00:05:54,260
+So
+
+145
+00:05:54,440 --> 00:05:56,640
+while they're not being like directly paid to work on it,
+
+146
+00:05:56,649 --> 00:05:59,290
+their company uses it and they get maybe some time to work on it.
+
+147
+00:05:59,299 --> 00:05:59,600
+Right?
+
+148
+00:05:59,609 --> 00:06:03,779
+Versus there are people that wrote something for themselves and they're like, hey,
+
+149
+00:06:03,790 --> 00:06:04,519
+I found this useful.
+
+150
+00:06:04,529 --> 00:06:06,600
+I'm just going to stick this up on my github because,
+
+151
+00:06:06,980 --> 00:06:07,440
+and then,
+
+152
+00:06:07,959 --> 00:06:10,100
+and sometimes these things become wildly popular,
+
+153
+00:06:10,109 --> 00:06:15,130
+you're conflating things that I think are irrelevant points to this conversation.
+
+154
+00:06:15,140 --> 00:06:16,859
+And so let me just explain
+
+155
+00:06:17,179 --> 00:06:19,820
+the stories driving this and then we can kind of
+
+156
+00:06:19,829 --> 00:06:23,380
+explore from there because I don't think that point matters.
+
+157
+00:06:23,390 --> 00:06:24,019
+So
+
+158
+00:06:24,399 --> 00:06:26,950
+the, the first story is
+
+159
+00:06:27,119 --> 00:06:29,820
+a Rust tool that's called Acti
+
+160
+00:06:30,040 --> 00:06:34,059
+web. And I'll put a link in the show notes to a blog post, that kind of
+
+161
+00:06:34,459 --> 00:06:39,059
+details the, the story behind this and what it kind of comes down to is obviously,
+
+162
+00:06:39,070 --> 00:06:42,399
+Rust is meant to be a safe programming language, not like
+
+163
+00:06:42,649 --> 00:06:46,769
+c for example, where C lets you basically shoot yourself in the foot, you know,
+
+164
+00:06:46,779 --> 00:06:50,160
+multiple times without even knowing you're doing it and it can be
+
+165
+00:06:50,434 --> 00:06:51,255
+extremely dangerous, right?
+
+166
+00:06:51,265 --> 00:06:53,234
+Russ is meant to fix a lot of those things,
+
+167
+00:06:53,244 --> 00:06:56,855
+but it also has the ability to run unsafe code
+
+168
+00:06:57,024 --> 00:07:00,505
+where and that makes sense because sometimes you might want to say like, right,
+
+169
+00:07:00,515 --> 00:07:03,934
+like II I understand, take the training wheels off.
+
+170
+00:07:04,154 --> 00:07:06,415
+I'm on my own here. I get it right
+
+171
+00:07:06,904 --> 00:07:08,095
+now. This, this
+
+172
+00:07:08,834 --> 00:07:13,135
+Aix Web apparently basically took just a bunch of unsafe code
+
+173
+00:07:13,315 --> 00:07:16,285
+and wrapped it all in the unsafe.
+
+174
+00:07:16,635 --> 00:07:19,765
+Uh I I guess I don't need a decorator. I don't know what they call it, a rust
+
+175
+00:07:20,190 --> 00:07:21,049
+and then
+
+176
+00:07:21,179 --> 00:07:24,089
+sent it out to the world and people started looking at this, they were like,
+
+177
+00:07:24,100 --> 00:07:26,329
+whoa look at all this unsafe code, we shouldn't do this.
+
+178
+00:07:26,339 --> 00:07:29,890
+And the developer was basically like, it's fine, everything's fine, it's fine.
+
+179
+00:07:30,500 --> 00:07:34,130
+And then people of course, did a bunch of testing and they kind of fuzzed it,
+
+180
+00:07:34,140 --> 00:07:34,790
+it sounds like.
+
+181
+00:07:34,799 --> 00:07:37,130
+And you can imagine what happened right
+
+182
+00:07:37,579 --> 00:07:39,609
+now. Here's what I will say.
+
+183
+00:07:40,109 --> 00:07:44,040
+I think at this point, the developer can say it's fine.
+
+184
+00:07:44,220 --> 00:07:45,809
+The developer can say
+
+185
+00:07:46,109 --> 00:07:47,250
+I don't want to fix it,
+
+186
+00:07:47,720 --> 00:07:50,130
+but people started submitting patches
+
+187
+00:07:50,320 --> 00:07:51,630
+and the developer said,
+
+188
+00:07:51,989 --> 00:07:52,549
+no,
+
+189
+00:07:52,910 --> 00:07:56,940
+I don't want your patches that fix these bugs so well In fairness though,
+
+190
+00:07:56,950 --> 00:08:00,510
+I've seen people submit patches that are horrifically bad
+
+191
+00:08:00,970 --> 00:08:02,950
+and some of them probably were,
+
+192
+00:08:03,059 --> 00:08:05,000
+I'm not talking about this specific issue, but in general,
+
+193
+00:08:05,010 --> 00:08:07,149
+I've seen people try and submit patches and it's like
+
+194
+00:08:07,329 --> 00:08:08,829
+your patch is bad.
+
+195
+00:08:08,839 --> 00:08:12,950
+It makes but Kurt, no, no, no, no, I don't, I don't want to do this because you're,
+
+196
+00:08:12,959 --> 00:08:15,869
+you're, you're distracting us from the actual problem.
+
+197
+00:08:15,880 --> 00:08:18,350
+Some of the patches were garbage. I guarantee it,
+
+198
+00:08:18,500 --> 00:08:20,630
+not all of them were right. This is
+
+199
+00:08:20,804 --> 00:08:21,934
+if you read the story,
+
+200
+00:08:21,945 --> 00:08:25,684
+this is clearly an issue of a developer who either didn't
+
+201
+00:08:25,695 --> 00:08:28,605
+want to admit fault or didn't want to do the work
+
+202
+00:08:28,765 --> 00:08:33,844
+and they were unwilling to turn their project into a community
+
+203
+00:08:33,854 --> 00:08:36,544
+project and they were hanging on to it by themselves.
+
+204
+00:08:36,554 --> 00:08:38,075
+And this is the thing
+
+205
+00:08:38,234 --> 00:08:40,544
+where I say, do you owe someone? Anything
+
+206
+00:08:40,960 --> 00:08:41,950
+that I think
+
+207
+00:08:42,140 --> 00:08:45,590
+this is where the open source concept sort of falls apart,
+
+208
+00:08:45,599 --> 00:08:48,780
+but sort of not because there's the concept of forking, that's part of it.
+
+209
+00:08:48,789 --> 00:08:51,039
+Well, I was about to say, I mean, worst case scenario,
+
+210
+00:08:51,049 --> 00:08:53,520
+somebody could fork this open source project, call it.
+
+211
+00:08:53,530 --> 00:08:53,900
+You know,
+
+212
+00:08:54,539 --> 00:08:57,150
+the thing that the code formerly known as act
+
+213
+00:08:57,510 --> 00:08:58,179
+and with a little
+
+214
+00:08:58,390 --> 00:08:59,400
+symbol but
+
+215
+00:08:59,729 --> 00:09:03,919
+is tricky. And I agree it's where this is going to end up. I have no doubt.
+
+216
+00:09:03,929 --> 00:09:04,960
+And additionally
+
+217
+00:09:05,090 --> 00:09:08,489
+running an open source project is really hard. Right.
+
+218
+00:09:08,500 --> 00:09:12,390
+Forking runs to the Wikipedia problem is the problem with Wikipedia is not that,
+
+219
+00:09:12,479 --> 00:09:14,750
+you know, it's great that everybody can have a copy of Wikipedia.
+
+220
+00:09:14,760 --> 00:09:16,460
+But if Wikipedia were to shut down,
+
+221
+00:09:16,929 --> 00:09:19,590
+where do we all go to keep editing it and keep it up to date
+
+222
+00:09:19,719 --> 00:09:21,450
+when there's like 700 copies floating around?
+
+223
+00:09:21,460 --> 00:09:24,429
+And that's one of the problems with forks is sort of, well, OK.
+
+224
+00:09:24,440 --> 00:09:28,109
+So this software got fork, there's like three or four major forks, which one is
+
+225
+00:09:28,570 --> 00:09:29,700
+the winner as it were.
+
+226
+00:09:30,429 --> 00:09:31,429
+And that's where that,
+
+227
+00:09:31,440 --> 00:09:35,270
+that's where you really do want the original developer's involvement
+
+228
+00:09:35,669 --> 00:09:38,469
+so that they can either officially bless the fork or
+
+229
+00:09:38,830 --> 00:09:40,390
+actually I'm just looking what happened with
+
+230
+00:09:40,609 --> 00:09:41,280
+Aix Web is
+
+231
+00:09:41,390 --> 00:09:46,669
+the original developer handed the project over to another person
+
+232
+00:09:47,109 --> 00:09:48,239
+to be project leader.
+
+233
+00:09:48,409 --> 00:09:49,750
+And so that hopefully,
+
+234
+00:09:49,760 --> 00:09:53,440
+now that person becomes more active and accepts patches and life goes on.
+
+235
+00:09:53,460 --> 00:09:54,289
+Right. Right.
+
+236
+00:09:54,299 --> 00:09:58,369
+And we can hope and now, but so here's, here's where that gets,
+
+237
+00:09:58,380 --> 00:10:01,880
+gets tricky and I'm going to, I'm going to kind of, there's a project in the node
+
+238
+00:10:01,989 --> 00:10:05,130
+Js world called low dash. And
+
+239
+00:10:05,510 --> 00:10:08,619
+I'm going to throw them under the bus a little bit here because I can
+
+240
+00:10:08,820 --> 00:10:14,250
+is so low dash is used in an enormous number of node dependencies.
+
+241
+00:10:14,260 --> 00:10:16,849
+If you do an NPM install of almost anything,
+
+242
+00:10:16,859 --> 00:10:20,229
+there is a very high probability low dash is going to come in with it.
+
+243
+00:10:20,239 --> 00:10:20,690
+And it's,
+
+244
+00:10:21,190 --> 00:10:21,830
+it's this,
+
+245
+00:10:21,840 --> 00:10:27,099
+this library that kind of adds functional programming like behavior to your,
+
+246
+00:10:27,109 --> 00:10:29,630
+your javascript project is basically what it is.
+
+247
+00:10:29,640 --> 00:10:31,909
+And it's a really cool library and it does some really neat things,
+
+248
+00:10:31,919 --> 00:10:37,770
+but the way it works, it has some very sharp edges and I've in fact is,
+
+249
+00:10:38,010 --> 00:10:42,289
+is I didn't try to do this. But I had multiple people come to me saying
+
+250
+00:10:42,700 --> 00:10:46,559
+I tried to raise some of these issues with low dash and the developer basically said
+
+251
+00:10:46,729 --> 00:10:48,020
+it's supposed to work that way.
+
+252
+00:10:48,030 --> 00:10:50,169
+And this is like this is like, you know,
+
+253
+00:10:50,179 --> 00:10:53,419
+to open your garage door and it lights on fire type stuff, right?
+
+254
+00:10:53,429 --> 00:10:59,190
+This is things that a reasonable person would not expect to be normal behavior.
+
+255
+00:10:59,270 --> 00:11:01,799
+Well, I'm just looking at that, that link you sent me and it's
+
+256
+00:11:03,049 --> 00:11:03,650
+Yeah.
+
+257
+00:11:04,380 --> 00:11:05,830
+Yeah. So it's pretty scary.
+
+258
+00:11:06,010 --> 00:11:07,190
+Yeah, I will,
+
+259
+00:11:07,489 --> 00:11:09,840
+I'll put a link to one or more issues.
+
+260
+00:11:09,849 --> 00:11:13,130
+I, I I'll, I'll decide how many I want to link because there's more than one
+
+261
+00:11:13,349 --> 00:11:14,940
+that are just some bugs
+
+262
+00:11:15,070 --> 00:11:18,390
+kind of detailing some of these issues. And the developer saying
+
+263
+00:11:18,849 --> 00:11:22,349
+I, I don't most of the time he says I'm too busy to do anything about this
+
+264
+00:11:22,659 --> 00:11:23,400
+and
+
+265
+00:11:23,770 --> 00:11:27,080
+see and that right there. But right there that says to me that,
+
+266
+00:11:27,270 --> 00:11:29,400
+OK, cool. You're too busy to do anything.
+
+267
+00:11:29,450 --> 00:11:32,559
+So are you going to accept help from the community members and actually, you know,
+
+268
+00:11:32,570 --> 00:11:33,909
+promote them to be
+
+269
+00:11:34,489 --> 00:11:35,510
+project
+
+270
+00:11:35,659 --> 00:11:38,109
+leadership admins or whatever you want to call it?
+
+271
+00:11:38,200 --> 00:11:39,969
+That's exactly kind of where I was hoping
+
+272
+00:11:39,979 --> 00:11:41,690
+to go with this because something like LO dash
+
+273
+00:11:41,909 --> 00:11:45,150
+is basically so embedded into the node ecosystem.
+
+274
+00:11:45,159 --> 00:11:49,429
+I think forking it is not going to be useful because so much
+
+275
+00:11:49,440 --> 00:11:53,119
+other stuff is already using it that I think replacing it would be
+
+276
+00:11:53,400 --> 00:11:54,940
+a monumental effort.
+
+277
+00:11:54,950 --> 00:11:58,190
+Well, actually it's interesting, there's actually some data on that Cloud Flare
+
+278
+00:11:58,409 --> 00:12:01,390
+blog just had an article on
+
+279
+00:12:01,710 --> 00:12:04,780
+javascript libraries are almost never updated once installed. The
+
+280
+00:12:05,260 --> 00:12:06,559
+Jquery Blog, I saw that
+
+281
+00:12:06,830 --> 00:12:07,200
+I am,
+
+282
+00:12:07,450 --> 00:12:11,340
+I am I for one am shocked, shocked, I tell you, you're right,
+
+283
+00:12:11,609 --> 00:12:12,619
+you know, like,
+
+284
+00:12:13,849 --> 00:12:15,460
+and this isn't just because you and I both
+
+285
+00:12:15,469 --> 00:12:17,239
+work for a software vendor where the idea was,
+
+286
+00:12:17,250 --> 00:12:20,679
+you know, take a piece of software and freeze it in time in Amber for 13 years.
+
+287
+00:12:20,690 --> 00:12:22,080
+No, like this is actually
+
+288
+00:12:22,489 --> 00:12:23,760
+this is actually quite normal.
+
+289
+00:12:23,770 --> 00:12:26,590
+Like for people like to be blunt, once you pull in something,
+
+290
+00:12:27,179 --> 00:12:28,219
+why would you update it?
+
+291
+00:12:28,229 --> 00:12:29,919
+It's only gonna maybe break stuff, you know,
+
+292
+00:12:29,929 --> 00:12:33,880
+like I'm really proud of my devs because they, they stay on the bleeding edge
+
+293
+00:12:34,150 --> 00:12:36,440
+and, yeah, they encounter Brokenness stuff all the time
+
+294
+00:12:36,739 --> 00:12:37,159
+but
+
+295
+00:12:37,530 --> 00:12:41,880
+they, they don't increase that delta between us and reality as much, you know, by,
+
+296
+00:12:41,890 --> 00:12:43,719
+by using the same thing for four years.
+
+297
+00:12:44,159 --> 00:12:45,989
+But, um, and especially, you know,
+
+298
+00:12:46,000 --> 00:12:48,380
+and it's one thing like pulling in a new version of something is
+
+299
+00:12:48,390 --> 00:12:52,580
+painful but like changing all those low dash to point to the,
+
+300
+00:12:52,590 --> 00:12:54,479
+the software formerly known as low dash,
+
+301
+00:12:54,969 --> 00:12:58,219
+right? That's just not gonna happen. No, it, it, it won't. I agree.
+
+302
+00:12:58,390 --> 00:12:59,739
+I agree. And then
+
+303
+00:12:59,929 --> 00:13:01,700
+it, it becomes very problematic.
+
+304
+00:13:01,710 --> 00:13:06,039
+And additionally, I think one of the other tricky things is so like, for example,
+
+305
+00:13:06,049 --> 00:13:07,619
+I have lots of crappy little github
+
+306
+00:13:07,750 --> 00:13:09,500
+projects that no one wants to help me with.
+
+307
+00:13:09,510 --> 00:13:12,650
+People, send me like drive by patches every now and then.
+
+308
+00:13:12,659 --> 00:13:14,659
+Actually, there, there's one project I have called
+
+309
+00:13:14,940 --> 00:13:15,989
+Yarn, which is an old net
+
+310
+00:13:16,130 --> 00:13:17,780
+hack style game
+
+311
+00:13:18,099 --> 00:13:20,539
+that is from, it's from a million years ago.
+
+312
+00:13:20,549 --> 00:13:22,580
+And for whatever reason I ended up with it,
+
+313
+00:13:22,590 --> 00:13:24,219
+I think it's because the old maintainer didn't care.
+
+314
+00:13:24,229 --> 00:13:26,340
+I sent a patches. You're like, I don't want this. Do you want it?
+
+315
+00:13:26,349 --> 00:13:27,250
+I'm like, yeah, I'll take it.
+
+316
+00:13:27,690 --> 00:13:28,830
+So anyway, I put it on github
+
+317
+00:13:29,030 --> 00:13:29,590
+and like,
+
+318
+00:13:29,859 --> 00:13:31,890
+yeah, someone sent me three patches one time.
+
+319
+00:13:31,900 --> 00:13:33,299
+I was like, do you just want commit privilege?
+
+320
+00:13:33,309 --> 00:13:35,929
+Because I'm sick of like, you know, taking your
+
+321
+00:13:36,090 --> 00:13:39,099
+request and adding it. I was like, oh yeah, that's cool.
+
+322
+00:13:39,109 --> 00:13:41,799
+And he did a few more and now, like, we haven't updated it in like,
+
+323
+00:13:41,809 --> 00:13:45,489
+five years and every now and then I'll get a bug report and I'm like, oh, ok,
+
+324
+00:13:45,500 --> 00:13:47,859
+I'll do something here and, you know, I'll maybe fix it or whatever.
+
+325
+00:13:47,869 --> 00:13:49,200
+But, like, it is,
+
+326
+00:13:49,585 --> 00:13:51,885
+it is one thing I think when it's just like,
+
+327
+00:13:51,895 --> 00:13:54,825
+crap little projects in Josh's github repos.
+
+328
+00:13:54,844 --> 00:13:56,885
+And it's another thing when, like, this is a
+
+329
+00:13:57,094 --> 00:14:02,775
+functional piece of software that is depended upon by an enormous number of people.
+
+330
+00:14:02,784 --> 00:14:06,965
+I think the phrase you're looking for, it's a key component of the ecosystem. Yeah.
+
+331
+00:14:06,974 --> 00:14:09,744
+That's fair. Right? Like we can't just get rid of all the worms.
+
+332
+00:14:09,755 --> 00:14:11,484
+And I think in a case like that
+
+333
+00:14:11,739 --> 00:14:16,760
+saying as an open source maintainer, you owe people nothing.
+
+334
+00:14:16,909 --> 00:14:22,679
+I won't say that's untrue, but I would say what you owe the world is a community.
+
+335
+00:14:23,039 --> 00:14:26,520
+And if people are willing to help you and willing to work with you in your community,
+
+336
+00:14:26,590 --> 00:14:28,809
+well, I wouldn't say you owe them a community.
+
+337
+00:14:28,820 --> 00:14:30,260
+I would say you owe them
+
+338
+00:14:30,450 --> 00:14:34,849
+the right to allow them to build a community. Yeah, that's fair. OK. I'll buy that.
+
+339
+00:14:34,909 --> 00:14:36,289
+But, you know, I mean, same idea. Right.
+
+340
+00:14:36,479 --> 00:14:39,270
+That's, I mean, I tried that with DW when people wanted to get involved, I was like,
+
+341
+00:14:39,280 --> 00:14:40,659
+hell, yeah, please do.
+
+342
+00:14:40,669 --> 00:14:43,200
+And of course they didn't really, and when I shut it down, they were all like, oh,
+
+343
+00:14:43,210 --> 00:14:44,219
+I would have helped And I'm like, no,
+
+344
+00:14:44,325 --> 00:14:46,955
+no, you wouldn't know because if you would have helped, you would have helped.
+
+345
+00:14:46,966 --> 00:14:49,906
+And that's ok too because I think you shutting it down
+
+346
+00:14:49,916 --> 00:14:53,346
+was the right move instead of keeping it barely alive,
+
+347
+00:14:53,356 --> 00:14:54,866
+which is not the right move.
+
+348
+00:14:55,875 --> 00:14:57,106
+Yeah. Just put things down
+
+349
+00:14:57,536 --> 00:15:00,346
+and there was a reasonable replacement for it. That's the other thing. Right.
+
+350
+00:15:00,356 --> 00:15:04,736
+Yes, that is true because CD E fixed a lot of their problems, you mean miter?
+
+351
+00:15:04,995 --> 00:15:05,505
+Sure,
+
+352
+00:15:05,911 --> 00:15:06,171
+whatever.
+
+353
+00:15:07,111 --> 00:15:08,081
+So anyways back
+
+354
+00:15:08,331 --> 00:15:08,601
+to this though,
+
+355
+00:15:08,771 --> 00:15:09,591
+I would say,
+
+356
+00:15:09,932 --> 00:15:14,512
+I think this actually there's a lot of real world analogs in the, for example,
+
+357
+00:15:14,521 --> 00:15:19,632
+it's not up to me or it's not my job to create community where I live.
+
+358
+00:15:19,762 --> 00:15:23,351
+But for example, I would say it would be a real dick move
+
+359
+00:15:23,572 --> 00:15:26,791
+to prevent other people from forming and creating a healthy community,
+
+360
+00:15:27,150 --> 00:15:27,460
+right?
+
+361
+00:15:27,469 --> 00:15:29,599
+To actively get in people's ways who want to
+
+362
+00:15:29,609 --> 00:15:31,159
+organize and make the world a better place.
+
+363
+00:15:31,489 --> 00:15:32,630
+That's kind of rude.
+
+364
+00:15:32,640 --> 00:15:34,140
+That's really interesting actually,
+
+365
+00:15:34,150 --> 00:15:37,880
+that you bring that up because I've seen things like this happen before.
+
+366
+00:15:37,890 --> 00:15:40,599
+And my favorite example is always when
+
+367
+00:15:41,070 --> 00:15:45,570
+you have like a group of especially young people trying to do something,
+
+368
+00:15:45,580 --> 00:15:46,489
+say at the park
+
+369
+00:15:46,729 --> 00:15:50,890
+and you'll have like this, it's always a grumpy old person for whatever reason,
+
+370
+00:15:50,900 --> 00:15:53,159
+they're throwing the ball too much and they're running
+
+371
+00:15:53,700 --> 00:15:57,429
+like one of my personal goals is to make sure that it's never me but you know. Right.
+
+372
+00:15:57,440 --> 00:15:59,510
+They're complaining about things and it's like just
+
+373
+00:15:59,520 --> 00:16:01,960
+there is literally nothing wrong with this event.
+
+374
+00:16:01,969 --> 00:16:07,159
+You need to just stay away, but they don't, right. They like, they actively try
+
+375
+00:16:07,460 --> 00:16:11,719
+to make it worse and they end up making themselves worse.
+
+376
+00:16:11,729 --> 00:16:15,119
+Well, or they impose rules or, oh, you're playing it wrong.
+
+377
+00:16:15,489 --> 00:16:16,559
+Like, literally, I,
+
+378
+00:16:16,570 --> 00:16:18,650
+I actually had to intervene once at the playground
+
+379
+00:16:18,659 --> 00:16:21,359
+because this adult was yelling at somebody else's kids
+
+380
+00:16:21,849 --> 00:16:22,479
+and,
+
+381
+00:16:22,719 --> 00:16:23,549
+and I was like,
+
+382
+00:16:23,559 --> 00:16:26,760
+and I literally the the parent was trying to intervene
+
+383
+00:16:26,770 --> 00:16:28,020
+and he was yelling at her and I'm like,
+
+384
+00:16:28,030 --> 00:16:28,989
+buddy, like a
+
+385
+00:16:29,109 --> 00:16:31,799
+complete stranger is intervening now in your behavior,
+
+386
+00:16:31,809 --> 00:16:33,840
+like you need to think about this.
+
+387
+00:16:34,119 --> 00:16:37,390
+And like, I, I literally, I hate to invoke this but like, you know, I
+
+388
+00:16:37,729 --> 00:16:39,940
+to become a scouting candidate, you have to take a bunch of training
+
+389
+00:16:40,539 --> 00:16:44,119
+and like the training explicitly covers dealing with people like this
+
+390
+00:16:44,599 --> 00:16:47,340
+because it's seen as such a threat and a problem, right?
+
+391
+00:16:47,479 --> 00:16:49,450
+And so I literally, and you know what the problem was,
+
+392
+00:16:49,809 --> 00:16:50,840
+this kid was,
+
+393
+00:16:50,849 --> 00:16:53,969
+he was basically accusing this person's kid of quote unquote cheating.
+
+394
+00:16:53,979 --> 00:16:54,679
+They were playing,
+
+395
+00:16:54,690 --> 00:16:57,799
+um it's whatever it's called grounders or something where you're supposed to,
+
+396
+00:16:57,809 --> 00:16:59,780
+one kid is supposed to keep their eyes closed while they
+
+397
+00:16:59,789 --> 00:17:01,400
+kind of try and find the other kids kind of thing.
+
+398
+00:17:01,750 --> 00:17:03,299
+And he was accused of cheating and opening
+
+399
+00:17:03,309 --> 00:17:05,439
+his eyes because he was like wearing sunglasses or
+
+400
+00:17:05,449 --> 00:17:07,640
+whatever and he couldn't see his eyes and he
+
+401
+00:17:07,650 --> 00:17:10,250
+wouldn't take his sunglasses off or whatever anyway.
+
+402
+00:17:10,260 --> 00:17:12,900
+So I spoke with this guy and he left in a huff because I was like,
+
+403
+00:17:12,910 --> 00:17:14,650
+I'm going to call the police in about a minute here.
+
+404
+00:17:14,660 --> 00:17:18,449
+Right? Because this is like, I feel physically unsafe and I'm 6 ft two
+
+405
+00:17:18,838 --> 00:17:21,618
+and you are literally behaving like a crazy person, you know.
+
+406
+00:17:22,088 --> 00:17:22,979
+And, um,
+
+407
+00:17:23,167 --> 00:17:23,318
+yeah,
+
+408
+00:17:23,328 --> 00:17:26,428
+it turns out the kid is wearing sunglasses because he just has an eye
+
+409
+00:17:26,438 --> 00:17:29,188
+condition and he can't be exposed to bright light without it hurting a lot.
+
+410
+00:17:29,499 --> 00:17:29,889
+You know,
+
+411
+00:17:30,029 --> 00:17:33,178
+more to the point too, if somebody else's kid is quote unquote cheating a bit. Like,
+
+412
+00:17:33,298 --> 00:17:34,178
+so what,
+
+413
+00:17:34,298 --> 00:17:37,379
+like that's part of life, that's part of learning about life. Like people,
+
+414
+00:17:37,889 --> 00:17:40,159
+I'm not saying it's good and you should cheat at games to be clear.
+
+415
+00:17:40,168 --> 00:17:40,938
+But at the same time,
+
+416
+00:17:41,189 --> 00:17:44,729
+let the kids learn how to handle it and only intervene if necessary. Right?
+
+417
+00:17:44,739 --> 00:17:46,550
+Like right now I'm at the stage with my kids.
+
+418
+00:17:46,560 --> 00:17:49,869
+They're nine years old and I'm like, I do as little as possible for them until
+
+419
+00:17:50,000 --> 00:17:53,619
+either they ask for help or they actually need help or a safety
+
+420
+00:17:53,869 --> 00:17:54,290
+because
+
+421
+00:17:54,579 --> 00:17:56,050
+how are they going to learn to do this?
+
+422
+00:17:56,260 --> 00:17:57,530
+And I see so many
+
+423
+00:17:57,670 --> 00:17:58,650
+other kids,
+
+424
+00:17:58,800 --> 00:18:01,030
+like literally, I have kids walk up to me at the playground and they're like,
+
+425
+00:18:01,040 --> 00:18:01,650
+can I play with him?
+
+426
+00:18:01,734 --> 00:18:03,714
+I'm like, I don't know, like who
+
+427
+00:18:03,814 --> 00:18:04,714
+is Kim? Like
+
+428
+00:18:04,824 --> 00:18:09,025
+I don't, I'm not I'm not the boss of Felix of Wolfgang. Like, I mean, I am but
+
+429
+00:18:09,234 --> 00:18:12,795
+you're, you're going to jail if they do something bad enough, right?
+
+430
+00:18:13,204 --> 00:18:13,795
+You know,
+
+431
+00:18:13,964 --> 00:18:16,775
+like, I, I don't know if Felix wants to play with you. Like
+
+432
+00:18:17,714 --> 00:18:18,214
+Kim. Yeah.
+
+433
+00:18:18,364 --> 00:18:19,025
+No, I, I
+
+434
+00:18:19,204 --> 00:18:22,155
+hear you back to the open source thing. I, I think,
+
+435
+00:18:22,880 --> 00:18:26,109
+for example, I mean, well,
+
+436
+00:18:26,119 --> 00:18:28,640
+I think part of the problem is people tend to really self
+
+437
+00:18:28,650 --> 00:18:31,969
+identify with the projects and especially the code they make because I,
+
+438
+00:18:32,040 --> 00:18:34,170
+and I think there is a bigger piece of artistry
+
+439
+00:18:34,180 --> 00:18:36,119
+to code than a lot of people want to admit,
+
+440
+00:18:36,130 --> 00:18:36,349
+right?
+
+441
+00:18:36,359 --> 00:18:39,540
+People become heavily emotionally invested in code they write.
+
+442
+00:18:39,729 --> 00:18:43,229
+And I actually have a parallel to this that
+
+443
+00:18:43,609 --> 00:18:46,270
+I, I will, I've been thinking about as well is
+
+444
+00:18:46,630 --> 00:18:51,069
+one of the things I've noticed in the security world especially is
+
+445
+00:18:51,079 --> 00:18:56,680
+we are notorious for viciously guarding our work of that's mine.
+
+446
+00:18:56,689 --> 00:19:00,760
+You can't do it. I'm working on that. Go away. No, you can't change that.
+
+447
+00:19:00,770 --> 00:19:02,569
+I'm working on it. That's my project.
+
+448
+00:19:02,989 --> 00:19:07,790
+And this is one of the things I have been working. I, I used to be like that.
+
+449
+00:19:07,800 --> 00:19:09,650
+Mind you, I know I was, we
+
+450
+00:19:09,780 --> 00:19:10,209
+were.
+
+451
+00:19:10,319 --> 00:19:12,459
+Yeah. And many of us still are.
+
+452
+00:19:12,859 --> 00:19:14,239
+And if you say you aren't,
+
+453
+00:19:14,469 --> 00:19:15,660
+you're just in denial
+
+454
+00:19:15,780 --> 00:19:17,930
+maybe. But this is part of the human condition, man.
+
+455
+00:19:18,219 --> 00:19:18,760
+I agree.
+
+456
+00:19:18,770 --> 00:19:21,260
+You know what I always think of actually when this happens is like when
+
+457
+00:19:21,270 --> 00:19:24,410
+I write a blog post or something and an editor gets at it.
+
+458
+00:19:24,599 --> 00:19:25,979
+I'm like, oh, my goodness.
+
+459
+00:19:25,989 --> 00:19:28,329
+I either feel angry because they took my voice away
+
+460
+00:19:28,339 --> 00:19:32,030
+or I'm embarrassed because I feel like I'm illiterate.
+
+461
+00:19:32,060 --> 00:19:32,170
+But
+
+462
+00:19:32,849 --> 00:19:34,109
+it's usually one of those two.
+
+463
+00:19:34,119 --> 00:19:35,030
+It's never like, oh, yes,
+
+464
+00:19:35,040 --> 00:19:38,750
+this is very reasonable commentary on the piece I just wrote,
+
+465
+00:19:38,760 --> 00:19:41,510
+I got over that because I wrote a monthly magazine column for Linux
+
+466
+00:19:41,650 --> 00:19:44,180
+journal. And like, yeah, the first few times I was like,
+
+467
+00:19:44,550 --> 00:19:44,560
+oh,
+
+468
+00:19:44,829 --> 00:19:45,469
+well, I know
+
+469
+00:19:45,719 --> 00:19:51,229
+I keep it to myself now. Right? I used to like lash out now. I'm good about it.
+
+470
+00:19:51,390 --> 00:19:54,650
+But, but here's my point, right is especially insecure.
+
+471
+00:19:54,910 --> 00:19:59,109
+We're, we're notorious for that, that ownership concept of
+
+472
+00:19:59,260 --> 00:20:04,119
+i it's mine. You can't touch it. Well, I would say unhealthy ownership. Yes. Yes.
+
+473
+00:20:04,140 --> 00:20:09,660
+Exactly. And I feel like this is, you see this in open source a lot where people are,
+
+474
+00:20:09,800 --> 00:20:11,609
+if you let it go,
+
+475
+00:20:11,819 --> 00:20:15,449
+it can grow into something so much bigger than you can imagine.
+
+476
+00:20:15,579 --> 00:20:18,099
+But if you, if you insist on maintaining control,
+
+477
+00:20:18,109 --> 00:20:20,290
+like the absolute best you're going to get
+
+478
+00:20:20,569 --> 00:20:25,630
+is something that barely lives. Well, I mean, back to, you know, I think
+
+479
+00:20:25,800 --> 00:20:28,390
+allowing the marketplace to speak is important
+
+480
+00:20:28,640 --> 00:20:33,420
+and consciously choosing to ignore what the market wants. Yeah, you can do that, but
+
+481
+00:20:33,680 --> 00:20:36,430
+then you're not going to be giving the market what they want, you're going, you know,
+
+482
+00:20:36,439 --> 00:20:39,189
+and in this case, you can actually be harming the market.
+
+483
+00:20:39,349 --> 00:20:40,020
+Right. There's
+
+484
+00:20:40,300 --> 00:20:42,910
+you refusing to accept patches and make the
+
+485
+00:20:42,920 --> 00:20:46,310
+software better actually has a real world cost potentially
+
+486
+00:20:46,719 --> 00:20:47,040
+in that.
+
+487
+00:20:47,050 --> 00:20:47,290
+Now,
+
+488
+00:20:47,300 --> 00:20:50,760
+these people have a lot of extra bugs and just general crappiness to
+
+489
+00:20:50,770 --> 00:20:54,209
+deal with that could easily be fixed in the case of Lo Dash.
+
+490
+00:20:54,300 --> 00:20:59,449
+These bugs allow for remote code execution in your No Js projects.
+
+491
+00:20:59,540 --> 00:21:02,430
+Like that's a big frigging deal. I mean,
+
+492
+00:21:02,800 --> 00:21:03,660
+RC,
+
+493
+00:21:03,890 --> 00:21:07,040
+that's what we talked about last week or two weeks ago.
+
+494
+00:21:07,050 --> 00:21:08,939
+I think it was with the Citrix remote code.
+
+495
+00:21:08,949 --> 00:21:12,449
+Like that's literally the worst possible problem you can have.
+
+496
+00:21:13,391 --> 00:21:15,192
+And is it technically low dash's fault?
+
+497
+00:21:15,202 --> 00:21:16,192
+Technically,
+
+498
+00:21:16,202 --> 00:21:19,092
+the project should have sanitized their inputs before they
+
+499
+00:21:19,102 --> 00:21:21,432
+did the perfectly reasonable thing with low dash.
+
+500
+00:21:21,592 --> 00:21:24,552
+But the reality is it's kind of like one of those things of saying,
+
+501
+00:21:24,661 --> 00:21:24,812
+oh,
+
+502
+00:21:24,822 --> 00:21:27,312
+you have to flip the don't explode switch before you flip
+
+503
+00:21:27,322 --> 00:21:30,112
+the turn on the light switch even worse than that.
+
+504
+00:21:30,121 --> 00:21:32,911
+If you have a library that accepts data and
+
+505
+00:21:33,041 --> 00:21:35,232
+potentially accepts dangerous data
+
+506
+00:21:35,391 --> 00:21:40,053
+and more to the point. If you can fix it in one spot at the library, why wouldn't you?
+
+507
+00:21:40,063 --> 00:21:43,553
+Yes, you should. Absolutely. And look defense in depth, right?
+
+508
+00:21:43,563 --> 00:21:46,494
+Multiple layers don't say, oh, you should only do that here.
+
+509
+00:21:46,504 --> 00:21:50,293
+No, like you should be sanitizing your inputs everywhere,
+
+510
+00:21:50,303 --> 00:21:53,093
+everywhere you can sanitize and sanitize them not in one place.
+
+511
+00:21:53,104 --> 00:21:53,154
+Well,
+
+512
+00:21:53,163 --> 00:21:55,644
+and you should also be assuming that the stuff that was supposed
+
+513
+00:21:55,654 --> 00:21:59,213
+to sanitize inputs didn't necessarily do it exactly in the real world.
+
+514
+00:21:59,223 --> 00:22:02,793
+That's kind of how that works. Sadly, that is exactly how it works.
+
+515
+00:22:02,803 --> 00:22:06,124
+Like all the time, every time, what always gets me is what these frameworks,
+
+516
+00:22:06,215 --> 00:22:06,715
+you can fix it.
+
+517
+00:22:06,725 --> 00:22:08,985
+A one spot for everybody for all time.
+
+518
+00:22:09,086 --> 00:22:10,196
+Why wouldn't you?
+
+519
+00:22:10,505 --> 00:22:10,796
+Right.
+
+520
+00:22:10,806 --> 00:22:14,605
+So I, I will, I will pick on one other thing and this is an interesting point as well.
+
+521
+00:22:14,615 --> 00:22:18,826
+If you look at the low dash uh like commit the activity graph in github,
+
+522
+00:22:19,885 --> 00:22:22,336
+there's a point where it, it dramatically falls.
+
+523
+00:22:22,345 --> 00:22:26,336
+And my assumption is the author either either had a job where they were working
+
+524
+00:22:26,345 --> 00:22:29,515
+on low dash as part of their job or they maybe got a new job.
+
+525
+00:22:29,526 --> 00:22:32,625
+You know what I mean? Like, there was some sort of probably life event
+
+526
+00:22:33,060 --> 00:22:37,430
+that has drastically altered the amount of time they can invest in this project.
+
+527
+00:22:37,810 --> 00:22:39,359
+And I mean, that's
+
+528
+00:22:39,650 --> 00:22:42,550
+I get it right. That, that's part of just life that happens to everybody.
+
+529
+00:22:42,560 --> 00:22:47,959
+I have many things that fall under that umbrella where I was doing certain things.
+
+530
+00:22:47,969 --> 00:22:52,180
+And I was like, like my blog is a great example. I used to write constantly and I just
+
+531
+00:22:52,520 --> 00:22:55,819
+due to a variety of events that have happened in life, I,
+
+532
+00:22:55,829 --> 00:22:59,660
+I write like a couple of times a year now instead of basically once a week.
+
+533
+00:22:59,869 --> 00:23:03,579
+And that's OK. Well, but here's a perfect example. He
+
+534
+00:23:03,939 --> 00:23:07,109
+when, when those things happen, the person can tell the community.
+
+535
+00:23:07,310 --> 00:23:09,540
+Well. Right. That's part of it. And I think
+
+536
+00:23:09,949 --> 00:23:13,540
+that is the thing I keep coming back to and kind of the,
+
+537
+00:23:13,550 --> 00:23:17,300
+the one message for anyone who hasn't turned this
+
+538
+00:23:17,310 --> 00:23:19,890
+podcast off and discussed up to this point yet.
+
+539
+00:23:19,900 --> 00:23:22,369
+Like the one thing I keep thinking of is
+
+540
+00:23:22,670 --> 00:23:28,239
+when you are part of making something with open source. And this is like
+
+541
+00:23:28,390 --> 00:23:28,810
+github
+
+542
+00:23:29,060 --> 00:23:33,650
+made this so easy, but it's not about you and it's not about your project.
+
+543
+00:23:33,660 --> 00:23:36,369
+It's about building up a community around what you're doing.
+
+544
+00:23:36,380 --> 00:23:38,650
+There's nothing wrong with being a community of one.
+
+545
+00:23:38,709 --> 00:23:41,569
+But if you have the ability to become a community of
+
+546
+00:23:41,670 --> 00:23:42,839
+multiple people,
+
+547
+00:23:43,020 --> 00:23:46,859
+it's so much more powerful. And like that is that is the point, right?
+
+548
+00:23:46,869 --> 00:23:48,589
+Like not to get all weird or anything.
+
+549
+00:23:48,599 --> 00:23:49,030
+But I mean,
+
+550
+00:23:49,099 --> 00:23:52,859
+the human condition is all about being part of a
+
+551
+00:23:52,869 --> 00:23:55,369
+community but being part of something bigger than yourself.
+
+552
+00:23:55,380 --> 00:24:00,489
+And like that is just open source. Well, to be blunt, nobody can survive on their own
+
+553
+00:24:01,170 --> 00:24:03,750
+unless they're like some crazy prepper who spent, you know,
+
+554
+00:24:03,760 --> 00:24:06,469
+years buying canned food so they could survive on their own.
+
+555
+00:24:06,479 --> 00:24:09,219
+Dude. You send me youtube videos like weekly
+
+556
+00:24:09,719 --> 00:24:12,219
+people that knew just that like,
+
+557
+00:24:12,439 --> 00:24:12,729
+right.
+
+558
+00:24:12,739 --> 00:24:16,079
+But I mean, the only reason they can survive on their own is because the the you know,
+
+559
+00:24:16,089 --> 00:24:20,739
+they had access to this massive everything to buy like a pallet of canned soup.
+
+560
+00:24:20,750 --> 00:24:25,000
+OK? That, that is fair and I will not disagree with you at all. And I think
+
+561
+00:24:25,219 --> 00:24:28,900
+that is, that's part of the story is if you are,
+
+562
+00:24:29,209 --> 00:24:31,099
+if you're developing software and github
+
+563
+00:24:31,260 --> 00:24:33,369
+and you're releasing it as open source,
+
+564
+00:24:33,380 --> 00:24:36,390
+you are standing on the shoulders of giants and
+
+565
+00:24:36,650 --> 00:24:40,229
+like letting people stand next to you or even stand
+
+566
+00:24:40,239 --> 00:24:43,910
+on top of your shoulders is extremely powerful and very
+
+567
+00:24:43,920 --> 00:24:47,390
+rewarding or kick you out of the way and take over it if they want to do a better job.
+
+568
+00:24:48,819 --> 00:24:50,959
+No. Really? Like because that does happen. Like, I,
+
+569
+00:24:52,010 --> 00:24:53,280
+well, for example,
+
+570
+00:24:53,290 --> 00:24:57,550
+I remember this one poor guy who started contributing to a major
+
+571
+00:24:57,560 --> 00:25:00,650
+library by doing documentation and then like six months later they're like,
+
+572
+00:25:00,660 --> 00:25:01,189
+yeah, cool.
+
+573
+00:25:01,199 --> 00:25:02,349
+I don't want to handle this. Do you want it?
+
+574
+00:25:02,359 --> 00:25:04,829
+And the guy's like, sure because he didn't know any better,
+
+575
+00:25:05,000 --> 00:25:06,270
+you know. So he said yes.
+
+576
+00:25:06,650 --> 00:25:08,670
+And then this thing had a major security flaw and he was like,
+
+577
+00:25:08,680 --> 00:25:11,069
+panicking because it had like 10 million installs.
+
+578
+00:25:11,079 --> 00:25:11,890
+It was a Ruby jam
+
+579
+00:25:12,209 --> 00:25:15,969
+and I'm like, no, you're not going to get sued. You'll be fine. I remember this. Yeah.
+
+580
+00:25:15,979 --> 00:25:18,949
+And you know, the poor guy was just freaked out but like, and he,
+
+581
+00:25:18,959 --> 00:25:20,150
+but the difference being is, you know,
+
+582
+00:25:20,160 --> 00:25:22,760
+rather than getting all crazy and defensive or whatever,
+
+583
+00:25:22,770 --> 00:25:25,430
+he actually reached out for help and it was fine,
+
+584
+00:25:25,680 --> 00:25:28,869
+but a lot of people do not want to accept help or they,
+
+585
+00:25:28,880 --> 00:25:31,839
+or maybe they feel like accepting help is a sign of weakness
+
+586
+00:25:31,849 --> 00:25:33,760
+because they feel like they should be able to do it themselves.
+
+587
+00:25:33,770 --> 00:25:33,959
+And
+
+588
+00:25:34,189 --> 00:25:34,880
+again,
+
+589
+00:25:35,219 --> 00:25:37,829
+yeah, that can sort of work for a while. But, like, even Lini Torvald
+
+590
+00:25:38,089 --> 00:25:40,050
+started accepting patches pretty early on
+
+591
+00:25:40,209 --> 00:25:43,010
+and, I mean, it seems to have worked out for him and he's like,
+
+592
+00:25:43,020 --> 00:25:46,130
+the least agreeable person anyone knows.
+
+593
+00:25:46,140 --> 00:25:46,689
+So,
+
+594
+00:25:46,829 --> 00:25:49,729
+yes and no, I actually have met people who are more disagreeable.
+
+595
+00:25:49,739 --> 00:25:50,849
+Yeah, that's probably true.
+
+596
+00:25:50,859 --> 00:25:54,050
+And they're in charge of open source projects that are much less successful.
+
+597
+00:25:54,060 --> 00:25:54,910
+Weirdly enough.
+
+598
+00:25:55,959 --> 00:25:56,000
+No.
+
+599
+00:25:56,640 --> 00:25:57,199
+And you know who I'm
+
+600
+00:25:57,349 --> 00:25:59,260
+talking? I know exactly who you're talking about.
+
+601
+00:26:00,260 --> 00:26:01,680
+So, anyway.
+
+602
+00:26:02,270 --> 00:26:02,280
+Uh,
+
+603
+00:26:02,420 --> 00:26:02,930
+yeah.
+
+604
+00:26:03,239 --> 00:26:05,890
+Right. Right. I, I agree. I, I, so
+
+605
+00:26:06,140 --> 00:26:09,339
+this to me is fundamentally part of the real world example of, you know,
+
+606
+00:26:09,489 --> 00:26:10,180
+people,
+
+607
+00:26:10,530 --> 00:26:14,500
+there are definitely benefits to learning how to behave with
+
+608
+00:26:15,010 --> 00:26:18,160
+and around other people and learning to cooper,
+
+609
+00:26:18,170 --> 00:26:20,660
+which oddly enough I seem to remember a lot.
+
+610
+00:26:20,670 --> 00:26:21,949
+It's being covered in kindergarten.
+
+611
+00:26:22,160 --> 00:26:23,550
+It's nice to be nice.
+
+612
+00:26:23,650 --> 00:26:27,510
+And that would be my takeaway. That's right. It's not so much nice to be nice.
+
+613
+00:26:27,520 --> 00:26:30,510
+It's, you're going to get punched in the face a lot less if you're nice.
+
+614
+00:26:30,719 --> 00:26:31,989
+Yeah, that's probably true.
+
+615
+00:26:32,099 --> 00:26:34,810
+And I don't mean, like, physically punched in the face but, I mean, metaphorically,
+
+616
+00:26:34,819 --> 00:26:36,709
+either way, probably both are true.
+
+617
+00:26:36,719 --> 00:26:39,280
+Yeah. Well, yeah, actually now that I think about it, yeah.
+
+618
+00:26:39,290 --> 00:26:41,540
+So I guess my key takeaway here is,
+
+619
+00:26:41,880 --> 00:26:44,040
+you know, if you're in charge of an open source project,
+
+620
+00:26:44,050 --> 00:26:46,699
+make sure you're behaving at least as well as a kindergartner.
+
+621
+00:26:46,709 --> 00:26:50,130
+So you get that gold star. It's a pretty high borrower set in there.
+
+622
+00:26:50,400 --> 00:26:56,420
+Sadly. Yeah, it is. It, for some of these people. It is. No, it is. I agree. And
+
+623
+00:26:56,699 --> 00:26:57,540
+I will,
+
+624
+00:26:57,979 --> 00:27:03,790
+I will always be more than happy to admit that many years ago. I was a terrible person
+
+625
+00:27:03,920 --> 00:27:07,060
+and I have a great deal of regret for the way I once acted.
+
+626
+00:27:07,069 --> 00:27:09,270
+And I feel like shows like this
+
+627
+00:27:09,540 --> 00:27:10,760
+and topics like this
+
+628
+00:27:11,040 --> 00:27:13,280
+are part of my penance
+
+629
+00:27:13,410 --> 00:27:15,839
+to try to help make sure it is not a,
+
+630
+00:27:15,849 --> 00:27:19,599
+a problem that persists even though I suspect it will.
+
+631
+00:27:19,810 --> 00:27:22,262
+But if even one person listens and understands,
+
+632
+00:27:22,272 --> 00:27:26,032
+I consider that a success because none of us are as cool as we think we are
+
+633
+00:27:26,152 --> 00:27:26,902
+and that's
+
+634
+00:27:27,292 --> 00:27:29,123
+pretty much how it goes.
+
+635
+00:27:29,152 --> 00:27:32,333
+Well, one thing I, I try to use and I've been trying to teach my kids is, you know,
+
+636
+00:27:32,343 --> 00:27:35,912
+if you can learn from the mistakes of others, it's going to be far less painful than
+
+637
+00:27:36,552 --> 00:27:38,022
+learn from your mistakes.
+
+638
+00:27:38,032 --> 00:27:41,743
+I know so many people that make the same mistake over and over and over again.
+
+639
+00:27:41,753 --> 00:27:42,373
+It's like just
+
+640
+00:27:43,145 --> 00:27:46,036
+please learn like please.
+
+641
+00:27:46,446 --> 00:27:47,426
+But anyway, I
+
+642
+00:27:47,645 --> 00:27:50,666
+think it's just part of the human condition. Yes. Yes, indeed.
+
+643
+00:27:50,676 --> 00:27:52,586
+We are squishy annoying. Begged me.
+
+644
+00:27:52,776 --> 00:27:55,845
+So. All right man. I'm calling it. Thank you. Thank you, Kurt.
+
+645
+00:27:55,855 --> 00:27:59,005
+This was this was a lovely conversation and it, of course,
+
+646
+00:27:59,015 --> 00:28:00,436
+I had no idea where we'd end up.
+
+647
+00:28:00,446 --> 00:28:02,855
+I think this is a very nice place and I,
+
+648
+00:28:02,865 --> 00:28:05,645
+hopefully we haven't angered anybody too greatly.
+
+649
+00:28:06,099 --> 00:28:10,339
+And as these things always go, if you are part of a project and you need help, like,
+
+650
+00:28:10,349 --> 00:28:14,119
+ask for it or just accept it when it comes, it's, it's,
+
+651
+00:28:14,250 --> 00:28:14,989
+it sounds,
+
+652
+00:28:15,369 --> 00:28:18,619
+it sounds easy but I know it can be hard but it's ok.
+
+653
+00:28:19,170 --> 00:28:21,439
+All right. So, thank you, Kurt. Thank you everyone for listening.
+
+654
+00:28:21,449 --> 00:28:24,569
+You can go to open source security podcast.com. Hit up the show notes, you
+
+655
+00:28:24,680 --> 00:28:28,160
+pound Os S podcast hashtag to hit us up on social media
+
+656
+00:28:28,380 --> 00:28:30,839
+and Kurt have a fantastic rest of your day.
+
+657
+00:28:30,949 --> 00:28:32,280
+You too. Thanks everybody.
+
+658
+00:28:32,449 --> 00:28:33,709
+Thanks everyone. Bye bye.

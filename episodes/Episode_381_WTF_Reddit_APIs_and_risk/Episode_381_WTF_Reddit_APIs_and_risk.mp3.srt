@@ -1,0 +1,3571 @@
+0
+00:00:05,639 --> 00:00:08,800
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,810 --> 00:00:12,329
+Kurt Siefried and my partner in lacking an API, Josh Pressers.
+
+2
+00:00:12,510 --> 00:00:13,949
+Do I lack an API
+
+3
+00:00:14,060 --> 00:00:14,130
+for the
+
+4
+00:00:14,270 --> 00:00:15,600
+Os S podcast? There's no API,
+
+5
+00:00:15,789 --> 00:00:18,959
+there's kind of an API, I mean,
+
+6
+00:00:19,379 --> 00:00:21,809
+so we have an RSS feed for the podcast that
+
+7
+00:00:22,280 --> 00:00:22,649
+then
+
+8
+00:00:23,739 --> 00:00:27,100
+I guess it's an API. But then also, so the service we use
+
+9
+00:00:27,760 --> 00:00:28,110
+Liben,
+
+10
+00:00:28,299 --> 00:00:32,930
+they do have an API and I have, I have considered scripting everything I do.
+
+11
+00:00:32,939 --> 00:00:33,979
+Actually, we use uh Liben
+
+12
+00:00:34,369 --> 00:00:35,319
+host, the
+
+13
+00:00:35,450 --> 00:00:36,400
+audio
+
+14
+00:00:36,659 --> 00:00:38,919
+and wordpress host the blog
+
+15
+00:00:39,520 --> 00:00:42,689
+or the website, whatever you want to call it. It, it's just a blog,
+
+16
+00:00:42,900 --> 00:00:46,889
+but there are API S and I have considered automating all of this.
+
+17
+00:00:46,900 --> 00:00:49,380
+So instead of like manually fiddling with it,
+
+18
+00:00:49,389 --> 00:00:51,930
+I just like type make or something and it goes, but
+
+19
+00:00:52,060 --> 00:00:54,009
+see, there's how you're doing it wrong.
+
+20
+00:00:54,020 --> 00:00:55,169
+If you're gonna automate this,
+
+21
+00:00:55,180 --> 00:00:57,590
+I'll walk you through doing it in zap year in about 20 minutes.
+
+22
+00:00:57,599 --> 00:01:01,250
+Do I have to pay for ZAP year? Not at three level anyway.
+
+23
+00:01:01,509 --> 00:01:06,071
+Well, and you get like 700 zaps a month, which for us would be a lot enough. I need four
+
+24
+00:01:06,202 --> 00:01:06,552
+Yeah.
+
+25
+00:01:07,181 --> 00:01:09,921
+Well, no, but each zap would have multiple things because you'd want to have it,
+
+26
+00:01:09,931 --> 00:01:12,332
+like, upload the file, fire up the blog
+
+27
+00:01:12,452 --> 00:01:15,141
+press, do this, do that, do that. But like using something like Zapper
+
+28
+00:01:15,561 --> 00:01:16,912
+done in like minutes.
+
+29
+00:01:17,041 --> 00:01:21,781
+That sounds like more work than I care about. I have a process that works.
+
+30
+00:01:21,882 --> 00:01:22,251
+Ok.
+
+31
+00:01:22,262 --> 00:01:23,751
+Before we get to the topic,
+
+32
+00:01:23,762 --> 00:01:26,893
+which is api related as people have probably ascertained.
+
+33
+00:01:26,903 --> 00:01:30,783
+I have discovered the most amazing thing and I told you about it yesterday.
+
+34
+00:01:30,793 --> 00:01:33,973
+So mcdonald's the, the giant fast food company,
+
+35
+00:01:33,984 --> 00:01:35,954
+they have a character named Grimace who many
+
+36
+00:01:35,963 --> 00:01:37,353
+people may not know about because Grimace,
+
+37
+00:01:37,704 --> 00:01:40,253
+I'm glad you qualified that mcdonald's is giant
+
+38
+00:01:40,424 --> 00:01:41,613
+because I, I wasn't aware.
+
+39
+00:01:41,624 --> 00:01:43,204
+Look, look, man, I'm,
+
+40
+00:01:43,223 --> 00:01:47,333
+this is for the people thousands of years in the future who uncovered his podcast
+
+41
+00:01:48,045 --> 00:01:50,805
+and they're wondering like, what are these two idiots doing?
+
+42
+00:01:50,975 --> 00:01:53,575
+So, anyway, mcdonald's has all these characters and you don't,
+
+43
+00:01:53,585 --> 00:01:57,045
+-- you don't really hear about many of them anymore,
+-- whatever happened to hamburglar.
+
+44
+00:01:57,055 --> 00:02:01,875
+-- Like, is he just doing time?
+-- He's probably not a role model for Children anymore.
+
+45
+00:02:02,216 --> 00:02:06,216
+But anyway, there's a character named Grimace and he's a very strange character.
+
+46
+00:02:06,225 --> 00:02:08,425
+No one knows what he is. He's purple
+
+47
+00:02:08,526 --> 00:02:09,996
+and apparently it's his birthday.
+
+48
+00:02:10,220 --> 00:02:11,330
+And so mcdonald's because
+
+49
+00:02:11,479 --> 00:02:14,479
+is like, there's this meal you can get called Grimace's birthday,
+
+50
+00:02:14,490 --> 00:02:15,559
+which I actually went and got when I
+
+51
+00:02:15,570 --> 00:02:17,679
+learned about this and the milkshake is whatever,
+
+52
+00:02:17,690 --> 00:02:19,240
+like I've had worse I've had better.
+
+53
+00:02:19,250 --> 00:02:23,350
+Is it purple? It is purple. Apparently when you eat the fries it changes flavor.
+
+54
+00:02:23,360 --> 00:02:27,479
+But I, I couldn't really tell and it just tasted like sugar, like,
+
+55
+00:02:28,240 --> 00:02:28,449
+but
+
+56
+00:02:29,759 --> 00:02:29,889
+-- it
+-- was
+
+57
+00:02:30,729 --> 00:02:31,350
+shocked
+
+58
+00:02:31,619 --> 00:02:33,779
+that a mcdonald's food product
+
+59
+00:02:33,880 --> 00:02:35,720
+that comes in a cup would taste like shrimp.
+
+60
+00:02:35,729 --> 00:02:39,070
+-- I,
+-- I'm sure I got four days worth of calories from eating that meal.
+
+61
+00:02:39,080 --> 00:02:42,539
+But they, they actually have shakes that are over 3000 calories here.
+
+62
+00:02:42,600 --> 00:02:42,910
+-- I,
+-- I
+
+63
+00:02:42,919 --> 00:02:44,509
+-- have
+-- no doubt. Anyway. Anyway,
+
+64
+00:02:44,764 --> 00:02:47,384
+no, no, no, we're not, we're not discussing our terrible eating habits.
+
+65
+00:02:47,565 --> 00:02:49,854
+So, anyway, it's part of this, there's this website called Grimes's
+
+66
+00:02:50,054 --> 00:02:52,304
+Birthday and it looks like something out of the nineties because it,
+
+67
+00:02:52,315 --> 00:02:53,304
+it's amazing looking.
+
+68
+00:02:53,315 --> 00:02:56,345
+Also. Grimace is 52 apparently, which seems like a strange
+
+69
+00:02:56,675 --> 00:03:00,494
+age to make a big deal about on the website. There's this little game, right?
+
+70
+00:03:00,835 --> 00:03:01,304
+And
+
+71
+00:03:01,639 --> 00:03:06,210
+when you play the game, it looks like something from the nineties as the website is.
+
+72
+00:03:06,339 --> 00:03:07,820
+And it turns out the, the,
+
+73
+00:03:07,830 --> 00:03:13,119
+the game is literally a game boy color rom that they're emulating in the web browser.
+
+74
+00:03:13,130 --> 00:03:17,059
+You can extract the rom and play it on a real game boy color,
+
+75
+00:03:17,419 --> 00:03:19,660
+which is amazing to me.
+
+76
+00:03:19,679 --> 00:03:22,380
+And of course, the, the, the weirdos on youtube were,
+
+77
+00:03:22,389 --> 00:03:27,610
+were commenting how mcdonald's is now a game publisher apparently, but like I
+
+78
+00:03:27,725 --> 00:03:30,395
+was blown away by the fact that they hired a
+
+79
+00:03:30,404 --> 00:03:33,445
+company to make them a game for Game Boy color.
+
+80
+00:03:33,455 --> 00:03:37,285
+And then anyone can play it. It's like that is so amazing to me.
+
+81
+00:03:37,294 --> 00:03:39,175
+-- This
+-- is
+-- another show we need to do at some point.
+
+82
+00:03:39,184 --> 00:03:41,565
+But I think we're rapidly getting to the point where
+
+83
+00:03:41,695 --> 00:03:41,964
+OK.
+
+84
+00:03:41,975 --> 00:03:45,214
+It reminds me of back when I uh like this is 20 some years ago,
+
+85
+00:03:45,225 --> 00:03:48,264
+flood forecasting control had remote machines like remote data
+
+86
+00:03:48,274 --> 00:03:50,695
+collection equipment for like river levels and flow meters
+
+87
+00:03:50,955 --> 00:03:53,664
+with custom silicon chips to like
+
+88
+00:03:53,809 --> 00:03:55,500
+connect to a phone line and blah, blah blah.
+
+89
+00:03:55,509 --> 00:03:57,919
+And nowadays the answer would be like, no, just get like
+
+90
+00:03:58,130 --> 00:03:58,139
+a
+
+91
+00:03:58,289 --> 00:03:58,339
+AAA
+
+92
+00:03:58,720 --> 00:04:01,309
+system on a board computer and write some Python script
+
+93
+00:04:01,619 --> 00:04:06,949
+and like use about 6 million times more lines of code than is necessary.
+
+94
+00:04:06,960 --> 00:04:08,270
+But who cares? It's a Python script.
+
+95
+00:04:08,279 --> 00:04:10,910
+It's clear to me that web browsers are now at that point where it's like
+
+96
+00:04:10,919 --> 00:04:15,369
+I want to build like an A RVR thing that needs all these crazy capabilities.
+
+97
+00:04:15,380 --> 00:04:15,679
+Well, yeah,
+
+98
+00:04:15,690 --> 00:04:17,540
+the web browser will just do that and just
+
+99
+00:04:17,548 --> 00:04:19,548
+whack it through some framework in the web browser.
+
+100
+00:04:19,894 --> 00:04:24,244
+And so I bet every software project kind of goes to heck in a handbasket
+
+101
+00:04:24,415 --> 00:04:25,644
+schedule wise.
+
+102
+00:04:26,364 --> 00:04:26,714
+But
+
+103
+00:04:27,065 --> 00:04:30,105
+for example, using an old DEV kit where you're kind of, you know,
+
+104
+00:04:30,114 --> 00:04:33,475
+there's like strong guard, like think about color game boy, there's,
+
+105
+00:04:33,484 --> 00:04:36,625
+there's gonna be guardrails like you can only do XY and Z right.
+
+106
+00:04:36,635 --> 00:04:38,774
+You can really only make a game, you can't like,
+
+107
+00:04:38,785 --> 00:04:40,834
+you don't have to worry about a web browser you don't have to worry about this.
+
+108
+00:04:40,845 --> 00:04:42,255
+You don't have to worry about that. Like,
+
+109
+00:04:42,394 --> 00:04:43,554
+I'm guessing that, that
+
+110
+00:04:43,915 --> 00:04:45,864
+you could probably, like once you get the art
+
+111
+00:04:46,179 --> 00:04:49,160
+assets done and the basic gameplay figured out,
+
+112
+00:04:49,170 --> 00:04:51,359
+you can probably crank out a game boy game
+
+113
+00:04:51,929 --> 00:04:53,279
+in like a couple of weeks.
+
+114
+00:04:53,510 --> 00:04:57,500
+There's really good tools as well that help you along this path.
+
+115
+00:04:57,779 --> 00:04:58,109
+Well,
+
+116
+00:04:58,329 --> 00:04:59,720
+very mature tools.
+
+117
+00:04:59,730 --> 00:05:00,029
+Uh Yeah,
+
+118
+00:05:00,040 --> 00:05:02,709
+which is funny because like all of the hacker types did
+
+119
+00:05:02,720 --> 00:05:06,920
+all this work because Nintendo's not releasing a DEV kit for this
+
+120
+00:05:07,670 --> 00:05:08,070
+-- and
+-- it kind
+
+121
+00:05:08,089 --> 00:05:10,109
+-- of
+-- runs. Remember all the flash games that went by by
+
+122
+00:05:10,295 --> 00:05:11,644
+flash went bye bye. But like
+
+123
+00:05:11,815 --> 00:05:13,904
+this really speaks to, you know,
+
+124
+00:05:13,915 --> 00:05:17,114
+if I because if somebody tried to build this game using a modern framework,
+
+125
+00:05:17,125 --> 00:05:18,114
+it still wouldn't be done.
+
+126
+00:05:18,355 --> 00:05:18,864
+That's it.
+
+127
+00:05:19,005 --> 00:05:21,635
+-- And that kind of speaks to API S and power use.
+-- It does.
+
+128
+00:05:21,644 --> 00:05:25,315
+Strangely enough, it's totally related to our topic, which is
+
+129
+00:05:25,445 --> 00:05:27,424
+API S and power users. OK?
+
+130
+00:05:27,524 --> 00:05:28,635
+What is an API?
+
+131
+00:05:29,329 --> 00:05:33,170
+And API is an application programming interface? And the idea is
+
+132
+00:05:33,320 --> 00:05:35,980
+you have a piece of software and typically pieces of software
+
+133
+00:05:35,989 --> 00:05:38,459
+have some sort of interface once they get complicated enough.
+
+134
+00:05:38,470 --> 00:05:40,480
+So we're, we're not talking about command line utilities anymore.
+
+135
+00:05:40,489 --> 00:05:41,480
+We're talking about like
+
+136
+00:05:41,989 --> 00:05:42,869
+a big Honkin
+
+137
+00:05:43,010 --> 00:05:47,760
+app that like like Microsoft Word or Excel or some web service thing or whatever.
+
+138
+00:05:47,769 --> 00:05:48,869
+Sure. And so
+
+139
+00:05:49,140 --> 00:05:50,489
+traditionally what happens?
+
+140
+00:05:50,500 --> 00:05:52,130
+Actually, Red Hat did this really well,
+
+141
+00:05:52,140 --> 00:05:54,380
+red hat when they would build something big and complicated,
+
+142
+00:05:54,390 --> 00:05:56,230
+would first of all build the command line tools.
+
+143
+00:05:56,799 --> 00:05:57,489
+And so
+
+144
+00:05:57,850 --> 00:06:00,600
+once you have command line tools, you have a working system and you can automate it.
+
+145
+00:06:01,200 --> 00:06:03,899
+And now you can stick a web front end on it
+
+146
+00:06:04,230 --> 00:06:06,989
+that calls the command line tools effectively. Right.
+
+147
+00:06:07,179 --> 00:06:07,890
+Yep, that's right.
+
+148
+00:06:07,899 --> 00:06:12,420
+And that web front end can be have a nice interface and it can, you know, like log in,
+
+149
+00:06:12,429 --> 00:06:13,890
+add a user whatever
+
+150
+00:06:14,140 --> 00:06:19,220
+and you can have like gated access and workflows and permissions and stuff.
+
+151
+00:06:19,549 --> 00:06:22,010
+But the problem becomes what happens when somebody needs
+
+152
+00:06:22,019 --> 00:06:24,720
+to do something that your interface does not support or
+
+153
+00:06:25,160 --> 00:06:28,600
+more likely needs to integrate it with another system. Well, they can't,
+
+154
+00:06:28,850 --> 00:06:30,519
+well, and that's where an API comes in.
+
+155
+00:06:30,529 --> 00:06:33,059
+You have an application programming interface where basically
+
+156
+00:06:33,359 --> 00:06:34,640
+you can touch all the knobs,
+
+157
+00:06:35,279 --> 00:06:39,649
+twiddle, all the knobs, get all the data in and out, do everything possible.
+
+158
+00:06:40,049 --> 00:06:42,429
+And now it's up to you to build something to do what you need it to do.
+
+159
+00:06:42,630 --> 00:06:44,829
+And I'm, I'm actually in this situation right now.
+
+160
+00:06:44,839 --> 00:06:49,440
+Uh The cloud security alliances has a uh we, we pay for this uh social platform
+
+161
+00:06:49,600 --> 00:06:52,380
+and I need to get the user's email address out of it so
+
+162
+00:06:52,390 --> 00:06:54,910
+that we can add them to the freaking Google groups as needed.
+
+163
+00:06:54,920 --> 00:06:55,390
+OK?
+
+164
+00:06:55,809 --> 00:06:56,269
+OK.
+
+165
+00:06:56,679 --> 00:07:00,209
+In the email that we send out to the group of men, you can add their first name,
+
+166
+00:07:00,220 --> 00:07:01,399
+their last name their company name.
+
+167
+00:07:01,410 --> 00:07:04,190
+There's like a whole mail merge with a list of variables that you can do.
+
+168
+00:07:04,790 --> 00:07:06,010
+Not their email address.
+
+169
+00:07:06,329 --> 00:07:08,470
+The reason API S are so critical
+
+170
+00:07:08,779 --> 00:07:10,200
+is it's your power users.
+
+171
+00:07:10,799 --> 00:07:13,250
+It's the people integrating this thing with another system.
+
+172
+00:07:13,260 --> 00:07:15,750
+It's the people building a tool that says, you know,
+
+173
+00:07:15,760 --> 00:07:18,269
+instead of clicking on each user profile and
+
+174
+00:07:18,279 --> 00:07:19,589
+cutting and paste the email address out,
+
+175
+00:07:19,600 --> 00:07:21,380
+we just want to automate that because
+
+176
+00:07:21,899 --> 00:07:24,380
+like seriously, right? Like that's our current workflows.
+
+177
+00:07:24,390 --> 00:07:27,890
+They click on the link, they cut and paste the email address into another thing.
+
+178
+00:07:27,899 --> 00:07:30,079
+And I'm like, that's no, we're, we're automating that. Like
+
+179
+00:07:30,250 --> 00:07:31,160
+that's ridiculous.
+
+180
+00:07:31,769 --> 00:07:37,769
+And so that's why API S are so critical because the majority of people will never
+
+181
+00:07:38,299 --> 00:07:42,359
+see an API most people will actually never interact with an
+
+182
+00:07:42,369 --> 00:07:45,619
+API because they'll use sort of the default website or the default
+
+183
+00:07:45,799 --> 00:07:46,600
+interface.
+
+184
+00:07:46,809 --> 00:07:50,359
+But the secret is the people who use power tools or third party clients,
+
+185
+00:07:50,619 --> 00:07:52,059
+they're the ones using API S
+
+186
+00:07:52,390 --> 00:07:54,260
+and if you take API S away from them,
+
+187
+00:07:54,739 --> 00:07:57,540
+you basically break life for all your power users
+
+188
+00:07:58,049 --> 00:08:00,480
+and all your third party apps and all your integrations.
+
+189
+00:08:00,799 --> 00:08:06,029
+That's right. And this is what Reddit did, which is why it's news at the moment.
+
+190
+00:08:06,040 --> 00:08:09,429
+-- But Twitter has done this as well.
+-- They did it but Reddit did it in a way.
+
+191
+00:08:09,440 --> 00:08:11,920
+That is so unspeakably ridiculous because no,
+
+192
+00:08:12,179 --> 00:08:15,940
+no, because remember Reddit basically said we're gonna charge access to the API
+
+193
+00:08:16,040 --> 00:08:17,890
+OK. That sucks. But fair.
+
+194
+00:08:18,089 --> 00:08:21,470
+But then they like literally two or three days later realized and sent out.
+
+195
+00:08:21,480 --> 00:08:23,739
+They put that posting on the website at the top
+
+196
+00:08:23,750 --> 00:08:27,940
+saying moderator tools and bots will have free API access.
+
+197
+00:08:27,950 --> 00:08:31,100
+Like they literally forgot that their website
+
+198
+00:08:32,159 --> 00:08:35,510
+literally cannot work without these automated bots and moderation tools
+
+199
+00:08:35,520 --> 00:08:37,479
+to keep all the spam and horror show stuff out,
+
+200
+00:08:37,489 --> 00:08:38,289
+right?
+
+201
+00:08:38,299 --> 00:08:40,409
+They literally didn't think that through.
+
+202
+00:08:41,489 --> 00:08:45,869
+I think you could say they didn't think that through is pretty much the,
+
+203
+00:08:46,008 --> 00:08:49,169
+the the slogan for everything reddit has done for
+
+204
+00:08:49,179 --> 00:08:51,708
+the last two or three weeks at this point.
+
+205
+00:08:52,278 --> 00:08:57,869
+And it is amusing to me. So here's where I think this conversation gets very fun
+
+206
+00:08:58,340 --> 00:09:02,260
+is like Twitter locked out their API at one point where they started charging for it,
+
+207
+00:09:02,270 --> 00:09:02,450
+right?
+
+208
+00:09:02,460 --> 00:09:04,130
+I love that. I predicted that.
+
+209
+00:09:04,140 --> 00:09:08,760
+And so I'd written, I have a headless chrome browser that implements the full
+
+210
+00:09:08,940 --> 00:09:13,280
+javascript and everything to extract a single piece of text from your profile.
+
+211
+00:09:13,289 --> 00:09:14,919
+So I can validate your email address.
+
+212
+00:09:14,950 --> 00:09:15,210
+And,
+
+213
+00:09:15,219 --> 00:09:19,570
+and here's what's funny is most of the API S and these services exist
+
+214
+00:09:19,580 --> 00:09:21,349
+because they got sick of people scraping
+
+215
+00:09:21,359 --> 00:09:24,104
+their sites and like destroying their bandwidth.
+
+216
+00:09:24,114 --> 00:09:24,494
+Whereas
+
+217
+00:09:24,705 --> 00:09:28,515
+like you can make an API call that pulls in a couple of bytes or you can load
+
+218
+00:09:28,525 --> 00:09:32,544
+a website that like three megabytes of crap and puts a huge load on the back end.
+
+219
+00:09:32,554 --> 00:09:33,304
+And I hate to say it.
+
+220
+00:09:33,315 --> 00:09:36,344
+But from my perspective, I don't really care, I just need that email address.
+
+221
+00:09:36,594 --> 00:09:36,965
+Well, no,
+
+222
+00:09:36,974 --> 00:09:40,385
+the person on the receiving side doesn't care if they're scraping
+
+223
+00:09:40,395 --> 00:09:44,924
+or using an API API S were created for the services to
+
+224
+00:09:45,114 --> 00:09:48,164
+basically control their, their loading costs.
+
+225
+00:09:48,354 --> 00:09:50,664
+-- Well, originally,
+-- not just that
+
+226
+00:09:51,179 --> 00:09:52,520
+but to allow
+
+227
+00:09:52,719 --> 00:09:55,530
+people to extend it because here's the thing.
+
+228
+00:09:55,729 --> 00:09:59,669
+-- Hold on,
+-- stop. Not yet. Not yet. Let's, I wanna, I wanna cover something else first.
+
+229
+00:09:59,950 --> 00:10:00,570
+So
+
+230
+00:10:00,890 --> 00:10:05,719
+Twitter and Reddit kind of lock down these API S and they start charging for them.
+
+231
+00:10:05,770 --> 00:10:07,539
+They didn't lock them down, they turned them off.
+
+232
+00:10:07,570 --> 00:10:10,159
+Well, they, they didn't turn them off, they're charging for them, right?
+
+233
+00:10:10,169 --> 00:10:11,840
+And they're charging quite a lot of money.
+
+234
+00:10:12,059 --> 00:10:14,559
+-- That's functionally the same as turning it off. OK,
+-- whatever.
+
+235
+00:10:14,830 --> 00:10:16,080
+And, but here's the thing,
+
+236
+00:10:16,320 --> 00:10:21,539
+the people who are using these API S are not the kind of people you often want to
+
+237
+00:10:21,880 --> 00:10:24,070
+kind of push out of your ecosystem.
+
+238
+00:10:24,080 --> 00:10:26,570
+-- Well,
+-- they're the people that literally build the ecosystem
+
+239
+00:10:26,710 --> 00:10:30,419
+in social media. Yes. Without people, you don't have social media.
+
+240
+00:10:30,429 --> 00:10:32,460
+I mean, I think Reddit's learning that
+
+241
+00:10:32,659 --> 00:10:36,200
+the people that use the third party Twitter clients are literally the people
+
+242
+00:10:36,210 --> 00:10:37,520
+that are posting massive amounts of
+
+243
+00:10:37,530 --> 00:10:40,169
+content and moderating content and providing feedback
+
+244
+00:10:40,630 --> 00:10:45,460
+and especially on Reddit, like all the mods, you, you cannot use reddit
+
+245
+00:10:45,989 --> 00:10:47,570
+with the default client and website.
+
+246
+00:10:48,010 --> 00:10:48,140
+It's
+
+247
+00:10:48,880 --> 00:10:49,750
+not good. No,
+
+248
+00:10:50,390 --> 00:10:50,539
+no,
+
+249
+00:10:50,729 --> 00:10:52,659
+no, you can't. It is
+
+250
+00:10:53,010 --> 00:10:54,909
+impossible. There's stuff that's missing.
+
+251
+00:10:55,140 --> 00:10:56,409
+That's fair. That's fair.
+
+252
+00:10:56,599 --> 00:10:59,969
+But here's so, here's, here's what amuses me about all this though. Right?
+
+253
+00:11:00,140 --> 00:11:02,489
+Is those people they
+
+254
+00:11:02,599 --> 00:11:03,659
+have found it,
+
+255
+00:11:03,809 --> 00:11:06,260
+I guess, easy to pick up and leave,
+
+256
+00:11:06,549 --> 00:11:09,940
+which I love because if you look at Mastodon,
+
+257
+00:11:10,200 --> 00:11:13,229
+a lot of the people who migrated to Mastodon right away,
+
+258
+00:11:13,390 --> 00:11:15,919
+they were the heavy lifters on Twitter.
+
+259
+00:11:15,929 --> 00:11:19,239
+And Mastodon has like in, in the security space, especially
+
+260
+00:11:19,549 --> 00:11:20,099
+there,
+
+261
+00:11:20,109 --> 00:11:24,460
+like the whole community basically just picked up and left and it was phenomenal.
+
+262
+00:11:24,469 --> 00:11:26,799
+-- I loved it.
+-- Well, and here's the trick is
+
+263
+00:11:27,250 --> 00:11:31,299
+you kind of have three main groups, you have the content producers,
+
+264
+00:11:31,559 --> 00:11:32,479
+the content
+
+265
+00:11:32,719 --> 00:11:34,559
+moderators and ma and community
+
+266
+00:11:34,570 --> 00:11:37,739
+managers effectively that enforce community norms
+
+267
+00:11:38,070 --> 00:11:39,799
+and the content consumers.
+
+268
+00:11:40,090 --> 00:11:42,369
+And they're broadly speaking, three separate groups of people.
+
+269
+00:11:42,380 --> 00:11:44,700
+Yes, obviously, there are people that are in all three groups, blah, blah, blah.
+
+270
+00:11:45,340 --> 00:11:48,590
+If one of those groups leaves or opts out largely,
+
+271
+00:11:48,599 --> 00:11:50,169
+then the whole thing just sort of falls apart
+
+272
+00:11:50,849 --> 00:11:52,179
+and especially
+
+273
+00:11:52,950 --> 00:11:56,450
+and OK, and if the, if the content creators leave, then obviously have a problem,
+
+274
+00:11:56,890 --> 00:11:58,400
+there's no new content, it's boring.
+
+275
+00:11:58,799 --> 00:11:59,190
+But
+
+276
+00:11:59,359 --> 00:12:02,739
+what's kind of insidious is the content moderators can leave and it,
+
+277
+00:12:03,570 --> 00:12:08,229
+it works for a few days or a few weeks until the not so nice people start coming in
+
+278
+00:12:09,000 --> 00:12:12,179
+and doing bad stuff to monetize community or to post
+
+279
+00:12:12,190 --> 00:12:15,049
+horrible stuff or to take advantage of it or whatever,
+
+280
+00:12:15,200 --> 00:12:18,419
+like apparently on Reddit, there's a whole bunch of companies that have already,
+
+281
+00:12:18,429 --> 00:12:18,859
+or,
+
+282
+00:12:19,190 --> 00:12:22,510
+you know, been using reddit essentially to do, for example, like market research,
+
+283
+00:12:22,520 --> 00:12:26,640
+like, apparently only fans was watching the various subs that post, you know,
+
+284
+00:12:26,650 --> 00:12:29,330
+where people post pictures of themselves to, you know, am I hot or not?
+
+285
+00:12:29,549 --> 00:12:31,580
+And then like the ones that are hot get
+
+286
+00:12:31,989 --> 00:12:35,099
+offered to become only fans content creator. Clever.
+
+287
+00:12:35,669 --> 00:12:36,780
+Right. Exactly. Well,
+
+288
+00:12:36,909 --> 00:12:37,419
+I mean,
+
+289
+00:12:38,020 --> 00:12:38,859
+yeah, like,
+
+290
+00:12:39,919 --> 00:12:41,780
+it's a no brainer, right? There's your market research
+
+291
+00:12:42,669 --> 00:12:44,049
+and, you know, they've already got a following.
+
+292
+00:12:44,200 --> 00:12:44,679
+So
+
+293
+00:12:45,190 --> 00:12:47,400
+what really the, the thing is
+
+294
+00:12:47,650 --> 00:12:51,239
+when you especially lose the sort of community content moderators,
+
+295
+00:12:52,119 --> 00:12:53,619
+the con the community
+
+296
+00:12:54,059 --> 00:12:55,690
+becomes very toxic and gross
+
+297
+00:12:55,969 --> 00:12:58,859
+nowadays. Very fast. It used to take months or years
+
+298
+00:12:59,349 --> 00:13:00,460
+now. It's like days or wish,
+
+299
+00:13:00,909 --> 00:13:04,090
+like I look at Twitter and like you read the studies of like the amount of
+
+300
+00:13:04,099 --> 00:13:06,140
+right wing and fascist stuff being posted there
+
+301
+00:13:06,150 --> 00:13:07,580
+and just being allowed and it's like,
+
+302
+00:13:08,419 --> 00:13:10,109
+well, I guess it's, that's how it is now,
+
+303
+00:13:10,469 --> 00:13:10,909
+right?
+
+304
+00:13:11,229 --> 00:13:13,099
+They're not taking stuff down anymore because, well,
+
+305
+00:13:13,109 --> 00:13:14,630
+they fired all the teams that did that.
+
+306
+00:13:15,390 --> 00:13:15,640
+No.
+
+307
+00:13:16,200 --> 00:13:16,429
+Right.
+
+308
+00:13:16,960 --> 00:13:20,349
+I know they did. Well, I mean, Reddit kind of just did too.
+
+309
+00:13:20,359 --> 00:13:23,309
+It's just theirs are volunteers and they got them for free.
+
+310
+00:13:23,609 --> 00:13:24,969
+So, anyway, anyway, OK. OK.
+
+311
+00:13:25,049 --> 00:13:29,070
+I want to, I want to back all this up because I think we're, we're too focused on,
+
+312
+00:13:29,080 --> 00:13:31,859
+on API S in this context.
+
+313
+00:13:31,900 --> 00:13:33,599
+And the other thing is API S
+
+314
+00:13:34,039 --> 00:13:36,349
+allow people to build something
+
+315
+00:13:36,840 --> 00:13:38,260
+new and interesting that
+
+316
+00:13:38,590 --> 00:13:40,210
+makes it better.
+
+317
+00:13:40,640 --> 00:13:44,950
+It maybe integrates with another service or it does spell check or whatever.
+
+318
+00:13:45,070 --> 00:13:47,250
+But it's subtle because sometimes the companies are like, oh,
+
+319
+00:13:47,260 --> 00:13:48,020
+that's a cool feature.
+
+320
+00:13:48,030 --> 00:13:51,020
+Let's make that part of the default and some of them do it nicely.
+
+321
+00:13:51,030 --> 00:13:53,099
+-- And ok,
+-- there, right there. Stop.
+
+322
+00:13:53,159 --> 00:13:57,419
+That is the purpose of this discussion that I wanted to cover is that
+
+323
+00:13:57,809 --> 00:13:59,260
+when I am
+
+324
+00:14:00,010 --> 00:14:05,390
+the consumer of an API from a company like Twitter or Reddit or Facebook or anybody,
+
+325
+00:14:05,919 --> 00:14:08,530
+you are functionally at their mercy.
+
+326
+00:14:08,539 --> 00:14:11,530
+And this is what I think makes this whole universe so interesting.
+
+327
+00:14:11,539 --> 00:14:13,580
+Like from a from a risk perspective,
+
+328
+00:14:13,849 --> 00:14:18,200
+it is very risky basing what you do on their API
+
+329
+00:14:18,210 --> 00:14:20,789
+because like the Apollo app for Reddit is a great example,
+
+330
+00:14:20,799 --> 00:14:21,070
+right?
+
+331
+00:14:21,320 --> 00:14:24,140
+The Apollo app was I I know that the developer was
+
+332
+00:14:24,150 --> 00:14:26,320
+not making a living off of this by any means,
+
+333
+00:14:26,510 --> 00:14:28,500
+but it's an example of Reddit basically said,
+
+334
+00:14:28,510 --> 00:14:31,700
+if you're going to keep making this app, you have to pay us $20 million a year.
+
+335
+00:14:32,000 --> 00:14:35,460
+And the Apollo guy was like, I can't possibly do that.
+
+336
+00:14:35,549 --> 00:14:38,140
+We're not going to go into that, but it's actually worse than that because the,
+
+337
+00:14:38,150 --> 00:14:41,570
+the way people use Apollo pricing, it would have been a complete impossibility.
+
+338
+00:14:41,580 --> 00:14:42,070
+But anyways
+
+339
+00:14:42,260 --> 00:14:43,299
+to back it up a second,
+
+340
+00:14:43,700 --> 00:14:47,299
+it's not that basing your business on a company's API is dangerous.
+
+341
+00:14:47,469 --> 00:14:49,130
+It's basing your business
+
+342
+00:14:49,280 --> 00:14:52,780
+on another thing that a single company controls
+
+343
+00:14:52,789 --> 00:14:54,559
+is dangerous because let's back it up steps.
+
+344
+00:14:54,570 --> 00:14:58,510
+For example, if you sell through Amazon on their marketplace,
+
+345
+00:14:58,520 --> 00:15:00,940
+guess what happens if you have a really popular product?
+
+346
+00:15:01,840 --> 00:15:04,539
+All of a sudden, Amazon basics shows up.
+
+347
+00:15:04,690 --> 00:15:05,280
+Yeah. Right.
+
+348
+00:15:05,289 --> 00:15:07,299
+They've done that more than once or actually, I,
+
+349
+00:15:07,309 --> 00:15:09,919
+I heard a story on public radio here in the US.
+
+350
+00:15:09,929 --> 00:15:11,780
+Uh, it's been maybe a year or more
+
+351
+00:15:12,039 --> 00:15:12,559
+but,
+
+352
+00:15:12,820 --> 00:15:14,979
+you know, the people who deliver for Amazon, right.
+
+353
+00:15:14,989 --> 00:15:17,380
+Those Amazon vans and trucks you see driving around.
+
+354
+00:15:17,390 --> 00:15:19,909
+Do you mean the Amazon ones or the outsourced? Like in telecom ones?
+
+355
+00:15:20,000 --> 00:15:22,440
+Well, the, the, the outsource they're all outsourced, aren't they?
+
+356
+00:15:22,450 --> 00:15:25,000
+-- I think they're all outsourced.
+-- Some are more outsourced than
+
+357
+00:15:25,070 --> 00:15:25,380
+ok.
+
+358
+00:15:25,390 --> 00:15:25,929
+Well, anyway,
+
+359
+00:15:25,940 --> 00:15:29,659
+they were basically talking about this person in Boston who created a
+
+360
+00:15:29,669 --> 00:15:33,960
+company basically to deliver Amazon stuff and for something happened that,
+
+361
+00:15:33,969 --> 00:15:36,599
+that Amazon got mad at him and they were like, you're done,
+
+362
+00:15:36,609 --> 00:15:38,400
+we're canceling your contract and like
+
+363
+00:15:38,760 --> 00:15:40,289
+that was it, there was no more.
+
+364
+00:15:40,299 --> 00:15:42,460
+This guy didn't have a business,
+
+365
+00:15:42,469 --> 00:15:47,140
+he only delivered for Amazon and when they cut him off with no warning because Amazon
+
+366
+00:15:47,479 --> 00:15:50,059
+-- like that was it, his company was over.
+-- A lot of businesses
+
+367
+00:15:50,190 --> 00:15:52,239
+will cut suppliers off with no warning.
+
+368
+00:15:52,440 --> 00:15:55,590
+-- I
+-- mean, that could be, I don't really understand that universe very well,
+
+369
+00:15:55,599 --> 00:15:56,929
+-- but part of
+-- it is,
+
+370
+00:15:57,299 --> 00:15:58,760
+but Amazon scale.
+
+371
+00:15:59,679 --> 00:16:01,039
+Oh, we lost one
+
+372
+00:16:01,150 --> 00:16:03,400
+supplier, providing package delivery.
+
+373
+00:16:03,429 --> 00:16:06,580
+-- Oh,
+-- they, they, they had, they probably had another one lined up
+
+374
+00:16:06,799 --> 00:16:07,770
+ready to go.
+
+375
+00:16:07,960 --> 00:16:09,030
+Well, they already have more.
+
+376
+00:16:09,039 --> 00:16:12,000
+See the thing to remember is Amazon is operating on a scale
+
+377
+00:16:12,179 --> 00:16:14,460
+where they use statistical modeling and forecasting.
+
+378
+00:16:14,729 --> 00:16:15,359
+Sure. It's,
+
+379
+00:16:15,609 --> 00:16:19,369
+it's nothing personal. It's not you. It's just a perfect example.
+
+380
+00:16:19,440 --> 00:16:20,880
+I remember 20 some years ago,
+
+381
+00:16:21,330 --> 00:16:21,690
+Suncor
+
+382
+00:16:22,010 --> 00:16:24,229
+and Syncrude, they're big oil companies locally, they had
+
+383
+00:16:24,669 --> 00:16:26,890
+massive spreadsheets for all of their equipment.
+
+384
+00:16:26,900 --> 00:16:30,150
+And essentially when this equipment starts breaking at this level and this rate
+
+385
+00:16:30,380 --> 00:16:31,580
+it's surplused.
+
+386
+00:16:31,719 --> 00:16:34,739
+And so for example, people were always like, oh man, Suncor and Syncrude,
+
+387
+00:16:34,750 --> 00:16:36,510
+they sell all these used pickup trucks so cheap.
+
+388
+00:16:36,890 --> 00:16:37,390
+And
+
+389
+00:16:37,669 --> 00:16:40,489
+like one of our I I was working for an electro like
+
+390
+00:16:40,500 --> 00:16:43,809
+an industrial electrical contractor back then that worked with these companies.
+
+391
+00:16:43,960 --> 00:16:44,440
+And they're like, yeah,
+
+392
+00:16:44,450 --> 00:16:46,750
+don't buy them because basically when sin crude or
+
+393
+00:16:46,760 --> 00:16:49,359
+Suncorp says that this equipment like we're selling it off
+
+394
+00:16:49,599 --> 00:16:50,109
+like
+
+395
+00:16:50,280 --> 00:16:54,270
+it's statistically, it's now into the nightmare mode of maintenance.
+
+396
+00:16:54,700 --> 00:16:55,320
+I have
+
+397
+00:16:55,429 --> 00:16:55,450
+no
+
+398
+00:16:55,570 --> 00:16:56,840
+doubt they've extracted
+
+399
+00:16:57,010 --> 00:16:59,789
+like they have literally extracted every drop of
+
+400
+00:16:59,799 --> 00:17:02,049
+value from that piece of equipment for sure,
+
+401
+00:17:02,059 --> 00:17:02,630
+for sure.
+
+402
+00:17:02,820 --> 00:17:03,869
+And now it's, it's
+
+403
+00:17:03,969 --> 00:17:05,030
+a, it's a negative thing
+
+404
+00:17:05,588 --> 00:17:07,398
+again, back to these API S that's
+
+405
+00:17:08,430 --> 00:17:11,979
+companies that are smart, provide API s realizing that OK,
+
+406
+00:17:12,108 --> 00:17:16,130
+Slack is a good example. Slack makes it easy to integrate stuff with Slack.
+
+407
+00:17:16,140 --> 00:17:16,790
+So what's happened?
+
+408
+00:17:16,800 --> 00:17:20,930
+Well, everybody uses Slack as their message bus with everything else tied in.
+
+409
+00:17:21,199 --> 00:17:23,780
+Same thing with Microsoft teams. Microsoft is trying to do this.
+
+410
+00:17:24,458 --> 00:17:25,868
+And this is for example,
+
+411
+00:17:26,159 --> 00:17:28,029
+um like what Zapp year does like they allow
+
+412
+00:17:28,038 --> 00:17:30,918
+you to integrate different services and smart services go
+
+413
+00:17:31,249 --> 00:17:33,879
+not only do we provide an API but we'll we'll set it up.
+
+414
+00:17:33,889 --> 00:17:37,029
+So it's easy to do in Zap year so that it just works and it's easy
+
+415
+00:17:37,168 --> 00:17:39,448
+because now for example, people like Kurt go, yes,
+
+416
+00:17:39,458 --> 00:17:41,229
+let's buy this service because this service will
+
+417
+00:17:41,239 --> 00:17:42,659
+integrate with all of our existing stuff.
+
+418
+00:17:42,668 --> 00:17:43,649
+So perfect example is
+
+419
+00:17:43,859 --> 00:17:46,088
+we use Zendesk for um help support,
+
+420
+00:17:46,639 --> 00:17:47,409
+right? Sure.
+
+421
+00:17:47,889 --> 00:17:51,499
+We're not going to use their api uh sorry, their A I for answering tickets
+
+422
+00:17:51,649 --> 00:17:52,848
+for one simple reason,
+
+423
+00:17:54,050 --> 00:17:55,550
+I can only use it in Zendesk
+
+424
+00:17:55,890 --> 00:17:57,949
+so I can put all this effort into learning how to
+
+425
+00:17:57,959 --> 00:18:00,530
+use their A I product and answer tickets and solve problems.
+
+426
+00:18:01,069 --> 00:18:03,150
+And I can only use it in Zendesk or
+
+427
+00:18:03,609 --> 00:18:07,150
+I can build an integration using ZAP here and open A is chat GP T
+
+428
+00:18:07,589 --> 00:18:08,829
+to answer our support tickets.
+
+429
+00:18:09,459 --> 00:18:14,390
+And now I can apply that knowledge and that system to do something else.
+
+430
+00:18:14,770 --> 00:18:15,790
+I mean, that's fair,
+
+431
+00:18:15,890 --> 00:18:16,890
+that's fair. See,
+
+432
+00:18:17,329 --> 00:18:17,849
+and
+
+433
+00:18:18,099 --> 00:18:19,709
+I'm of the mind where I would rather,
+
+434
+00:18:20,079 --> 00:18:22,050
+I would rather pick one vendor that solves multiple,
+
+435
+00:18:22,239 --> 00:18:24,150
+multiple problems than
+
+436
+00:18:24,400 --> 00:18:27,229
+you know, pay ZSK I and have that silo thing. And then,
+
+437
+00:18:27,400 --> 00:18:31,109
+oh, well, we want to use that knowledge and that training in another thing.
+
+438
+00:18:31,119 --> 00:18:35,709
+-- Uh We can't,
+-- that's always the dream, right? Of, of one thing to, to rule them all.
+
+439
+00:18:36,020 --> 00:18:40,390
+If I end up using one A I provided by each service,
+
+440
+00:18:40,930 --> 00:18:43,550
+I'm going to have 20 different A is and that has a high cost
+
+441
+00:18:43,560 --> 00:18:46,349
+and this is where this is the whole point of API S is.
+
+442
+00:18:46,359 --> 00:18:47,150
+For example,
+
+443
+00:18:47,800 --> 00:18:49,160
+you can uh perfect example,
+
+444
+00:18:49,170 --> 00:18:54,300
+Red hat makes software management products that use API S in VM Ware, for example,
+
+445
+00:18:54,310 --> 00:18:57,160
+to control VM Ware through a single red hat product.
+
+446
+00:18:57,170 --> 00:19:01,020
+-- I want to back you up because you just said this is the point of API
+-- S.
+
+447
+00:19:01,209 --> 00:19:02,380
+Well, it's one of the points
+
+448
+00:19:02,949 --> 00:19:07,020
+I have been thinking about this a lot and I think from the risk perspective,
+
+449
+00:19:07,030 --> 00:19:10,260
+so you hit your wagon to someone like Reddit or Twitter, we'll say,
+
+450
+00:19:10,270 --> 00:19:14,079
+and they're just good examples because they will say, behave badly recently.
+
+451
+00:19:14,349 --> 00:19:14,859
+And
+
+452
+00:19:15,989 --> 00:19:18,949
+I just keep thinking that the initial purpose of
+
+453
+00:19:18,959 --> 00:19:22,349
+those API S was kind of enablement and empowerment,
+
+454
+00:19:22,359 --> 00:19:24,650
+right to, to help people do better things.
+
+455
+00:19:24,959 --> 00:19:26,739
+And something happened
+
+456
+00:19:26,959 --> 00:19:29,699
+where they decided we're going to try to make
+
+457
+00:19:29,709 --> 00:19:33,150
+money off of this thing instead of viewing it as
+
+458
+00:19:33,430 --> 00:19:35,630
+a way to help people
+
+459
+00:19:35,760 --> 00:19:38,680
+do more and better with our product.
+
+460
+00:19:39,050 --> 00:19:42,670
+-- And I find that a fascinating occurrence. So
+-- Corey Dr
+
+461
+00:19:42,949 --> 00:19:44,819
+has written extensively about this and it's the Ancid
+
+462
+00:19:44,910 --> 00:19:48,510
+education process and basically it boils down to a company
+
+463
+00:19:48,709 --> 00:19:50,310
+has something of value
+
+464
+00:19:50,810 --> 00:19:51,689
+that they realize.
+
+465
+00:19:51,849 --> 00:19:52,550
+Oh, we could
+
+466
+00:19:52,880 --> 00:19:56,310
+extract that value. We can keep that value, we can monetize that value.
+
+467
+00:19:56,650 --> 00:19:58,030
+Well, duh, let's do that.
+
+468
+00:19:59,439 --> 00:19:59,939
+So,
+
+469
+00:20:00,369 --> 00:20:01,609
+and also to back it up a second.
+
+470
+00:20:02,599 --> 00:20:03,209
+I,
+
+471
+00:20:03,939 --> 00:20:07,989
+it's not that Twitter has an api, it's that if you want to do social media,
+
+472
+00:20:08,390 --> 00:20:10,439
+your choices are Facebook, Twitter, Reddit.
+
+473
+00:20:12,260 --> 00:20:13,400
+What else? That's it.
+
+474
+00:20:13,650 --> 00:20:13,729
+I
+
+475
+00:20:13,890 --> 00:20:18,459
+-- mean, for the big companies, maybe linkedin, I don't know. Does that count?
+-- No?
+
+476
+00:20:18,670 --> 00:20:18,719
+Well,
+
+477
+00:20:18,729 --> 00:20:21,410
+like if you want to actually like post pictures of cats
+
+478
+00:20:21,420 --> 00:20:23,680
+and somehow monetize that and make a business off that,
+
+479
+00:20:24,770 --> 00:20:25,150
+right?
+
+480
+00:20:25,290 --> 00:20:27,349
+You got to post it to Facebook or edit or Twitter.
+
+481
+00:20:27,619 --> 00:20:28,989
+That's fair. And so
+
+482
+00:20:29,619 --> 00:20:34,689
+it's more about you're not so much tied to the API you're tied to that company.
+
+483
+00:20:35,130 --> 00:20:35,739
+And so the FTA
+
+484
+00:20:36,020 --> 00:20:38,369
+is a good example of if you want to do Mastodon,
+
+485
+00:20:38,949 --> 00:20:40,780
+well, you can use somebody else's server,
+
+486
+00:20:41,079 --> 00:20:42,500
+you could set up your own server.
+
+487
+00:20:42,520 --> 00:20:45,869
+And as long as you're not a total jerk or using a total jerk servers,
+
+488
+00:20:45,880 --> 00:20:47,560
+you're probably not going to get defer
+
+489
+00:20:47,689 --> 00:20:49,760
+and blocked from everybody else's servers.
+
+490
+00:20:49,880 --> 00:20:51,790
+But it's biased nature. It's currently
+
+491
+00:20:52,060 --> 00:20:53,709
+mostly decentralized now.
+
+492
+00:20:53,719 --> 00:20:57,824
+It will centralized because simple economics says again,
+
+493
+00:20:57,834 --> 00:20:59,005
+there will be value there.
+
+494
+00:20:59,035 --> 00:21:00,905
+Companies will move in and try and capture it.
+
+495
+00:21:01,135 --> 00:21:01,635
+And then the coy
+
+496
+00:21:01,744 --> 00:21:03,084
+doctoral process of in shit
+
+497
+00:21:03,224 --> 00:21:04,285
+education will happen where
+
+498
+00:21:04,425 --> 00:21:05,494
+they intentionally
+
+499
+00:21:05,675 --> 00:21:08,895
+or unintentionally give away value, get people hooked in.
+
+500
+00:21:08,905 --> 00:21:10,354
+So, Amazon is a great example. Hey,
+
+501
+00:21:10,694 --> 00:21:13,275
+do you want to set up your own online store or just sell through us and have
+
+502
+00:21:13,285 --> 00:21:15,015
+delivery through us and prime delivery through us
+
+503
+00:21:15,025 --> 00:21:16,814
+and your customers will be so much happier.
+
+504
+00:21:16,824 --> 00:21:18,444
+Well, obviously, number two
+
+505
+00:21:18,875 --> 00:21:19,864
+and then Amazon
+
+506
+00:21:20,435 --> 00:21:22,604
+gets you in and start jacking up the fees.
+
+507
+00:21:23,015 --> 00:21:24,255
+What are you gonna do? Leave?
+
+508
+00:21:24,859 --> 00:21:27,930
+No, no, you're not. And worse if you're actually really successful.
+
+509
+00:21:27,939 --> 00:21:30,880
+Like, for example, I bought some uh gray bed sheets.
+
+510
+00:21:31,430 --> 00:21:32,260
+They were nice
+
+511
+00:21:32,689 --> 00:21:34,310
+and then I went to buy them a year later
+
+512
+00:21:35,260 --> 00:21:38,959
+and it recommended Amazon basics, exact same, basically description,
+
+513
+00:21:38,969 --> 00:21:39,979
+everything I ordered them.
+
+514
+00:21:40,170 --> 00:21:43,640
+And what's fascinating is they were exactly the same as the previous bedsheets.
+
+515
+00:21:43,849 --> 00:21:46,979
+However, the packaging was smaller, there was less packaging.
+
+516
+00:21:46,989 --> 00:21:48,479
+They'd basically been optimized.
+
+517
+00:21:49,219 --> 00:21:49,800
+They've been
+
+518
+00:21:49,979 --> 00:21:54,699
+optimized for cost and for pa and a whole bunch of like subtle things that probably
+
+519
+00:21:54,709 --> 00:21:58,160
+shaved a buck or two off the cost of producing this thing and shipping it,
+
+520
+00:21:58,219 --> 00:21:58,689
+which on a
+
+521
+00:21:59,430 --> 00:22:01,959
+-- matter at their
+-- scale, a buck is a big deal. All right.
+
+522
+00:22:02,209 --> 00:22:04,119
+So here's the question, right.
+
+523
+00:22:05,229 --> 00:22:07,020
+I'm a company
+
+524
+00:22:07,410 --> 00:22:10,599
+and you can't exist anymore outside of
+
+525
+00:22:10,609 --> 00:22:13,390
+this whole ecosystem of everything around us.
+
+526
+00:22:13,400 --> 00:22:13,819
+Right?
+
+527
+00:22:14,530 --> 00:22:16,140
+How do I
+
+528
+00:22:16,380 --> 00:22:19,189
+make sure, like from a risk perspective,
+
+529
+00:22:19,489 --> 00:22:21,349
+how do I make sure I'm not
+
+530
+00:22:21,479 --> 00:22:26,420
+basically creating an unacceptable level of risk by being overly reliant
+
+531
+00:22:26,569 --> 00:22:29,109
+on one mega company's stuff.
+
+532
+00:22:29,709 --> 00:22:31,489
+-- You can't always do that.
+-- I
+
+533
+00:22:31,500 --> 00:22:33,670
+-- don't
+-- know if you can. I've been thinking about this a lot.
+
+534
+00:22:33,680 --> 00:22:38,959
+-- I've got nothing.
+-- No, there, there's just industries where that's not possible.
+
+535
+00:22:39,369 --> 00:22:42,349
+Um If you build nuclear reactors for example,
+
+536
+00:22:42,359 --> 00:22:44,910
+you don't have a lot of customers if you're Lockheed Martin
+
+537
+00:22:45,229 --> 00:22:46,849
+and you build fighter jets.
+
+538
+00:22:47,349 --> 00:22:47,770
+Like
+
+539
+00:22:48,689 --> 00:22:51,170
+not only do you not have a lot of customers but the US government is gonna be like,
+
+540
+00:22:51,180 --> 00:22:53,689
+we don't care if you want to sell them to random country.
+
+541
+00:22:53,699 --> 00:22:54,569
+We said no,
+
+542
+00:22:55,489 --> 00:22:57,839
+like you can't sell the F-35 to
+
+543
+00:22:58,099 --> 00:22:58,680
+China.
+
+544
+00:22:58,949 --> 00:23:01,760
+Like you just can't, I don't care how many they want to buy.
+
+545
+00:23:03,060 --> 00:23:03,709
+Right.
+
+546
+00:23:04,170 --> 00:23:07,550
+And that's the thing like at some point, this is a business risk that you, you,
+
+547
+00:23:07,719 --> 00:23:09,219
+I'm a contractor.
+
+548
+00:23:09,619 --> 00:23:11,579
+I have a contract with the Cloud Security Alliance.
+
+549
+00:23:12,790 --> 00:23:13,410
+That's it.
+
+550
+00:23:13,579 --> 00:23:14,410
+I that's
+
+551
+00:23:15,189 --> 00:23:17,760
+if they cease to exist, I don't get to eat this month
+
+552
+00:23:17,920 --> 00:23:20,329
+until you get a new job. Right?
+
+553
+00:23:20,790 --> 00:23:21,050
+And
+
+554
+00:23:21,770 --> 00:23:22,410
+true.
+
+555
+00:23:22,650 --> 00:23:23,770
+So sometimes like
+
+556
+00:23:24,750 --> 00:23:25,890
+part of it is, for example,
+
+557
+00:23:25,900 --> 00:23:30,380
+some companies and suppliers will have very long term healthy relationships.
+
+558
+00:23:30,750 --> 00:23:33,219
+Like I heard examples that electrical contractor I work for,
+
+559
+00:23:33,280 --> 00:23:35,550
+they had been working for some of these country
+
+560
+00:23:35,560 --> 00:23:37,979
+uh companies for like over a decade or two
+
+561
+00:23:38,150 --> 00:23:42,180
+and essentially were on the preferred supplier list of essentially,
+
+562
+00:23:42,489 --> 00:23:44,579
+unless you bid some ridiculous number
+
+563
+00:23:44,939 --> 00:23:46,130
+will pay you to do it.
+
+564
+00:23:46,140 --> 00:23:48,880
+Or in some cases, they were so tightly enmeshed with the company,
+
+565
+00:23:49,050 --> 00:23:51,660
+they were just working on a cost plus basis of
+
+566
+00:23:51,670 --> 00:23:54,140
+essentially this plus 10% is what we pay you.
+
+567
+00:23:54,859 --> 00:23:56,510
+And it was such a massive amount of work.
+
+568
+00:23:56,520 --> 00:23:58,689
+We're talking like 2, 300 electricians on site
+
+569
+00:23:58,949 --> 00:23:59,040
+at
+
+570
+00:24:00,010 --> 00:24:02,170
+that scale again, you know, the company is like, yeah,
+
+571
+00:24:02,180 --> 00:24:04,449
+that plus 10% cool we can live with that.
+
+572
+00:24:05,329 --> 00:24:05,750
+Um
+
+573
+00:24:07,640 --> 00:24:08,010
+And
+
+574
+00:24:08,699 --> 00:24:12,050
+yeah, I mean, that's just a risk for a lot of companies. Like if you do delivery
+
+575
+00:24:12,550 --> 00:24:15,130
+for one company and that one company decides to fire you.
+
+576
+00:24:15,140 --> 00:24:16,410
+Yeah, that, that's unfortunate.
+
+577
+00:24:16,420 --> 00:24:18,859
+But part of it too, like if, for example,
+
+578
+00:24:18,869 --> 00:24:24,209
+if you make a product that manages virtual machine software environments
+
+579
+00:24:24,459 --> 00:24:25,930
+you're gonna support VM Ware,
+
+580
+00:24:26,650 --> 00:24:31,489
+maybe virtual box, maybe Red hat KVM. If you decide to be really nice.
+
+581
+00:24:31,959 --> 00:24:33,219
+And what are your other options?
+
+582
+00:24:33,359 --> 00:24:34,770
+Oh, Kubernetes, I guess,
+
+583
+00:24:35,140 --> 00:24:39,300
+I mean, for on Prem, you can also so a lot of those products now
+
+584
+00:24:39,449 --> 00:24:40,439
+-- and then cloud
+-- stuff
+
+585
+00:24:40,670 --> 00:24:43,010
+will integrate. Yeah, with like cloud and on Prem
+
+586
+00:24:43,119 --> 00:24:44,040
+and they give you
+
+587
+00:24:44,170 --> 00:24:47,530
+kind of a nicer opportunity. But I mean, you, you do have a point like,
+
+588
+00:24:47,800 --> 00:24:48,189
+yeah,
+
+589
+00:24:48,260 --> 00:24:51,520
+and for whatever reason if Amazon or VM Ware really decided to
+
+590
+00:24:51,604 --> 00:24:53,584
+somehow legally lock you out or have a fight with you.
+
+591
+00:24:53,594 --> 00:24:54,344
+Well, tough.
+
+592
+00:24:54,834 --> 00:24:55,885
+Well, and, and I mean,
+
+593
+00:24:55,895 --> 00:24:59,305
+Amazon has done this more than once where there was a company
+
+594
+00:24:59,314 --> 00:25:04,064
+providing a service and they basically just built it themselves in Aws and
+
+595
+00:25:04,214 --> 00:25:05,525
+-- well, and
+-- at some point though, like
+
+596
+00:25:06,025 --> 00:25:06,505
+that's
+
+597
+00:25:06,805 --> 00:25:07,905
+I'm sorry, but that's,
+
+598
+00:25:08,810 --> 00:25:09,619
+that's ok.
+
+599
+00:25:09,790 --> 00:25:13,400
+Like just because you just because you provide a service doesn't now you
+
+600
+00:25:13,410 --> 00:25:15,619
+get to own that forever and nobody else gets to provide that.
+
+601
+00:25:15,630 --> 00:25:20,750
+No, no, I, I get that. But I think so, what you're talking about there,
+
+602
+00:25:21,109 --> 00:25:21,780
+that's
+
+603
+00:25:21,989 --> 00:25:25,099
+functionally, I think competition in the market.
+
+604
+00:25:25,290 --> 00:25:27,449
+But I think Red Hat and t not Red
+
+605
+00:25:27,709 --> 00:25:29,260
+Reddit and Twitter.
+
+606
+00:25:30,030 --> 00:25:34,380
+-- That's a different story though.
+-- So there's a great example of this is Walmart.
+
+607
+00:25:34,469 --> 00:25:36,260
+There's a, uh, we'll have to find the pickle story,
+
+608
+00:25:36,270 --> 00:25:39,750
+but there's basically Walmart as a vendor to work with is apparently
+
+609
+00:25:39,760 --> 00:25:42,369
+a nightmare because they basically will squeeze every penny out of you
+
+610
+00:25:42,920 --> 00:25:46,239
+and then fire you randomly at some point. And so I've heard that before.
+
+611
+00:25:46,339 --> 00:25:47,910
+So the Walmart Pickle story.
+
+612
+00:25:48,020 --> 00:25:51,349
+Yeah. Anyways, wow, it's 20 years old now. Holy cow that goes back away.
+
+613
+00:25:51,359 --> 00:25:52,369
+But the point is
+
+614
+00:25:52,489 --> 00:25:53,739
+there are vendors that are
+
+615
+00:25:54,479 --> 00:25:55,380
+mature enough,
+
+616
+00:25:55,390 --> 00:25:58,349
+I guess that when Walmart comes to them and says we really want to buy your product,
+
+617
+00:25:58,359 --> 00:25:58,770
+they go,
+
+618
+00:25:58,939 --> 00:25:59,479
+no,
+
+619
+00:26:00,079 --> 00:26:03,170
+like just no, because we know how this will end.
+
+620
+00:26:04,079 --> 00:26:06,310
+And it's kind of the scorpion and the frog in that.
+
+621
+00:26:06,969 --> 00:26:08,199
+It's not personal.
+
+622
+00:26:08,209 --> 00:26:10,989
+It's just, this is how big business is you're going to try and extract all that value.
+
+623
+00:26:12,329 --> 00:26:12,910
+Ok.
+
+624
+00:26:13,160 --> 00:26:13,459
+But,
+
+625
+00:26:14,239 --> 00:26:16,500
+but in the case of Twitter and Reddit,
+
+626
+00:26:16,780 --> 00:26:18,660
+they're hurting themselves.
+
+627
+00:26:19,660 --> 00:26:20,500
+They've done.
+
+628
+00:26:22,310 --> 00:26:23,920
+But here's, here's what I wonder though.
+
+629
+00:26:23,930 --> 00:26:27,689
+And here's maybe the closing discussion point is,
+
+630
+00:26:28,160 --> 00:26:30,969
+I'm pretty sure Reddit did what they did because they're
+
+631
+00:26:30,979 --> 00:26:33,489
+hoping to suck money out of the A I people.
+
+632
+00:26:33,609 --> 00:26:35,739
+Well, actually, no, it's more the IP O thing.
+
+633
+00:26:36,569 --> 00:26:39,030
+They're trying to IP O and they're trying to juice the numbers.
+
+634
+00:26:39,040 --> 00:26:43,270
+I know they wanted to IP 00. And you think that the, the, it was strictly about
+
+635
+00:26:43,420 --> 00:26:44,189
+revenue?
+
+636
+00:26:44,459 --> 00:26:44,880
+Yeah.
+
+637
+00:26:45,319 --> 00:26:49,010
+-- Got to show recurring revenue. Got that, that line got to go up into the
+-- right.
+
+638
+00:26:49,020 --> 00:26:52,510
+I mean, maybe that it could be that simple. That seems overly dumb to me.
+
+639
+00:26:52,520 --> 00:26:53,390
+But that might be it.
+
+640
+00:26:53,640 --> 00:26:54,130
+I mean,
+
+641
+00:26:54,469 --> 00:26:54,780
+because
+
+642
+00:26:55,040 --> 00:26:55,930
+overly dumb,
+
+643
+00:26:56,150 --> 00:26:58,180
+well, no company would ever do something overly
+
+644
+00:26:58,359 --> 00:26:58,680
+fair.
+
+645
+00:26:59,079 --> 00:27:03,030
+And I think, I think in the case of, of Twitter from everything I've heard, they,
+
+646
+00:27:03,040 --> 00:27:05,910
+they, they got a huge hit from their revenue and they thought
+
+647
+00:27:06,349 --> 00:27:09,890
+they could just raise prices on the API S and,
+
+648
+00:27:09,900 --> 00:27:12,989
+and recover that and it doesn't look like that's true either.
+
+649
+00:27:13,060 --> 00:27:15,420
+Traditionally, large companies
+
+650
+00:27:15,650 --> 00:27:17,489
+had a board of directors
+
+651
+00:27:17,699 --> 00:27:18,329
+and
+
+652
+00:27:18,510 --> 00:27:19,880
+A CEO
+
+653
+00:27:20,329 --> 00:27:23,380
+that essentially wouldn't do irrational things.
+
+654
+00:27:23,500 --> 00:27:26,810
+They would be somewhat rational and predictable and sane
+
+655
+00:27:27,310 --> 00:27:28,170
+and that
+
+656
+00:27:28,410 --> 00:27:28,810
+is,
+
+657
+00:27:28,979 --> 00:27:31,770
+and then perfect example, apparently
+
+658
+00:27:32,020 --> 00:27:36,920
+Elon Musk and Mark Zuckerberg are having a little Twitter thing about a cage fight.
+
+659
+00:27:36,930 --> 00:27:39,020
+You, you sent me that story there
+
+660
+00:27:39,390 --> 00:27:42,979
+and it's on the BBC. So because when I first saw this pop up, I was like, what? No.
+
+661
+00:27:42,989 --> 00:27:47,660
+And then I'm like it links to the BBC. Oh my goodness. It might be real. Not the onion.
+
+662
+00:27:48,069 --> 00:27:51,660
+Yeah. And then it links to the tweets where they're like going at each other.
+
+663
+00:27:51,719 --> 00:27:53,660
+I hope they do.
+
+664
+00:27:53,880 --> 00:27:57,199
+And the last, and I'm just going to remind you the last time Elon Musk started
+
+665
+00:27:57,810 --> 00:28:00,239
+basically talking big on Twitter.
+
+666
+00:28:00,250 --> 00:28:03,959
+He ended up having to buy it at an absurdly inflated price.
+
+667
+00:28:04,069 --> 00:28:07,119
+Yeah. And it's worth pennies on the dollar now. Like,
+
+668
+00:28:07,890 --> 00:28:11,180
+I part of me hopes this happens because it's going
+
+669
+00:28:11,189 --> 00:28:14,439
+to be the most amusing event of the decade.
+
+670
+00:28:14,699 --> 00:28:18,280
+Zuckerberg has been training jujitsu. Like he's actually,
+
+671
+00:28:18,790 --> 00:28:20,089
+yeah, they, they said that on,
+
+672
+00:28:20,099 --> 00:28:23,439
+-- on the BBC article
+-- that I've seen video of him fighting.
+
+673
+00:28:23,449 --> 00:28:25,540
+-- He's, he's reasonably competent.
+-- Is he? Well,
+
+674
+00:28:25,869 --> 00:28:27,930
+Musk has no training in the space. So
+
+675
+00:28:28,630 --> 00:28:28,680
+50
+
+676
+00:28:29,089 --> 00:28:30,329
+year old out of shape guy.
+
+677
+00:28:31,239 --> 00:28:36,109
+Uh, yes. Right. He's 52 I think he said, and Zuckerberg is in his thirties, 39
+
+678
+00:28:36,229 --> 00:28:36,910
+or something. Ok.
+
+679
+00:28:37,089 --> 00:28:37,520
+That's
+
+680
+00:28:37,900 --> 00:28:40,219
+as an, as an aged gentleman.
+
+681
+00:28:41,050 --> 00:28:43,780
+There's a big difference between 10 years
+
+682
+00:28:43,989 --> 00:28:46,260
+-- and
+-- somebody who's been training and somebody who's not.
+
+683
+00:28:46,510 --> 00:28:48,079
+That's true too. That's very true.
+
+684
+00:28:48,089 --> 00:28:50,579
+I've seen some scary looking 70 year olds when I was doing.
+
+685
+00:28:50,790 --> 00:28:51,500
+-- That's a good
+-- point.
+
+686
+00:28:51,630 --> 00:28:52,290
+That's a good point.
+
+687
+00:28:52,510 --> 00:28:56,849
+-- Like that's fair. That's fair.
+-- Anyways, no, this whole thing, the problem is
+
+688
+00:28:57,239 --> 00:29:01,900
+the API is a technical thing that will always be beholden to the business interests.
+
+689
+00:29:01,910 --> 00:29:05,569
+So there is no amount of technical protection or like, oh, well,
+
+690
+00:29:05,579 --> 00:29:07,500
+very cleverly include a Blockchain.
+
+691
+00:29:07,510 --> 00:29:09,459
+So blah, blah, blah. No, it doesn't matter.
+
+692
+00:29:09,500 --> 00:29:11,439
+There will always be the business interests
+
+693
+00:29:12,020 --> 00:29:16,160
+assuming that API is done through a site being run by a business
+
+694
+00:29:16,729 --> 00:29:19,920
+and those business interests will always say something like, hey,
+
+695
+00:29:19,930 --> 00:29:23,640
+remember how open a I said that they grabbed all our data and used it to
+
+696
+00:29:23,650 --> 00:29:27,119
+train an A I model that they then managed to get $10 billion of funding for.
+
+697
+00:29:27,290 --> 00:29:28,920
+I would like some of that cake, please.
+
+698
+00:29:28,930 --> 00:29:32,280
+Well, now here's actually, here's the ending thought on this.
+
+699
+00:29:33,030 --> 00:29:35,060
+If you look at what's happening at Reddit,
+
+700
+00:29:35,569 --> 00:29:38,170
+all Reddit has to do is shut up
+
+701
+00:29:38,689 --> 00:29:40,250
+and they can't, they can't.
+
+702
+00:29:41,040 --> 00:29:44,380
+-- And that's what I think makes it the most amusing.
+-- Again.
+
+703
+00:29:44,390 --> 00:29:47,290
+The problem is you're saying Reddit when you should be saying SPZ
+
+704
+00:29:47,390 --> 00:29:48,069
+because Spz
+
+705
+00:29:48,280 --> 00:29:51,890
+is at the helm driving the boat and apparently he's not listening to reason,
+
+706
+00:29:51,900 --> 00:29:53,410
+just like Elon Musk with Twitter.
+
+707
+00:29:53,969 --> 00:29:56,390
+That, that, yeah, that's, and that's part of the thing, right?
+
+708
+00:29:56,400 --> 00:29:59,030
+Like a normal large company, the CEO,
+
+709
+00:29:59,250 --> 00:30:02,390
+the board would directly call the CEO or have legal,
+
+710
+00:30:02,400 --> 00:30:06,000
+call the CEO or the CFO would talk to the CEO or say something and be like, you know,
+
+711
+00:30:06,010 --> 00:30:06,089
+like,
+
+712
+00:30:07,560 --> 00:30:10,060
+and they'd be like, oh, right. Oops.
+
+713
+00:30:10,280 --> 00:30:13,670
+Or be like, you don't work here anymore because you're obviously an idiot.
+
+714
+00:30:13,680 --> 00:30:16,709
+Well, no, no, no, he's just, he's decided to take more time with his family.
+
+715
+00:30:16,750 --> 00:30:17,969
+-- That
+-- right. Yes, of course,
+
+716
+00:30:17,979 --> 00:30:19,640
+nobody ever does that. No. Cor
+
+717
+00:30:20,040 --> 00:30:22,510
+by definition, if you're a CEO, you don't like your family.
+
+718
+00:30:22,520 --> 00:30:25,420
+-- I
+-- mean, that's probably fair. They probably don't like you. But
+
+719
+00:30:26,229 --> 00:30:28,979
+-- that's not true. I know some CEO S that have lovely families.
+-- But,
+
+720
+00:30:29,199 --> 00:30:30,650
+well, I'm talking to like mega CEO.
+
+721
+00:30:30,949 --> 00:30:33,390
+-- Si get what you're saying. That's probably fair
+-- CEO s of these
+
+722
+00:30:33,579 --> 00:30:33,979
+like,
+
+723
+00:30:34,280 --> 00:30:35,229
+and that's part of the thing is,
+
+724
+00:30:35,239 --> 00:30:37,719
+I think part of it to become the CEO and stay
+
+725
+00:30:37,729 --> 00:30:39,939
+the CEO of some of these like large start up,
+
+726
+00:30:39,949 --> 00:30:42,670
+you kind of have to be a villain because
+
+727
+00:30:42,680 --> 00:30:45,260
+there's 100 people that would love to have your job
+
+728
+00:30:46,369 --> 00:30:48,510
+and we will cheerfully put you in a tree chipper to get it.
+
+729
+00:30:48,819 --> 00:30:48,930
+Yeah.
+
+730
+00:30:48,939 --> 00:30:51,079
+And I guess at this point if Reddit could, like,
+
+731
+00:30:51,089 --> 00:30:54,829
+just shut up and stop burning down the house, they would have done it weeks ago
+
+732
+00:30:55,010 --> 00:30:57,030
+and they obviously can't and won't.
+
+733
+00:30:57,380 --> 00:30:57,910
+And
+
+734
+00:30:58,349 --> 00:30:58,699
+I, the,
+
+735
+00:30:58,839 --> 00:30:58,959
+the,
+
+736
+00:30:59,089 --> 00:31:04,229
+-- the IP O ship just keep sailing further away.
+-- I predict what will happen is
+
+737
+00:31:04,599 --> 00:31:08,160
+the mods won't back down. So Reddit will replace a bunch of mods,
+
+738
+00:31:08,270 --> 00:31:11,510
+-- which they've replaced a ton of them already
+-- and things like our
+
+739
+00:31:11,650 --> 00:31:13,770
+picks will sort of soldier along. But
+
+740
+00:31:14,180 --> 00:31:18,300
+the people who will want to become mods are not becoming mods because they're
+
+741
+00:31:18,310 --> 00:31:21,939
+nice kind altruistic people who want to see a better ARP picks community,
+
+742
+00:31:22,199 --> 00:31:27,140
+they're going to do it to try and monetize or somehow push other agendas. Right.
+
+743
+00:31:27,150 --> 00:31:27,619
+Right.
+
+744
+00:31:28,000 --> 00:31:28,939
+I imagine
+
+745
+00:31:29,119 --> 00:31:31,310
+there's a bunch of countries with a bunch of disinformation
+
+746
+00:31:31,319 --> 00:31:34,239
+efforts right now that are working hard to be moderators,
+
+747
+00:31:34,560 --> 00:31:37,439
+you know, and steer those conversations and steer those, you know,
+
+748
+00:31:37,449 --> 00:31:38,680
+public opinion things
+
+749
+00:31:38,900 --> 00:31:41,140
+and, um, Reddit's not going to die,
+
+750
+00:31:41,150 --> 00:31:44,839
+but it's going to become kind of a grosser and grosser place like Twitter did.
+
+751
+00:31:45,170 --> 00:31:45,979
+Yeah, for sure.
+
+752
+00:31:46,119 --> 00:31:47,020
+The thing is though,
+
+753
+00:31:47,290 --> 00:31:49,479
+the people that are the users of it,
+
+754
+00:31:50,569 --> 00:31:51,709
+they won't know what to do.
+
+755
+00:31:51,719 --> 00:31:51,869
+Like,
+
+756
+00:31:51,880 --> 00:31:53,339
+it's not like dig to Reddit where there
+
+757
+00:31:53,349 --> 00:31:55,630
+was a clear transition from one coming to another
+
+758
+00:31:55,760 --> 00:31:57,770
+because the Reddit to Mastodon transition
+
+759
+00:31:57,780 --> 00:31:59,939
+is so fundamentally different and weird.
+
+760
+00:31:59,969 --> 00:32:03,109
+-- Not
+-- Mastodon Cavin or Lemmy are the two options.
+
+761
+00:32:03,469 --> 00:32:05,949
+Sorry. Yeah. Sorry. I meant, yeah, that's what I meant.
+
+762
+00:32:05,959 --> 00:32:09,829
+It is a lot different and like I, I won't lie. I'm loving it, but it's different.
+
+763
+00:32:09,839 --> 00:32:11,829
+-- I can't
+-- even remember the names,
+
+764
+00:32:11,839 --> 00:32:14,030
+let alone how to get there and log in and get an account.
+
+765
+00:32:14,430 --> 00:32:15,280
+That's my point
+
+766
+00:32:15,439 --> 00:32:16,390
+and I have an account
+
+767
+00:32:17,250 --> 00:32:18,280
+and I can't even remember.
+
+768
+00:32:18,290 --> 00:32:21,180
+So like a normal person is gonna be like, where's the app for this?
+
+769
+00:32:21,189 --> 00:32:23,160
+But here's the thing, here's the thing that I,
+
+770
+00:32:23,170 --> 00:32:25,719
+I think of it and I want to close on this point is
+
+771
+00:32:26,199 --> 00:32:26,750
+the,
+
+772
+00:32:26,949 --> 00:32:31,310
+the people who are most likely to run and moderate a community
+
+773
+00:32:31,400 --> 00:32:34,729
+are the people most capable of leaving and going somewhere else,
+
+774
+00:32:34,819 --> 00:32:35,300
+right?
+
+775
+00:32:35,359 --> 00:32:38,479
+The users who can't leave, they'll stick around for a while,
+
+776
+00:32:38,489 --> 00:32:40,250
+but they'll eventually turn it off because it's
+
+777
+00:32:40,260 --> 00:32:42,199
+going to turn into like the toxic trashy
+
+778
+00:32:42,859 --> 00:32:42,979
+about
+
+779
+00:32:43,089 --> 00:32:43,750
+Facebook and
+
+780
+00:32:45,339 --> 00:32:45,400
+Facebook
+
+781
+00:32:45,910 --> 00:32:47,150
+is different. Facebook
+
+782
+00:32:47,780 --> 00:32:52,329
+has a, a community aspect for planning and stuff. Look at Twitter, right?
+
+783
+00:32:52,430 --> 00:32:54,180
+How many people do you know? Still on Twitter?
+
+784
+00:32:54,339 --> 00:32:56,520
+Well, and more to the point nobody, you can't.
+
+785
+00:32:56,530 --> 00:32:58,900
+Facebook does have the family aspect where all your
+
+786
+00:32:58,910 --> 00:33:00,800
+old people are on Facebook and like you said,
+
+787
+00:33:00,810 --> 00:33:02,810
+the, the community kind of planning events,
+
+788
+00:33:03,520 --> 00:33:06,500
+-- I'll give you that. That is different.
+-- I think that's its power
+
+789
+00:33:06,925 --> 00:33:10,824
+because Twitter, I think lost its power because it lost a lot of the people who,
+
+790
+00:33:10,834 --> 00:33:12,994
+who did the good work of making Twitter.
+
+791
+00:33:13,005 --> 00:33:13,564
+Interesting. I'm
+
+792
+00:33:13,685 --> 00:33:15,704
+-- actually
+-- having to go back to Twitter because there's
+
+793
+00:33:15,714 --> 00:33:17,984
+still people that will only post stuff on Twitter
+
+794
+00:33:18,194 --> 00:33:22,584
+-- that's still quite high quality and interesting. I have,
+-- I have not found any of them
+
+795
+00:33:22,885 --> 00:33:25,944
+-- a
+-- bunch. Like, and they just, they're not un mastered on Tooting away
+
+796
+00:33:26,219 --> 00:33:28,319
+and that they aren't going to come to Mastodon at this point.
+
+797
+00:33:28,329 --> 00:33:30,469
+-- If you haven't moved to Mastodon, I don't think they
+-- will.
+
+798
+00:33:30,739 --> 00:33:31,250
+They're gonna lose their,
+
+799
+00:33:31,430 --> 00:33:32,800
+their follower account is gonna go from like six
+
+800
+00:33:33,050 --> 00:33:33,170
+figure.
+
+801
+00:33:33,599 --> 00:33:33,609
+I
+
+802
+00:33:34,369 --> 00:33:34,619
+think
+
+803
+00:33:34,719 --> 00:33:37,680
+that's what keeps a lot of people like on Twitter is they,
+
+804
+00:33:37,689 --> 00:33:41,319
+they're obsessed with that follower count and they, they don't want to start over
+
+805
+00:33:41,770 --> 00:33:44,520
+it. It's, it's gonna be similar with Reddit, right?
+
+806
+00:33:44,530 --> 00:33:49,040
+Where moving from a, a Reddit, a subreddit that had 3 million people.
+
+807
+00:33:49,050 --> 00:33:50,430
+And now the equivalent on Cain
+
+808
+00:33:50,650 --> 00:33:51,890
+has 2000.
+
+809
+00:33:52,260 --> 00:33:54,400
+Like that's a huge difference. But
+
+810
+00:33:54,790 --> 00:33:55,380
+again,
+
+811
+00:33:55,390 --> 00:33:56,900
+it's a different thing and I don't think
+
+812
+00:33:56,910 --> 00:33:58,670
+-- it's necessarily comparable
+-- and that's another thing.
+
+813
+00:33:58,680 --> 00:34:00,290
+Maybe another show. But like
+
+814
+00:34:00,660 --> 00:34:01,959
+some of these subreddits,
+
+815
+00:34:02,329 --> 00:34:06,209
+bird examples are slash picks. It's got a community of 30 million people.
+
+816
+00:34:06,219 --> 00:34:07,489
+That's a large country.
+
+817
+00:34:07,869 --> 00:34:08,850
+Yeah. It's ridiculous.
+
+818
+00:34:09,370 --> 00:34:11,929
+That's not a community anymore really. In the sense of,
+
+819
+00:34:12,469 --> 00:34:12,790
+like,
+
+820
+00:34:13,429 --> 00:34:14,949
+30 million people, man.
+
+821
+00:34:15,270 --> 00:34:16,418
+Right. Oh, for sure. Yeah.
+
+822
+00:34:16,429 --> 00:34:19,949
+Like, there aren't 30 million people on all of Mastodon, I don't think.
+
+823
+00:34:19,969 --> 00:34:24,620
+-- Well, more to
+-- the 0.30 million people can't really coordinate or talk to each other.
+
+824
+00:34:24,629 --> 00:34:26,500
+Like, that's way past your dunbar number.
+
+825
+00:34:26,728 --> 00:34:27,070
+Right
+
+826
+00:34:27,750 --> 00:34:29,489
+by a couple zeros.
+
+827
+00:34:30,120 --> 00:34:33,300
+So, and that's part of what I also wonder is, again, we're, we're,
+
+828
+00:34:33,310 --> 00:34:36,800
+we're lumping all these subreddits into sort of the Reddit bucket.
+
+829
+00:34:36,810 --> 00:34:37,159
+But
+
+830
+00:34:37,270 --> 00:34:40,418
+I mean, there are subreddits with 100 people and there are subreddits with
+
+831
+00:34:40,928 --> 00:34:43,799
+well, 30 million people. I think, I don't know what the biggest one is.
+
+832
+00:34:44,878 --> 00:34:47,039
+It's number nine ranked by size if I click that
+
+833
+00:34:47,638 --> 00:34:48,069
+one
+
+834
+00:34:48,539 --> 00:34:50,819
+R slash 2050 million users. So there are,
+
+835
+00:34:50,928 --> 00:34:53,268
+there are two subreddits that are bigger than Canada
+
+836
+00:34:53,759 --> 00:34:55,868
+and then a bunch that are about as big as Canada
+
+837
+00:34:56,268 --> 00:34:57,509
+-- anyway
+-- anyway.
+
+838
+00:34:58,100 --> 00:34:58,989
+Yeah. Yeah. I don't know.
+
+839
+00:34:59,000 --> 00:34:59,659
+It'll be,
+
+840
+00:34:59,699 --> 00:35:02,030
+it's funny because I have a suspicion from the time
+
+841
+00:35:02,040 --> 00:35:04,350
+we recorded until I hit publish on this episode.
+
+842
+00:35:04,620 --> 00:35:05,350
+There will be
+
+843
+00:35:05,540 --> 00:35:09,949
+many more ridiculous happenings in the Twitter or in the, in the Reddit saga.
+
+844
+00:35:10,280 --> 00:35:11,429
+-- But I guess we
+-- shall see.
+
+845
+00:35:11,600 --> 00:35:15,389
+And here's and one note also that we ignored that I want to mention explicitly just
+
+846
+00:35:16,409 --> 00:35:21,459
+API S are also really needed by people with disabilities like the
+
+847
+00:35:21,610 --> 00:35:21,780
+blind.
+
+848
+00:35:22,389 --> 00:35:24,500
+And that is one thing that really
+
+849
+00:35:24,639 --> 00:35:27,550
+does upset me and hurts me is that
+
+850
+00:35:27,840 --> 00:35:28,870
+Reddit is
+
+851
+00:35:30,000 --> 00:35:31,709
+largely unusable
+
+852
+00:35:32,219 --> 00:35:34,080
+through the default app and website,
+
+853
+00:35:34,290 --> 00:35:37,540
+even if you are fully cited and fully capable. Like I,
+
+854
+00:35:37,979 --> 00:35:40,189
+yeah, I use it through the default apps and stuff
+
+855
+00:35:40,409 --> 00:35:43,800
+and it's kind of garbage and I cannot imagine how terrible it
+
+856
+00:35:43,810 --> 00:35:45,449
+would be to try and use it if you were blind.
+
+857
+00:35:45,639 --> 00:35:47,050
+And that's the other thing is API S
+
+858
+00:35:47,060 --> 00:35:50,110
+allow people with disabilities to interact with the site
+
+859
+00:35:50,939 --> 00:35:54,510
+in ways that unless you are really committed to usability
+
+860
+00:35:55,310 --> 00:35:56,959
+and most tech companies are not,
+
+861
+00:35:58,209 --> 00:35:59,030
+they're just not.
+
+862
+00:35:59,270 --> 00:36:00,610
+I won't disagree with that.
+
+863
+00:36:01,800 --> 00:36:04,209
+And that's, I kind of hope at some point.
+
+864
+00:36:04,219 --> 00:36:06,989
+Somebody fires up like an ad, a suit in the US about this.
+
+865
+00:36:07,800 --> 00:36:09,260
+Uh Yeah,
+
+866
+00:36:09,530 --> 00:36:14,290
+I would not be sad to see that because we've already got ad a guidelines for websites
+
+867
+00:36:14,770 --> 00:36:15,350
+that are
+
+868
+00:36:16,439 --> 00:36:21,570
+-- largely ignored by a lot of sites like alt takes for text or images. Sorry.
+-- Right.
+
+869
+00:36:22,030 --> 00:36:24,189
+Alt text takes for images.
+
+870
+00:36:24,750 --> 00:36:26,919
+I, I, yes, I agree that that's a,
+
+871
+00:36:26,929 --> 00:36:30,139
+that's a very good point and I hadn't even considered that aspect of it.
+
+872
+00:36:30,909 --> 00:36:34,070
+All right. I'm gonna call it. Thank you, Kurt. Thank you everyone for listening.
+
+873
+00:36:34,080 --> 00:36:36,100
+Go to open source security podcast.com.
+
+874
+00:36:36,110 --> 00:36:39,939
+Find the show, not Tuesday Pound Os S podcast. Hashtag to hit us up on social media.
+
+875
+00:36:40,060 --> 00:36:41,899
+Kurt have a marvelous rest of your day.
+
+876
+00:36:42,010 --> 00:36:43,300
+You too. Thanks everybody.
+
+877
+00:36:43,570 --> 00:36:45,419
+-- Thanks
+-- everyone. Bye bye.

@@ -1,0 +1,4925 @@
+0
+00:00:05,230 --> 00:00:07,630
+Hello and welcome to the open source security
+
+1
+00:00:07,639 --> 00:00:11,050
+podcast episode 35 and three quarters with myself,
+
+2
+00:00:11,060 --> 00:00:13,239
+Kurt Siefried and my partner in crime, Josh Bresser.
+
+3
+00:00:13,850 --> 00:00:16,090
+You know, I figured you'd pick on me for that.
+
+4
+00:00:16,100 --> 00:00:19,430
+So the reason it's 35 and three quarters is we
+
+5
+00:00:19,440 --> 00:00:22,170
+tried to record this a couple of days ago and
+
+6
+00:00:22,520 --> 00:00:23,350
+due to,
+
+7
+00:00:23,889 --> 00:00:24,610
+ok, fine.
+
+8
+00:00:24,620 --> 00:00:28,450
+So I screwed up and I, I messed up the recording and we have to rerecord this show,
+
+9
+00:00:28,459 --> 00:00:31,290
+which I think is actually a gift because there
+
+10
+00:00:31,299 --> 00:00:35,209
+have been a handful of new bits of information
+
+11
+00:00:35,319 --> 00:00:39,220
+about the sha one attack and the cloud bleed or whatever is,
+
+12
+00:00:39,229 --> 00:00:40,279
+are we officially calling it?
+
+13
+00:00:40,650 --> 00:00:41,819
+Well, that's what everybody else
+
+14
+00:00:42,580 --> 00:00:42,830
+clouded.
+
+15
+00:00:43,659 --> 00:00:47,599
+You know, I guess, ironically, we don't have AC B ID for this, do we? We have to say
+
+16
+00:00:48,049 --> 00:00:54,020
+-- we can't because CV doesn't cover services yet.
+-- Right. So, wow, interesting.
+
+17
+00:00:54,029 --> 00:00:54,659
+Without clouded,
+
+18
+00:00:54,759 --> 00:00:58,430
+we'd have to call it that cloud flare issue, which could actually mean last
+
+19
+00:00:58,560 --> 00:00:58,900
+week,
+
+20
+00:00:59,299 --> 00:01:00,500
+last week, which in,
+
+21
+00:01:00,509 --> 00:01:04,809
+in a couple of weeks won't be last week and it will also potentially
+
+22
+00:01:05,040 --> 00:01:09,510
+not be the cloud flare issue anymore because there could certainly be another one
+
+23
+00:01:09,790 --> 00:01:10,449
+so interesting.
+
+24
+00:01:10,989 --> 00:01:11,129
+Yeah.
+
+25
+00:01:11,139 --> 00:01:11,370
+Well,
+
+26
+00:01:11,379 --> 00:01:15,580
+considering it was just literally equals equals versus what was it equals more than
+
+27
+00:01:16,690 --> 00:01:17,730
+it was? Well, I mean,
+
+28
+00:01:19,300 --> 00:01:19,779
+it wasn't,
+
+29
+00:01:20,599 --> 00:01:21,139
+it was
+
+30
+00:01:21,339 --> 00:01:21,720
+a,
+
+31
+00:01:21,940 --> 00:01:25,760
+well, they were using, um, like, what was it? It was generated code.
+
+32
+00:01:25,959 --> 00:01:26,160
+Well,
+
+33
+00:01:26,169 --> 00:01:28,220
+let's back it up a bit maybe and explain to people
+
+34
+00:01:28,230 --> 00:01:29,970
+because here's the point we've already talked about this one.
+
+35
+00:01:29,980 --> 00:01:32,550
+So, in our minds it's all fresh and in your minds you're like,
+
+36
+00:01:32,559 --> 00:01:34,099
+what the hell are these people talking about?
+
+37
+00:01:34,110 --> 00:01:35,330
+Crazy people.
+
+38
+00:01:35,629 --> 00:01:38,900
+Although if you haven't read the news in the last week and this is new to you.
+
+39
+00:01:38,910 --> 00:01:41,629
+Um, wow, you might want to go change some passwords. Uh Yeah.
+
+40
+00:01:41,849 --> 00:01:42,610
+Yeah,
+
+41
+00:01:42,910 --> 00:01:43,750
+you might,
+
+42
+00:01:44,099 --> 00:01:46,730
+maybe we don't know which ones. So
+
+43
+00:01:47,349 --> 00:01:49,519
+good luck changing them all.
+
+44
+00:01:50,059 --> 00:01:53,139
+You know, just a tangent and I don't want to do a commercial plug, but this,
+
+45
+00:01:53,150 --> 00:01:57,279
+this one password manager, I'm looking at, uh, for a variety of sites and stuff.
+
+46
+00:01:57,290 --> 00:01:58,040
+It understands.
+
+47
+00:01:58,050 --> 00:01:59,949
+You can actually just hit a button in the password app saying
+
+48
+00:01:59,959 --> 00:02:02,470
+-- change my password
+-- and it will do it magically for you.
+
+49
+00:02:03,139 --> 00:02:05,879
+That is amazing. Can I ask which one that is? Because
+
+50
+00:02:06,379 --> 00:02:08,008
+last pass does that? I will.
+
+51
+00:02:08,440 --> 00:02:10,610
+That might sell me on this because,
+
+52
+00:02:11,020 --> 00:02:13,050
+well, I don't, I don't know if I've talked about this, but I,
+
+53
+00:02:13,059 --> 00:02:14,889
+I use something called PW safe on
+
+54
+00:02:15,229 --> 00:02:15,690
+and
+
+55
+00:02:16,110 --> 00:02:19,369
+it's very manual. And so the passwords I have to change.
+
+56
+00:02:19,380 --> 00:02:22,220
+I'm dreading because it's going to literally take me hours of my
+
+57
+00:02:22,229 --> 00:02:24,369
+life to go through a bunch of sites and change them.
+
+58
+00:02:24,380 --> 00:02:25,509
+So last passing, I,
+
+59
+00:02:26,619 --> 00:02:31,559
+it might, I don't know, the, the cost of changing might outweigh
+
+60
+00:02:31,789 --> 00:02:34,600
+the cost of changing all my passwords.
+
+61
+00:02:35,199 --> 00:02:36,360
+If it has a magic button.
+
+62
+00:02:36,470 --> 00:02:36,729
+I
+
+63
+00:02:37,220 --> 00:02:40,490
+just, to me there's, you know, there's the passwords I really care about.
+
+64
+00:02:40,500 --> 00:02:42,860
+Like, say my icloud password and my Google password.
+
+65
+00:02:43,479 --> 00:02:44,740
+Uh, and funnily enough.
+
+66
+00:02:44,750 --> 00:02:48,320
+I would then put my banking in the second tier of passwords because, I mean,
+
+67
+00:02:48,330 --> 00:02:50,350
+it's important, it's my money but it's not as important as,
+
+68
+00:02:50,360 --> 00:02:53,020
+like my entire online identity and all my files.
+
+69
+00:02:53,250 --> 00:02:56,440
+Well, right. And not only that the bank, there are certain legal obligations.
+
+70
+00:02:56,449 --> 00:02:59,080
+Like, if someone steals all my money, they have to give it back to me
+
+71
+00:02:59,279 --> 00:03:02,220
+if someone steals my Twitter account, like it's gone.
+
+72
+00:03:02,630 --> 00:03:02,759
+Yeah,
+
+73
+00:03:02,770 --> 00:03:04,570
+there's a well understood legal framework
+
+74
+00:03:04,580 --> 00:03:06,529
+for dealing with shenanigans around that.
+
+75
+00:03:06,539 --> 00:03:09,149
+Whereas with icloud it's, I don't even want to think about that. So,
+
+76
+00:03:09,679 --> 00:03:14,389
+and, um, you know, and then there's like the third tier stuff which is like, you know,
+
+77
+00:03:14,399 --> 00:03:17,820
+um, just all those websites that made me make an account
+
+78
+00:03:18,360 --> 00:03:18,759
+-- and
+-- all
+
+79
+00:03:19,619 --> 00:03:23,429
+those are the dangerous ones because, you know, their security is terrible
+
+80
+00:03:23,600 --> 00:03:25,410
+and most people will just use the same
+
+81
+00:03:25,559 --> 00:03:26,669
+-- password for those they
+-- use
+
+82
+00:03:26,779 --> 00:03:26,830
+what
+
+83
+00:03:27,179 --> 00:03:27,899
+they have. Right. I mean,
+
+84
+00:03:28,190 --> 00:03:30,110
+I have over 1000 passwords at this point.
+
+85
+00:03:30,399 --> 00:03:33,139
+I don't, I think last time I looked, I have 300
+
+86
+00:03:33,289 --> 00:03:35,759
+I bet I could get rid of 20 or 30 of those
+
+87
+00:03:35,770 --> 00:03:38,380
+because they're just like old crap accounts I never use anymore.
+
+88
+00:03:38,389 --> 00:03:40,929
+But I'm too lazy to prune my password database.
+
+89
+00:03:41,229 --> 00:03:46,179
+Well, speaking of passwords, uh, sha one had a bit of a rough week. Last week.
+
+90
+00:03:46,190 --> 00:03:48,539
+-- It
+-- did sha one. Well, ok.
+
+91
+00:03:48,789 --> 00:03:51,779
+So it, it didn't, I don't, how do we want to see this? This is,
+
+92
+00:03:52,750 --> 00:03:53,880
+-- we've known
+-- Shaman
+
+93
+00:03:54,320 --> 00:03:55,449
+Falls downstairs.
+
+94
+00:03:56,179 --> 00:03:59,990
+That might be the most accurate headline for the sha one thing ever.
+
+95
+00:04:00,000 --> 00:04:02,020
+So, ok, let, let's back it up, I guess. Is
+
+96
+00:04:02,339 --> 00:04:05,050
+there is an attack called Shattered
+
+97
+00:04:05,460 --> 00:04:06,130
+that
+
+98
+00:04:06,470 --> 00:04:10,250
+the, the website leads off with. We have broken Sha One in practice.
+
+99
+00:04:10,630 --> 00:04:14,009
+And the importance of that is we've known Sha One
+
+100
+00:04:14,139 --> 00:04:16,170
+has certain weaknesses for
+
+101
+00:04:16,500 --> 00:04:19,970
+like, almost, I think 10 years now. I mean, this is not new.
+
+102
+00:04:19,980 --> 00:04:22,730
+We knew someday someone was going to break Sha
+
+103
+00:04:22,739 --> 00:04:25,089
+one and I won't say it's totally broken yet,
+
+104
+00:04:25,100 --> 00:04:25,640
+but like,
+
+105
+00:04:25,940 --> 00:04:27,720
+it's falling down the stairs right now,
+
+106
+00:04:28,100 --> 00:04:28,850
+you know, that's
+
+107
+00:04:29,019 --> 00:04:32,910
+that where we're standing at the bottom and, and we're, you know, it's that
+
+108
+00:04:33,109 --> 00:04:38,279
+bizarrely horrific slow motion, you know, trip down the stairs, you've fallen.
+
+109
+00:04:38,649 --> 00:04:41,309
+And that's what sha one is doing right now where
+
+110
+00:04:41,529 --> 00:04:46,709
+it's, I wouldn't say these attacks are in the realm of practical for,
+
+111
+00:04:46,720 --> 00:04:49,869
+we'll say non state actors, but it is
+
+112
+00:04:50,160 --> 00:04:51,390
+unquestionably
+
+113
+00:04:51,630 --> 00:04:53,190
+stop using Sha One. Right.
+
+114
+00:04:53,500 --> 00:04:55,170
+Well, we'll get to that later.
+
+115
+00:04:55,179 --> 00:04:59,470
+But I, I do think there are a couple of potential real world attacks where
+
+116
+00:04:59,720 --> 00:05:00,540
+it, it would
+
+117
+00:05:01,209 --> 00:05:04,500
+within, you know, generally speaking, it actually wouldn't be a,
+
+118
+00:05:04,510 --> 00:05:08,609
+-- probably a super successful attack, but it would be one hell of a huge mess
+-- maybe.
+
+119
+00:05:08,619 --> 00:05:10,500
+I mean, so actually let's start
+
+120
+00:05:11,290 --> 00:05:12,989
+even farther back than that is. So
+
+121
+00:05:13,589 --> 00:05:14,540
+there are
+
+122
+00:05:14,730 --> 00:05:18,769
+what we talked about kind of three types of attacks, three types of collisions, ok.
+
+123
+00:05:18,779 --> 00:05:19,290
+And
+
+124
+00:05:19,739 --> 00:05:20,820
+-- the first type
+-- is
+
+125
+00:05:21,019 --> 00:05:22,299
+stages of collision attacks
+
+126
+00:05:22,859 --> 00:05:23,140
+from
+
+127
+00:05:23,660 --> 00:05:26,279
+bad to worse to like, oh dear, this is terrible.
+
+128
+00:05:26,459 --> 00:05:26,690
+And,
+
+129
+00:05:26,700 --> 00:05:29,670
+and what's happened here is essentially researchers
+
+130
+00:05:29,679 --> 00:05:32,640
+with a massive amount of compute resources
+
+131
+00:05:32,850 --> 00:05:35,089
+generated two PDF S
+
+132
+00:05:35,309 --> 00:05:37,119
+that have the same sha
+
+133
+00:05:37,220 --> 00:05:37,709
+check
+
+134
+00:05:38,369 --> 00:05:39,570
+and they generate
+
+135
+00:05:39,929 --> 00:05:40,029
+or sea
+
+136
+00:05:40,269 --> 00:05:41,420
+one. Sorry. Yes,
+
+137
+00:05:41,929 --> 00:05:43,579
+they generated them at the same time.
+
+138
+00:05:43,690 --> 00:05:45,470
+And the importance of that is
+
+139
+00:05:45,790 --> 00:05:49,230
+when you're the way this attack, the current known attack works is
+
+140
+00:05:49,500 --> 00:05:52,720
+you basically can, can start figuring out
+
+141
+00:05:52,940 --> 00:05:54,989
+the internal state of the sha
+
+142
+00:05:55,130 --> 00:05:57,399
+hatching algorithm. And by
+
+143
+00:05:57,500 --> 00:06:00,850
+basically generating two files at the same time, it makes it easier.
+
+144
+00:06:00,859 --> 00:06:02,000
+And when I say easier,
+
+145
+00:06:02,200 --> 00:06:03,299
+I'm talking about
+
+146
+00:06:03,470 --> 00:06:07,760
+these guys use the amount of compute power and energy for that matter
+
+147
+00:06:07,890 --> 00:06:11,760
+that it basically takes to generate a Bitcoin block right now.
+
+148
+00:06:12,079 --> 00:06:15,250
+And so that's a crazy amount of power to say the least
+
+149
+00:06:16,209 --> 00:06:20,070
+six. It was over 6000 years of GP U time and something like about.
+
+150
+00:06:20,250 --> 00:06:21,660
+Well, if you bought it on the spot market,
+
+151
+00:06:21,670 --> 00:06:25,500
+it would be just over $100,000 us at current Amazon rates.
+
+152
+00:06:26,200 --> 00:06:29,600
+And that's so, it's, it's, that's a real world cost on this attack.
+
+153
+00:06:29,609 --> 00:06:31,480
+You're looking at 100 grand for now.
+
+154
+00:06:31,489 --> 00:06:32,779
+And obviously, and not only that,
+
+155
+00:06:32,790 --> 00:06:38,320
+this isn't a super useful attack because generating two files at the same time,
+
+156
+00:06:38,670 --> 00:06:43,799
+obviously isn't super useful. The attack that people are actually going to want
+
+157
+00:06:44,070 --> 00:06:46,989
+is when you have one file that has a certain checksum
+
+158
+00:06:47,230 --> 00:06:50,869
+and you can generate a separate file with the same checksum,
+
+159
+00:06:51,279 --> 00:06:52,760
+right? And that's dangerous.
+
+160
+00:06:53,220 --> 00:06:53,350
+Yeah,
+
+161
+00:06:53,359 --> 00:06:55,040
+that's where you get things like I signed a
+
+162
+00:06:55,049 --> 00:06:58,750
+contract and now that contract says something different,
+
+163
+00:06:59,160 --> 00:07:02,570
+right? Or in the context of things like certificates, right?
+
+164
+00:07:02,579 --> 00:07:04,559
+I mean, and now on that note though,
+
+165
+00:07:04,570 --> 00:07:09,170
+all of the browsers at this point should be banning sha one
+
+166
+00:07:09,730 --> 00:07:12,440
+uh well, sort of, they're in the process of banning Shaw.
+
+167
+00:07:12,540 --> 00:07:15,119
+And I mean, that's, that's what I, that's what I love about this attack, right?
+
+168
+00:07:15,130 --> 00:07:19,230
+Is like, like literally literally Microsoft's blog from last week was like,
+
+169
+00:07:19,450 --> 00:07:22,220
+yeah, sha one is like falling down the stairs. This is bad.
+
+170
+00:07:22,390 --> 00:07:26,950
+Um But we've already like us with our long term plans, you know, we're, we're,
+
+171
+00:07:26,959 --> 00:07:31,380
+we started phasing Sha one out in the end of January 2017,
+
+172
+00:07:31,799 --> 00:07:32,100
+you know,
+
+173
+00:07:32,109 --> 00:07:36,630
+so it's um they're slowly phasing shaw one out for certificates and right now it's um
+
+174
+00:07:37,440 --> 00:07:41,359
+uh you can't have it for uh what is it? You cannot have it for root certificates.
+
+175
+00:07:41,369 --> 00:07:43,579
+But you can have it for intermediate certificates
+
+176
+00:07:43,750 --> 00:07:47,790
+or manually installed root certificates on a system. Right.
+
+177
+00:07:47,799 --> 00:07:51,040
+Because there's still a lot of technologies and people like interception
+
+178
+00:07:51,049 --> 00:07:53,559
+proxies and stuff like that that you sha one certificates.
+
+179
+00:07:54,130 --> 00:07:56,459
+Um, but even, and that stuff too has been,
+
+180
+00:07:56,470 --> 00:07:59,390
+it's been planned to phase that out over the next like two or
+
+181
+00:07:59,399 --> 00:08:01,839
+three years and it looks like that will be sped up now,
+
+182
+00:08:02,040 --> 00:08:04,320
+whatever, you know, a bunch of these security products,
+
+183
+00:08:04,329 --> 00:08:06,260
+we're going to put the word security in air quotes here
+
+184
+00:08:06,510 --> 00:08:10,769
+that a bunch of these security products are probably still using MD five
+
+185
+00:08:11,839 --> 00:08:15,059
+in, in terms of their, their certificate signing for these middle,
+
+186
+00:08:15,070 --> 00:08:16,160
+in the middle things they do.
+
+187
+00:08:16,170 --> 00:08:16,500
+It's
+
+188
+00:08:17,000 --> 00:08:22,769
+I, I expect those to lag horribly behind and, and this is actually a place where
+
+189
+00:08:22,910 --> 00:08:26,220
+if we had an easy way to assign CV I DS for things like this,
+
+190
+00:08:26,230 --> 00:08:29,700
+I could maybe poke them in the eye a little bit and, and get things moving faster.
+
+191
+00:08:30,299 --> 00:08:32,169
+Well, that's something I've actually been working on is,
+
+192
+00:08:32,179 --> 00:08:36,390
+is so with classic security vulnerabilities, like say something resulting in,
+
+193
+00:08:36,400 --> 00:08:39,280
+you know, code execution clearly, that's a vulnerability with crypto.
+
+194
+00:08:39,289 --> 00:08:42,599
+It's a little harder because the, the bar keeps moving, you know, for example,
+
+195
+00:08:42,609 --> 00:08:46,369
+this attack today in real world terms costs about $100,000 in compute time,
+
+196
+00:08:46,489 --> 00:08:48,090
+10 years from now. It'll,
+
+197
+00:08:48,210 --> 00:08:51,090
+I don't know, take what, half an hour on your cell phone, right? I mean,
+
+198
+00:08:51,270 --> 00:08:55,099
+you know, so at some point it moves from being like, yeah, this is a problem to like,
+
+199
+00:08:55,109 --> 00:08:56,690
+no, this is a real problem too.
+
+200
+00:08:56,700 --> 00:08:59,400
+This is an actual security vulnerability because it's so easy to break.
+
+201
+00:08:59,409 --> 00:08:59,929
+Kind of like um
+
+202
+00:09:00,419 --> 00:09:02,880
+uh WP a encryption on wireless.
+
+203
+00:09:04,010 --> 00:09:04,400
+Sorry.
+
+204
+00:09:05,049 --> 00:09:07,460
+Wep, the even older one web,
+
+205
+00:09:07,809 --> 00:09:08,039
+you know,
+
+206
+00:09:08,049 --> 00:09:12,599
+we got to the point where you could break it literally in real time on a laptop.
+
+207
+00:09:12,609 --> 00:09:17,599
+So OK, clearly, if anybody, you know, is using web, that's just you can't, it,
+
+208
+00:09:17,609 --> 00:09:22,710
+it provides no protection anymore, you know, it's like des 5650 my laptop
+
+209
+00:09:22,909 --> 00:09:23,679
+will do that
+
+210
+00:09:23,940 --> 00:09:26,719
+in like minutes, single digit minutes,
+
+211
+00:09:27,520 --> 00:09:28,150
+you know.
+
+212
+00:09:28,760 --> 00:09:29,380
+Um
+
+213
+00:09:29,900 --> 00:09:32,830
+And so, yeah, at what point do these sort of, especially with hashing,
+
+214
+00:09:32,840 --> 00:09:36,380
+it's a little bit more subtle because the attacks aren't as like direct,
+
+215
+00:09:37,549 --> 00:09:40,109
+you know, even if I can create a hash collision.
+
+216
+00:09:40,119 --> 00:09:42,900
+Well, I still have to kind of do something with that,
+
+217
+00:09:43,590 --> 00:09:46,409
+you know, it's not like that directly gets me code execution
+
+218
+00:09:46,559 --> 00:09:49,940
+except in the case of things like say, you know, update systems,
+
+219
+00:09:50,270 --> 00:09:51,289
+right? But, you know,
+
+220
+00:09:51,989 --> 00:09:52,549
+anyways.
+
+221
+00:09:52,559 --> 00:09:54,460
+But um so I've been pushing for that for a
+
+222
+00:09:54,469 --> 00:09:57,570
+while for us to actually start defining in cryptographic terms,
+
+223
+00:09:57,580 --> 00:09:58,760
+both for hashing
+
+224
+00:09:59,109 --> 00:10:00,700
+and encryption functions.
+
+225
+00:10:00,929 --> 00:10:03,429
+Sort of, where's that line like today? OK.
+
+226
+00:10:03,440 --> 00:10:07,890
+Des, clearly not acceptable MD five, not acceptable generally
+
+227
+00:10:08,330 --> 00:10:09,880
+sha one where does that fall now?
+
+228
+00:10:09,890 --> 00:10:14,330
+Is it not acceptable anymore or do we start moving because it's the use cases too,
+
+229
+00:10:14,340 --> 00:10:15,260
+like root certificates.
+
+230
+00:10:15,270 --> 00:10:16,989
+Sha One would clearly be a problem
+
+231
+00:10:17,159 --> 00:10:19,710
+whereas, like using sha one in say, well,
+
+232
+00:10:19,719 --> 00:10:22,960
+great real world example being git git still uses sha One
+
+233
+00:10:23,119 --> 00:10:24,469
+uses it in a way that's
+
+234
+00:10:24,679 --> 00:10:26,549
+-- not as easily attacked.
+-- Well,
+
+235
+00:10:26,690 --> 00:10:28,549
+-- that's actually kind of complicated.
+-- It's,
+
+236
+00:10:28,729 --> 00:10:28,849
+yeah,
+
+237
+00:10:29,409 --> 00:10:33,190
+-- it's not a good answer. As Doom
+-- does root certificates using Sha one.
+
+238
+00:10:33,200 --> 00:10:33,630
+Right.
+
+239
+00:10:33,679 --> 00:10:34,270
+It is not.
+
+240
+00:10:34,570 --> 00:10:37,780
+And in many cases they're using it as an integrity check.
+
+241
+00:10:37,789 --> 00:10:41,330
+Not a security check, except for the places they're using it as a security check.
+
+242
+00:10:41,900 --> 00:10:43,210
+I was gonna say, yeah.
+
+243
+00:10:43,429 --> 00:10:46,909
+And so, and that's the problem is, you know, defining these, where these bars is,
+
+244
+00:10:46,919 --> 00:10:50,770
+is a, is a lot harder with encryption and, you know, hashing and, you know,
+
+245
+00:10:50,780 --> 00:10:54,090
+it's something I want to get because, yeah, we do need at some point, like,
+
+246
+00:10:54,099 --> 00:10:56,820
+I don't want to buy stuff or have companies buying stuff that,
+
+247
+00:10:56,830 --> 00:11:00,710
+like uses this sha one or MD five or whatever in a vulnerable manner.
+
+248
+00:11:01,510 --> 00:11:01,989
+And, and
+
+249
+00:11:02,140 --> 00:11:02,150
+I,
+
+250
+00:11:02,950 --> 00:11:06,590
+so here's the way I always look at this is even if they're
+
+251
+00:11:06,599 --> 00:11:09,820
+not using it in what we would call a vulnerable manner today,
+
+252
+00:11:10,270 --> 00:11:14,750
+they should still stop because someday someone's gonna get a good idea
+
+253
+00:11:14,960 --> 00:11:18,780
+and they're gonna be like, oh, look, it already does sha one. I'll just use that
+
+254
+00:11:19,070 --> 00:11:21,299
+and then all of a sudden now you have a problem.
+
+255
+00:11:22,039 --> 00:11:23,739
+Yeah. And I would be even more concerned.
+
+256
+00:11:23,750 --> 00:11:25,190
+My biggest concern would be, is like,
+
+257
+00:11:25,200 --> 00:11:27,570
+what's their software update process look like?
+
+258
+00:11:27,580 --> 00:11:27,780
+Right.
+
+259
+00:11:27,789 --> 00:11:32,260
+Like how, because if they're using sha one, they're clearly not staying up to date
+
+260
+00:11:32,440 --> 00:11:33,179
+with stuff
+
+261
+00:11:33,869 --> 00:11:35,479
+or if they're using MD five, you know,
+
+262
+00:11:36,260 --> 00:11:38,580
+updates were signed with their MD five.
+
+263
+00:11:39,010 --> 00:11:40,090
+so I almost for fun.
+
+264
+00:11:40,099 --> 00:11:43,640
+Bought a, uh, they had, um, at Staples, they had, um, like no name, a
+
+265
+00:11:44,070 --> 00:11:47,289
+bunch of no name, products like pens and pencils and, you know,
+
+266
+00:11:47,390 --> 00:11:49,130
+and $20 wireless routers.
+
+267
+00:11:49,659 --> 00:11:49,679
+Oh,
+
+268
+00:11:49,820 --> 00:11:50,799
+man,
+
+269
+00:11:51,669 --> 00:11:52,500
+-- I almost
+-- bought
+
+270
+00:11:52,510 --> 00:11:52,820
+one
+
+271
+00:11:53,049 --> 00:11:55,380
+but my girlfriend was like, no, you don't need that.
+
+272
+00:11:55,390 --> 00:11:58,729
+And I'm like, I know I don't need it, but I want to play with it and she's like, no,
+
+273
+00:11:58,739 --> 00:12:00,229
+put it, put it back.
+
+274
+00:12:00,429 --> 00:12:02,679
+You know, it's the same discussion I had with my kids and candy.
+
+275
+00:12:03,989 --> 00:12:06,200
+It's like I want this, it's not good for you.
+
+276
+00:12:06,280 --> 00:12:08,739
+It's, you, you will regret this purchase.
+
+277
+00:12:09,229 --> 00:12:09,640
+I know.
+
+278
+00:12:09,929 --> 00:12:11,820
+You know, I know this is a terrible thing but,
+
+279
+00:12:11,960 --> 00:12:12,179
+and,
+
+280
+00:12:12,190 --> 00:12:16,260
+and I literally wanted to buy it just to see what the update software stuff was like.
+
+281
+00:12:16,619 --> 00:12:16,659
+Oh,
+
+282
+00:12:17,270 --> 00:12:18,130
+yeah. You know,
+
+283
+00:12:18,349 --> 00:12:19,530
+you know, it's terrible.
+
+284
+00:12:19,849 --> 00:12:21,059
+I couldn't, you know, here's the best part.
+
+285
+00:12:21,070 --> 00:12:22,880
+I couldn't even find the model number online.
+
+286
+00:12:23,440 --> 00:12:24,700
+I have no doubt.
+
+287
+00:12:25,159 --> 00:12:29,489
+-- I have no doubt. It's, I want, oh man, part of me wants this now just to like
+-- start
+
+288
+00:12:29,710 --> 00:12:29,809
+key
+
+289
+00:12:30,460 --> 00:12:31,309
+Kee Wi
+
+290
+00:12:31,460 --> 00:12:36,700
+fi.com is the maker and it was like the, what was it? Wr 1014 or something like that.
+
+291
+00:12:37,039 --> 00:12:39,739
+It's at staples and, and yeah, it's a $20 router but,
+
+292
+00:12:40,349 --> 00:12:43,640
+you know, going back to the sort of CV E for crypto stuff. I, at
+
+293
+00:12:43,890 --> 00:12:44,630
+this point,
+
+294
+00:12:44,750 --> 00:12:47,039
+I kind of want like health food labels, you know,
+
+295
+00:12:47,049 --> 00:12:49,729
+where it gives you like the calorie count and the ingredient list.
+
+296
+00:12:49,929 --> 00:12:51,609
+And I would love to see like
+
+297
+00:12:51,960 --> 00:12:54,330
+an ingredient list for software saying like,
+
+298
+00:12:54,450 --> 00:12:59,599
+you know, this product uses Linux kernel version X last updated,
+
+299
+00:12:59,700 --> 00:13:00,890
+you know, at this date,
+
+300
+00:13:01,580 --> 00:13:01,840
+you know,
+
+301
+00:13:01,849 --> 00:13:03,619
+because maybe it's an old version that they back port
+
+302
+00:13:03,630 --> 00:13:05,719
+fixes to or maybe it's just an old version,
+
+303
+00:13:05,729 --> 00:13:06,119
+right?
+
+304
+00:13:06,130 --> 00:13:07,969
+Those are two very different things,
+
+305
+00:13:08,250 --> 00:13:08,789
+you know,
+
+306
+00:13:09,309 --> 00:13:13,440
+um, what's, you know, what ciphers and, you know, does it support WP A two,
+
+307
+00:13:13,450 --> 00:13:16,700
+does it support, you know, TLS version 1.3?
+
+308
+00:13:16,770 --> 00:13:19,559
+I guarantee you almost no products on the
+
+309
+00:13:19,760 --> 00:13:22,719
+market right now. Support TLS version 1.3
+
+310
+00:13:23,299 --> 00:13:23,969
+-- in the
+-- hardware space
+
+311
+00:13:24,159 --> 00:13:27,719
+in their defense. It's still not out of the standards committee.
+
+312
+00:13:27,729 --> 00:13:29,239
+But yes, I understand what you're saying.
+
+313
+00:13:29,669 --> 00:13:31,659
+Well, it's, it's darn close. I mean,
+
+314
+00:13:32,140 --> 00:13:32,789
+-- supports,
+-- it
+
+315
+00:13:33,840 --> 00:13:34,450
+is special.
+
+316
+00:13:34,969 --> 00:13:35,750
+-- Well, except for
+-- that
+
+317
+00:13:35,900 --> 00:13:37,630
+because they want to get it adopted and moving
+
+318
+00:13:37,640 --> 00:13:39,479
+and this is the chicken and egg problem.
+
+319
+00:13:39,500 --> 00:13:39,630
+Yeah.
+
+320
+00:13:39,640 --> 00:13:40,960
+Well, and from their perspective,
+
+321
+00:13:40,969 --> 00:13:44,849
+you figure TLS 13 is going to save them buckets of transfer
+
+322
+00:13:44,859 --> 00:13:47,429
+data more to the point it's going to save people time.
+
+323
+00:13:47,969 --> 00:13:48,770
+Yeah, that's true.
+
+324
+00:13:48,780 --> 00:13:49,690
+You know, that, those,
+
+325
+00:13:49,700 --> 00:13:52,890
+those when you think about how many round trips are made for TLS,
+
+326
+00:13:52,900 --> 00:13:54,049
+every day on the planet.
+
+327
+00:13:54,270 --> 00:13:56,010
+That's going to be an absurdly huge number.
+
+328
+00:13:56,739 --> 00:14:00,880
+It probably is. And that, that's actually one of the, we, we, we'll get to that.
+
+329
+00:14:01,210 --> 00:14:01,599
+Yeah.
+
+330
+00:14:01,780 --> 00:14:05,200
+Well, and the other thing too is you can, you can provide TLS version 1.3
+
+331
+00:14:05,950 --> 00:14:08,369
+and clients that don't support it. That's cool. Right.
+
+332
+00:14:08,380 --> 00:14:12,890
+-- They just talk TLS 1.1 or 1.0 or whatever, stop using
+-- TLS one point. Oh,
+
+333
+00:14:13,039 --> 00:14:16,559
+they, they should be talking about 12 or whatever.
+
+334
+00:14:18,260 --> 00:14:19,159
+And, well, you know,
+
+335
+00:14:19,169 --> 00:14:23,530
+that's actually related to this conversation about sha one is that I think we
+
+336
+00:14:23,539 --> 00:14:27,169
+need to get better about just drawing a line in the sand and saying
+
+337
+00:14:27,450 --> 00:14:28,489
+that's enough.
+
+338
+00:14:28,679 --> 00:14:30,849
+This doesn't, it's not supported, it doesn't work.
+
+339
+00:14:30,859 --> 00:14:32,929
+And the browser makers are basically going to do this
+
+340
+00:14:33,099 --> 00:14:33,690
+where
+
+341
+00:14:34,190 --> 00:14:36,210
+they're just gonna say, screw it. No way.
+
+342
+00:14:36,330 --> 00:14:39,640
+Instead of sort of supporting something for like 20
+
+343
+00:14:39,650 --> 00:14:41,690
+plus years and you get yourself into trouble.
+
+344
+00:14:42,159 --> 00:14:42,590
+Yeah.
+
+345
+00:14:43,090 --> 00:14:46,929
+No, we need to start killing these things otherwise they just linger on for
+
+346
+00:14:47,059 --> 00:14:47,219
+and they're
+
+347
+00:14:47,640 --> 00:14:51,969
+dangerous, right. How many attacks are we starting to see because of this stuff?
+
+348
+00:14:52,280 --> 00:14:52,489
+Yeah,
+
+349
+00:14:52,820 --> 00:14:56,789
+I think in general and, and this is one of the things where I think CV can help a lot is
+
+350
+00:14:56,979 --> 00:14:59,210
+if we assign CV S to these issues.
+
+351
+00:14:59,219 --> 00:15:02,710
+And, you know, like, for example, product uses MD five blah, blah, blah, blah blah,
+
+352
+00:15:03,039 --> 00:15:06,109
+then most organizations, if a product has a CV E,
+
+353
+00:15:06,119 --> 00:15:10,039
+they have to deal with it in some way and, and that way can be, you know, replacing it,
+
+354
+00:15:10,049 --> 00:15:10,890
+updating it, whatever.
+
+355
+00:15:10,900 --> 00:15:15,940
+But it can also be, we accept the risk and we accept that we cannot fix this but,
+
+356
+00:15:15,950 --> 00:15:18,229
+you know, due to business needs or whatever,
+
+357
+00:15:18,559 --> 00:15:19,270
+you know, at this time,
+
+358
+00:15:19,280 --> 00:15:21,190
+we don't have the money to replace it and we'll just eat the risk.
+
+359
+00:15:21,200 --> 00:15:22,909
+But at least then they are aware of
+
+360
+00:15:22,919 --> 00:15:25,469
+the risk and they're making a somewhat informed decision
+
+361
+00:15:25,900 --> 00:15:28,969
+rather than just, oh, we have a bunch of stuff sitting in a closet doing stuff.
+
+362
+00:15:28,979 --> 00:15:29,849
+I'm sure it's fine.
+
+363
+00:15:30,380 --> 00:15:32,570
+No, absolutely. That's absolutely correct.
+
+364
+00:15:32,780 --> 00:15:34,530
+And that's what II I like.
+
+365
+00:15:34,539 --> 00:15:37,330
+It kind of goes back again to this, you know, product labeling of like,
+
+366
+00:15:37,340 --> 00:15:38,450
+what is in this product?
+
+367
+00:15:38,460 --> 00:15:40,409
+How updated is it, you know, does this,
+
+368
+00:15:40,419 --> 00:15:43,450
+does this manufacturer still even exist or are they still in business?
+
+369
+00:15:44,150 --> 00:15:45,289
+No? Seriously. Like,
+
+370
+00:15:45,820 --> 00:15:47,119
+you know, some of these Chinese makers,
+
+371
+00:15:47,130 --> 00:15:50,130
+it's not that they go out of business but they, like, kill off a product line.
+
+372
+00:15:50,750 --> 00:15:52,900
+Oh, right. Well, everyone kills off product lines.
+
+373
+00:15:53,520 --> 00:15:57,849
+You can't support a product forever. That's just the reality of it.
+
+374
+00:15:58,359 --> 00:15:59,690
+Yeah, exactly. So,
+
+375
+00:16:00,380 --> 00:16:02,929
+you know, again, I want to make, you know, this is, I hate to say it.
+
+376
+00:16:02,940 --> 00:16:05,520
+This is one of, this is one of the core reasons I buy
+
+377
+00:16:05,799 --> 00:16:10,299
+Apple phones because I know for a fact, based on historical precedent,
+
+378
+00:16:10,309 --> 00:16:13,679
+I will get 3 to 4 years of support from Apple on software updates.
+
+379
+00:16:14,219 --> 00:16:14,409
+That
+
+380
+00:16:14,580 --> 00:16:15,219
+is,
+
+381
+00:16:15,590 --> 00:16:15,880
+is,
+
+382
+00:16:16,239 --> 00:16:19,270
+you know, with an Android phone, I'm up, I'm at the mercy of a random carrier.
+
+383
+00:16:19,280 --> 00:16:21,039
+Typically, unless I get an unlocked phone, which
+
+384
+00:16:21,330 --> 00:16:23,229
+in Canada is very difficult to get a hold of.
+
+385
+00:16:23,239 --> 00:16:26,380
+I run a Nexus phone from Google and I would,
+
+386
+00:16:26,750 --> 00:16:30,409
+I would not buy anything else. I would buy an iphone if I didn't have a Nexus.
+
+387
+00:16:30,419 --> 00:16:34,239
+And due to a variety of reasons, I sort of wish I had an iphone today but that's,
+
+388
+00:16:35,520 --> 00:16:35,890
+it's
+
+389
+00:16:36,979 --> 00:16:37,330
+us,
+
+390
+00:16:37,900 --> 00:16:38,940
+whatever man. It's
+
+391
+00:16:39,809 --> 00:16:41,130
+you, you and your cult.
+
+392
+00:16:41,760 --> 00:16:41,869
+Yeah.
+
+393
+00:16:42,229 --> 00:16:42,820
+Yeah, just like
+
+394
+00:16:42,950 --> 00:16:43,349
+Costco,
+
+395
+00:16:43,710 --> 00:16:47,289
+you know, actually I went to Costco the other day just to go in to look around.
+
+396
+00:16:47,440 --> 00:16:47,849
+It was
+
+397
+00:16:48,020 --> 00:16:50,849
+less impressive than you make it out to be, but very nice.
+
+398
+00:16:51,119 --> 00:16:52,049
+Did you try the hot dog?
+
+399
+00:16:52,229 --> 00:16:53,409
+I did not have a hot dog.
+
+400
+00:16:53,859 --> 00:16:54,359
+Should have a hot
+
+401
+00:16:54,460 --> 00:16:54,739
+dog
+
+402
+00:16:55,609 --> 00:16:56,169
+anyway.
+
+403
+00:16:56,640 --> 00:16:57,320
+Moving on.
+
+404
+00:16:57,330 --> 00:16:57,940
+So actually I,
+
+405
+00:16:57,950 --> 00:17:01,539
+I have one other really interesting thing about the Shah attack
+
+406
+00:17:01,549 --> 00:17:04,310
+that I found is so uh the Z cash guys,
+
+407
+00:17:04,319 --> 00:17:06,540
+which is Z cash is a digital currency,
+
+408
+00:17:06,890 --> 00:17:10,339
+which is supposed to be more exciting and interesting than Bitcoin.
+
+409
+00:17:10,630 --> 00:17:12,300
+But they kind of document
+
+410
+00:17:12,608 --> 00:17:17,540
+a whole bunch of things around attacks on secure hash functions. And one of the
+
+411
+00:17:17,760 --> 00:17:19,500
+results if you read this
+
+412
+00:17:19,920 --> 00:17:20,699
+is that
+
+413
+00:17:21,000 --> 00:17:24,979
+the current hashes that are being developed today are being designed
+
+414
+00:17:24,989 --> 00:17:29,650
+in a way to specifically be resistant to collision attacks.
+
+415
+00:17:29,949 --> 00:17:32,739
+And so it is conceivable at some point in the future,
+
+416
+00:17:32,949 --> 00:17:38,040
+the concept of basically like attacking a hash function in a manner looking
+
+417
+00:17:38,050 --> 00:17:41,180
+for collisions will not be practical and you would have to rely on
+
+418
+00:17:41,459 --> 00:17:45,609
+something very brute force oriented, which is not reasonable to do.
+
+419
+00:17:45,869 --> 00:17:49,319
+Yeah, I mean, I think the, the reality is as sort of so the,
+
+420
+00:17:49,329 --> 00:17:51,739
+the those talking about those three stages of attacks, you know,
+
+421
+00:17:51,750 --> 00:17:55,939
+where you can create two files with the same hash, you can create eight, a new file
+
+422
+00:17:56,109 --> 00:17:58,050
+with the same hash as an existing file.
+
+423
+00:17:58,119 --> 00:18:01,880
+And then the third step which is given a hash, here's a file that matches it.
+
+424
+00:18:02,400 --> 00:18:06,119
+That first attack is actually quite
+
+425
+00:18:06,930 --> 00:18:09,979
+potentially bad with some cryptocurrencies because for example,
+
+426
+00:18:09,989 --> 00:18:11,449
+you get into areas of double spend.
+
+427
+00:18:12,189 --> 00:18:15,869
+Uh yeah, that, that's probably fair, you know, and, and these are like,
+
+428
+00:18:15,880 --> 00:18:17,270
+this is literally if I can,
+
+429
+00:18:17,469 --> 00:18:19,170
+you can basically fake currency
+
+430
+00:18:19,989 --> 00:18:22,930
+and, and that's a real world problem for a currency,
+
+431
+00:18:23,420 --> 00:18:25,410
+you know, having fake currency running around, you know,
+
+432
+00:18:25,420 --> 00:18:28,060
+with these consensus protocols and stuff like it would,
+
+433
+00:18:28,229 --> 00:18:32,930
+it would probably not be a very great attack, but it would be one huge headache,
+
+434
+00:18:33,660 --> 00:18:34,640
+you know, to deal with it.
+
+435
+00:18:34,949 --> 00:18:38,770
+And what really gets me about this attack is that everybody, I mean, Shaw is,
+
+436
+00:18:38,780 --> 00:18:41,719
+you know, it's a pretty good hash, 1 60 100 and 60 bits.
+
+437
+00:18:41,729 --> 00:18:45,410
+So two to the 160th, which is a very large number with a lot of zeros, I'm sure.
+
+438
+00:18:45,949 --> 00:18:46,569
+And um,
+
+439
+00:18:46,839 --> 00:18:48,939
+but fundamentally what's, what's amusing to me is
+
+440
+00:18:49,180 --> 00:18:54,069
+some software that relies on sha one hashes to uh for the lack of a better term,
+
+441
+00:18:54,079 --> 00:18:56,050
+identify an object or a file
+
+442
+00:18:56,239 --> 00:19:00,339
+made the assumption that there will never be a collision, not even accidental.
+
+443
+00:19:00,560 --> 00:19:03,839
+And so, uh you remember the, the web KT thing, right?
+
+444
+00:19:04,569 --> 00:19:04,739
+So
+
+445
+00:19:05,729 --> 00:19:06,819
+there's subversion repo.
+
+446
+00:19:07,390 --> 00:19:11,119
+Yeah. So web kit has a Subversion repository
+
+447
+00:19:11,329 --> 00:19:13,660
+and they have a get to subversion sort of gateway.
+
+448
+00:19:14,270 --> 00:19:17,699
+And so some bright spark checked both these PDF files into the G
+
+449
+00:19:17,900 --> 00:19:19,300
+you know, totally reasonable, right?
+
+450
+00:19:19,310 --> 00:19:22,410
+Like I should be able to safely check in some files to get, you know,
+
+451
+00:19:22,420 --> 00:19:25,069
+as an example of the sha one attack, right?
+
+452
+00:19:25,739 --> 00:19:31,040
+And then when it went through their get to SVN uh gateway and into the SVNSVN just
+
+453
+00:19:31,050 --> 00:19:34,520
+apparently just barfed itself horribly horribly and like and
+
+454
+00:19:34,530 --> 00:19:37,589
+destroyed its internal database because of these matching sha
+
+455
+00:19:37,760 --> 00:19:39,040
+one hashes.
+
+456
+00:19:39,689 --> 00:19:39,989
+I
+
+457
+00:19:40,449 --> 00:19:43,800
+I've yet to properly understand that problem
+
+458
+00:19:44,420 --> 00:19:45,739
+because it,
+
+459
+00:19:46,209 --> 00:19:48,040
+I don't know, part of me gets it. And it's funny.
+
+460
+00:19:48,099 --> 00:19:48,930
+But another part of me,
+
+461
+00:19:48,939 --> 00:19:53,170
+like we check in files with the same check on all the time because, well,
+
+462
+00:19:53,180 --> 00:19:55,479
+granted they're the same file usually, you know what I mean?
+
+463
+00:19:56,349 --> 00:19:58,439
+I don't know, something crazy is going on obviously.
+
+464
+00:19:58,930 --> 00:20:01,589
+But I think fundamentally this points out a really good security
+
+465
+00:20:01,599 --> 00:20:04,020
+concept of you have to design with failure in mind.
+
+466
+00:20:04,209 --> 00:20:07,439
+And I'm guessing almost no software that uses shaw one to,
+
+467
+00:20:07,569 --> 00:20:09,119
+for example, identify objects
+
+468
+00:20:09,729 --> 00:20:11,150
+actually does. So
+
+469
+00:20:11,400 --> 00:20:14,750
+-- with, you know, this like actual,
+-- why wouldn't
+
+470
+00:20:14,880 --> 00:20:15,030
+the
+
+471
+00:20:15,229 --> 00:20:15,869
+different objects,
+
+472
+00:20:15,880 --> 00:20:20,280
+the whole point of using sha one is you don't have to worry about collisions.
+
+473
+00:20:20,520 --> 00:20:21,619
+-- Well,
+-- you know,
+
+474
+00:20:21,729 --> 00:20:22,589
+until now.
+
+475
+00:20:23,030 --> 00:20:23,359
+Yeah,
+
+476
+00:20:24,349 --> 00:20:25,079
+exactly.
+
+477
+00:20:25,099 --> 00:20:26,099
+Um, you know, it's just,
+
+478
+00:20:26,109 --> 00:20:28,849
+I feel like it's one of those design choices that if you design around that.
+
+479
+00:20:28,859 --> 00:20:30,069
+It also, then, you know,
+
+480
+00:20:30,079 --> 00:20:32,050
+you're buying yourself also some breathing room for
+
+481
+00:20:32,060 --> 00:20:33,819
+when the inevitable does happen or you know,
+
+482
+00:20:33,829 --> 00:20:35,790
+some crazy cosmic accident,
+
+483
+00:20:36,089 --> 00:20:36,530
+crazy
+
+484
+00:20:37,020 --> 00:20:38,489
+accidents. Those are the best kind.
+
+485
+00:20:39,109 --> 00:20:39,479
+Yeah,
+
+486
+00:20:39,650 --> 00:20:40,439
+so yeah.
+
+487
+00:20:40,449 --> 00:20:42,680
+No, this, I think the the good news,
+
+488
+00:20:42,689 --> 00:20:44,619
+like you said with Shaw one is the browsers are killing
+
+489
+00:20:44,630 --> 00:20:46,459
+it and hopefully more on the back end will kill it.
+
+490
+00:20:46,469 --> 00:20:49,180
+And then ideally, you know, we'll get CV S assigned to the stuff.
+
+491
+00:20:49,189 --> 00:20:52,000
+So people will know and be able to make an informed decision and, you know,
+
+492
+00:20:52,010 --> 00:20:53,780
+hopefully on the next equipment refresh,
+
+493
+00:20:54,579 --> 00:20:54,599
+I,
+
+494
+00:20:54,790 --> 00:20:58,640
+I blame MD five for making this a lot easier because I mean,
+
+495
+00:20:58,650 --> 00:21:01,569
+I remember when MD five finally died is
+
+496
+00:21:01,869 --> 00:21:03,760
+we knew it was bad and we're like,
+
+497
+00:21:03,770 --> 00:21:07,400
+it's not that bad and then the flame malware came out, it was like, yeah,
+
+498
+00:21:07,410 --> 00:21:08,420
+it's worse than we thought.
+
+499
+00:21:08,790 --> 00:21:11,170
+And so I think people understand
+
+500
+00:21:11,339 --> 00:21:13,849
+that is going to happen here eventually.
+
+501
+00:21:13,969 --> 00:21:14,410
+So,
+
+502
+00:21:14,920 --> 00:21:18,089
+so just to convert the flame hour, that was the one where it
+
+503
+00:21:18,439 --> 00:21:22,140
+was creating like hostile binaries with the same MD five or that was
+
+504
+00:21:22,260 --> 00:21:22,650
+the sign.
+
+505
+00:21:23,280 --> 00:21:23,829
+I think it was
+
+506
+00:21:23,969 --> 00:21:24,260
+doing something.
+
+507
+00:21:24,489 --> 00:21:25,280
+-- Right. It
+-- was the sign.
+
+508
+00:21:25,630 --> 00:21:27,750
+Right. It's, yes, I remember this now. Yeah.
+
+509
+00:21:27,760 --> 00:21:30,810
+And that one was even really interesting because that was
+
+510
+00:21:30,819 --> 00:21:34,630
+a completely unknown attack prior to the malware being found,
+
+511
+00:21:34,640 --> 00:21:35,609
+which is obviously,
+
+512
+00:21:35,829 --> 00:21:36,660
+that's terrifying.
+
+513
+00:21:36,670 --> 00:21:39,500
+And that's also another thing to think about is just because there's no
+
+514
+00:21:39,510 --> 00:21:42,339
+public research around the sha one attacks
+
+515
+00:21:42,349 --> 00:21:44,689
+doesn't mean it doesn't exist somewhere.
+
+516
+00:21:45,219 --> 00:21:48,489
+Well, something to keep in mind. I mean, this Shatter attack was done by, what was it?
+
+517
+00:21:48,500 --> 00:21:49,680
+Two guys at Google
+
+518
+00:21:50,119 --> 00:21:51,859
+and three guys at a university.
+
+519
+00:21:52,099 --> 00:21:55,579
+And they, but they also, I mean, they stood on research that came before them.
+
+520
+00:21:56,650 --> 00:22:00,130
+But the point is you, you think some government doesn't have five smart guys?
+
+521
+00:22:01,839 --> 00:22:03,660
+They have more than five.
+
+522
+00:22:04,109 --> 00:22:05,130
+Yeah, exactly.
+
+523
+00:22:05,530 --> 00:22:08,170
+You know, so the reality is this is, you know, like,
+
+524
+00:22:08,180 --> 00:22:10,680
+that's what always gets me is a lot of these attacks they come out
+
+525
+00:22:10,810 --> 00:22:11,189
+and it's,
+
+526
+00:22:11,199 --> 00:22:14,670
+it's not like the Manhattan project where you had thousands of people involved.
+
+527
+00:22:14,920 --> 00:22:16,069
+It's like five guys.
+
+528
+00:22:16,359 --> 00:22:17,199
+I, I know what you mean.
+
+529
+00:22:17,209 --> 00:22:20,949
+Well, not only that the, the fewer people you have working on something like this,
+
+530
+00:22:20,959 --> 00:22:22,339
+the easier it is to keep secret,
+
+531
+00:22:22,489 --> 00:22:23,219
+which is
+
+532
+00:22:23,540 --> 00:22:24,250
+in hindsight.
+
+533
+00:22:24,260 --> 00:22:24,530
+Like it's a,
+
+534
+00:22:24,540 --> 00:22:26,760
+can you imagine if something like the Manhattan
+
+535
+00:22:26,770 --> 00:22:28,500
+project was done today with social media?
+
+536
+00:22:28,510 --> 00:22:30,939
+Like, no, like I give it two hours
+
+537
+00:22:31,390 --> 00:22:32,699
+before it's leaked.
+
+538
+00:22:32,839 --> 00:22:36,339
+Right. Like someone taking a selfie next to the reactor and
+
+539
+00:22:36,670 --> 00:22:37,189
+it would be the
+
+540
+00:22:37,640 --> 00:22:39,030
+horrifying man. I mean,
+
+541
+00:22:39,160 --> 00:22:40,369
+look at what's going on now.
+
+542
+00:22:40,380 --> 00:22:41,010
+Like there's,
+
+543
+00:22:41,020 --> 00:22:43,560
+there's all these crackdowns and all these governments where they're
+
+544
+00:22:43,569 --> 00:22:46,250
+trying to keep information locked up and it's like guys,
+
+545
+00:22:46,260 --> 00:22:48,800
+you can't win this unless you lock these people
+
+546
+00:22:48,810 --> 00:22:51,380
+in vaults with no electronics of any sort.
+
+547
+00:22:51,390 --> 00:22:52,650
+You, you're going to fail.
+
+548
+00:22:53,079 --> 00:22:56,290
+Well, and they've done that like, uh what was it that one piece of legislation,
+
+549
+00:22:56,459 --> 00:22:57,849
+the TT P or whatever,
+
+550
+00:22:58,380 --> 00:23:00,540
+or the TPP, the Trans Pacific Partnership.
+
+551
+00:23:00,550 --> 00:23:04,739
+If memory serves the uh the European members of parliament, we're trying to like,
+
+552
+00:23:04,750 --> 00:23:06,089
+read it and the process to read it
+
+553
+00:23:06,260 --> 00:23:09,030
+is you have to give up all your electronic devices, go into a locked room,
+
+554
+00:23:09,040 --> 00:23:11,069
+you're not allowed to even bring paper and pen with you
+
+555
+00:23:11,800 --> 00:23:14,160
+and you're allowed to like spend half an hour reading this document,
+
+556
+00:23:14,170 --> 00:23:16,489
+then you have to leave the room and it's like, wow, that's,
+
+557
+00:23:17,229 --> 00:23:18,130
+yeah.
+
+558
+00:23:18,380 --> 00:23:18,739
+Right.
+
+559
+00:23:18,750 --> 00:23:19,729
+I mean, apart from the,
+
+560
+00:23:19,739 --> 00:23:24,369
+like you guys are clearly trying to hide something aspect of that is like,
+
+561
+00:23:24,380 --> 00:23:27,609
+people can still remember and they can sum it up later.
+
+562
+00:23:27,619 --> 00:23:30,640
+Like people are the problem, right? That, that's
+
+563
+00:23:31,079 --> 00:23:31,959
+-- pretty much how
+-- we,
+
+564
+00:23:32,400 --> 00:23:33,329
+you know, and I think this,
+
+565
+00:23:33,339 --> 00:23:35,020
+this talking about the small security team
+
+566
+00:23:35,030 --> 00:23:37,770
+and small security research thing really brings up
+
+567
+00:23:38,020 --> 00:23:39,890
+our next topic quite nicely. I mean,
+
+568
+00:23:40,209 --> 00:23:41,839
+because now we're talking about a guy Tavis
+
+569
+00:23:42,489 --> 00:23:42,609
+Ormandy.
+
+570
+00:23:43,319 --> 00:23:47,949
+Yeah, granted he is a very smart man. Very, very smart at security
+
+571
+00:23:48,130 --> 00:23:51,910
+but, you know, yeah, on his own, he um basically discovered that like,
+
+572
+00:23:51,920 --> 00:23:54,020
+what is it about 130 of the internet is um
+
+573
+00:23:54,760 --> 00:23:57,010
+vulnerable to leaked passwords, session data,
+
+574
+00:23:57,469 --> 00:23:57,599
+you know,
+
+575
+00:23:57,709 --> 00:24:00,199
+if it's that high. But why don't,
+
+576
+00:24:00,969 --> 00:24:02,300
+does about 30% of the website?
+
+577
+00:24:02,619 --> 00:24:07,619
+But it's not every site they've got to have some Janky html to really
+
+578
+00:24:07,790 --> 00:24:09,300
+-- trigger it. But
+-- no
+
+579
+00:24:09,569 --> 00:24:11,650
+uh no, no, no, no,
+
+580
+00:24:11,810 --> 00:24:12,359
+no, no,
+
+581
+00:24:12,469 --> 00:24:12,599
+no.
+
+582
+00:24:12,819 --> 00:24:13,189
+Ok.
+
+583
+00:24:14,234 --> 00:24:18,104
+A bunch of enhancements. So for example, I can have cloud
+
+584
+00:24:18,224 --> 00:24:20,744
+floor automatically rewrite all requests to http S
+
+585
+00:24:21,944 --> 00:24:22,275
+have cloud
+
+586
+00:24:22,984 --> 00:24:24,535
+-- ate email addresses, right?
+-- The,
+
+587
+00:24:24,714 --> 00:24:24,734
+the
+
+588
+00:24:24,875 --> 00:24:27,224
+the problem is more nuanced than this. It's the,
+
+589
+00:24:27,354 --> 00:24:33,665
+your data could be snarfed out from a request to a Janky site is what the problem is
+
+590
+00:24:34,109 --> 00:24:37,079
+and that's the real issue. And so why don't, do you want to explain this one?
+
+591
+00:24:37,089 --> 00:24:38,729
+Let's, let's let's start at the beginning
+
+592
+00:24:38,900 --> 00:24:40,369
+-- for people who might not
+-- Cloud
+
+593
+00:24:40,500 --> 00:24:42,790
+Flare is a content delivery network service,
+
+594
+00:24:43,000 --> 00:24:44,349
+maybe not that far in the beginning.
+
+595
+00:24:45,130 --> 00:24:47,979
+-- So basically everyone
+-- knows who cloud flare is, man. Come on.
+
+596
+00:24:48,500 --> 00:24:52,489
+But so they actually terminate the TLS and SSL connection
+
+597
+00:24:52,800 --> 00:24:56,109
+on their end and then send a further request to your server,
+
+598
+00:24:56,119 --> 00:24:58,420
+either encrypted or non encrypted depending on what you configured
+
+599
+00:24:58,510 --> 00:25:00,479
+to actually get the content and serve it up.
+
+600
+00:25:00,689 --> 00:25:03,300
+So that means the Cloud flare servers actually have
+
+601
+00:25:03,439 --> 00:25:05,540
+you know, the unencrypted raw
+
+602
+00:25:05,719 --> 00:25:09,599
+actual contents of the request because they also then are able to do things like
+
+603
+00:25:09,609 --> 00:25:13,189
+say email obfuscation where they like replace email addresses in the web page with,
+
+604
+00:25:13,199 --> 00:25:14,839
+uh I think it's like a picture or something so that, you know,
+
+605
+00:25:14,849 --> 00:25:16,560
+it can't be scraped as easily
+
+606
+00:25:16,849 --> 00:25:18,650
+or they do things like, um
+
+607
+00:25:18,989 --> 00:25:23,089
+you can um insert content or remove content, whatever, you know,
+
+608
+00:25:23,099 --> 00:25:24,170
+you can do some real cool stuff.
+
+609
+00:25:25,219 --> 00:25:29,449
+And the problem is they had like a little tiny, like literally a one character flaw
+
+610
+00:25:30,290 --> 00:25:34,579
+that meant that memory segments weren't aligned correctly in the application.
+
+611
+00:25:34,589 --> 00:25:35,420
+It was written in C
+
+612
+00:25:35,810 --> 00:25:37,619
+and so when it was
+
+613
+00:25:37,800 --> 00:25:41,390
+doing certain things, it could essentially insert data from
+
+614
+00:25:41,619 --> 00:25:44,209
+random parts of other memory on that server
+
+615
+00:25:44,969 --> 00:25:46,030
+and send that
+
+616
+00:25:46,300 --> 00:25:48,089
+in the request, you know, response.
+
+617
+00:25:48,099 --> 00:25:51,780
+And the problem is that those bits of data could be things like,
+
+618
+00:25:52,449 --> 00:25:57,069
+uh, cookie or a password or the actual web page itself
+
+619
+00:25:57,229 --> 00:25:59,150
+and it's sent to some random third party
+
+620
+00:25:59,280 --> 00:25:59,729
+and
+
+621
+00:25:59,859 --> 00:26:01,040
+ok, you know, that's bad.
+
+622
+00:26:01,050 --> 00:26:04,729
+But whatever, but the real problem becomes is now that, um, a lot of web caches
+
+623
+00:26:05,050 --> 00:26:05,469
+like
+
+624
+00:26:05,640 --> 00:26:08,790
+Google Bing Yahoo, you know, the big web crawler guys
+
+625
+00:26:09,199 --> 00:26:12,869
+have this content in the web pages, they have indexed and cached,
+
+626
+00:26:12,880 --> 00:26:15,430
+but that they also make available, right?
+
+627
+00:26:15,439 --> 00:26:16,750
+Like archived pages.
+
+628
+00:26:17,020 --> 00:26:17,560
+So,
+
+629
+00:26:17,569 --> 00:26:19,040
+and that's one thing Tavis had to work on is
+
+630
+00:26:19,050 --> 00:26:21,479
+he apparently had to write like a cleaner to like,
+
+631
+00:26:21,489 --> 00:26:24,410
+you know, the go through all of Google's data and like
+
+632
+00:26:24,530 --> 00:26:26,819
+basically clean the stuff out as best they could.
+
+633
+00:26:27,099 --> 00:26:28,760
+Um But we're talking like, what is it?
+
+634
+00:26:28,770 --> 00:26:33,199
+4.3 million domains are served through cloud flare, some of them pretty big.
+
+635
+00:26:34,459 --> 00:26:38,439
+And so this data is scattered all over, you know, God's green earth,
+
+636
+00:26:39,250 --> 00:26:42,810
+literally, who knows where and, and the real problem is we can't, you know,
+
+637
+00:26:42,819 --> 00:26:45,109
+I can't say with certainty that you're affected or not because
+
+638
+00:26:45,329 --> 00:26:47,550
+a couple of things had to happen. One, you know,
+
+639
+00:26:47,829 --> 00:26:48,300
+you,
+
+640
+00:26:48,310 --> 00:26:52,229
+you had to have your sensitive data in the cloud flare servers memory
+
+641
+00:26:52,239 --> 00:26:54,949
+while some other person made a request to a site with this,
+
+642
+00:26:54,959 --> 00:26:55,349
+you know,
+
+643
+00:26:55,880 --> 00:26:56,369
+um
+
+644
+00:26:56,510 --> 00:27:00,229
+flaw to be triggered and then randomly grab a chunk
+
+645
+00:27:00,239 --> 00:27:02,260
+of your memory that gets sent to an attacker.
+
+646
+00:27:02,270 --> 00:27:04,449
+Then the attacker would actually have to look at it and
+
+647
+00:27:04,459 --> 00:27:06,359
+process it and figure out what the heck this is for,
+
+648
+00:27:06,369 --> 00:27:10,260
+you know, like given just a cookie like, well, which website is this for which,
+
+649
+00:27:10,270 --> 00:27:11,510
+you know, is this an account?
+
+650
+00:27:11,520 --> 00:27:12,750
+Is this a session like,
+
+651
+00:27:13,030 --> 00:27:13,449
+you know?
+
+652
+00:27:13,550 --> 00:27:16,900
+And so that's the real problem is we're now at this place where like um well,
+
+653
+00:27:16,910 --> 00:27:20,099
+we think sort of like most of the internet is affected, but we don't really know
+
+654
+00:27:21,040 --> 00:27:21,819
+right, that
+
+655
+00:27:23,140 --> 00:27:27,939
+the unknown is the problem. And I remember it was very similar with heart bleed,
+
+656
+00:27:28,150 --> 00:27:30,540
+which is a very similar issue
+
+657
+00:27:30,989 --> 00:27:31,540
+and
+
+658
+00:27:31,750 --> 00:27:36,469
+it's just that unknown of did something bad happen, did something bad not happen.
+
+659
+00:27:36,479 --> 00:27:39,819
+We don't exactly know. And so from the security perspective,
+
+660
+00:27:40,040 --> 00:27:43,880
+-- it's always best to err on the side of caution. Well,
+-- but there's a cost with that.
+
+661
+00:27:43,890 --> 00:27:44,050
+Like,
+
+662
+00:27:44,060 --> 00:27:46,010
+are you gonna reset every single password
+
+663
+00:27:46,020 --> 00:27:48,219
+with every single cloud flare served website?
+
+664
+00:27:48,849 --> 00:27:49,530
+I,
+
+665
+00:27:49,640 --> 00:27:51,969
+-- do you even know which
+-- one? I have no idea.
+
+666
+00:27:52,250 --> 00:27:53,380
+-- And
+-- you're not gonna,
+
+667
+00:27:53,810 --> 00:27:55,729
+you're not gonna go through your password manager and, like,
+
+668
+00:27:55,739 --> 00:27:57,900
+compare it to that list of 4.3 million domains.
+
+669
+00:27:57,910 --> 00:27:58,300
+And then
+
+670
+00:27:58,479 --> 00:27:59,150
+there is
+
+671
+00:27:59,369 --> 00:27:59,380
+a
+
+672
+00:27:59,510 --> 00:27:59,540
+lot,
+
+673
+00:27:59,900 --> 00:28:01,229
+I'll put it in the show notes
+
+674
+00:28:02,359 --> 00:28:05,150
+impressively large to say the least.
+
+675
+00:28:05,890 --> 00:28:06,189
+Yeah.
+
+676
+00:28:06,199 --> 00:28:08,589
+So, well, part of it is like for example,
+
+677
+00:28:08,599 --> 00:28:11,319
+wordpress.com and a bunch of other sites like that have like
+
+678
+00:28:11,329 --> 00:28:14,140
+an automatic kind of ability for you to use Cloudflare,
+
+679
+00:28:14,150 --> 00:28:16,800
+you like hit a button and boom, you're using cloud flare,
+
+680
+00:28:17,140 --> 00:28:17,969
+you know, things like that.
+
+681
+00:28:17,979 --> 00:28:21,109
+There's a lot of applications now that like have a button to use cloud flare.
+
+682
+00:28:21,119 --> 00:28:24,175
+But yeah, so this basically it comes back to this uncertainty of like, well,
+
+683
+00:28:24,185 --> 00:28:25,714
+are we affected or are we not affected?
+
+684
+00:28:25,724 --> 00:28:25,964
+And
+
+685
+00:28:26,104 --> 00:28:29,834
+you know, even some sites that use cloud flare for serving stuff like for example,
+
+686
+00:28:29,844 --> 00:28:33,474
+-- explicitly did not use cloud flare for like their authentication stuff,
+-- right?
+
+687
+00:28:33,755 --> 00:28:36,055
+So they're not affected probably,
+
+688
+00:28:36,214 --> 00:28:37,944
+well, it's complicated because
+
+689
+00:28:38,185 --> 00:28:40,885
+just because you off against the site doesn't
+
+690
+00:28:40,895 --> 00:28:44,704
+mean there aren't cookies and various other authentication tokens
+
+691
+00:28:44,935 --> 00:28:46,474
+traveling between the cloud
+
+692
+00:28:46,665 --> 00:28:49,464
+servers and the resources you're trying to access. Right.
+
+693
+00:28:49,895 --> 00:28:51,094
+Exactly. So,
+
+694
+00:28:51,380 --> 00:28:54,239
+you know, that's really where it boils down to and more to the point. There's no,
+
+695
+00:28:55,609 --> 00:28:56,619
+well, there's very, uh,
+
+696
+00:28:56,630 --> 00:29:01,489
+the sort of the evidence and the artifacts of this problem that we do have, like,
+
+697
+00:29:01,500 --> 00:29:03,560
+stuff in, say Google's cash or Bing's cash,
+
+698
+00:29:03,890 --> 00:29:04,089
+you know,
+
+699
+00:29:04,099 --> 00:29:05,880
+going through and processing that to figure out
+
+700
+00:29:05,890 --> 00:29:07,680
+who actually got vulnerable and who didn't,
+
+701
+00:29:07,689 --> 00:29:08,869
+would just, it would be a,
+
+702
+00:29:08,989 --> 00:29:11,680
+you know, an expensive herculean task. But,
+
+703
+00:29:13,150 --> 00:29:16,380
+you know, they're not going to do probably, it's just too much of a pain in the butt
+
+704
+00:29:16,670 --> 00:29:18,619
+and on cloud flare side, you know, they don't,
+
+705
+00:29:18,750 --> 00:29:22,359
+I'm guessing, don't dump the contents of server memory every five seconds.
+
+706
+00:29:22,699 --> 00:29:23,819
+They, they couldn't,
+
+707
+00:29:24,020 --> 00:29:28,280
+they couldn't, they just, they, they process too much data and, and zeroing out.
+
+708
+00:29:28,290 --> 00:29:30,839
+Well, let's face it in a properly functioning system.
+
+709
+00:29:30,849 --> 00:29:33,339
+You don't need to zero out the memory because
+
+710
+00:29:33,630 --> 00:29:34,819
+the way you use it
+
+711
+00:29:35,079 --> 00:29:37,380
+does it correctly and takes care of that.
+
+712
+00:29:38,000 --> 00:29:38,579
+It's,
+
+713
+00:29:38,680 --> 00:29:43,430
+it's an unfortunate bug. Well, it's not so. Ok. C sucks. All right.
+
+714
+00:29:43,439 --> 00:29:47,380
+I love c more than, more than anything in the world, but I feel like it's,
+
+715
+00:29:47,390 --> 00:29:51,510
+it's that drug addict child you have that you love but you just, you know, you know,
+
+716
+00:29:51,520 --> 00:29:53,300
+you, you can't keep enabling them
+
+717
+00:29:53,449 --> 00:29:55,770
+to live that this lifestyle they have.
+
+718
+00:29:56,030 --> 00:29:57,780
+So, but the problem is
+
+719
+00:29:57,930 --> 00:30:00,290
+I, it wasn't really C's fault.
+
+720
+00:30:00,300 --> 00:30:03,609
+They had a parser generating C code and they had
+
+721
+00:30:03,619 --> 00:30:06,709
+basically made a mistake in their parser and the parser,
+
+722
+00:30:06,750 --> 00:30:08,569
+I guess, was dumb enough to generate
+
+723
+00:30:08,699 --> 00:30:12,540
+bad sea which then created this issue. And ironically,
+
+724
+00:30:12,699 --> 00:30:16,569
+the problem from what I've gathered is the bug had been there for years.
+
+725
+00:30:16,579 --> 00:30:21,369
+It was just when they made some recent change, it became easier to trigger.
+
+726
+00:30:21,959 --> 00:30:22,510
+Yeah.
+
+727
+00:30:22,589 --> 00:30:24,510
+Essentially my understanding is Tavis made some
+
+728
+00:30:24,520 --> 00:30:26,900
+requests and noticed this wonky garbage data,
+
+729
+00:30:26,910 --> 00:30:28,599
+looked at the wonky garbage data
+
+730
+00:30:28,750 --> 00:30:30,380
+and, you know, found out whoops,
+
+731
+00:30:31,030 --> 00:30:31,680
+right?
+
+732
+00:30:32,219 --> 00:30:33,660
+But even then I've,
+
+733
+00:30:33,670 --> 00:30:36,760
+I've read a handful of people who are criticizing
+
+734
+00:30:36,770 --> 00:30:40,579
+Tavis for kind of the project Zero response,
+
+735
+00:30:40,589 --> 00:30:43,140
+which is very aggressive compared to many.
+
+736
+00:30:43,530 --> 00:30:48,260
+But I will say that having been on both sides of this more times than I can count,
+
+737
+00:30:48,800 --> 00:30:53,859
+I think these guys did it right? I think being aggressive and honest is
+
+738
+00:30:54,260 --> 00:30:55,780
+the Google Project zero guys,
+
+739
+00:30:56,329 --> 00:30:56,359
+right?
+
+740
+00:30:56,569 --> 00:30:59,859
+Well, and especially since this is a real world attack that is,
+
+741
+00:31:00,219 --> 00:31:00,619
+you know,
+
+742
+00:31:01,550 --> 00:31:03,920
+-- it had a significant impact and
+-- even the Clown
+
+743
+00:31:03,949 --> 00:31:06,979
+Flare guys though they published a great blog.
+
+744
+00:31:07,109 --> 00:31:10,900
+-- Well, they did downplay the severity of it.
+-- They, they did a bit and
+
+745
+00:31:11,400 --> 00:31:15,290
+I'm sensitive to that because when you're the one getting kicked,
+
+746
+00:31:15,579 --> 00:31:16,160
+it's
+
+747
+00:31:16,550 --> 00:31:20,199
+it's difficult to be brutally honest. But I think,
+
+748
+00:31:20,500 --> 00:31:24,959
+I think for the most part they did what was right? And I think Tavis did what was right?
+
+749
+00:31:24,969 --> 00:31:28,339
+And so I think anyone criticizing either side is
+
+750
+00:31:28,439 --> 00:31:32,959
+kind of a fool. I've seen issues go way worse than this.
+
+751
+00:31:33,089 --> 00:31:33,660
+-- Right.
+-- Yeah.
+
+752
+00:31:33,670 --> 00:31:36,000
+Well, I do have one concern and that is, you know,
+
+753
+00:31:36,010 --> 00:31:38,160
+cloud flare runs apparently a bug bounty program.
+
+754
+00:31:38,170 --> 00:31:41,199
+But, like, even for an epically terrible problem, like this,
+
+755
+00:31:41,209 --> 00:31:43,199
+the best Tavis could do is a T shirt.
+
+756
+00:31:43,729 --> 00:31:44,979
+And so there were some comments that,
+
+757
+00:31:46,439 --> 00:31:46,640
+yeah,
+
+758
+00:31:46,650 --> 00:31:48,589
+and apparently there were some people commenting that
+
+759
+00:31:48,599 --> 00:31:51,589
+people are withholding flaws from cloud flare because of
+
+760
+00:31:51,869 --> 00:31:53,089
+the lack of reward. And
+
+761
+00:31:53,329 --> 00:31:54,680
+I part of me,
+
+762
+00:31:54,959 --> 00:31:56,109
+you know, I'm of two minds of that.
+
+763
+00:31:56,119 --> 00:31:56,619
+On the one hand,
+
+764
+00:31:56,630 --> 00:31:59,709
+I think that these companies should maybe spend a little bit on bug bounties and,
+
+765
+00:31:59,719 --> 00:32:02,380
+you know, provide that incentive for researchers.
+
+766
+00:32:02,390 --> 00:32:05,030
+But at the same time, I think like, like generally speaking,
+
+767
+00:32:05,040 --> 00:32:08,469
+white hat researchers in my opinion, should try to do the right thing
+
+768
+00:32:09,229 --> 00:32:10,989
+regardless of reward. You know, it's,
+
+769
+00:32:11,300 --> 00:32:11,869
+if I,
+
+770
+00:32:12,180 --> 00:32:12,650
+you know,
+
+771
+00:32:12,880 --> 00:32:13,390
+if I,
+
+772
+00:32:13,400 --> 00:32:17,130
+if I'm working in public health and I discover some new strain of super gonorrhea,
+
+773
+00:32:17,589 --> 00:32:19,880
+you know, I shouldn't report that to the government because I get a reward.
+
+774
+00:32:19,890 --> 00:32:21,300
+I should report to the government because I don't want
+
+775
+00:32:21,310 --> 00:32:23,280
+to live in a world full of super gonorrhea.
+
+776
+00:32:25,010 --> 00:32:28,280
+-- I understand what you're saying and I struggle with
+-- this
+
+777
+00:32:28,829 --> 00:32:28,949
+issue.
+
+778
+00:32:29,290 --> 00:32:32,189
+It, it, it doesn't have an easy answer and
+
+779
+00:32:32,969 --> 00:32:37,989
+we could argue about this for hours in, in either direction.
+
+780
+00:32:38,290 --> 00:32:39,270
+And I think
+
+781
+00:32:39,910 --> 00:32:41,270
+at the end of the day,
+
+782
+00:32:41,729 --> 00:32:44,390
+the current socially acceptable,
+
+783
+00:32:44,829 --> 00:32:46,310
+I guess solution
+
+784
+00:32:46,510 --> 00:32:50,589
+is the bug bounty system and is as flawed as it is and
+
+785
+00:32:50,760 --> 00:32:52,569
+it certainly is flawed,
+
+786
+00:32:53,089 --> 00:32:56,290
+but it is kind of the way it works now and
+
+787
+00:32:56,739 --> 00:32:58,430
+whether you like it or not,
+
+788
+00:32:58,689 --> 00:32:59,709
+that is
+
+789
+00:32:59,849 --> 00:33:01,430
+the way it is.
+
+790
+00:33:01,619 --> 00:33:04,050
+And I think, rather than argue about the phys
+
+791
+00:33:04,160 --> 00:33:05,390
+philosophical
+
+792
+00:33:05,520 --> 00:33:07,589
+or technical merits of it, it's just
+
+793
+00:33:08,359 --> 00:33:12,040
+if you're not running a bug bounty, you're probably behind the times.
+
+794
+00:33:12,050 --> 00:33:13,900
+It's just the unfortunate reality.
+
+795
+00:33:14,290 --> 00:33:16,010
+It reminds me a lot of like democracy.
+
+796
+00:33:16,020 --> 00:33:17,959
+You know, it's not pretty, it doesn't always work well,
+
+797
+00:33:17,969 --> 00:33:21,290
+but of all the systems we've tried so far, it's the least worst
+
+798
+00:33:22,069 --> 00:33:23,650
+or it used to be at least words.
+
+799
+00:33:24,010 --> 00:33:24,489
+Yeah.
+
+800
+00:33:24,910 --> 00:33:28,520
+But um, no, I mean, that's what, what really gets me is um
+
+801
+00:33:28,780 --> 00:33:32,180
+just, you know, yeah, companies need to at a minimum, make it,
+
+802
+00:33:32,189 --> 00:33:34,520
+make it easy to report stuff.
+
+803
+00:33:34,530 --> 00:33:36,469
+And number two for the really bad stuff,
+
+804
+00:33:36,479 --> 00:33:37,989
+you actually have to do something in a
+
+805
+00:33:38,000 --> 00:33:40,300
+reasonably timely manner like this whole thing,
+
+806
+00:33:40,310 --> 00:33:42,569
+you know, vendors used to sit on stuff like this for years,
+
+807
+00:33:43,229 --> 00:33:43,910
+literally,
+
+808
+00:33:44,260 --> 00:33:47,250
+you know, there's disclosure timelines from back in the, you know,
+
+809
+00:33:47,569 --> 00:33:49,479
+uh I hate to say this, the odds,
+
+810
+00:33:49,739 --> 00:33:52,400
+you know, the 2000 through 2010
+
+811
+00:33:52,739 --> 00:33:54,770
+or nine, whatever, whatever the odds were,
+
+812
+00:33:55,270 --> 00:33:55,530
+you know,
+
+813
+00:33:55,540 --> 00:33:57,489
+there's stuff that like you look at the disclosure
+
+814
+00:33:57,500 --> 00:33:59,650
+timeline and it's like two or three years.
+
+815
+00:33:59,979 --> 00:34:03,359
+Yeah, I, I remember those days, man, I remember
+
+816
+00:34:03,540 --> 00:34:07,209
+trying to do disclosure with certain organizations and
+
+817
+00:34:07,219 --> 00:34:09,208
+it was a total nightmare and they would,
+
+818
+00:34:09,219 --> 00:34:10,168
+they would bully you
+
+819
+00:34:10,580 --> 00:34:11,438
+because
+
+820
+00:34:11,780 --> 00:34:15,560
+they figured, well, we'll threaten to sue or we'll say this or that or another.
+
+821
+00:34:15,570 --> 00:34:16,219
+And so,
+
+822
+00:34:16,360 --> 00:34:16,879
+I mean,
+
+823
+00:34:17,020 --> 00:34:20,719
+it was, it was terrible. I'm not gonna lie. It was not good.
+
+824
+00:34:21,050 --> 00:34:22,399
+And this is where
+
+825
+00:34:22,889 --> 00:34:26,020
+I, I feel like the bug bounty programs,
+
+826
+00:34:26,179 --> 00:34:28,800
+they, they kind of have two effects is, first of all,
+
+827
+00:34:28,929 --> 00:34:31,879
+they give researchers a certain incentive,
+
+828
+00:34:32,208 --> 00:34:33,918
+ok? Which is
+
+829
+00:34:34,139 --> 00:34:36,060
+right or wrong. It exists, ok?
+
+830
+00:34:36,070 --> 00:34:40,360
+But it also on the company side or the organization side, I won't say company.
+
+831
+00:34:40,800 --> 00:34:41,139
+It,
+
+832
+00:34:41,149 --> 00:34:46,219
+it makes you put certain things in place for dealing with this stuff because I mean,
+
+833
+00:34:46,228 --> 00:34:48,500
+well, you remember, it's still, actually, it's not even remember.
+
+834
+00:34:48,510 --> 00:34:49,458
+It's still a problem. I mean,
+
+835
+00:34:49,629 --> 00:34:53,489
+there are organizations that if you had to report a security flaw to,
+
+836
+00:34:53,760 --> 00:34:55,020
+you couldn't
+
+837
+00:34:55,478 --> 00:34:56,100
+because,
+
+838
+00:34:56,489 --> 00:34:56,879
+you know,
+
+839
+00:34:56,889 --> 00:35:00,179
+you go to their website and you look for security stuff and there's nothing there.
+
+840
+00:35:00,189 --> 00:35:01,639
+I mean, that's a huge problem.
+
+841
+00:35:01,649 --> 00:35:05,340
+I remember horror stories of people like, you know, contacting organizations,
+
+842
+00:35:05,350 --> 00:35:08,110
+software or service providers and like trying to work their way
+
+843
+00:35:08,120 --> 00:35:10,330
+through sport and the ever classic one with the banks,
+
+844
+00:35:10,340 --> 00:35:10,699
+you know,
+
+845
+00:35:10,879 --> 00:35:12,699
+do you have an account with us? No click.
+
+846
+00:35:13,449 --> 00:35:14,040
+Yeah. Right.
+
+847
+00:35:14,159 --> 00:35:16,300
+You know, it's like I'm trying to help you guys, like,
+
+848
+00:35:16,310 --> 00:35:19,760
+I keep reaching out to this one bank and they're like on Twitter and I'm like, hey,
+
+849
+00:35:19,770 --> 00:35:22,510
+I just got, you know, because I keep getting text messages for like,
+
+850
+00:35:22,520 --> 00:35:24,949
+a couple of Canadian banks that I don't have account that saying, you know,
+
+851
+00:35:24,959 --> 00:35:26,040
+go to like Banken
+
+852
+00:35:26,530 --> 00:35:29,669
+online.com or whatever to like, you know,
+
+853
+00:35:30,120 --> 00:35:31,780
+reset your password or
+
+854
+00:35:32,320 --> 00:35:32,409
+those
+
+855
+00:35:33,389 --> 00:35:37,699
+messages and not like spammers trying to steal account information from you.
+
+856
+00:35:37,709 --> 00:35:40,139
+Well, that's exactly what they are. Right. They're spammers, right?
+
+857
+00:35:40,310 --> 00:35:44,419
+And so II I then, you know, take a screenshot and like, tweet it at,
+
+858
+00:35:44,689 --> 00:35:48,010
+uh, you know, at bank security or at bank or whatever.
+
+859
+00:35:48,060 --> 00:35:50,300
+And they're always like, oh, can you please report it through this, blah, blah,
+
+860
+00:35:50,310 --> 00:35:50,429
+blah.
+
+861
+00:35:50,439 --> 00:35:52,449
+And I'm like, no, no, I'm not,
+
+862
+00:35:52,629 --> 00:35:55,360
+I'm not jumping through hoops to report something to you. I,
+
+863
+00:35:55,550 --> 00:35:57,629
+I sent you a screenshot on Twitter with a domain.
+
+864
+00:35:58,629 --> 00:36:01,090
+You, you need to deal with this now and route it internally.
+
+865
+00:36:01,100 --> 00:36:02,330
+I'm not going to do that for you.
+
+866
+00:36:03,000 --> 00:36:03,290
+Yeah.
+
+867
+00:36:03,530 --> 00:36:05,360
+You know, and that's the thing, right? It's,
+
+868
+00:36:05,889 --> 00:36:08,050
+you know, all those times like somebody, you know,
+
+869
+00:36:08,060 --> 00:36:11,010
+when you don't make it hard for people to speak up
+
+870
+00:36:11,300 --> 00:36:14,260
+that drives me nuts. You know, I, I agree completely.
+
+871
+00:36:14,270 --> 00:36:16,810
+I was at the library and I saw somebody browsing porn.
+
+872
+00:36:16,820 --> 00:36:19,810
+So I went up to the library and I'm like, oh, hey, uh, you know, the guy in station nine,
+
+873
+00:36:19,820 --> 00:36:20,909
+he's, uh, browsing pornography.
+
+874
+00:36:20,919 --> 00:36:22,820
+She's like, oh, ok. Thank you. We'll deal with it
+
+875
+00:36:23,639 --> 00:36:24,060
+done.
+
+876
+00:36:25,350 --> 00:36:28,610
+You know, they, they're not gonna make me fill out a form and trip it or whatever.
+
+877
+00:36:31,070 --> 00:36:33,429
+-- I'm
+-- sure there's organizations and libraries that would,
+
+878
+00:36:33,729 --> 00:36:35,010
+nothing would surprise me.
+
+879
+00:36:35,310 --> 00:36:36,739
+And that's, you know, and that's the thing,
+
+880
+00:36:36,750 --> 00:36:38,290
+that's the biggest signal to me with a bug
+
+881
+00:36:38,300 --> 00:36:40,540
+bounty is chances are you're not gonna sue me
+
+882
+00:36:40,550 --> 00:36:44,379
+and chances are you're gonna have a point of contact I can talk to that won't be like,
+
+883
+00:36:44,760 --> 00:36:46,219
+have you tried turning it off and on?
+
+884
+00:36:47,870 --> 00:36:50,209
+Yeah, I'm, oh, man, I know what you mean.
+
+885
+00:36:50,219 --> 00:36:53,129
+Sometimes when you try to deal with nonsecurity people,
+
+886
+00:36:53,139 --> 00:36:55,000
+they don't quite understand what's going on.
+
+887
+00:36:55,010 --> 00:36:58,510
+You know, I'll never forget is this is, I love this story. So I was,
+
+888
+00:36:58,879 --> 00:36:59,500
+but a we lay
+
+889
+00:36:59,669 --> 00:37:03,010
+out fresh out of college and I was working for an organization
+
+890
+00:37:03,280 --> 00:37:04,050
+that was
+
+891
+00:37:04,330 --> 00:37:06,570
+in the process of cloud washing their product.
+
+892
+00:37:06,860 --> 00:37:07,469
+And
+
+893
+00:37:07,679 --> 00:37:08,370
+all right,
+
+894
+00:37:08,649 --> 00:37:11,489
+I remember they had one point where there was like the login user name,
+
+895
+00:37:11,500 --> 00:37:14,209
+password and they had a sequel injection on the login.
+
+896
+00:37:14,639 --> 00:37:15,239
+And
+
+897
+00:37:15,379 --> 00:37:19,260
+of course, you know, I'm like, look here, we, we can have to fix this because if,
+
+898
+00:37:19,270 --> 00:37:22,590
+you know, if I type in this look, I can, you know, show the, the total layout
+
+899
+00:37:22,719 --> 00:37:25,580
+of the database, right? No, I did not drop the tables.
+
+900
+00:37:25,659 --> 00:37:27,899
+But anyway, and I remember the, the developer looked at me, he's like,
+
+901
+00:37:27,909 --> 00:37:28,979
+why would anyone do that?
+
+902
+00:37:28,989 --> 00:37:32,709
+And I said I just did that, you know, come on and it,
+
+903
+00:37:33,239 --> 00:37:36,030
+they did not understand what was going on and
+
+904
+00:37:36,040 --> 00:37:38,060
+they just kept saying nobody's gonna do that.
+
+905
+00:37:38,520 --> 00:37:39,320
+And I remember
+
+906
+00:37:39,659 --> 00:37:39,689
+with
+
+907
+00:37:39,909 --> 00:37:40,479
+SS
+
+908
+00:37:41,379 --> 00:37:44,010
+Exactly they, but I mean, I get that right.
+
+909
+00:37:44,020 --> 00:37:47,899
+And this is unfortunately what can happen is if you have a security guy try
+
+910
+00:37:47,909 --> 00:37:51,030
+to report a security flaw and someone doesn't quite understand the nuance of it.
+
+911
+00:37:51,040 --> 00:37:54,739
+And let's face it, like, in this case with cloud flare, this was fairly nuanced.
+
+912
+00:37:54,750 --> 00:37:55,439
+I think
+
+913
+00:37:55,649 --> 00:38:01,250
+it would be easy for a, a very, we'll say, um, I, I hesitate to say uninformed but,
+
+914
+00:38:01,260 --> 00:38:01,379
+you know,
+
+915
+00:38:01,389 --> 00:38:04,669
+someone who maybe isn't hip with security to understand exactly
+
+916
+00:38:04,679 --> 00:38:06,870
+what is happening here and why it is so serious.
+
+917
+00:38:07,600 --> 00:38:08,040
+Yeah.
+
+918
+00:38:08,699 --> 00:38:09,689
+Oh man, it's
+
+919
+00:38:11,379 --> 00:38:12,659
+remember when things were easy, Kurt.
+
+920
+00:38:13,179 --> 00:38:13,479
+Yeah.
+
+921
+00:38:13,580 --> 00:38:15,040
+Well, so I have some good news for you.
+
+922
+00:38:15,209 --> 00:38:19,760
+Um This just came into my mailbox. Uh The CV newsletter from Miter just popped in
+
+923
+00:38:20,100 --> 00:38:25,399
+feature story CV E 2005 4900 is sha one collision attack shattered.
+
+924
+00:38:26,010 --> 00:38:33,750
+-- Uh from 2005,
+-- this vulnerability in sha one was assigned CV ID 2005 4900 in 2016.
+
+925
+00:38:33,760 --> 00:38:37,350
+Uh They don't say why they use 2005, but
+
+926
+00:38:37,479 --> 00:38:41,070
+I think it's probably because this attack was first posited in 2005.
+
+927
+00:38:41,090 --> 00:38:42,699
+Probably when the research came out
+
+928
+00:38:42,879 --> 00:38:45,669
+for this. I know it was a long time ago.
+
+929
+00:38:45,780 --> 00:38:48,860
+-- Yeah.
+-- And now it's, this is the actual proof of concept part, right?
+
+930
+00:38:48,870 --> 00:38:50,070
+Because we do that all the time, right? Like
+
+931
+00:38:50,290 --> 00:38:52,429
+somebody will come up with a Linux kernel flaw and it's
+
+932
+00:38:52,439 --> 00:38:54,120
+not for like a year or two until somebody bothers,
+
+933
+00:38:54,129 --> 00:38:54,969
+try and exploit for it.
+
+934
+00:38:54,979 --> 00:38:57,209
+-- You know,
+-- actually you say that this is even
+
+935
+00:38:57,320 --> 00:38:58,429
+look at physics.
+
+936
+00:38:58,580 --> 00:38:59,770
+How long was the Higgs
+
+937
+00:38:59,989 --> 00:39:01,199
+boson a thing?
+
+938
+00:39:01,209 --> 00:39:01,649
+And in fact,
+
+939
+00:39:01,659 --> 00:39:05,000
+actually the Higgs boson is a great analogy here because you think about it,
+
+940
+00:39:05,280 --> 00:39:05,919
+the Higgs
+
+941
+00:39:06,110 --> 00:39:06,540
+boson.
+
+942
+00:39:06,550 --> 00:39:08,310
+So Higgs is the name of the,
+
+943
+00:39:08,320 --> 00:39:12,100
+the physicist who kind of predicted the existence of the boson.
+
+944
+00:39:12,459 --> 00:39:16,989
+And then he was widely ridiculed for a long time as being a crazy person
+
+945
+00:39:17,260 --> 00:39:20,629
+and then they build the large Hadron Collider and it's like, oh, yeah, look,
+
+946
+00:39:20,639 --> 00:39:25,919
+we found it and it took, you know, like 30 years to go from essentially research
+
+947
+00:39:26,260 --> 00:39:28,600
+and, and theory to ridicule
+
+948
+00:39:28,729 --> 00:39:29,389
+to,
+
+949
+00:39:29,600 --> 00:39:29,669
+oh,
+
+950
+00:39:29,830 --> 00:39:29,879
+yeah,
+
+951
+00:39:30,129 --> 00:39:30,340
+it's,
+
+952
+00:39:31,070 --> 00:39:31,459
+uh, I
+
+953
+00:39:31,610 --> 00:39:33,449
+don't think anyone criticized Einstein.
+
+954
+00:39:33,570 --> 00:39:34,600
+-- Well, they kind of did
+-- for me,
+
+955
+00:39:35,225 --> 00:39:39,165
+it was not well accepted because, you know, God does not play dice with the universe,
+
+956
+00:39:39,175 --> 00:39:39,504
+I think.
+
+957
+00:39:39,514 --> 00:39:40,495
+Well, that was his quote.
+
+958
+00:39:40,975 --> 00:39:41,425
+Right. But, I
+
+959
+00:39:42,094 --> 00:39:42,665
+mean, you know,
+
+960
+00:39:42,675 --> 00:39:44,284
+anytime people have come up with new
+
+961
+00:39:44,294 --> 00:39:47,054
+theories that fundamentally view the world differently,
+
+962
+00:39:47,135 --> 00:39:47,794
+that's true.
+
+963
+00:39:47,814 --> 00:39:48,294
+I mean, that's,
+
+964
+00:39:48,774 --> 00:39:49,205
+that's
+
+965
+00:39:49,405 --> 00:39:49,625
+not
+
+966
+00:39:50,794 --> 00:39:50,814
+the
+
+967
+00:39:50,925 --> 00:39:51,074
+thing to
+
+968
+00:39:51,254 --> 00:39:52,395
+do and then eventually
+
+969
+00:39:52,830 --> 00:39:54,050
+it's proven
+
+970
+00:39:54,189 --> 00:39:56,370
+and, and I guess that that's part of this and this is true.
+
+971
+00:39:56,379 --> 00:39:59,080
+Security is there's always someone who will deny this is
+
+972
+00:39:59,090 --> 00:40:02,120
+a problem until it is proven beyond a reasonable doubt.
+
+973
+00:40:02,129 --> 00:40:05,600
+At which point. It's like, oh, crap. Now, I've got to get on this bus
+
+974
+00:40:05,840 --> 00:40:06,409
+and,
+
+975
+00:40:07,060 --> 00:40:11,320
+yeah, that's, that's really interesting. And I guess ironically as well is
+
+976
+00:40:11,489 --> 00:40:15,250
+the trick for like the Higgs boson is we had to wait for technology
+
+977
+00:40:15,550 --> 00:40:18,729
+and someone to build a giant machine capable of actually doing this work,
+
+978
+00:40:18,739 --> 00:40:22,030
+which is not unlike the shaw problem is we had to wait for
+
+979
+00:40:22,159 --> 00:40:24,159
+a massive cloud infrastructure to exist.
+
+980
+00:40:25,020 --> 00:40:25,550
+So we,
+
+981
+00:40:26,060 --> 00:40:27,290
+right. So we could do it.
+
+982
+00:40:27,459 --> 00:40:27,959
+It's, oh,
+
+983
+00:40:28,100 --> 00:40:30,810
+wow. I need to, I need to do some research on this.
+
+984
+00:40:30,820 --> 00:40:33,729
+This could be a really fun topic to, to compare
+
+985
+00:40:34,060 --> 00:40:35,530
+the I guess world of,
+
+986
+00:40:35,540 --> 00:40:40,169
+of science and physics to the world of security going from theory to practice.
+
+987
+00:40:40,459 --> 00:40:44,879
+And I guess more importantly though is once we've proven something in practice,
+
+988
+00:40:44,929 --> 00:40:48,510
+how does it change the work that happens after that point?
+
+989
+00:40:48,689 --> 00:40:54,439
+Because obviously for, for, I mean relativity is a great example is once Einstein,
+
+990
+00:40:54,520 --> 00:40:56,110
+you know, came up with the theory of relativity,
+
+991
+00:40:56,120 --> 00:40:58,290
+it kind of went through its peer review and was accepted,
+
+992
+00:40:58,429 --> 00:41:00,550
+it dramatically changed
+
+993
+00:41:00,989 --> 00:41:03,939
+literally all of science for forever
+
+994
+00:41:04,070 --> 00:41:04,620
+because
+
+995
+00:41:05,080 --> 00:41:05,469
+I mean
+
+996
+00:41:06,159 --> 00:41:08,739
+concrete level a member of the RS A show
+
+997
+00:41:08,850 --> 00:41:12,860
+there was a quantum level random number generator.
+
+998
+00:41:13,080 --> 00:41:14,320
+Oh yeah, that's uh Richard Mold
+
+999
+00:41:14,469 --> 00:41:16,459
+and the white wood encryption guys. They, they're super
+
+1000
+00:41:16,610 --> 00:41:17,729
+cool dudes and
+
+1001
+00:41:17,979 --> 00:41:21,929
+I love talking to them because my joke is always, you know, there, there's all this,
+
+1002
+00:41:21,939 --> 00:41:23,879
+all these people talk about randomness and whatnot.
+
+1003
+00:41:23,889 --> 00:41:24,320
+And I'm like,
+
+1004
+00:41:24,469 --> 00:41:26,239
+and I, I told Richard this and I said,
+
+1005
+00:41:26,350 --> 00:41:27,959
+you're one of like the five people in the
+
+1006
+00:41:27,969 --> 00:41:30,919
+world that's actually qualified to talk about randomness.
+
+1007
+00:41:30,929 --> 00:41:31,709
+You know, it's,
+
+1008
+00:41:32,010 --> 00:41:34,120
+it's one of those things everyone thinks they can talk about.
+
+1009
+00:41:34,129 --> 00:41:34,709
+I mean, heck, we've done
+
+1010
+00:41:34,814 --> 00:41:36,875
+more than once. Like, we're totally unqualified.
+
+1011
+00:41:36,885 --> 00:41:38,754
+We don't really know what we're talking about.
+
+1012
+00:41:39,125 --> 00:41:41,645
+Yeah. I just remember the look on the astrophysicist face there.
+
+1013
+00:41:41,655 --> 00:41:44,195
+She was so excited when she realized because I was wearing my suit. Right.
+
+1014
+00:41:44,205 --> 00:41:46,915
+And I think everybody assumes I'm a market droid when I'm in my suit
+
+1015
+00:41:47,705 --> 00:41:51,354
+and then she realized I was technical and just the look on her face was just such a joy.
+
+1016
+00:41:52,465 --> 00:41:52,955
+There you go.
+
+1017
+00:41:53,560 --> 00:41:56,659
+You know. But uh yeah. No, it's, it's, you're right like this,
+
+1018
+00:41:57,000 --> 00:41:58,600
+you know, the sha one is a great example.
+
+1019
+00:41:58,610 --> 00:42:00,850
+Are we gonna like all the world stop using
+
+1020
+00:42:00,860 --> 00:42:03,060
+sha one tomorrow and start transitioning off of it?
+
+1021
+00:42:03,139 --> 00:42:03,550
+Oh, no,
+
+1022
+00:42:03,709 --> 00:42:04,479
+sadly not.
+
+1023
+00:42:05,389 --> 00:42:05,840
+But
+
+1024
+00:42:07,120 --> 00:42:08,270
+yeah, I, I sha
+
+1025
+00:42:08,379 --> 00:42:09,629
+three is gonna be a ways away.
+
+1026
+00:42:10,820 --> 00:42:11,280
+Uh
+
+1027
+00:42:11,620 --> 00:42:12,939
+Yeah, probably.
+
+1028
+00:42:13,229 --> 00:42:15,600
+Which is sad. But, oh, well, it is what it is.
+
+1029
+00:42:16,110 --> 00:42:17,540
+There's not a lot we can do about it.
+
+1030
+00:42:18,340 --> 00:42:22,000
+Well, you know, it reminds me a lot of the I PV four I PV six network thing
+
+1031
+00:42:23,810 --> 00:42:24,100
+in the, I
+
+1032
+00:42:24,510 --> 00:42:26,489
+don't think I'll ever have a native I PV
+
+1033
+00:42:26,500 --> 00:42:29,949
+six network experience until my kids have like grandkids.
+
+1034
+00:42:30,219 --> 00:42:30,370
+I,
+
+1035
+00:42:31,439 --> 00:42:32,129
+yes,
+
+1036
+00:42:32,419 --> 00:42:33,169
+I know.
+
+1037
+00:42:33,379 --> 00:42:37,500
+I'm still terrified of the security flaws. We are going to discover
+
+1038
+00:42:38,090 --> 00:42:39,050
+I PV six.
+
+1039
+00:42:39,419 --> 00:42:41,409
+-- Well, you think about it? I mean,
+-- it's already been horrifying.
+
+1040
+00:42:42,120 --> 00:42:44,530
+It hasn't been that bad. Honestly, I, I've
+
+1041
+00:42:45,070 --> 00:42:47,219
+advertisement stuff has been pretty bad because most
+
+1042
+00:42:47,229 --> 00:42:49,389
+people just pretended like it wasn't a problem.
+
+1043
+00:42:50,350 --> 00:42:51,250
+-- Implementation.
+-- Explain
+
+1044
+00:42:51,639 --> 00:42:54,590
+the problem for the listeners who don't know what you're talking about.
+
+1045
+00:42:54,879 --> 00:42:56,129
+-- So,
+-- one of the, one of the,
+
+1046
+00:42:56,270 --> 00:43:01,229
+one of the things with I PV six is that, you know, let's make configuration easier. So
+
+1047
+00:43:01,649 --> 00:43:05,629
+you don't necessarily need to run like a DH CP server to hand out addresses and stuff.
+
+1048
+00:43:05,639 --> 00:43:09,550
+You can just, for example, here's your prefix staple on your MAC address. Boom.
+
+1049
+00:43:09,560 --> 00:43:10,429
+Done, right?
+
+1050
+00:43:11,290 --> 00:43:14,020
+Uh So things like that and then there's this idea of like a route advertisement,
+
+1051
+00:43:14,030 --> 00:43:17,800
+Damon where a machine can basically advertise like, hey, I'm a route for X, right?
+
+1052
+00:43:17,810 --> 00:43:20,790
+So that stuff, routing and whatnot just sort of magically happens.
+
+1053
+00:43:21,260 --> 00:43:23,969
+Well, the problem is anybody can advertise that crap on the network.
+
+1054
+00:43:23,979 --> 00:43:26,850
+So if you have a network with a malicious computer, it can advertise, hey,
+
+1055
+00:43:26,860 --> 00:43:27,850
+I'm the default route.
+
+1056
+00:43:27,860 --> 00:43:29,050
+And then of course, it actually,
+
+1057
+00:43:29,179 --> 00:43:29,629
+you know,
+
+1058
+00:43:29,820 --> 00:43:31,429
+becomes a default route for everything
+
+1059
+00:43:31,719 --> 00:43:35,639
+and then sends the traffic on through the actual default route.
+
+1060
+00:43:35,949 --> 00:43:37,350
+And man in the middle is everything,
+
+1061
+00:43:37,629 --> 00:43:40,320
+you know, things like that. So uh a quick search for um
+
+1062
+00:43:40,500 --> 00:43:45,050
+the CV database shows 263 CV entries that match the term I PV six.
+
+1063
+00:43:45,139 --> 00:43:46,580
+How many match I PV for
+
+1064
+00:43:46,909 --> 00:43:48,169
+uh a lot.
+
+1065
+00:43:48,590 --> 00:43:50,070
+Uh It is
+
+1066
+00:43:50,949 --> 00:43:52,459
+0 100 and 55
+
+1067
+00:43:53,010 --> 00:43:53,310
+it.
+
+1068
+00:43:53,330 --> 00:43:53,770
+Well,
+
+1069
+00:43:53,780 --> 00:43:55,199
+there's probably more than that because I'm
+
+1070
+00:43:55,209 --> 00:43:57,820
+sure a lot of things aren't specifically denoted
+
+1071
+00:43:57,830 --> 00:44:02,149
+as IP four and I'm sure a lot of these problems happened before CV.
+
+1072
+00:44:02,159 --> 00:44:03,360
+E was really even a thing
+
+1073
+00:44:04,340 --> 00:44:06,949
+CV, started in 1999. So, yes, I PV
+
+1074
+00:44:07,139 --> 00:44:07,159
+T
+
+1075
+00:44:07,320 --> 00:44:09,189
+four has been around forever.
+
+1076
+00:44:09,879 --> 00:44:10,239
+Forever.
+
+1077
+00:44:11,129 --> 00:44:14,409
+Yeah. But fundamentally like it's, I PV six is going to have to go, like,
+
+1078
+00:44:14,550 --> 00:44:18,189
+-- the sad reality is we don't seem to learn the lessons of the past.
+-- We never will.
+
+1079
+00:44:18,659 --> 00:44:22,669
+And, well, not only that, the bigger problem I see with I PV six is
+
+1080
+00:44:23,110 --> 00:44:26,030
+if you, if you think about the level of complexity,
+
+1081
+00:44:26,250 --> 00:44:31,000
+I PV six is like magnitudes more complex than I PV four.
+
+1082
+00:44:31,939 --> 00:44:32,000
+I
+
+1083
+00:44:32,219 --> 00:44:35,179
+try to read the specs to fully understand it and I gave up.
+
+1084
+00:44:35,550 --> 00:44:35,979
+It's,
+
+1085
+00:44:35,989 --> 00:44:38,719
+and that's gonna be the problem and that's what's gonna be the challenge
+
+1086
+00:44:38,729 --> 00:44:43,419
+for security is there's the issues of being complete according to standards which
+
+1087
+00:44:43,629 --> 00:44:45,659
+no one will be because they're too complicated.
+
+1088
+00:44:45,669 --> 00:44:48,020
+There's gonna be issues of implementing
+
+1089
+00:44:48,030 --> 00:44:50,620
+the standards because they're incomplete and
+
+1090
+00:44:50,909 --> 00:44:54,489
+it's just crazy complex. So there's going to be mistakes because
+
+1091
+00:44:54,820 --> 00:44:54,860
+there's
+
+1092
+00:44:55,070 --> 00:44:55,149
+different
+
+1093
+00:44:57,229 --> 00:45:00,530
+and that, that will probably happen also where one person will do it one way,
+
+1094
+00:45:00,540 --> 00:45:02,360
+the other person will do it the other way and
+
+1095
+00:45:02,780 --> 00:45:05,010
+who knows what that's going to result in.
+
+1096
+00:45:05,280 --> 00:45:09,600
+And so I imagine once I PV SIX becomes
+
+1097
+00:45:09,719 --> 00:45:13,250
+way more widely used than it is today and it's actually it's getting there.
+
+1098
+00:45:13,330 --> 00:45:14,629
+But I suspect
+
+1099
+00:45:15,159 --> 00:45:17,510
+once the researchers start hitting it hard
+
+1100
+00:45:17,780 --> 00:45:19,989
+we're gonna find a lot of crazy problems.
+
+1101
+00:45:20,129 --> 00:45:20,189
+Oh,
+
+1102
+00:45:20,379 --> 00:45:22,520
+yeah. Yeah. No, that's a given, um,
+
+1103
+00:45:23,159 --> 00:45:23,739
+for us.
+
+1104
+00:45:24,689 --> 00:45:25,629
+Yeah. So,
+
+1105
+00:45:25,780 --> 00:45:26,379
+anyway,
+
+1106
+00:45:27,010 --> 00:45:30,629
+I guess encrypt everything just and make sure you don't use sha one.
+
+1107
+00:45:31,919 --> 00:45:32,489
+Yes.
+
+1108
+00:45:32,909 --> 00:45:34,340
+That will fix everything.
+
+1109
+00:45:35,530 --> 00:45:37,419
+Indeed. Oh, man, it's,
+
+1110
+00:45:38,709 --> 00:45:42,250
+I love it. Welcome to the internet. It's complicated and hard and weird
+
+1111
+00:45:42,520 --> 00:45:43,570
+and we don't know what to do.
+
+1112
+00:45:45,350 --> 00:45:46,649
+Oh, well, such is life
+
+1113
+00:45:46,909 --> 00:45:48,919
+but it works pretty well. It, it does.
+
+1114
+00:45:50,149 --> 00:45:50,270
+Yeah,
+
+1115
+00:45:50,750 --> 00:45:52,199
+it's been, oh, man. Let's hope.
+
+1116
+00:45:52,209 --> 00:45:54,399
+Let's hope this week isn't anything like last week because, well,
+
+1117
+00:45:54,409 --> 00:45:56,830
+there was also that Linux kernel root privilege escalation
+
+1118
+00:45:56,840 --> 00:45:59,729
+issue that we totally didn't talk about at all,
+
+1119
+00:46:00,040 --> 00:46:02,290
+which ironically would have been exciting news.
+
+1120
+00:46:02,300 --> 00:46:07,010
+Had Sean not been broken and Claude Flair kind of had their issue.
+
+1121
+00:46:07,600 --> 00:46:11,469
+Well, and the thing, it kind of reminds me of like, like bank security that, you know,
+
+1122
+00:46:11,479 --> 00:46:12,870
+I hate to say this but like
+
+1123
+00:46:13,080 --> 00:46:16,469
+local privilege escalation in the Linux kernel are bad, but
+
+1124
+00:46:17,010 --> 00:46:19,229
+-- this isn't our first rodeo.
+-- It isn't.
+
+1125
+00:46:19,239 --> 00:46:21,010
+We basically know what to do at this point.
+
+1126
+00:46:21,020 --> 00:46:25,469
+Well, not only that, I think at this point if you have a system
+
+1127
+00:46:25,909 --> 00:46:31,379
+that isn't doing some sort of sand boxing and you are allowing multiple users on it,
+
+1128
+00:46:31,560 --> 00:46:32,899
+you're doing something wrong.
+
+1129
+00:46:33,199 --> 00:46:34,159
+Well, just from a, I
+
+1130
+00:46:34,629 --> 00:46:37,030
+mean, who the heck runs on bear hardware anymore?
+
+1131
+00:46:37,040 --> 00:46:39,780
+Like V MS are way easier to manage and provision.
+
+1132
+00:46:39,959 --> 00:46:40,679
+Yes. And
+
+1133
+00:46:41,179 --> 00:46:43,060
+I mean, it's just, we're at that point where it's like,
+
+1134
+00:46:43,560 --> 00:46:44,260
+it's, you know,
+
+1135
+00:46:44,270 --> 00:46:47,689
+it's like all the people that I remember back in the day people didn't use DH P,
+
+1136
+00:46:47,699 --> 00:46:49,189
+they would manually configure everything.
+
+1137
+00:46:49,199 --> 00:46:52,899
+And I discovered DH P and I'm like, oh, my sweet goodness.
+
+1138
+00:46:53,370 --> 00:46:53,899
+Wow.
+
+1139
+00:46:53,909 --> 00:46:54,419
+I just, I,
+
+1140
+00:46:54,429 --> 00:46:57,280
+I do one config file on one server and bam everything
+
+1141
+00:46:57,290 --> 00:46:59,199
+-- you turn it on and it works in their
+-- defense.
+
+1142
+00:46:59,270 --> 00:47:03,540
+I don't know if you've ever set up I PV or not. IP A DH CP.
+
+1143
+00:47:03,830 --> 00:47:08,060
+Way back in the day. It was a nightmare to get working correctly.
+
+1144
+00:47:08,709 --> 00:47:09,610
+This is actually,
+
+1145
+00:47:09,620 --> 00:47:13,560
+this is where Microsoft as much as I complained about them back in the 2000, early,
+
+1146
+00:47:13,570 --> 00:47:14,360
+two thousands,
+
+1147
+00:47:14,590 --> 00:47:17,659
+they got a lot of this stuff, right? Because they made it very pointy, clicky.
+
+1148
+00:47:17,669 --> 00:47:21,120
+Anyone can figure this out and, and if you're on using a UNIX system
+
+1149
+00:47:21,239 --> 00:47:22,600
+and trying to configure your network,
+
+1150
+00:47:22,949 --> 00:47:25,689
+you had to be some sort of insane wizard to make it work.
+
+1151
+00:47:25,699 --> 00:47:28,530
+And you remember all the books, like, remember the o'reilly books?
+
+1152
+00:47:28,540 --> 00:47:29,860
+They were all like phone books,
+
+1153
+00:47:30,000 --> 00:47:30,300
+all of them,
+
+1154
+00:47:30,649 --> 00:47:34,129
+right? I, oh man, I, I still have them. They're in my basement and I keep thinking,
+
+1155
+00:47:34,310 --> 00:47:36,830
+I don't want to throw them out, but they have no value.
+
+1156
+00:47:37,010 --> 00:47:37,919
+I do want to throw them out.
+
+1157
+00:47:38,080 --> 00:47:41,689
+I actually, my accountant asked me, I remember one year he's like, do you,
+
+1158
+00:47:41,699 --> 00:47:44,050
+do you really have to spend this much on computer books.
+
+1159
+00:47:44,060 --> 00:47:46,449
+And I'm like, yeah, and he's like, you realize you spent, like,
+
+1160
+00:47:46,459 --> 00:47:48,800
+$5000 on computer books.
+
+1161
+00:47:48,810 --> 00:47:50,409
+And I'm like, uh,
+
+1162
+00:47:50,979 --> 00:47:53,939
+I believe that I, well, and they were expensive, man.
+
+1163
+00:47:53,949 --> 00:47:55,959
+Like, the good books were 100 bucks.
+
+1164
+00:47:56,250 --> 00:47:57,689
+Some of them were more than that.
+
+1165
+00:47:57,939 --> 00:48:01,260
+Well, I remember buying, uh, not that this isn't really related but it's, uh,
+
+1166
+00:48:01,270 --> 00:48:03,949
+Knuth's the art of computer programming.
+
+1167
+00:48:04,100 --> 00:48:05,770
+It was like 300 bucks for that.
+
+1168
+00:48:05,780 --> 00:48:07,840
+There were, what, four books back then, or three books.
+
+1169
+00:48:07,850 --> 00:48:10,100
+I, for, I forget the name of it is, it is very nice.
+
+1170
+00:48:10,110 --> 00:48:11,790
+There's a new book now though and I don't have it and
+
+1171
+00:48:11,800 --> 00:48:13,280
+part of me wants it and part of me is like,
+
+1172
+00:48:13,340 --> 00:48:14,989
+uh, I don't know.
+
+1173
+00:48:15,679 --> 00:48:18,060
+So we'll see, maybe I'll break down some day and get it.
+
+1174
+00:48:19,189 --> 00:48:21,649
+I decided not to buy physical books anymore. I just,
+
+1175
+00:48:21,870 --> 00:48:25,590
+-- I don't space constraints.
+-- I agree with that. I don't care for real books.
+
+1176
+00:48:25,600 --> 00:48:28,580
+Real books are big and they take up a lot of space and
+
+1177
+00:48:28,719 --> 00:48:30,989
+I love the fact that I get on an airplane now
+
+1178
+00:48:31,239 --> 00:48:32,310
+and I have
+
+1179
+00:48:32,429 --> 00:48:34,379
+hundreds of books in my bag.
+
+1180
+00:48:34,780 --> 00:48:36,469
+And I remember traveling where,
+
+1181
+00:48:36,479 --> 00:48:38,989
+where occasionally you'd be almost done with one book and she'd
+
+1182
+00:48:39,000 --> 00:48:41,229
+bring two books and it took an insane amount of room.
+
+1183
+00:48:41,800 --> 00:48:42,120
+So,
+
+1184
+00:48:42,250 --> 00:48:43,870
+yeah, I'm quite happy. That's not a problem.
+
+1185
+00:48:44,189 --> 00:48:44,330
+Yeah.
+
+1186
+00:48:44,350 --> 00:48:47,030
+No, I, I think I only buy about 10 or 20 physical books a year now,
+
+1187
+00:48:47,040 --> 00:48:48,399
+which is down from like, hundreds.
+
+1188
+00:48:48,770 --> 00:48:52,620
+I don't even know. Well, I, if you count my kids, my kids like physical books.
+
+1189
+00:48:52,629 --> 00:48:56,550
+So we use them there. But, yeah, I don't think I've bought a real book in forever.
+
+1190
+00:48:56,679 --> 00:48:58,090
+I can't even remember the last one.
+
+1191
+00:48:58,399 --> 00:49:00,959
+-- Which is good. That's good. I'm happy.
+-- So, you heard it here?
+
+1192
+00:49:00,969 --> 00:49:02,909
+First folks, books are dead
+
+1193
+00:49:03,310 --> 00:49:03,330
+on
+
+1194
+00:49:03,489 --> 00:49:03,570
+the
+
+1195
+00:49:03,679 --> 00:49:03,770
+internet.
+
+1196
+00:49:04,239 --> 00:49:05,040
+Yeah.
+
+1197
+00:49:05,389 --> 00:49:06,810
+Right. Anyway,
+
+1198
+00:49:07,000 --> 00:49:08,550
+we'll say dead trees are dead,
+
+1199
+00:49:08,800 --> 00:49:09,149
+right.
+
+1200
+00:49:09,260 --> 00:49:09,959
+Dead trees are dead.
+
+1201
+00:49:10,199 --> 00:49:10,949
+That's what we'll say.
+
+1202
+00:49:11,959 --> 00:49:12,860
+Books are awesome.
+
+1203
+00:49:13,229 --> 00:49:14,030
+All right.
+
+1204
+00:49:14,949 --> 00:49:18,979
+They, they are the best thing. I agree. I do love books anyway. All right. All right.
+
+1205
+00:49:19,149 --> 00:49:19,780
+So,
+
+1206
+00:49:19,989 --> 00:49:21,620
+thank you everyone for listening.
+
+1207
+00:49:21,780 --> 00:49:22,580
+It's been fun.
+
+1208
+00:49:22,840 --> 00:49:25,310
+If you want to see any of the show notes,
+
+1209
+00:49:25,320 --> 00:49:27,379
+any of the links for the crazy things we talked about.
+
+1210
+00:49:27,389 --> 00:49:29,620
+You can go to open source security podcast.com
+
+1211
+00:49:30,040 --> 00:49:34,199
+and there you can find a link to Twitter to hassle. Kurt and myself.
+
+1212
+00:49:34,209 --> 00:49:37,750
+There is a link to a Facebook group. You are welcome to join and interact.
+
+1213
+00:49:37,949 --> 00:49:39,419
+If nothing else, Kurt,
+
+1214
+00:49:39,629 --> 00:49:42,909
+you have a Marvelous day and thank you everyone for listening.
+
+1215
+00:49:43,080 --> 00:49:43,820
+Thanks everybody.
+
+1216
+00:49:44,669 --> 00:49:47,330
+That's it. Just thanks. Usually you say something ridiculous.
+
+1217
+00:49:48,350 --> 00:49:50,129
+Well, it's, it's that whole pause where II,
+
+1218
+00:49:50,139 --> 00:49:52,520
+I feel like you were staring at me over the internet.
+
+1219
+00:49:52,530 --> 00:49:54,189
+I am staring at you over the internet.

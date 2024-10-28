@@ -1,0 +1,2946 @@
+0
+00:00:05,500 --> 00:00:08,970
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,979 --> 00:00:10,960
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:10,970 --> 00:00:11,930
+-- Josh
+-- Pressers.
+
+3
+00:00:12,109 --> 00:00:14,210
+Oh, it's Thought Crime again. That's very exciting. We have
+
+4
+00:00:14,380 --> 00:00:14,390
+a
+
+5
+00:00:14,520 --> 00:00:14,640
+ghost.
+
+6
+00:00:14,909 --> 00:00:15,189
+Yeah,
+
+7
+00:00:15,489 --> 00:00:17,520
+I know we do. I'm super excited. We are here.
+
+8
+00:00:17,530 --> 00:00:19,959
+We have the man, the myth, the legend,
+
+9
+00:00:19,969 --> 00:00:24,200
+Larry Cash Dollar who is a senior security researcher at Akamai Technologies.
+
+10
+00:00:24,209 --> 00:00:26,389
+We have talked about Larry literally for years
+
+11
+00:00:26,399 --> 00:00:28,489
+and he's finally honored us with his presence.
+
+12
+00:00:28,500 --> 00:00:29,940
+Larry, welcome to the show.
+
+13
+00:00:30,190 --> 00:00:33,380
+Hey, it's great being here. We are ecstatic. So I guess we
+
+14
+00:00:33,564 --> 00:00:35,034
+start out, tell us who you are,
+
+15
+00:00:35,044 --> 00:00:38,534
+tell us what you do and then we'll get into some of the why you're here.
+
+16
+00:00:38,544 --> 00:00:39,584
+So I'm Larry Kasher.
+
+17
+00:00:40,115 --> 00:00:40,884
+I work at
+
+18
+00:00:41,185 --> 00:00:45,224
+a my technologies in the, the security intelligence response team.
+
+19
+00:00:45,235 --> 00:00:47,825
+And generally they sort of pay me to look for
+
+20
+00:00:47,834 --> 00:00:50,384
+either vulnerabilities on the internet threats on the internet.
+
+21
+00:00:50,505 --> 00:00:54,974
+-- So it's sort of like being paid to break things and write about them. So
+-- awesome.
+
+22
+00:00:54,985 --> 00:00:58,865
+-- Awesome. And Kurt I'll let you do the honors. Why is Larry
+-- here?
+
+23
+00:00:58,875 --> 00:01:01,415
+Well, because that one year he broke CV.
+
+24
+00:01:02,630 --> 00:01:06,430
+-- Oh, he didn't break CV, but he screwed up. All the stats. All right.
+-- Let's go.
+
+25
+00:01:06,440 --> 00:01:07,569
+Why don't you?
+
+26
+00:01:07,739 --> 00:01:10,669
+Well, I guess Larry's here, Kurt doesn't have to explain what happened.
+
+27
+00:01:11,430 --> 00:01:12,879
+Larry, tell us what you've done.
+
+28
+00:01:12,910 --> 00:01:16,769
+-- I'm
+-- assuming the year you're talking about is when I started
+
+29
+00:01:16,879 --> 00:01:18,410
+attacking Ruby Jams. Right.
+
+30
+00:01:18,690 --> 00:01:23,480
+Yeah. So the back story to this goes, I was bored
+
+31
+00:01:23,750 --> 00:01:26,639
+and looking for something to poke at on the internet.
+
+32
+00:01:26,650 --> 00:01:29,559
+That might be interesting to find vulnerabilities in.
+
+33
+00:01:29,879 --> 00:01:33,639
+And I noticed that there wasn't a lot of stuff for Ruby Jam.
+
+34
+00:01:33,650 --> 00:01:35,660
+So I decided to download a bunch of them and
+
+35
+00:01:35,669 --> 00:01:38,940
+just start looking through them at places where easy stuff,
+
+36
+00:01:38,949 --> 00:01:41,239
+you know, low hanging fruit where folks were
+
+37
+00:01:41,540 --> 00:01:44,680
+pulling in user supply data into, you know,
+
+38
+00:01:44,690 --> 00:01:47,080
+functions that were shelling out so you can get
+
+39
+00:01:47,089 --> 00:01:49,099
+command injection and found a bunch of stuff.
+
+40
+00:01:49,110 --> 00:01:51,040
+So I guess there were no
+
+41
+00:01:52,209 --> 00:01:56,860
+that impacted Ruby gems until I started poking at them and found a bunch.
+
+42
+00:01:56,870 --> 00:02:00,180
+-- So I don't remember how many, but it was a bunch. Wait,
+-- there were none
+
+43
+00:02:00,470 --> 00:02:03,000
+-- before that.
+-- I think there might have been one. Wow,
+
+44
+00:02:03,010 --> 00:02:04,129
+that's madness.
+
+45
+00:02:04,139 --> 00:02:06,839
+This is common for most of these large ecosystems.
+
+46
+00:02:06,849 --> 00:02:09,820
+Like if you look at Ruby gems or node or whatever,
+
+47
+00:02:09,830 --> 00:02:12,339
+they generally are quietly ignored,
+
+48
+00:02:12,440 --> 00:02:16,720
+-- chug along and
+-- I don't know if I'd say that's necessarily true anymore.
+
+49
+00:02:16,729 --> 00:02:20,460
+I mean, it might have been back in the day for sure,
+
+50
+00:02:20,470 --> 00:02:23,380
+still ecosystems that are vastly ignored like every web
+
+51
+00:02:23,389 --> 00:02:26,759
+-- browser that's not Firefox chrome or edge or
+-- Safari?
+
+52
+00:02:26,770 --> 00:02:29,300
+That's fair. That's fair. OK? So
+
+53
+00:02:30,470 --> 00:02:33,220
+we're not going to argue about this. Larry's here talking to Larry.
+
+54
+00:02:34,779 --> 00:02:36,779
+And I'm curious because one thing I noticed is
+
+55
+00:02:36,789 --> 00:02:38,559
+with the research you did on the Ruby gems is
+
+56
+00:02:38,570 --> 00:02:40,750
+you sort of set a cut off for like these
+
+57
+00:02:40,759 --> 00:02:42,979
+actually sort of have to matter like command injection,
+
+58
+00:02:42,990 --> 00:02:43,740
+for example.
+
+59
+00:02:43,750 --> 00:02:48,380
+Yeah, I was looking for code execution really was my thing for that.
+
+60
+00:02:48,389 --> 00:02:50,660
+I have this joy which I'm sure everybody else
+
+61
+00:02:50,669 --> 00:02:53,179
+has of getting code injection or command injection on,
+
+62
+00:02:53,440 --> 00:02:55,979
+on stuff. So that, that's what I was looking for.
+
+63
+00:02:55,990 --> 00:02:58,320
+And they were relatively easy to find just
+
+64
+00:02:58,330 --> 00:03:00,830
+looking for functions that would shell out,
+
+65
+00:03:00,839 --> 00:03:04,399
+you know, if somebody was executing a curl command and then sticking in
+
+66
+00:03:04,660 --> 00:03:04,669
+a
+
+67
+00:03:04,820 --> 00:03:08,740
+user supply data into the command line to for a query parameter
+
+68
+00:03:08,750 --> 00:03:10,779
+on the URL that I was looking for stuff like that.
+
+69
+00:03:10,789 --> 00:03:14,979
+And I found a bunch. So it was, it was a lucrative enterprise for me.
+
+70
+00:03:15,399 --> 00:03:18,270
+OK? But I mean, so you have a story to tell here.
+
+71
+00:03:18,279 --> 00:03:23,169
+I, I remember this has been like 100 years ago. I think you,
+
+72
+00:03:23,389 --> 00:03:25,089
+you I gave you my,
+
+73
+00:03:25,190 --> 00:03:30,210
+my, my B sides badge in Vegas one year and we had dinner together and
+
+74
+00:03:30,419 --> 00:03:33,820
+you're I I still I I must say, OK, so most people don't know this. So
+
+75
+00:03:33,960 --> 00:03:38,929
+uh this is like man, this 100 years ago, Larry basically puts on Twitter.
+
+76
+00:03:38,940 --> 00:03:40,929
+Hey does anyone have a Bides badge and I had an
+
+77
+00:03:41,229 --> 00:03:43,479
+one and I was like, I will give it to you but you have to come get it.
+
+78
+00:03:43,490 --> 00:03:45,330
+And I feel like a huge dirt bag because like,
+
+79
+00:03:45,339 --> 00:03:46,899
+you brought your whole family and you guys, like,
+
+80
+00:03:46,910 --> 00:03:50,800
+walked clear across Vegas and it's like, well, for, you know, FFS Larry,
+
+81
+00:03:50,809 --> 00:03:53,960
+I would have freaking brought it to you don't drag your whole family out.
+
+82
+00:03:53,970 --> 00:03:54,710
+But, but anyway,
+
+83
+00:03:54,720 --> 00:03:57,190
+we had a lovely evening because we went and had dinner and everything.
+
+84
+00:03:57,199 --> 00:03:59,059
+But you told me the story of kind of what you
+
+85
+00:03:59,070 --> 00:04:01,229
+did and how you found this and what all happened.
+
+86
+00:04:01,240 --> 00:04:04,679
+So recount that story for us because I think it's super interesting.
+
+87
+00:04:05,000 --> 00:04:08,899
+Is this the SG story or is this,
+
+88
+00:04:09,009 --> 00:04:10,139
+I have a lot of stories.
+
+89
+00:04:10,149 --> 00:04:13,110
+-- So you have to,
+-- well specifically how you,
+
+90
+00:04:13,130 --> 00:04:15,789
+how you found all these Ruby Gems because it's not like
+
+91
+00:04:15,910 --> 00:04:18,820
+it's not like you went in and did it all by hand.
+
+92
+00:04:18,829 --> 00:04:21,420
+You actually had some automation that helped you do all this.
+
+93
+00:04:21,559 --> 00:04:22,820
+Yeah, I was,
+
+94
+00:04:22,850 --> 00:04:26,839
+I was a dork and I downloaded all the Ruby Gems
+
+95
+00:04:26,910 --> 00:04:29,910
+which was probably what like 10 megabytes back then at least,
+
+96
+00:04:29,920 --> 00:04:30,420
+right?
+
+97
+00:04:31,950 --> 00:04:33,459
+I can't remember how much disk
+
+98
+00:04:33,720 --> 00:04:36,839
+space it took it, it, it didn't take as much as you think.
+
+99
+00:04:36,929 --> 00:04:39,019
+But, but I ended up downloading all of them.
+
+100
+00:04:39,290 --> 00:04:40,970
+I think I scraped the page,
+
+101
+00:04:40,980 --> 00:04:46,119
+the Ruby Gem page and then parsed the html data to spit out the download URL
+
+102
+00:04:46,130 --> 00:04:49,230
+S and then pump it into a shell script and then downloaded all the URL S
+
+103
+00:04:49,470 --> 00:04:51,290
+or all of the uh the Ruby Gems and
+
+104
+00:04:51,299 --> 00:04:54,510
+then another script went through and un decompressed them.
+
+105
+00:04:54,519 --> 00:04:55,309
+I think they were Targ
+
+106
+00:04:55,480 --> 00:04:57,839
+zips that converted over and, and then
+
+107
+00:04:58,100 --> 00:04:59,929
+I ran a bunch of
+
+108
+00:05:00,230 --> 00:05:05,470
+other shell scripts to go through the code and look for key phrases, you know, like,
+
+109
+00:05:05,480 --> 00:05:08,910
+like uh execution commands or shell out commands
+
+110
+00:05:09,019 --> 00:05:12,549
+and, and you know, and then that created files that I could look at, you know,
+
+111
+00:05:12,559 --> 00:05:15,170
+to target is this piece of user input
+
+112
+00:05:15,274 --> 00:05:18,975
+being sent to something that is being passed to the shell and can I
+
+113
+00:05:19,184 --> 00:05:22,625
+stick a semicolon in there and get, you know, to execute ID?
+
+114
+00:05:22,635 --> 00:05:24,535
+So it was, it was a lot of fun.
+
+115
+00:05:24,545 --> 00:05:27,454
+I had to stop after months of doing that
+
+116
+00:05:27,464 --> 00:05:30,255
+because I started to have dreams about Ruby Gems,
+
+117
+00:05:30,970 --> 00:05:35,359
+which is, it's going to lead you to a psychotic episode eventually. If you're,
+
+118
+00:05:35,660 --> 00:05:39,339
+if you're dreaming about command injection and Ruby Gems, and you're
+
+119
+00:05:39,510 --> 00:05:41,820
+dreaming about code and
+
+120
+00:05:42,000 --> 00:05:44,339
+assigning IP addresses to people
+
+121
+00:05:44,529 --> 00:05:47,459
+in your dreams and it's time to take a break and walk away from that.
+
+122
+00:05:47,470 --> 00:05:50,015
+So it, it was getting pretty and
+
+123
+00:05:50,464 --> 00:05:53,595
+then I moved on, I think to wordpress plugins. So
+
+124
+00:05:55,964 --> 00:05:57,105
+-- that's
+-- a healthy choice.
+
+125
+00:05:59,005 --> 00:06:00,954
+Those are equally more,
+
+126
+00:06:01,234 --> 00:06:02,355
+they were more fun. So
+
+127
+00:06:02,484 --> 00:06:05,714
+that's awesome. OK. So I guess this is
+
+128
+00:06:05,954 --> 00:06:08,714
+super interesting to me is
+
+129
+00:06:09,130 --> 00:06:12,730
+so you had all these, I guess, maybe bugs.
+
+130
+00:06:12,899 --> 00:06:14,750
+And how did you make, like,
+
+131
+00:06:14,760 --> 00:06:17,140
+how did you verify you were actually dealing with something real?
+
+132
+00:06:17,149 --> 00:06:18,950
+Because I think one of the,
+
+133
+00:06:18,959 --> 00:06:23,190
+the enormous challenges when you're bug hunting is figuring out, you know,
+
+134
+00:06:23,200 --> 00:06:25,290
+kind of the ham from the spam of the things
+
+135
+00:06:25,299 --> 00:06:27,929
+that cannot be exploited versus the things that can.
+
+136
+00:06:28,070 --> 00:06:32,869
+Yeah, I like to do proof of concepts for everything. So I would,
+
+137
+00:06:33,059 --> 00:06:34,869
+it was a real pain to try and
+
+138
+00:06:35,000 --> 00:06:37,779
+verify these bugs because some of these gems were
+
+139
+00:06:38,239 --> 00:06:39,119
+sort of,
+
+140
+00:06:39,230 --> 00:06:41,859
+you know, there was like this very small gem that would,
+
+141
+00:06:41,869 --> 00:06:43,769
+it was a little library that somebody wrote
+
+142
+00:06:43,989 --> 00:06:44,799
+to download,
+
+143
+00:06:44,809 --> 00:06:49,970
+like using curl to download binary packages or websites that you pointed at.
+
+144
+00:06:49,980 --> 00:06:50,769
+So I had to
+
+145
+00:06:51,029 --> 00:06:52,640
+try and put that
+
+146
+00:06:52,829 --> 00:06:52,880
+in a,
+
+147
+00:06:52,890 --> 00:06:57,630
+in a ruby environment that I could actually get it to run and execute and it
+
+148
+00:06:57,640 --> 00:07:01,119
+was tedious and in some cases near impossible
+
+149
+00:07:01,130 --> 00:07:03,029
+and annoying to just do something quickly.
+
+150
+00:07:03,040 --> 00:07:08,690
+So I started to target stuff like someone had implemented an FTP Damon ruby gem,
+
+151
+00:07:08,920 --> 00:07:11,519
+which it was a, it was a project that you could launch
+
+152
+00:07:11,630 --> 00:07:15,250
+and it would, it would have an FTP server that would listen on port 21
+
+153
+00:07:15,609 --> 00:07:19,140
+and you could FTP to it and, and use it like a regular FTP server,
+
+154
+00:07:19,149 --> 00:07:22,260
+except all of the commands that you were sticking in
+
+155
+00:07:22,269 --> 00:07:26,769
+the FTP server side were being shelled out to EXEC.
+
+156
+00:07:26,779 --> 00:07:28,679
+So if you did an LS
+
+157
+00:07:29,470 --> 00:07:31,690
+semicolon, ID, semicolon.
+
+158
+00:07:31,700 --> 00:07:35,170
+You'd get a listing of files and you were running his route.
+
+159
+00:07:35,390 --> 00:07:36,089
+So.
+
+160
+00:07:36,299 --> 00:07:39,380
+Oh, my goodness. So that was one of one of the fun Ruby J
+
+161
+00:07:39,489 --> 00:07:40,450
+ones that I had found.
+
+162
+00:07:40,510 --> 00:07:44,579
+Well, I mean, I, I remember when I had to go through one code base and I,
+
+163
+00:07:44,589 --> 00:07:48,029
+to introduce myself, I just looked for their temp vulnerabilities
+
+164
+00:07:48,209 --> 00:07:50,000
+and they had about, they had 13
+
+165
+00:07:50,369 --> 00:07:53,160
+and one of them was, they'd actually written
+
+166
+00:07:53,480 --> 00:07:53,489
+a
+
+167
+00:07:53,730 --> 00:07:54,980
+function to exec
+
+168
+00:07:55,100 --> 00:07:55,850
+bash.
+
+169
+00:07:56,350 --> 00:07:58,950
+It was about seven or eight lines long and they almost got it right.
+
+170
+00:07:58,959 --> 00:08:01,309
+They were so close if they'd included, oh, exec,
+
+171
+00:08:01,739 --> 00:08:02,910
+they would have been OK.
+
+172
+00:08:02,920 --> 00:08:08,170
+But like, yeah, sometimes people have to accomplish something and I, they,
+
+173
+00:08:08,179 --> 00:08:11,019
+they choose these, like Rube Goldberg machines
+
+174
+00:08:11,410 --> 00:08:15,119
+because that's kind of what they know or I, I don't know,
+
+175
+00:08:15,290 --> 00:08:16,769
+like, what, what are your thoughts on this Larry?
+
+176
+00:08:16,779 --> 00:08:18,799
+Because I, I feel like a lot of software flaws,
+
+177
+00:08:18,809 --> 00:08:22,720
+especially in these gem sort of plug in ecosystems.
+
+178
+00:08:22,940 --> 00:08:25,649
+You get these developers who like, I know how to do this. So like
+
+179
+00:08:25,750 --> 00:08:28,440
+everything I accomplish is done via this method.
+
+180
+00:08:28,839 --> 00:08:29,920
+Oh II,
+
+181
+00:08:29,929 --> 00:08:32,140
+I know what it's like to be on the development end
+
+182
+00:08:32,150 --> 00:08:34,969
+of that as a researcher a couple of years ago,
+
+183
+00:08:34,979 --> 00:08:38,640
+I, I, well, maybe two or three years ago I, I wrote my own web server and see,
+
+184
+00:08:38,960 --> 00:08:40,900
+uh years ago.
+
+185
+00:08:41,770 --> 00:08:45,450
+Yeah, it runs my website right now. This is not RFC compliant.
+
+186
+00:08:45,799 --> 00:08:49,030
+It's it's, it's pretty crappy code. It works.
+
+187
+00:08:49,630 --> 00:08:51,179
+You heard it here if you want to P
+
+188
+00:08:51,349 --> 00:08:52,099
+Larry?
+
+189
+00:08:52,849 --> 00:08:53,559
+Oh, it is.
+
+190
+00:08:54,409 --> 00:08:56,549
+So, so I wrote this web server.
+
+191
+00:08:56,719 --> 00:09:00,940
+I had fixed a bunch of bugs in it and I sent it to a friend of mine, his name is Vlad.
+
+192
+00:09:01,090 --> 00:09:04,309
+He's in France. He's my, one of my hacker friends.
+
+193
+00:09:04,400 --> 00:09:07,799
+He's really good with C and, and kernel development and things like that
+
+194
+00:09:08,200 --> 00:09:09,809
+and he's, you know, CTF
+
+195
+00:09:10,159 --> 00:09:10,169
+er
+
+196
+00:09:10,270 --> 00:09:12,669
+type guy. And I'm like, hey, why don't you look for V
+
+197
+00:09:12,830 --> 00:09:13,609
+abilities in this?
+
+198
+00:09:13,799 --> 00:09:16,500
+He's like, sure. And he compiles it on the system and he's running it and
+
+199
+00:09:16,700 --> 00:09:19,469
+he's like, hey, I have, I found a path transferal
+
+200
+00:09:19,929 --> 00:09:22,820
+bug and I'm like, what? He's like, oh yeah. And I got code execution.
+
+201
+00:09:22,830 --> 00:09:24,130
+I'm like, what the hell?
+
+202
+00:09:24,309 --> 00:09:27,489
+And I'm like, what the hell's going on? I'm like, all right. Hang on a second, man.
+
+203
+00:09:27,500 --> 00:09:29,820
+You're having a free for all on this. What, what did I do?
+
+204
+00:09:30,059 --> 00:09:33,210
+And I went through and I looked at my code and I realized that I had disabled
+
+205
+00:09:33,219 --> 00:09:36,330
+a function that I wrote to strip out any
+
+206
+00:09:36,340 --> 00:09:39,559
+malicious characters because I was doing some testing with
+
+207
+00:09:39,919 --> 00:09:42,320
+Aami network. What I, what I had done was I had put
+
+208
+00:09:42,599 --> 00:09:46,270
+my web server which, which was running off of a Raspberry Pi. I put it on
+
+209
+00:09:46,609 --> 00:09:51,919
+a network. So imagine a content delivery network that's got 150,000 servers
+
+210
+00:09:52,099 --> 00:09:54,400
+and they're using this little Raspberry Pi
+
+211
+00:09:54,729 --> 00:09:57,400
+uh as an origin server for my website,
+
+212
+00:09:57,590 --> 00:09:58,950
+vapid dot DH s.org.
+
+213
+00:09:59,200 --> 00:09:59,830
+So
+
+214
+00:09:59,979 --> 00:10:02,799
+which isn't on the CD N anymore? It's, it's Vapid
+
+215
+00:10:03,150 --> 00:10:09,570
+labs.com. It's on CD N now. So it was uh it was pointing at my web server and I had,
+
+216
+00:10:09,770 --> 00:10:10,590
+you know, all of
+
+217
+00:10:10,950 --> 00:10:14,659
+my like enterprise level solutions, like on my website, I have
+
+218
+00:10:14,934 --> 00:10:14,994
+w
+
+219
+00:10:15,895 --> 00:10:18,015
+you know, I had their DNS solution.
+
+220
+00:10:18,025 --> 00:10:21,965
+So my, my name servers like distributed or my DNS is distributed across
+
+221
+00:10:22,354 --> 00:10:22,364
+a
+
+222
+00:10:22,784 --> 00:10:24,825
+DNS clusters globally.
+
+223
+00:10:25,164 --> 00:10:25,794
+And
+
+224
+00:10:26,015 --> 00:10:28,505
+I had disabled the security features of my
+
+225
+00:10:28,515 --> 00:10:30,484
+web server because I was doing testing with
+
+226
+00:10:31,195 --> 00:10:35,075
+a WF because one of the things I did a lot of back then was attacking my own website
+
+227
+00:10:35,340 --> 00:10:36,460
+and um testing
+
+228
+00:10:36,909 --> 00:10:36,929
+my
+
+229
+00:10:37,049 --> 00:10:37,070
+uh
+
+230
+00:10:37,380 --> 00:10:37,450
+W
+
+231
+00:10:37,849 --> 00:10:39,039
+signatures and things.
+
+232
+00:10:39,159 --> 00:10:40,960
+So I had disabled this function
+
+233
+00:10:41,130 --> 00:10:41,700
+and then
+
+234
+00:10:42,010 --> 00:10:44,719
+stupidly sent it to my friend who,
+
+235
+00:10:44,979 --> 00:10:45,719
+you know, was
+
+236
+00:10:45,849 --> 00:10:50,219
+honing my, my software left and right because this, this was letting in every,
+
+237
+00:10:50,250 --> 00:10:53,030
+every character and field and thing that he uh
+
+238
+00:10:53,280 --> 00:10:54,200
+that he could throw at it.
+
+239
+00:10:54,210 --> 00:10:56,799
+And it was, I just felt like an idiot, you know, it's like, what were you?
+
+240
+00:10:56,820 --> 00:10:58,320
+I wasn't even thinking about
+
+241
+00:10:58,640 --> 00:11:02,679
+the security of it. I was just thinking about, you know, will a core dump on a system.
+
+242
+00:11:02,710 --> 00:11:04,500
+So I ended up, you know, it was, it was,
+
+243
+00:11:04,510 --> 00:11:06,659
+I knew what it was like to be a developer at that point.
+
+244
+00:11:06,669 --> 00:11:09,700
+And it's, it's, I've seen, you know, both sides of the coin where,
+
+245
+00:11:09,869 --> 00:11:10,500
+you know, you're,
+
+246
+00:11:10,510 --> 00:11:14,179
+you're looking for vulnerabilities and then you're writing software,
+
+247
+00:11:14,190 --> 00:11:15,369
+but not necessarily
+
+248
+00:11:15,489 --> 00:11:17,179
+thinking about security first.
+
+249
+00:11:17,190 --> 00:11:21,859
+And I, I being a researcher, I tripped over my own shoelaces there, you know,
+
+250
+00:11:22,130 --> 00:11:24,820
+so I kind of understand how developers can
+
+251
+00:11:25,099 --> 00:11:26,789
+make mistakes when they're doing the gold
+
+252
+00:11:27,059 --> 00:11:27,280
+borg
+
+253
+00:11:27,570 --> 00:11:29,719
+type implementations on their software.
+
+254
+00:11:29,859 --> 00:11:31,840
+Well, and this goes back to
+
+255
+00:11:31,979 --> 00:11:33,679
+something Kurt and I have talked about
+
+256
+00:11:33,820 --> 00:11:35,020
+multiple times
+
+257
+00:11:35,219 --> 00:11:38,450
+is you literally know what you're looking for and you
+
+258
+00:11:38,460 --> 00:11:40,729
+know what you're doing and you still made mistakes.
+
+259
+00:11:40,760 --> 00:11:44,739
+So expecting anyone to write bug free code
+
+260
+00:11:44,849 --> 00:11:47,200
+is a ridiculous expectation.
+
+261
+00:11:47,299 --> 00:11:48,450
+And I think it's worse with security
+
+262
+00:11:48,534 --> 00:11:50,224
+bugs because they're not immediately apparent,
+
+263
+00:11:50,234 --> 00:11:50,434
+right?
+
+264
+00:11:50,445 --> 00:11:51,635
+Like they need to be triggered.
+
+265
+00:11:51,645 --> 00:11:53,994
+You know, it's not like, oh, the background is the wrong shade of blue.
+
+266
+00:11:54,005 --> 00:11:57,965
+Let's fix that or, oh, it doesn't work at all. It just core dumps.
+
+267
+00:11:58,205 --> 00:11:59,775
+You know, the security bug is,
+
+268
+00:11:59,895 --> 00:12:00,474
+well, you know,
+
+269
+00:12:00,484 --> 00:12:04,275
+we've had those bugs in bash and open cell that were there for decades before
+
+270
+00:12:04,375 --> 00:12:05,075
+somebody found them.
+
+271
+00:12:05,304 --> 00:12:07,304
+It could be something really nuanced.
+
+272
+00:12:07,315 --> 00:12:11,914
+I remember I was looking at a, uh, a wordpress plug in with, I had an intern
+
+273
+00:12:12,294 --> 00:12:14,354
+that we had taken in on the
+
+274
+00:12:14,635 --> 00:12:17,934
+A my cert team and uh she was an intern from MIT
+
+275
+00:12:18,200 --> 00:12:20,940
+and she was studying computer science and she was really interested in,
+
+276
+00:12:20,950 --> 00:12:22,099
+in security vulnerabilities.
+
+277
+00:12:22,109 --> 00:12:22,909
+And I'm like, you know what
+
+278
+00:12:23,049 --> 00:12:25,020
+I'm like, let's find security holes together.
+
+279
+00:12:25,030 --> 00:12:27,099
+I said I'll download a random wordpress plug in.
+
+280
+00:12:27,330 --> 00:12:28,619
+So it's how cocky I was
+
+281
+00:12:28,780 --> 00:12:30,539
+back then and we'll look for holes in it.
+
+282
+00:12:30,940 --> 00:12:34,559
+And so we downloaded it. I set up a wordpress instance on our local machine
+
+283
+00:12:34,809 --> 00:12:37,210
+and sold the plug in. And so we started poking at it.
+
+284
+00:12:37,559 --> 00:12:38,320
+I realized,
+
+285
+00:12:38,330 --> 00:12:41,520
+or we soon realized that it had cross site scripting vulnerability which,
+
+286
+00:12:41,530 --> 00:12:45,570
+which was pretty easy to find and it was, you know, fun to exploit.
+
+287
+00:12:45,580 --> 00:12:49,729
+But I also found out in that same field, it had SQL injection.
+
+288
+00:12:50,080 --> 00:12:50,840
+So
+
+289
+00:12:51,200 --> 00:12:53,929
+we came up with two payloads, one to execute
+
+290
+00:12:54,169 --> 00:12:58,250
+the cross site scripting vulnerability and one to execute or,
+
+291
+00:12:58,260 --> 00:13:00,760
+or verify that there was SQL injection.
+
+292
+00:13:01,080 --> 00:13:02,580
+So it was kind of like a funny,
+
+293
+00:13:02,799 --> 00:13:04,200
+you know, the same
+
+294
+00:13:04,729 --> 00:13:09,020
+user input field on this was vulnerable to cross site scripting and SQL injection.
+
+295
+00:13:09,030 --> 00:13:10,750
+And we had to come up with two different payloads.
+
+296
+00:13:11,039 --> 00:13:11,820
+And um you know,
+
+297
+00:13:11,830 --> 00:13:14,659
+when she was all excited because she got to find a vulnerability with me and,
+
+298
+00:13:14,940 --> 00:13:19,150
+and, you know, actually see the process of looking for security holes. It was fun.
+
+299
+00:13:19,159 --> 00:13:21,500
+And now did that get one or two CV?
+
+300
+00:13:21,609 --> 00:13:21,890
+-- I,
+-- I
+
+301
+00:13:22,369 --> 00:13:24,349
+think we ended up with four. I can't remember.
+
+302
+00:13:25,010 --> 00:13:27,359
+Nice because I think there was multiple
+
+303
+00:13:27,369 --> 00:13:31,200
+fields that also had other other vulnerabilities.
+
+304
+00:13:31,260 --> 00:13:34,679
+I don't remember what year that was was that 2017?
+
+305
+00:13:35,025 --> 00:13:35,575
+I don't know,
+
+306
+00:13:35,775 --> 00:13:38,395
+it was all hundreds of years ago.
+
+307
+00:13:38,405 --> 00:13:39,625
+-- This is
+-- one thing I love when
+
+308
+00:13:39,635 --> 00:13:43,284
+people think that finding security vulnerabilities is hard
+
+309
+00:13:43,525 --> 00:13:44,354
+and it's,
+
+310
+00:13:44,645 --> 00:13:45,715
+I mean, it, it is,
+
+311
+00:13:46,104 --> 00:13:48,515
+there's a certain type of skill
+
+312
+00:13:48,645 --> 00:13:49,554
+and tooling to it.
+
+313
+00:13:49,565 --> 00:13:51,114
+But from what I've seen, you know,
+
+314
+00:13:51,125 --> 00:13:54,604
+just downloading literally like you downloading random code and looking at
+
+315
+00:13:54,984 --> 00:13:57,315
+it, it, it all has bugs and security flaws.
+
+316
+00:13:57,700 --> 00:14:01,929
+So, so back in the day before I was doing this in the
+
+317
+00:14:02,090 --> 00:14:02,200
+a of my
+
+318
+00:14:02,349 --> 00:14:05,770
+cert, I'd say like 2005, 2006,
+
+319
+00:14:06,030 --> 00:14:07,719
+I used to look at Trade Max
+
+320
+00:14:08,000 --> 00:14:10,799
+and look for software that they're advertising
+
+321
+00:14:11,159 --> 00:14:11,770
+like Linux
+
+322
+00:14:11,960 --> 00:14:12,979
+based software.
+
+323
+00:14:13,099 --> 00:14:15,460
+And then if they had a free demo, I would download it
+
+324
+00:14:15,609 --> 00:14:17,409
+and then I would just start poking at that
+
+325
+00:14:17,590 --> 00:14:19,950
+and I would find security bugs that way, you know,
+
+326
+00:14:20,090 --> 00:14:23,700
+bounce a couple of temp vulnerabilities that way. I think I found path
+
+327
+00:14:23,820 --> 00:14:25,190
+Veral in some software too.
+
+328
+00:14:25,200 --> 00:14:26,239
+So it was like, you know,
+
+329
+00:14:26,250 --> 00:14:29,650
+I was sort of shopping for something to attack by looking at a trade magazine.
+
+330
+00:14:29,840 --> 00:14:30,210
+Ok.
+
+331
+00:14:30,219 --> 00:14:34,750
+But now let me, let me ask you a follow up to that is so back in those days,
+
+332
+00:14:34,830 --> 00:14:37,690
+how often did you report an issue to a company?
+
+333
+00:14:37,700 --> 00:14:40,750
+And they basically said, go away nerd, we don't care.
+
+334
+00:14:40,760 --> 00:14:43,250
+You know, I actually lucked out pretty well. I,
+
+335
+00:14:43,469 --> 00:14:47,349
+all the companies that I had talked to were pretty receptive. So
+
+336
+00:14:47,450 --> 00:14:51,109
+I managed to, I mean, I've had, I have research friends who were sued
+
+337
+00:14:51,320 --> 00:14:52,210
+by, you know,
+
+338
+00:14:52,739 --> 00:14:54,789
+application developers because they
+
+339
+00:14:54,979 --> 00:14:59,549
+found a security hole in their I OS app, their, their mobile app and, you know,
+
+340
+00:14:59,630 --> 00:15:03,030
+they ended up having to deal with lawyers and court issues and I,
+
+341
+00:15:03,039 --> 00:15:05,150
+I lucked out maybe they just thought that
+
+342
+00:15:05,280 --> 00:15:07,570
+my name was fake and I'd be too hard to track down.
+
+343
+00:15:09,630 --> 00:15:12,809
+I, I love how that is a recurring theme with everybody.
+
+344
+00:15:12,900 --> 00:15:15,010
+You know, when I, when I talk about you, you know,
+
+345
+00:15:15,020 --> 00:15:17,880
+and when I know I've actually met him and that is his name.
+
+346
+00:15:18,440 --> 00:15:18,789
+Yes,
+
+347
+00:15:19,140 --> 00:15:20,700
+it's such a good name. You got to admit,
+
+348
+00:15:21,549 --> 00:15:26,599
+I do see people on some of the forums that defend my name, defend your name.
+
+349
+00:15:26,619 --> 00:15:32,359
+Yeah, saying it's real. I saw when I disclosed the Blue imp vulnerability that
+
+350
+00:15:32,770 --> 00:15:36,090
+Jquery file upload vulnerability. And I think that was 2018,
+
+351
+00:15:36,489 --> 00:15:38,979
+I was looking on a forum and I saw
+
+352
+00:15:39,229 --> 00:15:40,489
+one of my former Akamai
+
+353
+00:15:40,849 --> 00:15:44,349
+employees or employee or wasn't my employee, but he was an a
+
+354
+00:15:44,479 --> 00:15:45,330
+my employee uh
+
+355
+00:15:45,590 --> 00:15:46,809
+from the
+
+356
+00:15:47,039 --> 00:15:47,719
+Infosec group
+
+357
+00:15:47,979 --> 00:15:51,330
+and he was talking to people on Reddit saying no, Larry is his real name.
+
+358
+00:15:51,340 --> 00:15:53,869
+He's a nice guy and, and it's not made up and,
+
+359
+00:15:54,109 --> 00:15:56,849
+and that's because they were, they were having a debate on this Reddit,
+
+360
+00:15:57,130 --> 00:16:01,190
+you know that whether I was a real name or not. So it was a, it's pretty funny.
+
+361
+00:16:01,200 --> 00:16:02,090
+That's awesome.
+
+362
+00:16:02,679 --> 00:16:03,650
+Ok. OK.
+
+363
+00:16:03,659 --> 00:16:08,510
+So I guess 11 last question and then we'll move away from, from talking about the,
+
+364
+00:16:08,520 --> 00:16:10,190
+your, your ruby gem research.
+
+365
+00:16:10,200 --> 00:16:14,190
+So you found all these problems and then you got C VS for them,
+
+366
+00:16:14,200 --> 00:16:16,429
+which I think is amazing because I don't think
+
+367
+00:16:16,440 --> 00:16:19,270
+many researchers who find lots of problems do this.
+
+368
+00:16:19,280 --> 00:16:19,750
+So
+
+369
+00:16:20,059 --> 00:16:24,109
+how, I mean, how did that work? How was that painful? What did you have to do?
+
+370
+00:16:24,119 --> 00:16:29,630
+Because I know back then Miter was a lot harder to deal with than they are today for CV.
+
+371
+00:16:29,640 --> 00:16:32,619
+-- Si
+-- remember folks were giving me ideas like
+
+372
+00:16:32,630 --> 00:16:35,070
+you should have a month of Ruby Jam vulnerabilities
+
+373
+00:16:35,369 --> 00:16:40,159
+and release a vulnerability once a day or you should release them all at once. And
+
+374
+00:16:40,590 --> 00:16:43,729
+I, I think I just pretty much would let me
+
+375
+00:16:43,950 --> 00:16:47,159
+know that I had, you know, a vulnerability and that I'd need a CV E
+
+376
+00:16:47,460 --> 00:16:49,080
+and they were,
+
+377
+00:16:49,229 --> 00:16:51,989
+I mean, they were pretty good, you know, they were pretty good to me.
+
+378
+00:16:52,000 --> 00:16:53,039
+Then they just would,
+
+379
+00:16:53,309 --> 00:16:55,830
+I think they had the cycles to process everything.
+
+380
+00:16:56,010 --> 00:17:00,049
+And then I think after that things just started to get overloaded and then
+
+381
+00:17:00,219 --> 00:17:02,020
+Kurt had to step in and start
+
+382
+00:17:03,460 --> 00:17:05,199
+create fork of his own
+
+383
+00:17:05,420 --> 00:17:07,280
+distributed weakness filing. So,
+
+384
+00:17:07,709 --> 00:17:09,829
+but I think that I think my,
+
+385
+00:17:10,170 --> 00:17:12,469
+I don't know if my thing broke it or not.
+
+386
+00:17:12,630 --> 00:17:15,858
+I know for sure. I skewed the stats for Ruby gem
+
+387
+00:17:16,848 --> 00:17:20,010
+vulnerabilities. I remember Steve Christie and Brian Martin
+
+388
+00:17:20,118 --> 00:17:21,709
+reaching out to me and saying,
+
+389
+00:17:21,910 --> 00:17:25,829
+hey, uh we're gonna make you famous and I'm like, what?
+
+390
+00:17:26,170 --> 00:17:27,270
+And they're like, yeah, we're,
+
+391
+00:17:27,280 --> 00:17:30,390
+we're doing a talk at black hat and we have a slide with you in it.
+
+392
+00:17:30,829 --> 00:17:31,859
+And I'm like, oh,
+
+393
+00:17:32,800 --> 00:17:37,699
+and I, you know, I don't really trust Steve or Brian too much. So, it's like, are they,
+
+394
+00:17:38,079 --> 00:17:39,250
+are they being
+
+395
+00:17:39,560 --> 00:17:41,780
+friendly, funny or they being malicious?
+
+396
+00:17:41,790 --> 00:17:45,459
+Like, I don't really know how to interpret these guys too much yet, you know.
+
+397
+00:17:45,900 --> 00:17:46,579
+So,
+
+398
+00:17:46,770 --> 00:17:51,449
+so I, I was talking about in my group, like, I just got a threat from,
+
+399
+00:17:51,839 --> 00:17:53,329
+from Steve
+
+400
+00:17:53,819 --> 00:17:54,589
+Steve
+
+401
+00:17:54,935 --> 00:17:55,015
+and uh
+
+402
+00:17:55,145 --> 00:17:58,354
+and Brian Martin and I, I'm not sure to be scared or happy.
+
+403
+00:17:58,364 --> 00:18:01,234
+So I reached out to like, I think it was Dave Lewis and I'm like, do you know
+
+404
+00:18:01,364 --> 00:18:02,405
+Brian Martin? Really?
+
+405
+00:18:02,415 --> 00:18:05,354
+Well, and he's like, yeah, he's a good guy and I'm like, why I'm like, well,
+
+406
+00:18:05,364 --> 00:18:05,954
+I'm scared.
+
+407
+00:18:05,964 --> 00:18:08,064
+He's like, no, don't be scared. He's like I talk to him.
+
+408
+00:18:08,074 --> 00:18:10,275
+He's like, it's gonna, it's gonna be good. And I'm like, ok,
+
+409
+00:18:10,694 --> 00:18:11,515
+so
+
+410
+00:18:11,805 --> 00:18:14,155
+my, I think the, the CSO
+
+411
+00:18:14,564 --> 00:18:15,824
+A Andy Ellis found out
+
+412
+00:18:16,239 --> 00:18:18,060
+and he's like, you have a slide deck,
+
+413
+00:18:18,250 --> 00:18:21,089
+they're doing the talk of black hat. There's a slide deck on you.
+
+414
+00:18:21,140 --> 00:18:22,020
+He's like, you need to be there.
+
+415
+00:18:22,030 --> 00:18:24,959
+He's like, you're going and I'm like, ok, he's like, we're gonna get you
+
+416
+00:18:25,119 --> 00:18:27,089
+tickets to Black Hat. And I'm like, oh, nice.
+
+417
+00:18:27,550 --> 00:18:30,239
+And you know, this was, I had just joined
+
+418
+00:18:30,390 --> 00:18:30,479
+Akamai
+
+419
+00:18:30,930 --> 00:18:34,500
+from, or I had just joined the Infosec group from the UNIX group
+
+420
+00:18:34,930 --> 00:18:37,579
+and the Infosec group was all about, you know, you could go to
+
+421
+00:18:37,689 --> 00:18:41,880
+all sorts of um conference and things. So it was, it was like,
+
+422
+00:18:42,719 --> 00:18:44,910
+it was sort of like being on the price is right?
+
+423
+00:18:45,069 --> 00:18:46,579
+And being showered with gifts, you know,
+
+424
+00:18:46,589 --> 00:18:50,349
+because you're not used to going to conferences when you're in UNIX administrator.
+
+425
+00:18:50,880 --> 00:18:52,069
+Are there any use?
+
+426
+00:18:52,229 --> 00:18:52,250
+N,
+
+427
+00:18:52,510 --> 00:18:54,310
+I don't know, I'm sure there is,
+
+428
+00:18:54,520 --> 00:18:58,229
+I'm sure there is VM Ware World or VM World or whatever they have. They,
+
+429
+00:18:58,430 --> 00:19:00,550
+they didn't send me to but um
+
+430
+00:19:02,199 --> 00:19:03,630
+but uh you know, but
+
+431
+00:19:03,939 --> 00:19:07,339
+infosec they just have the CSO like, yeah, you're gonna go,
+
+432
+00:19:07,349 --> 00:19:10,310
+we want you to go see what's on the slide and tell us about it and
+
+433
+00:19:10,459 --> 00:19:11,839
+it was really nice. So
+
+434
+00:19:12,180 --> 00:19:16,140
+it was good. It was just my, my skew on the ruby. They had a graph.
+
+435
+00:19:16,359 --> 00:19:16,810
+Well, I mean,
+
+436
+00:19:16,819 --> 00:19:20,010
+this isn't actually totally uncommon because if you look in CV database,
+
+437
+00:19:20,020 --> 00:19:20,910
+for example, there's
+
+438
+00:19:21,130 --> 00:19:22,020
+a company that did
+
+439
+00:19:22,244 --> 00:19:24,675
+a uh basically the mint token function of
+
+440
+00:19:24,685 --> 00:19:28,025
+a smart contract implementation for blank in Ethereum token
+
+441
+00:19:28,155 --> 00:19:30,435
+and there's like 380 of those.
+
+442
+00:19:30,444 --> 00:19:31,785
+Um And so a perfect example,
+
+443
+00:19:31,795 --> 00:19:35,724
+right is like CV has coverage of smart contracts to the tune of 500 CV S
+
+444
+00:19:36,135 --> 00:19:37,594
+all from 2018.
+
+445
+00:19:37,765 --> 00:19:40,494
+So the good news is that means that since 2018,
+
+446
+00:19:40,505 --> 00:19:42,295
+smart contracts have had no security flaws.
+
+447
+00:19:42,854 --> 00:19:44,474
+Right. Exactly.
+
+448
+00:19:44,775 --> 00:19:45,234
+Right.
+
+449
+00:19:45,709 --> 00:19:48,290
+Um So that's, that's what always frustrates me. I mean,
+
+450
+00:19:48,540 --> 00:19:50,780
+the whole CV database as a source of
+
+451
+00:19:50,790 --> 00:19:54,170
+data for making decisions about vulnerabilities globally is,
+
+452
+00:19:54,180 --> 00:19:54,689
+you know.
+
+453
+00:19:54,699 --> 00:19:55,020
+Yeah,
+
+454
+00:19:55,270 --> 00:19:57,599
+if once you learn how the sausage is made, you,
+
+455
+00:19:57,609 --> 00:20:00,449
+you understand that you can't use this as a reliable data source.
+
+456
+00:20:00,459 --> 00:20:01,530
+Right. Right.
+
+457
+00:20:01,729 --> 00:20:07,119
+OK. OK. Let's, let's, let's move on. We're, we're running ourselves out of time. And
+
+458
+00:20:07,400 --> 00:20:10,439
+I want to, I know and I feel like I could talk to you for days,
+
+459
+00:20:10,449 --> 00:20:12,290
+which we won't subject the audience to.
+
+460
+00:20:12,300 --> 00:20:12,530
+But
+
+461
+00:20:12,800 --> 00:20:14,239
+all right. So
+
+462
+00:20:14,589 --> 00:20:20,180
+before we hit record, you mentioned, I should ask you about your favorite CV E. So
+
+463
+00:20:20,479 --> 00:20:22,290
+what is your favorite CV E, Larry?
+
+464
+00:20:22,599 --> 00:20:24,599
+Oh, there's a, there's a few,
+
+465
+00:20:24,609 --> 00:20:28,060
+there's my first CV E and then one that I found shortly after that I,
+
+466
+00:20:28,069 --> 00:20:30,609
+I'll tell you about the first one because that one is probably the,
+
+467
+00:20:30,619 --> 00:20:31,550
+the most interesting.
+
+468
+00:20:31,560 --> 00:20:32,979
+And that's what people have been asking me about.
+
+469
+00:20:33,280 --> 00:20:36,180
+Back in 1998 1999.
+
+470
+00:20:36,189 --> 00:20:40,619
+I, uh I train, I moved from a small security company in Southern Maine
+
+471
+00:20:40,849 --> 00:20:42,699
+to Computer Sciences Corporation in Bath
+
+472
+00:20:42,939 --> 00:20:45,150
+Me, Computer Science Corporation, which, you know,
+
+473
+00:20:45,160 --> 00:20:48,339
+if you're not familiar with it is a pretty large, uh, like
+
+474
+00:20:49,000 --> 00:20:51,719
+company that was subcontracted by other companies
+
+475
+00:20:51,729 --> 00:20:53,510
+to sort of handle their it infrastructure
+
+476
+00:20:53,939 --> 00:20:56,780
+and Bath Ironworks had a contract to
+
+477
+00:20:56,979 --> 00:20:59,869
+have CS C manager their IT devices.
+
+478
+00:21:00,089 --> 00:21:03,099
+And I had gotten a job there and I went from
+
+479
+00:21:03,829 --> 00:21:09,089
+having access to, you know, maybe a couple dozen of machines to 3000. I mean, they had
+
+480
+00:21:09,369 --> 00:21:10,729
+3000 UNIX
+
+481
+00:21:11,099 --> 00:21:11,109
+A
+
+482
+00:21:11,219 --> 00:21:16,670
+UNIX systems ranging from uh Sgiirx machines to hphpu
+
+483
+00:21:16,819 --> 00:21:17,959
+machines to
+
+484
+00:21:18,229 --> 00:21:19,579
+so machines. Solaris
+
+485
+00:21:19,979 --> 00:21:20,890
+A IX
+
+486
+00:21:21,300 --> 00:21:21,969
+and
+
+487
+00:21:22,160 --> 00:21:22,560
+secure
+
+488
+00:21:22,859 --> 00:21:23,489
+wasn't
+
+489
+00:21:23,750 --> 00:21:28,290
+in the forefront of systems administration back then. It was
+
+490
+00:21:28,489 --> 00:21:29,959
+make sure this machine is running,
+
+491
+00:21:29,969 --> 00:21:33,069
+make sure the C AD D developers or C ad designers can use it.
+
+492
+00:21:33,329 --> 00:21:34,650
+Make sure that you know
+
+493
+00:21:34,760 --> 00:21:36,569
+when the desktop is imaged
+
+494
+00:21:36,829 --> 00:21:39,209
+or that the solar systems image that it, it's working,
+
+495
+00:21:39,219 --> 00:21:40,689
+you can run C AD on it and whatnot.
+
+496
+00:21:40,699 --> 00:21:41,369
+And um
+
+497
+00:21:41,780 --> 00:21:44,349
+it didn't matter if it was listening for every
+
+498
+00:21:44,359 --> 00:21:46,750
+service that son offered as long as it worked.
+
+499
+00:21:46,959 --> 00:21:47,619
+So
+
+500
+00:21:47,780 --> 00:21:48,900
+my first day
+
+501
+00:21:49,089 --> 00:21:52,349
+on the job I had, you know, my manager was showing me around
+
+502
+00:21:52,719 --> 00:21:56,300
+Biws campus because there's pretty big campus, there's multiple buildings
+
+503
+00:21:56,540 --> 00:21:57,520
+and we walk into this,
+
+504
+00:21:57,530 --> 00:22:02,380
+this new SG I lab that they just built and it's full of these SG I indie boxes,
+
+505
+00:22:02,390 --> 00:22:03,369
+indigo boxes.
+
+506
+00:22:03,380 --> 00:22:05,520
+And he says he sits down at one
+
+507
+00:22:05,625 --> 00:22:08,125
+and he says, you know, someday when you're, when you prove your worth,
+
+508
+00:22:08,415 --> 00:22:10,444
+I'll give you a log in on one of these systems.
+
+509
+00:22:10,454 --> 00:22:15,234
+And you know, me being from, coming from a security background, I knew that the LP
+
+510
+00:22:15,555 --> 00:22:18,064
+user on, on the IRA system had no
+
+511
+00:22:18,275 --> 00:22:21,244
+password. It had a valid shell and no password was blank.
+
+512
+00:22:21,255 --> 00:22:22,905
+So you could just walk up to an IR machine,
+
+513
+00:22:23,035 --> 00:22:24,234
+hit LP and hit enter.
+
+514
+00:22:24,685 --> 00:22:26,405
+So I walk up to an Ira machine.
+
+515
+00:22:26,535 --> 00:22:29,364
+I type in LP, I hit enter. I say thanks. I don't need one.
+
+516
+00:22:29,770 --> 00:22:32,750
+And my manager spins on his chair and he looks at me and he says,
+
+517
+00:22:32,880 --> 00:22:35,430
+how did you do that? And I'm like, I know
+
+518
+00:22:35,750 --> 00:22:40,300
+that these systems when they default don't have passwords assigned on LP.
+
+519
+00:22:40,689 --> 00:22:41,880
+And you could just log in.
+
+520
+00:22:42,140 --> 00:22:44,619
+And he looks at me and he says, will you do security for us?
+
+521
+00:22:44,630 --> 00:22:46,630
+And I said, I was hoping you'd say that
+
+522
+00:22:46,780 --> 00:22:48,550
+he pretty much let me
+
+523
+00:22:48,680 --> 00:22:50,829
+penetration test. Well, actually, I sort of
+
+524
+00:22:51,380 --> 00:22:54,750
+ran around the network breaking in the systems all over the place.
+
+525
+00:22:55,020 --> 00:22:55,719
+And
+
+526
+00:22:55,849 --> 00:22:57,270
+we had this one
+
+527
+00:22:57,459 --> 00:23:00,000
+machine room that had an SG I Onyx two in it.
+
+528
+00:23:00,339 --> 00:23:02,939
+Um If folks aren't familiar with an SG
+
+529
+00:23:03,079 --> 00:23:03,880
+Onyx two,
+
+530
+00:23:03,989 --> 00:23:06,170
+because it's, you know, a 25 year old computer,
+
+531
+00:23:06,310 --> 00:23:11,359
+it's about the size of a refrigerator. It was pretty much uh used for 3D modeling.
+
+532
+00:23:11,650 --> 00:23:16,280
+It had the reality creator or the reality 3d cards in them.
+
+533
+00:23:16,699 --> 00:23:17,359
+And,
+
+534
+00:23:17,520 --> 00:23:21,959
+you know, this system was anywhere from 250,000 to $500,000.
+
+535
+00:23:22,280 --> 00:23:25,189
+And now this thing is sitting in its own locked data center.
+
+536
+00:23:25,369 --> 00:23:28,520
+There's only a handful of assisted men who were allowed to go near it.
+
+537
+00:23:28,670 --> 00:23:33,560
+I was not one of them. I think there was only one or two guys that had access to that room
+
+538
+00:23:33,790 --> 00:23:37,520
+and these guys would taunt my friends and I my, my fellow coworkers. Hey,
+
+539
+00:23:37,770 --> 00:23:37,959
+you know,
+
+540
+00:23:37,969 --> 00:23:41,900
+we have access to the Onyx two and maybe someday you'll get access to the Onyx two.
+
+541
+00:23:42,229 --> 00:23:44,290
+And because, you know, I was assisted in level one,
+
+542
+00:23:44,300 --> 00:23:45,900
+they were like system in level three
+
+543
+00:23:46,290 --> 00:23:48,619
+and that, you know, kind of irked me. So I'm like, you know,
+
+544
+00:23:48,859 --> 00:23:51,319
+I want to get access to the Onyx and I want to get rude on it.
+
+545
+00:23:51,709 --> 00:23:52,510
+So
+
+546
+00:23:52,900 --> 00:23:56,829
+I'm like, how could I do that? So I started looking at um I had an SGI,
+
+547
+00:23:56,949 --> 00:24:00,550
+I think it was an indie that I had access to probably through the LP account
+
+548
+00:24:00,800 --> 00:24:02,290
+if I remember correctly. And
+
+549
+00:24:02,439 --> 00:24:04,410
+I'm like, how can I get rude on this box?
+
+550
+00:24:04,420 --> 00:24:05,829
+And I thought to myself, I'll,
+
+551
+00:24:05,839 --> 00:24:08,530
+I'll just start looking at set U ID route binaries because
+
+552
+00:24:08,719 --> 00:24:10,319
+because there's a bunch of them on here
+
+553
+00:24:10,449 --> 00:24:13,630
+and those are usually what you try and target and leverage back then to,
+
+554
+00:24:13,640 --> 00:24:16,130
+to elevate your privileges from an ordinary user to route.
+
+555
+00:24:16,699 --> 00:24:19,310
+And I, I started looking at user Espin and I saw
+
+556
+00:24:19,699 --> 00:24:22,150
+uh midi keys and I'm like, what's this midi keys
+
+557
+00:24:22,530 --> 00:24:23,709
+that set U ID root?
+
+558
+00:24:24,000 --> 00:24:25,729
+Let's let's fire it up and see what it is.
+
+559
+00:24:25,739 --> 00:24:28,650
+So I, I launch Midi keys in my, in my X window and
+
+560
+00:24:28,790 --> 00:24:30,660
+up pops this little keyboard
+
+561
+00:24:30,910 --> 00:24:33,119
+and it's this little piano keyboard that you can type on
+
+562
+00:24:33,130 --> 00:24:35,319
+or click with your mouse and it'll make little sounds.
+
+563
+00:24:35,329 --> 00:24:37,189
+So I'm like, why would this thing need
+
+564
+00:24:37,339 --> 00:24:40,719
+root access? You know, I thought maybe perhaps to access the sound card.
+
+565
+00:24:40,729 --> 00:24:42,130
+I'm like, I don't know. That's kind of odd,
+
+566
+00:24:42,329 --> 00:24:47,069
+but I can say files with it, edit files with it. Open files with it. What can I open
+
+567
+00:24:47,359 --> 00:24:51,199
+password? So, yeah, II, I ended up opening up Etsy password,
+
+568
+00:24:51,339 --> 00:24:56,119
+changed my Larry user id from whatever it was to zero, saved it
+
+569
+00:24:56,239 --> 00:24:58,069
+and s sued and got to,
+
+570
+00:24:58,359 --> 00:25:00,270
+you know, root as Larry. And I'm like, oh, neat.
+
+571
+00:25:00,280 --> 00:25:02,189
+I'm like, I'm gonna go try this on the Onyx too.
+
+572
+00:25:02,880 --> 00:25:03,420
+So,
+
+573
+00:25:03,930 --> 00:25:04,750
+so
+
+574
+00:25:04,920 --> 00:25:07,630
+I log into the Onyx two with LP,
+
+575
+00:25:07,640 --> 00:25:12,599
+I fire back an X window command or an X windows to my back to my desktop.
+
+576
+00:25:12,609 --> 00:25:13,920
+Launch midi keys,
+
+577
+00:25:14,199 --> 00:25:17,069
+edit Etsy password, modify the Larry account
+
+578
+00:25:17,219 --> 00:25:18,040
+to have a U
+
+579
+00:25:18,239 --> 00:25:21,310
+of zero log into the Onyx two as Larry
+
+580
+00:25:21,579 --> 00:25:24,599
+getting a root prompt and saying, oh, wow, I have root on the Onyx.
+
+581
+00:25:24,689 --> 00:25:26,030
+So I thought to myself, you know,
+
+582
+00:25:26,040 --> 00:25:28,280
+I should probably assign a password to the Larry account
+
+583
+00:25:28,619 --> 00:25:31,849
+because I don't want to leave this open. It's an open root account with no password
+
+584
+00:25:32,199 --> 00:25:33,959
+and I'll just change the password.
+
+585
+00:25:33,969 --> 00:25:36,920
+So I changed the password or I go to change the password and I realize
+
+586
+00:25:37,219 --> 00:25:38,810
+my user id is zero.
+
+587
+00:25:39,280 --> 00:25:40,989
+I'm changing the root password.
+
+588
+00:25:41,900 --> 00:25:44,199
+So I hit control D, control D
+
+589
+00:25:44,640 --> 00:25:46,859
+Iris took the password as control D.
+
+590
+00:25:47,479 --> 00:25:48,170
+So
+
+591
+00:25:48,829 --> 00:25:49,040
+I,
+
+592
+00:25:50,189 --> 00:25:53,760
+yeah, I changed the password on the Onyx two to control D
+
+593
+00:25:54,060 --> 00:25:56,150
+and at this time, I'm like, oh crap, I'm like,
+
+594
+00:25:56,619 --> 00:25:59,260
+I'm in trouble now. I'm like, I'm gonna have to go tell
+
+595
+00:25:59,680 --> 00:25:59,900
+the
+
+596
+00:26:00,170 --> 00:26:02,479
+Sidman guy that I just changed the password to control D
+
+597
+00:26:02,489 --> 00:26:04,459
+and he's gonna choke me because these guys didn't like me.
+
+598
+00:26:04,469 --> 00:26:07,660
+I was some 23 year old whippersnapper
+
+599
+00:26:07,670 --> 00:26:09,619
+who was running around blabbering about security.
+
+600
+00:26:09,630 --> 00:26:12,099
+So we already didn't have a good relationship.
+
+601
+00:26:12,329 --> 00:26:13,770
+So I asked my friend Donovan
+
+602
+00:26:14,060 --> 00:26:16,609
+who is much bigger than I am. He's like 6 ft three.
+
+603
+00:26:16,719 --> 00:26:19,949
+And I'm like, Donovan, can you go tell Dave that I,
+
+604
+00:26:19,959 --> 00:26:22,599
+I accidentally changed the Ro pastor on the Onyx two
+
+605
+00:26:22,770 --> 00:26:24,839
+to control D and he's like, sure
+
+606
+00:26:24,979 --> 00:26:28,439
+Donovan comes back about 15 minutes later or so, 20 minutes later.
+
+607
+00:26:28,449 --> 00:26:31,579
+And he's like, dude, he's like, they're so angry with you.
+
+608
+00:26:31,834 --> 00:26:33,525
+And I'm like, why, what happened? He's like
+
+609
+00:26:33,895 --> 00:26:35,944
+you changed the route password, right?
+
+610
+00:26:35,954 --> 00:26:38,344
+When they were about to give a demo to the US Navy.
+
+611
+00:26:38,515 --> 00:26:40,484
+And I'm like, oh my God, he's like,
+
+612
+00:26:40,494 --> 00:26:45,145
+there's an admiral in there with a bunch of senior management from our companies
+
+613
+00:26:45,155 --> 00:26:48,064
+and they're all standing around trying to log into the Onyx's route and,
+
+614
+00:26:48,074 --> 00:26:49,444
+and the password is not working.
+
+615
+00:26:49,635 --> 00:26:53,425
+And he's like, they had to scrub the demo and I'm like, oh my God, I'm like,
+
+616
+00:26:53,435 --> 00:26:54,454
+I'm getting fired.
+
+617
+00:26:54,645 --> 00:26:56,635
+That's it. I'm done. They're gonna kick me out.
+
+618
+00:26:57,229 --> 00:26:58,079
+So
+
+619
+00:26:58,219 --> 00:27:01,209
+Donovan is like, he's like, Dave came back,
+
+620
+00:27:01,219 --> 00:27:04,560
+he was able to change the room after because he had a show open on his desktop.
+
+621
+00:27:04,800 --> 00:27:06,800
+And I'm like, ok, and
+
+622
+00:27:07,530 --> 00:27:10,010
+So I'm like, all right, I got about a half an hour,
+
+623
+00:27:10,020 --> 00:27:12,760
+hour before my manager comes down here and throws me out.
+
+624
+00:27:13,280 --> 00:27:15,579
+And about an hour later my manager comes down, he goes, Larry.
+
+625
+00:27:15,589 --> 00:27:18,599
+He's like, I need you to come with me and we got to go talk to my manager in
+
+626
+00:27:18,819 --> 00:27:18,910
+a way.
+
+627
+00:27:19,369 --> 00:27:20,359
+Crap.
+
+628
+00:27:20,540 --> 00:27:24,290
+I'm like, here it is. I'm like, all right. So I don't have much stuff here.
+
+629
+00:27:24,459 --> 00:27:27,709
+You know, I'll be able to clear out my desk pretty quick and I just go home and,
+
+630
+00:27:27,890 --> 00:27:29,979
+you know, tell my wife, I just lost my job
+
+631
+00:27:30,290 --> 00:27:31,989
+and uh, I go into the,
+
+632
+00:27:32,229 --> 00:27:33,829
+into his manager's office
+
+633
+00:27:34,089 --> 00:27:37,579
+and I look on the wall and I see he's got a SANS security poster
+
+634
+00:27:37,920 --> 00:27:40,489
+and I'm like, wow, I'm like, this guy is actually,
+
+635
+00:27:40,599 --> 00:27:41,869
+you know, aware of
+
+636
+00:27:42,214 --> 00:27:45,244
+security, computer security, network security. So I'm like, cool
+
+637
+00:27:45,555 --> 00:27:49,625
+and I sit down and he goes all right, Larry, he's like I heard about the Onyx Two
+
+638
+00:27:49,755 --> 00:27:50,594
+and uh,
+
+639
+00:27:50,844 --> 00:27:53,334
+he's like, we're gonna need to change things and he's like,
+
+640
+00:27:53,415 --> 00:27:55,444
+before you do a penetration test,
+
+641
+00:27:55,655 --> 00:27:56,035
+he's like,
+
+642
+00:27:56,045 --> 00:27:59,885
+you have to tell the administrator that you're doing a penetration test and when,
+
+643
+00:27:59,895 --> 00:28:01,285
+and if it's ok because
+
+644
+00:28:01,395 --> 00:28:04,604
+things like the Onyx two incident today cannot happen.
+
+645
+00:28:04,765 --> 00:28:05,765
+He's like, you can't,
+
+646
+00:28:05,895 --> 00:28:10,885
+you can't make our systems unstable by testing their security and unavailable. So
+
+647
+00:28:11,250 --> 00:28:13,589
+he's like, you're gonna have to have, he's like, I want you to write up
+
+648
+00:28:13,790 --> 00:28:16,280
+an email to me and your boss to,
+
+649
+00:28:16,290 --> 00:28:19,010
+to tell us what machines you're planning on testing and when,
+
+650
+00:28:19,150 --> 00:28:21,959
+and then cc the administrators of those systems
+
+651
+00:28:22,089 --> 00:28:24,989
+and then get our, get everyone's approval before you go ahead.
+
+652
+00:28:25,430 --> 00:28:28,380
+And he's like, ok, he's like, you know, have a nice day and I'm like, great.
+
+653
+00:28:28,439 --> 00:28:31,709
+And I, I'm like, walked out, I'm like, elated, I'm like, I didn't get fired.
+
+654
+00:28:32,030 --> 00:28:35,890
+I got some legitimacy now that I can say, hey, my manager
+
+655
+00:28:36,000 --> 00:28:40,430
+and his manager are authorized me to ask to test your system.
+
+656
+00:28:40,439 --> 00:28:43,810
+Can you send me an email proving or, or give me a date when I can?
+
+657
+00:28:44,130 --> 00:28:44,709
+So
+
+658
+00:28:45,020 --> 00:28:47,469
+I, I lucked out again. I won. I kind of like,
+
+659
+00:28:47,650 --> 00:28:48,150
+you know, they,
+
+660
+00:28:48,160 --> 00:28:50,760
+they gave me some sort of some sort of framework
+
+661
+00:28:50,770 --> 00:28:55,140
+that I could work on in getting legitimized testing going.
+
+662
+00:28:55,170 --> 00:28:56,550
+It was, it was a good thing.
+
+663
+00:28:56,560 --> 00:28:59,229
+It actually helped me and I was all excited to,
+
+664
+00:28:59,239 --> 00:29:02,579
+to be able to post on bug track that I found this vulnerability in Iris
+
+665
+00:29:02,829 --> 00:29:04,589
+and then got my first CV ID.
+
+666
+00:29:04,989 --> 00:29:05,910
+That's awesome, man.
+
+667
+00:29:06,239 --> 00:29:06,630
+Curious,
+
+668
+00:29:06,640 --> 00:29:10,819
+how long did it take you to get all the systems like password on the LP account?
+
+669
+00:29:11,390 --> 00:29:15,699
+Uh I don't remember. Um I don't think we had ssh, then
+
+670
+00:29:15,839 --> 00:29:17,119
+I think they were still using Telnet.
+
+671
+00:29:17,410 --> 00:29:19,650
+So it wasn't something you could easily automate
+
+672
+00:29:19,939 --> 00:29:24,739
+they did have, I think they had open our remote R shell
+
+673
+00:29:24,900 --> 00:29:25,969
+where you could,
+
+674
+00:29:26,319 --> 00:29:29,910
+our shell into most machines just from, as root from almost any system
+
+675
+00:29:30,199 --> 00:29:34,189
+in the UNIX administrators network. So I think I might have,
+
+676
+00:29:34,750 --> 00:29:37,260
+I think I might have automated that. But you know what?
+
+677
+00:29:37,270 --> 00:29:41,790
+I think I automated it to where I had to keep typing in a new root password for, for,
+
+678
+00:29:41,800 --> 00:29:45,329
+or new LP password for all of the Ira systems.
+
+679
+00:29:45,599 --> 00:29:49,000
+I think I went back later and then just disabled the password
+
+680
+00:29:49,189 --> 00:29:52,770
+by putting an X where the, where the cipher text should be in the, in the
+
+681
+00:29:52,900 --> 00:29:54,250
+password violator. But
+
+682
+00:29:54,390 --> 00:29:55,680
+it was, I mean, I, I
+
+683
+00:29:55,790 --> 00:29:57,329
+had all sorts of fun with
+
+684
+00:29:57,729 --> 00:30:02,010
+a IX and stuff. I remember logging into an A IX machine
+
+685
+00:30:02,449 --> 00:30:08,020
+that was running the one team's um, local or infrastructure website.
+
+686
+00:30:08,319 --> 00:30:09,459
+One of the guys there was,
+
+687
+00:30:09,469 --> 00:30:13,930
+was savvy enough to have his own internal or internet website for their group.
+
+688
+00:30:14,270 --> 00:30:16,439
+And I logged into the machine by guessing
+
+689
+00:30:16,449 --> 00:30:18,589
+a password and then saw that they were writing
+
+690
+00:30:18,939 --> 00:30:20,000
+a file to temp
+
+691
+00:30:20,349 --> 00:30:22,589
+that they were executing that I had right access to.
+
+692
+00:30:22,599 --> 00:30:25,109
+So I ended up putting a Cron job in there to, to
+
+693
+00:30:25,479 --> 00:30:29,540
+set one of the shelves is set U ID root so I could get root on the thing. And then I
+
+694
+00:30:29,930 --> 00:30:32,439
+defaced their website with some hacker speak
+
+695
+00:30:32,729 --> 00:30:34,130
+and then sent it to my,
+
+696
+00:30:34,359 --> 00:30:35,339
+to my friend
+
+697
+00:30:35,589 --> 00:30:36,689
+and my manager
+
+698
+00:30:37,020 --> 00:30:37,699
+and
+
+699
+00:30:38,040 --> 00:30:42,209
+they were like, Larry, you can't do this, you can't do this hacker stuff.
+
+700
+00:30:42,219 --> 00:30:44,489
+He's like, you're going to scare the hell out of these guys,
+
+701
+00:30:44,630 --> 00:30:46,790
+you've got to just say, hey, you know,
+
+702
+00:30:46,949 --> 00:30:50,140
+I was able to get into your system. You can't deface their web page
+
+703
+00:30:50,410 --> 00:30:51,270
+in their infrastructure.
+
+704
+00:30:51,280 --> 00:30:53,910
+And I'm like, oh, yeah, that's probably, they don't know how to
+
+705
+00:30:54,652 --> 00:30:55,412
+speak either. So,
+
+706
+00:30:55,593 --> 00:30:57,032
+what are all these numbers?
+
+707
+00:30:57,402 --> 00:30:58,052
+So,
+
+708
+00:30:58,892 --> 00:31:01,463
+you know, I was in my twenties, I had a lot of learning to do.
+
+709
+00:31:01,713 --> 00:31:03,402
+-- Awesome.
+-- All right, we are
+
+710
+00:31:03,593 --> 00:31:07,672
+100% out of time. I will give you the floor, take us home, Larry.
+
+711
+00:31:08,093 --> 00:31:10,662
+Yeah. So um it was great talking to everybody.
+
+712
+00:31:10,782 --> 00:31:15,142
+I just, you know, I enjoy doing these podcasts and, and talking to folks
+
+713
+00:31:15,326 --> 00:31:16,895
+and talking to you guys. I, I,
+
+714
+00:31:17,066 --> 00:31:20,196
+I've been talking to a lot of journalists and it's nice to talk to journalists and,
+
+715
+00:31:20,206 --> 00:31:22,995
+and then friends from the past, I haven't seen you guys in a while and
+
+716
+00:31:23,426 --> 00:31:25,956
+now being in isolation, it's, it's
+
+717
+00:31:26,355 --> 00:31:29,995
+nice to actually talk to other folks that are, you know, your friends.
+
+718
+00:31:30,076 --> 00:31:31,505
+Seriously, man.
+
+719
+00:31:31,645 --> 00:31:32,916
+Indeed, indeed.
+
+720
+00:31:32,926 --> 00:31:36,505
+Hopefully, hopefully in the not too distant future, we will see each other again,
+
+721
+00:31:37,296 --> 00:31:38,586
+summer camp.
+
+722
+00:31:39,079 --> 00:31:41,530
+I know I keep saying that. All right. Awesome.
+
+723
+00:31:41,670 --> 00:31:46,699
+Thank you so much, Larry. This has been a marvelous conversation. So
+
+724
+00:31:47,060 --> 00:31:47,619
+you can,
+
+725
+00:31:48,270 --> 00:31:51,270
+you can go to open source security podcast.com. Hit up our show notes, you a pound
+
+726
+00:31:51,410 --> 00:31:52,150
+to says podcast.
+
+727
+00:31:52,160 --> 00:31:55,589
+Hashtag You hit us up on social media, we'll put some links into Larry and his,
+
+728
+00:31:55,599 --> 00:31:56,910
+his awesome findings
+
+729
+00:31:57,069 --> 00:32:01,339
+and yeah, I guess Curt and Larry have a marvelous rest of your day.
+
+730
+00:32:01,500 --> 00:32:02,099
+You too.
+
+731
+00:32:02,619 --> 00:32:03,859
+You too. Thanks everybody.
+
+732
+00:32:04,109 --> 00:32:05,810
+Awesome. Thanks everyone. Bye bye.

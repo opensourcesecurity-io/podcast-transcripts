@@ -1,0 +1,3118 @@
+0
+00:00:05,250 --> 00:00:09,590
+Hello and welcome to episode 104 of the open source security podcast with myself,
+
+1
+00:00:09,600 --> 00:00:12,159
+Kurt Siefried and my partner in Thought Crime, Josh Bresser.
+
+2
+00:00:12,630 --> 00:00:14,949
+So I heard Gen two got popped.
+
+3
+00:00:15,430 --> 00:00:15,930
+Yeah.
+
+4
+00:00:16,079 --> 00:00:17,600
+Yeah. Well, part of their github, uh,
+
+5
+00:00:17,840 --> 00:00:18,290
+their
+
+6
+00:00:18,569 --> 00:00:19,979
+github infrastructure, I guess
+
+7
+00:00:20,180 --> 00:00:20,469
+their
+
+8
+00:00:20,770 --> 00:00:21,000
+github
+
+9
+00:00:21,450 --> 00:00:23,100
+organization. Sorry. That's the correct.
+
+10
+00:00:23,879 --> 00:00:24,540
+-- Yes.
+-- Their github
+
+11
+00:00:24,659 --> 00:00:26,299
+organization got popped. Yes.
+
+12
+00:00:26,760 --> 00:00:27,829
+So that's neat.
+
+13
+00:00:28,079 --> 00:00:32,569
+Well, what's funny to me is this reads like a classic airline disaster of, like
+
+14
+00:00:32,810 --> 00:00:36,400
+this guy forgot to put the screw back in the engine and was like, eh, whatever.
+
+15
+00:00:36,479 --> 00:00:39,860
+And then the next guy, like, forgot to check the engine and was like, man, whatever,
+
+16
+00:00:39,869 --> 00:00:41,020
+put some tape over that hole.
+
+17
+00:00:41,659 --> 00:00:44,040
+And then the pilot was like, oh, we're losing fuel, let's, you know,
+
+18
+00:00:44,049 --> 00:00:47,599
+pump fuel from the good tank to the other tank because why not?
+
+19
+00:00:48,090 --> 00:00:50,659
+And so the whole thing is just like this series
+
+20
+00:00:50,669 --> 00:00:53,509
+of sort of incremental mistakes that results in an attacker
+
+21
+00:00:53,650 --> 00:00:57,680
+taking over the organization. And luckily the attacker was apparently an idiot.
+
+22
+00:00:59,389 --> 00:01:01,189
+I'm comfortable with that statement.
+
+23
+00:01:01,349 --> 00:01:04,970
+Well, considering what they accomplished and then what they did with it, it's like,
+
+24
+00:01:04,980 --> 00:01:05,510
+what?
+
+25
+00:01:05,940 --> 00:01:06,309
+Right.
+
+26
+00:01:06,319 --> 00:01:08,959
+You know what this really makes me think of when I look
+
+27
+00:01:08,970 --> 00:01:13,540
+at the timeline of events and everything that happened on both sides is
+
+28
+00:01:14,000 --> 00:01:15,779
+in order for a disaster to happen, a
+
+29
+00:01:16,529 --> 00:01:17,489
+bunch of things,
+
+30
+00:01:17,830 --> 00:01:18,559
+I'll get to that.
+
+31
+00:01:18,739 --> 00:01:22,040
+So in order for the mistake to happen, it will say disaster.
+
+32
+00:01:22,050 --> 00:01:25,900
+In this case, a number of mistakes need to be incident, right? Like
+
+33
+00:01:26,110 --> 00:01:26,849
+the incident,
+
+34
+00:01:27,269 --> 00:01:29,220
+a number of mistakes need to be made.
+
+35
+00:01:29,349 --> 00:01:32,470
+But on the other side of the coin, when you're the attacker,
+
+36
+00:01:32,919 --> 00:01:37,580
+you can't make mistakes, right? You have to basically play the game. Perfect.
+
+37
+00:01:38,139 --> 00:01:42,519
+Well, he did make a mistake and that's what made it real obvious that they got.
+
+38
+00:01:43,480 --> 00:01:45,180
+Right. Well, that's my point, right.
+
+39
+00:01:45,190 --> 00:01:50,559
+So if, if you think about a situation like this where you're talking about like
+
+40
+00:01:50,790 --> 00:01:54,540
+uh essentially the events leading up to a compromise,
+
+41
+00:01:54,750 --> 00:01:57,019
+you need like the perfect storm of mistakes.
+
+42
+00:01:57,309 --> 00:01:58,989
+And then after compromise,
+
+43
+00:01:59,150 --> 00:02:03,220
+you need to play the perfect game of no mistakes because when you make mistakes,
+
+44
+00:02:03,230 --> 00:02:05,379
+you get discovered and on the other side,
+
+45
+00:02:05,510 --> 00:02:08,649
+if you only make mistakes, then you end up, but they compromise.
+
+46
+00:02:08,660 --> 00:02:12,639
+And so it, it's kind of interesting to think about the, the two aspects of this, of,
+
+47
+00:02:12,649 --> 00:02:15,000
+of making a bunch of mistakes.
+
+48
+00:02:15,009 --> 00:02:18,139
+But then also when you're the attacker not making a
+
+49
+00:02:18,149 --> 00:02:21,020
+bunch of mistakes because you get found out right away.
+
+50
+00:02:21,770 --> 00:02:21,880
+Yeah.
+
+51
+00:02:22,229 --> 00:02:24,759
+Well, and, and the other thing too is looking at this
+
+52
+00:02:25,580 --> 00:02:29,039
+monetizing this attacker or essentially how do you gain benefit?
+
+53
+00:02:29,050 --> 00:02:31,190
+Like let's assume the attacker got in and was quiet,
+
+54
+00:02:31,380 --> 00:02:33,570
+how do you actually benefit from this attack?
+
+55
+00:02:33,580 --> 00:02:37,580
+And so one obvious answer is crypto mining, right? That is actually like
+
+56
+00:02:37,839 --> 00:02:41,220
+uh like those things with the hostile Docker images or not,
+
+57
+00:02:41,490 --> 00:02:43,929
+let me rephrase because Docker images with crypto
+
+58
+00:02:44,100 --> 00:02:45,509
+miners are actually a legit thing.
+
+59
+00:02:45,779 --> 00:02:48,089
+Um And so basically what, what it turns out is, you know,
+
+60
+00:02:48,100 --> 00:02:50,649
+people deploy stuff like kubernetes with no
+
+61
+00:02:51,250 --> 00:02:52,369
+authentication enabled.
+
+62
+00:02:52,830 --> 00:02:56,139
+Uh and, and publicly on the internet and of course, Attackers find it
+
+63
+00:02:56,289 --> 00:02:57,610
+connect to it and they're like, who, you know,
+
+64
+00:02:57,619 --> 00:02:59,660
+free resources to run virtual machines.
+
+65
+00:02:59,669 --> 00:03:01,970
+Well, again, how can I monetize that in a way that
+
+66
+00:03:02,259 --> 00:03:05,300
+doesn't attract a lot of attention like while spamming and denial service
+
+67
+00:03:05,539 --> 00:03:07,949
+attracts a lot of attention. Well, you know, crypto mining, right?
+
+68
+00:03:08,199 --> 00:03:09,979
+-- People are
+-- like ransomware. I
+
+69
+00:03:10,270 --> 00:03:12,139
+mean, ransomware is in your face,
+
+70
+00:03:12,619 --> 00:03:13,039
+crypto
+
+71
+00:03:13,279 --> 00:03:13,649
+mining
+
+72
+00:03:14,440 --> 00:03:14,460
+so
+
+73
+00:03:14,710 --> 00:03:14,740
+much.
+
+74
+00:03:15,210 --> 00:03:17,570
+Um So, yeah, how do you monetize an attack like this?
+
+75
+00:03:18,050 --> 00:03:23,699
+And it's reasonably difficult, like if it was part of a targeted attack? Sure,
+
+76
+00:03:24,360 --> 00:03:26,210
+you know, then it would have just been a stepping stone like, oh,
+
+77
+00:03:26,220 --> 00:03:29,009
+we have an organization that we know uses Gen two's github.
+
+78
+00:03:29,020 --> 00:03:32,179
+OK. Let's attack them via that. Now, that would be super clever, but
+
+79
+00:03:32,570 --> 00:03:34,309
+clearly, that's not what happened here.
+
+80
+00:03:34,470 --> 00:03:36,419
+-- Now, this was clearly malicious.
+-- Yeah.
+
+81
+00:03:36,429 --> 00:03:38,800
+Well, and that's what I mean then, then sort of the next thing is, well,
+
+82
+00:03:38,809 --> 00:03:39,690
+if you can't monetize it.
+
+83
+00:03:39,699 --> 00:03:41,380
+That typically means it's like vandalism.
+
+84
+00:03:42,149 --> 00:03:42,410
+Right?
+
+85
+00:03:42,419 --> 00:03:45,320
+Like a great example was there was a porta potty or a playground
+
+86
+00:03:45,330 --> 00:03:48,729
+that we go to and somebody went full van Gogh mode inside,
+
+87
+00:03:49,059 --> 00:03:49,490
+you know.
+
+88
+00:03:49,710 --> 00:03:52,860
+And like, yeah, exactly. It's exactly what you think
+
+89
+00:03:53,250 --> 00:03:54,929
+-- the medium was.
+-- Yeah, exactly.
+
+90
+00:03:54,940 --> 00:03:59,070
+It was, I was like, my son wanted to go and I, I, like, popped it up because I check,
+
+91
+00:03:59,080 --> 00:04:00,410
+you know, because these things happen.
+
+92
+00:04:00,710 --> 00:04:04,809
+And I was like, no, he's like, I want to look, I want to look, I'm like, you don't.
+
+93
+00:04:04,820 --> 00:04:06,759
+And so I, I open it and he's like,
+
+94
+00:04:06,889 --> 00:04:07,929
+uh and he runs away
+
+95
+00:04:08,220 --> 00:04:10,440
+and then of course his brothers, like I want to see what it is. I'm like,
+
+96
+00:04:11,020 --> 00:04:12,259
+don't. But whatever
+
+97
+00:04:12,960 --> 00:04:14,619
+lesson learned, everyone line up
+
+98
+00:04:14,720 --> 00:04:15,410
+-- pretty
+-- much,
+
+99
+00:04:15,699 --> 00:04:17,140
+let's all go wash our hands. Now,
+
+100
+00:04:17,649 --> 00:04:21,640
+the thing that gets me is like most vandalism isn't that
+
+101
+00:04:21,809 --> 00:04:22,660
+clever.
+
+102
+00:04:23,470 --> 00:04:26,049
+And by definition, the attack on this was actually,
+
+103
+00:04:26,059 --> 00:04:28,559
+I don't want to say super clever but reasonably clever,
+
+104
+00:04:28,899 --> 00:04:32,059
+-- you
+-- know. Yeah, but you could still argue it wasn't clever enough.
+
+105
+00:04:32,070 --> 00:04:32,600
+No, no.
+
+106
+00:04:32,730 --> 00:04:35,279
+But I mean, the, the attack itself wasn't like, you know, they,
+
+107
+00:04:35,290 --> 00:04:37,940
+they had some known vulnerability that they didn't patch, right?
+
+108
+00:04:37,950 --> 00:04:41,170
+That that's always the classic one, right where an organization literally
+
+109
+00:04:41,390 --> 00:04:42,760
+gets popped because
+
+110
+00:04:42,920 --> 00:04:44,170
+they like literally
+
+111
+00:04:44,329 --> 00:04:46,600
+were, you know, running Java struts or,
+
+112
+00:04:46,890 --> 00:04:49,959
+you know, running a uh like a database just open to the public.
+
+113
+00:04:50,970 --> 00:04:54,660
+Alright. Well, let's do this, then let's gen to, to their credit.
+
+114
+00:04:54,670 --> 00:04:55,019
+I'm,
+
+115
+00:04:55,029 --> 00:04:57,299
+I'm going to praise these guys immensely as
+
+116
+00:04:57,309 --> 00:04:59,880
+they've been remarkably open about the incident.
+
+117
+00:04:59,890 --> 00:05:01,709
+And if you go to the show notes,
+
+118
+00:05:01,720 --> 00:05:05,679
+there's a link to a wiki page where they have documented
+
+119
+00:05:05,809 --> 00:05:08,359
+kind of everything. Why don't, why don't we walk through some of this?
+
+120
+00:05:08,369 --> 00:05:10,959
+Because there's, there's actually some really interesting stuff.
+
+121
+00:05:11,070 --> 00:05:14,190
+On one note, I would say even more importantly, again, like an air incident,
+
+122
+00:05:14,380 --> 00:05:17,399
+they've also documented what they're going to do to fix and prevent this.
+
+123
+00:05:18,130 --> 00:05:20,070
+And it looks like they're actually executing on that.
+
+124
+00:05:20,079 --> 00:05:22,480
+And that's, that's the biggest thing for me is like, did OK.
+
+125
+00:05:22,489 --> 00:05:25,670
+Have we learned anything from this and, and
+
+126
+00:05:25,989 --> 00:05:27,390
+have we applied those lessons? Right?
+
+127
+00:05:27,399 --> 00:05:31,829
+Because I see lots of organizations learn lessons and then just keep doing things
+
+128
+00:05:32,109 --> 00:05:33,329
+the way they've always done it. So,
+
+129
+00:05:33,820 --> 00:05:38,230
+yeah. Um I do have to say this is a beautiful write up. So do you want to start us off?
+
+130
+00:05:38,420 --> 00:05:42,390
+Cool to kind of start at the top. They, they note from
+
+131
+00:05:43,660 --> 00:05:49,130
+April 8th to June 27th, there was somebody probing github
+
+132
+00:05:49,239 --> 00:05:49,970
+accounts,
+
+133
+00:05:50,779 --> 00:05:51,670
+which
+
+134
+00:05:51,959 --> 00:05:53,190
+I mean, I don't know, man,
+
+135
+00:05:53,200 --> 00:05:58,350
+I feel like every github organization probably has a gazillion probes every day of,
+
+136
+00:05:58,359 --> 00:05:59,600
+of users, right?
+
+137
+00:05:59,980 --> 00:06:02,279
+I've actually never bothered to look at them
+
+138
+00:06:03,690 --> 00:06:07,179
+mostly because we generally almost everybody has two fa
+
+139
+00:06:07,190 --> 00:06:10,279
+enabled and actually we will be forcing it shortly
+
+140
+00:06:10,380 --> 00:06:11,959
+and, and we'll get to that.
+
+141
+00:06:12,239 --> 00:06:17,480
+Yeah. OK. So, so we'll kind of start out then. So it sounds like June 28th
+
+142
+00:06:17,890 --> 00:06:19,440
+is kind of the day
+
+143
+00:06:19,649 --> 00:06:20,880
+everything happened
+
+144
+00:06:21,299 --> 00:06:22,290
+right where
+
+145
+00:06:22,500 --> 00:06:26,970
+it seems like it sounds like an attacker got in with a bad password.
+
+146
+00:06:26,980 --> 00:06:30,100
+And obviously when we say bad password, we just mean
+
+147
+00:06:30,260 --> 00:06:32,660
+it's either reused or a really crappy password.
+
+148
+00:06:32,760 --> 00:06:35,049
+What it sounded like is that this person was
+
+149
+00:06:35,059 --> 00:06:39,000
+using sort of a password formula to generate passwords.
+
+150
+00:06:39,459 --> 00:06:42,420
+And so I've seen people, you know, where they're, like, pick a, you know, like,
+
+151
+00:06:42,429 --> 00:06:46,489
+pick a name and a number and then you, like, append the name of the site to the password
+
+152
+00:06:47,220 --> 00:06:47,790
+is,
+
+153
+00:06:48,350 --> 00:06:51,929
+uh, not a, not so terrible if the password is hashed.
+
+154
+00:06:52,410 --> 00:06:52,850
+Right.
+
+155
+00:06:53,220 --> 00:06:55,910
+But if the attacker gets that clear text password and see, like, you know,
+
+156
+00:06:55,920 --> 00:06:57,559
+Jon Snow 1989
+
+157
+00:06:57,989 --> 00:06:58,059
+or,
+
+158
+00:06:58,369 --> 00:06:58,390
+um,
+
+159
+00:07:00,010 --> 00:07:03,769
+you know, then they, then they maybe guess that if they replace Facebook with github
+
+160
+00:07:03,920 --> 00:07:04,880
+and try to log in at github,
+
+161
+00:07:05,059 --> 00:07:06,269
+-- then it might work.
+-- Right.
+
+162
+00:07:06,279 --> 00:07:09,769
+No, we're going to say every password that isn't a password manager.
+
+163
+00:07:09,779 --> 00:07:11,000
+-- Password is terrible.
+-- I
+
+164
+00:07:11,290 --> 00:07:11,440
+agree.
+
+165
+00:07:11,559 --> 00:07:11,959
+100%.
+
+166
+00:07:12,260 --> 00:07:12,369
+Ok.
+
+167
+00:07:12,489 --> 00:07:12,850
+Good.
+
+168
+00:07:13,019 --> 00:07:14,130
+Just so we're clear.
+
+169
+00:07:14,549 --> 00:07:14,579
+No.
+
+170
+00:07:14,600 --> 00:07:15,079
+But, and, you know,
+
+171
+00:07:15,089 --> 00:07:16,769
+this is an example of people trying to be
+
+172
+00:07:16,779 --> 00:07:19,209
+clever in ways that are actually not that clever.
+
+173
+00:07:19,940 --> 00:07:24,869
+Right. Exactly. Exactly. So, anyway, it sounds like then the attacker gets in
+
+174
+00:07:25,440 --> 00:07:28,109
+and they gain administrative access
+
+175
+00:07:28,399 --> 00:07:28,489
+because
+
+176
+00:07:28,890 --> 00:07:28,910
+the
+
+177
+00:07:29,390 --> 00:07:30,089
+administrative,
+
+178
+00:07:30,769 --> 00:07:34,829
+that's, that's my assumption. And they don't, they don't say that but
+
+179
+00:07:34,989 --> 00:07:36,510
+they sort of strongly implied because they
+
+180
+00:07:36,519 --> 00:07:38,510
+talk about cleaning up old debt accounts.
+
+181
+00:07:40,019 --> 00:07:40,950
+So, you know,
+
+182
+00:07:41,859 --> 00:07:44,730
+so anyway, and then they, they create
+
+183
+00:07:45,070 --> 00:07:49,570
+new accounts, which obviously is exactly the right way to do it because when you're,
+
+184
+00:07:49,579 --> 00:07:53,279
+when you're mounting some sort of an attack and you're using an existing account,
+
+185
+00:07:53,670 --> 00:07:54,329
+you,
+
+186
+00:07:54,779 --> 00:07:58,809
+you run the risk of the individual you're after
+
+187
+00:07:58,980 --> 00:08:03,190
+or rather the individual you just attack noticing some shenanigans. Right.
+
+188
+00:08:03,200 --> 00:08:05,839
+So like get in, create a new account. Get out.
+
+189
+00:08:08,049 --> 00:08:09,359
+Right. I mean, yeah,
+
+190
+00:08:09,459 --> 00:08:13,829
+actually essentially it's exactly what it is, right? It's a back door, fair enough.
+
+191
+00:08:14,970 --> 00:08:15,570
+Ok.
+
+192
+00:08:15,579 --> 00:08:18,399
+So anyway, so m accounts get added and, and the thing,
+
+193
+00:08:18,410 --> 00:08:21,320
+I think that's the most interesting is it says
+
+194
+00:08:21,540 --> 00:08:24,100
+they, they add a malicious commit
+
+195
+00:08:24,230 --> 00:08:26,890
+and this malicious commit is literally 20 minutes
+
+196
+00:08:26,899 --> 00:08:29,190
+after they first get access where they,
+
+197
+00:08:29,200 --> 00:08:30,980
+they looks like they, they tell
+
+198
+00:08:31,239 --> 00:08:37,460
+the, the gen two repository to RM dash RF slash star,
+
+199
+00:08:38,299 --> 00:08:39,190
+which is
+
+200
+00:08:39,950 --> 00:08:44,450
+as everyone knows that delete all of the files on your desk in theory. Right.
+
+201
+00:08:46,010 --> 00:08:47,080
+And
+
+202
+00:08:47,190 --> 00:08:47,950
+I mean,
+
+203
+00:08:48,159 --> 00:08:53,119
+I feel like if you do this in 20 minutes, you knew what you wanted to do. Right.
+
+204
+00:08:53,429 --> 00:08:55,710
+Well, what's interesting to me is that like, there's,
+
+205
+00:08:55,719 --> 00:08:59,109
+there's way more subtle and annoying ways to mess up a system
+
+206
+00:08:59,400 --> 00:09:01,309
+than just an RM hyphen RF. Right.
+
+207
+00:09:01,659 --> 00:09:03,869
+I, I feel like it is the,
+
+208
+00:09:04,219 --> 00:09:07,179
+the unlearned man's solution,
+
+209
+00:09:07,369 --> 00:09:09,729
+right? Because everyone knows
+
+210
+00:09:09,869 --> 00:09:12,359
+you DD garbage to the disk.
+
+211
+00:09:12,489 --> 00:09:13,690
+-- That's how
+-- you do it,
+
+212
+00:09:13,929 --> 00:09:15,859
+you put that in one of the start up scripts.
+
+213
+00:09:16,619 --> 00:09:18,159
+So the next time they reboot they're like, oh,
+
+214
+00:09:18,169 --> 00:09:21,400
+this seems to be taking a while but whatever weird stuff happens and then, you know,
+
+215
+00:09:21,409 --> 00:09:23,200
+five minutes later they realize they have a brick,
+
+216
+00:09:23,469 --> 00:09:24,890
+well, not a brick system but
+
+217
+00:09:25,390 --> 00:09:26,719
+they better have backups. Right.
+
+218
+00:09:26,950 --> 00:09:33,150
+Did you know, the, the last time I needed to kill a drive, I booted it
+
+219
+00:09:33,659 --> 00:09:38,409
+and then ID D to the desk while it was running just to see.
+
+220
+00:09:38,859 --> 00:09:42,479
+-- And it finished. I was
+-- shocked because everything is in memory.
+
+221
+00:09:42,700 --> 00:09:44,479
+-- So as long as you don't
+-- write, right?
+
+222
+00:09:45,219 --> 00:09:49,640
+I, I expected something to blow up though before it finished.
+
+223
+00:09:50,010 --> 00:09:53,030
+Well, that's part of the beauty, right? If it's running and it's in memory, it should
+
+224
+00:09:53,530 --> 00:09:54,320
+keep running.
+
+225
+00:09:54,820 --> 00:09:56,359
+But, uh, yeah, it's, well,
+
+226
+00:09:56,369 --> 00:10:00,400
+and the other thing is to an RM I hyphen RF is like very obviously hostile.
+
+227
+00:10:00,409 --> 00:10:01,369
+Like there's no,
+
+228
+00:10:01,650 --> 00:10:02,659
+right. It's not like
+
+229
+00:10:03,130 --> 00:10:03,219
+it's
+
+230
+00:10:03,369 --> 00:10:03,489
+not,
+
+231
+00:10:04,059 --> 00:10:06,679
+yeah, it's, I mean, well, the, my favorite example being,
+
+232
+00:10:06,690 --> 00:10:09,250
+what was it like some driver or game that like
+
+233
+00:10:09,260 --> 00:10:11,900
+did an RM hyphen RF slash user slash something coming,
+
+234
+00:10:11,909 --> 00:10:12,580
+coming something
+
+235
+00:10:12,750 --> 00:10:14,710
+and they like stuck a space in there somewhere.
+
+236
+00:10:14,719 --> 00:10:18,109
+So it like nuked slash user or whatever. Remember
+
+237
+00:10:18,739 --> 00:10:22,859
+-- it was like steam or something?
+-- That wasn't a game, it was,
+
+238
+00:10:23,309 --> 00:10:27,200
+didn't that just happen with it? Wasn't that MP M's problem or something?
+
+239
+00:10:27,739 --> 00:10:30,840
+-- Yeah. But basically, I mean,
+-- we talked about this in
+
+240
+00:10:30,969 --> 00:10:31,369
+the past.
+
+241
+00:10:31,849 --> 00:10:34,109
+I mean, you know, then it becomes more of a whoop.
+
+242
+00:10:34,119 --> 00:10:37,359
+Somebody, like, made a really bad fat finger. Not like, ok, somebody added RM
+
+243
+00:10:37,500 --> 00:10:37,559
+hyphen
+
+244
+00:10:37,760 --> 00:10:38,940
+RF. That's slash
+
+245
+00:10:39,099 --> 00:10:39,460
+-- star.
+-- Yeah.
+
+246
+00:10:39,640 --> 00:10:40,159
+Right.
+
+247
+00:10:40,489 --> 00:10:41,109
+Right. Right. So,
+
+248
+00:10:41,830 --> 00:10:48,440
+and, and now the, the other thing, I don't know how gen two does this but I know
+
+249
+00:10:49,239 --> 00:10:56,159
+that on many systems. RM dash RF stuff doesn't always do what you think it does
+
+250
+00:10:56,450 --> 00:10:57,989
+and, and in many
+
+251
+00:10:58,539 --> 00:10:59,859
+and many modern unixes,
+
+252
+00:10:59,869 --> 00:11:02,989
+they assume you just did something really dumb and they don't let you.
+
+253
+00:11:03,000 --> 00:11:06,510
+And, and there's, there have been many arguments whether this is good or bad.
+
+254
+00:11:06,890 --> 00:11:07,229
+But,
+
+255
+00:11:07,239 --> 00:11:12,330
+but from what I've heard that command does not work by default on a GEN two system.
+
+256
+00:11:12,340 --> 00:11:13,150
+So even
+
+257
+00:11:13,330 --> 00:11:19,219
+even the people who happened to pull down this bad commit and tried to run a build,
+
+258
+00:11:19,599 --> 00:11:21,869
+it didn't do anything to them,
+
+259
+00:11:22,570 --> 00:11:25,030
+which is, which is cool. And, and then in
+
+260
+00:11:25,270 --> 00:11:29,349
+this timeline, literally half an hour after this event started,
+
+261
+00:11:29,809 --> 00:11:32,679
+the, the gen two people contacted github
+
+262
+00:11:32,849 --> 00:11:35,710
+basically to say something fishy is going on.
+
+263
+00:11:36,059 --> 00:11:36,619
+Well, and,
+
+264
+00:11:36,630 --> 00:11:39,109
+and that's actually something where this is kind of an example
+
+265
+00:11:39,119 --> 00:11:41,669
+of where the industry fails is they had private contacts with github
+
+266
+00:11:41,799 --> 00:11:43,289
+because they knew people there, right?
+
+267
+00:11:43,299 --> 00:11:46,559
+If they had to come in through the front door, like some random schmuck,
+
+268
+00:11:46,570 --> 00:11:48,950
+this would have taken days or weeks if anything happened,
+
+269
+00:11:49,219 --> 00:11:51,059
+it, it probably would have
+
+270
+00:11:51,200 --> 00:11:53,429
+like I for example, I know
+
+271
+00:11:53,729 --> 00:11:56,369
+somebody who actually uh their
+
+272
+00:11:56,539 --> 00:11:58,059
+Gmail account,
+
+273
+00:11:58,359 --> 00:11:58,369
+uh
+
+274
+00:11:58,479 --> 00:12:01,229
+essentially a pile of data within it got deleted by accident
+
+275
+00:12:01,549 --> 00:12:03,159
+and they knew somebody high up enough at
+
+276
+00:12:03,169 --> 00:12:05,270
+Google that they actually got their data back.
+
+277
+00:12:05,280 --> 00:12:09,229
+That's like you, that's like that's unicorn levels of knowledge of people.
+
+278
+00:12:09,239 --> 00:12:10,940
+And that's kind of where I fear this thing with github
+
+279
+00:12:11,049 --> 00:12:11,750
+comes in is that
+
+280
+00:12:12,099 --> 00:12:15,590
+it kind of sounds because they were able to get github to respond,
+
+281
+00:12:16,320 --> 00:12:19,059
+you know, so quickly and, you know, with details,
+
+282
+00:12:19,309 --> 00:12:23,210
+what I'm saying is, don't, don't kind of expect that to be the normal case.
+
+283
+00:12:23,679 --> 00:12:25,140
+You are correct.
+
+284
+00:12:25,309 --> 00:12:29,289
+But here's the other side of that I like to think about is
+
+285
+00:12:30,169 --> 00:12:34,090
+I, if you're a project like, like GEN two or you're,
+
+286
+00:12:34,099 --> 00:12:36,950
+you're an organization of some sort,
+
+287
+00:12:37,739 --> 00:12:42,280
+part of the value in hiring good people is you, you're hiring their role
+
+288
+00:12:42,440 --> 00:12:43,289
+attacks as well.
+
+289
+00:12:43,969 --> 00:12:44,590
+And
+
+290
+00:12:44,750 --> 00:12:49,690
+I mean, I, I, I've done this more times than I can count for, for, you know,
+
+291
+00:12:49,700 --> 00:12:52,030
+my last couple jobs without question,
+
+292
+00:12:52,039 --> 00:12:55,000
+if something happens and it's like I know this person, let me just go
+
+293
+00:12:56,130 --> 00:12:59,349
+and in 10 minutes, I get more done than you get done in two weeks.
+
+294
+00:12:59,880 --> 00:13:00,450
+And,
+
+295
+00:13:00,630 --> 00:13:06,020
+and I, I do agree that companies need a nice front door.
+
+296
+00:13:06,049 --> 00:13:08,530
+You know, the front door shouldn't be hostile if it's hostile,
+
+297
+00:13:08,539 --> 00:13:10,340
+you have other problems.
+
+298
+00:13:10,669 --> 00:13:14,940
+The problem is when you have a bunch of crazy people throwing poop at your front door
+
+299
+00:13:15,219 --> 00:13:17,049
+and, and Yes. And I imagine
+
+300
+00:13:17,349 --> 00:13:20,500
+Github's front door has an enormous pile of poop.
+
+301
+00:13:20,809 --> 00:13:23,729
+I, I have no doubt because you, I mean, I mean,
+
+302
+00:13:23,739 --> 00:13:25,559
+I see this all the time where people just,
+
+303
+00:13:25,679 --> 00:13:27,289
+you end up with,
+
+304
+00:13:27,580 --> 00:13:31,210
+with, like I'm not saying they're bad people but they,
+
+305
+00:13:31,299 --> 00:13:33,729
+they come in with requests that are,
+
+306
+00:13:34,000 --> 00:13:36,359
+are clearly not properly researched.
+
+307
+00:13:36,369 --> 00:13:37,880
+And when you, you suggest, you know,
+
+308
+00:13:37,890 --> 00:13:40,489
+maybe you should go and look over here and because
+
+309
+00:13:40,500 --> 00:13:43,309
+you didn't tell them exactly how to solve their problem,
+
+310
+00:13:43,409 --> 00:13:45,280
+they start yelling at you and it's like
+
+311
+00:13:45,409 --> 00:13:46,419
+this isn't a
+
+312
+00:13:46,619 --> 00:13:48,159
+good response.
+
+313
+00:13:48,369 --> 00:13:51,000
+I don't want to talk to you anymore person.
+
+314
+00:13:51,780 --> 00:13:54,500
+And, and when you're paying someone money, it's
+
+315
+00:13:54,789 --> 00:13:56,479
+impossible to do that
+
+316
+00:13:56,780 --> 00:13:59,080
+in many instances. However, I'm going to say
+
+317
+00:13:59,780 --> 00:14:02,400
+if you're an organization hiring security people,
+
+318
+00:14:02,690 --> 00:14:07,359
+the rolodex is part of what you're hiring and, and I truly believe that
+
+319
+00:14:07,609 --> 00:14:11,799
+when, when you're in, if you have senior leadership and they don't have a rolodex,
+
+320
+00:14:11,809 --> 00:14:14,530
+you don't have senior leadership, that's kind of the way I view that.
+
+321
+00:14:14,539 --> 00:14:16,169
+Right. And someone like Gen Two
+
+322
+00:14:16,299 --> 00:14:18,200
+almost certainly has contacts up the one
+
+323
+00:14:18,489 --> 00:14:18,919
+zoo
+
+324
+00:14:19,280 --> 00:14:19,840
+community
+
+325
+00:14:19,945 --> 00:14:22,625
+driven organization. Right. Because they're open source
+
+326
+00:14:24,025 --> 00:14:25,414
+who and what they are.
+
+327
+00:14:25,614 --> 00:14:30,684
+Exactly. Exactly. And so I, I don't think that's unexpected or unreasonable.
+
+328
+00:14:30,695 --> 00:14:37,054
+In fact, if they didn't have a backdoor into github, I would be sad for, for Gen Two.
+
+329
+00:14:37,875 --> 00:14:38,155
+Right.
+
+330
+00:14:38,585 --> 00:14:40,135
+And that's one of those things. It's like
+
+331
+00:14:40,315 --> 00:14:42,525
+if you don't just call,
+
+332
+00:14:42,854 --> 00:14:46,234
+ok, I will help you out open source project.
+
+333
+00:14:46,505 --> 00:14:47,565
+But anyway, anyway,
+
+334
+00:14:47,830 --> 00:14:49,609
+and, and like this is,
+
+335
+00:14:50,840 --> 00:14:51,750
+I'm impressed,
+
+336
+00:14:51,760 --> 00:14:56,190
+I'm impressed by how fast this went because I've seen many incidents take
+
+337
+00:14:56,369 --> 00:14:57,570
+much longer than half.
+
+338
+00:14:57,780 --> 00:14:59,979
+But in fairness, this was a pretty simple
+
+339
+00:15:00,380 --> 00:15:01,400
+incident. I mean,
+
+340
+00:15:01,510 --> 00:15:04,599
+let's, let's ok. Now, here's the point where we, I get a little me,
+
+341
+00:15:04,969 --> 00:15:06,109
+all right. Bring it.
+
+342
+00:15:06,500 --> 00:15:06,830
+G
+
+343
+00:15:06,960 --> 00:15:10,820
+two made some really painfully like rookie level
+
+344
+00:15:10,979 --> 00:15:12,109
+mistakes. So
+
+345
+00:15:12,229 --> 00:15:13,130
+number one,
+
+346
+00:15:13,419 --> 00:15:14,380
+somebody had
+
+347
+00:15:14,510 --> 00:15:15,539
+bad passwords
+
+348
+00:15:16,440 --> 00:15:17,320
+because no offense.
+
+349
+00:15:17,429 --> 00:15:18,559
+If everyone has bad
+
+350
+00:15:18,900 --> 00:15:18,969
+password,
+
+351
+00:15:19,010 --> 00:15:21,830
+if somebody can guess if somebody can see one of your passwords
+
+352
+00:15:21,840 --> 00:15:25,710
+and then guess another password for a different site based on that,
+
+353
+00:15:26,049 --> 00:15:27,530
+you have bad passwords,
+
+354
+00:15:27,679 --> 00:15:29,260
+right? They should be random.
+
+355
+00:15:29,429 --> 00:15:30,580
+I guarantee
+
+356
+00:15:30,840 --> 00:15:34,960
+in, in any organization that is more than 30% of the pass.
+
+357
+00:15:35,039 --> 00:15:39,330
+-- So
+-- basically there, it boils down to use a password manager. Uh Number two github
+
+358
+00:15:39,469 --> 00:15:43,090
+supports two fa they support phones, they support the, um,
+
+359
+00:15:43,789 --> 00:15:44,190
+what is it?
+
+360
+00:15:44,200 --> 00:15:46,320
+Otphotp, whatever the heck the app is, you know,
+
+361
+00:15:46,330 --> 00:15:49,169
+the QR code and you get the time based rolling code,
+
+362
+00:15:49,400 --> 00:15:50,849
+they support
+
+363
+00:15:51,260 --> 00:15:53,929
+printed recovery codes, they support UBI
+
+364
+00:15:54,539 --> 00:15:54,929
+keys.
+
+365
+00:15:55,039 --> 00:15:57,729
+I think there might be one other option. I can't remember it off hand.
+
+366
+00:15:57,739 --> 00:16:00,039
+But the point is they support like all the normal ration.
+
+367
+00:16:01,280 --> 00:16:07,599
+-- Well, and when I say phones,
+-- did you know that I got my first U two F tokens from github
+
+368
+00:16:07,739 --> 00:16:12,770
+because when they first started supporting U two F, they had a special with UB key
+
+369
+00:16:12,934 --> 00:16:16,195
+for $5. I bought, I think three of them for $5.
+
+370
+00:16:16,205 --> 00:16:18,914
+And it's got, I've got the hash cat logo on the back of it even.
+
+371
+00:16:18,924 --> 00:16:21,775
+And I don't use it anymore because now that I have UB
+
+372
+00:16:21,974 --> 00:16:23,914
+four it does U two F but yeah,
+
+373
+00:16:23,924 --> 00:16:25,775
+I still have it and I carry it with me
+
+374
+00:16:25,784 --> 00:16:28,715
+because funny enough I keep thinking maybe there's some site,
+
+375
+00:16:28,724 --> 00:16:31,614
+I forgot I plugged this into and I better keep it just
+
+376
+00:16:31,625 --> 00:16:34,635
+in case and I haven't used it in like a year.
+
+377
+00:16:34,974 --> 00:16:38,744
+Yeah, it's like back in the day ebay used to do Rs a tokens for five bucks.
+
+378
+00:16:39,369 --> 00:16:40,229
+And, uh,
+
+379
+00:16:40,429 --> 00:16:40,940
+you know,
+
+380
+00:16:42,299 --> 00:16:45,030
+but yeah, so, like rookie mistake number two is not
+
+381
+00:16:45,530 --> 00:16:47,309
+at least encouraging or required
+
+382
+00:16:47,479 --> 00:16:50,849
+to fa across the org, especially for admin users.
+
+383
+00:16:51,419 --> 00:16:51,900
+That's,
+
+384
+00:16:52,609 --> 00:16:54,349
+that needs to be
+
+385
+00:16:54,770 --> 00:16:54,830
+II,
+
+386
+00:16:54,840 --> 00:16:59,119
+I feel like if you're any sort of reasonable sign
+
+387
+00:16:59,130 --> 00:17:02,190
+and actually look if you're anybody to FA on github,
+
+388
+00:17:02,719 --> 00:17:03,440
+I think it's like,
+
+389
+00:17:03,549 --> 00:17:03,700
+so,
+
+390
+00:17:03,830 --> 00:17:03,859
+and
+
+391
+00:17:04,650 --> 00:17:08,030
+it's just, it's part of how the world is now. If,
+
+392
+00:17:08,300 --> 00:17:09,589
+if the site supports
+
+393
+00:17:09,858 --> 00:17:10,709
+two fa
+
+394
+00:17:10,939 --> 00:17:12,689
+second two factor authentication,
+
+395
+00:17:12,848 --> 00:17:15,358
+assuming it's not some really stupid form of two fa,
+
+396
+00:17:15,368 --> 00:17:17,829
+like my bank has two fa it's two passwords, right?
+
+397
+00:17:17,839 --> 00:17:19,589
+It's a password and then a secret question.
+
+398
+00:17:20,118 --> 00:17:21,368
+That's not two fa,
+
+399
+00:17:22,159 --> 00:17:25,178
+well, it's, it's two factors but they're identical and
+
+400
+00:17:25,328 --> 00:17:25,608
+the same
+
+401
+00:17:25,729 --> 00:17:25,898
+failure.
+
+402
+00:17:26,239 --> 00:17:26,398
+That's
+
+403
+00:17:26,688 --> 00:17:28,098
+no, that's one factor.
+
+404
+00:17:28,368 --> 00:17:28,639
+That's one
+
+405
+00:17:29,058 --> 00:17:32,788
+factor. Two questions. One factor. No, Kurt, it's what's in your head.
+
+406
+00:17:32,798 --> 00:17:34,068
+Both of them are what's in your head.
+
+407
+00:17:34,390 --> 00:17:35,719
+So. Exactly. Right.
+
+408
+00:17:35,729 --> 00:17:40,369
+So, if, if they support anything reasonable now and the other,
+
+409
+00:17:40,380 --> 00:17:43,819
+my other concern too is like, I think Facebook or I think it was Facebook.
+
+410
+00:17:43,829 --> 00:17:45,540
+I had to share my phone number with them and of course,
+
+411
+00:17:45,550 --> 00:17:48,800
+then I started kind of getting spams and I had to figure out how to set my,
+
+412
+00:17:49,150 --> 00:17:52,569
+don't contact my phone settings in my Facebook account. Right.
+
+413
+00:17:52,890 --> 00:17:56,390
+But in general, you know, most of these companies aren't that crazy abusive.
+
+414
+00:17:56,400 --> 00:17:59,810
+So, yeah, I would say number two, if the site supports two fa
+
+415
+00:18:00,119 --> 00:18:00,869
+you,
+
+416
+00:18:00,959 --> 00:18:03,349
+you forcibly enable it and if it doesn't support two
+
+417
+00:18:03,359 --> 00:18:05,729
+fa you might want to look at a different site.
+
+418
+00:18:05,930 --> 00:18:09,310
+I, I agree with that. I think there's no excuse to not use
+
+419
+00:18:09,420 --> 00:18:12,079
+to fa like, make it, make it happen.
+
+420
+00:18:12,089 --> 00:18:14,829
+-- And
+-- then the third really massive mistake and this is
+
+421
+00:18:14,839 --> 00:18:17,989
+one open ssh made that resulted in like key disclosures,
+
+422
+00:18:18,000 --> 00:18:19,599
+not removing dead stuff.
+
+423
+00:18:20,000 --> 00:18:20,689
+That's so
+
+424
+00:18:20,900 --> 00:18:21,290
+hard. I
+
+425
+00:18:22,180 --> 00:18:25,910
+know. But so, you know, it's, but it's one of those things where it's actually,
+
+426
+00:18:26,459 --> 00:18:29,319
+it's like flossing. It's actually not that hard.
+
+427
+00:18:29,329 --> 00:18:31,000
+The problem is you have to do it every day.
+
+428
+00:18:31,390 --> 00:18:33,160
+I, I do floss every day.
+
+429
+00:18:33,170 --> 00:18:36,400
+You're the first person I've met outside of my dentist's office staff
+
+430
+00:18:36,959 --> 00:18:37,260
+that
+
+431
+00:18:37,859 --> 00:18:40,619
+-- I believe.
+-- Yeah, they, they, my dentist is shocked.
+
+432
+00:18:40,630 --> 00:18:42,290
+It's funny because I tell them they said,
+
+433
+00:18:42,300 --> 00:18:44,359
+do you floss I say every day and you can tell
+
+434
+00:18:44,369 --> 00:18:46,520
+they don't really believe me until they look at my,
+
+435
+00:18:46,530 --> 00:18:51,280
+until they look at my teeth like, oh you do floss every day said I told you I do.
+
+436
+00:18:52,010 --> 00:18:52,430
+Yeah.
+
+437
+00:18:52,609 --> 00:18:54,280
+And, and that's part of it like I just, you know,
+
+438
+00:18:54,290 --> 00:18:57,510
+recently went through account cleanups, you know, with the CS A and
+
+439
+00:18:57,689 --> 00:18:59,199
+there was one or two old ones that,
+
+440
+00:18:59,329 --> 00:19:00,599
+you know, needed to be nuked off.
+
+441
+00:19:00,609 --> 00:19:03,550
+I mean, we'd already suspended them but we just hadn't removed them, removed them.
+
+442
+00:19:03,560 --> 00:19:03,739
+But,
+
+443
+00:19:04,020 --> 00:19:06,959
+you know, that's one thing like I am super fascist
+
+444
+00:19:07,550 --> 00:19:10,489
+about, for example, looking through, uh, the, you know,
+
+445
+00:19:10,500 --> 00:19:13,349
+the logins because most of these services support that.
+
+446
+00:19:13,359 --> 00:19:15,400
+Now they'll tell you when the last time a user logged in is
+
+447
+00:19:15,569 --> 00:19:18,560
+so, you know, sort by age and, you know, anything over six months old,
+
+448
+00:19:18,780 --> 00:19:20,880
+you, you have to give me a reason not to nuke this.
+
+449
+00:19:21,119 --> 00:19:23,329
+I was just working with,
+
+450
+00:19:23,339 --> 00:19:27,119
+with something the other day and I can't remember what this was to save my life.
+
+451
+00:19:27,130 --> 00:19:29,189
+But it had an option to say that if someone
+
+452
+00:19:29,199 --> 00:19:31,849
+hasn't logged in after a certain amount of time,
+
+453
+00:19:31,969 --> 00:19:33,410
+just like lock the account.
+
+454
+00:19:33,859 --> 00:19:34,650
+That's awesome.
+
+455
+00:19:34,930 --> 00:19:35,189
+Yeah.
+
+456
+00:19:35,199 --> 00:19:37,949
+Well, and by definition, if the user isn't using that account, you know,
+
+457
+00:19:37,959 --> 00:19:40,469
+I also want to close it because it saves us a few bucks every month.
+
+458
+00:19:40,479 --> 00:19:43,300
+So it's, it's basically, it's, it's like flossing.
+
+459
+00:19:43,310 --> 00:19:46,689
+It's actually not a lot of work to go nuke an account out of a system typically.
+
+460
+00:19:46,829 --> 00:19:49,400
+But it is one of those things where, yeah, you have to stay on top of it.
+
+461
+00:19:49,410 --> 00:19:54,670
+-- But
+-- no, it, it, it is a lot of work and, and I think flossing is a great example.
+
+462
+00:19:55,140 --> 00:20:00,339
+You have to do something about that. And not only that Kurt, I could have,
+
+463
+00:20:00,650 --> 00:20:02,319
+I could have, I mean, I have a github
+
+464
+00:20:02,439 --> 00:20:04,920
+account. I use my github account all the time.
+
+465
+00:20:05,199 --> 00:20:08,310
+And if I was a member of, of GEN two,
+
+466
+00:20:08,319 --> 00:20:13,390
+does it tell me the last time I used a gen two resource or just the last time?
+
+467
+00:20:13,400 --> 00:20:14,040
+-- I
+-- actually
+
+468
+00:20:14,839 --> 00:20:15,829
+looking to see if
+
+469
+00:20:15,939 --> 00:20:16,000
+github
+
+470
+00:20:16,219 --> 00:20:20,199
+-- hints me that you don't
+-- know. So don't, don't be all high and mighty on here.
+
+471
+00:20:20,209 --> 00:20:21,869
+All right. That's, this is my point.
+
+472
+00:20:22,369 --> 00:20:22,910
+And, and
+
+473
+00:20:23,670 --> 00:20:25,310
+I'm going to compare this to flossing.
+
+474
+00:20:25,319 --> 00:20:30,410
+I floss every day and every day, I think I don't want to floss today every single day.
+
+475
+00:20:30,609 --> 00:20:34,130
+I don't know why I just think it every day
+
+476
+00:20:34,319 --> 00:20:38,010
+and this is even worse where it's like, oh, I should look at that. I'll do it tomorrow.
+
+477
+00:20:38,400 --> 00:20:38,839
+It's
+
+478
+00:20:39,050 --> 00:20:41,810
+very easy to put this up. This is an example of
+
+479
+00:20:42,099 --> 00:20:43,979
+this has to be fixed with tools,
+
+480
+00:20:43,989 --> 00:20:48,699
+expecting people to do this on a regular basis is failure is the only option.
+
+481
+00:20:48,829 --> 00:20:50,060
+It has to be tools.
+
+482
+00:20:50,380 --> 00:20:54,050
+Well, the problem is, it's a, it's a much more subtle process even it's, you know,
+
+483
+00:20:54,060 --> 00:20:55,219
+it's part of the exit process.
+
+484
+00:20:55,229 --> 00:20:57,180
+And also how, especially with something like gen two,
+
+485
+00:20:57,189 --> 00:20:59,959
+how do you define what constitutes leaving the organization?
+
+486
+00:20:59,969 --> 00:21:01,579
+Like, what if somebody goes silent for three months?
+
+487
+00:21:01,969 --> 00:21:04,229
+You know, it's obviously with companies, it's a bit easier, you know,
+
+488
+00:21:04,239 --> 00:21:05,939
+when we stop paying them, we boot them out.
+
+489
+00:21:05,949 --> 00:21:08,670
+But I do agree that, like, I would like to see every
+
+490
+00:21:08,839 --> 00:21:11,260
+sort of website service thing that I use,
+
+491
+00:21:11,270 --> 00:21:13,969
+be able to give me a list of all the users I have allowed in.
+
+492
+00:21:14,229 --> 00:21:14,550
+And like,
+
+493
+00:21:14,560 --> 00:21:16,510
+when is the last time they actually touched it
+
+494
+00:21:16,520 --> 00:21:18,349
+or used it or logged in or did something?
+
+495
+00:21:18,359 --> 00:21:20,130
+So that, yeah, I can flush everybody
+
+496
+00:21:20,250 --> 00:21:22,390
+more than three months old and ideally make it like
+
+497
+00:21:22,400 --> 00:21:24,839
+a flag somewhere where I just set it and forget
+
+498
+00:21:25,030 --> 00:21:26,420
+it just automated.
+
+499
+00:21:26,739 --> 00:21:26,910
+Yeah.
+
+500
+00:21:26,920 --> 00:21:29,640
+Well, that's what I mean, like, ideally, right, maybe that's, you know,
+
+501
+00:21:29,650 --> 00:21:32,540
+something we need to add to the cwe list, lack of, you know,
+
+502
+00:21:32,550 --> 00:21:36,079
+automated account lockout slash removal due to an activity.
+
+503
+00:21:36,770 --> 00:21:39,229
+I, I think it's necessary. Right.
+
+504
+00:21:39,239 --> 00:21:44,300
+I, I think without it, your failure is the only way it's going to end. So,
+
+505
+00:21:45,000 --> 00:21:47,500
+-- so anyway,
+-- anyway, sort of, um,
+
+506
+00:21:47,510 --> 00:21:50,140
+those were the three main failures I would say that they made.
+
+507
+00:21:50,150 --> 00:21:50,459
+And I mean,
+
+508
+00:21:50,510 --> 00:21:55,689
+the good news is that also the way the attacker made the get commit was super noisy.
+
+509
+00:21:55,699 --> 00:21:58,579
+Right. There's ways they could have added the get commit. There were much,
+
+510
+00:21:58,869 --> 00:22:01,319
+well, it's not much that would have been super quiet
+
+511
+00:22:01,500 --> 00:22:04,170
+but the way they did, I think they did a forced merge or something.
+
+512
+00:22:04,180 --> 00:22:08,109
+So like every single person, you know, would have seen that like noisy get message,
+
+513
+00:22:08,119 --> 00:22:09,150
+I forget what it says
+
+514
+00:22:09,510 --> 00:22:11,630
+and they probably like me would have ignored it and be like whatever,
+
+515
+00:22:11,640 --> 00:22:12,459
+whatever force merge.
+
+516
+00:22:12,469 --> 00:22:13,900
+Great. Like just work. Damn it.
+
+517
+00:22:14,410 --> 00:22:15,109
+Um
+
+518
+00:22:17,060 --> 00:22:21,040
+And uh yeah, I mean, the good news is with get, you know, it's
+
+519
+00:22:22,089 --> 00:22:25,589
+git is really easy to roll back to a previous state.
+
+520
+00:22:25,599 --> 00:22:27,300
+So all you got to do is figure out like what's
+
+521
+00:22:27,310 --> 00:22:30,560
+my last known good state and just roll back to that
+
+522
+00:22:31,260 --> 00:22:31,959
+end of story.
+
+523
+00:22:32,369 --> 00:22:36,829
+Well, not only that, the other beautiful thing Git does and other
+
+524
+00:22:37,069 --> 00:22:38,939
+source code management systems don't do.
+
+525
+00:22:38,949 --> 00:22:42,339
+This is, let's say I go back in time and change a git commit.
+
+526
+00:22:42,449 --> 00:22:44,479
+I've now ruined
+
+527
+00:22:44,670 --> 00:22:47,329
+-- all future git commits
+-- or you broke Shaw,
+
+528
+00:22:49,199 --> 00:22:50,640
+which probably didn't happen.
+
+529
+00:22:50,770 --> 00:22:52,719
+-- Yes,
+-- I could totally do that.
+
+530
+00:22:53,079 --> 00:22:56,069
+But you know what I mean? It, it's comparable to the Blockchain
+
+531
+00:22:56,250 --> 00:22:59,469
+in terms of everything has to happen in the right order.
+
+532
+00:22:59,810 --> 00:23:02,189
+It has very strong internal state
+
+533
+00:23:02,699 --> 00:23:04,810
+kind of control and reporting
+
+534
+00:23:05,000 --> 00:23:05,390
+and it's,
+
+535
+00:23:05,770 --> 00:23:07,939
+and here's the best part, it's really easy to use.
+
+536
+00:23:08,099 --> 00:23:09,979
+That's the real trick I think.
+
+537
+00:23:10,550 --> 00:23:12,329
+And it, it has to be, I mean,
+
+538
+00:23:12,500 --> 00:23:13,800
+I'll, I'll go back to your list.
+
+539
+00:23:13,810 --> 00:23:17,449
+You pointed out three things, one of which I think you can blame on, on Gen,
+
+540
+00:23:17,640 --> 00:23:18,239
+which is
+
+541
+00:23:18,599 --> 00:23:20,410
+able to factor off which they've done.
+
+542
+00:23:20,780 --> 00:23:24,000
+But like strong passwords, you can't enforce that. And
+
+543
+00:23:24,160 --> 00:23:27,859
+watching for old accounts again, that has to be tooling. That's, that's github's
+
+544
+00:23:28,089 --> 00:23:28,689
+fault.
+
+545
+00:23:28,859 --> 00:23:31,530
+Actually strong passwords you can,
+
+546
+00:23:31,540 --> 00:23:34,540
+the provider can enforce now because for example, they could use that.
+
+547
+00:23:34,550 --> 00:23:37,520
+What is it? 500 billion broken passwords?
+
+548
+00:23:38,209 --> 00:23:40,589
+That's, you know, public now. Right. Remember the thing?
+
+549
+00:23:40,599 --> 00:23:42,890
+The guy built a cloud flare worker. So you can check
+
+550
+00:23:43,050 --> 00:23:45,560
+the, have I been pwned? Try
+
+551
+00:23:45,750 --> 00:23:47,219
+hunts website? Yes.
+
+552
+00:23:47,579 --> 00:23:48,420
+Exactly.
+
+553
+00:23:48,890 --> 00:23:49,229
+Yeah.
+
+554
+00:23:49,239 --> 00:23:50,160
+And well, more to the point,
+
+555
+00:23:50,170 --> 00:23:52,640
+the guy built like a cloud flare worker with an API so
+
+556
+00:23:52,650 --> 00:23:56,910
+that you can in tens of milliseconds when somebody enters a password,
+
+557
+00:23:56,920 --> 00:23:57,589
+say
+
+558
+00:23:57,689 --> 00:23:58,189
+like, yeah,
+
+559
+00:23:58,199 --> 00:24:00,829
+we've seen that password somewhere in this list of 500 billion passwords.
+
+560
+00:24:00,839 --> 00:24:02,069
+So, no, you're not allowed to use it.
+
+561
+00:24:02,270 --> 00:24:06,869
+And again, I would say that is probably something everybody should be doing now,
+
+562
+00:24:07,640 --> 00:24:09,250
+if they do passwords,
+
+563
+00:24:10,439 --> 00:24:12,170
+you know, and not like o
+
+564
+00:24:12,290 --> 00:24:13,699
+author Sam or something,
+
+565
+00:24:13,900 --> 00:24:15,099
+maybe,
+
+566
+00:24:15,390 --> 00:24:17,579
+I mean, it, it's more complicated than that.
+
+567
+00:24:18,079 --> 00:24:21,410
+Well, ok, let me, let me point out too. Something to remember is github
+
+568
+00:24:21,530 --> 00:24:24,660
+is also an identity provider. So these accounts kind of matter.
+
+569
+00:24:24,979 --> 00:24:30,670
+Yes. In their case, I think you could argue that have I been po passwords? But I mean,
+
+570
+00:24:30,910 --> 00:24:33,699
+the solution is still password managers?
+
+571
+00:24:33,810 --> 00:24:34,869
+Oh, I agree.
+
+572
+00:24:34,880 --> 00:24:35,469
+But I mean,
+
+573
+00:24:35,479 --> 00:24:38,880
+this kind of forces people into using a password manager because literally
+
+574
+00:24:39,189 --> 00:24:41,829
+pretty much any terrible password a person
+
+575
+00:24:41,839 --> 00:24:43,869
+will pick has already been picked and used
+
+576
+00:24:43,979 --> 00:24:44,319
+and ped
+
+577
+00:24:44,579 --> 00:24:47,030
+and in all the good passwords, people picks
+
+578
+00:24:47,199 --> 00:24:50,920
+picked are in, have I been pwned? I mean, that's part of the problem is,
+
+579
+00:24:51,050 --> 00:24:56,239
+and basically at this point, any human generated password is probably in the,
+
+580
+00:24:56,250 --> 00:24:57,880
+have I been pwned database?
+
+581
+00:24:58,170 --> 00:25:01,280
+I mean, for real? Right. And, and you know what's going to happen
+
+582
+00:25:01,650 --> 00:25:02,239
+is
+
+583
+00:25:02,569 --> 00:25:03,670
+if I
+
+584
+00:25:03,869 --> 00:25:07,020
+have my password and it shows up and says, oh, you're on this list,
+
+585
+00:25:07,030 --> 00:25:07,869
+you know what I'm gonna do?
+
+586
+00:25:07,880 --> 00:25:10,010
+I'm gonna add a one and all of a sudden, pow,
+
+587
+00:25:10,719 --> 00:25:12,069
+it's not on the list.
+
+588
+00:25:12,310 --> 00:25:12,489
+Right.
+
+589
+00:25:12,500 --> 00:25:16,790
+So, like, even that doesn't necessarily fix the problem two factor off,
+
+590
+00:25:16,800 --> 00:25:18,189
+fixes the problem,
+
+591
+00:25:18,290 --> 00:25:19,969
+-- well,
+-- enforce two factor off.
+
+592
+00:25:20,189 --> 00:25:20,819
+Right.
+
+593
+00:25:21,810 --> 00:25:22,579
+Right.
+
+594
+00:25:23,410 --> 00:25:24,939
+So, so anyway,
+
+595
+00:25:24,949 --> 00:25:28,329
+and then you continue reading in the list and it's actually
+
+596
+00:25:28,339 --> 00:25:30,959
+kind of funny because it sounds like on the weekend github
+
+597
+00:25:31,140 --> 00:25:32,550
+wasn't very responsive,
+
+598
+00:25:33,689 --> 00:25:36,489
+which happens. I get it. I'm not going to blame him for that.
+
+599
+00:25:36,500 --> 00:25:39,300
+And then it looks like on July 3rd
+
+600
+00:25:39,839 --> 00:25:42,640
+gen two basically put all the pieces back together.
+
+601
+00:25:42,760 --> 00:25:43,560
+So it,
+
+602
+00:25:43,880 --> 00:25:45,760
+it really wasn't a very long outage.
+
+603
+00:25:45,770 --> 00:25:49,280
+It was definitely embarrassing for them, but they were very transparent.
+
+604
+00:25:49,599 --> 00:25:51,959
+My understand, like that's not the true source of their code.
+
+605
+00:25:51,969 --> 00:25:53,130
+It's like a mirror but just
+
+606
+00:25:53,400 --> 00:25:54,280
+available via
+
+607
+00:25:54,609 --> 00:25:56,229
+because it's really easy to do that.
+
+608
+00:25:56,890 --> 00:25:57,609
+Right. Right.
+
+609
+00:25:57,709 --> 00:26:00,880
+Exactly. Where it wasn't, it wasn't the one true source.
+
+610
+00:26:00,890 --> 00:26:04,689
+So that, that, that also helped. I'm sure with with a lot of this. But
+
+611
+00:26:05,060 --> 00:26:06,180
+I mean, fundamentally
+
+612
+00:26:06,750 --> 00:26:10,959
+I give them tons of credit. It was embarrassing. They were super open about it and,
+
+613
+00:26:11,349 --> 00:26:11,900
+and
+
+614
+00:26:12,319 --> 00:26:15,310
+they, they made the changes that I think they needed to make.
+
+615
+00:26:15,829 --> 00:26:18,300
+Right. They, they, they've been able to factor off,
+
+616
+00:26:18,880 --> 00:26:21,530
+well, force to factor off it's enabled by default.
+
+617
+00:26:22,369 --> 00:26:23,709
+But here, let me ask you a question
+
+618
+00:26:23,839 --> 00:26:27,640
+of all the organizations reading this
+
+619
+00:26:28,030 --> 00:26:31,349
+uh gen two wiki page describing the incident and what they're going to do.
+
+620
+00:26:31,630 --> 00:26:34,150
+What percentage of those that haven't already done this?
+
+621
+00:26:34,160 --> 00:26:37,469
+Do you think now will like what percentage of people reading this will go? Oh,
+
+622
+00:26:37,650 --> 00:26:40,349
+I can, you know, I should go enable because I,
+
+623
+00:26:40,359 --> 00:26:43,229
+I honestly didn't think you could force two factor off on github.
+
+624
+00:26:43,359 --> 00:26:46,410
+And I remember I tweeted that a while ago and then somebody pointed out that yes,
+
+625
+00:26:46,420 --> 00:26:46,790
+you can.
+
+626
+00:26:46,800 --> 00:26:47,650
+And I'm like, oh whoops,
+
+627
+00:26:47,849 --> 00:26:51,849
+because to put it bluntly like Google has this amazing web page.
+
+628
+00:26:52,030 --> 00:26:54,704
+It's a two factor off landing page where it's like, why should do this?
+
+629
+00:26:54,714 --> 00:26:55,484
+Why does it matter?
+
+630
+00:26:55,594 --> 00:26:58,244
+And then at the very bottom it says let's get started and it walks you through
+
+631
+00:26:58,255 --> 00:27:01,385
+and it just makes it so easy and pain like my mom could do it.
+
+632
+00:27:01,395 --> 00:27:03,984
+That's, that's the gold standard, right? Can your parents do it?
+
+633
+00:27:04,564 --> 00:27:05,064
+And
+
+634
+00:27:05,435 --> 00:27:07,464
+github, I was like,
+
+635
+00:27:07,474 --> 00:27:10,714
+I didn't even know that was an option and I dug around the settings and I'm like,
+
+636
+00:27:10,724 --> 00:27:11,385
+oh yeah, look at that.
+
+637
+00:27:11,395 --> 00:27:14,425
+There, it is. The annoying part being is I can't enable it by user.
+
+638
+00:27:14,435 --> 00:27:16,984
+I can only turn it off or on for the whole organization.
+
+639
+00:27:17,540 --> 00:27:20,119
+90% of me agrees is actually the correct solution.
+
+640
+00:27:20,130 --> 00:27:22,800
+-- The 10% of you that has to deal with the real world is like, man, that's
+-- annoying.
+
+641
+00:27:22,810 --> 00:27:23,380
+I know.
+
+642
+00:27:23,390 --> 00:27:23,810
+You know what,
+
+643
+00:27:23,819 --> 00:27:27,969
+I don't think there's a real excuse anymore to not be using two factor off.
+
+644
+00:27:27,979 --> 00:27:30,560
+So while it definitely gives a little bit of pain
+
+645
+00:27:30,680 --> 00:27:33,339
+automated accounts with read only access. Yeah, I know.
+
+646
+00:27:33,349 --> 00:27:35,890
+And, and there's like the API stuff you're supposed to be doing.
+
+647
+00:27:36,140 --> 00:27:39,400
+-- Can you?
+-- Yeah, I was gonna say, can you just set those up to use API keys?
+
+648
+00:27:39,520 --> 00:27:39,810
+Yeah.
+
+649
+00:27:39,819 --> 00:27:43,560
+But I mean, it's just, you know, managing them and stuff becomes a bit more of a chore.
+
+650
+00:27:43,569 --> 00:27:45,920
+Somebody has to have the two of a blah, blah, blah, blah, blah. Right.
+
+651
+00:27:46,760 --> 00:27:48,150
+Um But like I said,
+
+652
+00:27:48,160 --> 00:27:52,109
+the 90% of me actually agrees that just make it a switch for the organization
+
+653
+00:27:52,400 --> 00:27:53,430
+is the correct thing to do.
+
+654
+00:27:53,439 --> 00:27:56,780
+The 10% of me that is, is annoyed by that because that means I don't,
+
+655
+00:27:56,790 --> 00:27:58,010
+-- I can't be a lazy
+-- barger.
+
+656
+00:27:58,300 --> 00:28:03,160
+Now, you asked what percentage of people are going to do something about this
+
+657
+00:28:03,359 --> 00:28:04,750
+-- that
+-- have read this wiki page.
+
+658
+00:28:05,150 --> 00:28:08,250
+I would guess the number is 10% or less.
+
+659
+00:28:08,400 --> 00:28:10,089
+-- I wouldn't have gone that high
+-- because
+
+660
+00:28:10,680 --> 00:28:11,260
+it's,
+
+661
+00:28:11,369 --> 00:28:12,599
+I said or less
+
+662
+00:28:13,160 --> 00:28:14,640
+I learned the answer.
+
+663
+00:28:15,260 --> 00:28:17,540
+I mean, here is the thing is
+
+664
+00:28:18,130 --> 00:28:22,270
+there are, first of all this, this page just describes what gen two did.
+
+665
+00:28:22,280 --> 00:28:25,010
+It doesn't give like real world advice, not like,
+
+666
+00:28:25,020 --> 00:28:27,189
+not like a high quality security podcast such as
+
+667
+00:28:27,339 --> 00:28:27,589
+this.
+
+668
+00:28:27,939 --> 00:28:30,000
+But, and, and we've already told people to do it.
+
+669
+00:28:30,010 --> 00:28:34,829
+And my guess is we might get 20% of our listeners just because I,
+
+670
+00:28:34,839 --> 00:28:36,589
+I suspect there's a certain,
+
+671
+00:28:36,819 --> 00:28:41,430
+we'll say interest in security that is lacking from the general public.
+
+672
+00:28:41,760 --> 00:28:42,270
+But
+
+673
+00:28:42,520 --> 00:28:44,550
+it's, it's, again, it's like flossing,
+
+674
+00:28:44,790 --> 00:28:47,209
+it's too easy to do it tomorrow.
+
+675
+00:28:47,469 --> 00:28:47,969
+Right.
+
+676
+00:28:48,619 --> 00:28:48,920
+And,
+
+677
+00:28:48,930 --> 00:28:50,630
+and I almost feel like this is one of
+
+678
+00:28:50,640 --> 00:28:52,569
+those things that at some point someone like github
+
+679
+00:28:52,770 --> 00:28:56,040
+is just going to have to pull the trigger and say everyone's using two factor
+
+680
+00:28:56,170 --> 00:28:59,489
+off. Now if you don't like it, go find someone else to work. Yeah.
+
+681
+00:28:59,500 --> 00:29:02,430
+Well, and the thing is, I mean, it's not like,
+
+682
+00:29:02,569 --> 00:29:05,540
+you know, they nuked your account but you just have to go enable two factor off.
+
+683
+00:29:05,560 --> 00:29:07,920
+Right. Exactly. Exactly.
+
+684
+00:29:08,290 --> 00:29:12,040
+Log in, enable to factor off. You don't want to factor off too bad.
+
+685
+00:29:12,329 --> 00:29:12,589
+Yeah.
+
+686
+00:29:12,599 --> 00:29:14,430
+And I would say that they provide the options that
+
+687
+00:29:14,439 --> 00:29:16,290
+don't require you to give them your phone number,
+
+688
+00:29:16,300 --> 00:29:17,189
+for example, which is,
+
+689
+00:29:17,310 --> 00:29:20,989
+that's, that's my only concern is places that support two factor off and,
+
+690
+00:29:21,439 --> 00:29:24,310
+and only support like the phone number. S MS stuff
+
+691
+00:29:24,459 --> 00:29:27,099
+-- drives me nuts and that's
+-- not two factor
+
+692
+00:29:27,260 --> 00:29:27,280
+off.
+
+693
+00:29:27,400 --> 00:29:27,979
+It is.
+
+694
+00:29:28,239 --> 00:29:32,040
+Well, it's even worse now. Freaking Google. Which, which I won't lie.
+
+695
+00:29:32,050 --> 00:29:33,469
+It's a great feature but with,
+
+696
+00:29:33,479 --> 00:29:37,189
+with android messages now you can bring it up in your web browser.
+
+697
+00:29:37,880 --> 00:29:38,760
+And so
+
+698
+00:29:38,930 --> 00:29:43,219
+the, the irony is someone, was someone, a nonsecurity person I know was saying, oh,
+
+699
+00:29:43,229 --> 00:29:46,170
+look, now, I can just get my two factor off codes to my web browser.
+
+700
+00:29:46,180 --> 00:29:48,380
+I'm like that completely defeats the purpose
+
+701
+00:29:48,550 --> 00:29:50,010
+of two factor on.
+
+702
+00:29:50,310 --> 00:29:52,800
+Well, no, but it is a separate, it is a separate
+
+703
+00:29:53,020 --> 00:29:56,560
+-- pan until
+-- it pops up in their web browser. Right?
+
+704
+00:29:56,900 --> 00:29:58,310
+Well, I don't know what CSO R,
+
+705
+00:29:59,170 --> 00:29:59,500
+what
+
+706
+00:29:59,810 --> 00:30:00,500
+S and CSO
+
+707
+00:30:00,640 --> 00:30:04,369
+-- rrf and whatnot protections they have.
+-- It doesn't matter.
+
+708
+00:30:04,380 --> 00:30:08,199
+The point is when you, when you're using something like two factor S MS,
+
+709
+00:30:08,469 --> 00:30:11,239
+you need like a separate thing,
+
+710
+00:30:11,349 --> 00:30:15,319
+right? If it's all going to the same machine that doesn't count requiring.
+
+711
+00:30:15,329 --> 00:30:16,400
+So I just went in github
+
+712
+00:30:16,530 --> 00:30:18,729
+to enable this on the distributed weakness filing,
+
+713
+00:30:19,329 --> 00:30:22,550
+requiring two factor authentication will remove all users in the
+
+714
+00:30:22,560 --> 00:30:26,030
+distributed weakness filing organization who have not enabled it or
+
+715
+00:30:26,219 --> 00:30:27,430
+on their personal accounts,
+
+716
+00:30:27,739 --> 00:30:30,709
+one user will be removed from this organization and it is
+
+717
+00:30:31,130 --> 00:30:34,089
+like I said, it's an internal account or it's like a,
+
+718
+00:30:34,099 --> 00:30:37,680
+an internal account with read only access for um C I or whatever.
+
+719
+00:30:37,760 --> 00:30:38,550
+So I guess
+
+720
+00:30:38,979 --> 00:30:41,310
+-- they're gonna have to go fix that
+-- sweet.
+
+721
+00:30:42,250 --> 00:30:42,790
+So, yeah, I,
+
+722
+00:30:42,800 --> 00:30:44,650
+I don't like that because I wish it would actually just
+
+723
+00:30:44,660 --> 00:30:47,550
+lock them out until they enable two fa on their account.
+
+724
+00:30:48,079 --> 00:30:49,260
+Kind of like what Google does, right?
+
+725
+00:30:49,270 --> 00:30:50,140
+Google is like, ok,
+
+726
+00:30:50,150 --> 00:30:53,790
+you have to go enable two fa and once you enable two fa I'll let you see your email.
+
+727
+00:30:54,229 --> 00:30:57,760
+Right. You know, it's got a gun to the, your email inbox.
+
+728
+00:30:57,770 --> 00:31:02,170
+But yeah, so that's not the, that's a little bit painful because, you know,
+
+729
+00:31:02,310 --> 00:31:05,589
+you can't enable it until you're willing to nuke a bunch of people's accounts,
+
+730
+00:31:05,599 --> 00:31:07,930
+which is kind of annoying but whatever.
+
+731
+00:31:08,349 --> 00:31:09,719
+Yeah, that's fair.
+
+732
+00:31:09,729 --> 00:31:13,329
+-- But, but
+-- yeah, I, I, I'm getting to the point now where I agree, we essentially,
+
+733
+00:31:14,109 --> 00:31:14,609
+yeah.
+
+734
+00:31:15,140 --> 00:31:15,989
+Well, it's like your car,
+
+735
+00:31:16,000 --> 00:31:20,459
+it has a light that goes on and I think most cars ding or bing now, if you don't put the,
+
+736
+00:31:20,469 --> 00:31:22,390
+if the driver doesn't put their seatbelt on.
+
+737
+00:31:22,520 --> 00:31:25,890
+Right. And it will, like, annoy you to death until you do it.
+
+738
+00:31:26,180 --> 00:31:27,239
+Yeah, exactly.
+
+739
+00:31:27,449 --> 00:31:30,150
+You know, and, and same thing with the airbags and whatnot
+
+740
+00:31:30,430 --> 00:31:33,869
+and, and I, I think it just, it has to be like that. I'm sorry,
+
+741
+00:31:35,119 --> 00:31:36,859
+I agree. I agree completely.
+
+742
+00:31:36,869 --> 00:31:40,869
+And, and I see no better way to end it than, than just to say that is like,
+
+743
+00:31:41,000 --> 00:31:44,780
+II, I could tell you all to enable, to factor off many of you won't.
+
+744
+00:31:44,949 --> 00:31:49,500
+And, and I hope the day comes soon when just, there's no choice it,
+
+745
+00:31:49,510 --> 00:31:52,380
+it's going to be like that and, and that's the way it is.
+
+746
+00:31:52,839 --> 00:31:56,729
+It's happening with us selling TLS. Right. Chrome. Is moving ahead with in what
+
+747
+00:31:56,880 --> 00:32:02,010
+is it this? Oh, it's this month that they will mark all http websites as insecure and
+
+748
+00:32:02,369 --> 00:32:04,060
+same deal. Exactly.
+
+749
+00:32:04,250 --> 00:32:05,489
+I, I approve.
+
+750
+00:32:05,630 --> 00:32:07,369
+I just hope it doesn't take 10 years.
+
+751
+00:32:07,900 --> 00:32:08,839
+It, it might,
+
+752
+00:32:09,989 --> 00:32:12,410
+but I think two factor off is the,
+
+753
+00:32:12,420 --> 00:32:17,079
+it's the next great battle where we're going to see very similar things and
+
+754
+00:32:17,430 --> 00:32:20,689
+I think it's getting close, man, but at the same time, the day it happens,
+
+755
+00:32:20,699 --> 00:32:21,810
+it's going to be huge.
+
+756
+00:32:22,280 --> 00:32:25,180
+I think at a minimum, it has to happen for these ident
+
+757
+00:32:25,420 --> 00:32:26,630
+identity providers
+
+758
+00:32:26,849 --> 00:32:27,380
+because
+
+759
+00:32:27,510 --> 00:32:30,010
+like my linkedin account and my Facebook account,
+
+760
+00:32:30,380 --> 00:32:31,650
+but you know, those accounts,
+
+761
+00:32:31,660 --> 00:32:35,160
+they are just too important to people that that's who they are online
+
+762
+00:32:35,579 --> 00:32:39,260
+and it's how they log into other systems. So like, yeah, I think at this point we,
+
+763
+00:32:39,479 --> 00:32:42,060
+you know, they have to bite the bullet and do it.
+
+764
+00:32:42,410 --> 00:32:46,959
+Yep. Yep. Yep. I, I agree 100%. All right, sweet. Well, thank you, Kurt.
+
+765
+00:32:46,969 --> 00:32:49,180
+Thank you everyone for listening. You can go to open
+
+766
+00:32:49,300 --> 00:32:51,280
+source security podcast.com for the show notes.
+
+767
+00:32:51,290 --> 00:32:54,959
+We'll have a link to this fantastic gen two report
+
+768
+00:32:55,819 --> 00:33:00,349
+and you can use the Pound Os S podcast hashtag on social media to get our attention.
+
+769
+00:33:00,359 --> 00:33:03,890
+And if nothing else, Kurt have a fantastic rest of your day.
+
+770
+00:33:04,250 --> 00:33:05,530
+You too. Thanks everybody.

@@ -1,0 +1,2352 @@
+0
+00:00:05,690 --> 00:00:10,720
+Hello and welcome to the open source security podcast episode 123 with myself,
+
+1
+00:00:10,729 --> 00:00:13,239
+Kurt Siefried and my partner in Thought Crime, Josh Bresser.
+
+2
+00:00:13,840 --> 00:00:16,909
+Hey, Kurt. And today we are joined, we have a guest.
+
+3
+00:00:16,920 --> 00:00:21,850
+We have Liz Rice who is a technology evangelist with Aqua Security. Say hello, Liz.
+
+4
+00:00:22,020 --> 00:00:22,670
+Hello,
+
+5
+00:00:22,879 --> 00:00:25,209
+I resisted saying hello, Liz.
+
+6
+00:00:27,049 --> 00:00:29,250
+That's ok. Bad jokes are more than welcome here.
+
+7
+00:00:29,489 --> 00:00:33,569
+So awesome. So thank you so much for joining us and, and I guess
+
+8
+00:00:33,700 --> 00:00:36,189
+you just wrote a book. I, I found out it's called Kuber
+
+9
+00:00:36,299 --> 00:00:38,319
+Neti Security. Tell us a little bit about that.
+
+10
+00:00:38,569 --> 00:00:40,729
+-- Yeah.
+-- So my pleasure to be here. Um
+
+11
+00:00:40,970 --> 00:00:42,740
+Yeah, myself and my co author,
+
+12
+00:00:43,069 --> 00:00:43,520
+Michael Hasen
+
+13
+00:00:43,900 --> 00:00:49,560
+from Red Hat. We wrote a book on Kubernetes Security for o'reilly.
+
+14
+00:00:49,569 --> 00:00:51,009
+And yeah, it was,
+
+15
+00:00:51,020 --> 00:00:54,599
+we felt that it was important to try to
+
+16
+00:00:54,610 --> 00:00:58,360
+give people some kind of pointers to best practices.
+
+17
+00:00:58,369 --> 00:00:59,860
+There, there are lots of things about Kubernetes
+
+18
+00:01:00,569 --> 00:01:01,790
+that you can
+
+19
+00:01:02,209 --> 00:01:06,989
+make really insecure through bad configuration or bad practices.
+
+20
+00:01:07,000 --> 00:01:11,319
+So we wanted to try to enumerate some of those and help people avoid
+
+21
+00:01:11,440 --> 00:01:13,800
+-- walking into those traps.
+-- That's, that's all.
+
+22
+00:01:13,809 --> 00:01:17,599
+So, I guess, ok, I'm gonna I'm gonna put you on the spot. Now. What, what are the traps?
+
+23
+00:01:17,705 --> 00:01:21,485
+Right. If, if I, I'm going to run Kubernetes, what do I need to watch out for?
+
+24
+00:01:21,495 --> 00:01:24,175
+As, as I will admit, I, I run like, what is Mini
+
+25
+00:01:24,294 --> 00:01:24,355
+Co
+
+26
+00:01:25,025 --> 00:01:27,144
+right for, for my various personal projects.
+
+27
+00:01:27,154 --> 00:01:27,544
+But I,
+
+28
+00:01:27,555 --> 00:01:31,084
+I am totally inept about running Kubernetes at scale other
+
+29
+00:01:31,095 --> 00:01:33,245
+than things I've read or things I guess about.
+
+30
+00:01:33,919 --> 00:01:36,580
+Sure. So, um, some of the
+
+31
+00:01:36,889 --> 00:01:41,940
+kind of obvious things that you shouldn't be doing are leaving your
+
+32
+00:01:42,779 --> 00:01:47,160
+C TIS dashboard open to the public internet, which uh has been done,
+
+33
+00:01:47,529 --> 00:01:49,480
+you know, by I,
+
+34
+00:01:49,599 --> 00:01:53,099
+I believe uh Tesla was the, the company that did that.
+
+35
+00:01:53,559 --> 00:01:54,379
+Um
+
+36
+00:01:54,519 --> 00:01:58,029
+You can also very easily, particularly with older versions of
+
+37
+00:01:58,449 --> 00:02:01,349
+C tis, the defaults tended to be insecure
+
+38
+00:02:01,510 --> 00:02:04,510
+so you could very easily be running with your
+
+39
+00:02:04,760 --> 00:02:06,699
+API like the whole
+
+40
+00:02:06,919 --> 00:02:07,769
+server,
+
+41
+00:02:07,870 --> 00:02:11,369
+the API server port um open to
+
+42
+00:02:11,490 --> 00:02:11,699
+any,
+
+43
+00:02:12,485 --> 00:02:13,494
+you know. So,
+
+44
+00:02:13,714 --> 00:02:17,354
+uh making sure that you've got authentication set up is
+
+45
+00:02:17,475 --> 00:02:19,485
+one of those really basic things that you
+
+46
+00:02:19,634 --> 00:02:21,005
+definitely want to do.
+
+47
+00:02:21,225 --> 00:02:24,145
+And it's funny you mentioned that because I specifically remember having,
+
+48
+00:02:24,375 --> 00:02:24,955
+like I,
+
+49
+00:02:24,964 --> 00:02:27,365
+I used to do CV S at Red Hat and specifically
+
+50
+00:02:27,375 --> 00:02:30,035
+doing CV S for Kubernetes with Jordan Liggett and others.
+
+51
+00:02:30,380 --> 00:02:33,949
+And I remember those things came up and, but in Kubernetes defense, I remember that
+
+52
+00:02:34,050 --> 00:02:36,619
+Kubernetes sort of explicitly had documented that, you know,
+
+53
+00:02:36,630 --> 00:02:38,449
+you probably shouldn't do those things
+
+54
+00:02:38,649 --> 00:02:41,289
+and they were I think in general, uh,
+
+55
+00:02:41,300 --> 00:02:44,720
+at least a year or two ago in the process of switching to much better defaults.
+
+56
+00:02:45,259 --> 00:02:48,580
+That's absolutely right. And they have got much better defaults.
+
+57
+00:02:48,589 --> 00:02:51,419
+It kind of depends what installation tool you're using.
+
+58
+00:02:51,610 --> 00:02:53,399
+Yeah, that was the big thing is
+
+59
+00:02:54,020 --> 00:02:56,869
+what it boiled down to, is there were secure ways to install it and, yeah,
+
+60
+00:02:56,880 --> 00:02:59,029
+unfortunately some of the installation tools made some
+
+61
+00:02:59,580 --> 00:03:03,360
+-- well, you know, it worked when you install.
+-- Yeah. Yeah. Yeah. But you needed to,
+
+62
+00:03:03,570 --> 00:03:07,699
+it, it's a good idea to check some of these things and, and things like um you know,
+
+63
+00:03:07,710 --> 00:03:11,320
+there's role based access control now, which wasn't there.
+
+64
+00:03:11,410 --> 00:03:14,679
+Well, a few versions ago, it's a really great thing.
+
+65
+00:03:14,690 --> 00:03:17,860
+If people are still running on an older version that doesn't support it,
+
+66
+00:03:17,869 --> 00:03:21,440
+then we're basically advising you might want to think about upgrading
+
+67
+00:03:22,000 --> 00:03:26,699
+and, and then there's all sorts of things that you can uh do to improve security
+
+68
+00:03:27,080 --> 00:03:30,649
+in the application code. So in the container images that you're gonna run,
+
+69
+00:03:30,899 --> 00:03:32,600
+um making sure that you're scanning those for
+
+70
+00:03:32,610 --> 00:03:34,740
+vulnerabilities or all that kind of good stuff.
+
+71
+00:03:34,750 --> 00:03:36,740
+So there's various different layers at which
+
+72
+00:03:36,990 --> 00:03:40,889
+you want to look at security when you're operating.
+
+73
+00:03:41,279 --> 00:03:41,350
+Ce
+
+74
+00:03:41,830 --> 00:03:44,770
+That's interesting. Actually, I, I don't think that's something
+
+75
+00:03:44,970 --> 00:03:47,009
+that we necessarily think about
+
+76
+00:03:47,199 --> 00:03:47,669
+in
+
+77
+00:03:47,979 --> 00:03:50,009
+kind of in, in most development environments, right?
+
+78
+00:03:50,020 --> 00:03:52,360
+Where we focus on our own code and our own,
+
+79
+00:03:52,649 --> 00:03:54,789
+I guess applications and deployments.
+
+80
+00:03:54,800 --> 00:03:55,550
+But you're right,
+
+81
+00:03:55,559 --> 00:03:59,250
+there's there's Kubernetes itself which needs security and there's as well as
+
+82
+00:03:59,259 --> 00:04:02,369
+obviously the containers you're running need some level of security as well.
+
+83
+00:04:03,009 --> 00:04:05,809
+Which is like, I mean, I, I feel like
+
+84
+00:04:06,059 --> 00:04:07,199
+this is a point
+
+85
+00:04:07,500 --> 00:04:11,440
+that people have been beating the drum on forever now.
+
+86
+00:04:11,449 --> 00:04:13,949
+And do, do you think it's ever gonna end, like,
+
+87
+00:04:13,960 --> 00:04:15,770
+secure your freaking containers people?
+
+88
+00:04:15,779 --> 00:04:16,238
+Right.
+
+89
+00:04:16,980 --> 00:04:18,070
+Well, I,
+
+90
+00:04:18,358 --> 00:04:20,510
+I continually sort of
+
+91
+00:04:20,940 --> 00:04:26,079
+surprised and surprised and not surprised that if I do a talk and I might
+
+92
+00:04:26,220 --> 00:04:27,640
+suggest to people that they should
+
+93
+00:04:27,649 --> 00:04:30,959
+be scanning their container images for vulnerabilities
+
+94
+00:04:31,220 --> 00:04:33,779
+and an awful lot of hands in the room
+
+95
+00:04:33,929 --> 00:04:36,809
+don't go up if I ask if they're actually doing that.
+
+96
+00:04:37,059 --> 00:04:37,760
+So
+
+97
+00:04:37,910 --> 00:04:42,079
+one way or another people aren't necessarily
+
+98
+00:04:42,239 --> 00:04:45,040
+checking whether or not the containers they run,
+
+99
+00:04:45,049 --> 00:04:47,119
+have got serious vulnerabilities in them
+
+100
+00:04:47,579 --> 00:04:49,399
+and, and obviously, that's a big problem.
+
+101
+00:04:49,450 --> 00:04:51,320
+So uh I feel like one of my,
+
+102
+00:04:51,329 --> 00:04:55,679
+my big missions at the moment is to make sure that everybody that I talk to knows,
+
+103
+00:04:56,279 --> 00:05:00,690
+you know, you can scan your images, you don't have to be paying for at all.
+
+104
+00:05:00,700 --> 00:05:01,399
+Like Aqua,
+
+105
+00:05:01,410 --> 00:05:03,959
+there are free solutions available that are pretty good and
+
+106
+00:05:03,970 --> 00:05:06,470
+we've got a free solution that we give away.
+
+107
+00:05:06,500 --> 00:05:10,010
+And there are open source tools, there's Claire and, and Anor.
+
+108
+00:05:10,690 --> 00:05:11,410
+So
+
+109
+00:05:11,549 --> 00:05:16,359
+there's no real excuse to not be incorporating an image scanner in your
+
+110
+00:05:16,760 --> 00:05:18,049
+deployment pipeline.
+
+111
+00:05:18,269 --> 00:05:18,559
+OK?
+
+112
+00:05:18,570 --> 00:05:21,320
+So, so let's let's touch on that then because you,
+
+113
+00:05:21,329 --> 00:05:24,690
+you work for Aqua Security which obviously has a container scanner
+
+114
+00:05:24,700 --> 00:05:26,149
+and I didn't know you guys had a free one.
+
+115
+00:05:26,160 --> 00:05:27,980
+That's really cool. Actually, I'm, I guess
+
+116
+00:05:28,390 --> 00:05:32,910
+so. Let's for, for people who might not know, let, can you explain to us kind of
+
+117
+00:05:33,109 --> 00:05:35,570
+what is the problem with
+
+118
+00:05:36,040 --> 00:05:39,570
+when we talk about container scanning? What, what is the problem that's solving?
+
+119
+00:05:39,579 --> 00:05:41,489
+And then let's talk about what does it mean when
+
+120
+00:05:41,500 --> 00:05:44,089
+we scan a container as well as how do we,
+
+121
+00:05:44,100 --> 00:05:45,119
+how do we fix that?
+
+122
+00:05:45,130 --> 00:05:47,890
+Well, let's say that the scanner does find something. What does that mean then?
+
+123
+00:05:48,480 --> 00:05:49,609
+Sure. OK.
+
+124
+00:05:49,750 --> 00:05:50,299
+So
+
+125
+00:05:50,420 --> 00:05:52,920
+what we're doing when we scan for vulnerabilities,
+
+126
+00:05:52,929 --> 00:05:56,970
+we're looking for these known vulnerabilities, what's called CV ES
+
+127
+00:05:57,369 --> 00:06:00,739
+the things like shell shock and heart bleed and, and you know,
+
+128
+00:06:00,750 --> 00:06:07,109
+thousands of other known problems that exist in third party codes that
+
+129
+00:06:07,119 --> 00:06:11,380
+you the dependencies that your application is very likely relying on.
+
+130
+00:06:11,940 --> 00:06:13,649
+And the problem is that when we move
+
+131
+00:06:13,660 --> 00:06:17,480
+from a sort of traditional software monolithic environment,
+
+132
+00:06:17,489 --> 00:06:20,000
+when we move from that to containers,
+
+133
+00:06:20,769 --> 00:06:25,720
+every container is bundling up application code with its dependencies.
+
+134
+00:06:25,880 --> 00:06:30,279
+And if you have a lot of containers, that means a lot of copies of those dependencies.
+
+135
+00:06:30,359 --> 00:06:32,369
+So each different
+
+136
+00:06:32,600 --> 00:06:36,239
+container could have a different set of packages and
+
+137
+00:06:36,250 --> 00:06:40,390
+a different set of these vulnerabilities included in that.
+
+138
+00:06:41,109 --> 00:06:41,750
+So
+
+139
+00:06:42,070 --> 00:06:45,440
+the key to dealing with this is automation,
+
+140
+00:06:45,630 --> 00:06:47,600
+uh like everything in the sort of modern DEV
+
+141
+00:06:47,720 --> 00:06:48,769
+ops world, everything
+
+142
+00:06:49,000 --> 00:06:50,170
+has to be automated
+
+143
+00:06:50,700 --> 00:06:55,359
+and you can build an image scanner into your build process
+
+144
+00:06:55,619 --> 00:06:59,959
+to make sure that every container image you build is scanned
+
+145
+00:06:59,970 --> 00:07:04,799
+by which we're looking at the contents of that container image
+
+146
+00:07:05,029 --> 00:07:09,290
+matching it against or or matching all the the packages against
+
+147
+00:07:09,559 --> 00:07:13,600
+a database of packages and their known vulnerabilities
+
+148
+00:07:13,779 --> 00:07:16,489
+and reporting back to you whether there's
+
+149
+00:07:17,049 --> 00:07:19,260
+you know, significant issues or not.
+
+150
+00:07:19,809 --> 00:07:22,809
+So for example, you might choose to fail the build
+
+151
+00:07:23,100 --> 00:07:26,339
+if there's high severity vulnerabilities in an image because
+
+152
+00:07:26,350 --> 00:07:28,070
+you really don't want to be deploying that.
+
+153
+00:07:28,079 --> 00:07:32,910
+And uh the, the sort of level of sophistication on, on what policies you
+
+154
+00:07:33,160 --> 00:07:33,779
+uh
+
+155
+00:07:33,899 --> 00:07:36,630
+you might choose to deploy or not.
+
+156
+00:07:36,640 --> 00:07:40,910
+Uh that will be the difference between a free scanner and a, and a commercial one.
+
+157
+00:07:41,059 --> 00:07:43,769
+But with a free one, you can find out whether you've got
+
+158
+00:07:43,940 --> 00:07:47,149
+high, medium, low severity issues in your code and
+
+159
+00:07:47,820 --> 00:07:51,350
+ideally not deploy the ones that have got significant problems.
+
+160
+00:07:53,109 --> 00:07:53,929
+Indeed.
+
+161
+00:07:54,769 --> 00:07:56,170
+All right. So
+
+162
+00:07:56,600 --> 00:07:58,269
+II, I love this topic.
+
+163
+00:07:58,279 --> 00:08:01,880
+I've been the, the problem with dependencies is something dear dear to my heart.
+
+164
+00:08:01,890 --> 00:08:05,220
+And I've been talking about this and, and dealing with, I deal with it right now.
+
+165
+00:08:05,230 --> 00:08:07,029
+In fact, I've got some things happening
+
+166
+00:08:07,529 --> 00:08:11,989
+at work that are, are dependency related and, and it's always a treat.
+
+167
+00:08:12,160 --> 00:08:13,049
+And I guess
+
+168
+00:08:13,220 --> 00:08:15,309
+here's the thing
+
+169
+00:08:15,690 --> 00:08:17,309
+I don't think people understand and I,
+
+170
+00:08:17,320 --> 00:08:20,549
+I'd love to hear some of your thoughts on this is, is it's kind of,
+
+171
+00:08:20,859 --> 00:08:23,440
+it's dependencies all the way down, right?
+
+172
+00:08:23,450 --> 00:08:25,100
+Because open source product, you know,
+
+173
+00:08:25,109 --> 00:08:27,380
+you might have an application that depends on open source,
+
+174
+00:08:27,390 --> 00:08:29,410
+but that open source depends on other open source
+
+175
+00:08:29,420 --> 00:08:31,510
+and that open source depends on other open source.
+
+176
+00:08:31,790 --> 00:08:35,580
+And you can imagine this kind of starts forking out of control very, very quickly.
+
+177
+00:08:35,590 --> 00:08:38,979
+And I think that's something people often don't understand is
+
+178
+00:08:38,989 --> 00:08:41,700
+that you're not including one library in your application,
+
+179
+00:08:41,710 --> 00:08:46,119
+you're probably including 10 or more once you walk your way down that chain.
+
+180
+00:08:46,719 --> 00:08:50,479
+Yeah, it's really true. And, and do you remember that thing that happened with um
+
+181
+00:08:51,049 --> 00:08:52,349
+uh the N PM,
+
+182
+00:08:52,359 --> 00:08:54,989
+the node package management that exactly the
+
+183
+00:08:55,000 --> 00:08:56,989
+left left padding or something like that,
+
+184
+00:08:57,000 --> 00:08:57,390
+wasn't it?
+
+185
+00:08:57,400 --> 00:08:57,690
+Yeah,
+
+186
+00:08:57,989 --> 00:08:59,590
+the shift left.
+
+187
+00:08:59,729 --> 00:09:00,400
+Yes.
+
+188
+00:09:01,309 --> 00:09:02,729
+And uh yeah,
+
+189
+00:09:02,760 --> 00:09:05,510
+basically the internet got broken because of
+
+190
+00:09:05,520 --> 00:09:07,940
+one dependency that was included by everything.
+
+191
+00:09:09,530 --> 00:09:10,140
+Uh Yeah.
+
+192
+00:09:10,400 --> 00:09:12,510
+So I guess that can be a lesson to us all.
+
+193
+00:09:12,520 --> 00:09:14,919
+Well, I know for uh what was it openshift, you know,
+
+194
+00:09:14,929 --> 00:09:18,570
+which is Red Hat's sort of version of Kubernetes with some special sauce on top.
+
+195
+00:09:18,580 --> 00:09:18,750
+And
+
+196
+00:09:19,609 --> 00:09:22,619
+the last time I checked the open source version was pulling in
+
+197
+00:09:22,869 --> 00:09:25,270
+something like 1200 dependencies.
+
+198
+00:09:27,669 --> 00:09:31,559
+Um, you know, not even that bad and, and well, and quite frankly, you know, I've,
+
+199
+00:09:31,570 --> 00:09:33,270
+I've, I've seen developers where
+
+200
+00:09:33,450 --> 00:09:34,549
+they need,
+
+201
+00:09:34,559 --> 00:09:36,340
+I forget what they needed but they're like
+
+202
+00:09:36,349 --> 00:09:38,450
+whatever and they just pulled in all of ruby
+
+203
+00:09:38,960 --> 00:09:40,409
+and I mean, all of it.
+
+204
+00:09:41,090 --> 00:09:43,400
+Right. And, and in fairness, their code worked,
+
+205
+00:09:43,549 --> 00:09:44,039
+you know.
+
+206
+00:09:44,299 --> 00:09:45,590
+And I'm wondering so.
+
+207
+00:09:45,599 --> 00:09:47,729
+So that's one thing I've been seeing is, you know, we,
+
+208
+00:09:47,739 --> 00:09:51,070
+we seem to now have a maturing market for security scanners where it's like, OK,
+
+209
+00:09:51,080 --> 00:09:52,690
+you know, this version is bad to have CV.
+
+210
+00:09:52,700 --> 00:09:55,770
+Food, don't, don't deploy that, you know, or if you do deploy it,
+
+211
+00:09:56,210 --> 00:09:58,000
+you need to fix that real soon now.
+
+212
+00:09:58,229 --> 00:10:03,940
+But one thing I'm not really seeing is sort of this dependency management thing,
+
+213
+00:10:03,950 --> 00:10:05,270
+that sort of a meta level of,
+
+214
+00:10:05,609 --> 00:10:10,030
+you know, do you actually need all these dependencies or, you know,
+
+215
+00:10:10,039 --> 00:10:12,679
+are you pulling in this one thing that pulls in
+
+216
+00:10:13,280 --> 00:10:15,059
+16 million other things? Um
+
+217
+00:10:15,210 --> 00:10:16,799
+that maybe you don't actually need, you know,
+
+218
+00:10:16,809 --> 00:10:18,890
+there's a lot of libraries that pull in stuff
+
+219
+00:10:19,669 --> 00:10:20,049
+that
+
+220
+00:10:20,210 --> 00:10:21,770
+you don't necessarily need them to do.
+
+221
+00:10:21,780 --> 00:10:24,489
+Like maybe they pull in the G zip and you, you know,
+
+222
+00:10:24,500 --> 00:10:26,840
+you're not actually using the compression part or
+
+223
+00:10:27,250 --> 00:10:31,179
+um well, the LIB XML gets pulled in by damn near everything it's usually used. But
+
+224
+00:10:31,369 --> 00:10:34,900
+is there any hope or any solution for this where it's sort of,
+
+225
+00:10:34,909 --> 00:10:37,890
+you can minimize your dependency chain in an automated way?
+
+226
+00:10:38,020 --> 00:10:42,000
+I think that's a great question. And yeah, a difficult problem to solve.
+
+227
+00:10:42,010 --> 00:10:45,919
+I haven't come across anybody solving it by
+
+228
+00:10:46,010 --> 00:10:49,330
+sort of removing unused dependencies like that.
+
+229
+00:10:50,219 --> 00:10:50,909
+And
+
+230
+00:10:51,059 --> 00:10:56,979
+uh but we do see this problem quite a lot with base images for containers that include
+
+231
+00:10:57,320 --> 00:10:58,869
+a whole Linux distribution,
+
+232
+00:10:58,880 --> 00:11:01,390
+which is fair enough except that most of the time
+
+233
+00:11:01,400 --> 00:11:05,070
+you're not gonna use very much of that Linux distribution.
+
+234
+00:11:05,169 --> 00:11:08,659
+So you're kind of leading me on to another one of my favorite topics,
+
+235
+00:11:08,669 --> 00:11:10,469
+which is about runtime protection
+
+236
+00:11:11,000 --> 00:11:13,659
+where one of the cool things that we do in the
+
+237
+00:11:14,000 --> 00:11:16,659
+aqua products and this isn't open source unfortunately.
+
+238
+00:11:16,669 --> 00:11:23,179
+But, um, we, we were basically saying given a profile of a container or its image,
+
+239
+00:11:23,190 --> 00:11:25,580
+we know what normal behavior looks like.
+
+240
+00:11:25,590 --> 00:11:27,030
+So my favorite example is
+
+241
+00:11:27,275 --> 00:11:28,744
+X, when you're running engine
+
+242
+00:11:28,864 --> 00:11:29,534
+X,
+
+243
+00:11:29,945 --> 00:11:33,434
+there is only one executable that should be running and it's called engine
+
+244
+00:11:33,544 --> 00:11:37,965
+X. So if you can stop all the other executables from running,
+
+245
+00:11:38,205 --> 00:11:39,734
+you know, even if there is,
+
+246
+00:11:39,744 --> 00:11:43,525
+I don't know some kind of network facility built into the container image,
+
+247
+00:11:44,460 --> 00:11:47,020
+if you can prevent those executables from running,
+
+248
+00:11:47,030 --> 00:11:49,369
+even if your container gets compromised, there's,
+
+249
+00:11:49,760 --> 00:11:51,880
+there's very little that an attacker can do because
+
+250
+00:11:51,890 --> 00:11:55,619
+they're just gonna get permission denied for every executable
+
+251
+00:11:55,809 --> 00:11:56,760
+that isn't gen
+
+252
+00:11:56,890 --> 00:11:59,570
+X. So that's like a super powerful
+
+253
+00:11:59,965 --> 00:12:00,255
+that,
+
+254
+00:12:00,405 --> 00:12:01,955
+that we can do at run time.
+
+255
+00:12:02,044 --> 00:12:06,354
+And you couldn't really do that in the sort of monolithic era because
+
+256
+00:12:06,674 --> 00:12:08,914
+there was just so much going on, on,
+
+257
+00:12:09,065 --> 00:12:12,474
+on a given server, it could be running all sorts of different things.
+
+258
+00:12:12,784 --> 00:12:15,075
+Uh But now with containers, it's much easier.
+
+259
+00:12:15,414 --> 00:12:17,135
+This is fascinating to me.
+
+260
+00:12:17,145 --> 00:12:20,965
+This is something I know I've talked about at length with many people, you know,
+
+261
+00:12:20,974 --> 00:12:22,155
+some time ago But
+
+262
+00:12:22,460 --> 00:12:27,020
+so how, how does that work? Do you, is it a configuration option in your tool?
+
+263
+00:12:27,030 --> 00:12:28,919
+Do you do something when you build your container?
+
+264
+00:12:28,929 --> 00:12:31,419
+I guess because, because the obvious thing I'm thinking of is
+
+265
+00:12:31,650 --> 00:12:35,409
+if, if you've, you know, gone all in on micros surfaces,
+
+266
+00:12:35,539 --> 00:12:39,789
+you could potentially have hundreds, maybe thousands of containers running.
+
+267
+00:12:39,799 --> 00:12:42,760
+At which point. How do you manage that at scale?
+
+268
+00:12:42,770 --> 00:12:46,640
+Saying this container runs this executable, this container runs this executable.
+
+269
+00:12:46,650 --> 00:12:48,119
+This container runs this executable.
+
+270
+00:12:48,130 --> 00:12:51,479
+And then of course, they're changing on probably a regular basis. Right.
+
+271
+00:12:51,929 --> 00:12:55,309
+Right. Right. And that's exactly where the, the tooling comes into it.
+
+272
+00:12:55,320 --> 00:12:58,469
+So we'll hook in at build time to
+
+273
+00:12:58,640 --> 00:13:00,520
+fingerprint the container images.
+
+274
+00:13:00,530 --> 00:13:04,679
+So essentially keep a record of what executables are in it.
+
+275
+00:13:05,609 --> 00:13:08,950
+And then you go through a, a learning phase where it, you know,
+
+276
+00:13:08,960 --> 00:13:12,099
+you're running the code and it's learning what
+
+277
+00:13:12,200 --> 00:13:14,859
+you know is supposed to be running and what user I DS
+
+278
+00:13:14,869 --> 00:13:18,390
+are supposed to be running and what network traffic it it does
+
+279
+00:13:18,719 --> 00:13:21,239
+again makes a lot of sense if you've got a microservice
+
+280
+00:13:21,250 --> 00:13:24,469
+because it's probably only doing a very small number of things.
+
+281
+00:13:25,010 --> 00:13:26,869
+And then once you've learned that profile,
+
+282
+00:13:26,880 --> 00:13:31,830
+you can apply that to any container running from that image.
+
+283
+00:13:31,840 --> 00:13:34,429
+So any running container instantiated from the same
+
+284
+00:13:34,440 --> 00:13:36,950
+image picks up the same profile and you can
+
+285
+00:13:36,960 --> 00:13:39,349
+kind of keep the same sort of profile
+
+286
+00:13:39,359 --> 00:13:42,450
+updated as you release new versions of that image
+
+287
+00:13:43,119 --> 00:13:47,789
+and just kind of automatically limit what each of those containers can do.
+
+288
+00:13:48,729 --> 00:13:50,340
+Not to sound like an old crazy person.
+
+289
+00:13:50,349 --> 00:13:53,440
+But I mean, this is the exact same problem we had with Se Linux.
+
+290
+00:13:53,559 --> 00:13:54,919
+Right. Remember Josh, I mean,
+
+291
+00:13:55,130 --> 00:13:57,239
+trying to contain a large app was
+
+292
+00:13:57,500 --> 00:13:59,539
+like wordpress was impossible. And,
+
+293
+00:13:59,849 --> 00:14:02,000
+you know, I, I actually looked at sort of a,
+
+294
+00:14:02,010 --> 00:14:05,080
+a local microservices architecture with Se Linux,
+
+295
+00:14:05,190 --> 00:14:08,989
+but it was just too painful And, and that's one thing I'm seeing with containers is
+
+296
+00:14:09,210 --> 00:14:10,080
+it's a lot
+
+297
+00:14:10,460 --> 00:14:13,320
+less painful to implement and to get working, you know, it's,
+
+298
+00:14:13,330 --> 00:14:14,960
+and it's easier to sort of dial in
+
+299
+00:14:15,869 --> 00:14:17,809
+Se Linux with App Armor.
+
+300
+00:14:17,820 --> 00:14:21,169
+You know, it's really powerful, but it's just so painful to configure
+
+301
+00:14:21,460 --> 00:14:26,929
+that people tend to not really use it as effectively, but moving to containers.
+
+302
+00:14:26,940 --> 00:14:32,080
+You've got that ability to profile each individual service separately.
+
+303
+00:14:32,780 --> 00:14:35,809
+Right. And, and I think the profiling is key.
+
+304
+00:14:36,070 --> 00:14:38,030
+And I remember actually
+
+305
+00:14:38,140 --> 00:14:39,960
+way back we'll, we'll,
+
+306
+00:14:39,969 --> 00:14:42,979
+we'll get in the time machine here and way back
+
+307
+00:14:42,989 --> 00:14:45,440
+in the day when Se Linux was relatively new,
+
+308
+00:14:45,830 --> 00:14:49,349
+there were discussions around some automatic profiling and the
+
+309
+00:14:49,739 --> 00:14:50,799
+back then
+
+310
+00:14:51,169 --> 00:14:55,789
+it was still very much that all or nothing mindset and, and it was decided that
+
+311
+00:14:56,049 --> 00:14:59,590
+it is conceivable, you could profile something doing something bad
+
+312
+00:14:59,840 --> 00:15:01,109
+and we don't want that.
+
+313
+00:15:01,239 --> 00:15:06,030
+So we don't want to profile things automatically. We want to write it by a human
+
+314
+00:15:06,460 --> 00:15:10,159
+and I have a suspicion. Right. Well, of course. But, but this was a different time.
+
+315
+00:15:10,169 --> 00:15:11,070
+Right. This was,
+
+316
+00:15:11,349 --> 00:15:15,109
+oh, no, I lived through those times. This is why I'm, I'm thinking about going to my
+
+317
+00:15:15,280 --> 00:15:18,200
+-- drinks cabinet.
+-- The world was a different place.
+
+318
+00:15:18,440 --> 00:15:19,229
+Yes,
+
+319
+00:15:20,250 --> 00:15:20,820
+that's right.
+
+320
+00:15:23,109 --> 00:15:26,210
+But, but I mean, in, in all seriousness, I feel like
+
+321
+00:15:26,679 --> 00:15:29,260
+automatic profiling of a container image,
+
+322
+00:15:29,489 --> 00:15:31,900
+there is a possibility
+
+323
+00:15:32,000 --> 00:15:36,090
+of having something mis profiled. Right. Without question.
+
+324
+00:15:36,340 --> 00:15:39,260
+But I bet it's correct more than 80% of the time.
+
+325
+00:15:39,270 --> 00:15:43,989
+And if you're willing to throw away 80% accuracy for a system that's so broken,
+
+326
+00:15:44,000 --> 00:15:45,299
+no one will ever turn it on.
+
+327
+00:15:45,609 --> 00:15:47,539
+That's crazy. Right.
+
+328
+00:15:47,979 --> 00:15:52,940
+Well, yeah, and, and I think it's probably more than 80% correct, you know,
+
+329
+00:15:53,140 --> 00:15:56,150
+-- and also
+-- I love the contempt in that answer.
+
+330
+00:15:58,020 --> 00:16:00,840
+You, you, you can do things like um
+
+331
+00:16:01,039 --> 00:16:02,799
+you know, you don't have to
+
+332
+00:16:02,919 --> 00:16:05,869
+prevent you, you can alert when something goes wrong. So
+
+333
+00:16:06,489 --> 00:16:09,679
+we, we have a lot of customers who do that who say, well, actually,
+
+334
+00:16:09,690 --> 00:16:13,799
+just to be on the safe side, I will do this in a alerting mode.
+
+335
+00:16:14,489 --> 00:16:16,570
+But hopefully, you know, it's right.
+
+336
+00:16:16,580 --> 00:16:19,469
+So much of the time that those alerts really only happen,
+
+337
+00:16:20,130 --> 00:16:24,549
+you know, on the rare occasion so that you can spot the signal from the noise
+
+338
+00:16:24,979 --> 00:16:26,669
+so it can be super powerful.
+
+339
+00:16:27,119 --> 00:16:30,000
+Yeah, that was another thing I found with Se Lennox was alarm fatigue,
+
+340
+00:16:30,400 --> 00:16:30,650
+right?
+
+341
+00:16:30,659 --> 00:16:34,789
+Because Sel even a properly written Se Linux profile still had a ton of alarms.
+
+342
+00:16:35,330 --> 00:16:38,919
+Yeah, and that's still an issue with um image scanning as well.
+
+343
+00:16:38,929 --> 00:16:44,960
+People finding false positives. It's a really hard problem to basically avoid.
+
+344
+00:16:45,169 --> 00:16:46,989
+So I I actually in Ulster,
+
+345
+00:16:47,130 --> 00:16:49,020
+you guys, you guys have a container scanner.
+
+346
+00:16:49,030 --> 00:16:51,929
+I'd love to hear any advice you have on this because this is, this is one,
+
+347
+00:16:51,979 --> 00:16:53,280
+one of the things I struggle with
+
+348
+00:16:53,460 --> 00:16:55,770
+on probably a weekly basis where someone shows
+
+349
+00:16:55,780 --> 00:16:57,719
+up with an automated scanner and says,
+
+350
+00:16:57,789 --> 00:16:59,080
+can you comment on this?
+
+351
+00:16:59,179 --> 00:17:02,159
+And I say I can't give you 13,000 comments, right?
+
+352
+00:17:02,169 --> 00:17:06,689
+Like pick, pick 10 and I'll tell you about 10 of them, you know, not 13,000,
+
+353
+00:17:06,739 --> 00:17:08,439
+what the individual
+
+354
+00:17:09,069 --> 00:17:11,380
+-- vulnerabilities that it's found or?
+-- Right. Right.
+
+355
+00:17:11,390 --> 00:17:12,459
+Where someone, someone will want,
+
+356
+00:17:12,469 --> 00:17:15,469
+they'll want me to comment on all of them because let's face it.
+
+357
+00:17:15,479 --> 00:17:16,140
+I have a suspicion.
+
+358
+00:17:16,150 --> 00:17:17,459
+They didn't really look at the report,
+
+359
+00:17:17,469 --> 00:17:19,829
+they probably just ran it and then they're throwing it over to me.
+
+360
+00:17:19,848 --> 00:17:23,560
+But no, I'm I'm curious given you guys, I mean, you have a product that does this.
+
+361
+00:17:23,569 --> 00:17:26,579
+I'm I'm curious what sort of advice you have
+
+362
+00:17:26,709 --> 00:17:27,459
+around it,
+
+363
+00:17:27,469 --> 00:17:32,219
+just kind of false positives in some of these reports because it can be very,
+
+364
+00:17:32,229 --> 00:17:34,660
+very intimidating when you look at them.
+
+365
+00:17:35,119 --> 00:17:35,839
+Absolutely.
+
+366
+00:17:35,849 --> 00:17:39,369
+And it's a big part of what we do, you know, as a as a company,
+
+367
+00:17:39,380 --> 00:17:44,719
+we build up information about the vulnerabilities from lots of different sources.
+
+368
+00:17:44,729 --> 00:17:45,069
+So the
+
+369
+00:17:45,260 --> 00:17:49,079
+the problem with false positives usually comes from
+
+370
+00:17:49,520 --> 00:17:51,020
+uh your,
+
+371
+00:17:51,290 --> 00:17:55,729
+you're using version 1.3 of this library
+
+372
+00:17:55,949 --> 00:17:56,780
+and
+
+373
+00:17:57,069 --> 00:18:01,619
+the unpatched version of 1.3 has this terrible vulnerability.
+
+374
+00:18:01,959 --> 00:18:04,819
+But actually the version you're running with isn't
+
+375
+00:18:04,829 --> 00:18:08,900
+vanilla 1.3 it's 1.3 with this other little patch
+
+376
+00:18:09,380 --> 00:18:12,939
+and you need to know what the like distribution
+
+377
+00:18:13,380 --> 00:18:17,739
+knows about that patch or what the vendor knows about that patch
+
+378
+00:18:18,109 --> 00:18:19,829
+as well as what the kind of base vulnerable
+
+379
+00:18:20,030 --> 00:18:23,260
+or the information about vulnerabilities is in the base package.
+
+380
+00:18:23,420 --> 00:18:24,010
+Um
+
+381
+00:18:24,680 --> 00:18:25,339
+Yeah, that's,
+
+382
+00:18:25,349 --> 00:18:27,739
+that's kind of the information you need to
+
+383
+00:18:27,750 --> 00:18:30,510
+kind of pull together to avoid false positives.
+
+384
+00:18:30,819 --> 00:18:32,979
+Um And sometimes it gets really, um
+
+385
+00:18:33,099 --> 00:18:38,359
+you know, it, it's not even clear whether or not a version is patched or not.
+
+386
+00:18:38,369 --> 00:18:39,180
+You know, sometimes
+
+387
+00:18:39,410 --> 00:18:43,469
+different vendors or different distributions will have conflicting
+
+388
+00:18:43,479 --> 00:18:46,500
+reports about whether or not something really is
+
+389
+00:18:46,719 --> 00:18:48,020
+present or not.
+
+390
+00:18:48,130 --> 00:18:51,140
+Um And sometimes so we have a research team, you know, that,
+
+391
+00:18:51,150 --> 00:18:53,219
+that look at some of this and just try to
+
+392
+00:18:54,119 --> 00:18:56,469
+figure out what the correct answer is.
+
+393
+00:18:56,670 --> 00:19:01,140
+So it's a big problem and that's why people kind of,
+
+394
+00:19:01,589 --> 00:19:02,880
+you know, come to our
+
+395
+00:19:03,130 --> 00:19:06,939
+service because we're trying our best to pull together the,
+
+396
+00:19:06,949 --> 00:19:09,449
+the different sources of information and, and,
+
+397
+00:19:09,849 --> 00:19:14,369
+and to the best that we can uh remove the false positives where we can.
+
+398
+00:19:14,609 --> 00:19:15,729
+But yeah, it's a hard problem.
+
+399
+00:19:15,979 --> 00:19:19,469
+-- No, it is. It's, it's a terrible problem. Unquestionably.
+-- Yeah. Sorry.
+
+400
+00:19:19,479 --> 00:19:20,689
+I'm just having a flashback.
+
+401
+00:19:20,699 --> 00:19:23,810
+My last seven years of my life was basically doing this, you know,
+
+402
+00:19:23,819 --> 00:19:25,359
+exact kind of work at Red Hat,
+
+403
+00:19:25,739 --> 00:19:30,530
+I mean, and yeah, it's, it's a, it's a tough problem. I'm, you know, trying to get CV.
+
+404
+00:19:30,699 --> 00:19:32,209
+One big problem I find is, you know,
+
+405
+00:19:32,219 --> 00:19:34,489
+we only have one good public source of
+
+406
+00:19:34,500 --> 00:19:37,160
+security data really that's consumable in that CV.
+
+407
+00:19:37,329 --> 00:19:39,319
+But the data is very coarse,
+
+408
+00:19:39,579 --> 00:19:40,560
+right? It's not,
+
+409
+00:19:41,209 --> 00:19:43,920
+you know, the CV data itself doesn't, for example,
+
+410
+00:19:43,930 --> 00:19:46,260
+have an exact listing of Red Hat packages
+
+411
+00:19:46,750 --> 00:19:48,750
+that are, you know, vulnerable or not vulnerable.
+
+412
+00:19:48,760 --> 00:19:51,030
+And to be blunt, even if it did have that
+
+413
+00:19:51,609 --> 00:19:55,530
+due to the way Red Hat distribute software and the channels and other things work,
+
+414
+00:19:55,540 --> 00:19:58,510
+that would not even be 100% you know, so things get
+
+415
+00:19:59,199 --> 00:20:00,020
+messy.
+
+416
+00:20:00,400 --> 00:20:02,329
+Uh And that's just one vendor and there's, you know,
+
+417
+00:20:02,339 --> 00:20:07,260
+probably what about a half a dozen major Linux vendors plus Windows and Mac and
+
+418
+00:20:07,780 --> 00:20:08,939
+yeah, blah, blah, blah, blah, blah
+
+419
+00:20:09,640 --> 00:20:13,380
+and some of the individual tools will have different um you know, information.
+
+420
+00:20:13,390 --> 00:20:15,420
+So a great example will be,
+
+421
+00:20:15,560 --> 00:20:19,040
+well, anything with a client and a server that gets distributed separately.
+
+422
+00:20:19,160 --> 00:20:19,660
+Um
+
+423
+00:20:20,000 --> 00:20:27,020
+you know, so uh like on the NVD, there will be a list of vulnerabilities in Mongo DB.
+
+424
+00:20:27,030 --> 00:20:28,349
+But if you go to Mongo DB,
+
+425
+00:20:28,359 --> 00:20:29,979
+they've got information about whether it's in
+
+426
+00:20:29,989 --> 00:20:32,420
+the server component or the client component and
+
+427
+00:20:33,140 --> 00:20:35,489
+that may reduce some of the,
+
+428
+00:20:35,949 --> 00:20:39,859
+the issues that get reported. If you're only using one or the other, which you
+
+429
+00:20:40,199 --> 00:20:41,849
+probably are in many
+
+430
+00:20:42,329 --> 00:20:43,650
+-- cases.
+-- Right.
+
+431
+00:20:44,670 --> 00:20:49,819
+Indeed. No, it's, this, this stuff is, is painful and, and I guess
+
+432
+00:20:49,979 --> 00:20:50,969
+why don't
+
+433
+00:20:51,260 --> 00:20:52,500
+let, let, let's do this.
+
+434
+00:20:52,510 --> 00:20:56,410
+II, I guess given, given the position you're in and the topics you talk about and,
+
+435
+00:20:56,420 --> 00:20:57,920
+and kind of the knowledge you have.
+
+436
+00:20:58,689 --> 00:21:01,420
+What, what do you think the world is gonna look like in, let's say,
+
+437
+00:21:01,430 --> 00:21:03,630
+five or 10 years and, and obviously,
+
+438
+00:21:03,640 --> 00:21:06,050
+we all know predictions are always wildly inaccurate.
+
+439
+00:21:06,060 --> 00:21:10,469
+But I'm curious, given just kind of, given the nature of things, I, I feel like
+
+440
+00:21:10,770 --> 00:21:15,630
+deep down inside, there's like the smallest spark of hope when I see things like,
+
+441
+00:21:15,640 --> 00:21:19,709
+like what you guys are up to and, and just some of the new technologies coming out,
+
+442
+00:21:19,719 --> 00:21:20,140
+you know, it,
+
+443
+00:21:20,319 --> 00:21:23,109
+it's not enough to squash my grumpy old man, but it's,
+
+444
+00:21:23,119 --> 00:21:26,510
+it's at least enough that I think there, there might be a future
+
+445
+00:21:26,719 --> 00:21:30,550
+that isn't completely terrible, which I'm, I'm curious if you agree.
+
+446
+00:21:31,339 --> 00:21:34,280
+Oh, I think as humans, we'll find other ways to make it happen.
+
+447
+00:21:36,660 --> 00:21:41,069
+Well, and one thing to keep in mind is, is as terrible as things are, you know,
+
+448
+00:21:41,079 --> 00:21:42,449
+we're now at a point where I remember when I
+
+449
+00:21:42,459 --> 00:21:45,300
+started and if an admin could handle a dozen servers,
+
+450
+00:21:45,310 --> 00:21:47,939
+that was good and if you could handle, she could handle 50 servers,
+
+451
+00:21:47,949 --> 00:21:48,869
+they were amazing.
+
+452
+00:21:49,500 --> 00:21:52,780
+And, you know, now we have small admin teams handling
+
+453
+00:21:52,939 --> 00:21:55,219
+thousands of virtual servers,
+
+454
+00:21:55,699 --> 00:21:57,670
+you know, or microservices or whatever.
+
+455
+00:21:57,810 --> 00:22:02,000
+And so, you know, people keep worrying about the world burning down and as do I,
+
+456
+00:22:02,010 --> 00:22:03,079
+but at the same time, you know,
+
+457
+00:22:03,089 --> 00:22:05,839
+the lights keep turning on and everything mostly keeps working.
+
+458
+00:22:06,670 --> 00:22:07,609
+So, II,
+
+459
+00:22:07,619 --> 00:22:12,199
+I do wonder if things may not necessarily get better but they may not get worse.
+
+460
+00:22:12,280 --> 00:22:15,130
+And I, you know, I think I can live with that. Not that I have a choice.
+
+461
+00:22:15,550 --> 00:22:16,459
+-- Yeah,
+-- I think that's true.
+
+462
+00:22:16,469 --> 00:22:22,770
+I think human innovation has consistently found ways to solve problems and
+
+463
+00:22:22,880 --> 00:22:25,530
+also to create new ones. You know, we,
+
+464
+00:22:25,859 --> 00:22:28,430
+we give ourselves the challenge of
+
+465
+00:22:28,989 --> 00:22:32,180
+shipping software five times a day now that we didn't
+
+466
+00:22:32,189 --> 00:22:34,729
+used to do even three or four years ago.
+
+467
+00:22:34,890 --> 00:22:36,119
+Um, and with that,
+
+468
+00:22:36,130 --> 00:22:37,290
+we've created a whole load of
+
+469
+00:22:37,300 --> 00:22:41,010
+challenges about managing those software deployments.
+
+470
+00:22:41,130 --> 00:22:44,300
+But the positive side is, you know, it's great for businesses.
+
+471
+00:22:44,310 --> 00:22:46,849
+They can and be really responsive and they can
+
+472
+00:22:47,000 --> 00:22:47,300
+ch
+
+473
+00:22:47,410 --> 00:22:49,959
+functionality several times a day.
+
+474
+00:22:49,969 --> 00:22:55,569
+And, uh, that's presumably good for businesses and economies
+
+475
+00:22:55,699 --> 00:22:57,170
+and, uh, and everybody
+
+476
+00:22:57,569 --> 00:22:57,939
+presumably.
+
+477
+00:22:58,609 --> 00:22:58,719
+Yes.
+
+478
+00:23:01,609 --> 00:23:04,579
+No, I mean, I, I think that's fair. That's fair.
+
+479
+00:23:04,800 --> 00:23:06,589
+And, and so I guess
+
+480
+00:23:06,920 --> 00:23:08,810
+we're, we're kind of, we're nearing the end.
+
+481
+00:23:08,819 --> 00:23:11,369
+So I'm curious to hear what are, are there,
+
+482
+00:23:11,380 --> 00:23:15,069
+are any anything coming in Kubernetes or just containers in general
+
+483
+00:23:15,079 --> 00:23:17,099
+or even some of the things Aqua is working on that,
+
+484
+00:23:17,109 --> 00:23:19,489
+that you excited to see in the next, I guess,
+
+485
+00:23:19,500 --> 00:23:21,699
+couple of weeks or months or maybe even years.
+
+486
+00:23:22,030 --> 00:23:25,050
+Well, over the next couple of weeks, we've got keep
+
+487
+00:23:25,300 --> 00:23:29,780
+Con and cloud native con in Shanghai, which will be the first one in China and
+
+488
+00:23:30,060 --> 00:23:33,130
+I've never been to China before. So that will be exciting.
+
+489
+00:23:33,599 --> 00:23:35,949
+And, and now you're one of the co
+
+490
+00:23:36,209 --> 00:23:37,349
+founders or co
+
+491
+00:23:38,569 --> 00:23:38,709
+coa
+
+492
+00:23:40,530 --> 00:23:40,630
+OKA.
+
+493
+00:23:41,430 --> 00:23:41,670
+Yeah,
+
+494
+00:23:41,989 --> 00:23:43,140
+that sounds like a lot of work.
+
+495
+00:23:43,839 --> 00:23:44,680
+Yeah.
+
+496
+00:23:46,760 --> 00:23:48,270
+Yeah, for um
+
+497
+00:23:48,500 --> 00:23:49,000
+uh
+
+498
+00:23:49,239 --> 00:23:52,449
+Copenhagen back in May and then for Shanghai
+
+499
+00:23:52,459 --> 00:23:55,520
+and then a couple of weeks later in Seattle
+
+500
+00:23:55,880 --> 00:23:55,969
+and
+
+501
+00:23:56,260 --> 00:24:01,319
+-- then that's the end of my, my tenure as, as co-chair after that.
+-- So, and then you get to
+
+502
+00:24:01,869 --> 00:24:02,719
+escape how exciting
+
+503
+00:24:04,369 --> 00:24:07,829
+I, I have this funny idea that I have loads of free time next year,
+
+504
+00:24:08,790 --> 00:24:09,510
+right?
+
+505
+00:24:10,239 --> 00:24:12,869
+You hear that folks, if you need Liz's help, like get in now.
+
+506
+00:24:13,339 --> 00:24:15,219
+No, no, that's, that's really cool.
+
+507
+00:24:15,680 --> 00:24:18,609
+Yeah. So, so that will tell that will give us over the next,
+
+508
+00:24:18,880 --> 00:24:19,849
+you know, couple of months.
+
+509
+00:24:19,859 --> 00:24:22,640
+We'll have a lot of, you know,
+
+510
+00:24:22,650 --> 00:24:26,079
+I'm sure there will be a lot of new things announced at those events.
+
+511
+00:24:26,089 --> 00:24:27,300
+We will get a, a
+
+512
+00:24:27,500 --> 00:24:29,510
+good idea of what's happening,
+
+513
+00:24:29,900 --> 00:24:32,810
+you know, in the world of cloud native right now.
+
+514
+00:24:32,819 --> 00:24:34,359
+Uh you know, bring ourselves up to speed.
+
+515
+00:24:34,369 --> 00:24:38,260
+But I think the thing that we'll see over the next year or so is
+
+516
+00:24:38,380 --> 00:24:42,770
+improvements to developer experience and operator experience.
+
+517
+00:24:42,780 --> 00:24:46,540
+Basically things just getting easier to use in the cloud native.
+
+518
+00:24:47,410 --> 00:24:51,709
+Sure that that's fair and, and I guess. No, no help frame this as well.
+
+519
+00:24:51,719 --> 00:24:54,199
+How long has Kubernetes been around?
+
+520
+00:24:54,670 --> 00:24:57,359
+It was announced at an Os
+
+521
+00:24:57,569 --> 00:25:01,770
+Con and I can't remember whether it was 2015 or 2016.
+
+522
+00:25:02,000 --> 00:25:02,319
+It
+
+523
+00:25:02,880 --> 00:25:07,380
+doesn't matter because think about the, the change it's created in,
+
+524
+00:25:07,390 --> 00:25:08,810
+in like three years.
+
+525
+00:25:08,819 --> 00:25:10,650
+Right. That's crazy.
+
+526
+00:25:11,010 --> 00:25:12,869
+How much it's transformed the world
+
+527
+00:25:13,130 --> 00:25:16,189
+and, and it's barely been around for any amount of time.
+
+528
+00:25:16,369 --> 00:25:21,630
+Yeah. And the speed of adoption has been astonishing. Like even a year ago,
+
+529
+00:25:21,849 --> 00:25:27,349
+we would have conversations about which container orchestrator are people using.
+
+530
+00:25:27,859 --> 00:25:29,060
+And now
+
+531
+00:25:29,390 --> 00:25:30,739
+pretty much all of the, you know,
+
+532
+00:25:30,750 --> 00:25:32,920
+unless you've got a really good reason to use something different,
+
+533
+00:25:32,930 --> 00:25:34,160
+most people are picking ti
+
+534
+00:25:34,689 --> 00:25:40,040
+well, I think it's the Apache of, you know, container management. It really has one
+
+535
+00:25:40,150 --> 00:25:41,819
+which I I'm actually quite glad because I,
+
+536
+00:25:41,829 --> 00:25:44,280
+I had experiences with a bunch of alternatives and
+
+537
+00:25:44,800 --> 00:25:45,319
+Yeah.
+
+538
+00:25:47,630 --> 00:25:49,650
+Oh, indeed, indeed.
+
+539
+00:25:49,900 --> 00:25:51,290
+OK, cool. That's,
+
+540
+00:25:51,520 --> 00:25:53,209
+that is, that is fantastic.
+
+541
+00:25:53,219 --> 00:25:55,560
+And, and I guess as, as we wrap up, Liz,
+
+542
+00:25:55,569 --> 00:25:58,170
+are there any any parting thoughts you might have for the audience?
+
+543
+00:25:58,180 --> 00:25:59,849
+-- Anything you want us to know?
+-- You,
+
+544
+00:26:00,239 --> 00:26:01,930
+we mentioned the book already, didn't
+
+545
+00:26:02,209 --> 00:26:02,310
+we?
+
+546
+00:26:02,459 --> 00:26:06,619
+You can plug it again and I guess for the audience, the book will be in the show notes.
+
+547
+00:26:06,630 --> 00:26:11,020
+So by all means, you know, you can, you can hit up the show notes, get a link to the book.
+
+548
+00:26:11,030 --> 00:26:11,040
+Uh
+
+549
+00:26:11,500 --> 00:26:13,020
+Yeah, yeah. Uh anything else
+
+550
+00:26:13,160 --> 00:26:17,010
+and, and obviously you, you've hit on, uh, your, your, your conference in Shanghai,
+
+551
+00:26:17,020 --> 00:26:18,479
+which is also very exciting.
+
+552
+00:26:18,489 --> 00:26:22,869
+-- Anyone in the region by all means anything else?
+-- Absolutely. And then, and a
+
+553
+00:26:23,050 --> 00:26:26,660
+couple of weeks later we'll be in Seattle as well. So, um,
+
+554
+00:26:26,859 --> 00:26:31,589
+if anybody wants a signed copy of the book, I'm sure we can arrange that in
+
+555
+00:26:32,000 --> 00:26:35,359
+Shanghai or Seattle or some other event. Yeah,
+
+556
+00:26:36,719 --> 00:26:38,520
+indeed. Yeah. And I guess that too.
+
+557
+00:26:38,530 --> 00:26:42,530
+I'll put a link to Liz's personal website in the show notes as well.
+
+558
+00:26:42,540 --> 00:26:44,560
+And you have a list of kind of all your,
+
+559
+00:26:44,569 --> 00:26:46,630
+all your articles you write and your speaking
+
+560
+00:26:46,640 --> 00:26:48,260
+engagements and things like that and you are,
+
+561
+00:26:48,270 --> 00:26:49,939
+you're clearly a very busy person.
+
+562
+00:26:50,010 --> 00:26:53,180
+And so I'd encourage everyone to take a look at that also. And so
+
+563
+00:26:53,680 --> 00:26:54,229
+awesome,
+
+564
+00:26:54,630 --> 00:26:55,500
+I guess.
+
+565
+00:26:55,750 --> 00:26:58,500
+Yeah, that's, we'll end it there. Thank you so much, Liz.
+
+566
+00:26:58,510 --> 00:27:01,180
+This has been an awesome conversation. I really had a lot of fun.
+
+567
+00:27:01,510 --> 00:27:03,979
+Uh I guess good luck in Shanghai.
+
+568
+00:27:03,989 --> 00:27:06,699
+It's always exciting and terrifying going to a new
+
+569
+00:27:06,709 --> 00:27:08,670
+place for the first time to run your conference.
+
+570
+00:27:08,680 --> 00:27:08,969
+So
+
+571
+00:27:09,239 --> 00:27:09,500
+that,
+
+572
+00:27:11,640 --> 00:27:15,439
+no, no. Exactly. Exactly. It's, it's awesome. Right.
+
+573
+00:27:15,560 --> 00:27:18,140
+And, and I, I can't believe how big these have gone as well.
+
+574
+00:27:18,150 --> 00:27:20,089
+So, like, congratulations to you guys there.
+
+575
+00:27:20,310 --> 00:27:22,410
+And I guess, yeah, if anyone wants the show notes,
+
+576
+00:27:22,420 --> 00:27:24,709
+you can go to open source security podcast.com,
+
+577
+00:27:24,719 --> 00:27:27,650
+you can hit us up on social media with the Pound Os S podcast.
+
+578
+00:27:27,660 --> 00:27:28,449
+Hashtag
+
+579
+00:27:28,719 --> 00:27:32,250
+I'll make sure I put a link to Liz's Twitter account in, in the show notes also,
+
+580
+00:27:32,260 --> 00:27:35,439
+so you can, you know, hit her up on Twitter and, and see what's going on and yeah,
+
+581
+00:27:35,449 --> 00:27:36,060
+nothing else.
+
+582
+00:27:36,069 --> 00:27:39,459
+Uh Curtain Liz, thank you so much. It has been an awesome conversation.
+
+583
+00:27:39,510 --> 00:27:41,589
+-- Thank
+-- you so much for having me. It's been a pleasure.
+
+584
+00:27:42,270 --> 00:27:43,420
+Thanks for being our guest.

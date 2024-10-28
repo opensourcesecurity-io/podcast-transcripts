@@ -1,0 +1,3187 @@
+0
+00:00:05,369 --> 00:00:08,649
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,659 --> 00:00:11,050
+Kurt Siefried and my partner in blaming DNS.
+
+2
+00:00:11,060 --> 00:00:14,100
+-- Josh Pressers. It's
+-- always DNS. Right.
+
+3
+00:00:14,270 --> 00:00:14,750
+Yes.
+
+4
+00:00:15,409 --> 00:00:16,889
+And do you know why it's always DNS?
+
+5
+00:00:16,899 --> 00:00:19,819
+-- There's actually a very cute underlying issue
+-- is
+
+6
+00:00:19,829 --> 00:00:22,030
+-- there
+-- because DNS is the only globally unique
+
+7
+00:00:22,040 --> 00:00:26,059
+name space apart from IP addresses and IP addresses are not very useful to humans.
+
+8
+00:00:26,069 --> 00:00:29,549
+And that's probably fair. That's it. Like because if you want to find something,
+
+9
+00:00:29,709 --> 00:00:31,579
+well, first of all, we only have 4 billion IP S.
+
+10
+00:00:31,590 --> 00:00:35,540
+So we share DNS, we don't share like walmart.com should
+
+11
+00:00:35,680 --> 00:00:38,540
+in theory only ever be walmart.com
+
+12
+00:00:39,082 --> 00:00:42,111
+and that's the thing is there's, and, and then as a consequence,
+
+13
+00:00:42,122 --> 00:00:45,291
+everything that hangs off of that email web, whatever
+
+14
+00:00:45,411 --> 00:00:49,431
+those can be if they choose to be globally unique. So uh github
+
+15
+00:00:49,582 --> 00:00:52,312
+is a good example of github.com/whatever
+
+16
+00:00:53,141 --> 00:00:53,431
+github
+
+17
+00:00:53,571 --> 00:00:56,981
+owns that name space and keeps it unique and to the point of being annoying where,
+
+18
+00:00:56,992 --> 00:00:59,131
+you know, github.com/red hat is not at all.
+
+19
+00:00:59,141 --> 00:00:59,712
+Red hat.
+
+20
+00:01:00,422 --> 00:01:00,942
+Well, right.
+
+21
+00:01:00,951 --> 00:01:02,282
+Or, or same things with email address,
+
+22
+00:01:02,374 --> 00:01:06,304
+like you could set up an email address to forward to multiple people or whatever,
+
+23
+00:01:06,314 --> 00:01:07,853
+not be globally unique, right?
+
+24
+00:01:08,024 --> 00:01:10,454
+But, and, and you hear all those stories of people are like,
+
+25
+00:01:10,463 --> 00:01:12,293
+I keep getting email for somebody who's handing out this email
+
+26
+00:01:12,304 --> 00:01:14,613
+address and it's like I keep canceling the flights and like,
+
+27
+00:01:14,624 --> 00:01:16,833
+oh, I know that's, I get that every now and then.
+
+28
+00:01:16,844 --> 00:01:21,234
+It's so weird. Like, and I own a weird domain though. Like I have my own domain.
+
+29
+00:01:21,244 --> 00:01:25,753
+-- How are people using my email address accidentally?
+-- Well, like if you have
+
+30
+00:01:25,856 --> 00:01:25,886
+um
+
+31
+00:01:26,085 --> 00:01:27,026
+for example,
+
+32
+00:01:27,036 --> 00:01:28,875
+I've seen people that believe like they don't
+
+33
+00:01:28,886 --> 00:01:30,816
+understand the whole.in an email address thing.
+
+34
+00:01:30,825 --> 00:01:32,115
+So a dot And that's fine.
+
+35
+00:01:32,125 --> 00:01:33,346
+But the problem is, for example,
+
+36
+00:01:33,356 --> 00:01:36,596
+they think that some people were claiming you could register like Jane dot
+
+37
+00:01:36,606 --> 00:01:40,066
+Smith at gmail.com and that was different than Jane Smith at gmail.com.
+
+38
+00:01:40,075 --> 00:01:42,195
+But the part I don't get is that they would use an
+
+39
+00:01:42,206 --> 00:01:44,795
+email address that like and that they wouldn't get the email.
+
+40
+00:01:44,935 --> 00:01:49,225
+-- And then like there,
+-- this is not the topic today. We are not going down this rat hole.
+
+41
+00:01:49,639 --> 00:01:51,720
+This is part of the human condition about this
+
+42
+00:01:51,730 --> 00:01:55,919
+DNS stuff where fundamentally the biggest problem with using DNS
+
+43
+00:01:56,269 --> 00:01:58,830
+is that if you provide a service on a DNS domain,
+
+44
+00:01:58,839 --> 00:02:02,930
+you are now making a promise that you will always own and control,
+
+45
+00:02:02,940 --> 00:02:06,059
+maybe not own but control that DNS domain
+
+46
+00:02:06,180 --> 00:02:08,419
+forever. And of course, that doesn't happen.
+
+47
+00:02:08,508 --> 00:02:11,539
+People forget to renew people let stuff expire.
+
+48
+00:02:11,550 --> 00:02:13,399
+It used to be that domains got hijacked.
+
+49
+00:02:13,505 --> 00:02:16,845
+Yeah, that's harder to do now. I mean, it's still very possible, but
+
+50
+00:02:17,145 --> 00:02:17,654
+it's
+
+51
+00:02:17,835 --> 00:02:20,865
+so, so it used to be now. Well, ok, what is it now?
+
+52
+00:02:20,875 --> 00:02:24,505
+A domain expires and you have, what, like, three or six months to reclaim it?
+
+53
+00:02:24,845 --> 00:02:25,294
+Someone?
+
+54
+00:02:26,335 --> 00:02:30,604
+-- I thought it was a while,
+-- isn't it? Usually the DS registrar will hold it for a while
+
+55
+00:02:31,080 --> 00:02:31,960
+and then it's gone.
+
+56
+00:02:32,160 --> 00:02:33,100
+And so, like,
+
+57
+00:02:33,160 --> 00:02:35,820
+my friend forgot to renew her DNS Domain because she
+
+58
+00:02:35,830 --> 00:02:37,910
+was working crazy long hours when the email came in
+
+59
+00:02:38,039 --> 00:02:40,149
+and like the second it expired and went up,
+
+60
+00:02:40,160 --> 00:02:43,509
+it got sold and like we tried to reclaim it and contact them and
+
+61
+00:02:43,809 --> 00:02:45,100
+you know, nothing is gone.
+
+62
+00:02:45,380 --> 00:02:49,220
+Ok? I just looked, um, so the registrar I use a lot hover,
+
+63
+00:02:49,360 --> 00:02:53,684
+they say most domains a period of 34 days that they will hold it
+
+64
+00:02:53,955 --> 00:02:57,964
+-- after a grace period
+-- depends on the TLD and the registrar you're using.
+
+65
+00:02:58,014 --> 00:02:59,804
+But regardless, like back in the day,
+
+66
+00:02:59,815 --> 00:03:05,425
+I remember waiting for domains I wanted to expire and then literally gobbling it
+
+67
+00:03:05,434 --> 00:03:08,884
+up like on that day it expired like the moment it was free,
+
+68
+00:03:08,895 --> 00:03:10,354
+it was like, wow, I got it.
+
+69
+00:03:10,970 --> 00:03:12,279
+But a great example of this is siefried
+
+70
+00:03:12,509 --> 00:03:14,880
+dot I register.org dot net
+
+71
+00:03:15,369 --> 00:03:18,860
+and I was going to register.com like the next week and, and a spammer bought it.
+
+72
+00:03:18,869 --> 00:03:21,339
+That's funny like this is over 20 years ago.
+
+73
+00:03:21,509 --> 00:03:23,229
+They've never done anything with it as far as I
+
+74
+00:03:23,240 --> 00:03:25,940
+know it's just sitting in some spammer domain registry.
+
+75
+00:03:25,949 --> 00:03:29,619
+Idly, I've tried contacting them to buy it. No luck. Right.
+
+76
+00:03:29,630 --> 00:03:31,820
+And so that's the thing, like, once you lose control of a domain name,
+
+77
+00:03:32,190 --> 00:03:34,259
+unless you're some massive company who can, like,
+
+78
+00:03:34,270 --> 00:03:37,289
+basically get cloud Fflur or somebody like that to go to bat for you.
+
+79
+00:03:37,300 --> 00:03:37,889
+It's gone.
+
+80
+00:03:38,179 --> 00:03:40,649
+Yeah. Yeah. I, I remember so fun stories.
+
+81
+00:03:40,660 --> 00:03:44,089
+You know, we have open source security dot IO. It's where we crossed all our stuff.
+
+82
+00:03:44,419 --> 00:03:48,429
+I tried to buy open source security.org for a Bitcoin a couple of years ago and, like,
+
+83
+00:03:48,440 --> 00:03:49,809
+the person would not take it.
+
+84
+00:03:49,820 --> 00:03:53,169
+I'm like, this is back then. I think it was, I think it was 20 grand
+
+85
+00:03:53,440 --> 00:03:53,759
+is what
+
+86
+00:03:54,610 --> 00:03:56,279
+is worth and I had it and they would not take it.
+
+87
+00:03:56,289 --> 00:04:00,539
+I'm like, holy crap, what the heck is wrong with you? Like open source security.org.
+
+88
+00:04:00,610 --> 00:04:03,919
+-- It's never had anything on
+-- it. Yeah. It's names pro dot C A.
+
+89
+00:04:03,929 --> 00:04:07,139
+-- It's a domain park and, and
+-- it's funny because the Rando is like, oh, yeah,
+
+90
+00:04:07,149 --> 00:04:09,820
+I'll take that and then literally two hours later they're like, no,
+
+91
+00:04:09,830 --> 00:04:10,740
+I can't accept this.
+
+92
+00:04:10,750 --> 00:04:13,050
+I'm like, what, what is wrong with you?
+
+93
+00:04:14,529 --> 00:04:16,089
+Yeah. For real. It was insane.
+
+94
+00:04:16,100 --> 00:04:19,149
+-- Anyway, anyway,
+-- anything over, like, three or four figures.
+
+95
+00:04:19,230 --> 00:04:19,980
+I know. Right.
+
+96
+00:04:19,988 --> 00:04:20,380
+I'm like,
+
+97
+00:04:20,390 --> 00:04:23,450
+I figured for sure this was like a done deal
+
+98
+00:04:23,459 --> 00:04:25,410
+and I could finally have that domain and no,
+
+99
+00:04:25,420 --> 00:04:26,369
+no, nothing.
+
+100
+00:04:26,459 --> 00:04:27,329
+So, anyway,
+
+101
+00:04:27,459 --> 00:04:30,920
+ok, we have a topic that is not us rambling about DNS.
+
+102
+00:04:31,380 --> 00:04:36,959
+Then it's this uh who is server story that is making the rounds.
+
+103
+00:04:37,079 --> 00:04:39,670
+The article or the blog that was published
+
+104
+00:04:39,890 --> 00:04:41,760
+from Watchtower,
+
+105
+00:04:41,769 --> 00:04:45,549
+which tower spelled funny Watchtower labs is we spent $20 to
+
+106
+00:04:45,559 --> 00:04:49,260
+achieve R ce and accidentally became the admins of dot Movie.
+
+107
+00:04:49,269 --> 00:04:50,480
+So let's back it up in the moment.
+
+108
+00:04:50,489 --> 00:04:54,130
+So there's DNA registrars who, you know, run a top level domain.
+
+109
+00:04:54,239 --> 00:04:54,839
+Yeah. Yeah.
+
+110
+00:04:55,029 --> 00:04:59,559
+And they basically have typically one core function which is to take your money
+
+111
+00:04:59,790 --> 00:05:02,809
+and provide a DNS clue record for like food dot
+
+112
+00:05:02,829 --> 00:05:05,489
+Mobi points at these IP S that are serving it.
+
+113
+00:05:06,119 --> 00:05:09,570
+Another common feature that they're historically
+
+114
+00:05:09,760 --> 00:05:11,209
+uh supposed to provide
+
+115
+00:05:11,489 --> 00:05:16,750
+is a who is server and who is, is literally a command called who is one word, no space.
+
+116
+00:05:16,970 --> 00:05:18,549
+And like if you do who is see.org,
+
+117
+00:05:18,850 --> 00:05:20,630
+it'll basically, well back in the day,
+
+118
+00:05:20,640 --> 00:05:22,079
+it would have actually told you who owns it
+
+119
+00:05:22,089 --> 00:05:23,929
+and like what their street address was and their,
+
+120
+00:05:23,940 --> 00:05:24,829
+you know, abuse and
+
+121
+00:05:24,940 --> 00:05:27,670
+all of that is behind privacy stuff now because people used to
+
+122
+00:05:27,850 --> 00:05:31,070
+grab the who is domain and like span the bejesus out of all of us. And
+
+123
+00:05:31,609 --> 00:05:34,459
+-- so now it's all privacy registrations
+-- and and it should also
+
+124
+00:05:34,470 --> 00:05:37,700
+be noted that the who is info is required by icann.
+
+125
+00:05:37,980 --> 00:05:38,429
+Yes.
+
+126
+00:05:38,570 --> 00:05:41,910
+According to icann, which I don't, I forget what icann stands for,
+
+127
+00:05:41,920 --> 00:05:46,070
+but it's basically the organization behind like all of the DNS magic.
+
+128
+00:05:46,420 --> 00:05:50,940
+And icann says, if you lie in your who is info, we will take your domain from you.
+
+129
+00:05:50,950 --> 00:05:52,190
+I don't know if they ever have,
+
+130
+00:05:52,200 --> 00:05:54,869
+but that's the threat they hand out constantly because I get the
+
+131
+00:05:55,200 --> 00:05:56,619
+notices for all my domains.
+
+132
+00:05:56,630 --> 00:05:59,670
+Like, what, once every couple of months or so, once a quarter maybe.
+
+133
+00:05:59,899 --> 00:06:04,329
+-- Yeah,
+-- the reminders to update your address. And I'm like, I still live at 12345. Ave.
+
+134
+00:06:04,899 --> 00:06:07,839
+Well, no, I, I just use, um, this is one of the reasons I,
+
+135
+00:06:07,850 --> 00:06:12,010
+I use hover as my registrar is they were they let me do free
+
+136
+00:06:12,579 --> 00:06:16,809
+privacy shield whenever they call the where they fill in their info instead of mine
+
+137
+00:06:16,920 --> 00:06:18,200
+for the who is info.
+
+138
+00:06:18,799 --> 00:06:21,869
+They did that for free back when everyone else was paying for it.
+
+139
+00:06:21,880 --> 00:06:25,269
+I, I suspect it's free everywhere now, but I'm too lazy to ever move.
+
+140
+00:06:25,459 --> 00:06:29,309
+I just put in fake data all the time because how are they going to validate my address?
+
+141
+00:06:29,329 --> 00:06:32,869
+-- I
+-- don't know, I don't want to risk that. Kurt, I'm unwilling to, to
+
+142
+00:06:33,140 --> 00:06:35,709
+have that kind of responsibility on my head.
+
+143
+00:06:35,899 --> 00:06:37,459
+So literally the who is
+
+144
+00:06:38,149 --> 00:06:42,239
+command on a UNIX system has like a little database of like here's a bunch of
+
+145
+00:06:42,250 --> 00:06:46,109
+top level domains and here's the who is server to to go talk to it,
+
+146
+00:06:46,119 --> 00:06:46,609
+right?
+
+147
+00:06:47,190 --> 00:06:52,369
+And in true classic business fashion, Moby forgot to or not Moby rather,
+
+148
+00:06:52,380 --> 00:06:54,720
+but whoever runs the who is server for Mobi
+
+149
+00:06:54,910 --> 00:06:56,829
+like forgot to renew the DNS.
+
+150
+00:06:57,429 --> 00:06:58,779
+And so Yeah, researchers,
+
+151
+00:06:58,929 --> 00:06:59,209
+yeah,
+
+152
+00:06:59,420 --> 00:07:00,700
+registered the DNS
+
+153
+00:07:01,109 --> 00:07:02,929
+and set up a who is server that could, you know,
+
+154
+00:07:02,940 --> 00:07:05,700
+return funny ask yard pictures or whatever.
+
+155
+00:07:06,070 --> 00:07:10,140
+Well, and there was, uh, one of the PHP apps has a real control execution
+
+156
+00:07:10,589 --> 00:07:13,619
+-- in it
+-- because who is data is trustworthy. It comes from a trusted source.
+
+157
+00:07:13,630 --> 00:07:18,010
+Well, that's just it. Exactly. Like if I was writing a who is client, I would
+
+158
+00:07:18,130 --> 00:07:20,329
+incorrectly assume
+
+159
+00:07:20,500 --> 00:07:22,739
+that there are no malicious who is servers.
+
+160
+00:07:23,269 --> 00:07:25,329
+I would assume that there's always
+
+161
+00:07:25,690 --> 00:07:27,709
+because the who is protocol is not
+
+162
+00:07:28,230 --> 00:07:29,269
+like secure.
+
+163
+00:07:29,320 --> 00:07:33,739
+I don't know that I'm just a random developer writing a who is server in PHP
+
+164
+00:07:34,200 --> 00:07:36,640
+or who is client in PHP. Like
+
+165
+00:07:36,890 --> 00:07:40,049
+here's the thing like we're broken security.
+
+166
+00:07:40,059 --> 00:07:43,230
+People think weird normal developers aren't gonna be like,
+
+167
+00:07:43,239 --> 00:07:45,369
+what if the who is server is malicious?
+
+168
+00:07:45,380 --> 00:07:48,170
+-- What would happen? Then they're gonna be like whatever this is
+-- the who is,
+
+169
+00:07:48,709 --> 00:07:49,269
+it's fine
+
+170
+00:07:49,779 --> 00:07:51,790
+or a person in the middle attack or whatever,
+
+171
+00:07:52,100 --> 00:07:53,850
+right. So, anyway, anyway,
+
+172
+00:07:54,010 --> 00:07:57,559
+so I'm, we're not going to recount all the details of this whole thing.
+
+173
+00:07:57,809 --> 00:08:00,399
+Well, there are, that's it, there are no details. They, they let the domain.
+
+174
+00:08:00,489 --> 00:08:04,559
+Well, there's, it's the story is interesting. They weave a thrilling tale.
+
+175
+00:08:05,029 --> 00:08:07,750
+-- Well, you have to because it's pretty boring. Otherwise
+-- it is kind of boring.
+
+176
+00:08:07,760 --> 00:08:09,089
+They're good storytellers, which is great.
+
+177
+00:08:09,519 --> 00:08:13,920
+But here's the thing I've been thinking about and I put this on Mastodon is,
+
+178
+00:08:14,130 --> 00:08:15,910
+does this really matter?
+
+179
+00:08:16,049 --> 00:08:16,549
+And
+
+180
+00:08:17,019 --> 00:08:18,880
+I'm gonna frame my thinking of this.
+
+181
+00:08:18,890 --> 00:08:21,890
+I know it's easy to be like, does this matter be like, oh, whatever, grandpa, shut up.
+
+182
+00:08:21,899 --> 00:08:23,279
+You always say that. But,
+
+183
+00:08:23,410 --> 00:08:24,390
+so here's the thing.
+
+184
+00:08:24,790 --> 00:08:28,519
+So this feels really bad because the internet is big
+
+185
+00:08:28,709 --> 00:08:29,320
+and
+
+186
+00:08:29,429 --> 00:08:33,440
+every time there's some sort of weird corner case bug,
+
+187
+00:08:33,450 --> 00:08:35,130
+it's easy to sensationalize it.
+
+188
+00:08:35,140 --> 00:08:36,719
+And I don't think, does this have a name?
+
+189
+00:08:36,900 --> 00:08:38,080
+Um, who knows?
+
+190
+00:08:38,530 --> 00:08:40,210
+I don't know, Moby for
+
+191
+00:08:40,359 --> 00:08:41,150
+Shell or something,
+
+192
+00:08:41,320 --> 00:08:45,609
+but who is for Shell? Who is Moby? Who is Moby? Oh my. Who
+
+193
+00:08:45,710 --> 00:08:46,049
+is Mo
+
+194
+00:08:47,010 --> 00:08:47,099
+Mo?
+
+195
+00:08:47,229 --> 00:08:47,820
+Anyway,
+
+196
+00:08:48,159 --> 00:08:50,809
+young people don't know. Look at Moby. He's a singer pretty good.
+
+197
+00:08:51,119 --> 00:08:51,960
+Um Anyway,
+
+198
+00:08:52,070 --> 00:08:52,580
+so
+
+199
+00:08:52,729 --> 00:08:54,299
+you actually got the joke. That's awesome.
+
+200
+00:08:54,549 --> 00:08:58,809
+-- Well,
+-- yeah, because we're freaking old, like, because we lived through Moby. Moby.
+
+201
+00:08:58,820 --> 00:09:00,849
+Still look while I'm talking, look at the Mo
+
+202
+00:09:00,979 --> 00:09:02,190
+is still performing. So, anyway,
+
+203
+00:09:02,429 --> 00:09:04,580
+so here's the thing, right? This sounds important.
+
+204
+00:09:05,070 --> 00:09:06,940
+But the reality is like,
+
+205
+00:09:07,190 --> 00:09:11,460
+-- what can attacker really do with this in a meaningful way? I have
+-- an answer for you.
+
+206
+00:09:11,719 --> 00:09:13,380
+-- Is Moby still on the road?
+-- I
+
+207
+00:09:13,390 --> 00:09:13,809
+-- don't
+-- know.
+
+208
+00:09:13,820 --> 00:09:17,179
+-- I keep getting things for bike stores and stuff.
+-- I asked you one question.
+
+209
+00:09:17,520 --> 00:09:19,809
+Sorry. Uh, Moby singer, I guess
+
+210
+00:09:21,090 --> 00:09:25,409
+he's still, wow. He looks old. He's older than us.
+
+211
+00:09:25,770 --> 00:09:29,090
+Uh, uh, when was he born? Oh, wow. Yeah, he's born in 65.
+
+212
+00:09:29,260 --> 00:09:32,460
+-- Yeah. And I mean, he still looks like he's still cranking out stuff.
+-- Good. Right on.
+
+213
+00:09:32,469 --> 00:09:34,869
+Good for you movie. Ok. Anyway. So we've got
+
+214
+00:09:34,969 --> 00:09:36,150
+this sort of thing
+
+215
+00:09:36,359 --> 00:09:38,880
+and the question is gonna be, is it, is it important?
+
+216
+00:09:39,190 --> 00:09:43,010
+And I don't think it's unimportant, but this feels like
+
+217
+00:09:43,169 --> 00:09:43,989
+it can
+
+218
+00:09:44,099 --> 00:09:45,840
+by itself, it's probably
+
+219
+00:09:46,429 --> 00:09:50,289
+relatively harmless. Let's say it needs to be part of something bigger.
+
+220
+00:09:50,330 --> 00:09:52,739
+And what I mean by that is, let's say I'm gonna, I'm gonna,
+
+221
+00:09:52,750 --> 00:09:55,580
+my analogy will be based in the real world.
+
+222
+00:09:55,650 --> 00:09:56,770
+There's the old saying,
+
+223
+00:09:56,780 --> 00:09:59,979
+like you can put on a hard hat and carry a clipboard and you can go anywhere
+
+224
+00:10:00,359 --> 00:10:02,330
+and that's generally been proven true, right.
+
+225
+00:10:02,340 --> 00:10:04,369
+There are tons of people that have proven you can do this right?
+
+226
+00:10:04,380 --> 00:10:06,099
+Go to a sporting event, go to whatever.
+
+227
+00:10:06,330 --> 00:10:08,169
+So let's say I have nefarious intent
+
+228
+00:10:08,349 --> 00:10:10,859
+getting into the venue is step one
+
+229
+00:10:11,280 --> 00:10:13,640
+and I can probably accomplish that without issue.
+
+230
+00:10:13,650 --> 00:10:16,320
+But then taking my nefarious actions after that,
+
+231
+00:10:16,330 --> 00:10:19,890
+it's now I have other security hurdles.
+
+232
+00:10:19,900 --> 00:10:21,059
+I need to get over
+
+233
+00:10:21,380 --> 00:10:23,229
+in order to accomplish whatever my goal is.
+
+234
+00:10:23,239 --> 00:10:26,280
+And I think this is a similar thing like by itself,
+
+235
+00:10:26,289 --> 00:10:29,510
+this is probably not a big deal because it's just going to be part
+
+236
+00:10:29,520 --> 00:10:33,039
+of something bigger and hopefully we can catch the bigger thing along the way.
+
+237
+00:10:33,489 --> 00:10:35,869
+So I'm not saying we should ignore problems like this,
+
+238
+00:10:35,880 --> 00:10:38,109
+but I don't think it's world ending either.
+
+239
+00:10:38,119 --> 00:10:40,650
+No, but the problem with catching the thing along the way is
+
+240
+00:10:40,830 --> 00:10:43,229
+there's like thousands or millions or whoever knows
+
+241
+00:10:43,239 --> 00:10:44,909
+how many clients deciding to use that.
+
+242
+00:10:44,919 --> 00:10:48,520
+Who is server? Yes, you can't fix them all or get them all to behave also.
+
+243
+00:10:48,580 --> 00:10:50,539
+Correct what this would actually be.
+
+244
+00:10:50,549 --> 00:10:52,190
+Basically, there's two real things you could do with this.
+
+245
+00:10:52,200 --> 00:10:53,440
+Number one, you could serve malicious,
+
+246
+00:10:53,539 --> 00:10:55,549
+whoa data and compromise those remote sites.
+
+247
+00:10:55,559 --> 00:10:57,099
+Sure. You know, because there
+
+248
+00:10:57,513 --> 00:11:01,362
+most whose clients I'm guessing are not very robust. Right.
+
+249
+00:11:01,552 --> 00:11:03,672
+And number two certificate authorities,
+
+250
+00:11:03,682 --> 00:11:06,343
+a lot of certificate authorities will issue you a certificate
+
+251
+00:11:06,353 --> 00:11:08,023
+and you have to prove you control the domain.
+
+252
+00:11:08,033 --> 00:11:10,072
+And there's a couple ways to prove you control the domain.
+
+253
+00:11:10,083 --> 00:11:12,672
+One is with the DNS record, one is with a web record.
+
+254
+00:11:12,812 --> 00:11:14,622
+Another one is through an email address.
+
+255
+00:11:14,643 --> 00:11:17,682
+-- Now, how do we find out what email address is in charge of a domain?
+-- Right?
+
+256
+00:11:17,692 --> 00:11:19,502
+-- I mean, the who is info obviously?
+-- Right.
+
+257
+00:11:19,643 --> 00:11:20,232
+Yeah, exactly.
+
+258
+00:11:20,562 --> 00:11:20,812
+And
+
+259
+00:11:20,916 --> 00:11:22,495
+there used to be some historical ones like root
+
+260
+00:11:22,505 --> 00:11:24,536
+and host master or postmaster that they would use.
+
+261
+00:11:24,546 --> 00:11:26,216
+But then we discovered that that's a bad idea
+
+262
+00:11:26,226 --> 00:11:30,796
+because modern systems don't have those as reserved for admins
+
+263
+00:11:31,005 --> 00:11:33,176
+as much anymore as they used to. And like
+
+264
+00:11:33,395 --> 00:11:35,846
+I have, that's one of my checks. When I check an email services.
+
+265
+00:11:35,856 --> 00:11:38,705
+Can I, can I be host master? I would like that email address
+
+266
+00:11:38,906 --> 00:11:41,786
+and some will tell me to take a hike and some will be like,
+
+267
+00:11:41,916 --> 00:11:44,486
+oh, that's already taken or some will be like, sure, here you go.
+
+268
+00:11:44,849 --> 00:11:48,809
+You know, it's like the time I took local host as my host name of my uh ISP.
+
+269
+00:11:48,820 --> 00:11:51,630
+And then my network fell over. Right. Good job.
+
+270
+00:11:51,789 --> 00:11:52,549
+Yeah, it was funny.
+
+271
+00:11:52,559 --> 00:11:55,450
+Then they put that on the reserve list so that this could
+
+272
+00:11:55,460 --> 00:12:00,789
+definitely be part of either remote code execution in bad clients or
+
+273
+00:12:00,989 --> 00:12:02,645
+getting certificates for daunt mo
+
+274
+00:12:02,765 --> 00:12:03,775
+sites. And then,
+
+275
+00:12:04,104 --> 00:12:08,255
+-- but again, and then more nefarious things. Right.
+-- Right. And that, that's my point.
+
+276
+00:12:08,265 --> 00:12:09,715
+Like there's a, there's a step too now,
+
+277
+00:12:09,724 --> 00:12:12,854
+granted a lot of these places that you could attack,
+
+278
+00:12:12,864 --> 00:12:16,414
+probably have zero protections against
+
+279
+00:12:16,645 --> 00:12:19,174
+any of this stuff. They're, they're not monitoring anything,
+
+280
+00:12:19,450 --> 00:12:20,400
+they're not using
+
+281
+00:12:20,570 --> 00:12:24,780
+any sort of software to watch for nefarious activity like nothing. Right.
+
+282
+00:12:24,909 --> 00:12:27,710
+Well, more to the point if I now
+
+283
+00:12:28,030 --> 00:12:31,030
+am controlling the who is and I'm, and I managed to get a certificate.
+
+284
+00:12:31,260 --> 00:12:34,830
+Well, I can do a man in the middle attack legitimately.
+
+285
+00:12:34,960 --> 00:12:35,390
+-- No,
+-- you
+
+286
+00:12:35,400 --> 00:12:36,219
+can't.
+
+287
+00:12:37,590 --> 00:12:39,270
+What do you mean? No, I can't. I have the certificate.
+
+288
+00:12:39,309 --> 00:12:42,840
+-- Uh
+-- How are you going to man in the middle? Anyone?
+
+289
+00:12:43,179 --> 00:12:44,919
+Like a man in the middle attack?
+
+290
+00:12:44,929 --> 00:12:49,330
+-- It is
+-- on a Wi Fi network on through what was part of other things?
+
+291
+00:12:49,469 --> 00:12:51,650
+No, no. Look here. OK.
+
+292
+00:12:51,659 --> 00:12:56,369
+I, I'm going to say this and, and like send the hate to Kurt if you like, but
+
+293
+00:12:56,510 --> 00:12:59,880
+man in the middle or, or what are we calling man? A person in the middle?
+
+294
+00:12:59,929 --> 00:13:00,950
+I don't recall him anymore.
+
+295
+00:13:00,960 --> 00:13:04,270
+Like I know man in the middle is frowned upon but those attacks, right.
+
+296
+00:13:04,280 --> 00:13:05,950
+Those interceptions style attacks
+
+297
+00:13:06,390 --> 00:13:06,950
+are
+
+298
+00:13:07,080 --> 00:13:08,950
+very hard today, even
+
+299
+00:13:09,229 --> 00:13:11,989
+with like the whole, oh, I'll use a wireless network. No,
+
+300
+00:13:12,250 --> 00:13:13,669
+no, it doesn't work that way anymore.
+
+301
+00:13:13,679 --> 00:13:16,359
+-- Like there are, well, it
+-- would be part of a targeted attack.
+
+302
+00:13:16,369 --> 00:13:18,729
+-- It wouldn't be some,
+-- not just a targeted attack.
+
+303
+00:13:18,739 --> 00:13:22,260
+Kurt, you're talking about a highly resourced attacker here
+
+304
+00:13:22,429 --> 00:13:24,489
+because in order to actually
+
+305
+00:13:24,630 --> 00:13:25,669
+intercept
+
+306
+00:13:26,179 --> 00:13:26,799
+and
+
+307
+00:13:26,909 --> 00:13:30,479
+stop traffic and then pass it along and, and kind of be in the middle.
+
+308
+00:13:31,020 --> 00:13:32,400
+You're talking about like
+
+309
+00:13:32,549 --> 00:13:38,080
+someone is in the ISP type event, right? This is not trivial at this point.
+
+310
+00:13:38,090 --> 00:13:40,989
+I mean, it was easier when we had like open Wi Fi
+
+311
+00:13:41,320 --> 00:13:44,380
+and we had no encryption, everything was hubs and networks and stuff like that.
+
+312
+00:13:44,390 --> 00:13:45,260
+But it is.
+
+313
+00:13:45,450 --> 00:13:45,900
+Well,
+
+314
+00:13:46,075 --> 00:13:49,085
+no, we had encryption on Wi Fi but everybody had the same key.
+
+315
+00:13:49,385 --> 00:13:52,474
+Well, there's sure. But, but you know what I'm saying? Like
+
+316
+00:13:52,625 --> 00:13:54,015
+that is not
+
+317
+00:13:54,265 --> 00:13:56,844
+a, I'm not saying it's an attack we should ignore,
+
+318
+00:13:56,875 --> 00:14:01,054
+but I don't think it's a practical attack for the vast majority of Attackers.
+
+319
+00:14:01,549 --> 00:14:02,909
+I would agree. Right.
+
+320
+00:14:03,169 --> 00:14:03,619
+But
+
+321
+00:14:03,750 --> 00:14:05,369
+we're saying like, what could this be part of?
+
+322
+00:14:05,380 --> 00:14:07,169
+Well, that's what it would be typically part of. Right.
+
+323
+00:14:07,179 --> 00:14:09,159
+That's why you would want to get fake certificates.
+
+324
+00:14:09,320 --> 00:14:12,010
+Well, not fake certificates, they're real certificates just for the wrong person.
+
+325
+00:14:12,260 --> 00:14:14,330
+-- I think
+-- what's more valuable from a certificate
+
+326
+00:14:14,340 --> 00:14:18,010
+perspective actually isn't even getting a fake certificate necessarily
+
+327
+00:14:18,380 --> 00:14:19,309
+is that
+
+328
+00:14:19,469 --> 00:14:23,719
+you could get a certificate for something that looks really close
+
+329
+00:14:23,869 --> 00:14:26,869
+to like, like, for example, like the, the, this was dot Moby,
+
+330
+00:14:27,030 --> 00:14:27,559
+like
+
+331
+00:14:27,890 --> 00:14:29,320
+Apple dot Moby, right?
+
+332
+00:14:29,330 --> 00:14:31,849
+If you sent people there and it looked just like the Apple site, they'd be like, oh,
+
+333
+00:14:31,859 --> 00:14:34,989
+it's just Apple doing something weird, you know, or whatever.
+
+334
+00:14:35,049 --> 00:14:39,880
+Well, you can already do that because it's not like cas have. That's true.
+
+335
+00:14:39,929 --> 00:14:44,030
+It's not like, like when you register a business in most of the world, they do a
+
+336
+00:14:44,200 --> 00:14:49,369
+business name search, not just for like that exact name, but for sounds like names.
+
+337
+00:14:49,380 --> 00:14:49,809
+And
+
+338
+00:14:49,909 --> 00:14:52,820
+you can actually have apple plumbing, apple computers.
+
+339
+00:14:52,830 --> 00:14:55,630
+As long as there's like enough distinction, they'll generally allow it. Right?
+
+340
+00:14:55,640 --> 00:14:59,380
+-- Because apple doesn't get to own the word apple forever and always like too
+-- bad.
+
+341
+00:14:59,390 --> 00:15:00,659
+I have a fun fact for you.
+
+342
+00:15:00,669 --> 00:15:03,489
+So I live in Green Bay, Wisconsin and I think I've told this before.
+
+343
+00:15:03,590 --> 00:15:06,299
+There is a store here called the Apple Store.
+
+344
+00:15:06,309 --> 00:15:09,929
+And it has been here since the fifties and they sell like apples from trees.
+
+345
+00:15:10,500 --> 00:15:12,909
+And it's always funny because if you look at like the Yelp reviews and stuff,
+
+346
+00:15:12,919 --> 00:15:14,729
+people like this isn't an apple store.
+
+347
+00:15:14,739 --> 00:15:16,890
+They sell fruit. It's like, yes
+
+348
+00:15:17,020 --> 00:15:17,590
+they do.
+
+349
+00:15:17,599 --> 00:15:20,219
+And they've been selling it for like 50 plus years at
+
+350
+00:15:20,229 --> 00:15:23,210
+this location and they're never gonna give this name up.
+
+351
+00:15:23,219 --> 00:15:25,590
+-- Like
+-- Hungry Jack in uh Australia, you know, there's
+
+352
+00:15:25,780 --> 00:15:29,010
+Burger King. So now you gotta go to Hungry Jack's. If you want your whopper.
+
+353
+00:15:29,099 --> 00:15:30,169
+-- And,
+-- and I, I just,
+
+354
+00:15:30,179 --> 00:15:34,119
+I love that like David and Goliath dynamic of like this is obviously just like some
+
+355
+00:15:34,520 --> 00:15:36,140
+crazy old person at this point.
+
+356
+00:15:36,150 --> 00:15:38,469
+That's like just fighting the good fight because they can
+
+357
+00:15:38,799 --> 00:15:40,179
+even for a reason.
+
+358
+00:15:40,669 --> 00:15:43,940
+But um so back to this, that's the challenge with DNS is like,
+
+359
+00:15:43,950 --> 00:15:47,950
+I've known people that have not renewed their DNS or somehow lost control of it.
+
+360
+00:15:47,960 --> 00:15:51,260
+And for us, mere mortals it's gone forever. Yes, for sure.
+
+361
+00:15:51,309 --> 00:15:53,830
+Like they're like, I've been trying to get seafood.com
+
+362
+00:15:53,969 --> 00:15:58,645
+back kind of for 2025 years on and off. It'll, yeah, it'll literally never happen.
+
+363
+00:15:58,835 --> 00:16:01,005
+It's not even parked, it's just like it's registered,
+
+364
+00:16:01,015 --> 00:16:03,236
+but there's nothing associated with it as far as I can tell.
+
+365
+00:16:04,125 --> 00:16:04,716
+And so
+
+366
+00:16:04,866 --> 00:16:06,255
+that I really,
+
+367
+00:16:06,455 --> 00:16:08,265
+it always drives me nuts when people talk about
+
+368
+00:16:08,276 --> 00:16:10,056
+digital sovereignty on a personal level and they're like,
+
+369
+00:16:10,065 --> 00:16:12,835
+oh, just get your own domain name and host your own services or whatever, blah, blah,
+
+370
+00:16:12,846 --> 00:16:12,995
+blah.
+
+371
+00:16:13,005 --> 00:16:14,395
+And then you can pick and choose and move.
+
+372
+00:16:14,445 --> 00:16:17,476
+Well, for somebody like me and Josh are a lot of our show listeners.
+
+373
+00:16:17,846 --> 00:16:19,521
+Yeah, we have the expertise to do that,
+
+374
+00:16:19,632 --> 00:16:22,671
+but most people don't and they probably don't have the
+
+375
+00:16:22,682 --> 00:16:24,851
+money to pay for the DNS to pay for,
+
+376
+00:16:24,861 --> 00:16:25,041
+you know,
+
+377
+00:16:25,052 --> 00:16:27,361
+Google workspace because it's not like you can hook
+
+378
+00:16:27,372 --> 00:16:29,081
+a domain in up to your free Gmail account,
+
+379
+00:16:29,091 --> 00:16:29,202
+right?
+
+380
+00:16:29,211 --> 00:16:30,731
+You need to pay for Google workspace,
+
+381
+00:16:31,012 --> 00:16:33,812
+right. Yeah. Yeah. They used to give it away for free.
+
+382
+00:16:33,971 --> 00:16:37,211
+-- Yeah.
+-- You used to be able to get free Google Domain, whatever.
+
+383
+00:16:37,442 --> 00:16:37,762
+And,
+
+384
+00:16:37,771 --> 00:16:38,932
+and I had a bunch of those but they've
+
+385
+00:16:38,942 --> 00:16:41,392
+all sort of since grandfathered out and expired.
+
+386
+00:16:41,820 --> 00:16:42,119
+Yeah.
+
+387
+00:16:42,280 --> 00:16:43,919
+I think you still have one that's kind of quasi
+
+388
+00:16:44,039 --> 00:16:45,979
+-- free. Or did they? Finally?
+-- Mine's not free.
+
+389
+00:16:45,989 --> 00:16:49,409
+No, I, I converted it to a proper paid account because
+
+390
+00:16:49,669 --> 00:16:52,849
+I became very concerned that by staying on the free plan,
+
+391
+00:16:52,859 --> 00:16:54,750
+I was going to have too many problems.
+
+392
+00:16:54,760 --> 00:16:56,210
+Whereas in my mind,
+
+393
+00:16:56,659 --> 00:16:58,729
+I feel like if I'm paying them money
+
+394
+00:16:58,979 --> 00:16:59,760
+they will
+
+395
+00:17:00,059 --> 00:17:01,520
+maybe read my email,
+
+396
+00:17:02,030 --> 00:17:03,820
+maybe not accidentally delete you.
+
+397
+00:17:04,189 --> 00:17:05,439
+Right. Right. I
+
+398
+00:17:05,589 --> 00:17:05,989
+like that
+
+399
+00:17:06,430 --> 00:17:06,699
+one.
+
+400
+00:17:06,810 --> 00:17:10,050
+Yeah. But I mean, so, so in all seriousness. So this is also the reason
+
+401
+00:17:10,199 --> 00:17:12,660
+that I use a domain registrar
+
+402
+00:17:12,790 --> 00:17:16,040
+separate from Google and all the other call providers because, like,
+
+403
+00:17:16,050 --> 00:17:18,780
+if Google for some reason decides I violated their terms of service,
+
+404
+00:17:18,989 --> 00:17:20,500
+like, wipe out rest.net,
+
+405
+00:17:21,098 --> 00:17:22,688
+I still have control of the domain,
+
+406
+00:17:22,698 --> 00:17:25,638
+I can move it somewhere else versus if they're the registrar,
+
+407
+00:17:25,648 --> 00:17:26,858
+-- I'm probably sol
+-- at
+
+408
+00:17:26,868 --> 00:17:27,298
+-- that point
+-- a
+
+409
+00:17:27,628 --> 00:17:28,358
+-- 100
+-- percent.
+
+410
+00:17:28,968 --> 00:17:29,168
+Yeah.
+
+411
+00:17:29,178 --> 00:17:30,688
+And the problem too is like, you can't,
+
+412
+00:17:30,698 --> 00:17:32,948
+how do you talk to them because your email address doesn't work anymore.
+
+413
+00:17:32,979 --> 00:17:35,088
+-- That is a good point actually, like, really
+-- thought about that.
+
+414
+00:17:35,098 --> 00:17:36,838
+And that's something my friend has is where her
+
+415
+00:17:36,848 --> 00:17:39,088
+old email address is hooked up to our Apple account
+
+416
+00:17:39,560 --> 00:17:39,750
+and
+
+417
+00:17:40,430 --> 00:17:41,000
+you can't
+
+418
+00:17:41,119 --> 00:17:43,739
+change it because Apple emails you a confirmation
+
+419
+00:17:44,329 --> 00:17:45,459
+which is totally
+
+420
+00:17:45,569 --> 00:17:46,439
+not going anywhere.
+
+421
+00:17:46,449 --> 00:17:48,939
+And like, even on the phone, they're like, yeah, we'll email you a confirmation.
+
+422
+00:17:48,949 --> 00:17:49,520
+It's just like,
+
+423
+00:17:49,729 --> 00:17:50,290
+that's
+
+424
+00:17:50,489 --> 00:17:51,500
+the problem.
+
+425
+00:17:51,640 --> 00:17:53,489
+I love it when that kind of stuff happens. All right. All right.
+
+426
+00:17:53,500 --> 00:17:54,810
+Anyway, back to this movie thing.
+
+427
+00:17:54,819 --> 00:17:58,180
+-- I don't want to keep, we keep going down the, the DNS rat hole because it's
+-- well,
+
+428
+00:17:58,189 --> 00:18:01,010
+but it also speaks to how most companies build business
+
+429
+00:18:01,020 --> 00:18:03,900
+process around the assumption that you own this domain name.
+
+430
+00:18:03,910 --> 00:18:06,790
+You will always own this domain name and there will never be a problem
+
+431
+00:18:06,959 --> 00:18:10,380
+and they don't handle it very well either themselves losing it.
+
+432
+00:18:10,390 --> 00:18:11,680
+-- But
+-- why would you handle it?
+
+433
+00:18:11,689 --> 00:18:14,780
+-- Well, why, why
+-- are, well, because people do lose these domain names.
+
+434
+00:18:14,790 --> 00:18:16,180
+Not that often though.
+
+435
+00:18:16,189 --> 00:18:16,530
+I mean,
+
+436
+00:18:16,540 --> 00:18:18,640
+I don't think it's a common enough occurrence that you
+
+437
+00:18:18,650 --> 00:18:22,199
+can really justify planning for that in any meaningful way.
+
+438
+00:18:22,209 --> 00:18:25,079
+Well, a simple thing like having a backup email address.
+
+439
+00:18:25,089 --> 00:18:27,479
+-- So that on a different domain, I mean,
+-- yeah, but that's,
+
+440
+00:18:27,739 --> 00:18:29,280
+that's something different obviously.
+
+441
+00:18:29,290 --> 00:18:31,560
+And, and I actually do have that for what it's worth.
+
+442
+00:18:31,839 --> 00:18:35,650
+But because I back in the day I got Josh dot Resor at gmail.com
+
+443
+00:18:35,819 --> 00:18:38,410
+and I log into it like once a year to clean up the spam
+
+444
+00:18:38,420 --> 00:18:41,459
+and then it's just there in case I ever need it for anything.
+
+445
+00:18:41,949 --> 00:18:44,180
+But anyway, ok, so here's the deal, right?
+
+446
+00:18:44,349 --> 00:18:48,180
+We've got this, these security researchers, they find this clever bug.
+
+447
+00:18:48,189 --> 00:18:51,579
+Well, it's not a bug. It's just, it's a, it's, the DNS expired.
+
+448
+00:18:51,589 --> 00:18:55,349
+And so they registered it, like, let's assume there's an embassy in a major city
+
+449
+00:18:55,469 --> 00:18:57,859
+and they decide to move to a new location.
+
+450
+00:18:58,520 --> 00:19:01,579
+And so they moved to the new location and the old location goes up for lease.
+
+451
+00:19:01,609 --> 00:19:02,930
+Well, I could lease it
+
+452
+00:19:03,069 --> 00:19:05,420
+and put up a flag and put up the signs and,
+
+453
+00:19:05,579 --> 00:19:07,030
+you know, a bad accent
+
+454
+00:19:07,430 --> 00:19:10,630
+and I'm guessing a lot of people like your apple store,
+
+455
+00:19:10,640 --> 00:19:14,500
+people would go to the old location because that's, you know,
+
+456
+00:19:14,530 --> 00:19:15,689
+what if that's illegal?
+
+457
+00:19:15,760 --> 00:19:16,869
+How's that illegal? Is it?
+
+458
+00:19:17,160 --> 00:19:17,959
+Well, I mean, that's
+
+459
+00:19:18,609 --> 00:19:19,069
+about it.
+
+460
+00:19:19,449 --> 00:19:20,109
+Maybe.
+
+461
+00:19:20,119 --> 00:19:22,430
+I mean, there's laws against Impersonating certain,
+
+462
+00:19:22,439 --> 00:19:24,050
+like officials and things like that.
+
+463
+00:19:24,109 --> 00:19:27,030
+Well, ok, but ignoring all that, the point is there's,
+
+464
+00:19:27,040 --> 00:19:30,680
+there are sort of this happens in the real world where businesses,
+
+465
+00:19:30,890 --> 00:19:35,660
+uh, a business fails or closes and some other business grabs that kind of good name.
+
+466
+00:19:36,010 --> 00:19:38,189
+Yeah. Yeah. Uh Oh, perfect example.
+
+467
+00:19:38,349 --> 00:19:41,560
+There's a big company out here I think I mentioned before called Standard General.
+
+468
+00:19:41,569 --> 00:19:44,400
+And they do paving and parking lots and road building.
+
+469
+00:19:44,410 --> 00:19:47,160
+Like they're a massive construction company, right? Big legit.
+
+470
+00:19:47,170 --> 00:19:49,069
+Like we're talking probably a couple of 1000 people
+
+471
+00:19:50,390 --> 00:19:51,989
+and there's some dude in Nova Scotia,
+
+472
+00:19:52,000 --> 00:19:54,579
+I think it was who called his company Standard
+
+473
+00:19:54,589 --> 00:19:56,420
+General because then on the web searches and stuff,
+
+474
+00:19:56,430 --> 00:19:59,420
+it shows us having a good review and of course he's a total scam artist and like,
+
+475
+00:19:59,430 --> 00:20:01,290
+there's a ton of incidents with him
+
+476
+00:20:01,449 --> 00:20:02,250
+and, you know,
+
+477
+00:20:02,260 --> 00:20:04,489
+so he's trading on Standard General's good name
+
+478
+00:20:04,500 --> 00:20:06,510
+and because it's in a different province like
+
+479
+00:20:06,900 --> 00:20:07,949
+that was allowed.
+
+480
+00:20:08,239 --> 00:20:08,849
+And so
+
+481
+00:20:09,060 --> 00:20:11,969
+the thing is as a, as a business say, like in Alberta,
+
+482
+00:20:11,979 --> 00:20:16,130
+I'm not going to bother to register my business name in all 10 provinces,
+
+483
+00:20:16,510 --> 00:20:17,290
+I guess.
+
+484
+00:20:17,569 --> 00:20:19,920
+Or what about every city? You know, like
+
+485
+00:20:20,050 --> 00:20:22,349
+at some point, I just sort of give up like
+
+486
+00:20:22,579 --> 00:20:26,449
+I've done defensive registrations of cloud security lines dot A bunch of stuff,
+
+487
+00:20:26,800 --> 00:20:30,050
+but there's over 2000 tl Ds now. So like I'm not doing them all.
+
+488
+00:20:30,209 --> 00:20:30,920
+I don't have time for it
+
+489
+00:20:31,599 --> 00:20:32,079
+for sure. I did.
+
+490
+00:20:32,564 --> 00:20:32,584
+I
+
+491
+00:20:33,035 --> 00:20:38,104
+mean, ok, look, I don't think that is a reasonable comparison. In this case.
+
+492
+00:20:38,314 --> 00:20:38,944
+I think
+
+493
+00:20:39,194 --> 00:20:43,425
+there are legal mechanisms for dealing with some of these situations,
+
+494
+00:20:43,435 --> 00:20:44,604
+maybe not in Canada.
+
+495
+00:20:44,614 --> 00:20:47,305
+But I know like in the US, you have things like trademark law.
+
+496
+00:20:47,834 --> 00:20:48,405
+Yeah,
+
+497
+00:20:48,760 --> 00:20:52,979
+you can register a trademark and a DNS name can be part of a trademark.
+
+498
+00:20:53,030 --> 00:20:58,170
+-- Like that is what happens sometimes,
+-- but a trademark is more specific.
+
+499
+00:20:58,180 --> 00:20:59,229
+And so for example,
+
+500
+00:20:59,239 --> 00:21:03,380
+you can still have apple dot whatever and be an Apple store online and Apple,
+
+501
+00:21:03,390 --> 00:21:04,650
+depending on the jurisdiction
+
+502
+00:21:04,775 --> 00:21:06,594
+may have to pound sand and that's the other prompt.
+
+503
+00:21:06,604 --> 00:21:07,675
+Remembers this is global,
+
+504
+00:21:07,685 --> 00:21:12,114
+it is global and we're in a hole because this is completely unrelated, I think.
+
+505
+00:21:12,564 --> 00:21:15,635
+-- But
+-- it is, it's it's DNS is a global system.
+
+506
+00:21:15,775 --> 00:21:19,015
+OK. No, no, I don't want to talk about DNS. I want, I want to rope us all the way back.
+
+507
+00:21:19,025 --> 00:21:20,675
+I want to, I want to ask this, right.
+
+508
+00:21:20,979 --> 00:21:24,540
+So these researchers publish this blog and they
+
+509
+00:21:24,550 --> 00:21:26,420
+even kind of towards the bottom of it.
+
+510
+00:21:26,510 --> 00:21:27,920
+They talk about, you know,
+
+511
+00:21:28,239 --> 00:21:29,839
+there, I'll just read this paragraph.
+
+512
+00:21:29,849 --> 00:21:32,119
+It says we continue to hold concerns around the basic reality.
+
+513
+00:21:32,130 --> 00:21:35,270
+We found this on a whim in a hotel room while escaping the Vegas heat surrounding
+
+514
+00:21:35,280 --> 00:21:37,829
+black hat while well resourced and focused nation
+
+515
+00:21:37,839 --> 00:21:39,979
+states look for loopholes like this every day.
+
+516
+00:21:40,079 --> 00:21:40,790
+In our opinion,
+
+517
+00:21:40,800 --> 00:21:46,359
+we are not likely to be the last to find inexcusable flaws in such a crucial process.
+
+518
+00:21:46,569 --> 00:21:47,030
+Well,
+
+519
+00:21:47,141 --> 00:21:48,482
+more to the point, DNS
+
+520
+00:21:48,621 --> 00:21:51,832
+and spammers have been doing this for over a decade where
+
+521
+00:21:51,842 --> 00:21:55,802
+a popular DNS Domain lapses and they grab it within seconds,
+
+522
+00:21:56,072 --> 00:21:56,401
+right?
+
+523
+00:21:56,692 --> 00:21:58,812
+Like this is not a new thing. This is
+
+524
+00:21:58,932 --> 00:22:03,251
+-- like I let domains lapse and, and then they get snapped up,
+-- stop it.
+
+525
+00:22:03,261 --> 00:22:04,871
+You keep going back to DNS.
+
+526
+00:22:05,052 --> 00:22:06,041
+Here's my question.
+
+527
+00:22:06,052 --> 00:22:10,641
+-- Is this an inexcusable process by the Moby people so
+-- well,
+
+528
+00:22:10,651 --> 00:22:15,343
+first comment is so Mobi outsource they who is server to somebody else that or
+
+529
+00:22:15,484 --> 00:22:17,884
+they basically did such a terrible job running it that they let
+
+530
+00:22:17,894 --> 00:22:21,473
+the DNS for it lapse and didn't notice like to put it bluntly
+
+531
+00:22:21,784 --> 00:22:24,173
+to put it bluntly, they're at DNS registrar,
+
+532
+00:22:24,183 --> 00:22:27,014
+maintaining control of DNS should be a core competency.
+
+533
+00:22:27,024 --> 00:22:28,644
+-- That's all I got. Ok.
+-- Here it is.
+
+534
+00:22:28,654 --> 00:22:30,303
+Uh we discovered that a few years ago the who
+
+535
+00:22:30,313 --> 00:22:32,514
+is server for the dot Mobi TLD migrated from?
+
+536
+00:22:32,524 --> 00:22:39,323
+Who is 0.0 my goodness. It's who is dot Then dot Moby registry.net. So there's li
+
+537
+00:22:39,826 --> 00:22:43,786
+the letters dot After a dot Which is someone
+
+538
+00:22:43,796 --> 00:22:45,306
+thought they were clever when they did that.
+
+539
+00:22:45,316 --> 00:22:45,806
+-- I'm
+-- sure.
+
+540
+00:22:45,916 --> 00:22:49,206
+No, because it probably was grabbed. The other one was probably already taken.
+
+541
+00:22:49,355 --> 00:22:52,406
+Oh, that could be. So anyway, to who is dot Nick dot Moby?
+
+542
+00:22:52,416 --> 00:22:57,235
+And then obviously the the old domain expired,
+
+543
+00:22:57,245 --> 00:22:59,365
+but lots of things were still using it.
+
+544
+00:22:59,495 --> 00:23:00,446
+That and, and
+
+545
+00:23:00,686 --> 00:23:05,526
+now the question is like, is this the fault of the dot Moby people for not just keeping
+
+546
+00:23:05,738 --> 00:23:08,208
+the domain forever because of what they did?
+
+547
+00:23:08,397 --> 00:23:11,228
+-- It's
+-- like when Microsoft bought the corp.com thing, right?
+
+548
+00:23:11,238 --> 00:23:12,848
+It's cheaper for Microsoft just to buy that
+
+549
+00:23:12,858 --> 00:23:14,937
+domain and make sure no shenanigans happen than
+
+550
+00:23:14,947 --> 00:23:17,858
+-- it is to deal with all the support calls if an attacker grabs it and
+-- does
+
+551
+00:23:17,958 --> 00:23:18,848
+I agree with that?
+
+552
+00:23:19,267 --> 00:23:21,927
+-- And we, we did a whole show about corp.com, didn't
+-- we?
+
+553
+00:23:21,937 --> 00:23:27,078
+If a DNS registrar can't register and control a domain name?
+
+554
+00:23:27,267 --> 00:23:29,277
+I kind of got to wonder about their competency.
+
+555
+00:23:29,427 --> 00:23:31,667
+-- I mean,
+-- that's a good point. I won't argue with that.
+
+556
+00:23:32,258 --> 00:23:33,598
+That's right like that.
+
+557
+00:23:34,239 --> 00:23:34,550
+Yeah.
+
+558
+00:23:34,829 --> 00:23:35,010
+Yeah.
+
+559
+00:23:35,170 --> 00:23:38,469
+-- Ok. Ok. I'll accept that.
+-- And so for example, we have the
+
+560
+00:23:38,770 --> 00:23:39,000
+name.
+
+561
+00:23:39,010 --> 00:23:39,949
+Oh, perfect example,
+
+562
+00:23:39,959 --> 00:23:43,439
+we have a piece of documentation at the CS A where somebody mentioned a domain name.
+
+563
+00:23:43,449 --> 00:23:43,959
+And I'm like,
+
+564
+00:23:44,239 --> 00:23:45,750
+when did we buy that domain name?
+
+565
+00:23:46,099 --> 00:23:46,760
+We didn't
+
+566
+00:23:47,130 --> 00:23:48,589
+and we used it as an example.
+
+567
+00:23:48,599 --> 00:23:49,310
+And so I'm like, well,
+
+568
+00:23:49,319 --> 00:23:50,709
+I better go register that and grab it
+
+569
+00:23:50,719 --> 00:23:52,520
+because it's in an official piece of documentation.
+
+570
+00:23:52,530 --> 00:23:53,810
+We're telling people something, something,
+
+571
+00:23:53,819 --> 00:23:56,319
+this domain name and I don't want people going there
+
+572
+00:23:56,819 --> 00:23:58,719
+and seeing like a porn site or something.
+
+573
+00:23:58,729 --> 00:24:02,630
+Like, remember the Heinz QR code thing where Heinz did a QR code
+
+574
+00:24:02,969 --> 00:24:04,270
+and it went
+
+575
+00:24:04,520 --> 00:24:06,640
+anyways, it ended up going to a porn site,
+
+576
+00:24:07,119 --> 00:24:09,319
+you know, I don't remember that. But that's pretty funny.
+
+577
+00:24:10,119 --> 00:24:10,219
+Let me
+
+578
+00:24:10,349 --> 00:24:10,390
+just
+
+579
+00:24:10,910 --> 00:24:11,050
+let the
+
+580
+00:24:11,219 --> 00:24:13,380
+intern generate the QR code and no one checked it.
+
+581
+00:24:14,359 --> 00:24:19,050
+Uh Yeah, Heinz says sorry for ketchup QR code that links to porn back in 2015.
+
+582
+00:24:19,430 --> 00:24:21,219
+Mine's like a trap. Everything's in there.
+
+583
+00:24:21,839 --> 00:24:23,729
+It may not be useful but it's in there.
+
+584
+00:24:24,270 --> 00:24:26,699
+Well, also I'm, I'm a Heinz ketchup person.
+
+585
+00:24:26,709 --> 00:24:29,229
+-- I
+-- could
+-- not tell you what kind of ketchup I have in my
+
+586
+00:24:29,339 --> 00:24:29,949
+favorite. It's the mouth
+
+587
+00:24:30,099 --> 00:24:33,890
+-- feel. It's got that just, it's got that richness. It's good.
+-- I literally don't care
+
+588
+00:24:34,030 --> 00:24:36,180
+as long as my ketchup tastes good. I'm fine.
+
+589
+00:24:36,300 --> 00:24:36,439
+Yeah,
+
+590
+00:24:36,979 --> 00:24:39,060
+but um see that's the thing, right? Like it
+
+591
+00:24:40,579 --> 00:24:43,670
+on a does this attack really matter?
+
+592
+00:24:43,890 --> 00:24:44,400
+No,
+
+593
+00:24:44,410 --> 00:24:47,709
+but do I want to avoid having to deal with apologizing
+
+594
+00:24:47,719 --> 00:24:49,849
+for a porn site being linked from one of our documents.
+
+595
+00:24:50,000 --> 00:24:52,180
+-- Yes.
+-- Yes, I agree with that. Yes.
+
+596
+00:24:52,260 --> 00:24:55,800
+Does it cost a few bucks a year to maintain and keep that registry up?
+
+597
+00:24:55,900 --> 00:24:59,160
+Yeah. It's kind of annoying but in the long term it's way less
+
+598
+00:24:59,319 --> 00:25:02,599
+-- than having to deal with a porn site there.
+-- That's a good point. That's a good point.
+
+599
+00:25:02,750 --> 00:25:03,189
+It,
+
+600
+00:25:03,510 --> 00:25:03,859
+yeah.
+
+601
+00:25:03,979 --> 00:25:08,790
+Yeah, it's definitely, it, it's probably a signal for competency in the MO
+
+602
+00:25:08,920 --> 00:25:09,719
+-- TLD
+-- fail.
+
+603
+00:25:09,869 --> 00:25:10,719
+But if you own a mobile
+
+604
+00:25:10,849 --> 00:25:14,619
+-- domain, what choice do you have?
+-- I mean, there's, there's also the issue of like,
+
+605
+00:25:14,750 --> 00:25:16,020
+I wonder how many
+
+606
+00:25:16,310 --> 00:25:20,040
+instances of things like this exist where there are expired domains
+
+607
+00:25:20,239 --> 00:25:22,010
+that are referenced in
+
+608
+00:25:22,199 --> 00:25:27,160
+-- some sort of tool or document or whatever
+-- for, I have an exact example for you.
+
+609
+00:25:27,170 --> 00:25:29,239
+The CWE database. I went through it
+
+610
+00:25:29,410 --> 00:25:31,239
+and I grabbed a bunch of domains that had
+
+611
+00:25:31,250 --> 00:25:34,479
+expired that were linked from the CWE database.
+
+612
+00:25:34,500 --> 00:25:36,199
+What do they link for?
+
+613
+00:25:36,459 --> 00:25:37,520
+Like I don't understand
+
+614
+00:25:37,760 --> 00:25:43,260
+-- like
+-- for sources in C in CV E sorry. When I said CW si mean CV es oh CV
+
+615
+00:25:43,270 --> 00:25:44,390
+E oh man. Yeah,
+
+616
+00:25:44,650 --> 00:25:46,599
+like what 30% of those
+
+617
+00:25:46,900 --> 00:25:48,439
+references are dead, right?
+
+618
+00:25:49,020 --> 00:25:53,280
+-- Um Well, no, I registered the domain names. They work now.
+-- Not all of them.
+
+619
+00:25:53,290 --> 00:25:54,339
+Well, no, but a bunch of them.
+
+620
+00:25:54,349 --> 00:25:56,800
+It was, it was several, there was quite a few links actually.
+
+621
+00:25:56,890 --> 00:25:59,089
+How many are getting hit? Do you have logs?
+
+622
+00:25:59,329 --> 00:26:03,060
+-- Uh I don't know, I don't, they're not set up for anything.
+-- You should log that.
+
+623
+00:26:03,069 --> 00:26:04,119
+That sounds interesting.
+
+624
+00:26:04,310 --> 00:26:05,739
+But because part of it is I, I,
+
+625
+00:26:05,750 --> 00:26:09,439
+at various points have downloaded every reference link in the CV E database.
+
+626
+00:26:09,739 --> 00:26:10,650
+Yeah. And like,
+
+627
+00:26:10,979 --> 00:26:15,040
+a lot of them are dead in the sense of they go to, like, a marketing web page.
+
+628
+00:26:15,339 --> 00:26:16,839
+Yeah, I, I remember
+
+629
+00:26:16,989 --> 00:26:19,609
+you told me about this. It was like 20 or 30%. Right. It's,
+
+630
+00:26:20,119 --> 00:26:20,800
+-- no, no,
+-- no, no, no,
+
+631
+00:26:20,810 --> 00:26:23,319
+it's far more because we're just gonna pretend like
+
+632
+00:26:23,329 --> 00:26:26,140
+all of sun.com just got deleted from the database.
+
+633
+00:26:26,270 --> 00:26:28,420
+Yeah, that's true. There were a lot of those
+
+634
+00:26:28,750 --> 00:26:32,670
+and all the old, almost all the old references are like just gone now.
+
+635
+00:26:32,839 --> 00:26:34,079
+Tons of that stuff.
+
+636
+00:26:34,479 --> 00:26:37,760
+Yeah. Uh Yeah, I got rid of all those domains that were uh
+
+637
+00:26:38,219 --> 00:26:40,819
+that were uh from. Yeah, I just let them expire.
+
+638
+00:26:41,310 --> 00:26:44,420
+Um Now someone else can register them. Exactly.
+
+639
+00:26:44,430 --> 00:26:45,079
+But yeah, see,
+
+640
+00:26:45,089 --> 00:26:47,219
+and that's the thing this is trivial to do because literally
+
+641
+00:26:47,229 --> 00:26:50,099
+all you do is you find something referencing domain names.
+
+642
+00:26:50,109 --> 00:26:54,685
+-- Well, no, it's
+-- not. Ok. It's trivial to do, but the outcome is not trivial.
+
+643
+00:26:54,694 --> 00:26:57,415
+I think there's probably very limited value
+
+644
+00:26:57,594 --> 00:27:00,094
+in a lot of this, which is why it doesn't get more attention.
+
+645
+00:27:00,344 --> 00:27:03,155
+But we see this with domain parking where you make a type in
+
+646
+00:27:03,165 --> 00:27:05,994
+a domain name and you end up with some crappy parking site that like
+
+647
+00:27:06,155 --> 00:27:07,694
+is trying to make some ad revenue.
+
+648
+00:27:07,885 --> 00:27:08,694
+-- Yeah,
+-- I also like
+
+649
+00:27:09,035 --> 00:27:13,775
+github. I often do go to gihub.com because I can't type.
+
+650
+00:27:14,719 --> 00:27:16,359
+Yeah. And, and it's not github.
+
+651
+00:27:16,599 --> 00:27:19,520
+-- It brings me to some crappy shopping site.
+-- Oh.
+
+652
+00:27:19,989 --> 00:27:24,640
+Oh, interesting. Uh, chrome popped up for a second. Did you mean github.com?
+
+653
+00:27:25,069 --> 00:27:25,660
+Ok.
+
+654
+00:27:25,770 --> 00:27:27,750
+But then that went away and it loaded the webpage
+
+655
+00:27:27,890 --> 00:27:28,599
+and, oh,
+
+656
+00:27:28,650 --> 00:27:31,300
+apparently my computer has all the internet herpes and
+
+657
+00:27:31,310 --> 00:27:33,280
+I need to contact this 1 800 number.
+
+658
+00:27:33,500 --> 00:27:34,199
+-- Oh,
+-- yeah. It's like
+
+659
+00:27:34,415 --> 00:27:36,535
+random. It's, it, it goes to like, different things.
+
+660
+00:27:36,545 --> 00:27:38,744
+It's some sort of weird shopping aggregator thing.
+
+661
+00:27:38,755 --> 00:27:41,275
+I think that just sends you to probably affiliate links.
+
+662
+00:27:41,425 --> 00:27:46,114
+I get a um what I get a windows.net site claiming that I
+
+663
+00:27:46,125 --> 00:27:49,734
+have Windows defender security center and to call this 1 800 number.
+
+664
+00:27:49,744 --> 00:27:50,185
+All right, github
+
+665
+00:27:50,375 --> 00:27:54,114
+dot com from Firefox. And this one's blocking me,
+
+666
+00:27:54,560 --> 00:27:56,380
+you block origin is blocking it.
+
+667
+00:27:57,170 --> 00:27:59,770
+I will proceed. Thank you. You block origin.
+
+668
+00:27:59,880 --> 00:28:03,510
+-- Oh, now it went to star choice
+-- wise, staffing.
+
+669
+00:28:03,729 --> 00:28:04,050
+This is
+
+670
+00:28:04,349 --> 00:28:07,280
+ok. This is not, no, we are not ending like this.
+
+671
+00:28:07,290 --> 00:28:12,579
+All right, we're done talking about.com or whatever it is. So ok. So here's the deal.
+
+672
+00:28:12,589 --> 00:28:13,699
+Here's what I find. Interesting.
+
+673
+00:28:14,300 --> 00:28:16,010
+Yes, it is a problem. Yes.
+
+674
+00:28:16,020 --> 00:28:18,650
+It almost exists in probably hundreds or thousands
+
+675
+00:28:18,660 --> 00:28:21,500
+of places that are using expired domains.
+
+676
+00:28:21,680 --> 00:28:22,810
+But I also think
+
+677
+00:28:22,989 --> 00:28:26,890
+the, the potential badness is low at the moment.
+
+678
+00:28:26,939 --> 00:28:29,709
+It doesn't mean it will stay low forever. It is very conceivable.
+
+679
+00:28:29,719 --> 00:28:32,329
+Something incredibly important could expire
+
+680
+00:28:32,540 --> 00:28:36,089
+that there are, there's something we haven't thought of yet. There's some novel
+
+681
+00:28:36,189 --> 00:28:37,849
+attacker we haven't thought of yet.
+
+682
+00:28:38,050 --> 00:28:40,140
+Well, or a major company forgets to
+
+683
+00:28:40,420 --> 00:28:43,579
+like we have documented cases where major companies have
+
+684
+00:28:43,589 --> 00:28:45,569
+like fallen over for a day or two.
+
+685
+00:28:45,839 --> 00:28:46,089
+Well,
+
+686
+00:28:46,099 --> 00:28:50,050
+Microsoft let hotmail.com expire once and then like some Rando
+
+687
+00:28:50,060 --> 00:28:52,489
+registered it just so they could get their email back.
+
+688
+00:28:52,500 --> 00:28:55,130
+Like then they gave it to Microsoft. I mean,
+
+689
+00:28:55,420 --> 00:28:58,010
+now, but like here's an, if that happened again,
+
+690
+00:28:58,989 --> 00:29:01,930
+I'm pretty confident Microsoft could get that back
+
+691
+00:29:01,939 --> 00:29:03,709
+either through legal or just be like,
+
+692
+00:29:03,719 --> 00:29:05,030
+here's a bag of freaking money.
+
+693
+00:29:05,040 --> 00:29:07,130
+Give us our domain back type things.
+
+694
+00:29:07,219 --> 00:29:10,099
+Well, no, they, they just threaten the other registrars and stuff. And like
+
+695
+00:29:10,699 --> 00:29:13,040
+the part of the problem is this goes back to that kind of classic.
+
+696
+00:29:13,050 --> 00:29:16,250
+If you know who to talk to at the place, they can fix it for you right away
+
+697
+00:29:16,479 --> 00:29:19,300
+and you see that like all those threads on hacker news where somebody announces
+
+698
+00:29:19,310 --> 00:29:21,660
+like I have this problem with youtube or I have this problem with Gmail.
+
+699
+00:29:21,670 --> 00:29:25,739
+Who do I talk to or? Well, heck on Mastodon where like Jerry Bell is like, uh,
+
+700
+00:29:26,170 --> 00:29:29,459
+what was the pizza place that he wanted to contact for? Cosmos?
+
+701
+00:29:29,469 --> 00:29:30,689
+Pizza, something like that.
+
+702
+00:29:30,839 --> 00:29:34,660
+I don't know if that was serious though. Was that real? I think that was a joke.
+
+703
+00:29:34,780 --> 00:29:35,449
+I don't know.
+
+704
+00:29:35,459 --> 00:29:38,790
+But I've seen that where I've literally had people come to me and they're like,
+
+705
+00:29:39,079 --> 00:29:42,430
+like for some Canadian thing. And I'm like, I don't know. Tom in Toronto.
+
+706
+00:29:42,439 --> 00:29:43,180
+Like, come on,
+
+707
+00:29:44,000 --> 00:29:46,359
+all Canadians know each other. Kurt. Come on.
+
+708
+00:29:46,469 --> 00:29:48,660
+Like, we're contractually obligated.
+
+709
+00:29:48,890 --> 00:29:52,500
+There's what, like, a couple 100 people in Canada, like, it's fine.
+
+710
+00:29:53,569 --> 00:29:54,550
+But that's the thing. Right.
+
+711
+00:29:54,560 --> 00:29:56,270
+Like, so it's kind of like that where, yeah,
+
+712
+00:29:56,280 --> 00:30:00,010
+if you know the process and the people to talk to you can fix it very easily.
+
+713
+00:30:00,119 --> 00:30:02,849
+But for the rest of us we're, we're up the creek without a paddle,
+
+714
+00:30:03,079 --> 00:30:06,380
+for sure, for sure. And then, I don't know, I guess here's the thing,
+
+715
+00:30:06,520 --> 00:30:10,469
+this will be interesting to watch, but I don't think it is world ending.
+
+716
+00:30:10,479 --> 00:30:11,900
+It is good research.
+
+717
+00:30:11,920 --> 00:30:15,510
+Like good job Watchtower folks that this was a great find like
+
+718
+00:30:15,520 --> 00:30:18,969
+DNS Parkers have been doing this for 2030 years like this is,
+
+719
+00:30:19,079 --> 00:30:23,260
+yes, it's not new, it's not new for sure, for sure. But I love when people
+
+720
+00:30:23,640 --> 00:30:28,099
+take something like this to the next level and then talk about it because just saying
+
+721
+00:30:28,339 --> 00:30:31,739
+we bought this domain, we'd be like big freaking deal.
+
+722
+00:30:31,869 --> 00:30:36,219
+Now. Now, granted, I'm also glad they didn't try to turn this into a spectacle.
+
+723
+00:30:36,229 --> 00:30:37,050
+It is not
+
+724
+00:30:37,829 --> 00:30:40,650
+because you do get that too where people are like, oh, look at this research.
+
+725
+00:30:40,660 --> 00:30:42,099
+I did and look like I'm gonna like,
+
+726
+00:30:42,109 --> 00:30:45,319
+hack the planet with this and the world is going to light on fire and it's like,
+
+727
+00:30:45,329 --> 00:30:46,339
+uh probably not,
+
+728
+00:30:46,469 --> 00:30:48,459
+I don't know. It's interesting. It's fun to watch.
+
+729
+00:30:48,469 --> 00:30:50,500
+It's fun to talk about, but I also don't think
+
+730
+00:30:50,849 --> 00:30:51,459
+this is
+
+731
+00:30:51,723 --> 00:30:54,543
+a world ending event and I have a suspicion
+
+732
+00:30:54,683 --> 00:30:58,813
+even though it's always DNS and even though DNS sucks and has tons of problems,
+
+733
+00:30:59,093 --> 00:31:02,473
+there's, it, it's really only the stepping stone to something bigger.
+
+734
+00:31:02,484 --> 00:31:05,354
+And hopefully we have protections in place that
+
+735
+00:31:05,364 --> 00:31:07,634
+will prevent the next step or maybe the
+
+736
+00:31:07,644 --> 00:31:10,693
+step after that or the step after that because there is no such thing as,
+
+737
+00:31:10,703 --> 00:31:13,494
+like most attacks are not like one and done, right?
+
+738
+00:31:13,504 --> 00:31:17,473
+You need, you need multiple steps and that's, that's how you catch people.
+
+739
+00:31:17,484 --> 00:31:19,394
+The thing is there are those like one and done attack
+
+740
+00:31:19,508 --> 00:31:23,317
+like the, the what was it the, the recent like various TCP packet,
+
+741
+00:31:23,328 --> 00:31:26,047
+ping things and windows and Linux that could cause code execution.
+
+742
+00:31:26,057 --> 00:31:29,287
+-- So they do happen. They, they,
+-- yes they do. But
+
+743
+00:31:29,498 --> 00:31:31,057
+-- this is not
+-- it walk for
+
+744
+00:31:31,197 --> 00:31:33,758
+she is a great example of like you just fire off this packet,
+
+745
+00:31:33,927 --> 00:31:36,098
+well, a couple of packets of the web server and like
+
+746
+00:31:36,287 --> 00:31:37,208
+go to execution
+
+747
+00:31:37,657 --> 00:31:41,767
+no big deal. What's interesting is in CWE there is ac we
+
+748
+00:31:41,947 --> 00:31:46,208
+dash 350 reliance on reverse DNS resolution for security critical action
+
+749
+00:31:46,368 --> 00:31:47,338
+because again, Attackers
+
+750
+00:31:47,442 --> 00:31:48,761
+control reverse DNS,
+
+751
+00:31:49,381 --> 00:31:49,682
+right?
+
+752
+00:31:49,891 --> 00:31:51,421
+So the trick is you have to do reverse DNS,
+
+753
+00:31:51,432 --> 00:31:54,621
+then forward DNS and to make sure that they match up,
+
+754
+00:31:54,722 --> 00:31:55,182
+right?
+
+755
+00:31:55,391 --> 00:31:56,501
+Or vice versa, right?
+
+756
+00:31:56,621 --> 00:32:00,952
+But you can't because one IP address can host 1000 domains.
+
+757
+00:32:01,001 --> 00:32:03,621
+Well, uh I was actually just dealing with this yesterday.
+
+758
+00:32:03,631 --> 00:32:05,102
+Google bought, for example,
+
+759
+00:32:05,482 --> 00:32:08,421
+uh they say it's like Google bought, dash, dash, dash, dash,
+
+760
+00:32:08,432 --> 00:32:10,582
+dash dot Google bot.com or whatever.
+
+761
+00:32:10,791 --> 00:32:12,871
+So you basically look for this red jacks and,
+
+762
+00:32:12,881 --> 00:32:15,251
+and then also look forwards and to match up.
+
+763
+00:32:15,375 --> 00:32:17,355
+All right, anyway, I'm going to call this one
+
+764
+00:32:17,475 --> 00:32:18,276
+and there's also,
+
+765
+00:32:18,385 --> 00:32:19,326
+but here's the best part.
+
+766
+00:32:19,375 --> 00:32:22,865
+There is nothing in CWE for like essentially
+
+767
+00:32:22,916 --> 00:32:24,946
+the domain name got hijacked by an attacker.
+
+768
+00:32:24,956 --> 00:32:27,235
+Somehow. There's, there's nothing in here at all.
+
+769
+00:32:27,245 --> 00:32:32,536
+An expired domain should have ac we because an expired domain is a legitimate risk.
+
+770
+00:32:32,676 --> 00:32:37,046
+The problem is this is a hard one to fix because once the attacker has DNS,
+
+771
+00:32:37,206 --> 00:32:39,956
+-- they stand up everything and look legit,
+-- I mean, to a degree.
+
+772
+00:32:39,965 --> 00:32:43,196
+All right, I'm not going to argue this one anymore. I, I think again,
+
+773
+00:32:43,650 --> 00:32:46,069
+we'll see, we'll see how it all turns out. Thank you, Kurt.
+
+774
+00:32:46,079 --> 00:32:47,270
+Thank you everyone for listening. Go to the
+
+775
+00:32:47,469 --> 00:32:49,430
+Security podcast.com. Head up the show notes. Yui
+
+776
+00:32:49,780 --> 00:32:53,510
+Podos says podcast. Hashtag and Mastodon. Kurt have a marvelous rest of your day.
+
+777
+00:32:53,709 --> 00:32:57,069
+-- You too. Thanks everybody. Thanks
+-- everyone. Bye bye.

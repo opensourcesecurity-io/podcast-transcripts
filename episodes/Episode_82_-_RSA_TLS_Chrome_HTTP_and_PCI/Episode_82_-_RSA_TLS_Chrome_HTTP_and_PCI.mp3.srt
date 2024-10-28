@@ -1,0 +1,2676 @@
+0
+00:00:05,309 --> 00:00:09,529
+Hello and welcome to the open source security podcast episode 82 with myself,
+
+1
+00:00:09,539 --> 00:00:12,319
+Kurt Siefried and my partner in Thought Crime, Josh Pressers.
+
+2
+00:00:12,779 --> 00:00:15,989
+So I'm excited you have something to tell me about,
+
+3
+00:00:16,010 --> 00:00:18,569
+but you haven't told me before now because
+
+4
+00:00:18,579 --> 00:00:21,799
+you apparently want my unadulterated reaction to it.
+
+5
+00:00:21,899 --> 00:00:22,319
+So
+
+6
+00:00:23,129 --> 00:00:24,100
+-- what's going on, man,
+-- a
+
+7
+00:00:24,250 --> 00:00:29,479
+quick back story as people may or may not know there's a large Chinese. Uh
+
+8
+00:00:29,899 --> 00:00:32,799
+I don't even know what to call it anymore. Like what do you call Google and Yahoo?
+
+9
+00:00:32,810 --> 00:00:36,189
+They're not internet providers, they're internet properties, they're internet
+
+10
+00:00:36,750 --> 00:00:39,979
+-- conglomerates. There we go. That's the word,
+-- conglomerates, a nice word.
+
+11
+00:00:40,349 --> 00:00:45,270
+So there's a big one in China called qq.com and uh they do a lot of stuff, for example,
+
+12
+00:00:45,279 --> 00:00:46,060
+free email.
+
+13
+00:00:46,069 --> 00:00:48,409
+Uh One of the interesting things being is that you,
+
+14
+00:00:48,419 --> 00:00:50,400
+you have to actually have a Chinese mobile number
+
+15
+00:00:50,409 --> 00:00:51,860
+for them to send the confirmation code to.
+
+16
+00:00:52,689 --> 00:00:54,380
+So like you and I can't sign up,
+
+17
+00:00:54,779 --> 00:00:57,319
+right? It's basically Chinese nationals only
+
+18
+00:00:57,470 --> 00:01:03,700
+and like a lot of conglomerates, they produce a web browser because I guess you want,
+
+19
+00:01:03,709 --> 00:01:07,099
+well, you want to capture ad revenue and shopping and you know, it's kind of like,
+
+20
+00:01:07,110 --> 00:01:07,569
+was it Weibo
+
+21
+00:01:07,849 --> 00:01:09,260
+is the other one where they have like
+
+22
+00:01:09,379 --> 00:01:12,260
+the online payments now and everything built into their client? Right.
+
+23
+00:01:12,529 --> 00:01:12,980
+Right.
+
+24
+00:01:13,150 --> 00:01:14,319
+So they have a browser
+
+25
+00:01:14,849 --> 00:01:17,529
+and what do web browsers have to make us all safe?
+
+26
+00:01:18,029 --> 00:01:18,819
+Nothing
+
+27
+00:01:19,279 --> 00:01:19,980
+they have crypto.
+
+28
+00:01:21,370 --> 00:01:21,669
+Yeah.
+
+29
+00:01:22,129 --> 00:01:23,120
+Um So they have crypto,
+
+30
+00:01:23,260 --> 00:01:23,779
+right.
+
+31
+00:01:24,400 --> 00:01:26,080
+So uh these
+
+32
+00:01:26,309 --> 00:01:30,050
+rather clever guys uh from the Department of Computer Science,
+
+33
+00:01:30,059 --> 00:01:31,949
+University of New Mexico, Cornell Tech.
+
+34
+00:01:31,959 --> 00:01:35,120
+And uh yeah, again, University of New Mexico
+
+35
+00:01:35,959 --> 00:01:39,989
+did a paper entitled when Textbook Rs A is used
+
+36
+00:01:40,000 --> 00:01:42,019
+to protect the privacy of hundreds of millions of users.
+
+37
+00:01:42,029 --> 00:01:43,750
+And so this is literally
+
+38
+00:01:44,169 --> 00:01:44,800
+here's the thing, right?
+
+39
+00:01:44,809 --> 00:01:47,400
+If you're a developer and you need to do some crypto code, what do you do?
+
+40
+00:01:47,949 --> 00:01:49,760
+You should totally write your own, right?
+
+41
+00:01:50,120 --> 00:01:52,389
+Oh Wait, no, I mean, don't, don't roll your own crypto.
+
+42
+00:01:52,400 --> 00:01:52,500
+No,
+
+43
+00:01:52,510 --> 00:01:55,389
+never roll your own crypto or even if you don't roll your own
+
+44
+00:01:55,400 --> 00:01:57,739
+crypto and you try to use like open SSL libraries and stuff.
+
+45
+00:01:57,750 --> 00:01:58,540
+The problem is they,
+
+46
+00:01:58,550 --> 00:02:04,019
+they go to like a textbook or like stack overflow and like look for the answer to,
+
+47
+00:02:04,029 --> 00:02:05,589
+you know, how do I make web crypto
+
+48
+00:02:06,080 --> 00:02:08,860
+and then they, you know, follow what is in there because
+
+49
+00:02:09,139 --> 00:02:10,380
+well, it'll probably work.
+
+50
+00:02:11,529 --> 00:02:13,470
+I think it's safe to say if you're going
+
+51
+00:02:13,479 --> 00:02:16,639
+to stack overflow to enable TLS in your application,
+
+52
+00:02:16,770 --> 00:02:19,259
+you probably have two problems now instead
+
+53
+00:02:19,529 --> 00:02:20,679
+of one, right?
+
+54
+00:02:21,520 --> 00:02:23,759
+So anyways, um they do crypto on the web browser
+
+55
+00:02:23,929 --> 00:02:25,300
+they have a browser for Android.
+
+56
+00:02:25,419 --> 00:02:29,940
+And uh so the uh the wup um
+
+57
+00:02:30,229 --> 00:02:33,550
+the WUP requests contain basically information about, you know,
+
+58
+00:02:33,559 --> 00:02:36,559
+the user's phone number, QQ user name, the Wi Fi Mac address,
+
+59
+00:02:36,570 --> 00:02:38,449
+they're on the SS ID blah, blah blah, right?
+
+60
+00:02:39,520 --> 00:02:44,070
+So anyways to encrypt this wup request, we use crypto, of course.
+
+61
+00:02:44,369 --> 00:02:47,119
+So first and, and this is verbatim from the paper.
+
+62
+00:02:47,130 --> 00:02:49,770
+This is not me making terrible stuff up first.
+
+63
+00:02:49,779 --> 00:02:52,720
+The client generates 100 and 28 bit A S session key
+
+64
+00:02:52,910 --> 00:02:57,600
+-- for the session, right? That's, that's good 128 bit session key.
+-- It's all right.
+
+65
+00:02:57,610 --> 00:03:02,550
+-- It could be better
+-- using a pseudorandom number generator. OK? We're good, right?
+
+66
+00:03:02,899 --> 00:03:05,520
+Seated with the current time in milliseconds since the UNIX
+
+67
+00:03:05,639 --> 00:03:05,880
+epoch.
+
+68
+00:03:06,500 --> 00:03:07,470
+That's bad.
+
+69
+00:03:07,949 --> 00:03:09,610
+Now, tell us why is that bad?
+
+70
+00:03:09,869 --> 00:03:16,720
+Because if you know about when somebody did something, you can easily regenerate.
+
+71
+00:03:16,729 --> 00:03:18,949
+Well, that's not a pseudo random number. Well, I can't,
+
+72
+00:03:19,619 --> 00:03:22,929
+it's, well, it doesn't matter what pseudorandomness if you,
+
+73
+00:03:23,100 --> 00:03:24,330
+even if you don't like,
+
+74
+00:03:24,339 --> 00:03:27,800
+even if you only know within an hour or a day of when the person sent this request,
+
+75
+00:03:27,809 --> 00:03:28,679
+you can brute force it.
+
+76
+00:03:29,190 --> 00:03:31,559
+They pretty easily without question. Yes.
+
+77
+00:03:31,570 --> 00:03:32,960
+I mean, that's the whole point of,
+
+78
+00:03:32,970 --> 00:03:35,360
+of pseudo random number generators is that there's no
+
+79
+00:03:35,369 --> 00:03:38,440
+way for an attacker to ascertain the internal state.
+
+80
+00:03:38,850 --> 00:03:41,009
+And if you're setting it based on milliseconds,
+
+81
+00:03:41,369 --> 00:03:43,559
+I can easily figure out your state.
+
+82
+00:03:44,779 --> 00:03:45,270
+All right.
+
+83
+00:03:45,490 --> 00:03:47,279
+So, well, OK, then
+
+84
+00:03:48,419 --> 00:03:52,820
+then the client encrypts the session key using a 1024 bit RS A public key.
+
+85
+00:03:53,039 --> 00:03:56,880
+This public key has the exponent 65,537.
+
+86
+00:03:57,089 --> 00:03:59,899
+And the RS A implementation is quote textbook RS
+
+87
+00:04:00,000 --> 00:04:04,559
+a unquote, meaning that no form of padding such as OAP is applied at all. Now,
+
+88
+00:04:04,770 --> 00:04:07,559
+what is padding? Can you explain that to us in a crypto sense?
+
+89
+00:04:08,199 --> 00:04:12,490
+Yeah, I'll try to make it make sense. So when you have crypto,
+
+90
+00:04:13,229 --> 00:04:17,290
+you obviously have a message, let's say you have 36 bytes of text,
+
+91
+00:04:17,298 --> 00:04:18,940
+we'll just say for this example.
+
+92
+00:04:18,988 --> 00:04:23,100
+And when you encrypt 36 bytes of text, you get 36 bytes of
+
+93
+00:04:23,670 --> 00:04:25,700
+encrypted data essentially, right?
+
+94
+00:04:26,329 --> 00:04:31,279
+And there are various crypto algorithms that require say 1024 bytes or
+
+95
+00:04:31,570 --> 00:04:36,269
+there there's a number of other reasons including if, if someone knows it's 36 bys,
+
+96
+00:04:36,459 --> 00:04:40,329
+they can conduct certain attacks on it. And so you generally pad it out to something.
+
+97
+00:04:40,339 --> 00:04:44,989
+So it's consistent no matter who's doing what you always have, say 1024 bits.
+
+98
+00:04:45,480 --> 00:04:47,260
+And that, that helps with the algorithms.
+
+99
+00:04:47,269 --> 00:04:50,470
+It helps with consistency and it makes certain attacks much, much harder.
+
+100
+00:04:50,480 --> 00:04:55,350
+And so not padding is generally frowned upon in most situations today.
+
+101
+00:04:56,119 --> 00:04:56,459
+Yeah,
+
+102
+00:04:56,820 --> 00:05:01,470
+the client then uses the session key to encrypt, the WUP request in ECB mode,
+
+103
+00:05:01,850 --> 00:05:05,190
+hang on a second ECB mode for web
+
+104
+00:05:05,380 --> 00:05:07,640
+crypto. Let's see what the top result is.
+
+105
+00:05:08,019 --> 00:05:10,350
+Probably don't necessarily want to be doing that,
+
+106
+00:05:10,709 --> 00:05:14,540
+I believe. Yes, insecure cipher mode is what they call it typically.
+
+107
+00:05:15,730 --> 00:05:18,880
+Uh So the long and the short of that is, is there's different modes of encryption,
+
+108
+00:05:18,890 --> 00:05:21,350
+some of which are suitable for the web and many of which are not.
+
+109
+00:05:21,359 --> 00:05:22,600
+So anyways, step four,
+
+110
+00:05:22,799 --> 00:05:24,209
+the client says the R A encrypted,
+
+111
+00:05:25,119 --> 00:05:30,549
+sorry, let's talk about ECB for a second as well. So, so ECB
+
+112
+00:05:31,130 --> 00:05:37,470
+is, there's CBC and there's ECB are kind of the two big ones. And with CBC,
+
+113
+00:05:37,709 --> 00:05:39,149
+imagine it's,
+
+114
+00:05:39,690 --> 00:05:41,559
+we could think of it in the context of
+
+115
+00:05:41,570 --> 00:05:44,109
+even the Blockchain just because I can say Blockchain now
+
+116
+00:05:44,399 --> 00:05:47,739
+is you kind of take the results of the last operation
+
+117
+00:05:47,750 --> 00:05:50,589
+you did and you feed it back into the algorithm.
+
+118
+00:05:50,600 --> 00:05:54,500
+And so obviously, if you pick up the stream halfway through,
+
+119
+00:05:54,970 --> 00:05:56,140
+even if you have the key,
+
+120
+00:05:56,149 --> 00:06:00,299
+it's not useful to you because what it's been doing is part of the key essentially
+
+121
+00:06:00,640 --> 00:06:05,170
+where ECB doesn't work like that. It's, it's more of what we would think of as
+
+122
+00:06:05,470 --> 00:06:09,559
+you know, you, you kind of X or let's say, and I know that's grossly inaccurate.
+
+123
+00:06:09,570 --> 00:06:11,290
+So please please don't hold me to that.
+
+124
+00:06:11,579 --> 00:06:14,230
+But it, it's, it's more static in that regard, right?
+
+125
+00:06:14,239 --> 00:06:16,829
+Where kind of each block is encrypted in the same way.
+
+126
+00:06:17,100 --> 00:06:20,980
+Yeah, if you go to the Wikipedia page on ECB and CB or on ECB,
+
+127
+00:06:20,989 --> 00:06:22,579
+they have that beautiful image of to
+
+128
+00:06:22,850 --> 00:06:23,070
+the Linux
+
+129
+00:06:23,170 --> 00:06:23,690
+Penguin
+
+130
+00:06:24,049 --> 00:06:24,149
+and
+
+131
+00:06:24,500 --> 00:06:27,019
+using ECB mode. You can clearly see it's to
+
+132
+00:06:27,179 --> 00:06:29,089
+-- the Linux Penguin and you know,
+-- right.
+
+133
+00:06:29,390 --> 00:06:32,709
+Any non ECB mode, it, it looks like, you know, the TV, on the fritz,
+
+134
+00:06:32,720 --> 00:06:33,589
+it's just white noise.
+
+135
+00:06:33,600 --> 00:06:34,109
+Right.
+
+136
+00:06:35,049 --> 00:06:36,859
+That, yes, that's, that's a great example.
+
+137
+00:06:36,869 --> 00:06:38,790
+And we'll put a link to that in the show notes.
+
+138
+00:06:39,119 --> 00:06:41,429
+Yeah. What it boils down to is don't use ECB
+
+139
+00:06:41,760 --> 00:06:42,640
+for web crypto.
+
+140
+00:06:43,850 --> 00:06:43,899
+Is
+
+141
+00:06:44,010 --> 00:06:46,079
+there any time it's appropriate to use ECB anymore?
+
+142
+00:06:47,640 --> 00:06:48,100
+It's
+
+143
+00:06:48,690 --> 00:06:51,070
+for file system encryption because any time you
+
+144
+00:06:51,079 --> 00:06:53,470
+need kind of random access to the data,
+
+145
+00:06:53,480 --> 00:06:57,100
+you can't use CBC or you have to basically replay everything
+
+146
+00:06:57,109 --> 00:06:59,250
+in order which would be bad in a file system.
+
+147
+00:06:59,529 --> 00:07:00,220
+Yeah, that's true.
+
+148
+00:07:00,589 --> 00:07:02,619
+Uh So then number four,
+
+149
+00:07:02,630 --> 00:07:04,859
+the client sends the RS a encrypted a session
+
+150
+00:07:04,869 --> 00:07:07,429
+key and the encrypted wup request to the server,
+
+151
+00:07:08,130 --> 00:07:10,720
+the server then decrypt the RS A encrypted AES
+
+152
+00:07:10,730 --> 00:07:12,420
+key it received from the client using its private
+
+153
+00:07:12,429 --> 00:07:14,950
+key then chooses the least significant 120 bits of
+
+154
+00:07:14,959 --> 00:07:17,630
+the plain text to be the AES session key
+
+155
+00:07:18,470 --> 00:07:19,170
+white.
+
+156
+00:07:22,989 --> 00:07:23,920
+No, no,
+
+157
+00:07:25,970 --> 00:07:30,380
+see this is. Oh, anyway, so, well, obviously we have your reaction out.
+
+158
+00:07:30,390 --> 00:07:32,059
+Now, can you please explain that reaction?
+
+159
+00:07:33,390 --> 00:07:33,559
+Uh
+
+160
+00:07:34,970 --> 00:07:36,559
+There's so much wrong with this,
+
+161
+00:07:37,130 --> 00:07:40,320
+read this again slowly and then I'll pick it apart. OK?
+
+162
+00:07:40,809 --> 00:07:41,820
+The server decrypt,
+
+163
+00:07:41,829 --> 00:07:45,679
+the RS A encrypted AES key it received from the client using its private key, right?
+
+164
+00:07:45,690 --> 00:07:46,279
+That's fine.
+
+165
+00:07:46,600 --> 00:07:46,820
+That's
+
+166
+00:07:47,470 --> 00:07:47,549
+fine.
+
+167
+00:07:48,250 --> 00:07:51,959
+Then it chooses the least significant 128 bits of the plain text
+
+168
+00:07:53,630 --> 00:07:55,369
+to be the A E session key.
+
+169
+00:07:56,029 --> 00:07:57,850
+And so this is where
+
+170
+00:07:58,609 --> 00:07:59,480
+I'm, I'm
+
+171
+00:07:59,970 --> 00:08:03,950
+a couple of things pop into my head here. So, first of all, it's already an AES key.
+
+172
+00:08:04,299 --> 00:08:04,869
+Right?
+
+173
+00:08:05,290 --> 00:08:08,290
+And, and I don't know exactly what's in the session text,
+
+174
+00:08:08,299 --> 00:08:12,309
+but it's quite likely it's going to be something relatively predictable.
+
+175
+00:08:12,320 --> 00:08:12,709
+And
+
+176
+00:08:12,890 --> 00:08:16,510
+the first thing that popped into my head is they're not padding anything.
+
+177
+00:08:16,839 --> 00:08:19,579
+So are they essentially dealing with like null bites in
+
+178
+00:08:19,589 --> 00:08:22,089
+some way if there's no padding as part of this?
+
+179
+00:08:22,100 --> 00:08:22,549
+It's,
+
+180
+00:08:23,940 --> 00:08:27,440
+this is, this is wonky. I mean, you don't ever use
+
+181
+00:08:27,679 --> 00:08:30,630
+when, when you need to generate a cryptographically strong key,
+
+182
+00:08:30,640 --> 00:08:35,960
+you don't use things like known plain text from the, from the,
+
+183
+00:08:35,969 --> 00:08:39,140
+essentially the client you're communicating with because everything I've,
+
+184
+00:08:39,150 --> 00:08:40,520
+I've heard so far
+
+185
+00:08:40,808 --> 00:08:42,280
+strikes me as
+
+186
+00:08:42,669 --> 00:08:46,880
+it probably wouldn't be terribly difficult to man in the middle of this process.
+
+187
+00:08:47,270 --> 00:08:49,440
+Well, like Ime I numbers, there's,
+
+188
+00:08:49,619 --> 00:08:50,690
+there's a lot of them. There's
+
+189
+00:08:51,919 --> 00:08:52,010
+not
+
+190
+00:08:52,179 --> 00:08:52,190
+a
+
+191
+00:08:52,419 --> 00:08:52,559
+lot so
+
+192
+00:08:52,770 --> 00:08:53,679
+much known.
+
+193
+00:08:54,280 --> 00:08:54,380
+Yeah,
+
+194
+00:08:54,489 --> 00:08:56,840
+there's so much known about these sessions and
+
+195
+00:08:57,880 --> 00:08:58,669
+I would, I
+
+196
+00:08:58,840 --> 00:09:01,140
+could put my tinfoil hat on and say
+
+197
+00:09:01,349 --> 00:09:05,450
+this was done on purpose so it can be broken. But I have a greater suspicion.
+
+198
+00:09:05,590 --> 00:09:08,099
+This is just someone who didn't actually know what they were doing.
+
+199
+00:09:09,969 --> 00:09:14,010
+So the server then decrypt the w uh sorry, we said that uh oh sorry,
+
+200
+00:09:14,059 --> 00:09:17,869
+the server then decrypt the WEP request using the session key that it,
+
+201
+00:09:17,880 --> 00:09:20,520
+that it obtained via the RS A decryption.
+
+202
+00:09:21,400 --> 00:09:22,000
+Great.
+
+203
+00:09:22,229 --> 00:09:23,520
+And then finally, number seven,
+
+204
+00:09:23,530 --> 00:09:25,390
+if the A as cipher text received from the
+
+205
+00:09:25,400 --> 00:09:28,630
+client decrypt to a valid wup request correctly,
+
+206
+00:09:28,880 --> 00:09:31,489
+the server sends an A s encrypted response using
+
+207
+00:09:31,500 --> 00:09:34,330
+the AES session key also using ECB mode.
+
+208
+00:09:36,409 --> 00:09:36,919
+Yeah.
+
+209
+00:09:36,929 --> 00:09:38,969
+At this point like this is where the expert basically
+
+210
+00:09:38,979 --> 00:09:40,909
+takes a deep breath and then goes for a drink.
+
+211
+00:09:41,299 --> 00:09:44,700
+And so man, there's so much messed up with this.
+
+212
+00:09:44,849 --> 00:09:46,830
+So I'm not even a crypto expert, right?
+
+213
+00:09:46,840 --> 00:09:47,010
+I'm,
+
+214
+00:09:47,020 --> 00:09:50,659
+I'm there's people way smarter than me that I know are probably crying right now.
+
+215
+00:09:50,669 --> 00:09:50,900
+But
+
+216
+00:09:51,090 --> 00:09:51,429
+so,
+
+217
+00:09:51,440 --> 00:09:56,270
+so here's the biggest problem I see with ECB encryption using something like this,
+
+218
+00:09:56,479 --> 00:10:00,030
+there are going to be parts of this message that are known and understood.
+
+219
+00:10:00,340 --> 00:10:03,979
+And this is kind of like that, that Linux Penguin example where you know,
+
+220
+00:10:03,989 --> 00:10:06,400
+there's going to be so much, so many bites of header,
+
+221
+00:10:06,409 --> 00:10:08,679
+there's going to be so many bites of message.
+
+222
+00:10:08,690 --> 00:10:12,989
+There's gonna be, you know, probably some sort of ending bites in, in the message.
+
+223
+00:10:13,000 --> 00:10:16,750
+There's, well, there's not padding apparently, but there should be.
+
+224
+00:10:17,500 --> 00:10:20,789
+And like this is one of the challenges you get with ECB is is
+
+225
+00:10:20,799 --> 00:10:24,760
+if you look at the patterns and if you collect a lot of them,
+
+226
+00:10:24,900 --> 00:10:29,679
+you can start figuring things out and, and it's very easy to do cryptanalysis
+
+227
+00:10:29,900 --> 00:10:30,190
+when,
+
+228
+00:10:30,200 --> 00:10:34,530
+when you are able to collect huge volumes of basically similar
+
+229
+00:10:34,539 --> 00:10:37,630
+looking messages sent over and over and over again here.
+
+230
+00:10:39,530 --> 00:10:40,690
+Well, that's neat.
+
+231
+00:10:41,890 --> 00:10:45,020
+Now, here's the other thing that, that comes to my brain though,
+
+232
+00:10:45,030 --> 00:10:46,280
+when I think of this is,
+
+233
+00:10:46,650 --> 00:10:51,219
+are, are the, the Chinese developers, have they seen this report?
+
+234
+00:10:51,229 --> 00:10:52,669
+Will they see this report
+
+235
+00:10:52,909 --> 00:10:53,989
+and will they fix it?
+
+236
+00:10:54,250 --> 00:10:57,070
+Apparently it was fixed. They went from 128
+
+237
+00:10:57,440 --> 00:10:59,510
+to 1024 and some other stuff. But
+
+238
+00:11:00,190 --> 00:11:02,630
+in my experience when you have
+
+239
+00:11:02,859 --> 00:11:04,469
+especially your own crypto code,
+
+240
+00:11:05,429 --> 00:11:06,820
+when you have inexperienced developers,
+
+241
+00:11:06,830 --> 00:11:09,840
+they may have plugged these specific holes and problems.
+
+242
+00:11:10,500 --> 00:11:13,280
+The problem is they're going to probably write some new functionality tomorrow.
+
+243
+00:11:13,619 --> 00:11:14,440
+Yes.
+
+244
+00:11:14,909 --> 00:11:17,039
+Yes. Without, without a doubt. And
+
+245
+00:11:17,289 --> 00:11:21,479
+well, other things are less dangerous in crypto. I mean, crypto is hard, man.
+
+246
+00:11:21,940 --> 00:11:24,320
+Even, even the guys who know what they're doing, get it wrong.
+
+247
+00:11:24,679 --> 00:11:24,750
+Yeah.
+
+248
+00:11:25,520 --> 00:11:25,719
+Yeah.
+
+249
+00:11:26,299 --> 00:11:29,799
+So well, and speaking of crypto and getting it wrong and making it hard.
+
+250
+00:11:30,010 --> 00:11:31,590
+So we now have
+
+251
+00:11:31,729 --> 00:11:33,710
+two big events coming up this summer.
+
+252
+00:11:33,880 --> 00:11:37,590
+-- Oh, man, it's going to be the summer of TLS. I'm so excited.
+-- Oh, yeah.
+
+253
+00:11:37,880 --> 00:11:40,630
+So the, well, the first event chronologically
+
+254
+00:11:40,919 --> 00:11:44,750
+is the PC I the payment card industry standard.
+
+255
+00:11:45,700 --> 00:11:51,179
+Uh They will be deprecating TLS version one point. Oh and well, SSL
+
+256
+00:11:51,390 --> 00:11:51,960
+uh
+
+257
+00:11:52,289 --> 00:11:54,169
+it, it won't be allowed and, and of course,
+
+258
+00:11:54,179 --> 00:11:56,989
+there are exemptions for like payment card terminals and
+
+259
+00:11:57,000 --> 00:11:59,789
+a pile of other stuff that can't be replaced reasonably
+
+260
+00:11:59,900 --> 00:12:00,729
+cheaply.
+
+261
+00:12:00,900 --> 00:12:02,869
+So, of course, they're letting people just not,
+
+262
+00:12:03,150 --> 00:12:05,599
+um, you know, and they sort of are going with the whole wily wobbly.
+
+263
+00:12:05,609 --> 00:12:09,820
+Well, these things aren't really web browsers so it's kind of mostly. Ok.
+
+264
+00:12:10,039 --> 00:12:10,520
+Ish,
+
+265
+00:12:11,000 --> 00:12:11,010
+I
+
+266
+00:12:11,169 --> 00:12:11,289
+mean,
+
+267
+00:12:11,710 --> 00:12:13,080
+for some tax is true.
+
+268
+00:12:13,469 --> 00:12:16,909
+I, I've talked to a lot of PC I auditors about this actually because it was,
+
+269
+00:12:16,919 --> 00:12:20,169
+I think the 3.2 standard basically said you had to use my,
+
+270
+00:12:20,179 --> 00:12:22,049
+and they just said modern TLS
+
+271
+00:12:22,380 --> 00:12:24,820
+for new deployments and now old deploy, well,
+
+272
+00:12:24,830 --> 00:12:29,330
+only certain aspects of the PC I standard depending upon what you were doing.
+
+273
+00:12:29,340 --> 00:12:30,880
+It was, it was modern TLS.
+
+274
+00:12:30,890 --> 00:12:35,169
+And that was interpreted to mean in TLS 1.2 by every auditor I talked to
+
+275
+00:12:35,859 --> 00:12:36,409
+and,
+
+276
+00:12:36,760 --> 00:12:38,669
+and this one sounds like they're,
+
+277
+00:12:38,679 --> 00:12:42,690
+they're going to bring the hammer down maybe a little harder than they did before.
+
+278
+00:12:43,059 --> 00:12:43,630
+And
+
+279
+00:12:43,869 --> 00:12:47,270
+the, the thing is though to that PC I does, it's really clever is
+
+280
+00:12:47,919 --> 00:12:53,780
+you, you can fail technically, but as long as you have a plan to not fail next time,
+
+281
+00:12:53,789 --> 00:12:56,200
+they will often let you continue operating,
+
+282
+00:12:56,210 --> 00:12:59,710
+which is obviously the right way to do it because if you fail and you're like, yeah,
+
+283
+00:12:59,719 --> 00:13:00,929
+screw this, I hate this stuff.
+
+284
+00:13:00,940 --> 00:13:02,140
+They're gonna be like, nope, you're done.
+
+285
+00:13:02,450 --> 00:13:03,460
+But if you say, ok,
+
+286
+00:13:03,469 --> 00:13:05,760
+I failed and this is why I failed and here's how
+
+287
+00:13:05,770 --> 00:13:07,419
+I'm going to fix it in the next three months,
+
+288
+00:13:07,429 --> 00:13:08,979
+they'll be like, ok, great.
+
+289
+00:13:09,140 --> 00:13:10,140
+-- You know, let's let's
+-- work out.
+
+290
+00:13:10,150 --> 00:13:13,809
+And realistically these guys can't turn their stuff off and just not
+
+291
+00:13:14,289 --> 00:13:17,530
+process credit card money because then they would go bankrupt.
+
+292
+00:13:18,109 --> 00:13:22,690
+Right. Right. Exactly. That's, so, that's not an, like, like, literally failure
+
+293
+00:13:22,890 --> 00:13:23,849
+is not an option,
+
+294
+00:13:24,469 --> 00:13:25,409
+like true failure.
+
+295
+00:13:26,150 --> 00:13:26,799
+Um,
+
+296
+00:13:27,380 --> 00:13:28,719
+but yeah, so it's, it's,
+
+297
+00:13:29,090 --> 00:13:29,929
+yeah, I,
+
+298
+00:13:31,419 --> 00:13:34,070
+here's the other thing that I think is really important to
+
+299
+00:13:34,080 --> 00:13:36,159
+clarify and you and I were talking about this yesterday.
+
+300
+00:13:36,270 --> 00:13:41,400
+TLS 1.2 which is the latest standard is like, it's nearly 10 years old now.
+
+301
+00:13:41,650 --> 00:13:43,489
+-- Right?
+-- August 2008 is when it was,
+
+302
+00:13:43,900 --> 00:13:45,440
+we're not talking about like
+
+303
+00:13:45,750 --> 00:13:50,900
+people have only had three months to get ready or something. It's been 10 years.
+
+304
+00:13:51,159 --> 00:13:55,880
+There is, if you're still using SSL, I just shame on you. Right.
+
+305
+00:13:55,890 --> 00:13:57,469
+That's all I can say to that. I mean,
+
+306
+00:13:57,659 --> 00:14:03,340
+no piece of hardware should be in use for 10 years if it's not maybe a car and even then,
+
+307
+00:14:03,349 --> 00:14:04,770
+right, nobody keeps cars for 10 years.
+
+308
+00:14:04,780 --> 00:14:07,650
+I'm sure these guys have mainframes and older systems creaking along.
+
+309
+00:14:08,510 --> 00:14:11,179
+I mean, I, ok, let me put it this way.
+
+310
+00:14:11,190 --> 00:14:15,010
+Would you bet money against there being at least one windows 95 machine in
+
+311
+00:14:15,020 --> 00:14:18,429
+use by somebody in the payment card industry somewhere doing some automated task?
+
+312
+00:14:18,440 --> 00:14:21,450
+Oh, I have no doubt there shouldn't be, but I'm sure there is.
+
+313
+00:14:21,460 --> 00:14:25,570
+And this is a great example of finally saying, you know what it's time to be done,
+
+314
+00:14:25,719 --> 00:14:26,559
+get rid of it.
+
+315
+00:14:27,179 --> 00:14:28,369
+And, and not only that, I
+
+316
+00:14:28,770 --> 00:14:32,010
+have a sneaking suspicion that if you actually did like an
+
+317
+00:14:32,020 --> 00:14:34,450
+ro I assessment on a lot of this old gear,
+
+318
+00:14:34,979 --> 00:14:37,130
+the cost of, of upgrading it
+
+319
+00:14:37,260 --> 00:14:39,960
+well, carries a certain amount of upfront. It,
+
+320
+00:14:40,359 --> 00:14:43,450
+it is probably cheaper over the life of the product
+
+321
+00:14:43,460 --> 00:14:46,599
+versus whatever you're paying now to keep the stuff alive.
+
+322
+00:14:47,179 --> 00:14:48,799
+Yeah, the problem being is that, you know,
+
+323
+00:14:48,809 --> 00:14:51,849
+a lot of financial thinking is quite often short term.
+
+324
+00:14:52,320 --> 00:14:55,049
+Right. You gotta, gotta hit the number for Wall Street, right.
+
+325
+00:14:55,539 --> 00:14:55,619
+Yeah.
+
+326
+00:14:56,820 --> 00:14:58,809
+So that's the first thing that's gonna happen.
+
+327
+00:14:58,820 --> 00:15:02,119
+And that's June 30th and that date was already pushed back and I, it
+
+328
+00:15:02,590 --> 00:15:03,570
+doesn't look, I, I
+
+329
+00:15:03,979 --> 00:15:06,929
+don't think they're going to push the state back again because as you said, this,
+
+330
+00:15:06,940 --> 00:15:09,760
+you know, everybody's had just about 10 years at that point.
+
+331
+00:15:09,770 --> 00:15:14,830
+There's been a long time in, in PC I 3.2 landed more than a year ago.
+
+332
+00:15:14,840 --> 00:15:16,929
+It's been like two years I think for that one.
+
+333
+00:15:17,059 --> 00:15:18,270
+So there's,
+
+334
+00:15:18,799 --> 00:15:20,650
+there's not a very good reason
+
+335
+00:15:20,830 --> 00:15:23,880
+at this point to not be using TLS.
+
+336
+00:15:24,309 --> 00:15:27,049
+A new version of TLS we'll say. Right.
+
+337
+00:15:28,130 --> 00:15:28,599
+Yeah.
+
+338
+00:15:29,890 --> 00:15:30,080
+Oh,
+
+339
+00:15:30,090 --> 00:15:33,440
+and the other nice thing too is that they're going to be disallowing the use of weak
+
+340
+00:15:33,450 --> 00:15:35,739
+ciphers and unapproved algorithms such as RC four
+
+341
+00:15:35,750 --> 00:15:37,599
+and MB five which have at this point,
+
+342
+00:15:37,609 --> 00:15:39,270
+they, you know, your laptop can crack them
+
+343
+00:15:40,340 --> 00:15:41,489
+in real time.
+
+344
+00:15:42,929 --> 00:15:45,500
+So, yeah. No, this is, I mean, this is good.
+
+345
+00:15:45,510 --> 00:15:47,809
+This is gonna actually, this is something that will
+
+346
+00:15:48,460 --> 00:15:49,710
+hope. Well,
+
+347
+00:15:49,880 --> 00:15:51,880
+the thing I always wonder though is realistically,
+
+348
+00:15:52,570 --> 00:15:54,219
+has there ever been
+
+349
+00:15:54,640 --> 00:15:57,309
+a crypto based attack against a major
+
+350
+00:15:58,169 --> 00:15:59,190
+PC I player
+
+351
+00:15:59,400 --> 00:16:01,119
+or do they just break into the database and
+
+352
+00:16:01,130 --> 00:16:02,989
+hoover it all up like they did with equifax?
+
+353
+00:16:03,000 --> 00:16:04,510
+-- I, I
+-- don't think you.
+
+354
+00:16:04,520 --> 00:16:07,869
+Well, ok, so first of all, my guess is if there was a proper attack,
+
+355
+00:16:07,880 --> 00:16:08,979
+we'd never hear about it.
+
+356
+00:16:09,479 --> 00:16:11,950
+But kind of the way I view this is,
+
+357
+00:16:11,960 --> 00:16:16,989
+it's maybe less about the crypto itself and more about if you can't do this,
+
+358
+00:16:17,000 --> 00:16:19,150
+it's because you have bad hygiene,
+
+359
+00:16:19,520 --> 00:16:20,070
+right?
+
+360
+00:16:20,270 --> 00:16:24,270
+This is kind of like one of those just outward signs that if,
+
+361
+00:16:24,280 --> 00:16:26,030
+if you're using SSL three,
+
+362
+00:16:26,320 --> 00:16:27,700
+what else are you doing?
+
+363
+00:16:27,900 --> 00:16:28,380
+Right.
+
+364
+00:16:28,580 --> 00:16:28,820
+Yeah.
+
+365
+00:16:29,299 --> 00:16:31,349
+Well, I was talking with this about somebody um,
+
+366
+00:16:31,469 --> 00:16:32,820
+with respect to
+
+367
+00:16:33,000 --> 00:16:35,719
+essentially doing CV S for services and part
+
+368
+00:16:35,729 --> 00:16:37,440
+of the challenge with CV S for services is
+
+369
+00:16:37,669 --> 00:16:39,619
+with the majority of services provided by companies.
+
+370
+00:16:39,630 --> 00:16:43,109
+We don't really have any insight to them, right. It's just here, you know,
+
+371
+00:16:43,549 --> 00:16:46,520
+often times here's a public api that's it. That's all you can see. Right?
+
+372
+00:16:46,530 --> 00:16:47,219
+You don't know what,
+
+373
+00:16:47,229 --> 00:16:49,299
+what it's doing on the back end or what software it's running
+
+374
+00:16:49,309 --> 00:16:51,380
+on the back end or even what it's written in some cases.
+
+375
+00:16:52,099 --> 00:16:54,559
+And one of the things I mentioned was that, well, you know,
+
+376
+00:16:54,570 --> 00:16:57,119
+we might go with like SSL and TLS kind of stuff
+
+377
+00:16:57,130 --> 00:17:01,140
+initially because that is public facing and can easily be quantified,
+
+378
+00:17:01,369 --> 00:17:01,960
+right? You,
+
+379
+00:17:02,179 --> 00:17:04,300
+you can run like a tool like N map and say,
+
+380
+00:17:04,310 --> 00:17:07,229
+like give me a list of all the ciphers and protocols and combinations and blah,
+
+381
+00:17:07,239 --> 00:17:09,140
+blah blah that this endpoint will do,
+
+382
+00:17:09,598 --> 00:17:11,319
+you know, and show me the bad ones, right?
+
+383
+00:17:11,329 --> 00:17:14,880
+Or like the SSL lab stuff from qual, you know, query my server and
+
+384
+00:17:15,040 --> 00:17:17,800
+give me a, you know, an A through an F score.
+
+385
+00:17:18,218 --> 00:17:20,578
+Um So yeah, that's no, that's a good point though.
+
+386
+00:17:20,588 --> 00:17:23,688
+If, if you literally can't upgrade to like TLS,
+
+387
+00:17:23,848 --> 00:17:26,318
+then chances are like, are you even patching?
+
+388
+00:17:27,020 --> 00:17:29,020
+Right. Exactly. And, and that's,
+
+389
+00:17:29,270 --> 00:17:32,119
+that's my view on a lot of this compliance stuff is,
+
+390
+00:17:32,199 --> 00:17:36,959
+is compliance is like just saying I wash my hands after I use the bathroom,
+
+391
+00:17:37,140 --> 00:17:40,199
+right? It, it's not showing really anything deep.
+
+392
+00:17:40,209 --> 00:17:43,260
+It just shows that you have the basics under control and,
+
+393
+00:17:43,270 --> 00:17:44,859
+and a lot of organizations don't.
+
+394
+00:17:45,949 --> 00:17:46,609
+It's,
+
+395
+00:17:47,040 --> 00:17:48,500
+and I'm not gonna lie.
+
+396
+00:17:48,510 --> 00:17:52,150
+If you have legacy infrastructure and you're not already compliant,
+
+397
+00:17:52,160 --> 00:17:55,089
+it is very difficult to change the way you do
+
+398
+00:17:55,099 --> 00:17:58,020
+things and in all seriousness in a lot of instances,
+
+399
+00:17:58,030 --> 00:18:00,099
+it's probably easier to just start over.
+
+400
+00:18:01,469 --> 00:18:02,170
+Yes.
+
+401
+00:18:02,630 --> 00:18:06,160
+Yeah. And so in line with this, we also have Google Chrome
+
+402
+00:18:06,670 --> 00:18:08,819
+in July of 2018
+
+403
+00:18:09,530 --> 00:18:11,599
+with the release of version 68
+
+404
+00:18:11,910 --> 00:18:16,500
+chrome will mark all http sites as quote not secure unquote.
+
+405
+00:18:16,510 --> 00:18:18,430
+So I am so excited about this
+
+406
+00:18:18,709 --> 00:18:21,030
+in the address bar, it will say you know, like right now
+
+407
+00:18:21,329 --> 00:18:26,709
+it says example.com and in future, it will say not secure little bar thing and then
+
+408
+00:18:26,880 --> 00:18:28,550
+the uh the actual URL.
+
+409
+00:18:29,020 --> 00:18:33,280
+And yeah, this is interesting because users have been trained, you know,
+
+410
+00:18:33,290 --> 00:18:36,439
+oh you know, look for the lock, the lock makes it secure, blah, blah, blah,
+
+411
+00:18:36,780 --> 00:18:42,239
+but this is way more in your face, right? It says not secure right at the top,
+
+412
+00:18:43,300 --> 00:18:45,199
+you know, instead of saying like right now, I,
+
+413
+00:18:45,209 --> 00:18:47,270
+I see I'm looking at this blog posting on Google and
+
+414
+00:18:47,280 --> 00:18:49,160
+there's a little green lock and it says secure and then,
+
+415
+00:18:49,530 --> 00:18:50,540
+you know, HTPSF
+
+416
+00:18:50,859 --> 00:18:51,040
+slash
+
+417
+00:18:51,300 --> 00:18:53,439
+security dot google blog.com stuff.
+
+418
+00:18:53,630 --> 00:18:55,390
+What I'm really curious about is like,
+
+419
+00:18:55,400 --> 00:18:58,750
+how many people are going to upgrade to Chrome 68 not
+
+420
+00:18:58,760 --> 00:19:01,270
+notice it for a few days and then just flip out
+
+421
+00:19:01,920 --> 00:19:05,250
+when they go to like their favorite ecommerce website or bank or something.
+
+422
+00:19:05,569 --> 00:19:08,579
+I'm, I'm sure there will be some without question.
+
+423
+00:19:08,750 --> 00:19:13,160
+But at the same time, actually, I put a thing on Twitter about this. I said
+
+424
+00:19:13,729 --> 00:19:18,660
+this will do more to further security than every fishing training session ever
+
+425
+00:19:19,109 --> 00:19:19,900
+combined.
+
+426
+00:19:20,479 --> 00:19:20,819
+And,
+
+427
+00:19:20,829 --> 00:19:22,880
+and here's my thinking on this and I know
+
+428
+00:19:22,890 --> 00:19:25,250
+this will be kind of controversial to some but whatever
+
+429
+00:19:25,439 --> 00:19:26,079
+is
+
+430
+00:19:26,520 --> 00:19:29,290
+we have obsessed for a long time on
+
+431
+00:19:29,479 --> 00:19:31,540
+teaching users to do the right thing.
+
+432
+00:19:31,949 --> 00:19:36,770
+And I feel like this is the first big stake in the ground where we're admitting
+
+433
+00:19:37,170 --> 00:19:41,709
+it's not about the users. We need to use our technology to make things better.
+
+434
+00:19:41,930 --> 00:19:42,989
+And now mind you
+
+435
+00:19:43,239 --> 00:19:46,109
+what, what the TLS everywhere is going to do
+
+436
+00:19:46,329 --> 00:19:48,880
+isn't make site secure because let's face it.
+
+437
+00:19:48,890 --> 00:19:51,140
+Anyone can get a certificate from, let's encrypt now.
+
+438
+00:19:51,469 --> 00:19:51,619
+Yeah,
+
+439
+00:19:51,719 --> 00:19:53,910
+-- or use cloud flare or whatever,
+-- whatever. Exactly.
+
+440
+00:19:53,920 --> 00:19:57,219
+Like HTTP S is not a high bar any longer.
+
+441
+00:19:57,430 --> 00:19:59,969
+But what this does is it sets us up
+
+442
+00:19:59,979 --> 00:20:03,550
+for a universe where we can start imposing certain limits
+
+443
+00:20:03,910 --> 00:20:08,729
+on, on the way the internet is working to make it better for people.
+
+444
+00:20:08,780 --> 00:20:11,500
+And let's face it also, I think my, my guess is
+
+445
+00:20:11,739 --> 00:20:14,099
+the real reason Google really likes this is
+
+446
+00:20:14,510 --> 00:20:15,890
+there are various
+
+447
+00:20:16,069 --> 00:20:18,969
+I SPS now, at least in the United States
+
+448
+00:20:19,189 --> 00:20:20,140
+that are
+
+449
+00:20:20,449 --> 00:20:24,520
+they, they're modifying HTTP traffic to show their own ads
+
+450
+00:20:24,979 --> 00:20:26,729
+and, and let's face it at the end of the day,
+
+451
+00:20:26,739 --> 00:20:28,770
+Google is making all of its money on ads
+
+452
+00:20:28,780 --> 00:20:30,890
+and I'm sure this makes them incredibly grumpy.
+
+453
+00:20:31,119 --> 00:20:33,969
+I'm glad this also has the effect
+
+454
+00:20:34,079 --> 00:20:36,449
+of making the whole internet
+
+455
+00:20:36,589 --> 00:20:42,500
+-- use http S everywhere. It will be glorious if port 80 is gone someday.
+-- Right?
+
+456
+00:20:42,780 --> 00:20:45,500
+Well, I mean, you know, we've had hsts so the,
+
+457
+00:20:45,510 --> 00:20:49,079
+the HTTP S strict transport security header for a while.
+
+458
+00:20:49,089 --> 00:20:50,260
+And basically what that says is,
+
+459
+00:20:50,819 --> 00:20:51,800
+you know, you go to the,
+
+460
+00:20:51,810 --> 00:20:54,660
+the insecure version of the website and you get handed this header saying,
+
+461
+00:20:54,670 --> 00:20:57,760
+you know what from now on only talk to me via http S,
+
+462
+00:20:57,989 --> 00:21:01,229
+you know, for this amount of time. Usually you said the thing to be six months
+
+463
+00:21:01,339 --> 00:21:01,369
+at
+
+464
+00:21:01,819 --> 00:21:02,170
+the
+
+465
+00:21:02,449 --> 00:21:03,050
+same time.
+
+466
+00:21:03,280 --> 00:21:03,290
+I
+
+467
+00:21:03,459 --> 00:21:03,619
+mean,
+
+468
+00:21:03,969 --> 00:21:08,420
+-- look how hard is it to man in the middle of something like that? Right.
+-- Exactly.
+
+469
+00:21:08,430 --> 00:21:10,560
+So the idea behind hsts is ideally,
+
+470
+00:21:10,569 --> 00:21:14,119
+people would access their bank or whatever from home at first and then, you know,
+
+471
+00:21:14,130 --> 00:21:16,150
+later when they're at a coffee shop and somebody's
+
+472
+00:21:16,160 --> 00:21:17,290
+trying to man in the middle of them,
+
+473
+00:21:17,479 --> 00:21:18,000
+they can't,
+
+474
+00:21:18,359 --> 00:21:20,609
+you can also whitelist your domain
+
+475
+00:21:20,790 --> 00:21:24,290
+uh with Google and Firefox and the other browsers pull this. So for example,
+
+476
+00:21:24,449 --> 00:21:26,209
+creed.org has been whitelisted as
+
+477
+00:21:26,829 --> 00:21:28,380
+uh an HSTS domain
+
+478
+00:21:28,579 --> 00:21:31,140
+for several years now. And so when you actually type in
+
+479
+00:21:31,430 --> 00:21:33,300
+cried.org into your web browser,
+
+480
+00:21:33,310 --> 00:21:36,540
+it automatically flips it to http S whether or not you want
+
+481
+00:21:36,689 --> 00:21:38,660
+end of story, it won't give you a choice.
+
+482
+00:21:38,910 --> 00:21:41,040
+And the other nice thing about hsts is it
+
+483
+00:21:41,530 --> 00:21:43,810
+doesn't allow you to click through uh
+
+484
+00:21:44,060 --> 00:21:44,910
+warnings,
+
+485
+00:21:45,359 --> 00:21:45,670
+right?
+
+486
+00:21:45,680 --> 00:21:47,910
+Like normally if you get like uh oh you know,
+
+487
+00:21:47,920 --> 00:21:52,089
+the certificates wonky or it's out of date or it's expired or whatever, you know.
+
+488
+00:21:52,099 --> 00:21:54,709
+No. Yeah, I really want to go look at this. It's cool.
+
+489
+00:21:55,010 --> 00:21:58,250
+Uh And with HSTS, the browsers are like, nope, I'm not going to let you do that.
+
+490
+00:21:58,260 --> 00:21:59,030
+Not cool.
+
+491
+00:21:59,709 --> 00:22:00,250
+Um
+
+492
+00:22:00,839 --> 00:22:02,930
+And so, yeah, no, I agree. This is, this is kind of
+
+493
+00:22:03,050 --> 00:22:08,560
+what really gets me is that the number of websites that are not properly maintained
+
+494
+00:22:08,969 --> 00:22:10,770
+will become somewhat apparent.
+
+495
+00:22:11,520 --> 00:22:13,729
+I know that's going to be great. And again,
+
+496
+00:22:14,050 --> 00:22:17,150
+I view this kind of similar to
+
+497
+00:22:17,420 --> 00:22:19,030
+the whole PC I,
+
+498
+00:22:19,199 --> 00:22:21,989
+if you're not doing this, what else aren't you doing?
+
+499
+00:22:22,130 --> 00:22:23,630
+Because at this point,
+
+500
+00:22:23,969 --> 00:22:29,589
+there's basically the bar for HTTP S is, it's about as low as it can get.
+
+501
+00:22:29,699 --> 00:22:30,270
+I mean,
+
+502
+00:22:30,520 --> 00:22:31,979
+there's even scripts you can get
+
+503
+00:22:31,989 --> 00:22:35,020
+from nuts encrypt that basically automate everything
+
+504
+00:22:35,449 --> 00:22:38,089
+like you, you don't need to be overly skilled
+
+505
+00:22:38,459 --> 00:22:41,280
+to use HTTP S anymore. And I will say though,
+
+506
+00:22:41,410 --> 00:22:44,619
+I do remember the days of generating certificates and
+
+507
+00:22:44,630 --> 00:22:46,339
+having to send them off to the C A
+
+508
+00:22:46,560 --> 00:22:51,900
+-- and man, it was horrible to do that and you always screwed it up or
+-- oh,
+
+509
+00:22:51,910 --> 00:22:54,560
+my favorite part was always trying to get the
+
+510
+00:22:55,270 --> 00:22:56,719
+chaining certificates
+
+511
+00:22:56,890 --> 00:22:57,589
+served by the
+
+512
+00:22:57,900 --> 00:22:59,040
+server working
+
+513
+00:22:59,349 --> 00:23:00,260
+correctly that I mean,
+
+514
+00:23:00,270 --> 00:23:03,170
+just for people who are listening and don't know what the hell we're talking about.
+
+515
+00:23:03,180 --> 00:23:07,030
+-- Just trust us when we say it was a nightmare.
+-- Well, ok, so, no, we should explain this.
+
+516
+00:23:07,040 --> 00:23:09,829
+So what happen is when you go to a website
+
+517
+00:23:10,010 --> 00:23:10,869
+and let's say we go to
+
+518
+00:23:11,040 --> 00:23:13,079
+cried.org and it's signed by, I don't know,
+
+519
+00:23:13,089 --> 00:23:15,270
+let's say let's encrypt and I don't care if it is or isn't,
+
+520
+00:23:15,560 --> 00:23:16,939
+let's say it's signed by, let's encrypt.
+
+521
+00:23:17,219 --> 00:23:20,750
+Uh Your browser will trust the, let's encrypt route.
+
+522
+00:23:20,849 --> 00:23:24,319
+But let's say there's a couple of cas in between because
+
+523
+00:23:24,790 --> 00:23:28,369
+it is in the real world. You might have like real root C A, right?
+
+524
+00:23:28,380 --> 00:23:30,650
+And then you have like say two or three levels of resellers.
+
+525
+00:23:30,660 --> 00:23:34,359
+So like whatever signed your certificate might be kind of like
+
+526
+00:23:34,369 --> 00:23:37,719
+three layers removed from the actual C A your browser trusts.
+
+527
+00:23:38,170 --> 00:23:41,239
+And this is the point of certificates so you can do this sort of delegation.
+
+528
+00:23:41,520 --> 00:23:43,250
+And so what happens is
+
+529
+00:23:43,400 --> 00:23:47,219
+you have to make sure you include all of the certificates along your chain
+
+530
+00:23:47,790 --> 00:23:51,699
+that the web server hands to the browser. So the browser can say, OK,
+
+531
+00:23:51,910 --> 00:23:53,619
+I trust this certificate, the certificates,
+
+532
+00:23:53,630 --> 00:23:56,729
+trusted or signed by this certificate and signed by this certificate
+
+533
+00:23:56,739 --> 00:23:59,099
+and that signed this the connection I'm using right now.
+
+534
+00:23:59,989 --> 00:24:01,189
+And so. Right. Exactly.
+
+535
+00:24:01,199 --> 00:24:03,530
+And if you missed one, the browser would, well,
+
+536
+00:24:03,540 --> 00:24:06,349
+the browser would sometimes flip out depending upon what you missed.
+
+537
+00:24:06,359 --> 00:24:09,550
+And if it knew about the certificate already, it was like it was such a freaking mess,
+
+538
+00:24:09,560 --> 00:24:09,949
+man.
+
+539
+00:24:09,969 --> 00:24:10,680
+Oh my goodness.
+
+540
+00:24:11,040 --> 00:24:12,329
+Just thinking of that gives me pain
+
+541
+00:24:12,479 --> 00:24:14,010
+and all the clients were different too.
+
+542
+00:24:14,560 --> 00:24:16,569
+Of course. Yeah, because they all did different things,
+
+543
+00:24:16,939 --> 00:24:21,030
+right? Some clients did ssl somewhat reasonably correctly and a lot of them didn't,
+
+544
+00:24:21,280 --> 00:24:23,709
+you know it was. Yeah, I remember those days.
+
+545
+00:24:23,719 --> 00:24:24,510
+So yeah, I mean,
+
+546
+00:24:24,520 --> 00:24:29,270
+fundamentally if you can't get HTTP S working properly in front of your website,
+
+547
+00:24:29,800 --> 00:24:32,160
+then you know it better be a uh
+
+548
+00:24:32,650 --> 00:24:34,609
+like a personal blog or something that you're running.
+
+549
+00:24:34,790 --> 00:24:38,819
+There's no excuse anymore. Look, there's zero excuse. I'm sorry, I'm just gonna,
+
+550
+00:24:39,069 --> 00:24:41,359
+if you're not using hhps already,
+
+551
+00:24:41,369 --> 00:24:44,660
+you need to start and if you don't know how spend like, 10 minutes getting,
+
+552
+00:24:44,670 --> 00:24:47,900
+lets encrypt working and you will never regret it ever.
+
+553
+00:24:48,609 --> 00:24:49,069
+I mean,
+
+554
+00:24:49,390 --> 00:24:52,520
+yeah, it's, it's time there, there's no excuse. Get it.
+
+555
+00:24:52,660 --> 00:24:55,020
+So, the other thing that's interesting about this is it will have
+
+556
+00:24:55,300 --> 00:24:57,709
+a side effect of effectively
+
+557
+00:24:58,189 --> 00:25:02,989
+punting Windows X is it Windows XP that does still doesn't do SN I
+
+558
+00:25:03,099 --> 00:25:06,989
+maybe, maybe like IE six or something. But I mean, even at this point.
+
+559
+00:25:07,479 --> 00:25:09,709
+-- So
+-- basically, well, here's so here's the thing, right?
+
+560
+00:25:09,900 --> 00:25:12,280
+When you do SL RT LS to a server,
+
+561
+00:25:12,829 --> 00:25:17,869
+you talk to the IP address. And if you want to talk to like a specific host name on it,
+
+562
+00:25:18,239 --> 00:25:20,209
+there's a thing called server name indicator.
+
+563
+00:25:20,219 --> 00:25:22,140
+Um because as part of the initial request,
+
+564
+00:25:22,150 --> 00:25:24,969
+like you have to set up sort of an encrypted channel with the server
+
+565
+00:25:25,839 --> 00:25:27,699
+and then you can talk to it and do stuff, right?
+
+566
+00:25:27,709 --> 00:25:30,819
+And for a server that hosts multiple hosts,
+
+567
+00:25:31,089 --> 00:25:33,630
+you know, host names, which is like all the web servers. Now
+
+568
+00:25:33,819 --> 00:25:36,040
+we have this thing called server name indicator that
+
+569
+00:25:36,050 --> 00:25:38,770
+you create an encrypted connection to the server.
+
+570
+00:25:38,780 --> 00:25:41,579
+And then you say I want to talk to super.org or I want to talk to
+
+571
+00:25:42,060 --> 00:25:43,540
+let's encrypt.org or whatever
+
+572
+00:25:44,229 --> 00:25:46,959
+and you know, yeah, older browsers and stuff don't support this.
+
+573
+00:25:46,969 --> 00:25:48,880
+And the reality is to,
+
+574
+00:25:49,280 --> 00:25:51,650
+to do http S at scale,
+
+575
+00:25:51,839 --> 00:25:54,250
+we can't do one IP per
+
+576
+00:25:54,530 --> 00:25:55,319
+web address.
+
+577
+00:25:55,849 --> 00:25:58,000
+You know, I remember, I remember being ac a
+
+578
+00:25:58,109 --> 00:25:58,140
+man
+
+579
+00:25:58,469 --> 00:26:03,119
+on servers that had one IP per address for it was SSL back then.
+
+580
+00:26:03,869 --> 00:26:05,839
+It was a management nightmare.
+
+581
+00:26:06,099 --> 00:26:06,939
+Oh, I remember, yeah.
+
+582
+00:26:06,949 --> 00:26:10,439
+Like you'd run if config and there'd be like 400 pages of screens.
+
+583
+00:26:10,500 --> 00:26:12,479
+-- Oh, man,
+-- it was brutal. It was brutal.
+
+584
+00:26:12,489 --> 00:26:15,119
+But again, so here's, here's what I'm going to say is
+
+585
+00:26:15,560 --> 00:26:17,920
+if you're using a web browser, they can't do this.
+
+586
+00:26:18,229 --> 00:26:21,219
+you have way bigger problems than just your web browser.
+
+587
+00:26:21,300 --> 00:26:24,630
+I mean, this is, you're not washing your hands when you go to the bathroom,
+
+588
+00:26:24,640 --> 00:26:25,729
+that's what that means.
+
+589
+00:26:25,780 --> 00:26:27,010
+You know, start doing it.
+
+590
+00:26:27,060 --> 00:26:30,040
+There is no excuse any longer and, and this is,
+
+591
+00:26:30,109 --> 00:26:32,609
+this is why I'm so excited about this because
+
+592
+00:26:32,790 --> 00:26:33,890
+someone who,
+
+593
+00:26:33,900 --> 00:26:37,250
+who can actually make a difference is finally like standing up and saying no,
+
+594
+00:26:37,260 --> 00:26:38,709
+we're done, right?
+
+595
+00:26:38,719 --> 00:26:41,680
+And you're, you're not, it almost feels like
+
+596
+00:26:41,900 --> 00:26:43,719
+you've got like your, your typical
+
+597
+00:26:44,229 --> 00:26:46,839
+bully versus victim sort of person
+
+598
+00:26:47,109 --> 00:26:50,890
+here where, where the, you know, like, oh no, we can't disable ssl one point.
+
+599
+00:26:50,900 --> 00:26:53,180
+Oh, because someone might be using it. It's like, no,
+
+600
+00:26:53,319 --> 00:26:55,410
+no more like I'm done with you.
+
+601
+00:26:55,420 --> 00:27:00,489
+If you're doing that too bad, you lose where the world is moving on.
+
+602
+00:27:01,530 --> 00:27:01,689
+Yeah.
+
+603
+00:27:01,699 --> 00:27:04,209
+And that's, and that's one of the things I worry about is, I mean,
+
+604
+00:27:04,219 --> 00:27:06,250
+I get that people want to buy stuff and use it for 10
+
+605
+00:27:06,260 --> 00:27:08,699
+or 20 years and a lot of people don't have money to say,
+
+606
+00:27:08,709 --> 00:27:11,359
+upgrade every three years to the latest phone or whatever.
+
+607
+00:27:11,949 --> 00:27:16,290
+But at the same time, you know, it really reminds me of cars. Right. Older cars
+
+608
+00:27:16,390 --> 00:27:18,069
+fantastically dangerous.
+
+609
+00:27:18,770 --> 00:27:18,979
+Right.
+
+610
+00:27:18,989 --> 00:27:22,479
+Not just for the people in them because they didn't have air bags or anti lock brakes,
+
+611
+00:27:22,489 --> 00:27:23,770
+but for the rest of us.
+
+612
+00:27:24,180 --> 00:27:24,630
+Right.
+
+613
+00:27:25,449 --> 00:27:29,400
+You know, like modern cars have crumple zones for pedestrians.
+
+614
+00:27:29,660 --> 00:27:34,849
+I would go farther than that and say this is like taking your horse on the interstate.
+
+615
+00:27:35,020 --> 00:27:35,369
+Right.
+
+616
+00:27:35,550 --> 00:27:37,199
+There's a reason that's illegal.
+
+617
+00:27:37,550 --> 00:27:38,209
+Ok.
+
+618
+00:27:38,540 --> 00:27:40,510
+There's a good reason that's legal
+
+619
+00:27:40,760 --> 00:27:43,239
+because there's going to be dead horse and,
+
+620
+00:27:43,250 --> 00:27:45,780
+and broken cars everywhere is what's going to happen.
+
+621
+00:27:45,800 --> 00:27:46,000
+Right.
+
+622
+00:27:46,089 --> 00:27:49,099
+Yeah, it's just, it's, you know, all these things are parts of botnets that,
+
+623
+00:27:49,109 --> 00:27:52,099
+you know, you can't realistically secure them unless you're some, like,
+
+624
+00:27:52,109 --> 00:27:54,869
+crazy corporation that needs to run this thing behind seven firewalls.
+
+625
+00:27:55,229 --> 00:27:58,900
+But, but I would hope. And so again, you're not washing your hands,
+
+626
+00:27:59,060 --> 00:28:01,979
+but more importantly is like, if you absolutely have to do this.
+
+627
+00:28:01,989 --> 00:28:02,790
+And now I know, like,
+
+628
+00:28:02,800 --> 00:28:06,459
+I've heard stories about someone like Boeing needing windows 95 from whatever,
+
+629
+00:28:06,469 --> 00:28:08,920
+like their C AD program was for designing something
+
+630
+00:28:09,329 --> 00:28:09,989
+that's fine.
+
+631
+00:28:10,000 --> 00:28:11,680
+Set up a VM and, like,
+
+632
+00:28:11,689 --> 00:28:15,380
+lock that sucker up and make sure you have the expertise to actually take care of it.
+
+633
+00:28:15,390 --> 00:28:20,469
+Right. But like, yeah, the person sitting at home running a, a 12 year old computer,
+
+634
+00:28:20,680 --> 00:28:24,010
+like, there's so much wrong with that you can't even start. Right.
+
+635
+00:28:24,380 --> 00:28:24,550
+Yeah.
+
+636
+00:28:24,760 --> 00:28:26,760
+No, I think it really does boil down to, you know,
+
+637
+00:28:26,770 --> 00:28:28,640
+when you're out in public you need to cough into your rebel,
+
+638
+00:28:28,650 --> 00:28:30,109
+not your hand for the love of God.
+
+639
+00:28:30,119 --> 00:28:31,829
+People. Stop coughing into your hand.
+
+640
+00:28:32,060 --> 00:28:36,270
+-- Right.
+-- And, and think about that, like, if I was walking around coughing on people,
+
+641
+00:28:36,650 --> 00:28:40,109
+I have a suspicion, something bad would happen to me. Right.
+
+642
+00:28:40,160 --> 00:28:43,229
+I'm either gonna get beat up or arrested is my suspicion.
+
+643
+00:28:43,319 --> 00:28:44,449
+Well, we're just going to shun you
+
+644
+00:28:44,819 --> 00:28:46,229
+that already happened. So,
+
+645
+00:28:47,030 --> 00:28:47,410
+so,
+
+646
+00:28:47,640 --> 00:28:52,270
+but yeah, no, I'm, I'm excited because these two changes essentially
+
+647
+00:28:52,790 --> 00:28:57,949
+will have the side effect of breaking a ton of old obsolete clients which
+
+648
+00:28:58,329 --> 00:29:02,030
+sucks for the people using them. But at the same time, I think will
+
+649
+00:29:02,380 --> 00:29:06,030
+probably measurably help and make things a bit better for the rest of us.
+
+650
+00:29:06,680 --> 00:29:07,920
+I, I have no doubt.
+
+651
+00:29:08,130 --> 00:29:12,180
+I'm, I'm very excited now. I, I recognize there's going to be some pain,
+
+652
+00:29:12,410 --> 00:29:13,410
+but I think
+
+653
+00:29:13,949 --> 00:29:15,099
+when it's done,
+
+654
+00:29:15,290 --> 00:29:18,390
+we will look back and say, thank goodness we did that.
+
+655
+00:29:18,670 --> 00:29:20,930
+Yeah. So I guess with that we're going to wrap this up.
+
+656
+00:29:21,540 --> 00:29:25,390
+Yes, there's, there's no better way to end it than that. I guess we, we're ending.
+
+657
+00:29:25,400 --> 00:29:26,839
+Thank goodness we did that. Um
+
+658
+00:29:27,109 --> 00:29:27,800
+So
+
+659
+00:29:28,079 --> 00:29:29,880
+thank you, Kurt. Thank you everyone for listening.
+
+660
+00:29:29,890 --> 00:29:33,050
+You can hit up open source security podcast.com for the show notes.
+
+661
+00:29:33,250 --> 00:29:36,530
+You can use the Pound Os S podcast hashtag to
+
+662
+00:29:36,540 --> 00:29:38,839
+get the attention of Kurt and myself and social media
+
+663
+00:29:39,119 --> 00:29:42,790
+and if nothing else, Kurt, you have a fantastic rest of your day.
+
+664
+00:29:42,989 --> 00:29:43,920
+You too. Thanks.

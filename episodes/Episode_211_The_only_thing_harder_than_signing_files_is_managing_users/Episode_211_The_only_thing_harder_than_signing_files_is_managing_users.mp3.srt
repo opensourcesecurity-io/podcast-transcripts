@@ -1,0 +1,2853 @@
+0
+00:00:05,619 --> 00:00:09,060
+Hello and welcome to the open source security podcast with myself.
+
+1
+00:00:09,069 --> 00:00:11,560
+Kurt Siefried and my partner in Thought Crime. Josh Pressers.
+
+2
+00:00:12,470 --> 00:00:14,689
+Oh, man. So, you know what something
+
+3
+00:00:14,890 --> 00:00:15,260
+I,
+
+4
+00:00:15,989 --> 00:00:16,969
+-- we laugh
+-- because
+
+5
+00:00:17,680 --> 00:00:19,129
+300 in the bunker
+
+6
+00:00:19,989 --> 00:00:20,420
+is it?
+
+7
+00:00:20,579 --> 00:00:21,600
+I don't, it's been
+
+8
+00:00:21,739 --> 00:00:22,329
+years
+
+9
+00:00:22,889 --> 00:00:22,899
+I
+
+10
+00:00:23,149 --> 00:00:23,409
+think,
+
+11
+00:00:23,770 --> 00:00:23,879
+I don't
+
+12
+00:00:24,729 --> 00:00:24,750
+know.
+
+13
+00:00:25,549 --> 00:00:28,530
+I have no idea anymore. Time is an illusion.
+
+14
+00:00:28,799 --> 00:00:29,489
+That's,
+
+15
+00:00:29,790 --> 00:00:31,209
+that is my life now.
+
+16
+00:00:31,309 --> 00:00:32,569
+I think of it every day.
+
+17
+00:00:32,779 --> 00:00:35,209
+I can't even imagine how bad it is for our kids. Right.
+
+18
+00:00:35,220 --> 00:00:37,169
+Because they've been out of school for five months.
+
+19
+00:00:37,310 --> 00:00:37,639
+Yeah.
+
+20
+00:00:37,860 --> 00:00:40,209
+Yeah. Actually it's funny because
+
+21
+00:00:40,450 --> 00:00:43,330
+we were talking to our Children about going back to
+
+22
+00:00:43,340 --> 00:00:45,639
+school and they're going to do all virtual and stuff.
+
+23
+00:00:45,650 --> 00:00:48,630
+And my daughter's like, I just want to go to a real school and we're like,
+
+24
+00:00:48,819 --> 00:00:50,729
+yeah, we want you to go too. But
+
+25
+00:00:51,069 --> 00:00:53,330
+you can't. So there you go.
+
+26
+00:00:53,799 --> 00:00:54,270
+It's
+
+27
+00:00:54,500 --> 00:00:57,259
+anyway. Anyway, whatever it is,
+
+28
+00:00:57,360 --> 00:00:57,389
+it
+
+29
+00:00:57,549 --> 00:01:00,419
+is what it is. The dumpster fire of 2020.
+
+30
+00:01:00,590 --> 00:01:00,869
+Well,
+
+31
+00:01:01,439 --> 00:01:05,989
+the good news is there's other people that do silly things and take years to fix
+
+32
+00:01:06,269 --> 00:01:09,900
+what seemed to me to be pretty, I don't want to say a simple security flight.
+
+33
+00:01:09,910 --> 00:01:12,940
+It's simple on the surface and I know it's more complicated under the surface,
+
+34
+00:01:12,949 --> 00:01:13,800
+but fundamentally,
+
+35
+00:01:13,809 --> 00:01:17,059
+it seems like this is something Microsoft should have fixed a long time ago.
+
+36
+00:01:17,269 --> 00:01:17,959
+Yeah, why don't you
+
+37
+00:01:18,597 --> 00:01:20,857
+issue and then we can go into some details.
+
+38
+00:01:20,866 --> 00:01:23,577
+So as we all know if you're going to distribute files,
+
+39
+00:01:23,586 --> 00:01:26,457
+signing them is the most perfect way to secure the whole thing, right?
+
+40
+00:01:26,467 --> 00:01:29,817
+You sign the file, customer downloads the file checks the signature,
+
+41
+00:01:29,827 --> 00:01:30,897
+the signature is safe.
+
+42
+00:01:30,906 --> 00:01:32,387
+What could go wrong? Nothing, right?
+
+43
+00:01:32,397 --> 00:01:33,857
+It's not like people could go by code
+
+44
+00:01:33,866 --> 00:01:35,637
+signing certificates or steal them or anything,
+
+45
+00:01:35,647 --> 00:01:35,777
+right?
+
+46
+00:01:35,787 --> 00:01:37,497
+That's just not possible. So it's fine.
+
+47
+00:01:37,507 --> 00:01:40,577
+And so the deal is you download like an MSI installer, your system,
+
+48
+00:01:40,586 --> 00:01:43,296
+your windows machine checks the file signature, the
+
+49
+00:01:43,513 --> 00:01:47,293
+signature matches and you're you're totally safe to double click on it.
+
+50
+00:01:47,304 --> 00:01:49,653
+Nothing can go wrong. Sure.
+
+51
+00:01:49,844 --> 00:01:50,973
+And then, well,
+
+52
+00:01:50,984 --> 00:01:54,353
+there's this little annoying problem of apparently with an M SI file,
+
+53
+00:01:54,363 --> 00:01:56,314
+you can actually append data to the back of it.
+
+54
+00:01:56,323 --> 00:02:00,094
+Like you can take the M SI file and like literally cat space file name, you know,
+
+55
+00:02:00,103 --> 00:02:02,564
+greater than greater than M SI and just jam a bunch
+
+56
+00:02:02,573 --> 00:02:05,153
+of data onto the back of the M SI sort of.
+
+57
+00:02:05,164 --> 00:02:08,143
+Yeah, I mean it's conceptually it's that simple like it's not,
+
+58
+00:02:08,320 --> 00:02:09,490
+-- you don't need a hex
+-- editor.
+
+59
+00:02:09,621 --> 00:02:12,610
+Well, ok, so here is what's actually happening
+
+60
+00:02:12,960 --> 00:02:13,610
+and
+
+61
+00:02:13,781 --> 00:02:17,811
+this is hilarious for all of the right reasons.
+
+62
+00:02:18,031 --> 00:02:23,600
+So it's not just M si it, it, well, ok, you can take any M si, ok.
+
+63
+00:02:23,610 --> 00:02:25,531
+It just has to be a signed M SI
+
+64
+00:02:25,541 --> 00:02:28,251
+which is like the Microsoft installer format or whatever.
+
+65
+00:02:28,261 --> 00:02:32,850
+And you then append a jar file to the end
+
+66
+00:02:33,339 --> 00:02:34,880
+and then you rename
+
+67
+00:02:35,080 --> 00:02:36,649
+the new file
+
+68
+00:02:36,809 --> 00:02:41,779
+with a dot Jar extension. What happens is hilariously stupid.
+
+69
+00:02:41,850 --> 00:02:44,380
+So a jar file is just a zip file, the,
+
+70
+00:02:44,429 --> 00:02:49,130
+the lovable compression format we've all had for a million years.
+
+71
+00:02:49,139 --> 00:02:49,600
+And
+
+72
+00:02:50,029 --> 00:02:54,570
+this is important because floppy disks are part of this story, right?
+
+73
+00:02:54,580 --> 00:02:55,889
+I'll, I'll, I'll, I'll,
+
+74
+00:02:55,899 --> 00:02:59,850
+I'll let you wait in suspense as to how floppy disks come into play here.
+
+75
+00:02:59,860 --> 00:03:03,729
+But so anyway, you append these two files, you rename it dot Jar.
+
+76
+00:03:03,740 --> 00:03:07,330
+And so basically what happens is if there's a signature check
+
+77
+00:03:07,464 --> 00:03:11,634
+on the file, it's going to pass because the way a signature works is
+
+78
+00:03:12,095 --> 00:03:15,865
+these M si files, basically, there's like the, the file content, right?
+
+79
+00:03:15,875 --> 00:03:17,524
+The actual meat of the file
+
+80
+00:03:17,735 --> 00:03:19,725
+and then it's wrapped around a little shell
+
+81
+00:03:19,735 --> 00:03:21,384
+and the little shell basically says like,
+
+82
+00:03:21,395 --> 00:03:21,675
+oh, there,
+
+83
+00:03:21,684 --> 00:03:24,904
+here's the signature and here's what's in the file and here's what's going on
+
+84
+00:03:25,235 --> 00:03:29,735
+and that's the thing that windows or antivirus or whatever is going to look at
+
+85
+00:03:29,854 --> 00:03:30,535
+and then check.
+
+86
+00:03:30,544 --> 00:03:34,324
+But the beauty of it is, it'll say, OK, I'm the wrapper around the content.
+
+87
+00:03:34,559 --> 00:03:39,529
+Here's the signature and the next 10,000 bytes is the file, right?
+
+88
+00:03:39,539 --> 00:03:42,160
+So obviously the thing is going to check the 10,000 bytes,
+
+89
+00:03:42,169 --> 00:03:43,630
+it's going to calculate the check sum.
+
+90
+00:03:43,639 --> 00:03:46,660
+It's going to check the signature and it says everything checks out. That's great.
+
+91
+00:03:46,669 --> 00:03:49,389
+Except there's uh megabytes of garbage on the end.
+
+92
+00:03:49,399 --> 00:03:51,380
+But we'll just ignore that because we don't care.
+
+93
+00:03:51,389 --> 00:03:54,380
+Technically speaking, if you treat it as an M si it doesn't matter.
+
+94
+00:03:54,639 --> 00:03:56,979
+It's right. It's metadata, whatever. Now,
+
+95
+00:03:57,389 --> 00:03:58,610
+zip files,
+
+96
+00:03:59,000 --> 00:04:05,020
+they have the unique property of storing the metadata for zip at the very end.
+
+97
+00:04:05,050 --> 00:04:06,029
+Well, it makes sense.
+
+98
+00:04:06,289 --> 00:04:09,779
+Well, it makes sense in the context of why they do it in history.
+
+99
+00:04:09,869 --> 00:04:11,779
+This is where the floppies come in.
+
+100
+00:04:12,050 --> 00:04:17,339
+So back in the day, you had the ability to tell the PK zip command,
+
+101
+00:04:17,769 --> 00:04:18,500
+which is,
+
+102
+00:04:19,149 --> 00:04:24,329
+that's a blast from the past on M sds that I want you to zip this data
+
+103
+00:04:24,470 --> 00:04:26,329
+onto floppy disks.
+
+104
+00:04:26,609 --> 00:04:29,440
+And I don't know how many it will take because obviously you can't,
+
+105
+00:04:29,619 --> 00:04:33,200
+you can't say, OK, I've got 12 megabytes of data.
+
+106
+00:04:33,690 --> 00:04:34,760
+You're going to need,
+
+107
+00:04:34,920 --> 00:04:36,369
+you know, 10 floppy disks or whatever.
+
+108
+00:04:36,380 --> 00:04:40,059
+There's no way to prec calculate that in a reasonable manner.
+
+109
+00:04:40,070 --> 00:04:40,260
+Well,
+
+110
+00:04:40,269 --> 00:04:42,450
+this also assumes that your floppy disks actually hold
+
+111
+00:04:42,459 --> 00:04:44,369
+1.44 megabytes because I don't know about you.
+
+112
+00:04:44,380 --> 00:04:44,600
+But I,
+
+113
+00:04:44,609 --> 00:04:47,000
+I had a tendency to recycle those free AOL floppy
+
+114
+00:04:47,010 --> 00:04:49,359
+disk that would hold anywhere from a couple 100 K to
+
+115
+00:04:49,589 --> 00:04:51,910
+-- whatever they were supposed to hold.
+-- Exactly.
+
+116
+00:04:51,920 --> 00:04:54,640
+And I mean, there were different sizes of floppy disk, whatever.
+
+117
+00:04:54,649 --> 00:04:56,079
+There's a million things that could happen.
+
+118
+00:04:56,089 --> 00:04:56,570
+So basically,
+
+119
+00:04:56,579 --> 00:05:00,970
+what zip did is it just started zipping crap and writing to disk it fill up a floppy,
+
+120
+00:05:00,980 --> 00:05:02,119
+say give me a new floppy
+
+121
+00:05:02,233 --> 00:05:04,322
+and it didn't care how big it was, whatever, it didn't matter.
+
+122
+00:05:04,333 --> 00:05:08,013
+You just start feeding it floppies and then it gets to the end and it says I'm all done.
+
+123
+00:05:08,023 --> 00:05:11,622
+Now, I'm going to write the metadata onto the floppies.
+
+124
+00:05:11,632 --> 00:05:13,053
+And so if you ever then unzipped,
+
+125
+00:05:13,062 --> 00:05:16,352
+it would basically say unzip this file on this floppy and then say, oh,
+
+126
+00:05:16,393 --> 00:05:17,852
+insert the last disk.
+
+127
+00:05:17,863 --> 00:05:21,132
+OK. Now I know what's going on now, insert these disks anyway.
+
+128
+00:05:21,143 --> 00:05:25,472
+The long story is that basically the signatures
+
+129
+00:05:25,483 --> 00:05:27,053
+checked at the beginning of the file,
+
+130
+00:05:27,062 --> 00:05:30,812
+the zip content is at the end jar files are just zip files.
+
+131
+00:05:30,925 --> 00:05:32,645
+So you rename it dot Jar.
+
+132
+00:05:32,656 --> 00:05:33,966
+It passes signature checks,
+
+133
+00:05:33,976 --> 00:05:37,626
+you double click it and it's going to run your malicious jar content.
+
+134
+00:05:37,635 --> 00:05:40,006
+Well, and also I think there's a subtle thing where
+
+135
+00:05:40,145 --> 00:05:44,376
+the signed file is a signed portion of the file.
+
+136
+00:05:44,395 --> 00:05:47,795
+And that is a big distinction because when I heard this, I'm like, wait,
+
+137
+00:05:47,805 --> 00:05:50,346
+how can you have a signed file that has crap in it.
+
+138
+00:05:50,355 --> 00:05:52,735
+That's not signed, that is no longer a signed file.
+
+139
+00:05:52,746 --> 00:05:55,645
+You've signed part of the file, this other crap. What is that? Like?
+
+140
+00:05:55,656 --> 00:05:58,205
+-- It's not signed, it's not part of the signed file. It shouldn't be
+-- there.
+
+141
+00:05:58,216 --> 00:05:59,536
+It's metadata.
+
+142
+00:06:00,429 --> 00:06:04,640
+And I think that I, I think it's, well, so it's that perfect combination of
+
+143
+00:06:04,779 --> 00:06:07,369
+one thing reads from the front, one thing reads from the back
+
+144
+00:06:07,579 --> 00:06:08,350
+and
+
+145
+00:06:09,059 --> 00:06:10,750
+it treats a signed, it's,
+
+146
+00:06:10,820 --> 00:06:14,489
+I hate using the word signed file in this context because in my mind,
+
+147
+00:06:14,500 --> 00:06:18,130
+a signed file means the entire file is signed like an R PM
+
+148
+00:06:18,230 --> 00:06:21,920
+-- or like a AP GP.
+-- Well, R PM does this too though.
+
+149
+00:06:21,970 --> 00:06:23,170
+Yeah. Well, exactly.
+
+150
+00:06:23,179 --> 00:06:26,279
+-- And that's broken
+-- R PM literally does exactly this.
+
+151
+00:06:26,290 --> 00:06:28,010
+So, and here's so here's a challenge.
+
+152
+00:06:28,019 --> 00:06:31,420
+Here's something like a thought experiment for all of us. I want you
+
+153
+00:06:31,529 --> 00:06:33,320
+to have a file
+
+154
+00:06:33,500 --> 00:06:36,269
+that has the check sum of the file
+
+155
+00:06:36,559 --> 00:06:38,239
+as content in the file.
+
+156
+00:06:38,399 --> 00:06:40,859
+-- I've done that with shell scripts. No,
+-- you didn't.
+
+157
+00:06:41,309 --> 00:06:41,769
+Yeah. Yeah,
+
+158
+00:06:41,970 --> 00:06:42,790
+I don't believe you.
+
+159
+00:06:42,950 --> 00:06:45,799
+What you do though is so you have a shell script like it's,
+
+160
+00:06:45,809 --> 00:06:47,850
+and it's like basically bang bin bash
+
+161
+00:06:48,059 --> 00:06:52,119
+and then you have like check some equals whatever number and then you basically
+
+162
+00:06:52,130 --> 00:06:55,779
+have a function that reads the entire file except for the top two lines,
+
+163
+00:06:55,790 --> 00:06:56,630
+check sums it.
+
+164
+00:06:56,739 --> 00:06:58,369
+I don't mean that that's cheating.
+
+165
+00:06:58,500 --> 00:07:00,109
+-- That's literally what you
+-- want.
+
+166
+00:07:00,119 --> 00:07:03,040
+The signature embedded in the file with the whole file.
+
+167
+00:07:04,000 --> 00:07:07,489
+-- OK.
+-- Well, then you basically you use MD five and a bunch of playstations.
+
+168
+00:07:08,829 --> 00:07:09,010
+Yeah,
+
+169
+00:07:10,220 --> 00:07:10,820
+that is,
+
+170
+00:07:11,260 --> 00:07:12,489
+don't use MD five, please.
+
+171
+00:07:12,790 --> 00:07:15,549
+Actually with MD five, you could probably do some magic to do it.
+
+172
+00:07:15,559 --> 00:07:16,929
+-- But here's the point,
+-- right?
+
+173
+00:07:16,940 --> 00:07:19,420
+No, no, no, there's, there's, there's source code out there to build
+
+174
+00:07:19,640 --> 00:07:20,929
+these files. OK. Maybe.
+
+175
+00:07:20,940 --> 00:07:21,390
+But here's,
+
+176
+00:07:21,399 --> 00:07:23,570
+here's the point of this thought experiment is
+
+177
+00:07:23,579 --> 00:07:28,220
+signing the whole file is basically computationally impossible,
+
+178
+00:07:28,230 --> 00:07:33,250
+especially if you're using say like sha 512, which is very large and is slow.
+
+179
+00:07:33,260 --> 00:07:35,395
+And so that's why they kind of sheet in this way.
+
+180
+00:07:35,406 --> 00:07:38,536
+Now, this is also why there's things called detached signatures
+
+181
+00:07:38,705 --> 00:07:41,876
+where you can, for example, say here is a whole file.
+
+182
+00:07:41,885 --> 00:07:45,096
+I want you to sign it and then put the signature in this file over here.
+
+183
+00:07:45,335 --> 00:07:49,036
+And that gives you obviously an instance where now you can
+
+184
+00:07:49,186 --> 00:07:52,555
+sign the entire file. You don't just have to sign parts of it.
+
+185
+00:07:52,566 --> 00:07:55,645
+And I mean, this is, this is perpetually a challenge because
+
+186
+00:07:55,805 --> 00:07:59,496
+what do you sign? How do you sign it? Do you sign all of the content?
+
+187
+00:07:59,506 --> 00:08:00,256
+Do you sign the headers?
+
+188
+00:08:00,265 --> 00:08:04,122
+Like this is a challenge at R PM, for example, where you have an R PM header,
+
+189
+00:08:04,152 --> 00:08:05,721
+then you have R PM content.
+
+190
+00:08:06,111 --> 00:08:11,742
+-- What do we sign? How do we do this?
+-- I would say honestly at this point in it's 2020. Yes.
+
+191
+00:08:11,752 --> 00:08:12,582
+Sign everything.
+
+192
+00:08:12,712 --> 00:08:14,022
+Well, I mean, yeah, I agree.
+
+193
+00:08:14,032 --> 00:08:16,492
+You sign the content and the headers like come on guys, it's
+
+194
+00:08:16,861 --> 00:08:19,872
+girls like it's, it's 2020 we sign everything because
+
+195
+00:08:19,992 --> 00:08:20,981
+if you don't sign it,
+
+196
+00:08:20,992 --> 00:08:22,941
+somebody's going to tamper with it and we're all going to
+
+197
+00:08:22,951 --> 00:08:25,182
+-- end up in tears
+-- even if you do sign it.
+
+198
+00:08:25,471 --> 00:08:25,842
+Yeah.
+
+199
+00:08:26,231 --> 00:08:26,691
+OK.
+
+200
+00:08:27,040 --> 00:08:29,019
+Yeah. So, no, I get it.
+
+201
+00:08:29,029 --> 00:08:30,339
+But, I mean, the thing is too,
+
+202
+00:08:30,350 --> 00:08:33,880
+we've had a lot of systems that have signed things reasonably correctly.
+
+203
+00:08:33,890 --> 00:08:36,140
+So it's not like this is impossible. Oh, right.
+
+204
+00:08:36,150 --> 00:08:38,820
+It's, it's definitely, and look, here's the thing.
+
+205
+00:08:38,830 --> 00:08:42,359
+So I'm going to this Microsoft bug, I would break down in two pieces.
+
+206
+00:08:42,369 --> 00:08:47,500
+-- There's the angle of this was a stupid mistake and they obviously fixed it
+-- after two,
+
+207
+00:08:47,510 --> 00:08:50,525
+after being notified, two years after they were notified,
+
+208
+00:08:50,534 --> 00:08:51,815
+it took longer than it should have.
+
+209
+00:08:51,825 --> 00:08:54,184
+And I don't think there's necessarily a great excuse for that.
+
+210
+00:08:54,195 --> 00:08:56,405
+But my suspicion is the reason it took so long
+
+211
+00:08:56,625 --> 00:08:57,965
+is they were like,
+
+212
+00:08:58,244 --> 00:08:59,844
+how, you know,
+
+213
+00:08:59,854 --> 00:09:02,244
+you've got to get a file on the system and then
+
+214
+00:09:02,255 --> 00:09:04,784
+a user has to double click the file and like,
+
+215
+00:09:04,794 --> 00:09:07,525
+how often is that really going to happen?
+
+216
+00:09:07,645 --> 00:09:10,034
+So this Windows 10 computer I just bought and
+
+217
+00:09:10,044 --> 00:09:12,465
+the drivers I was downloading from the motherboard website.
+
+218
+00:09:13,010 --> 00:09:14,830
+Uh, there's some pretty sketchy,
+
+219
+00:09:14,840 --> 00:09:17,630
+like I was downloading some stuff that wasn't signed and it's just like, you know,
+
+220
+00:09:17,640 --> 00:09:19,340
+click the ignore button and continue with.
+
+221
+00:09:19,349 --> 00:09:21,710
+Yes and like enter your password to force Windows to install it.
+
+222
+00:09:21,719 --> 00:09:26,070
+And I'm kind of like, well, I guess I want my network to work so I better do this.
+
+223
+00:09:26,479 --> 00:09:27,349
+And, um,
+
+224
+00:09:27,969 --> 00:09:30,919
+there was, you know, I was downloading science stuff and in one instance,
+
+225
+00:09:30,929 --> 00:09:32,869
+my favorite is I bought a new computer mouse
+
+226
+00:09:33,320 --> 00:09:38,169
+-- and the driver for it. Was actually hosted off of mega.
+-- Yeah, you told me about that.
+
+227
+00:09:38,179 --> 00:09:39,179
+That's hilarious.
+
+228
+00:09:39,340 --> 00:09:41,309
+I guess that's a cheap way to host a file.
+
+229
+00:09:41,320 --> 00:09:44,090
+But, like, it's an unsigned file coming off of mega.
+
+230
+00:09:44,099 --> 00:09:44,440
+I'm like,
+
+231
+00:09:44,450 --> 00:09:46,739
+I'm throwing this thing through virus total and it's one of the
+
+232
+00:09:46,750 --> 00:09:49,590
+few instances where the file had been put through virus total.
+
+233
+00:09:49,840 --> 00:09:51,909
+Well, a lot, like a long time ago.
+
+234
+00:09:51,919 --> 00:09:54,719
+So somebody else had that thought too where they're like, you want me to do what? Now?
+
+235
+00:09:54,729 --> 00:09:55,460
+With where?
+
+236
+00:09:56,140 --> 00:09:58,869
+Um, so no, this is, there's tons
+
+237
+00:09:59,150 --> 00:10:02,520
+of, and the thing is also, I was getting signed M SI files
+
+238
+00:10:03,020 --> 00:10:04,950
+and signed DXC files to, you know,
+
+239
+00:10:04,960 --> 00:10:07,400
+install various drivers and stuff off of insecure
+
+240
+00:10:07,409 --> 00:10:10,049
+websites or off of insecure content delivery networks.
+
+241
+00:10:10,229 --> 00:10:14,630
+So there's a ton of signed files floating around out there.
+
+242
+00:10:14,650 --> 00:10:17,669
+And then my favorite thing is, of course, is what happens if you Google like
+
+243
+00:10:18,099 --> 00:10:22,909
+your, your, your most part, your most part number. Slap space drivers.
+
+244
+00:10:23,049 --> 00:10:23,349
+Do you?
+
+245
+00:10:23,359 --> 00:10:23,840
+Does it,
+
+246
+00:10:23,849 --> 00:10:26,590
+does Google Point you at the like Corsair or
+
+247
+00:10:26,599 --> 00:10:28,979
+Steel Series website first or some like dodgy,
+
+248
+00:10:28,989 --> 00:10:30,309
+like most drivers.com?
+
+249
+00:10:30,549 --> 00:10:33,599
+I mean, you never know. That's one of the challenges always.
+
+250
+00:10:33,849 --> 00:10:35,200
+It, it could go anywhere.
+
+251
+00:10:35,210 --> 00:10:38,429
+Some of these drivers were like most drivers.com or whatever and I'm like, nope,
+
+252
+00:10:38,440 --> 00:10:39,200
+not going there.
+
+253
+00:10:39,479 --> 00:10:42,580
+-- Yeah. No, I, I
+-- agree. You and your printer drivers for your relatives.
+
+254
+00:10:42,669 --> 00:10:47,859
+Yeah, this is, this is why I just buy crappy mice off Amazon that don't need drivers.
+
+255
+00:10:49,590 --> 00:10:50,739
+I'm not a cool kid. Anyway.
+
+256
+00:10:50,750 --> 00:10:51,580
+Anyway, anyway,
+
+257
+00:10:51,590 --> 00:10:53,619
+so I think sort of the root cause of this whole thing
+
+258
+00:10:53,630 --> 00:10:57,270
+is that there's no established way to handle and treat a file,
+
+259
+00:10:57,280 --> 00:10:57,510
+right?
+
+260
+00:10:57,520 --> 00:11:02,099
+Like is a file, a zip file because it says dot zip or is it a file, a zip file?
+
+261
+00:11:02,109 --> 00:11:06,270
+Because the file is actually physically like a zip file as far as I know there's,
+
+262
+00:11:06,280 --> 00:11:07,630
+there's no iso or
+
+263
+00:11:07,979 --> 00:11:10,309
+standard on this, right. You just kind of do your best.
+
+264
+00:11:10,890 --> 00:11:11,669
+And,
+
+265
+00:11:11,929 --> 00:11:14,030
+yeah, I, it's, it's complicated. Right.
+
+266
+00:11:14,200 --> 00:11:16,130
+I agree. The good news is they fixed it.
+
+267
+00:11:16,369 --> 00:11:21,299
+The bad news is that, you know, how many systems got infected by this?
+
+268
+00:11:21,309 --> 00:11:22,309
+We will never know.
+
+269
+00:11:23,150 --> 00:11:23,750
+I know.
+
+270
+00:11:23,760 --> 00:11:24,809
+Let's just say, hey,
+
+271
+00:11:24,820 --> 00:11:28,270
+users don't download crap off the internet because it's your fault.
+
+272
+00:11:28,280 --> 00:11:29,450
+There we go. Problem solve.
+
+273
+00:11:29,979 --> 00:11:31,140
+Well, and this is what drives me nuts.
+
+274
+00:11:31,150 --> 00:11:35,320
+I, I should be able to reasonably download files and
+
+275
+00:11:35,760 --> 00:11:37,890
+run them now, whether or not, you know,
+
+276
+00:11:37,900 --> 00:11:40,229
+if I give a file permission to install to my system then, yeah,
+
+277
+00:11:40,239 --> 00:11:41,359
+kind of all bets are off.
+
+278
+00:11:41,599 --> 00:11:46,039
+But even that shouldn't be so unsafe that it like bricks my system or, you know,
+
+279
+00:11:46,049 --> 00:11:48,140
+totally destroys my system.
+
+280
+00:11:48,530 --> 00:11:49,299
+Which, uh, you know,
+
+281
+00:11:49,309 --> 00:11:51,729
+I think that's a pretty simple reason why tablets have taken off.
+
+282
+00:11:51,739 --> 00:11:53,799
+Right. Because you, you can't screw up your tablet like this.
+
+283
+00:11:54,289 --> 00:11:54,750
+Yeah.
+
+284
+00:11:55,549 --> 00:11:58,919
+Like there's literally nothing my kids can do their tablet that would mess it up.
+
+285
+00:11:58,929 --> 00:12:03,489
+Versus if I gave Felix admin privileges on the Windows 10 machine, what, maybe a day,
+
+286
+00:12:03,500 --> 00:12:04,489
+two days
+
+287
+00:12:05,010 --> 00:12:05,340
+before
+
+288
+00:12:05,479 --> 00:12:05,489
+a
+
+289
+00:12:05,659 --> 00:12:07,140
+-- couple of hours,
+-- man.
+
+290
+00:12:07,890 --> 00:12:13,909
+I mean, I, I, so I actually gave my kids admin access to the Windows machines.
+
+291
+00:12:13,919 --> 00:12:17,260
+I have an admin account and I gave them the PIN code and I was like,
+
+292
+00:12:17,270 --> 00:12:18,969
+just try not to screw it up too bad.
+
+293
+00:12:19,179 --> 00:12:21,320
+But yeah, that machine as far as I'm concerned
+
+294
+00:12:21,469 --> 00:12:22,979
+is an adversary.
+
+295
+00:12:23,840 --> 00:12:25,650
+I never use it in a,
+
+296
+00:12:25,799 --> 00:12:29,299
+we'll say, man, like I, I've never logged into Google on it. I've never logged in.
+
+297
+00:12:29,309 --> 00:12:32,260
+The only thing I log into is Steam so I can play games.
+
+298
+00:12:32,270 --> 00:12:35,090
+And I'm like, you know what, it would suck if my Steam account got stolen,
+
+299
+00:12:35,179 --> 00:12:38,080
+but I would not cry too hard if it did.
+
+300
+00:12:38,109 --> 00:12:42,460
+So I can live with that. I would lose my 500 games. I've never played that would
+
+301
+00:12:44,140 --> 00:12:45,520
+anyway. Anyway.
+
+302
+00:12:45,669 --> 00:12:49,270
+All right, let's move on to the git lab news story that we found.
+
+303
+00:12:49,280 --> 00:12:54,760
+So I will, I will explain this one basically Git lab which is like an open source.
+
+304
+00:12:54,770 --> 00:12:54,989
+Github
+
+305
+00:12:55,179 --> 00:12:56,059
+competitor.
+
+306
+00:12:56,530 --> 00:12:59,880
+Fundamentally said we're not going to allow
+
+307
+00:13:00,020 --> 00:13:02,109
+support to reset multi
+
+308
+00:13:02,590 --> 00:13:04,500
+authentication on free accounts.
+
+309
+00:13:05,109 --> 00:13:08,380
+And I'm curious, just give me your hot take on this. What do you think?
+
+310
+00:13:08,390 --> 00:13:08,679
+Funny,
+
+311
+00:13:08,690 --> 00:13:10,479
+you mentioned that I was just logging into youtube on
+
+312
+00:13:10,489 --> 00:13:13,059
+my ipad and I was having trouble and it said,
+
+313
+00:13:13,070 --> 00:13:15,900
+basically log in with your key or a PIN code
+
+314
+00:13:16,109 --> 00:13:18,140
+and if none of this works and you need to recover your code,
+
+315
+00:13:18,150 --> 00:13:20,460
+it's going to be 3 to 5 business days to contact Google
+
+316
+00:13:21,510 --> 00:13:21,989
+and
+
+317
+00:13:22,280 --> 00:13:25,289
+I have a paid Google account with which allows
+
+318
+00:13:25,299 --> 00:13:26,729
+me to have the advanced protection turned on,
+
+319
+00:13:26,739 --> 00:13:27,770
+which I do have turned on.
+
+320
+00:13:28,140 --> 00:13:31,849
+So the reality is doing account recovery beyond.
+
+321
+00:13:31,859 --> 00:13:33,890
+Oh, you control that email address. That's you. Cool.
+
+322
+00:13:34,570 --> 00:13:35,260
+Is
+
+323
+00:13:35,500 --> 00:13:36,190
+expensive.
+
+324
+00:13:36,200 --> 00:13:39,669
+I had a friend who had their, I think it was Pinterest or Instagram account hacked
+
+325
+00:13:39,869 --> 00:13:42,070
+and they had to go through account recovery and what they did.
+
+326
+00:13:42,080 --> 00:13:43,489
+And I thought this was very clever.
+
+327
+00:13:43,729 --> 00:13:44,549
+They had to,
+
+328
+00:13:44,559 --> 00:13:47,630
+they basically got a one time code via email that they then had to like
+
+329
+00:13:47,640 --> 00:13:50,049
+write on a piece of paper and hold up and take a selfie with.
+
+330
+00:13:50,809 --> 00:13:53,830
+And that actually works with like Pinterest and Instagram because they have
+
+331
+00:13:54,109 --> 00:13:57,090
+past pictures of you on your account, right? So they can,
+
+332
+00:13:57,400 --> 00:13:59,359
+they can do like a proof of life picture with you,
+
+333
+00:13:59,369 --> 00:14:01,580
+but that requires a human being by and large.
+
+334
+00:14:02,200 --> 00:14:05,510
+The thing is if you want to do account recovery securely,
+
+335
+00:14:06,130 --> 00:14:08,159
+then you basically have to have either
+
+336
+00:14:08,169 --> 00:14:11,270
+a hugely complicated technical system that is
+
+337
+00:14:11,280 --> 00:14:14,309
+basically a human being or you actually have to have a human being.
+
+338
+00:14:14,320 --> 00:14:17,409
+And that costs money like a five or 10 minute phone call,
+
+339
+00:14:17,419 --> 00:14:19,510
+even with a poorly paid support person
+
+340
+00:14:19,770 --> 00:14:22,989
+-- that's costing the company 1020 bucks.
+-- Well, not only that,
+
+341
+00:14:23,190 --> 00:14:25,909
+there's So from what I read
+
+342
+00:14:26,039 --> 00:14:27,229
+about Git lab,
+
+343
+00:14:27,500 --> 00:14:30,859
+I don't think that was even necessarily the inception of this.
+
+344
+00:14:30,869 --> 00:14:32,580
+I feel like this is more of a,
+
+345
+00:14:32,880 --> 00:14:35,340
+lots of people are using this now
+
+346
+00:14:35,539 --> 00:14:36,950
+and we're seeing Attackers
+
+347
+00:14:37,140 --> 00:14:41,460
+abusing our basically friendly support staff to gain access to account.
+
+348
+00:14:41,469 --> 00:14:44,419
+So our solution is just to not do it. Which
+
+349
+00:14:44,630 --> 00:14:46,219
+-- I mean,
+-- well, that's the Google way.
+
+350
+00:14:46,409 --> 00:14:49,219
+-- Yeah, and I'm not opposed to
+-- it.
+
+351
+00:14:49,400 --> 00:14:51,169
+Well, I mean, the perfect example is like, you know,
+
+352
+00:14:51,179 --> 00:14:54,299
+somebody's homeless and they're saying, look, I have no ID,
+
+353
+00:14:54,630 --> 00:14:58,909
+like I got rolled, like I got mugged my ID, all my, you know, all my identification,
+
+354
+00:14:58,919 --> 00:15:02,500
+all my papers, all my worldly possessions are missing, but I'm Bob and I want to,
+
+355
+00:15:02,510 --> 00:15:05,619
+you know, get registered for this program or for some support thing.
+
+356
+00:15:05,859 --> 00:15:06,859
+Well, what do you do? Right.
+
+357
+00:15:06,869 --> 00:15:10,400
+If we, we generally don't have biometrics of people in North America, you know,
+
+358
+00:15:10,409 --> 00:15:13,479
+there's countries out there like, um I think India is one where they're collecting,
+
+359
+00:15:13,489 --> 00:15:15,159
+you know, fingerprints as part of the ID scheme.
+
+360
+00:15:15,169 --> 00:15:18,210
+But fundamentally if somebody claims, hey, I'm Bob but, you know,
+
+361
+00:15:18,219 --> 00:15:20,049
+I got mugged and all my ID and everything's missing.
+
+362
+00:15:20,059 --> 00:15:20,510
+Well,
+
+363
+00:15:20,830 --> 00:15:23,619
+yeah, what do you do then? Right? You can't prove a negative.
+
+364
+00:15:23,630 --> 00:15:25,719
+Like you can't make Bob prove that he lost his
+
+365
+00:15:25,729 --> 00:15:27,359
+ID because he could just throw it in the garbage.
+
+366
+00:15:27,520 --> 00:15:28,539
+It shouldn't be git
+
+367
+00:15:28,789 --> 00:15:30,250
+lab's job to do that.
+
+368
+00:15:30,520 --> 00:15:33,849
+Well, but it is, if they own the account, right? If they're hosting the account
+
+369
+00:15:34,099 --> 00:15:37,719
+and somebody shows up and says that's my account, but I don't know my password.
+
+370
+00:15:37,729 --> 00:15:40,969
+I've, what the extreme is like, install Google Chrome.
+
+371
+00:15:40,979 --> 00:15:43,349
+And it's like you want to, I want like, do you want to log in?
+
+372
+00:15:43,539 --> 00:15:44,690
+Did you forget your email address?
+
+373
+00:15:44,700 --> 00:15:46,802
+And I'm like, how the heck do people forget their email address?
+
+374
+00:15:46,812 --> 00:15:48,312
+But apparently it happens enough
+
+375
+00:15:48,422 --> 00:15:51,893
+that that's in the first screen of logging into Chrome.
+
+376
+00:15:51,903 --> 00:15:54,552
+It's like if you forgot your email address, you can enter your phone number.
+
+377
+00:15:54,562 --> 00:15:56,293
+And I actually did this once to see what happens,
+
+378
+00:15:56,302 --> 00:15:57,562
+plugged in my phone number and it like,
+
+379
+00:15:57,572 --> 00:15:59,922
+spat out all my email addresses that are register
+
+380
+00:16:00,043 --> 00:16:01,713
+with that phone number. And I'm like, oh, ok.
+
+381
+00:16:01,723 --> 00:16:04,273
+And I've talked to some people about this who work in, you know,
+
+382
+00:16:04,283 --> 00:16:05,343
+in public service and they're like, yeah,
+
+383
+00:16:05,353 --> 00:16:07,293
+we deal with people all the time where we
+
+384
+00:16:07,302 --> 00:16:08,593
+ask them their email address and they're like,
+
+385
+00:16:08,603 --> 00:16:12,153
+-- I don't know,
+-- that's a meet space government problem
+
+386
+00:16:12,306 --> 00:16:15,166
+though. And I view that as different.
+
+387
+00:16:15,325 --> 00:16:16,736
+The point being is that,
+
+388
+00:16:17,036 --> 00:16:17,255
+you know,
+
+389
+00:16:17,265 --> 00:16:19,616
+we live in a somewhat privileged world where we expect
+
+390
+00:16:19,625 --> 00:16:22,776
+people to have their user names and accounts and passwords.
+
+391
+00:16:22,786 --> 00:16:26,255
+And the reality is what percentage of people use a password manager personally.
+
+392
+00:16:26,265 --> 00:16:28,056
+I'm going to guess about maybe 1%.
+
+393
+00:16:28,195 --> 00:16:29,755
+I'd be shocked if it's that high.
+
+394
+00:16:30,026 --> 00:16:31,755
+And it might be 1% though because there's people
+
+395
+00:16:31,765 --> 00:16:33,315
+like me who force my Children to use it.
+
+396
+00:16:33,536 --> 00:16:37,815
+That's true. My whole family is using it and it's, it's actually really funny is so,
+
+397
+00:16:38,239 --> 00:16:40,489
+uh my son who is
+
+398
+00:16:40,590 --> 00:16:42,739
+dreaming of becoming a youtuber,
+
+399
+00:16:43,000 --> 00:16:43,820
+he,
+
+400
+00:16:44,010 --> 00:16:46,940
+he's setting up all of his youtube stuff
+
+401
+00:16:47,229 --> 00:16:50,150
+and one of his options was he decided to
+
+402
+00:16:50,159 --> 00:16:54,489
+create like a special account just for youtube stuff,
+
+403
+00:16:54,500 --> 00:16:56,859
+which I'm like, that's not the worst idea in the world.
+
+404
+00:16:56,869 --> 00:16:57,349
+It's like
+
+405
+00:16:57,469 --> 00:16:58,880
+they're asking me about two factor O.
+
+406
+00:16:59,059 --> 00:17:00,780
+I said you better install two factor
+
+407
+00:17:01,260 --> 00:17:01,900
+off. Like
+
+408
+00:17:02,039 --> 00:17:03,739
+there's no excuse not to.
+
+409
+00:17:03,750 --> 00:17:07,540
+Well, and the good news is like, I know natively in the apple world, you know,
+
+410
+00:17:07,550 --> 00:17:10,685
+with Safari, it's doing password management, your web browser and stuff.
+
+411
+00:17:10,694 --> 00:17:14,385
+Same in chrome. Firefox does the same, I assume internet
+
+412
+00:17:14,614 --> 00:17:17,243
+or what is it edge now? Whatever it is edge.
+
+413
+00:17:17,714 --> 00:17:19,314
+So that's, and, and let's face it.
+
+414
+00:17:19,324 --> 00:17:21,594
+Web based passwords and credentials are like,
+
+415
+00:17:21,604 --> 00:17:23,483
+pretty much that's all that matters to people.
+
+416
+00:17:23,493 --> 00:17:25,135
+Like I'm trying to think if I have any credentials for
+
+417
+00:17:25,145 --> 00:17:27,973
+anything else that matters and the answer is nothing important.
+
+418
+00:17:27,983 --> 00:17:33,354
+No account recovery is one of the easiest ways to hack someone because
+
+419
+00:17:33,680 --> 00:17:34,939
+you don't have to guess their password.
+
+420
+00:17:34,949 --> 00:17:37,729
+Hell, you don't even have to guess their user name in half the cases.
+
+421
+00:17:37,800 --> 00:17:41,540
+You just phone up the support and you're like, I'm Bob and I want my account, please.
+
+422
+00:17:41,859 --> 00:17:43,540
+Right. And this is
+
+423
+00:17:43,780 --> 00:17:47,770
+so my, what I always like to tell people about this is,
+
+424
+00:17:48,229 --> 00:17:51,579
+this is something that sounds really easy in theory.
+
+425
+00:17:51,989 --> 00:17:53,099
+And if you're say
+
+426
+00:17:53,310 --> 00:17:56,540
+hosting data for six people, it is,
+
+427
+00:17:56,790 --> 00:17:59,239
+well, it is easy because they know those six people,
+
+428
+00:17:59,410 --> 00:17:59,800
+right?
+
+429
+00:17:59,810 --> 00:18:04,640
+And it's different when you try to scale this problem and it becomes very difficult.
+
+430
+00:18:04,650 --> 00:18:07,260
+And especially when you're dealing with adversaries,
+
+431
+00:18:07,270 --> 00:18:09,069
+there's almost nothing you can do.
+
+432
+00:18:09,079 --> 00:18:11,689
+And adversaries if they are motivated,
+
+433
+00:18:11,890 --> 00:18:14,219
+they will acquire the information, they need
+
+434
+00:18:14,439 --> 00:18:16,140
+to accomplish their task.
+
+435
+00:18:16,329 --> 00:18:21,219
+There actually is one thing you can do that's rather clever as you just don't do it.
+
+436
+00:18:21,489 --> 00:18:22,410
+And that, and I,
+
+437
+00:18:22,420 --> 00:18:25,530
+I don't mean like git lab where you just don't provide support for that.
+
+438
+00:18:25,630 --> 00:18:28,670
+But for example, the CS A has some systems where
+
+439
+00:18:28,979 --> 00:18:31,630
+we really, really don't want you to make an account,
+
+440
+00:18:31,640 --> 00:18:33,660
+we want you to log in through a different account
+
+441
+00:18:33,670 --> 00:18:36,329
+provider like Google or Twitter or Facebook or linkedin.
+
+442
+00:18:36,729 --> 00:18:38,349
+I agree with that 100%.
+
+443
+00:18:38,439 --> 00:18:42,829
+There's no way unless you give me like about $100 million that I can provide
+
+444
+00:18:42,839 --> 00:18:45,895
+anything approaching the security and reliability of like
+
+445
+00:18:45,906 --> 00:18:48,265
+-- a Google
+-- login a long time ago.
+
+446
+00:18:48,556 --> 00:18:49,745
+I was, I think it was at
+
+447
+00:18:50,095 --> 00:18:51,865
+OCON, maybe I had lunch
+
+448
+00:18:51,975 --> 00:18:56,505
+with someone who was working on the Microsoft Identity platform and I don't even,
+
+449
+00:18:56,515 --> 00:18:59,576
+this might have been before office 365 even existed.
+
+450
+00:18:59,586 --> 00:19:01,375
+I mean, this was, this was a long time ago.
+
+451
+00:19:01,495 --> 00:19:01,936
+And anyway,
+
+452
+00:19:01,946 --> 00:19:04,505
+I was talking to this guy and something I'd never considered
+
+453
+00:19:04,515 --> 00:19:07,306
+before because he told me that on a daily basis,
+
+454
+00:19:07,316 --> 00:19:09,465
+Microsoft was seeing billions
+
+455
+00:19:09,791 --> 00:19:10,421
+of failed
+
+456
+00:19:10,602 --> 00:19:12,862
+login attempts that were malicious.
+
+457
+00:19:13,151 --> 00:19:15,141
+And I know I was like, that's
+
+458
+00:19:15,352 --> 00:19:18,842
+-- nuts. I couldn't fathom that.
+-- Well, credential stuffing.
+
+459
+00:19:19,192 --> 00:19:19,531
+I mean,
+
+460
+00:19:20,271 --> 00:19:23,982
+there's public databases of all the passwords that people have used.
+
+461
+00:19:24,312 --> 00:19:27,791
+Yes, exactly. That. And so this is, I mean, this guy
+
+462
+00:19:27,911 --> 00:19:30,962
+over the course of lunch basically completely revolutionized
+
+463
+00:19:30,972 --> 00:19:33,501
+my thinking on authentication on the internet.
+
+464
+00:19:33,750 --> 00:19:37,770
+And so they obviously they see this, but he said the most important part of it
+
+465
+00:19:38,069 --> 00:19:39,849
+is they collect this data
+
+466
+00:19:40,069 --> 00:19:42,890
+and then they use it to protect other users. So for example,
+
+467
+00:19:43,010 --> 00:19:48,369
+they might see 2 million login requests coming from some IP address in the Ukraine.
+
+468
+00:19:48,510 --> 00:19:52,900
+And they're like, well, this IP address is just never going to log in, right?
+
+469
+00:19:52,910 --> 00:19:54,689
+Like we're going to block it for a month.
+
+470
+00:19:54,699 --> 00:19:59,060
+You think about that on a on a scale of me running a computer on the internet,
+
+471
+00:19:59,170 --> 00:19:59,729
+I can't
+
+472
+00:20:00,084 --> 00:20:01,055
+fathom
+
+473
+00:20:01,165 --> 00:20:02,875
+doing something like that, right?
+
+474
+00:20:02,885 --> 00:20:05,275
+But to them, no big deal now,
+
+475
+00:20:05,285 --> 00:20:07,795
+now they know when that when that person running that attack,
+
+476
+00:20:07,805 --> 00:20:09,305
+when they do hit a valid login,
+
+477
+00:20:09,415 --> 00:20:12,234
+they're still going to fail. That's huge.
+
+478
+00:20:12,285 --> 00:20:12,574
+Well,
+
+479
+00:20:12,584 --> 00:20:15,305
+a great example of this is log into your Gmail through a Tor
+
+480
+00:20:15,375 --> 00:20:18,675
+enabled browser and you're going to have to re log in constantly.
+
+481
+00:20:18,685 --> 00:20:21,464
+I would hope so. And I'm OK with that,
+
+482
+00:20:21,574 --> 00:20:22,765
+-- right?
+-- Because those Tor
+
+483
+00:20:22,875 --> 00:20:25,785
+exit nodes are, let's just say dodgy
+
+484
+00:20:26,540 --> 00:20:27,800
+like that. I don't mean the Tor
+
+485
+00:20:27,920 --> 00:20:30,250
+exit node itself is dodgy but like the,
+
+486
+00:20:30,609 --> 00:20:33,569
+the kind of people that use them to log into Gmail.
+
+487
+00:20:33,699 --> 00:20:35,290
+I mean, well, you know,
+
+488
+00:20:35,300 --> 00:20:38,520
+I've worked for a company where we provided a service and we
+
+489
+00:20:38,530 --> 00:20:42,569
+found that 100% of the signups through Tor IP S were malicious.
+
+490
+00:20:42,579 --> 00:20:44,050
+I don't doubt that.
+
+491
+00:20:44,189 --> 00:20:46,719
+And so we ended up blocking signups through Tor
+
+492
+00:20:46,869 --> 00:20:47,430
+IP S.
+
+493
+00:20:47,939 --> 00:20:49,829
+Now you could access your account through Tor.
+
+494
+00:20:49,949 --> 00:20:51,479
+We didn't care that that was fine
+
+495
+00:20:51,630 --> 00:20:53,040
+but the actual sign up part,
+
+496
+00:20:53,219 --> 00:20:56,140
+not, there was not a single legitimate sign up through
+
+497
+00:20:56,300 --> 00:20:56,469
+Tor.
+
+498
+00:20:56,579 --> 00:21:00,520
+-- It was always malicious people hiding their tracks and stuff.
+-- I believe that.
+
+499
+00:21:00,650 --> 00:21:03,060
+And in fact, it was just a report that came out the other day.
+
+500
+00:21:03,069 --> 00:21:04,930
+I'll see if I can dig it up and throw it in the show notes.
+
+501
+00:21:05,109 --> 00:21:09,420
+But they basically point out the fact that like a nontrivial number of Tor exit
+
+502
+00:21:09,430 --> 00:21:12,000
+nodes are believed to literally be malicious where
+
+503
+00:21:12,010 --> 00:21:14,160
+they're spying on what users are doing.
+
+504
+00:21:14,680 --> 00:21:17,060
+Somebody ran a research paper looking at what ports
+
+505
+00:21:17,069 --> 00:21:19,449
+were blocked and there were Tor exit nodes blocking.
+
+506
+00:21:19,459 --> 00:21:19,839
+Like
+
+507
+00:21:20,109 --> 00:21:22,800
+um this is years ago when Tor was actually still reasonably fresh,
+
+508
+00:21:22,810 --> 00:21:25,189
+but it was blocking like all the encrypted email options.
+
+509
+00:21:25,199 --> 00:21:30,369
+Like it would allow port 110 and 19 for IMAP and pop, but it was blocking um like,
+
+510
+00:21:30,380 --> 00:21:35,290
+uh what is it like 553 or whatever the encrypted IMAP and encrypted pop options.
+
+511
+00:21:35,439 --> 00:21:35,979
+One.
+
+512
+00:21:36,150 --> 00:21:36,500
+Yeah.
+
+513
+00:21:37,119 --> 00:21:40,540
+So, same thing for Web. It was blocking 443 and allowing port 80.
+
+514
+00:21:40,550 --> 00:21:42,099
+Now, obviously, nowadays that wouldn't work,
+
+515
+00:21:42,109 --> 00:21:46,459
+but back in the day it did and I guess maybe somebody's stupid enough to use Tor
+
+516
+00:21:46,560 --> 00:21:47,170
+and be like, oh,
+
+517
+00:21:47,449 --> 00:21:49,859
+you know, I can't get my mail encrypted. So I'm going to
+
+518
+00:21:50,010 --> 00:21:51,199
+go to unencrypted.
+
+519
+00:21:51,280 --> 00:21:57,020
+I bet a lot of male clients a long time ago would just fail over and not say anything.
+
+520
+00:21:57,180 --> 00:22:00,219
+-- I mean, that was the way things used to work.
+-- Well, that's it. The
+
+521
+00:22:00,430 --> 00:22:03,180
+even US supported encryption. I remember
+
+522
+00:22:03,520 --> 00:22:06,900
+when they started supporting encryption and setting it up was often quite a chore.
+
+523
+00:22:07,130 --> 00:22:10,719
+The other aspect of this is that whole law of large numbers, right? Like,
+
+524
+00:22:11,060 --> 00:22:13,699
+there's a fundamental difference between making dinner for one person,
+
+525
+00:22:13,709 --> 00:22:16,770
+making dinner for 10 people, making dinner for 100 people
+
+526
+00:22:17,160 --> 00:22:19,739
+and making dinner for 10,000 people. Were to be blunt,
+
+527
+00:22:20,079 --> 00:22:23,989
+-- you're now managing a logistics chain. You're not making dinner. Yeah,
+-- exactly.
+
+528
+00:22:24,000 --> 00:22:26,800
+This is what git lab is doing is where Git lab basically went
+
+529
+00:22:26,810 --> 00:22:30,900
+from being the cool alternative kid on the block to now they're,
+
+530
+00:22:31,194 --> 00:22:34,045
+they're having to deal with logistics and infrastructure
+
+531
+00:22:34,354 --> 00:22:35,734
+and it's different.
+
+532
+00:22:35,755 --> 00:22:38,744
+-- The,
+-- the reality is even if they were somehow able to provide the service,
+
+533
+00:22:38,755 --> 00:22:41,185
+they just don't have enough bathrooms and parking for all the people.
+
+534
+00:22:42,074 --> 00:22:43,645
+No, like, really, I mean, you know,
+
+535
+00:22:43,755 --> 00:22:44,785
+it always astounds me.
+
+536
+00:22:44,795 --> 00:22:48,204
+I remember the official alternate seat of government here in Alberta was, uh,
+
+537
+00:22:48,214 --> 00:22:49,805
+it's a building called Government House.
+
+538
+00:22:49,814 --> 00:22:53,645
+It's by the old Provincial Museum. It's a lovely stone building.
+
+539
+00:22:53,655 --> 00:22:56,214
+It's the Lieutenant Governor's mansion and I believe it had
+
+540
+00:22:56,224 --> 00:22:58,425
+something like 20 phone lines and about a dozen toilets.
+
+541
+00:22:58,849 --> 00:22:59,349
+And I'm like,
+
+542
+00:22:59,359 --> 00:23:01,800
+that is not going to work so well as the alternative to
+
+543
+00:23:01,810 --> 00:23:04,109
+government when you try and cram like 300 people in there.
+
+544
+00:23:04,119 --> 00:23:07,469
+Yeah. Right. Right. I, oh man, no.
+
+545
+00:23:07,479 --> 00:23:12,030
+You know, so you know what's funny is this is one of those things that
+
+546
+00:23:12,180 --> 00:23:14,109
+I think as humans were really bad at understanding.
+
+547
+00:23:14,469 --> 00:23:15,979
+We, we look at our,
+
+548
+00:23:16,000 --> 00:23:19,920
+our one computer with three users and we think it
+
+549
+00:23:19,930 --> 00:23:21,760
+wouldn't be that hard to scale it up and,
+
+550
+00:23:21,770 --> 00:23:23,619
+and it's kind of, I forget,
+
+551
+00:23:23,939 --> 00:23:26,020
+I forget where there's some culture
+
+552
+00:23:26,219 --> 00:23:29,540
+that basically their counting system is 123 more than three.
+
+553
+00:23:29,760 --> 00:23:30,349
+And I,
+
+554
+00:23:30,959 --> 00:23:31,859
+I get that
+
+555
+00:23:31,959 --> 00:23:32,550
+like
+
+556
+00:23:32,719 --> 00:23:35,859
+it is, it is so hard for us to envision
+
+557
+00:23:35,989 --> 00:23:37,540
+things at scale
+
+558
+00:23:37,790 --> 00:23:38,420
+and
+
+559
+00:23:38,880 --> 00:23:41,589
+it, it feels like we should be able to just say, oh,
+
+560
+00:23:41,599 --> 00:23:44,780
+that's easy or II I understand or I can do that and
+
+561
+00:23:45,079 --> 00:23:48,780
+it's not, I mean, so one of my, a great example I have actually is. So
+
+562
+00:23:48,910 --> 00:23:50,670
+I know we've talked about this in the past,
+
+563
+00:23:50,680 --> 00:23:54,250
+but I basically took all of the Bitcoin data and I shoved it into elastic search,
+
+564
+00:23:54,260 --> 00:23:54,410
+right.
+
+565
+00:23:54,420 --> 00:23:55,689
+And I did do all this fun stuff with it.
+
+566
+00:23:55,939 --> 00:23:57,589
+Of a fun talk I give and whatever.
+
+567
+00:23:57,599 --> 00:23:59,400
+But the point is like when I started,
+
+568
+00:23:59,410 --> 00:24:02,380
+I was basically doing things in a nice linear manner, right?
+
+569
+00:24:02,410 --> 00:24:04,150
+And you don't think about it.
+
+570
+00:24:04,160 --> 00:24:07,640
+But I could say, oh, I'm doing like a couple of 100 entries per second.
+
+571
+00:24:07,650 --> 00:24:12,920
+I, I'm like, I'm on fire here. But then you realize a couple 100
+
+572
+00:24:13,449 --> 00:24:16,750
+entries per second when you have literally now, like, you know,
+
+573
+00:24:16,780 --> 00:24:18,579
+500 million transactions.
+
+574
+00:24:18,589 --> 00:24:19,020
+Like
+
+575
+00:24:19,540 --> 00:24:20,270
+that's,
+
+576
+00:24:21,329 --> 00:24:23,760
+I'll be dead before this is done.
+
+577
+00:24:24,030 --> 00:24:25,040
+And so,
+
+578
+00:24:25,280 --> 00:24:26,479
+and it's funny,
+
+579
+00:24:26,489 --> 00:24:29,770
+it's totally changed my perspective on a lot of things because I realized like,
+
+580
+00:24:29,930 --> 00:24:31,619
+I need to be able to process
+
+581
+00:24:31,780 --> 00:24:36,390
+millions of things per second to even hope to make this practical
+
+582
+00:24:36,400 --> 00:24:38,630
+and to get a meaningful answer in a short time frame.
+
+583
+00:24:38,944 --> 00:24:40,755
+Right. Right. And so it's, it's,
+
+584
+00:24:40,875 --> 00:24:44,204
+it changes your perspective when you have to scale things up.
+
+585
+00:24:44,214 --> 00:24:47,025
+Well, not just scale them up but make them still happen fast.
+
+586
+00:24:47,035 --> 00:24:49,604
+Like again, if you're going to make dinner for 10,000 people,
+
+587
+00:24:49,614 --> 00:24:50,724
+you can't take three months.
+
+588
+00:24:50,895 --> 00:24:53,724
+That is a good point. You would have a revolt.
+
+589
+00:24:53,814 --> 00:24:56,805
+You actually have, you have like a two hour window to feed everybody
+
+590
+00:24:58,135 --> 00:24:59,675
+otherwise it's not dinner anymore.
+
+591
+00:25:00,939 --> 00:25:01,430
+Right.
+
+592
+00:25:01,849 --> 00:25:06,310
+Just blends into drinks in the evening. No, I mean, I, I agree. I totally get this,
+
+593
+00:25:06,410 --> 00:25:08,589
+here's how I will end this, this conversation.
+
+594
+00:25:08,599 --> 00:25:13,209
+It is a curse and a blessing when you reach this point because it means git
+
+595
+00:25:13,219 --> 00:25:17,550
+lab has been successful enough that they have to worry about this level of scale.
+
+596
+00:25:17,560 --> 00:25:21,829
+And the curse is obviously you have reduced some of the
+
+597
+00:25:21,839 --> 00:25:26,219
+user experience value that you could obviously bring in the past.
+
+598
+00:25:26,359 --> 00:25:28,430
+My comment on this would be I think
+
+599
+00:25:29,050 --> 00:25:31,619
+places and this will a lot of people are going to hate me for saying this.
+
+600
+00:25:31,630 --> 00:25:35,760
+But I think places should as much as possible avoid human support,
+
+601
+00:25:35,770 --> 00:25:38,979
+not because they can save money and create crappy user experience.
+
+602
+00:25:39,069 --> 00:25:42,479
+But because they should actually invest in creating a really good
+
+603
+00:25:42,800 --> 00:25:47,079
+automated support system, but even better prevent the support from being needed.
+
+604
+00:25:47,089 --> 00:25:51,349
+Do things, you know, like Google is doing things on the front end so that you can, oh,
+
+605
+00:25:51,359 --> 00:25:53,760
+I forgot my email address, plug in my phone number.
+
+606
+00:25:53,770 --> 00:25:55,089
+Oh, there's my email address right now.
+
+607
+00:25:55,099 --> 00:25:57,400
+I remember, you know, things like that because that's
+
+608
+00:25:57,512 --> 00:26:00,642
+the only thing that is sustainable in the long term.
+
+609
+00:26:00,652 --> 00:26:02,812
+I think that's a really powerful statement.
+
+610
+00:26:02,833 --> 00:26:06,453
+Otherwise, otherwise you're doing artisanal it services which,
+
+611
+00:26:06,463 --> 00:26:07,672
+and there's a market for that.
+
+612
+00:26:07,812 --> 00:26:09,713
+Right. There's a market for that. Absolutely.
+
+613
+00:26:09,723 --> 00:26:09,812
+You know,
+
+614
+00:26:09,822 --> 00:26:11,932
+there's old people that will happily pay 50 bucks
+
+615
+00:26:11,942 --> 00:26:13,373
+an hour for somebody to hold their hand.
+
+616
+00:26:13,383 --> 00:26:15,253
+It's a small market though. Good luck with that.
+
+617
+00:26:15,373 --> 00:26:16,503
+-- Yeah,
+-- it doesn't scale.
+
+618
+00:26:16,512 --> 00:26:20,782
+I mean, I think that's a powerful statement you just made and I think it's, it
+
+619
+00:26:21,022 --> 00:26:26,012
+is the right way to do things. I think, I think designing to not
+
+620
+00:26:26,125 --> 00:26:27,586
+support is the,
+
+621
+00:26:27,595 --> 00:26:30,745
+it's the only way you should be designing
+
+622
+00:26:30,765 --> 00:26:32,786
+a great example of this is road construction,
+
+623
+00:26:32,796 --> 00:26:32,926
+right?
+
+624
+00:26:32,936 --> 00:26:34,906
+You look at interstate freeways in the US and
+
+625
+00:26:34,916 --> 00:26:37,615
+they are amazingly well designed from a safety perspective,
+
+626
+00:26:37,625 --> 00:26:37,706
+right?
+
+627
+00:26:37,715 --> 00:26:41,895
+You have this like 10 to 20 yard run out on either side, that's basically flat.
+
+628
+00:26:41,906 --> 00:26:43,566
+So even if you come off the road,
+
+629
+00:26:43,576 --> 00:26:46,066
+you're basically going to lose speed before you hit anything.
+
+630
+00:26:46,265 --> 00:26:48,345
+In theory, you have guard rails.
+
+631
+00:26:48,355 --> 00:26:49,385
+I mean, when you look at them,
+
+632
+00:26:49,395 --> 00:26:51,826
+you look at those youtube videos of people crashing and walking
+
+633
+00:26:51,836 --> 00:26:54,666
+away from it now in like just normal cheap cars.
+
+634
+00:26:54,939 --> 00:26:58,239
+And a lot of that is the car, but a lot of that is also the road design, you know,
+
+635
+00:26:58,250 --> 00:27:03,469
+Jersey barriers that redirect the energy upwards the guard rails the here locally,
+
+636
+00:27:03,479 --> 00:27:04,930
+I've noticed we have a big ring road,
+
+637
+00:27:04,939 --> 00:27:08,109
+the Anthony Hendy Drive and pretty much the entire thing now in the middle, you know,
+
+638
+00:27:08,119 --> 00:27:10,819
+the, the metal stakes with the three or four wires
+
+639
+00:27:10,920 --> 00:27:13,790
+and like there's a couple of spots where it got clobbered.
+
+640
+00:27:13,869 --> 00:27:15,479
+Well, yeah, those are designed to sell you down
+
+641
+00:27:15,593 --> 00:27:18,942
+on, well, and to prevent you from going into oncoming traffic when you wipe out.
+
+642
+00:27:18,953 --> 00:27:20,493
+-- Right. Right.
+-- That's going to end poorly.
+
+643
+00:27:20,503 --> 00:27:22,062
+The challenge there as well.
+
+644
+00:27:22,072 --> 00:27:25,412
+And the thing to always remember and the thing we don't have in it is
+
+645
+00:27:25,422 --> 00:27:29,772
+those kind of safety measures and those kind of regulations are written in blood.
+
+646
+00:27:29,863 --> 00:27:32,373
+We don't kill a lot of people. Thank goodness.
+
+647
+00:27:32,383 --> 00:27:36,123
+-- The
+-- thing is, at least people are thinking about it and the systems are starting to do
+
+648
+00:27:36,406 --> 00:27:37,145
+to get better.
+
+649
+00:27:37,156 --> 00:27:39,995
+You know, Google has put in your recovery, uh email address,
+
+650
+00:27:40,005 --> 00:27:43,536
+put in your recovery phone number, nominate a recovery person.
+
+651
+00:27:43,546 --> 00:27:46,345
+So again, I don't know if you notice this in your Google account, right?
+
+652
+00:27:46,355 --> 00:27:47,026
+Because you pay,
+
+653
+00:27:47,196 --> 00:27:49,566
+but you're a super admin for your organization and you
+
+654
+00:27:49,576 --> 00:27:51,946
+can nominate someone else to be your recovery person.
+
+655
+00:27:52,095 --> 00:27:55,926
+I have not looked at that. II, I don't, I don't know if I can do that or not.
+
+656
+00:27:55,936 --> 00:27:56,826
+-- If it's
+-- paid, you can,
+
+657
+00:27:57,140 --> 00:27:57,959
+you're paying, right?
+
+658
+00:27:58,380 --> 00:27:58,640
+Oh,
+
+659
+00:27:58,869 --> 00:28:01,079
+-- that's
+-- right. Your grandfather in, under the free one
+
+660
+00:28:01,219 --> 00:28:02,609
+way back in the day,
+
+661
+00:28:03,410 --> 00:28:06,959
+it's always Google's accounts are all separate that way. It's really messy.
+
+662
+00:28:06,969 --> 00:28:09,469
+-- Like
+-- I don't have enough people that really matter. But it's like,
+
+663
+00:28:09,660 --> 00:28:10,199
+I,
+
+664
+00:28:10,510 --> 00:28:12,270
+it'll cost me a couple of 100 bucks a year
+
+665
+00:28:12,555 --> 00:28:16,074
+isn't the end of the world, but it's like I'm pretty happy not to pay anything.
+
+666
+00:28:16,385 --> 00:28:18,675
+-- I
+-- honestly pay so that I didn't have to worry about them.
+
+667
+00:28:18,685 --> 00:28:21,094
+Like going away or I had some recourse basically.
+
+668
+00:28:21,114 --> 00:28:21,295
+-- Yeah,
+-- I
+
+669
+00:28:21,305 --> 00:28:23,685
+-- should,
+-- I should probably look into that because it's,
+
+670
+00:28:23,714 --> 00:28:27,074
+if I lost my personal email address,
+
+671
+00:28:27,224 --> 00:28:27,925
+it would,
+
+672
+00:28:28,405 --> 00:28:30,814
+-- it would make me sad.
+-- It would be a problem
+
+673
+00:28:32,300 --> 00:28:36,589
+actually. So I'll end on this one silly story is I was talking to a friend.
+
+674
+00:28:36,599 --> 00:28:39,880
+So I I've set up, I've got some honey pots running in digital ocean
+
+675
+00:28:40,339 --> 00:28:40,890
+for
+
+676
+00:28:41,060 --> 00:28:41,609
+and,
+
+677
+00:28:41,619 --> 00:28:43,459
+and obviously just to kind of pay attention to
+
+678
+00:28:43,469 --> 00:28:45,349
+some attacks going on right now in the world.
+
+679
+00:28:45,619 --> 00:28:49,619
+And this guy was saying, oh, I'm going to set this all up in, in GCP.
+
+680
+00:28:49,750 --> 00:28:54,219
+And I said I never run anything even remotely questionable in Amazon
+
+681
+00:28:54,229 --> 00:28:57,339
+or Google just because I don't want them one day being like,
+
+682
+00:28:57,510 --> 00:28:58,849
+we think you're a bad guy.
+
+683
+00:28:58,979 --> 00:29:01,130
+Like all your, all your accounts are gone. Now,
+
+684
+00:29:01,260 --> 00:29:02,510
+that is my nightmare.
+
+685
+00:29:02,520 --> 00:29:03,969
+Well, my favorite is those people who are like,
+
+686
+00:29:03,979 --> 00:29:07,170
+Google suspended my account and they're like, but you're not a Google customer.
+
+687
+00:29:07,180 --> 00:29:08,130
+So you can't talk to us,
+
+688
+00:29:08,699 --> 00:29:11,439
+even if you are a Google customer, you can't talk to them.
+
+689
+00:29:12,060 --> 00:29:12,680
+I mean,
+
+690
+00:29:14,369 --> 00:29:16,229
+like that's one of the things I think is,
+
+691
+00:29:16,239 --> 00:29:18,579
+is if something bad happened to my Google account,
+
+692
+00:29:18,760 --> 00:29:21,900
+I would be like, who do I know who works for Google?
+
+693
+00:29:22,520 --> 00:29:25,109
+I wouldn't even dream of trying to go through support.
+
+694
+00:29:25,119 --> 00:29:28,270
+I would totally backdoor myself in because I know that's
+
+695
+00:29:28,280 --> 00:29:31,310
+the only way I might maybe have some traction.
+
+696
+00:29:31,479 --> 00:29:32,189
+Yeah, pretty much
+
+697
+00:29:32,660 --> 00:29:34,709
+anyway, I'm calling it. It is.
+
+698
+00:29:35,130 --> 00:29:38,560
+Thank you, Kurt. Thank you everyone for listening. You can go to open
+
+699
+00:29:38,660 --> 00:29:40,910
+source security, podcast.com. Head up the show notes, Suzy Podos
+
+700
+00:29:41,180 --> 00:29:43,750
+says podcast hashtag to hit us up on social media.
+
+701
+00:29:43,760 --> 00:29:45,989
+Kurt have a fantastic rest of your day.
+
+702
+00:29:46,119 --> 00:29:47,430
+-- You too. Thanks
+-- everybody.
+
+703
+00:29:47,599 --> 00:29:49,109
+All right, thanks, everyone. Bye bye.

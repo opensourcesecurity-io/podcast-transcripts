@@ -1,0 +1,2918 @@
+0
+00:00:05,750 --> 00:00:09,140
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:09,149 --> 00:00:11,010
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:11,020 --> 00:00:15,539
+-- Josh Bresser.
+-- Hello, and I'm super excited. We have a guest today.
+
+3
+00:00:15,550 --> 00:00:19,389
+We have Jeff Mitchell who's a principal engineer at Hashicorp,
+
+4
+00:00:19,399 --> 00:00:21,219
+who's joined us to talk about hashy
+
+5
+00:00:21,389 --> 00:00:22,875
+Corp boundaries. So welcome to the show. So,
+
+6
+00:00:23,004 --> 00:00:24,584
+-- Jeff,
+-- thanks for having me.
+
+7
+00:00:24,694 --> 00:00:28,584
+-- Glad to be here. Awesome.
+-- So I guess, tell us what you've done. Why are you here?
+
+8
+00:00:28,594 --> 00:00:30,915
+-- So
+-- we released two weeks ago now, hash
+
+9
+00:00:31,075 --> 00:00:33,275
+Corp Boundary and Boundary is a,
+
+10
+00:00:33,284 --> 00:00:38,044
+a tool as a piece of software for essentially doing identity based access,
+
+11
+00:00:38,055 --> 00:00:39,525
+network access of resources.
+
+12
+00:00:39,534 --> 00:00:39,875
+So
+
+13
+00:00:40,169 --> 00:00:43,470
+the idea being that, you know, it's not simply sufficient to
+
+14
+00:00:43,580 --> 00:00:46,090
+be on the same network or have sort of direct
+
+15
+00:00:46,099 --> 00:00:49,049
+uh network connectivity to a service and to have credentials.
+
+16
+00:00:49,060 --> 00:00:49,790
+But in fact,
+
+17
+00:00:49,959 --> 00:00:53,860
+you need to have each individual session that you want to make, be authorized.
+
+18
+00:00:53,869 --> 00:00:56,909
+And one of the nice things about having an approach like this is that
+
+19
+00:00:57,040 --> 00:00:58,880
+you can actually essentially use this as a
+
+20
+00:00:58,889 --> 00:01:01,209
+bridge between public and private networks or,
+
+21
+00:01:01,220 --> 00:01:03,950
+you know, within fully public or within fully private networks as well.
+
+22
+00:01:03,959 --> 00:01:04,388
+So
+
+23
+00:01:04,519 --> 00:01:05,790
+you can use it to basically
+
+24
+00:01:06,029 --> 00:01:06,349
+have
+
+25
+00:01:06,650 --> 00:01:09,580
+an ingress point into your network that is doing a just in
+
+26
+00:01:09,589 --> 00:01:12,209
+time authorization check for every single connection you want to make,
+
+27
+00:01:12,220 --> 00:01:15,050
+making sure that you are the right person, the right authorization.
+
+28
+00:01:15,160 --> 00:01:18,120
+And in the future, there will be other things that are layered on top.
+
+29
+00:01:18,129 --> 00:01:19,980
+Some of which we've sort of talked about already and some of
+
+30
+00:01:19,989 --> 00:01:21,629
+which are just kind of on our long term road map.
+
+31
+00:01:21,819 --> 00:01:26,779
+Awesome. This is, I'm so excited about this, what I read about. So I guess let's start
+
+32
+00:01:27,040 --> 00:01:28,019
+at the beginning.
+
+33
+00:01:28,190 --> 00:01:29,849
+Sure. Tell us who hatch
+
+34
+00:01:29,970 --> 00:01:32,639
+Corp is because I, I have a feeling not every
+
+35
+00:01:32,839 --> 00:01:36,000
+-- knows and if you don't know, you should and you're going to find
+-- out,
+
+36
+00:01:36,029 --> 00:01:37,809
+especially if you're storing secrets on your web.
+
+37
+00:01:38,040 --> 00:01:38,779
+Exactly.
+
+38
+00:01:39,459 --> 00:01:40,209
+Yeah. So, so Ash
+
+39
+00:01:40,410 --> 00:01:42,930
+Corp was founded, I, I actually, I'm gonna get the date wrong,
+
+40
+00:01:42,940 --> 00:01:43,839
+so I'm not going to say it.
+
+41
+00:01:43,919 --> 00:01:47,610
+I, what I can say is I joined five years ago and um, and at that point,
+
+42
+00:01:47,620 --> 00:01:49,809
+there were already several different products
+
+43
+00:01:49,949 --> 00:01:53,349
+and there's sort of a predictable key of products that are all kind of along the dev
+
+44
+00:01:53,489 --> 00:01:54,569
+ops tool chain. And so
+
+45
+00:01:54,839 --> 00:01:56,849
+one thing that Hashi Corp was doing and actually
+
+46
+00:01:56,860 --> 00:01:58,970
+what brought me to the company eventually was that
+
+47
+00:01:59,250 --> 00:02:02,120
+they were looking at each individual aspect of sort of
+
+48
+00:02:02,129 --> 00:02:05,040
+getting from I have application code and I want to
+
+49
+00:02:05,050 --> 00:02:09,229
+get it to an end system and then I need to actually like run it in an end system.
+
+50
+00:02:09,429 --> 00:02:11,729
+And they were figuring out how do we make a tool
+
+51
+00:02:11,850 --> 00:02:14,339
+that, you know, for each step along the way,
+
+52
+00:02:14,350 --> 00:02:19,070
+actually solves a specific need and very much in the UNIX model of like, do one thing,
+
+53
+00:02:19,080 --> 00:02:20,600
+do it well, so, you know, our, our, our,
+
+54
+00:02:20,850 --> 00:02:22,750
+our mantra is better together,
+
+55
+00:02:22,759 --> 00:02:26,080
+but each individual project should be able to stand on its own.
+
+56
+00:02:26,089 --> 00:02:28,500
+And so this encompasses, you know, vagrant,
+
+57
+00:02:28,509 --> 00:02:30,970
+which is something that a lot of people probably know.
+
+58
+00:02:31,220 --> 00:02:32,300
+Um So vagrant is,
+
+59
+00:02:32,309 --> 00:02:34,460
+is a mechanism for sort of uh uh it's a
+
+60
+00:02:34,470 --> 00:02:37,130
+DS L for describing virtual machine images and then you
+
+61
+00:02:37,139 --> 00:02:42,119
+can sort of do a vagrant up and you have a uh A VM ready to go on various hypervisors.
+
+62
+00:02:42,130 --> 00:02:42,649
+And so
+
+63
+00:02:42,910 --> 00:02:45,270
+that's sort of the at the very beginning of sort of that,
+
+64
+00:02:45,279 --> 00:02:48,520
+that DEV op step of like the actual DEV work and having a predictable environment
+
+65
+00:02:48,750 --> 00:02:51,259
+and then it moves along to, to like Packer.
+
+66
+00:02:51,339 --> 00:02:52,990
+So Packer is a way of building machine
+
+67
+00:02:53,000 --> 00:02:55,169
+images for all sorts of different targets from,
+
+68
+00:02:55,179 --> 00:02:58,220
+you know, a similar configuration language from there.
+
+69
+00:02:58,229 --> 00:03:01,690
+You have Terraform, which is probably one of the most well known products.
+
+70
+00:03:01,699 --> 00:03:05,399
+And Terraform is essentially a DS L that allows you to
+
+71
+00:03:05,410 --> 00:03:09,210
+do infrastructure as code and it's extremely well supported in industry.
+
+72
+00:03:09,449 --> 00:03:12,139
+It has a lot of different providers that provide different
+
+73
+00:03:12,149 --> 00:03:14,809
+functionality for different clouds and systems and you know,
+
+74
+00:03:14,919 --> 00:03:19,669
+you can do everything from, you know, manage EC2 all the way down to like DNS.
+
+75
+00:03:19,889 --> 00:03:22,070
+Um There's all sorts of things that terraform hooks into.
+
+76
+00:03:22,149 --> 00:03:24,399
+And then from there, we have a couple of runtime products there,
+
+77
+00:03:24,604 --> 00:03:25,585
+console, which is
+
+78
+00:03:25,755 --> 00:03:28,664
+console originally started out basically as a key value store,
+
+79
+00:03:28,675 --> 00:03:30,294
+uh a consistent key value store.
+
+80
+00:03:30,345 --> 00:03:32,434
+And it's really, and, and on top of that,
+
+81
+00:03:32,445 --> 00:03:35,634
+they built a service registry and now that's turned into a,
+
+82
+00:03:35,645 --> 00:03:36,725
+a lot of different things.
+
+83
+00:03:36,735 --> 00:03:39,664
+But, you know, it's, it's a full on service mesh at this point. And
+
+84
+00:03:39,904 --> 00:03:43,384
+uh and so that's, that's finding a lot of um really interesting use cases and,
+
+85
+00:03:43,395 --> 00:03:44,785
+and it scales extremely well.
+
+86
+00:03:44,914 --> 00:03:46,975
+Uh There's nomad which is a scheduler.
+
+87
+00:03:47,240 --> 00:03:51,339
+So Nomad is extremely fast and extremely scalable and handles
+
+88
+00:03:51,350 --> 00:03:52,869
+all sorts of different things that it can deploy,
+
+89
+00:03:52,880 --> 00:03:53,910
+not just containers.
+
+90
+00:03:54,119 --> 00:03:57,710
+Um So there are a lot of people that use it for very, very demanding workloads.
+
+91
+00:03:57,720 --> 00:04:00,770
+And then probably I, I would guess outside of terraform,
+
+92
+00:04:00,779 --> 00:04:04,399
+the other most well known product is vault and vault is
+
+93
+00:04:04,710 --> 00:04:08,220
+a Secrets Management platform. So it started out kind of as a uh
+
+94
+00:04:08,360 --> 00:04:08,949
+uh with,
+
+95
+00:04:09,300 --> 00:04:11,100
+with sort of a couple of interesting notes.
+
+96
+00:04:11,369 --> 00:04:12,440
+So one is, you know,
+
+97
+00:04:12,449 --> 00:04:15,100
+originally started out as consular is key value store and
+
+98
+00:04:15,110 --> 00:04:17,070
+we want to encrypt things that are living in consul.
+
+99
+00:04:17,079 --> 00:04:17,519
+And so it,
+
+100
+00:04:17,678 --> 00:04:20,880
+it really was about building that initial root of trust.
+
+101
+00:04:20,890 --> 00:04:23,720
+And then they had this idea about something called dynamic secrets,
+
+102
+00:04:23,730 --> 00:04:27,070
+which are basically why don't we just mint credentials just in time and have vault
+
+103
+00:04:27,079 --> 00:04:30,589
+be responsible for the lifetime of those credentials and revoke them as we go.
+
+104
+00:04:30,600 --> 00:04:31,440
+And over time,
+
+105
+00:04:31,450 --> 00:04:35,049
+vault turned into more and more of a platform where you have kind of this core of
+
+106
+00:04:35,179 --> 00:04:39,440
+auditing access control, replication and scaling and all these things.
+
+107
+00:04:39,489 --> 00:04:41,320
+And then each different aspect of it,
+
+108
+00:04:41,329 --> 00:04:44,959
+it provides essentially an api upon which you can build all sorts of things that,
+
+109
+00:04:44,970 --> 00:04:46,160
+that need high security.
+
+110
+00:04:46,170 --> 00:04:46,570
+So
+
+111
+00:04:46,720 --> 00:04:48,760
+there's encryption as a service, there's, you know,
+
+112
+00:04:48,769 --> 00:04:51,859
+just kind of a key value store that, that encrypts things to go through.
+
+113
+00:04:51,869 --> 00:04:55,940
+There's database credentials that can be generated, it can act as a PK I like a,
+
+114
+00:04:55,950 --> 00:04:57,320
+a certificate authority, et cetera.
+
+115
+00:04:57,329 --> 00:04:58,320
+So that's sort of the,
+
+116
+00:04:58,450 --> 00:04:58,920
+the, the
+
+117
+00:04:59,290 --> 00:04:59,649
+that hush
+
+118
+00:04:59,850 --> 00:05:00,890
+products take you on.
+
+119
+00:05:00,899 --> 00:05:04,329
+And a lot of people actually find it in a way similar to what I did, which was
+
+120
+00:05:04,510 --> 00:05:05,380
+I was working in a coma
+
+121
+00:05:05,519 --> 00:05:08,809
+at the time and I was working on as an infrastructure architect,
+
+122
+00:05:08,820 --> 00:05:12,220
+working on kind of green fielding infrastructure for one of the groups there.
+
+123
+00:05:12,350 --> 00:05:14,890
+And what I found is that every single time I was like, OK,
+
+124
+00:05:14,899 --> 00:05:18,540
+here's the way that I want to build this, I want something that does X
+
+125
+00:05:18,700 --> 00:05:21,579
+and basically every single time I said I want something that does X, it was,
+
+126
+00:05:21,589 --> 00:05:22,260
+it ended up being a house
+
+127
+00:05:22,450 --> 00:05:23,040
+product.
+
+128
+00:05:24,130 --> 00:05:25,890
+So, you know, first I was like, I need this,
+
+129
+00:05:25,899 --> 00:05:28,109
+I need some way to do like distributed evening and
+
+130
+00:05:28,119 --> 00:05:30,519
+oh console lets you like send events out to nodes.
+
+131
+00:05:30,529 --> 00:05:33,549
+OK? And also has key value store so I can send configuration through it.
+
+132
+00:05:33,559 --> 00:05:37,940
+And then it was like, OK. Now I want to do do Docker in an item put way oh look terraform.
+
+133
+00:05:38,130 --> 00:05:40,790
+And, and so kind of every step along the way.
+
+134
+00:05:40,799 --> 00:05:42,679
+Uh I just ended up finding myself using Hushka
+
+135
+00:05:42,920 --> 00:05:44,109
+products and eventually
+
+136
+00:05:44,209 --> 00:05:47,510
+I just moved over there and started working on products myself.
+
+137
+00:05:47,519 --> 00:05:51,309
+So when I took over, I, I basically came in and, and I sort of took over primary
+
+138
+00:05:51,411 --> 00:05:54,532
+engineering on faults starting just before the 0.3 release.
+
+139
+00:05:54,601 --> 00:05:58,391
+And then we kicked off boundary in earnest about a year ago.
+
+140
+00:05:58,402 --> 00:06:02,272
+We sort of had been thinking about it uh for quite a bit longer than that.
+
+141
+00:06:02,441 --> 00:06:07,111
+-- And I sort of moved over to kind of spin up and kick off the boundary project.
+-- That was
+
+142
+00:06:07,342 --> 00:06:08,832
+a fantastic
+
+143
+00:06:08,971 --> 00:06:10,082
+retelling of hay
+
+144
+00:06:10,441 --> 00:06:10,682
+Carp.
+
+145
+00:06:11,161 --> 00:06:14,611
+-- Great. Glad you like
+-- it. Thank you. Iii I learned quite a bit.
+
+146
+00:06:14,622 --> 00:06:17,872
+I thought I knew more than I did, which is always a pleasant surprise.
+
+147
+00:06:17,881 --> 00:06:19,261
+II, I will say I left way point
+
+148
+00:06:19,373 --> 00:06:21,993
+doubt which I shouldn't have, but only because it's so new.
+
+149
+00:06:22,003 --> 00:06:24,593
+It, you know, it's not part of this sort of traditional hush group story.
+
+150
+00:06:24,604 --> 00:06:25,813
+I've been so steeped on boundary.
+
+151
+00:06:25,824 --> 00:06:29,593
+I'm not even sure I fully understand the way point myself. So I'm gonna,
+
+152
+00:06:29,794 --> 00:06:30,753
+I'm gonna leave it there.
+
+153
+00:06:30,764 --> 00:06:31,354
+It's actually, it's,
+
+154
+00:06:31,364 --> 00:06:34,794
+it's very interesting approach for sort of tackling the build,
+
+155
+00:06:34,803 --> 00:06:39,194
+deploy run sort of a cycle in a way that makes it extremely easy for
+
+156
+00:06:39,343 --> 00:06:41,954
+you to sort of tackle any kind of workflow there,
+
+157
+00:06:41,963 --> 00:06:45,273
+like across any platform and make it very easy for developers to be in control.
+
+158
+00:06:45,283 --> 00:06:47,283
+So, Waypoint is really interesting project to check out as well.
+
+159
+00:06:47,335 --> 00:06:49,316
+It's funny that you mention that because I think that's
+
+160
+00:06:49,325 --> 00:06:50,795
+one of the biggest things missing from a lot of
+
+161
+00:06:50,805 --> 00:06:54,406
+security is that processes that allow people to shorten those
+
+162
+00:06:54,415 --> 00:06:56,596
+latency loops and make it easier to do these things.
+
+163
+00:06:56,605 --> 00:06:58,976
+Because both Josh and I have worked at companies where, you know,
+
+164
+00:06:58,985 --> 00:07:03,376
+-- pushing out emergency updates of software is, you know, Death March
+-- that it can be.
+
+165
+00:07:03,526 --> 00:07:05,996
+And I, I also want to add
+
+166
+00:07:06,305 --> 00:07:06,955
+that
+
+167
+00:07:07,066 --> 00:07:08,675
+virtually everything
+
+168
+00:07:08,786 --> 00:07:09,006
+has
+
+169
+00:07:09,115 --> 00:07:09,126
+a
+
+170
+00:07:09,276 --> 00:07:10,105
+Corp does
+
+171
+00:07:10,305 --> 00:07:11,955
+is open source on
+
+172
+00:07:12,196 --> 00:07:13,885
+github, which is awesome.
+
+173
+00:07:14,476 --> 00:07:15,196
+So we, we have
+
+174
+00:07:15,298 --> 00:07:18,157
+open core model and, you know, I I think that
+
+175
+00:07:18,437 --> 00:07:18,757
+there,
+
+176
+00:07:18,768 --> 00:07:21,518
+there are obviously people that would like everything to be fully open source and,
+
+177
+00:07:21,528 --> 00:07:22,447
+and just go with support.
+
+178
+00:07:22,458 --> 00:07:22,757
+But you know,
+
+179
+00:07:22,768 --> 00:07:25,497
+there are different approaches to sort of building a sustainable company
+
+180
+00:07:25,507 --> 00:07:27,467
+and we want to make sure that we're around for our,
+
+181
+00:07:27,477 --> 00:07:28,638
+our users and our customers.
+
+182
+00:07:28,648 --> 00:07:31,088
+So, you know, so we have an open core approach. Um
+
+183
+00:07:31,287 --> 00:07:34,417
+The way that we try to look at it is we try to put kind of the,
+
+184
+00:07:34,428 --> 00:07:38,618
+the core functionality for any individual technology that, that a product is,
+
+185
+00:07:38,667 --> 00:07:43,157
+is sitting in and essentially make the core technology open
+
+186
+00:07:43,260 --> 00:07:45,390
+source and then focus on uh I'm not,
+
+187
+00:07:45,399 --> 00:07:47,720
+I'm not gonna go into details because really that's more on the,
+
+188
+00:07:47,730 --> 00:07:49,000
+the sort of product side
+
+189
+00:07:49,119 --> 00:07:51,279
+and marketing side and I don't want to say anything that's gonna get,
+
+190
+00:07:51,290 --> 00:07:53,940
+that's gonna not be what, what they would want me to say.
+
+191
+00:07:53,950 --> 00:07:57,239
+But, you know, I, I think in general, I can say that the way we think about it is sort of,
+
+192
+00:07:57,250 --> 00:07:58,500
+you know, if you,
+
+193
+00:07:58,600 --> 00:08:01,160
+if you have specific needs that really
+
+194
+00:08:01,170 --> 00:08:03,910
+are catering specifically to large enterprises,
+
+195
+00:08:03,920 --> 00:08:08,750
+which is a, a large subset of our kind of customer base or, you know, fortune 500 C,
+
+196
+00:08:08,809 --> 00:08:11,119
+you know, companies, then that's really where we want
+
+197
+00:08:11,221 --> 00:08:13,802
+to, you know, figure out how to monetize it because they,
+
+198
+00:08:13,812 --> 00:08:16,191
+they want those extra features, they want that support.
+
+199
+00:08:16,201 --> 00:08:18,802
+And meanwhile, it means that we can put kind of all the base tools that,
+
+200
+00:08:18,992 --> 00:08:21,941
+uh you know, if you're just a home user and an open source user, you know,
+
+201
+00:08:21,951 --> 00:08:25,041
+another open source project, let's say that that's available for you to,
+
+202
+00:08:25,052 --> 00:08:25,842
+to make use of.
+
+203
+00:08:25,851 --> 00:08:28,641
+So it's always a delicate balance as you can, as you might imagine.
+
+204
+00:08:28,851 --> 00:08:32,131
+Yeah, totally. Well, I mean, Kurt and I have long histories in open source.
+
+205
+00:08:32,142 --> 00:08:35,241
+I, I work at Elastic now and it's, you know, gotta eat man.
+
+206
+00:08:35,392 --> 00:08:36,171
+Exactly.
+
+207
+00:08:36,302 --> 00:08:39,081
+II, I get, I get it. OK. OK. So let's, let's
+
+208
+00:08:39,453 --> 00:08:43,203
+on boundary. I read about how boundary works and it sounds amazing. And
+
+209
+00:08:43,513 --> 00:08:45,633
+in, in the zero trust world,
+
+210
+00:08:45,664 --> 00:08:50,203
+one of the challenges is always how do you restrict access?
+
+211
+00:08:50,213 --> 00:08:54,583
+And I've seen a variety of methods and the age old
+
+212
+00:08:54,593 --> 00:08:58,044
+trope of just put a firewall in front of the network
+
+213
+00:08:58,333 --> 00:09:01,914
+is I think anyone still relying on that is fooling themselves.
+
+214
+00:09:01,924 --> 00:09:05,054
+I think part of the point it's not restricting access,
+
+215
+00:09:05,064 --> 00:09:07,044
+it's doing so efficiently nowadays,
+
+216
+00:09:07,750 --> 00:09:10,559
+right? Because the great example is, you know, oh, all of a sudden
+
+217
+00:09:10,700 --> 00:09:12,530
+everybody's logging in from home
+
+218
+00:09:12,849 --> 00:09:13,869
+and, and that's like that.
+
+219
+00:09:13,880 --> 00:09:16,520
+And that used to be, I remember having these arguments with, you know,
+
+220
+00:09:16,530 --> 00:09:18,619
+in companies where like, no people need to be able to work from home.
+
+221
+00:09:18,630 --> 00:09:20,179
+Like, no, we'll make them do it on site now.
+
+222
+00:09:20,190 --> 00:09:22,570
+It's kind of like, yeah, now that, that argument is over.
+
+223
+00:09:22,650 --> 00:09:25,609
+Yeah, we, we actually saw that with my, my wife's company,
+
+224
+00:09:25,619 --> 00:09:28,219
+which I won't name but they, they actually just switched products,
+
+225
+00:09:28,229 --> 00:09:30,140
+but they were using a VPN product.
+
+226
+00:09:30,150 --> 00:09:32,530
+And essentially people would just be hopping around
+
+227
+00:09:32,539 --> 00:09:34,080
+during the day to all the different,
+
+228
+00:09:34,090 --> 00:09:36,530
+like configured VPN end points at some point,
+
+229
+00:09:36,744 --> 00:09:40,614
+she found that things were so overloaded. It was actually faster for her to go to a VPN
+
+230
+00:09:40,794 --> 00:09:41,844
+ingress point
+
+231
+00:09:42,005 --> 00:09:43,244
+in I think London
+
+232
+00:09:43,544 --> 00:09:47,114
+than it was to go to like Cincinnati. So, yeah, it, it's
+
+233
+00:09:47,234 --> 00:09:50,385
+you know, you need something that scales, you know, when you're bridging networks,
+
+234
+00:09:50,395 --> 00:09:54,325
+like, like you generally do the VPN S, although there are obviously are, you know,
+
+235
+00:09:54,335 --> 00:09:57,275
+security features in VPN S to kind of keep people isolated, you know,
+
+236
+00:09:57,284 --> 00:09:58,864
+put them into V lands, things like that.
+
+237
+00:09:58,875 --> 00:10:00,645
+But when you're bridging networks, then,
+
+238
+00:10:00,940 --> 00:10:01,159
+you know,
+
+239
+00:10:01,169 --> 00:10:04,469
+there's a lot of assumptions that end up getting made about what people ought
+
+240
+00:10:04,479 --> 00:10:06,770
+to be able to do or what people can do and sort of what,
+
+241
+00:10:06,780 --> 00:10:07,960
+how that should behave.
+
+242
+00:10:07,969 --> 00:10:10,340
+You know, there are some, there are very good use cases for it.
+
+243
+00:10:10,349 --> 00:10:12,599
+You know, if I'm, if I'm coming into my home network, I,
+
+244
+00:10:12,609 --> 00:10:15,289
+I do have boundary running locally, but if I'm coming to my home network,
+
+245
+00:10:15,299 --> 00:10:16,320
+I often want a VPN,
+
+246
+00:10:16,434 --> 00:10:21,414
+I just actually want to access my, my own home network as if I was sitting at home.
+
+247
+00:10:21,424 --> 00:10:21,625
+You know,
+
+248
+00:10:21,635 --> 00:10:23,434
+I want access to all the different IP S and the different
+
+249
+00:10:23,445 --> 00:10:25,684
+ports and services and things like that that I have running.
+
+250
+00:10:25,744 --> 00:10:28,265
+But, you know, if you're an enterprise and you're like, OK,
+
+251
+00:10:28,385 --> 00:10:31,815
+I just want to allow somebody to ssh to a single machine,
+
+252
+00:10:32,229 --> 00:10:32,599
+right?
+
+253
+00:10:32,690 --> 00:10:35,039
+Getting them in and essentially bridging networks is
+
+254
+00:10:35,049 --> 00:10:36,419
+not really the right way to do that.
+
+255
+00:10:36,429 --> 00:10:39,080
+It, it provides a lot more access than you really want to give.
+
+256
+00:10:39,219 --> 00:10:41,820
+And so then essentially what happens is you're falling back to,
+
+257
+00:10:42,000 --> 00:10:45,440
+you have that network access layer. But once someone's in on that network.
+
+258
+00:10:45,450 --> 00:10:48,919
+The only thing that's left is either sort of IP whitelisting, you know,
+
+259
+00:10:48,929 --> 00:10:52,039
+allow listing, deny, listing kind of things or you get, you know, credentials,
+
+260
+00:10:52,049 --> 00:10:52,400
+right.
+
+261
+00:10:52,630 --> 00:10:52,950
+You know,
+
+262
+00:10:52,960 --> 00:10:54,539
+it's still a journey for a lot of companies to
+
+263
+00:10:54,549 --> 00:10:56,591
+get to a point where credentials are more ephemeral,
+
+264
+00:10:56,601 --> 00:10:59,221
+um where they rotate rapidly or they're sort of just in time.
+
+265
+00:10:59,231 --> 00:11:02,382
+One of the things that we're going to be doing with boundary in kind of the near term,
+
+266
+00:11:02,392 --> 00:11:05,521
+and we've sort of this is on a public road map is vault integration.
+
+267
+00:11:05,531 --> 00:11:08,161
+And part of that is that we want to,
+
+268
+00:11:08,312 --> 00:11:09,401
+you know, to make it easy.
+
+269
+00:11:09,411 --> 00:11:11,171
+So that not only can you connect into
+
+270
+00:11:11,182 --> 00:11:13,651
+a machine through boundary and only through boundary,
+
+271
+00:11:13,661 --> 00:11:13,762
+right,
+
+272
+00:11:13,771 --> 00:11:15,711
+you can set up your firewall such that only
+
+273
+00:11:15,721 --> 00:11:18,262
+boundary worker nodes that are proxy traffic can actually
+
+274
+00:11:18,504 --> 00:11:21,564
+allow you to make a connection into the node. But on top of that
+
+275
+00:11:21,744 --> 00:11:25,364
+boundary can manage the lifetime of a credential that's minted from vault.
+
+276
+00:11:25,374 --> 00:11:28,443
+And so that way you can say, OK, I want to connect to, you know,
+
+277
+00:11:28,453 --> 00:11:31,044
+some machine I want to connect to a post Chris database.
+
+278
+00:11:31,114 --> 00:11:32,383
+I have to go through boundary.
+
+279
+00:11:32,393 --> 00:11:34,323
+And when I make that connection through boundary,
+
+280
+00:11:34,333 --> 00:11:36,023
+the boundary will in the near term,
+
+281
+00:11:36,033 --> 00:11:40,973
+it will return to me a set of credentials that I can then kind of seed into, you know,
+
+282
+00:11:40,984 --> 00:11:42,385
+into the the client.
+
+283
+00:11:42,526 --> 00:11:45,385
+Oh, nice. If you're using our helpers, we can see it in for you.
+
+284
+00:11:45,466 --> 00:11:46,726
+And then eventually we'll get to a point
+
+285
+00:11:46,736 --> 00:11:49,036
+where we're doing protocol decoding for various protocols and
+
+286
+00:11:49,046 --> 00:11:53,106
+then we can actually inject the credentials and you as a user never see a credential.
+
+287
+00:11:53,116 --> 00:11:55,565
+Oh, nice. The way it should be. Right.
+
+288
+00:11:55,575 --> 00:11:58,726
+And so that way, you know, if you, if you don't have a credential of your own,
+
+289
+00:11:58,926 --> 00:12:01,786
+then you can't, even if you manage to get onto the network,
+
+290
+00:12:01,796 --> 00:12:04,505
+you literally have no credentials that you can use to authenticate to a service.
+
+291
+00:12:05,039 --> 00:12:06,080
+That's awesome. All right.
+
+292
+00:12:06,090 --> 00:12:06,900
+So let me,
+
+293
+00:12:06,909 --> 00:12:11,659
+let's discuss some use cases here because I read about this and I'm super excited
+
+294
+00:12:11,669 --> 00:12:15,140
+and I want to make sure I understand it as well because I always worry that
+
+295
+00:12:15,369 --> 00:12:16,340
+I either
+
+296
+00:12:16,630 --> 00:12:19,739
+am overthinking or under thinking this problem. So I guess,
+
+297
+00:12:20,359 --> 00:12:21,500
+let's say
+
+298
+00:12:21,840 --> 00:12:25,859
+I, and this is a very typical setup where I have a
+
+299
+00:12:26,030 --> 00:12:27,219
+corporate network.
+
+300
+00:12:27,479 --> 00:12:29,940
+I have a VPN and I have,
+
+301
+00:12:30,200 --> 00:12:33,260
+we'll say everyone working from home and obviously,
+
+302
+00:12:33,270 --> 00:12:34,859
+people need to access a resource.
+
+303
+00:12:34,869 --> 00:12:40,250
+So let's say I Josh need to ssh into a server
+
+304
+00:12:40,650 --> 00:12:41,820
+in the corporate network.
+
+305
+00:12:41,830 --> 00:12:45,094
+And traditionally, the way that would be done is I connect my VPN.
+
+306
+00:12:45,104 --> 00:12:49,155
+I basically my computer in my living room now becomes part of the corporate
+
+307
+00:12:49,164 --> 00:12:54,015
+VPN as well as whatever botnet that my kids have installed on the computer.
+
+308
+00:12:54,104 --> 00:12:58,405
+And so now I basically have unfettered access into the corporate network.
+
+309
+00:12:58,414 --> 00:13:02,844
+So how would you say is the better way to do this with boundary.
+
+310
+00:13:03,270 --> 00:13:05,429
+So with boundary, the way you would do this is you would,
+
+311
+00:13:05,440 --> 00:13:08,270
+you would have a boundary client on your machine right now.
+
+312
+00:13:08,280 --> 00:13:11,150
+We just have cli in terms of actually making connections,
+
+313
+00:13:11,159 --> 00:13:13,369
+but we are working on a desktop client so that
+
+314
+00:13:13,380 --> 00:13:15,150
+you'll be able to sort of browse through available,
+
+315
+00:13:15,159 --> 00:13:17,869
+what we call targets, uh browse through available targets, then, you know,
+
+316
+00:13:17,880 --> 00:13:18,969
+pick one to connect to.
+
+317
+00:13:18,979 --> 00:13:22,330
+So what you would do is you would, you would authenticate the boundary and
+
+318
+00:13:22,530 --> 00:13:26,650
+that will, again, this is very early days, this was our 0.1 release.
+
+319
+00:13:26,659 --> 00:13:29,010
+Um So OO I DC support is coming shortly.
+
+320
+00:13:29,020 --> 00:13:30,869
+That's one of the major things we're working on right now.
+
+321
+00:13:31,150 --> 00:13:33,030
+And O I DC is what
+
+322
+00:13:33,210 --> 00:13:34,679
+uh O open ID connect.
+
+323
+00:13:34,690 --> 00:13:36,989
+So that that's essentially become kind of the
+
+324
+00:13:37,000 --> 00:13:38,940
+standardized way of doing single sign on.
+
+325
+00:13:38,950 --> 00:13:39,440
+So
+
+326
+00:13:39,590 --> 00:13:42,140
+for the most part, it's replaced Sam Li, I mean, not,
+
+327
+00:13:42,150 --> 00:13:44,349
+not in a lot of kind of bigger institutions, but
+
+328
+00:13:44,520 --> 00:13:47,109
+you know, it, it's very, very widely supported and it's I,
+
+329
+00:13:47,119 --> 00:13:50,469
+I think in many cases much easier to get set up than, than Sam L is
+
+330
+00:13:50,880 --> 00:13:55,580
+-- sorry, I've, I've tried to set up Sam Ml and yes, I I was
+-- being nice.
+
+331
+00:13:56,510 --> 00:13:58,840
+So the easiest example here is when you see those like
+
+332
+00:13:58,849 --> 00:14:01,679
+log in with Google buttons everywhere or log in with Facebook,
+
+333
+00:14:01,690 --> 00:14:02,210
+that's open
+
+334
+00:14:02,340 --> 00:14:04,630
+-- ID connect, right?
+-- It can be or it can be OO
+
+335
+00:14:04,859 --> 00:14:07,190
+two, which is what open ID connect is based on
+
+336
+00:14:07,349 --> 00:14:07,840
+um open
+
+337
+00:14:07,940 --> 00:14:10,700
+ID connect is, is more or less, it's a way of sort of taking
+
+338
+00:14:10,830 --> 00:14:11,750
+something called OO
+
+339
+00:14:11,979 --> 00:14:12,549
+two.
+
+340
+00:14:12,669 --> 00:14:13,469
+And if you've dealt with oo,
+
+341
+00:14:13,869 --> 00:14:14,400
+you know that
+
+342
+00:14:14,630 --> 00:14:15,080
+oath ain't oo,
+
+343
+00:14:15,239 --> 00:14:17,659
+which is a very frustrating thing about it, which is that
+
+344
+00:14:18,000 --> 00:14:19,729
+in many cases, there are
+
+345
+00:14:19,929 --> 00:14:21,580
+the, the RFC, I, I've,
+
+346
+00:14:21,590 --> 00:14:23,309
+I've actually written an OO two servers so I
+
+347
+00:14:23,320 --> 00:14:25,450
+can speak with slight amount of authority here.
+
+348
+00:14:25,460 --> 00:14:28,750
+The RFC is under spec to be, to be gentle. And
+
+349
+00:14:28,909 --> 00:14:30,969
+uh as a result, there are, there's a lot of leeway.
+
+350
+00:14:30,979 --> 00:14:33,640
+And so you find out that if you want to interoperate with various providers,
+
+351
+00:14:33,650 --> 00:14:34,320
+you have to like
+
+352
+00:14:34,450 --> 00:14:36,799
+do things slightly differently and especially in,
+
+353
+00:14:36,809 --> 00:14:38,150
+in the information that comes back.
+
+354
+00:14:38,416 --> 00:14:38,955
+And so
+
+355
+00:14:39,065 --> 00:14:42,616
+what OIO I DC does, what open ID connect does is it sort of takes that
+
+356
+00:14:42,755 --> 00:14:43,505
+oath workflow,
+
+357
+00:14:43,745 --> 00:14:49,056
+but it, it codifies the format of a returned token into a jot
+
+358
+00:14:49,166 --> 00:14:49,176
+uh
+
+359
+00:14:49,466 --> 00:14:52,056
+JSON web token. It's a sign token that, that has embedded
+
+360
+00:14:52,335 --> 00:14:52,705
+Json in it.
+
+361
+00:14:52,875 --> 00:14:56,825
+And so this allows you to convey a lot of information just by looking at that
+
+362
+00:14:57,056 --> 00:15:00,601
+sign jot and then make ensure that it is valid by checking the signature.
+
+363
+00:15:00,611 --> 00:15:04,452
+And so there are only some codified claims, what are, what,
+
+364
+00:15:04,461 --> 00:15:05,721
+what the keys there are called.
+
+365
+00:15:05,731 --> 00:15:07,872
+There are only some codified claims that you have to support,
+
+366
+00:15:08,021 --> 00:15:09,802
+but there's a whole lot more that you can add.
+
+367
+00:15:09,812 --> 00:15:13,872
+And so it just kind of makes it a lot easier to actually kind of consume identity than,
+
+368
+00:15:13,882 --> 00:15:14,651
+than straight up.
+
+369
+00:15:14,791 --> 00:15:14,841
+Oo
+
+370
+00:15:15,151 --> 00:15:16,481
+uh you don't have to sort of know all
+
+371
+00:15:16,492 --> 00:15:18,762
+the different API S for all the different providers.
+
+372
+00:15:19,070 --> 00:15:21,359
+So what you would do just going back to the kind
+
+373
+00:15:21,369 --> 00:15:23,500
+of the original example is you would on your machine,
+
+374
+00:15:23,510 --> 00:15:24,570
+you would connect to,
+
+375
+00:15:24,789 --> 00:15:28,010
+you know, go through O I DC and authenticate And probably there you would have,
+
+376
+00:15:28,020 --> 00:15:30,000
+you know, an M FA challenge or, you know,
+
+377
+00:15:30,010 --> 00:15:31,969
+a security token challenge or something like that,
+
+378
+00:15:32,099 --> 00:15:33,630
+you would connect through O I DC that
+
+379
+00:15:33,640 --> 00:15:36,780
+would authenticate your client that's running on your machine
+
+380
+00:15:36,940 --> 00:15:41,150
+to boundary to boundaries uh controller servers and which are like the API servers.
+
+381
+00:15:41,159 --> 00:15:41,840
+And so then
+
+382
+00:15:42,059 --> 00:15:45,190
+you would be able to say, OK, what are the targets I can connect to or just,
+
+383
+00:15:45,200 --> 00:15:47,169
+I would like to connect to this particular target
+
+384
+00:15:47,409 --> 00:15:50,159
+and then you go and you say, please authorize me.
+
+385
+00:15:50,239 --> 00:15:54,049
+And at that point, you know, the, the initial step of I DC has authenticated you,
+
+386
+00:15:54,059 --> 00:15:55,270
+but it hasn't authorized you.
+
+387
+00:15:55,510 --> 00:15:58,729
+It's only at that point when you actually want to run a command that we say, OK,
+
+388
+00:15:58,739 --> 00:16:02,760
+given who this person is, let's, you know what they're trying to access,
+
+389
+00:16:02,770 --> 00:16:04,719
+let's load up the set of grants that have been applied to
+
+390
+00:16:04,729 --> 00:16:07,520
+them and let's make sure that they're allowed to make this connection.
+
+391
+00:16:07,669 --> 00:16:10,450
+And so that happens every single time you want to make a connection,
+
+392
+00:16:10,619 --> 00:16:14,099
+you have to do that. Let me, let me clarify something, connection versus session.
+
+393
+00:16:14,109 --> 00:16:16,530
+What we call a session can actually have multiple connections allowed.
+
+394
+00:16:16,659 --> 00:16:19,580
+This is because there are lots of programs that actually
+
+395
+00:16:19,789 --> 00:16:22,409
+in the course of essentially making what you might think
+
+396
+00:16:22,541 --> 00:16:25,952
+as a single connection actually have multiple different T uh TCP establishments.
+
+397
+00:16:25,961 --> 00:16:29,171
+But so really, it's a session is authorized which might allow
+
+398
+00:16:29,281 --> 00:16:34,791
+one many or unlimited connections. And we also have a time bound on top of that. So
+
+399
+00:16:34,952 --> 00:16:38,452
+you can say, you know what I want to allow unlimited connections, but for 10 seconds,
+
+400
+00:16:38,461 --> 00:16:40,611
+so that might be good if it's like I have the shell script,
+
+401
+00:16:40,622 --> 00:16:44,002
+I wanna run it just pipelines, you know, SSH commands through.
+
+402
+00:16:44,101 --> 00:16:47,651
+And so I wanna make a bunch of connections, but only within the space of, you know,
+
+403
+00:16:47,661 --> 00:16:49,432
+if the expected run time is two seconds,
+
+404
+00:16:49,664 --> 00:16:51,254
+I'll allow it for 10 seconds.
+
+405
+00:16:51,504 --> 00:16:52,783
+And so there would also sort of
+
+406
+00:16:52,794 --> 00:16:54,934
+effectively be an implicit firewall because it's doing
+
+407
+00:16:54,943 --> 00:16:57,604
+stuff at the application level like obviously letting
+
+408
+00:16:57,614 --> 00:16:59,593
+you ssh into a host or whatever.
+
+409
+00:16:59,814 --> 00:17:00,114
+Right.
+
+410
+00:17:00,124 --> 00:17:04,364
+So, right, right now, the only, the only sort of target type that we have is TCP.
+
+411
+00:17:04,374 --> 00:17:07,542
+And so anything that you can run on TCP can be proxy through.
+
+412
+00:17:07,553 --> 00:17:08,703
+Now, there are, there are gas
+
+413
+00:17:08,913 --> 00:17:10,513
+and there are things that are, that get,
+
+414
+00:17:10,713 --> 00:17:12,333
+you know, kind of complicated and there are,
+
+415
+00:17:12,463 --> 00:17:14,874
+there are things that cannot easily be supported now.
+
+416
+00:17:14,884 --> 00:17:18,365
+But where we will be addressing those in feature for something like SSH, you know,
+
+417
+00:17:18,375 --> 00:17:19,576
+it's a single TCP connection.
+
+418
+00:17:19,586 --> 00:17:22,076
+And so we are not currently protocol decoding.
+
+419
+00:17:22,086 --> 00:17:24,695
+SSH, that's something we will be doing going forward.
+
+420
+00:17:24,765 --> 00:17:27,984
+So right now, it's simply are you allowed to make this TCP connection?
+
+421
+00:17:28,105 --> 00:17:31,635
+And you know, the nice thing there is like, say that you disconnect that session or,
+
+422
+00:17:31,645 --> 00:17:33,336
+or let's say that that session times out,
+
+423
+00:17:33,625 --> 00:17:35,416
+right? Once that session times out,
+
+424
+00:17:35,566 --> 00:17:38,855
+you can't just connect back, right? You were never on the network to begin with.
+
+425
+00:17:38,865 --> 00:17:40,235
+Your traffic was being proxy.
+
+426
+00:17:40,286 --> 00:17:43,416
+And so you have to go back to the to boundary and say, can I please
+
+427
+00:17:43,517 --> 00:17:44,297
+connect again?
+
+428
+00:17:44,407 --> 00:17:48,047
+And it has to decide whether or not to authorize you and that, that might,
+
+429
+00:17:48,208 --> 00:17:50,208
+you know, that might be based on right now.
+
+430
+00:17:50,218 --> 00:17:53,358
+It might be based on sort of like specific specific grants applied to you.
+
+431
+00:17:53,368 --> 00:17:55,657
+But you can imagine if you're aware of like Sentinel,
+
+432
+00:17:55,667 --> 00:17:59,177
+which is kind of a policy as code language that's in many of our other products.
+
+433
+00:17:59,187 --> 00:18:01,718
+You can imagine the Sentinel will eventually make its way into boundary and that
+
+434
+00:18:01,728 --> 00:18:04,167
+will give you kind of A DS L for doing all sorts of checks.
+
+435
+00:18:04,177 --> 00:18:06,937
+And there are a lot of other integrations that we have planned, you know,
+
+436
+00:18:06,947 --> 00:18:10,407
+at some point in the future with, with other systems that can help you with that logic
+
+437
+00:18:10,979 --> 00:18:14,260
+-- you'd mentioned you were going to be doing protocol decode later in SSH,
+-- right?
+
+438
+00:18:14,270 --> 00:18:14,579
+So that,
+
+439
+00:18:14,589 --> 00:18:16,760
+so that would be for that initial connection
+
+440
+00:18:16,770 --> 00:18:19,540
+from your client to that that end target,
+
+441
+00:18:19,619 --> 00:18:22,359
+there are different sub commands or sub protocols, an SSH.
+
+442
+00:18:22,369 --> 00:18:24,800
+So like one is actually just a command. And so
+
+443
+00:18:24,969 --> 00:18:28,319
+you could say you're only allowed to run commands and that
+
+444
+00:18:28,329 --> 00:18:30,949
+basically is run this command and then give me back,
+
+445
+00:18:30,959 --> 00:18:33,400
+you know, the output from the command like the standard out and the standard.
+
+446
+00:18:33,489 --> 00:18:35,604
+-- So
+-- it sounds almost like a pseudo layer on top of it.
+
+447
+00:18:35,694 --> 00:18:37,295
+-- Yeah,
+-- it kind of depends on what you want.
+
+448
+00:18:37,415 --> 00:18:40,464
+-- Well, in the sense of like with the command restrictions and what not
+-- sure.
+
+449
+00:18:40,474 --> 00:18:43,165
+So, so the way that, you know, I, like I said, I, I spent time in
+
+450
+00:18:43,464 --> 00:18:46,314
+Aai and I, I, you know, I talk to people in their knock quite a bit
+
+451
+00:18:46,494 --> 00:18:47,074
+and
+
+452
+00:18:47,275 --> 00:18:49,714
+one of the things that I had in mind was sort of that, that, you know,
+
+453
+00:18:49,724 --> 00:18:51,994
+when we were designing boundary was like that knock use case.
+
+454
+00:18:52,005 --> 00:18:52,755
+And so there,
+
+455
+00:18:52,895 --> 00:18:56,035
+you know, the knock users are trusted but they're not really trusted, right?
+
+456
+00:18:56,265 --> 00:18:56,314
+Akamai
+
+457
+00:18:56,415 --> 00:18:58,765
+at the time, had 100 and 40,000 machines,
+
+458
+00:18:58,989 --> 00:19:01,290
+the world and they didn't really trust knock users
+
+459
+00:19:01,300 --> 00:19:03,650
+to just like get onto the box and do whatever
+
+460
+00:19:03,859 --> 00:19:05,089
+crypto mining.
+
+461
+00:19:05,380 --> 00:19:06,390
+Yeah, exactly.
+
+462
+00:19:06,400 --> 00:19:08,689
+And so what they had was they had dashboards,
+
+463
+00:19:08,699 --> 00:19:12,530
+they built up and those dashboards had essentially scripts,
+
+464
+00:19:12,540 --> 00:19:14,209
+like you could hit a button and say like, ok,
+
+465
+00:19:14,219 --> 00:19:17,339
+run this script and the script would go out and, you know,
+
+466
+00:19:17,349 --> 00:19:19,770
+that would be authorized through some of their means and
+
+467
+00:19:19,780 --> 00:19:22,050
+would run like a very particular set of commands.
+
+468
+00:19:22,060 --> 00:19:22,569
+And so
+
+469
+00:19:22,994 --> 00:19:23,574
+the knock,
+
+470
+00:19:23,584 --> 00:19:27,885
+like they had kind of recipes for how to try to try to tackle various problems.
+
+471
+00:19:27,905 --> 00:19:29,665
+And then if they, if their recipes didn't work,
+
+472
+00:19:29,675 --> 00:19:30,974
+they would escalate it to engineering.
+
+473
+00:19:30,984 --> 00:19:32,734
+And so from that perspective,
+
+474
+00:19:32,744 --> 00:19:35,505
+you can imagine that like you could replace kind of the traditional,
+
+475
+00:19:35,515 --> 00:19:37,464
+like I must be on the network or I must have sort
+
+476
+00:19:37,474 --> 00:19:40,435
+of some back channel with something like boundary where you can say,
+
+477
+00:19:40,444 --> 00:19:42,694
+I actually, you know, in my knock, we're only going to have
+
+478
+00:19:42,795 --> 00:19:43,194
+a knock
+
+479
+00:19:43,425 --> 00:19:45,535
+network operations center. Um I should have
+
+480
+00:19:45,685 --> 00:19:45,875
+dis
+
+481
+00:19:46,405 --> 00:19:46,935
+that, but
+
+482
+00:19:47,189 --> 00:19:51,339
+you could say in the knock, like I'm, I'm going to have a similar approach of I,
+
+483
+00:19:51,349 --> 00:19:54,689
+you know, I can take certain actions and those actions kick something off.
+
+484
+00:19:54,699 --> 00:19:56,310
+But now those actions can be kicking off a
+
+485
+00:19:56,319 --> 00:19:58,819
+script that actually uses boundary to make that connection.
+
+486
+00:19:59,150 --> 00:19:59,959
+And so each,
+
+487
+00:19:59,969 --> 00:20:03,890
+each individual command is not only something that's like a script that you know,
+
+488
+00:20:03,900 --> 00:20:04,479
+that they
+
+489
+00:20:04,589 --> 00:20:06,689
+in theory cannot access or modify,
+
+490
+00:20:06,750 --> 00:20:10,589
+but also then has to match like a particular command that's allowed through
+
+491
+00:20:10,709 --> 00:20:11,729
+to that end. Toast.
+
+492
+00:20:11,739 --> 00:20:14,589
+And so when you're protocol decoding, you can do things like that,
+
+493
+00:20:14,599 --> 00:20:16,719
+that you can't if you're just looking at a TP stream
+
+494
+00:20:17,020 --> 00:20:19,180
+and I assume then also logging and whatnot because I
+
+495
+00:20:19,189 --> 00:20:20,680
+know that's one of the biggest things I saw with,
+
+496
+00:20:20,689 --> 00:20:23,359
+you know, the setting up the whole SSH jump box.
+
+497
+00:20:23,369 --> 00:20:23,790
+It was,
+
+498
+00:20:24,089 --> 00:20:28,560
+I would say for me, it was always 5050 you know, access control and 50% like logging.
+
+499
+00:20:28,569 --> 00:20:29,650
+What the heck happened?
+
+500
+00:20:29,660 --> 00:20:32,599
+-- I,
+-- I will say that that is something we are keenly interested in.
+
+501
+00:20:32,810 --> 00:20:34,349
+I'm familiar with this problem
+
+502
+00:20:36,030 --> 00:20:39,650
+for anyone who doesn't know elastic search is one of elastic's products.
+
+503
+00:20:39,660 --> 00:20:40,979
+And logging is
+
+504
+00:20:41,260 --> 00:20:44,500
+one of the primary use cases for the system.
+
+505
+00:20:44,729 --> 00:20:48,540
+So I have a great deal of, we'll say experience in the logging space.
+
+506
+00:20:48,550 --> 00:20:50,250
+-- So logging
+-- is important.
+
+507
+00:20:50,349 --> 00:20:51,939
+It's hugely important.
+
+508
+00:20:51,949 --> 00:20:54,530
+And, you know, it's a funny thing is when,
+
+509
+00:20:54,790 --> 00:20:58,630
+when you start going down the path of compliance, basically,
+
+510
+00:20:58,640 --> 00:21:02,060
+access control and logging are the only two things anyone seems to care about.
+
+511
+00:21:02,689 --> 00:21:06,650
+If you don't have those two things though, you can't have compliance,
+
+512
+00:21:06,660 --> 00:21:08,430
+like you can't secure what you can't measure.
+
+513
+00:21:08,439 --> 00:21:08,630
+I,
+
+514
+00:21:08,640 --> 00:21:12,349
+I finally have learned this now because I used to not understand why
+
+515
+00:21:12,359 --> 00:21:15,410
+the auditors were so hell bent on locking everything because I'm like,
+
+516
+00:21:15,420 --> 00:21:16,540
+really doesn't matter that much.
+
+517
+00:21:16,560 --> 00:21:20,310
+Yeah, it does. That, that's all I have to say about this anymore is log everything.
+
+518
+00:21:20,319 --> 00:21:23,109
+Data storage is cheap. Chuck it in an S3 bucket encrypt it
+
+519
+00:21:23,540 --> 00:21:26,160
+-- and ignore it until something bad happens and then send
+-- it off to glacier.
+
+520
+00:21:26,170 --> 00:21:26,890
+So it's even cheaper.
+
+521
+00:21:27,010 --> 00:21:29,449
+-- Exactly.
+-- Yeah. Until you have to take it back out.
+
+522
+00:21:29,510 --> 00:21:30,689
+Oh, yeah. Well, there's that
+
+523
+00:21:31,020 --> 00:21:31,390
+dude,
+
+524
+00:21:31,400 --> 00:21:33,859
+-- I
+-- actually downloaded my cloud trail logs once and
+
+525
+00:21:33,869 --> 00:21:35,060
+I tried looking at them and I'm like,
+
+526
+00:21:35,069 --> 00:21:35,530
+there's just,
+
+527
+00:21:35,900 --> 00:21:40,670
+there's, we don't even do much and just all the automated events firing, you know,
+
+528
+00:21:40,680 --> 00:21:44,670
+it's millions of events per hour, day, whatever, it's bonkers
+
+529
+00:21:44,920 --> 00:21:47,910
+because when I saw boundary, you know, at first I was like, ok, well, this,
+
+530
+00:21:47,920 --> 00:21:48,689
+this seems like
+
+531
+00:21:48,849 --> 00:21:48,859
+a
+
+532
+00:21:49,151 --> 00:21:49,720
+option than an
+
+533
+00:21:49,931 --> 00:21:50,941
+H jump box.
+
+534
+00:21:51,061 --> 00:21:53,860
+And yeah, I mean, if you're going to have things like logging in the future,
+
+535
+00:21:53,870 --> 00:21:56,620
+then that really, that, that makes a big difference.
+
+536
+00:21:56,740 --> 00:21:56,770
+Yeah,
+
+537
+00:21:57,061 --> 00:22:00,390
+yeah, we, we are definitely looking into those, those capabilities.
+
+538
+00:22:00,401 --> 00:22:01,541
+That's all I can say for now.
+
+539
+00:22:01,571 --> 00:22:04,860
+I, I will say as far as the jump box, you know, I there, there are definitely, you know,
+
+540
+00:22:04,870 --> 00:22:09,421
+having a jump box is, it's a very ssh specific way to do something like this.
+
+541
+00:22:09,431 --> 00:22:11,651
+Um And I think that's one of the main drawbacks is, you know,
+
+542
+00:22:11,661 --> 00:22:14,461
+it's ssh specific and so you could port for
+
+543
+00:22:14,972 --> 00:22:19,151
+and so you could have tunnels to then get to other things. But in some ways that kind of
+
+544
+00:22:19,482 --> 00:22:21,151
+almost like defeats the purpose.
+
+545
+00:22:21,161 --> 00:22:24,712
+I I if you can sort of use that to then do sort of arbitrary protocols and things,
+
+546
+00:22:24,722 --> 00:22:25,072
+then that's,
+
+547
+00:22:25,082 --> 00:22:27,312
+that's not ideal and that's not saying that boundaries
+
+548
+00:22:27,322 --> 00:22:29,202
+is necessarily better in that regard right now.
+
+549
+00:22:29,212 --> 00:22:32,952
+But again, we're 0.1 and we have we have plans to sort of help address those,
+
+550
+00:22:32,962 --> 00:22:34,251
+those issues in the future.
+
+551
+00:22:34,281 --> 00:22:36,582
+And then there's one of the thing that I found out, you know,
+
+552
+00:22:36,592 --> 00:22:40,092
+working on this is when we were going after, you know, writing documentation and,
+
+553
+00:22:40,142 --> 00:22:40,432
+you know,
+
+554
+00:22:40,442 --> 00:22:43,042
+as we got near the end and needed to come out with all the information about like,
+
+555
+00:22:43,052 --> 00:22:44,843
+what is this thing and how does it work and all that.
+
+556
+00:22:44,853 --> 00:22:46,713
+Then I kept seeing people say like, oh, you know,
+
+557
+00:22:46,723 --> 00:22:49,723
+so it replaces this fashion host sort of approach.
+
+558
+00:22:49,733 --> 00:22:50,843
+And I was telling them like, you're,
+
+559
+00:22:50,853 --> 00:22:53,192
+you're giving too much credit to fashion host like
+
+560
+00:22:53,932 --> 00:22:56,822
+II, I was like, well, no, no, no. So let me explain. So
+
+561
+00:22:57,083 --> 00:23:00,503
+in my experience, I, I think I just was only at places that had very,
+
+562
+00:23:00,512 --> 00:23:02,662
+very locked down fashion hosts because I'd be like, oh,
+
+563
+00:23:02,672 --> 00:23:05,322
+you go into a fashion host and then you can do one of like three things.
+
+564
+00:23:05,333 --> 00:23:05,603
+It's like
+
+565
+00:23:05,713 --> 00:23:09,994
+ssh to a set of a particular set of boxes or do this or do that.
+
+566
+00:23:10,024 --> 00:23:13,583
+-- I've never seen a lock down properly.
+-- Exactly. And so then people are like, what?
+
+567
+00:23:13,703 --> 00:23:15,284
+And then, so I was like, what are you talking about?
+
+568
+00:23:15,293 --> 00:23:17,933
+And then I would explain this and they'd be like, what are you talking about?
+
+569
+00:23:17,943 --> 00:23:20,213
+Bastion hosts are just like an open thing.
+
+570
+00:23:20,223 --> 00:23:25,024
+-- You just get on it and now you can get anywhere.
+-- Yeah. SSH N And if you want to SH VPN you,
+
+571
+00:23:25,193 --> 00:23:29,313
+-- you do that?
+-- Yeah. And so, and so that, that seems like a, uh, you know, I think that's,
+
+572
+00:23:29,514 --> 00:23:31,173
+that's an area where I actually didn't even
+
+573
+00:23:31,285 --> 00:23:34,614
+realized kind of the current state of the world was less secure than I thought it was.
+
+574
+00:23:34,625 --> 00:23:37,864
+And so I think that boundary is a good alternative to that kind of fashion,
+
+575
+00:23:37,875 --> 00:23:38,734
+fashion host.
+
+576
+00:23:38,765 --> 00:23:43,984
+I mean, that doesn't surprise me though. You exist in a world where anyone
+
+577
+00:23:44,175 --> 00:23:50,324
+coming to Hashy Corp for these tools is probably in the top 10% of organizations,
+
+578
+00:23:50,984 --> 00:23:51,535
+-- one
+-- percent,
+
+579
+00:23:51,984 --> 00:23:52,464
+-- one
+-- percent
+
+580
+00:23:52,954 --> 00:23:55,675
+when I, when I talk to people about Secrets Management, number one,
+
+581
+00:23:55,685 --> 00:23:56,785
+they don't realize it's a thing.
+
+582
+00:23:57,030 --> 00:23:58,050
+And number two,
+
+583
+00:23:58,319 --> 00:24:01,530
+like they generally understand that you can't put your Aws credentials in github
+
+584
+00:24:01,660 --> 00:24:03,410
+publicly like they get that.
+
+585
+00:24:03,540 --> 00:24:05,859
+But, but then, but then the question becomes,
+
+586
+00:24:05,969 --> 00:24:09,250
+-- but what do I do?
+-- Just put them, put them in a spreadsheet? It's fine
+
+587
+00:24:09,500 --> 00:24:10,489
+-- like they have
+-- no idea.
+
+588
+00:24:10,500 --> 00:24:11,189
+And in fairness,
+
+589
+00:24:11,199 --> 00:24:13,729
+like if you haven't heard of Secrets Management and Vault and you're,
+
+590
+00:24:13,739 --> 00:24:15,420
+you're not aware of these products,
+
+591
+00:24:15,569 --> 00:24:17,569
+you know, it reminds me back in the days with Telnet
+
+592
+00:24:17,800 --> 00:24:19,750
+and when ssh, you know, tattoo loan
+
+593
+00:24:19,910 --> 00:24:22,900
+and came up with SSH, like people were like, what do you mean?
+
+594
+00:24:22,910 --> 00:24:24,300
+There's an alternative to Telnet?
+
+595
+00:24:24,619 --> 00:24:28,569
+No, like really? Right. Like there was a time where like Red Hat didn't ship Ssh,
+
+596
+00:24:28,709 --> 00:24:31,380
+you know, like there was a time back in the olden days
+
+597
+00:24:31,530 --> 00:24:32,880
+where all we had was telnet.
+
+598
+00:24:33,609 --> 00:24:35,959
+And so I, I feel like that's kind of where we are with a lot of this,
+
+599
+00:24:36,030 --> 00:24:38,420
+especially this infrastructure type stuff is,
+
+600
+00:24:38,630 --> 00:24:39,300
+yeah, I mean,
+
+601
+00:24:39,500 --> 00:24:43,640
+-- you gave me a problem, give remote access to people to the network. So I
+-- did
+
+602
+00:24:43,790 --> 00:24:47,709
+and, and security is always hard. It's always hard, like proper security.
+
+603
+00:24:47,719 --> 00:24:51,920
+There's no, there are no real shortcuts. There's no real sort of easy mode. Right.
+
+604
+00:24:51,949 --> 00:24:52,369
+Right.
+
+605
+00:24:52,530 --> 00:24:55,189
+If you're used to thinking about things like, and, and, and for what it's worth,
+
+606
+00:24:55,199 --> 00:24:57,750
+I think that that's something where vault, for instance, you know, I,
+
+607
+00:24:57,760 --> 00:24:59,939
+I worked on vault for many, many, many, many years.
+
+608
+00:24:59,949 --> 00:25:00,079
+And
+
+609
+00:25:00,244 --> 00:25:00,663
+so, like,
+
+610
+00:25:00,673 --> 00:25:04,384
+I have a deep and abiding love for it and what it does that said it's not the right
+
+611
+00:25:04,394 --> 00:25:07,624
+solution for everybody because some people have so much
+
+612
+00:25:07,634 --> 00:25:09,843
+simpler needs that there are simpler products out there.
+
+613
+00:25:09,854 --> 00:25:13,963
+Whereas vault is really the, I need to have a lot of different use cases.
+
+614
+00:25:13,973 --> 00:25:18,433
+Like I need to encrypt and generate certificates and just do KV, storage, you know,
+
+615
+00:25:18,443 --> 00:25:22,274
+maybe I need to also be able to do this with like a single api across many,
+
+616
+00:25:22,284 --> 00:25:23,463
+many different clouds.
+
+617
+00:25:23,473 --> 00:25:24,734
+That's obviously one of has
+
+618
+00:25:24,894 --> 00:25:27,024
+groups, sort of bread and butter. Is this sort of we work with you
+
+619
+00:25:27,128 --> 00:25:30,657
+on prem or any cloud, you know, as you make that journey to cloud, you know,
+
+620
+00:25:30,667 --> 00:25:32,118
+there are people where it's like, ok,
+
+621
+00:25:32,128 --> 00:25:34,797
+my secrets right now are in an S3 bucket unencrypted.
+
+622
+00:25:34,807 --> 00:25:36,078
+And so right now, the,
+
+623
+00:25:36,088 --> 00:25:39,488
+the thing that I just need to do is maybe I turn on like server side encryption
+
+624
+00:25:39,657 --> 00:25:42,738
+on that S3 bucket, you know, tied to an AWS policy.
+
+625
+00:25:42,748 --> 00:25:44,368
+And like at least now it's encrypted.
+
+626
+00:25:44,378 --> 00:25:48,267
+Like at rest, if you aren't authenticated, there, there are baby steps for sure.
+
+627
+00:25:48,277 --> 00:25:50,358
+The more that you, that you sort of layer in security,
+
+628
+00:25:50,368 --> 00:25:52,947
+the more and more complicated it gets as, as I think all of us know.
+
+629
+00:25:53,397 --> 00:25:53,887
+So I
+
+630
+00:25:54,011 --> 00:25:55,871
+want to, we are, we are nearly out of time.
+
+631
+00:25:55,881 --> 00:26:00,352
+But I want to ask one more question about what you said
+
+632
+00:26:00,362 --> 00:26:05,871
+at the very beginning about boundary has the ability to ease the
+
+633
+00:26:05,972 --> 00:26:10,962
+VPN like scenario where we are connecting to, we'll say in theory,
+
+634
+00:26:10,972 --> 00:26:12,072
+protected resources.
+
+635
+00:26:12,082 --> 00:26:14,212
+But you also mentioned public cloud.
+
+636
+00:26:14,952 --> 00:26:15,631
+How does,
+
+637
+00:26:15,641 --> 00:26:18,281
+how do you envision boundary fitting into a space where
+
+638
+00:26:18,291 --> 00:26:20,791
+I can connect directly to the machine in question?
+
+639
+00:26:20,895 --> 00:26:22,916
+Because it is literally sitting on the internet,
+
+640
+00:26:22,926 --> 00:26:24,796
+even if you have something sitting on the internet
+
+641
+00:26:24,806 --> 00:26:27,326
+and granted source IP spoofing is a real thing,
+
+642
+00:26:27,385 --> 00:26:28,796
+but that's why you have defense in depth.
+
+643
+00:26:28,806 --> 00:26:30,916
+But even if you are sitting on the internet,
+
+644
+00:26:31,046 --> 00:26:34,076
+let's say, let's say that you're going from, you know, you have a public host,
+
+645
+00:26:34,125 --> 00:26:36,666
+you want to connect to another public host and you have,
+
+646
+00:26:36,676 --> 00:26:39,186
+you have boundary that's running in, you know, some other, you know,
+
+647
+00:26:39,196 --> 00:26:40,995
+public IP space.
+
+648
+00:26:41,005 --> 00:26:43,265
+You can still say, you know, what my end target
+
+649
+00:26:43,465 --> 00:26:46,495
+in addition to maybe, you know, one of the best things you can do, for instance,
+
+650
+00:26:46,505 --> 00:26:47,666
+if you're running on a public IP address
+
+651
+00:26:47,780 --> 00:26:51,060
+with like SSH is move ssh off the port 22 right?
+
+652
+00:26:51,069 --> 00:26:52,449
+That stops the vast, vast,
+
+653
+00:26:52,459 --> 00:26:55,369
+vast majority of like random attempts to break into your box.
+
+654
+00:26:55,420 --> 00:26:57,930
+So you could do something like that where you could say, OK,
+
+655
+00:26:57,959 --> 00:26:59,640
+I want to connect through boundary,
+
+656
+00:26:59,650 --> 00:27:03,050
+I'm gonna move it to this other port and I'm also gonna restrict the source IP S
+
+657
+00:27:03,209 --> 00:27:05,000
+to only come from my boundary workers.
+
+658
+00:27:05,010 --> 00:27:08,880
+So even though everything is on is, is public, you still have some like, you know,
+
+659
+00:27:08,890 --> 00:27:11,989
+not only are you sort of hiding the service a bit, you know,
+
+660
+00:27:12,000 --> 00:27:14,530
+from kind of the the commonplace Attackers by putting on different
+
+661
+00:27:14,894 --> 00:27:16,874
+and yes source IP spoofing is a thing.
+
+662
+00:27:16,884 --> 00:27:19,384
+Although, you know, in a lot of like internet infrastructure,
+
+663
+00:27:19,394 --> 00:27:20,723
+it's relatively decent.
+
+664
+00:27:20,823 --> 00:27:23,963
+Like you still have to, you know, there's a lot of checks in, in places to sort of have,
+
+665
+00:27:23,973 --> 00:27:27,723
+you know, a source IP in a destination IP coming back like it has to sort of match.
+
+666
+00:27:27,734 --> 00:27:30,443
+But, you know, you can basically say, look, I want to
+
+667
+00:27:30,663 --> 00:27:32,313
+restrict the set of, you know,
+
+668
+00:27:32,323 --> 00:27:34,884
+incoming IP addresses to only my boundary worker notes.
+
+669
+00:27:34,894 --> 00:27:35,563
+And so then
+
+670
+00:27:35,673 --> 00:27:36,624
+you're saying, OK,
+
+671
+00:27:36,823 --> 00:27:40,543
+to get in, maybe I still need a credential to actually get onto that service.
+
+672
+00:27:40,553 --> 00:27:41,443
+So I as a user need it
+
+673
+00:27:41,637 --> 00:27:43,078
+or needs to get generated from vault.
+
+674
+00:27:43,088 --> 00:27:46,218
+But on top of that now, even though it's all public on top of that,
+
+675
+00:27:46,228 --> 00:27:47,387
+I'm still going to restrict
+
+676
+00:27:47,488 --> 00:27:49,807
+at a network level to only the workers. And so,
+
+677
+00:27:50,008 --> 00:27:51,947
+you know, I have to, if I want to get around that,
+
+678
+00:27:52,017 --> 00:27:53,657
+not only do I need to credential for the box,
+
+679
+00:27:53,667 --> 00:27:57,197
+but I have to be able to essentially either get on to that worker network
+
+680
+00:27:57,208 --> 00:28:00,128
+or I have to spoof source IP S and also be able to route back.
+
+681
+00:28:00,258 --> 00:28:03,197
+And you know, it, it sort of enhances that tax service.
+
+682
+00:28:03,208 --> 00:28:05,677
+It makes it a, a smaller tax service, right?
+
+683
+00:28:05,687 --> 00:28:08,328
+It makes it harder for you to actually satisfy all
+
+684
+00:28:08,432 --> 00:28:10,911
+requirements to launch a successful attack. And so,
+
+685
+00:28:11,041 --> 00:28:13,692
+you know, going public to public and, and that's the same thing,
+
+686
+00:28:13,702 --> 00:28:14,641
+private to private as well.
+
+687
+00:28:14,651 --> 00:28:16,741
+If you're like on an internet, you know, it's the same thing,
+
+688
+00:28:16,751 --> 00:28:18,102
+like maybe everybody on the internet,
+
+689
+00:28:18,112 --> 00:28:20,411
+maybe you assume that people get access to your internet.
+
+690
+00:28:20,421 --> 00:28:23,761
+Like if you have a big enough company network, you got to assume that somebody is,
+
+691
+00:28:23,771 --> 00:28:24,531
+somebody is on it.
+
+692
+00:28:24,682 --> 00:28:27,741
+But you can still say, you know what, but these critical infrastructure, you know,
+
+693
+00:28:27,751 --> 00:28:31,411
+ssh on these boxes like that still has to go through this set of nodes.
+
+694
+00:28:31,421 --> 00:28:35,212
+-- So yeah, it, it, it can, it can be used in all of those scenarios.
+-- That's awesome.
+
+695
+00:28:35,489 --> 00:28:38,709
+That's awesome. All right, we are fresh out of time.
+
+696
+00:28:38,719 --> 00:28:42,630
+So I guess Jeff, I will give you the final word. Take us home.
+
+697
+00:28:43,280 --> 00:28:43,300
+Uh
+
+698
+00:28:43,439 --> 00:28:44,099
+Sure.
+
+699
+00:28:44,209 --> 00:28:47,140
+So, yeah, I mean, we, we really love hearing feedback.
+
+700
+00:28:47,150 --> 00:28:50,859
+It's very early days of the project. We have a, a forum discussed at Hash
+
+701
+00:28:51,010 --> 00:28:51,739
+group.com
+
+702
+00:28:51,869 --> 00:28:52,699
+and we also have github.
+
+703
+00:28:52,939 --> 00:28:55,260
+And so, you know, by all means, feel free to
+
+704
+00:28:55,489 --> 00:28:58,329
+drop by, tell us how it's working for you, what needs to get fixed, you know,
+
+705
+00:28:58,339 --> 00:28:59,540
+what you're looking forward to.
+
+706
+00:28:59,760 --> 00:29:03,540
+And uh and we're, we're very responsive and we love seeing all of it.
+
+707
+00:29:03,550 --> 00:29:08,020
+-- So please
+-- check us out and, and I would also like to add that you're getting started.
+
+708
+00:29:08,030 --> 00:29:09,939
+Guides and information
+
+709
+00:29:10,150 --> 00:29:14,290
+is surprisingly good for her. How early stage this project is? Thank you.
+
+710
+00:29:14,300 --> 00:29:17,530
+-- Well done to you guys.
+-- I'll pass it up to the education folk.
+
+711
+00:29:17,640 --> 00:29:19,849
+-- They'll be happy to
+-- hear it. Cool, cool. Ok, good deal.
+
+712
+00:29:19,859 --> 00:29:23,640
+I'm going to call it then I will say thank you, Kurt. Thank you, Jeff.
+
+713
+00:29:23,650 --> 00:29:26,810
+Thank you, everyone for listening. You can go to open source security podcast.com.
+
+714
+00:29:26,819 --> 00:29:30,819
+Hit up the show notes, use a Pound Os S podcast. Hashtag Do hit us up on social media.
+
+715
+00:29:30,829 --> 00:29:31,349
+We'll of course,
+
+716
+00:29:31,359 --> 00:29:35,660
+have plenty of show notes and a link to Jeff in the show notes that doesn't make sense,
+
+717
+00:29:35,670 --> 00:29:36,489
+whatever doesn't matter.
+
+718
+00:29:37,680 --> 00:29:38,160
+And I guess
+
+719
+00:29:38,339 --> 00:29:42,400
+Kurt and Jeff have a marvelous rest of your day. Thank you. You too.
+
+720
+00:29:42,430 --> 00:29:43,349
+Thanks, everybody.
+
+721
+00:29:44,079 --> 00:29:45,439
+Thanks everyone. Bye bye.

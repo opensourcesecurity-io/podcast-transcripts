@@ -1,0 +1,3663 @@
+0
+00:00:05,599 --> 00:00:08,810
+Hello and welcome to the open source security podcast with myself,
+
+1
+00:00:08,819 --> 00:00:12,670
+Kurt Siefried and my partner in reminiscing about the past Josh Pressers
+
+2
+00:00:12,779 --> 00:00:17,270
+-- reminiscing. It's, this is the freaking future, man.
+-- No, I'm gonna read something
+
+3
+00:00:17,409 --> 00:00:19,260
+I wrote over 20 years ago
+
+4
+00:00:19,860 --> 00:00:21,190
+that applies to this.
+
+5
+00:00:22,079 --> 00:00:26,149
+Linux has gone through a series of firewalls. The most recent is IP tables.
+
+6
+00:00:26,250 --> 00:00:28,989
+Most of the people listening to the show probably don't know what IP tables is.
+
+7
+00:00:29,000 --> 00:00:31,170
+Thank goodness. But I continue
+
+8
+00:00:31,420 --> 00:00:34,533
+sometimes to his net filter preceding this was IP
+
+9
+00:00:34,542 --> 00:00:37,263
+chains and preceding this was IP firewall admin,
+
+10
+00:00:37,272 --> 00:00:38,423
+which I'm guessing.
+
+11
+00:00:38,432 --> 00:00:40,823
+Absolutely nobody knows unless you've been using Linux since
+
+12
+00:00:40,932 --> 00:00:41,943
+the nineties
+
+13
+00:00:42,592 --> 00:00:43,213
+as well.
+
+14
+00:00:43,222 --> 00:00:46,583
+There are a number of other files such as IP F and Sinus Firewall,
+
+15
+00:00:46,592 --> 00:00:49,893
+some of which only work on 2.0 and 2.2 series kernels.
+
+16
+00:00:50,263 --> 00:00:51,932
+So are largely obsolete.
+
+17
+00:00:52,073 --> 00:00:54,923
+I would recommend using a 2.4 kernel with IP tables
+
+18
+00:00:54,932 --> 00:00:57,502
+if possible since it offers state full packet inspections,
+
+19
+00:00:57,592 --> 00:00:58,513
+which makes firewall
+
+20
+00:00:58,756 --> 00:01:01,655
+calls such as DNS and FTP properly a lot easier.
+
+21
+00:01:01,826 --> 00:01:02,456
+OK.
+
+22
+00:01:02,585 --> 00:01:02,936
+And
+
+23
+00:01:03,066 --> 00:01:08,045
+that is a lot of the context for like our discussion about Cups today. Is it,
+
+24
+00:01:08,146 --> 00:01:08,975
+it is because
+
+25
+00:01:09,106 --> 00:01:10,496
+OK, here's the thing. So
+
+26
+00:01:10,746 --> 00:01:15,655
+remember like I found a remote massive code execution that affects all Linux
+
+27
+00:01:15,765 --> 00:01:17,886
+by default, blah, blah, blah. And it turns out to be a fla
+
+28
+00:01:18,005 --> 00:01:18,636
+cops,
+
+29
+00:01:19,325 --> 00:01:20,096
+right? Like,
+
+30
+00:01:20,246 --> 00:01:23,846
+which is funny because you had looked at kind of like, what could it be like?
+
+31
+00:01:23,856 --> 00:01:24,986
+OK, system D
+
+32
+00:01:26,019 --> 00:01:28,290
+uh I forget one or two other things. And then you said cups
+
+33
+00:01:28,449 --> 00:01:28,879
+and
+
+34
+00:01:29,010 --> 00:01:32,199
+I remember looking at the cups get history
+
+35
+00:01:32,540 --> 00:01:35,400
+and like half the commits for the last two months,
+
+36
+00:01:35,500 --> 00:01:37,080
+literally just like glancing at them.
+
+37
+00:01:37,089 --> 00:01:40,239
+I'm like that they all smell like CV ES because they're all like, no, they're,
+
+38
+00:01:40,250 --> 00:01:41,550
+they were horrifying
+
+39
+00:01:41,769 --> 00:01:45,720
+and I don't think those were any of the security fix. I think one of them was.
+
+40
+00:01:46,400 --> 00:01:46,449
+Yeah.
+
+41
+00:01:46,790 --> 00:01:47,980
+But yeah, they were things like
+
+42
+00:01:48,114 --> 00:01:51,614
+this thing crashes because of this magic number that we
+
+43
+00:01:51,625 --> 00:01:54,004
+now account for like it raps to zero whatever and
+
+44
+00:01:54,605 --> 00:01:56,425
+oftentimes those tend to be security flaws. So
+
+45
+00:01:56,985 --> 00:01:57,294
+the,
+
+46
+00:01:57,305 --> 00:02:00,684
+the long and the short of it is if you're attaching
+
+47
+00:02:00,694 --> 00:02:04,894
+a system to the internet with a public facing IP address,
+
+48
+00:02:04,904 --> 00:02:10,255
+it probably shouldn't have that many public facing services
+
+49
+00:02:10,990 --> 00:02:14,880
+unless they're like, really kind of well hardened things like a web server
+
+50
+00:02:15,000 --> 00:02:18,119
+and to put it bluntly cups is not one of those.
+
+51
+00:02:18,679 --> 00:02:19,960
+-- And
+-- that's easy to say.
+
+52
+00:02:20,130 --> 00:02:20,460
+It is
+
+53
+00:02:20,570 --> 00:02:20,800
+-- easy
+-- to
+
+54
+00:02:20,809 --> 00:02:22,210
+-- say and it's also
+-- correct.
+
+55
+00:02:22,220 --> 00:02:25,330
+It's bold of you to jump to the end with your conclusion
+
+56
+00:02:25,339 --> 00:02:29,210
+-- and semi actionable advice
+-- and it also boils back to my,
+
+57
+00:02:29,220 --> 00:02:33,289
+remember me saying, I don't care, argument where this is a perfect example of, like,
+
+58
+00:02:33,300 --> 00:02:34,309
+I don't care because
+
+59
+00:02:34,919 --> 00:02:37,850
+if people actually understood kind of what cups is and does,
+
+60
+00:02:37,860 --> 00:02:40,179
+they would never expose it to the internet.
+
+61
+00:02:40,229 --> 00:02:44,139
+I suspect most people didn't do it on purpose.
+
+62
+00:02:44,860 --> 00:02:45,740
+That's my guess.
+
+63
+00:02:45,929 --> 00:02:48,600
+Yeah, they just attached a thing to the network and, and,
+
+64
+00:02:48,610 --> 00:02:50,580
+and they might not even know it's running cups.
+
+65
+00:02:50,869 --> 00:02:53,139
+I think a lot of them probably don't.
+
+66
+00:02:53,330 --> 00:02:59,979
+And I bet a lot of printers run cups by default. Now there's all this wild software.
+
+67
+00:03:00,169 --> 00:03:01,520
+What else would they run? Like
+
+68
+00:03:01,720 --> 00:03:05,123
+you think a, the company is going to write their own printer software when they
+
+69
+00:03:05,442 --> 00:03:06,123
+grab cups,
+
+70
+00:03:06,632 --> 00:03:07,643
+they're already running Linux.
+
+71
+00:03:09,533 --> 00:03:12,802
+I want to rewind us to the beginning of this whole
+
+72
+00:03:12,813 --> 00:03:17,292
+debacle because I don't think Cups by itself is very interesting.
+
+73
+00:03:17,302 --> 00:03:20,522
+I think the chaos surrounding this entire event
+
+74
+00:03:20,533 --> 00:03:23,522
+is vastly more interesting to talk about.
+
+75
+00:03:23,533 --> 00:03:25,763
+And it is a case study
+
+76
+00:03:26,022 --> 00:03:28,723
+in how not to disclose an issue.
+
+77
+00:03:29,072 --> 00:03:30,203
+And the ironic thing is we
+
+78
+00:03:30,326 --> 00:03:33,776
+just literally as of yesterday also have
+
+79
+00:03:34,205 --> 00:03:34,945
+Akamai and Larry cash
+
+80
+00:03:35,095 --> 00:03:37,095
+dollar guest of the show. In the past,
+
+81
+00:03:37,555 --> 00:03:39,535
+they published that blog entry where
+
+82
+00:03:39,856 --> 00:03:41,216
+uh long story short,
+
+83
+00:03:41,436 --> 00:03:43,315
+you can send one UDP packet to cups.
+
+84
+00:03:43,326 --> 00:03:46,345
+And of course, Cups very helpfully replies with a whole bunch of stuff.
+
+85
+00:03:46,936 --> 00:03:47,505
+And
+
+86
+00:03:47,876 --> 00:03:51,856
+the trick is because it's UDP, it's trivial to spoof because there's no TCP,
+
+87
+00:03:51,865 --> 00:03:53,546
+sequence number to guess or anything like that.
+
+88
+00:03:54,376 --> 00:03:54,906
+And so
+
+89
+00:03:55,106 --> 00:03:55,115
+a
+
+90
+00:03:55,436 --> 00:03:57,906
+I published this blog saying basically, you know, you can, you can,
+
+91
+00:03:58,240 --> 00:04:01,419
+you can use this for traffic amplification to a degree that is,
+
+92
+00:04:01,600 --> 00:04:04,039
+yeah, it's a problem. And of course, being
+
+93
+00:04:04,210 --> 00:04:08,809
+Akamai, they, they released this kind of in a very boring like here it is everything,
+
+94
+00:04:08,820 --> 00:04:11,899
+you know, here's the fix, here's the problem, here's the explanation, blah, blah,
+
+95
+00:04:11,910 --> 00:04:12,179
+blah.
+
+96
+00:04:12,580 --> 00:04:15,259
+And that was kind of the more in my opinion,
+
+97
+00:04:15,270 --> 00:04:17,700
+professional way to handle something like this,
+
+98
+00:04:17,988 --> 00:04:22,850
+right? Well, then Larry's done this many times before. He definitely understands.
+
+99
+00:04:22,859 --> 00:04:24,720
+We'll say the the process.
+
+100
+00:04:24,869 --> 00:04:27,500
+Now, whether the process is right or wrong, it's wrong
+
+101
+00:04:27,799 --> 00:04:29,660
+is part of the discussion.
+
+102
+00:04:29,670 --> 00:04:32,779
+Also, I would agree and to be clear when I said professional,
+
+103
+00:04:33,059 --> 00:04:36,299
+yeah, may not necessarily correct or the best way
+
+104
+00:04:36,730 --> 00:04:38,410
+I wanna, I wanna tell the story.
+
+105
+00:04:38,420 --> 00:04:42,179
+Let's tell the thrilling tale as it unfolded because I think it is,
+
+106
+00:04:42,190 --> 00:04:43,140
+it's interesting.
+
+107
+00:04:43,350 --> 00:04:43,549
+Well,
+
+108
+00:04:43,559 --> 00:04:45,339
+it starts out with a couple of mastered on tooths
+
+109
+00:04:45,350 --> 00:04:46,980
+which in the past it would have been tweets.
+
+110
+00:04:47,079 --> 00:04:49,100
+-- Technically Twitter.
+-- Oh, was it Twitter? First?
+
+111
+00:04:49,109 --> 00:04:51,209
+The person in question evil socket.
+
+112
+00:04:51,549 --> 00:04:52,779
+They do not have a Mastodon
+
+113
+00:04:54,609 --> 00:04:56,220
+-- was one of those republish things.
+-- Ok.
+
+114
+00:04:56,459 --> 00:04:56,760
+Yes,
+
+115
+00:04:56,929 --> 00:04:59,570
+because I think I retweeted,
+
+116
+00:04:59,750 --> 00:05:00,859
+I don't Twitter anymore.
+
+117
+00:05:01,149 --> 00:05:01,329
+I mean
+
+118
+00:05:01,459 --> 00:05:06,179
+-- X sorry, X,
+-- who cares? I'm calling it Twitter until I die. I literally don't care.
+
+119
+00:05:06,989 --> 00:05:07,670
+So, you know, this
+
+120
+00:05:08,040 --> 00:05:13,500
+interrupt, somebody pointed out that this gives whoever acquires Twitter slash X.
+
+121
+00:05:13,579 --> 00:05:17,790
+The easiest way to fix the brand, which is we're dropping X and going back to Twitter,
+
+122
+00:05:17,799 --> 00:05:19,630
+I, no one's gonna acquire it.
+
+123
+00:05:19,640 --> 00:05:22,390
+It's, it might be, penny's not like
+
+124
+00:05:22,920 --> 00:05:25,010
+-- it's not gonna be that expensive to
+-- acquire.
+
+125
+00:05:25,019 --> 00:05:28,684
+I'm willing to purchase Twitter for $17.
+
+126
+00:05:28,695 --> 00:05:31,684
+Actually, the thing is, it has such a negative value. Now,
+
+127
+00:05:31,945 --> 00:05:35,575
+the cost of running it versus the actual revenue is,
+
+128
+00:05:35,765 --> 00:05:39,845
+have they sorted all of their lawsuits with their employees or former?
+
+129
+00:05:40,795 --> 00:05:45,315
+I'd be shocked if they have anyway. Ok. So this person Evil Socket,
+
+130
+00:05:45,695 --> 00:05:47,045
+they, they tweet
+
+131
+00:05:47,359 --> 00:05:48,380
+that they found in.
+
+132
+00:05:48,390 --> 00:05:52,459
+I'm I'm gonna read the some of the, the highlights here because it's, it's,
+
+133
+00:05:52,470 --> 00:05:53,619
+it's spicy.
+
+134
+00:05:53,790 --> 00:05:57,500
+They say there's an unauthenticated R ce remote code execution
+
+135
+00:05:58,059 --> 00:05:59,660
+in all the new Linux
+
+136
+00:05:59,779 --> 00:06:00,190
+like that.
+
+137
+00:06:00,200 --> 00:06:01,380
+They put the canoe there,
+
+138
+00:06:01,390 --> 00:06:06,100
+all the new Linux systems plus others in parentheses disclosed three weeks ago,
+
+139
+00:06:06,109 --> 00:06:06,470
+right?
+
+140
+00:06:06,480 --> 00:06:07,130
+First of all,
+
+141
+00:06:07,140 --> 00:06:09,989
+if you're a security person that is like your
+
+142
+00:06:10,000 --> 00:06:11,980
+spidey senses just went off and you're like,
+
+143
+00:06:11,989 --> 00:06:13,299
+oh, what's going on?
+
+144
+00:06:13,540 --> 00:06:16,361
+And then they say full disclosure happening less than two weeks still,
+
+145
+00:06:16,372 --> 00:06:20,272
+no CV E assigned there should be at least three, possibly four, ideally six.
+
+146
+00:06:20,361 --> 00:06:22,212
+Ok. What do we get? Four out of this? I think
+
+147
+00:06:23,981 --> 00:06:26,372
+anyway, still not working. Fix which whatever.
+
+148
+00:06:26,391 --> 00:06:30,492
+And then it says canonical redhead and others has confirmed the severity 9.9
+
+149
+00:06:30,502 --> 00:06:34,532
+check screenshot and then they have a screenshot of some CV SS calculator
+
+150
+00:06:34,981 --> 00:06:37,821
+because as we all know, screenshots cannot be faked,
+
+151
+00:06:37,941 --> 00:06:38,451
+obviously,
+
+152
+00:06:38,582 --> 00:06:41,652
+who cares? You can just make up crap. It's the internet.
+
+153
+00:06:42,062 --> 00:06:44,312
+Well, it's, it's, but this is an interesting thing because I've seen
+
+154
+00:06:44,481 --> 00:06:44,492
+a
+
+155
+00:06:44,723 --> 00:06:47,683
+of people posting screenshots and posting videos of things to like,
+
+156
+00:06:47,694 --> 00:06:48,954
+prove that it's real.
+
+157
+00:06:48,963 --> 00:06:51,644
+And I'm like, like we've literally remember at Red Hat, like I had,
+
+158
+00:06:51,653 --> 00:06:55,234
+we had people sending in videos of like, hey, I found a flaw in Linux.
+
+159
+00:06:55,503 --> 00:06:56,924
+Here's a video of me
+
+160
+00:06:57,033 --> 00:06:57,644
+exploiting
+
+161
+00:06:58,223 --> 00:06:59,324
+for a long time.
+
+162
+00:06:59,334 --> 00:07:01,933
+And I remember when I worked at Elastic and I, I was,
+
+163
+00:07:01,944 --> 00:07:04,403
+I built their bug brownie program and we stood it up.
+
+164
+00:07:04,813 --> 00:07:08,084
+We at first didn't have a policy of like no videos
+
+165
+00:07:08,093 --> 00:07:10,364
+and people were just sending us videos with no other evidence.
+
+166
+00:07:10,373 --> 00:07:13,003
+And we're like, this is meaningless to us. We need like
+
+167
+00:07:13,135 --> 00:07:17,316
+something, send us a a URL to test, send us anything.
+
+168
+00:07:17,485 --> 00:07:19,835
+And so we had to say like no videos. But anyway,
+
+169
+00:07:20,096 --> 00:07:23,446
+so then, but here's, here's the bit that I think is most interesting.
+
+170
+00:07:23,455 --> 00:07:26,235
+It says I've spent the last three weeks of my sabbatical,
+
+171
+00:07:26,246 --> 00:07:28,096
+working full time in this research, reporting,
+
+172
+00:07:28,105 --> 00:07:31,635
+coordinating and so on with the sole purpose of helping and pretty much only
+
+173
+00:07:31,645 --> 00:07:34,006
+got patronized because the devs just can't
+
+174
+00:07:34,015 --> 00:07:37,305
+accept that their code is crap responsible disclosure
+
+175
+00:07:37,566 --> 00:07:38,436
+no more.
+
+176
+00:07:38,656 --> 00:07:40,876
+Uh The other thing is uh which devs
+
+177
+00:07:40,885 --> 00:07:43,808
+specifically he talking about because cups is forked,
+
+178
+00:07:43,838 --> 00:07:45,178
+no cups is not forked.
+
+179
+00:07:45,187 --> 00:07:47,828
+There's only one cups. There's the open printing cups.
+
+180
+00:07:48,118 --> 00:07:52,428
+-- Yeah, that one because, but then there's the original one that's not
+-- cups anymore.
+
+181
+00:07:52,437 --> 00:07:52,808
+Apple,
+
+182
+00:07:52,958 --> 00:07:56,787
+apple bought cups and then they spun it back up. So that is, that is Cups.
+
+183
+00:07:56,947 --> 00:07:59,967
+Well, yeah, because they had like, one commit in like, five years or something.
+
+184
+00:07:59,977 --> 00:08:02,928
+-- Goofy.
+-- I still don't know why they bought that but whatever.
+
+185
+00:08:02,937 --> 00:08:04,488
+Oh, well, because it runs on Mac O,
+
+186
+00:08:05,187 --> 00:08:08,588
+-- like, that's the Mac O printing subsystem. But now
+-- here's the thing.
+
+187
+00:08:08,787 --> 00:08:10,148
+So this person
+
+188
+00:08:10,869 --> 00:08:12,089
+puts this tweet out
+
+189
+00:08:12,929 --> 00:08:13,529
+and of course,
+
+190
+00:08:13,540 --> 00:08:15,989
+the first thing that any good security person is going
+
+191
+00:08:16,000 --> 00:08:18,429
+to do is they're going to start like looking at,
+
+192
+00:08:18,440 --> 00:08:20,540
+what is this person putting out on Twitter?
+
+193
+00:08:20,549 --> 00:08:22,549
+What are they talking about? What's going on?
+
+194
+00:08:22,850 --> 00:08:24,640
+What's their history? And
+
+195
+00:08:24,859 --> 00:08:28,279
+the thing is though, if you look kind of back in time a little bit,
+
+196
+00:08:28,350 --> 00:08:31,279
+this person had a handful of other tweets where
+
+197
+00:08:31,290 --> 00:08:33,650
+they talked about some of the things they found,
+
+198
+00:08:34,219 --> 00:08:34,558
+right?
+
+199
+00:08:34,660 --> 00:08:36,000
+And they were talking about
+
+200
+00:08:36,171 --> 00:08:40,601
+this is from a couple days before the, the the thing I just read
+
+201
+00:08:40,861 --> 00:08:44,611
+where they just said, I'm finding myself in a situation I've never been in before.
+
+202
+00:08:44,620 --> 00:08:45,320
+I don't know what to do.
+
+203
+00:08:45,330 --> 00:08:47,870
+I found an unauthenticated R ce on a very
+
+204
+00:08:47,880 --> 00:08:50,791
+common good new Linux network service enabled by default on
+
+205
+00:08:50,960 --> 00:08:52,351
+ubuntu in several other majors.
+
+206
+00:08:53,250 --> 00:08:54,640
+That's data point number one,
+
+207
+00:08:54,960 --> 00:08:55,440
+right?
+
+208
+00:08:55,450 --> 00:08:57,921
+Already confirmed public facing services, blah, blah, blah, blah, blah,
+
+209
+00:08:57,931 --> 00:08:58,370
+the main author
+
+210
+00:08:58,583 --> 00:09:01,054
+bonded, blah, blah, blah, blah blah. Should I just go public disclosure?
+
+211
+00:09:01,064 --> 00:09:01,953
+What am I supposed to do?
+
+212
+00:09:02,093 --> 00:09:04,164
+And it sounds like they ended up going to cert and,
+
+213
+00:09:04,174 --> 00:09:06,164
+and kind of letting cert help with the disclosure.
+
+214
+00:09:06,174 --> 00:09:10,703
+But here's the thing. First of all, they said it is enabled by default on ubuntu.
+
+215
+00:09:10,994 --> 00:09:13,533
+So obviously, what's the first thing we do?
+
+216
+00:09:13,653 --> 00:09:14,354
+We install
+
+217
+00:09:14,513 --> 00:09:16,684
+ubuntu and we say what are the things enabled
+
+218
+00:09:16,693 --> 00:09:18,823
+by default that are also listening on the network?
+
+219
+00:09:18,833 --> 00:09:22,403
+There are two things, there is system D and there is cups.
+
+220
+00:09:22,505 --> 00:09:23,726
+And I remember when,
+
+221
+00:09:23,835 --> 00:09:26,546
+when I think I, I sent you the first tweet
+
+222
+00:09:26,786 --> 00:09:28,135
+and then we had a little chat and I'm like,
+
+223
+00:09:28,145 --> 00:09:30,736
+I think it's system D because obviously like
+
+224
+00:09:30,745 --> 00:09:34,976
+from the perspective of difficult developers installed everywhere,
+
+225
+00:09:34,995 --> 00:09:37,325
+remote RC, I'm like, it's got to be system D.
+
+226
+00:09:37,335 --> 00:09:38,606
+System D has,
+
+227
+00:09:38,616 --> 00:09:42,166
+has a legendarily difficult to work with upstream and it's a little better.
+
+228
+00:09:42,176 --> 00:09:44,176
+Now, some of the, the original developers left,
+
+229
+00:09:44,185 --> 00:09:46,005
+there's some new blood in there that's a little easier.
+
+230
+00:09:46,015 --> 00:09:46,325
+But
+
+231
+00:09:47,190 --> 00:09:48,049
+what's sad
+
+232
+00:09:48,159 --> 00:09:51,789
+to me is this kind of stuff poisons the well around system D.
+
+233
+00:09:51,799 --> 00:09:54,010
+And you know, there's been a lot of pushback on it. But it's like,
+
+234
+00:09:54,520 --> 00:09:56,440
+trust me when I say we do not want to go back
+
+235
+00:09:56,450 --> 00:09:59,869
+to writing shell scripts to make your GPS USB device work.
+
+236
+00:09:59,880 --> 00:10:03,030
+When you plug it in like system D is the future
+
+237
+00:10:03,219 --> 00:10:05,659
+-- we had to move to
+-- it. It already won
+
+238
+00:10:06,150 --> 00:10:06,210
+it.
+
+239
+00:10:06,599 --> 00:10:09,710
+So anyway, OK, so they do that right? And I'm thinking, OK,
+
+240
+00:10:09,859 --> 00:10:10,510
+then,
+
+241
+00:10:10,659 --> 00:10:13,030
+then they, they put a,
+
+242
+00:10:13,309 --> 00:10:19,830
+an image up of a showdown, I query search. I don't know of a map, right?
+
+243
+00:10:20,510 --> 00:10:24,940
+And obviously that is meant to be proving how widely deployed
+
+244
+00:10:24,950 --> 00:10:27,330
+the service they just found the the issue in was,
+
+245
+00:10:27,340 --> 00:10:32,409
+but here's the thing when you look at it, it's a really weird map because Korea
+
+246
+00:10:32,789 --> 00:10:33,650
+has
+
+247
+00:10:33,849 --> 00:10:36,059
+-- like
+-- to be clear, South Korea, is
+
+248
+00:10:36,179 --> 00:10:37,575
+-- it
+-- it, what did, what does it
+
+249
+00:10:37,585 --> 00:10:38,034
+say?
+
+250
+00:10:38,044 --> 00:10:38,325
+Well,
+
+251
+00:10:38,335 --> 00:10:41,104
+because can you imagine if we actually found a service that was heavy in North Korea?
+
+252
+00:10:41,114 --> 00:10:43,994
+-- That would be extremely weird.
+-- I, I don't know.
+
+253
+00:10:44,405 --> 00:10:46,375
+Let's look at that. I have a picture actually.
+
+254
+00:10:46,385 --> 00:10:49,835
+-- Let me, let me look at, yeah,
+-- Republic of Korea. So South Korea Republic of
+
+255
+00:10:49,844 --> 00:10:50,114
+Korea.
+
+256
+00:10:50,125 --> 00:10:53,034
+Yes. Korea comma Republic of Yes. Ok.
+
+257
+00:10:53,340 --> 00:10:58,000
+So, and it shows 20,000 and the next is US with 10,000.
+
+258
+00:10:58,010 --> 00:11:01,250
+So like that's a pretty significant grouping, right?
+
+259
+00:11:01,630 --> 00:11:04,700
+So the first thing I do is I'm like, well, I'm gonna go check show Dan,
+
+260
+00:11:04,710 --> 00:11:05,940
+so I check show Dan.
+
+261
+00:11:06,200 --> 00:11:06,840
+And
+
+262
+00:11:07,099 --> 00:11:08,530
+if you search for cups,
+
+263
+00:11:08,809 --> 00:11:10,650
+I got almost exactly the same results.
+
+264
+00:11:10,659 --> 00:11:13,799
+The numbers were a little off which was filtering time of day, whatever it,
+
+265
+00:11:13,809 --> 00:11:15,419
+it could be a million things right now.
+
+266
+00:11:15,429 --> 00:11:17,159
+It says 14,000 for the US.
+
+267
+00:11:17,330 --> 00:11:18,270
+Does it for cups?
+
+268
+00:11:18,989 --> 00:11:22,450
+Well, they probably turned their cup scanner up to an 11, right?
+
+269
+00:11:22,659 --> 00:11:23,369
+And then
+
+270
+00:11:23,590 --> 00:11:24,700
+you look at
+
+271
+00:11:24,849 --> 00:11:25,890
+like system D
+
+272
+00:11:26,229 --> 00:11:29,570
+and there's literally nothing, nothing, nothing reports back as system D,
+
+273
+00:11:29,580 --> 00:11:31,190
+which doesn't mean it's not on the internet.
+
+274
+00:11:31,200 --> 00:11:35,429
+It more means system D doesn't report back in a meaningful way that shin
+
+275
+00:11:35,669 --> 00:11:36,549
+can interpret.
+
+276
+00:11:36,739 --> 00:11:39,400
+So I look at all this and I send you a message, I'm like, it's cups,
+
+277
+00:11:39,409 --> 00:11:40,729
+it's definitely cups.
+
+278
+00:11:40,739 --> 00:11:43,010
+And so then of course, you know, you start poking around in the cups, github
+
+279
+00:11:43,140 --> 00:11:45,640
+repo and stuff. And actually a, a guy I work with
+
+280
+00:11:45,960 --> 00:11:47,299
+made a comment to me that
+
+281
+00:11:47,530 --> 00:11:49,859
+he read this person's comments
+
+282
+00:11:50,200 --> 00:11:51,989
+and then the first thing he did was he went
+
+283
+00:11:52,000 --> 00:11:54,820
+and looked at what repos has this person recently forked?
+
+284
+00:11:55,090 --> 00:11:57,940
+I'm like, oh, that's brilliant. And they'd forked all of the cups, repos.
+
+285
+00:11:58,010 --> 00:12:00,130
+So it's like, oh, it's obviously cups.
+
+286
+00:12:00,390 --> 00:12:03,140
+But so here's, here's what I love about. This
+
+287
+00:12:03,359 --> 00:12:09,059
+is when you are trying to privately disclose, disclose a security issue.
+
+288
+00:12:09,630 --> 00:12:15,210
+If you say anything in public, no matter how inconsequential you think it might be,
+
+289
+00:12:15,799 --> 00:12:19,650
+you're leaking valuable information. And here's the thing, I'm not that smart.
+
+290
+00:12:19,659 --> 00:12:23,169
+There are people who do this kind of research every day, all day
+
+291
+00:12:23,559 --> 00:12:26,440
+that I'm sure they saw the first tweet and probably
+
+292
+00:12:26,450 --> 00:12:28,210
+had it figured out in like less than 10 minutes.
+
+293
+00:12:28,219 --> 00:12:29,950
+This all took me like two hours.
+
+294
+00:12:29,989 --> 00:12:33,400
+You know what it reminds this reminds me of is like the Geoguessr
+
+295
+00:12:33,609 --> 00:12:37,739
+where they learn just all these obscure facts of like, how are roads mark,
+
+296
+00:12:37,750 --> 00:12:39,059
+what do road signs look like?
+
+297
+00:12:39,070 --> 00:12:40,880
+The plants, the vegetation, the dirt
+
+298
+00:12:41,039 --> 00:12:41,450
+and like,
+
+299
+00:12:41,900 --> 00:12:46,059
+that's like what you and I have done when it comes to like open source security.
+
+300
+00:12:46,320 --> 00:12:48,380
+-- Oh, no,
+-- not me. I'm not gonna pretend I have that.
+
+301
+00:12:48,690 --> 00:12:50,059
+Well, no, no, no, no, no, no, no, no.
+
+302
+00:12:50,070 --> 00:12:53,349
+But you have an inherent knowledge of open source. And you know,
+
+303
+00:12:53,489 --> 00:12:57,679
+for example, the fact that if somebody says, hey, this guy just recently cut forks,
+
+304
+00:12:57,690 --> 00:12:59,729
+you're immediately like, 00, ok.
+
+305
+00:12:59,739 --> 00:13:00,020
+That's
+
+306
+00:13:00,229 --> 00:13:01,039
+like, you know what I mean?
+
+307
+00:13:01,229 --> 00:13:02,650
+That brings alarm bells for you.
+
+308
+00:13:02,799 --> 00:13:05,280
+You might not have thought to do it yourself.
+
+309
+00:13:05,289 --> 00:13:08,299
+But when somebody says it out loud, you're like, oh yeah, I get it.
+
+310
+00:13:08,309 --> 00:13:11,739
+That's and also saying like it's, it's installed by default that
+
+311
+00:13:12,099 --> 00:13:13,119
+tu like firing a boon.
+
+312
+00:13:13,380 --> 00:13:13,419
+I
+
+313
+00:13:13,690 --> 00:13:15,780
+actually had to download the IO I did not have an
+
+314
+00:13:15,909 --> 00:13:17,659
+Iso boom too. I've been running almost all de
+
+315
+00:13:17,849 --> 00:13:18,469
+and lately but
+
+316
+00:13:18,619 --> 00:13:19,539
+download the
+
+317
+00:13:19,710 --> 00:13:23,729
+ISO install it. Look at it, run that stat like boom, I see it right away. Right.
+
+318
+00:13:23,739 --> 00:13:24,440
+Like it took,
+
+319
+00:13:24,880 --> 00:13:26,690
+I don't know, 1520 minutes maybe.
+
+320
+00:13:26,700 --> 00:13:28,700
+And most of that time was just spent because I was on
+
+321
+00:13:28,719 --> 00:13:32,429
+Wi Fi instead of my wired connection on that particular computer.
+
+322
+00:13:33,440 --> 00:13:38,159
+And that's the thing when you have these kinds of skills and this depth of knowledge.
+
+323
+00:13:38,960 --> 00:13:40,070
+Yeah, this is really easy.
+
+324
+00:13:40,080 --> 00:13:41,460
+It's like the lock picking lawyer, you know,
+
+325
+00:13:41,469 --> 00:13:43,900
+all his videos are like five minutes or shorter.
+
+326
+00:13:44,469 --> 00:13:47,659
+That's what always gets me. I'm waiting for the day he posted a video
+
+327
+00:13:47,760 --> 00:13:50,940
+that's like 20 minutes long. And then that's like, ok, now I know which lock to buy.
+
+328
+00:13:51,070 --> 00:13:54,739
+I doubt it. I doubt there's any lock he can't pick in 10 minutes.
+
+329
+00:13:55,400 --> 00:13:58,539
+But that's the thing. Right. Like it, you're right though, is even, even
+
+330
+00:13:58,645 --> 00:14:03,744
+just tiny hints like 100%. You can find my house on satellite imagery. Why?
+
+331
+00:14:03,755 --> 00:14:07,344
+Because I have two trampolines in my backyard. Boom. Like I've talked myself,
+
+332
+00:14:07,594 --> 00:14:12,044
+you figure you live in Edmonton, which is not a secret. You've talked about it a lot.
+
+333
+00:14:12,085 --> 00:14:12,784
+And yes,
+
+334
+00:14:12,794 --> 00:14:14,604
+you say you have two trampolines in your yard and there
+
+335
+00:14:14,614 --> 00:14:18,224
+are probably some like Geoguessr types that could find your house in
+
+336
+00:14:18,520 --> 00:14:21,739
+less than an hour. We'll say probably a lot less than an hour.
+
+337
+00:14:22,549 --> 00:14:25,390
+I'm not going to dig up the video, but I remember on my games done quick.
+
+338
+00:14:25,400 --> 00:14:29,780
+They had like a Geoguessr, I don't know, game or match or something where these,
+
+339
+00:14:29,789 --> 00:14:31,830
+these two people were just cooperating.
+
+340
+00:14:31,840 --> 00:14:32,289
+Basically,
+
+341
+00:14:32,299 --> 00:14:34,239
+they were playing the two player Geoguessr game
+
+342
+00:14:34,250 --> 00:14:36,520
+where only one person can see the screen,
+
+343
+00:14:36,530 --> 00:14:39,979
+the other one can see the map and you have to like, explain to them what you see
+
+344
+00:14:41,135 --> 00:14:41,495
+like.
+
+345
+00:14:42,116 --> 00:14:43,935
+Right. Yeah, you have to like, figure it out.
+
+346
+00:14:43,945 --> 00:14:48,085
+Well, no one person sees the like road view and the second person
+
+347
+00:14:48,236 --> 00:14:48,645
+has.
+
+348
+00:14:48,656 --> 00:14:49,606
+No, they, they, they had,
+
+349
+00:14:49,616 --> 00:14:52,745
+they're zooming in on the map trying to figure out what the other person and they,
+
+350
+00:14:52,755 --> 00:14:54,385
+they can only communicate with voice, right?
+
+351
+00:14:54,395 --> 00:14:55,736
+You can't see each other screen.
+
+352
+00:14:55,895 --> 00:14:58,926
+But anyway, they did like a, a demo before this, right,
+
+353
+00:14:58,935 --> 00:14:59,846
+where one of the users were like,
+
+354
+00:14:59,856 --> 00:15:02,825
+here's how this works and he would open a screen and be like, oh,
+
+355
+00:15:02,835 --> 00:15:06,111
+we see this on this side and this over here and there's over here like this is,
+
+356
+00:15:06,122 --> 00:15:07,471
+and they're driving on the left.
+
+357
+00:15:07,481 --> 00:15:10,512
+This is Germany or this is Ireland or whatever. My favorite, he pulls one up.
+
+358
+00:15:10,521 --> 00:15:14,791
+He's like, this is Japan for too many reasons to explain. He just moves on.
+
+359
+00:15:14,971 --> 00:15:17,961
+-- And I'm like, oh, my goodness. That's so funny.
+-- Well, that's the thing, right?
+
+360
+00:15:17,971 --> 00:15:20,952
+Like, for example, if you drop me in Germany,
+
+361
+00:15:20,961 --> 00:15:25,461
+I can tell you how far north or south I am based on the shape of churches.
+
+362
+00:15:26,289 --> 00:15:26,609
+No,
+
+363
+00:15:26,760 --> 00:15:27,150
+the more,
+
+364
+00:15:28,130 --> 00:15:29,669
+the more onion doughy they get.
+
+365
+00:15:29,890 --> 00:15:30,049
+Oh,
+
+366
+00:15:30,280 --> 00:15:31,200
+interesting.
+
+367
+00:15:31,700 --> 00:15:34,200
+Interesting. Anyway. Ok. So
+
+368
+00:15:34,570 --> 00:15:38,039
+that, that whole, like, don't, don't talk about what, you know, like,
+
+369
+00:15:38,049 --> 00:15:41,289
+-- that's obviously really hard as humans and
+-- don't even talk about that.
+
+370
+00:15:41,299 --> 00:15:41,929
+You're doing that
+
+371
+00:15:42,159 --> 00:15:42,950
+because
+
+372
+00:15:43,070 --> 00:15:46,859
+there are people who, when they say I found a vulnerability, I'm like, oh,
+
+373
+00:15:46,869 --> 00:15:48,820
+you found another vulnerability and x and they're like,
+
+374
+00:15:48,969 --> 00:15:51,609
+yeah, I'm like, because that's what you do,
+
+375
+00:15:52,229 --> 00:15:52,549
+right?
+
+376
+00:15:52,559 --> 00:15:54,799
+There are some security researchers that are like, that's,
+
+377
+00:15:54,809 --> 00:15:56,140
+there's like they have a specialty.
+
+378
+00:15:56,150 --> 00:15:57,809
+So when they say I found something, it's like,
+
+379
+00:15:58,340 --> 00:16:01,640
+well, it's probably the thing, they found stuff in the last 50 times.
+
+380
+00:16:01,650 --> 00:16:04,820
+-- So
+-- I remember there was some time ago when I,
+
+381
+00:16:04,830 --> 00:16:08,349
+I can't remember which particular TLS bug this was, but there was
+
+382
+00:16:08,549 --> 00:16:11,719
+one of those TLS bugs back when people were, like,
+
+383
+00:16:12,250 --> 00:16:13,229
+able to take
+
+384
+00:16:13,335 --> 00:16:16,034
+like, compress TLS streams and things like that and,
+
+385
+00:16:16,044 --> 00:16:18,625
+and just discern information about them.
+
+386
+00:16:18,645 --> 00:16:19,794
+And someone basically says, like, oh,
+
+387
+00:16:19,804 --> 00:16:23,934
+I found a bug in this TLS version with this um this library.
+
+388
+00:16:24,114 --> 00:16:26,914
+And I remember some of the really smart security researchers were like, oh,
+
+389
+00:16:26,924 --> 00:16:28,354
+it's probably this bug
+
+390
+00:16:28,799 --> 00:16:30,179
+and they were completely right and,
+
+391
+00:16:30,190 --> 00:16:32,890
+and it leaked basically because someone gave out
+
+392
+00:16:32,900 --> 00:16:35,840
+what seemed like no useful information at all.
+
+393
+00:16:35,950 --> 00:16:38,590
+And the experts were like, yeah, we know exactly what this is.
+
+394
+00:16:38,599 --> 00:16:40,309
+This is almost definitely this problem
+
+395
+00:16:40,700 --> 00:16:44,520
+and it's, it's fascinating and wild and, but now as humans,
+
+396
+00:16:44,669 --> 00:16:47,020
+we love talking about what we're doing.
+
+397
+00:16:47,030 --> 00:16:50,979
+-- Like there is nothing more exciting than learning.
+-- I have a secret,
+
+398
+00:16:51,056 --> 00:16:51,596
+right?
+
+399
+00:16:51,606 --> 00:16:53,476
+Or learning a new thing and being like, let me,
+
+400
+00:16:53,486 --> 00:16:56,875
+let me show you the new thing I'm doing like this is exciting and fun
+
+401
+00:16:57,135 --> 00:17:00,075
+-- and it, it's a very human thing. Well, they
+-- want validation for
+
+402
+00:17:00,085 --> 00:17:00,955
+sure, for sure.
+
+403
+00:17:00,966 --> 00:17:01,716
+It's just, it's,
+
+404
+00:17:01,726 --> 00:17:03,916
+it's part of what makes humans so interesting is
+
+405
+00:17:03,926 --> 00:17:06,036
+we have to talk about what we're interested in.
+
+406
+00:17:06,046 --> 00:17:07,494
+Well, I mean, and maybe we'll post a link to it,
+
+407
+00:17:07,505 --> 00:17:09,244
+but remember Will Wheaton talking about like,
+
+408
+00:17:09,255 --> 00:17:11,336
+what is a geek and what is a nerd that famous?
+
+409
+00:17:11,435 --> 00:17:13,234
+I think it was Comic Con talk he gives
+
+410
+00:17:13,442 --> 00:17:15,112
+Yeah. Yeah. Right. Maybe post that.
+
+411
+00:17:15,121 --> 00:17:18,411
+-- But that is the essence of this for
+-- sure, for sure. Now
+
+412
+00:17:18,761 --> 00:17:20,491
+there's another piece of this
+
+413
+00:17:20,682 --> 00:17:23,362
+that I think is an interesting conversation and
+
+414
+00:17:23,371 --> 00:17:27,011
+that is the whole responsible disclosure no more.
+
+415
+00:17:27,421 --> 00:17:28,682
+You and I both
+
+416
+00:17:28,832 --> 00:17:32,371
+have been part of probably hundreds or thousands
+
+417
+00:17:32,381 --> 00:17:35,452
+of we'll call them co ordinated disclosure events.
+
+418
+00:17:35,939 --> 00:17:36,890
+I'm not going to use the word
+
+419
+00:17:36,900 --> 00:17:40,010
+responsible disclosure because responsible disclosure is a term
+
+420
+00:17:40,020 --> 00:17:43,650
+that was co opted by Microsoft to me do what Microsoft tells you to do.
+
+421
+00:17:43,660 --> 00:17:44,219
+And if you don't,
+
+422
+00:17:44,229 --> 00:17:47,489
+-- we're going to yell at you
+-- well or not pay you a bug bounty or not put you on the
+
+423
+00:17:47,979 --> 00:17:49,589
+list or not give you credit. And that,
+
+424
+00:17:49,760 --> 00:17:52,329
+that was a huge thing like when I worked at Isight and I defense
+
+425
+00:17:52,959 --> 00:17:53,500
+that
+
+426
+00:17:53,670 --> 00:17:55,040
+credit was like
+
+427
+00:17:55,180 --> 00:17:57,150
+they would do whatever they needed to get
+
+428
+00:17:57,160 --> 00:18:00,310
+that credit because that credit sold subscriptions.
+
+429
+00:18:00,569 --> 00:18:00,939
+Right?
+
+430
+00:18:00,949 --> 00:18:02,469
+Well, and, and that's even, I mean,
+
+431
+00:18:02,479 --> 00:18:05,780
+bug bounties work the same way where if you don't play by the bug money rules,
+
+432
+00:18:05,829 --> 00:18:09,780
+actually, technically, this was just at the cusp of bug bounties because actually,
+
+433
+00:18:09,790 --> 00:18:10,560
+was it eyesight
+
+434
+00:18:10,739 --> 00:18:14,400
+burners was the first company to pay for exploits like to pay a bug
+
+435
+00:18:14,510 --> 00:18:14,579
+might
+
+436
+00:18:14,819 --> 00:18:15,109
+have been.
+
+437
+00:18:15,280 --> 00:18:18,540
+No, we, we were, we, we were like, well, the first legal,
+
+438
+00:18:18,775 --> 00:18:19,285
+obviously
+
+439
+00:18:19,535 --> 00:18:22,045
+the black market was doing it before us
+
+440
+00:18:22,234 --> 00:18:24,255
+but, and it was funny too because we were like,
+
+441
+00:18:24,375 --> 00:18:26,675
+we, we immediately tell the vendor to want to get it fixed.
+
+442
+00:18:26,685 --> 00:18:28,405
+Like that's our whole shick and everybody thought we
+
+443
+00:18:28,415 --> 00:18:30,364
+were being evil and it's like we're not evil,
+
+444
+00:18:30,375 --> 00:18:31,525
+we're not rich enough to be evil.
+
+445
+00:18:31,535 --> 00:18:32,244
+I remember that
+
+446
+00:18:32,785 --> 00:18:33,425
+anyway.
+
+447
+00:18:33,494 --> 00:18:34,364
+But here's the thing,
+
+448
+00:18:34,385 --> 00:18:38,574
+it is really hard to be part of any sort of coordinate disclosure event,
+
+449
+00:18:38,584 --> 00:18:40,944
+especially if there's a large company involved.
+
+450
+00:18:41,135 --> 00:18:44,484
+And obviously, in this case, there's a, there was a a again
+
+451
+00:18:44,719 --> 00:18:47,180
+another image posted to Twitter
+
+452
+00:18:47,300 --> 00:18:50,020
+that showed the screenshot of the companies
+
+453
+00:18:50,030 --> 00:18:52,250
+involved on the cert reporting platform.
+
+454
+00:18:52,260 --> 00:18:52,780
+And
+
+455
+00:18:52,939 --> 00:18:56,219
+Apple was on the list. HP was on the list. Dell was on the list.
+
+456
+00:18:56,229 --> 00:18:59,579
+Like these are not small organizations,
+
+457
+00:18:59,589 --> 00:19:02,500
+they are legendarily large and they're going to be hard to
+
+458
+00:19:02,510 --> 00:19:03,979
+work with because they also have
+
+459
+00:19:03,989 --> 00:19:07,050
+-- significant resources internally
+-- what's happened.
+
+460
+00:19:07,060 --> 00:19:09,280
+And uh open SSL is a perfect example of this
+
+461
+00:19:09,290 --> 00:19:12,109
+where Open SSL has learned that they cannot work with these
+
+462
+00:19:12,119 --> 00:19:14,599
+vendors because every single vendors like we're big and important and
+
+463
+00:19:14,609 --> 00:19:17,719
+we have like three bajillion TV S running this vulnerable thing
+
+464
+00:19:17,849 --> 00:19:20,619
+and thus the world will end if you don't let us do it our way.
+
+465
+00:19:21,069 --> 00:19:23,500
+And of course, they all want it done their way, which is like,
+
+466
+00:19:23,510 --> 00:19:26,540
+can we basically hold off on this as long as possible
+
+467
+00:19:27,239 --> 00:19:28,760
+without having to actually do anything?
+
+468
+00:19:28,930 --> 00:19:30,050
+And so like,
+
+469
+00:19:30,449 --> 00:19:33,189
+I believe at one point openness sl straight up said like
+
+470
+00:19:33,520 --> 00:19:36,630
+you kind of, everybody gets the same notification.
+
+471
+00:19:36,640 --> 00:19:40,500
+We don't do like pre notification because we just can't, it's, you know,
+
+472
+00:19:40,510 --> 00:19:41,459
+same thing with the Linux kernel.
+
+473
+00:19:41,469 --> 00:19:46,109
+It's like we can't make a tier list of like who's more and less important.
+
+474
+00:19:46,119 --> 00:19:47,739
+Like, obviously to some degree you could like,
+
+475
+00:19:47,750 --> 00:19:49,589
+like steam de or maybe less important than
+
+476
+00:19:50,180 --> 00:19:52,280
+all the oil refineries in the world. Running Linux.
+
+477
+00:19:52,349 --> 00:19:53,569
+But at the same time, like there's
+
+478
+00:19:53,800 --> 00:19:55,800
+all the stuff running Linux,
+
+479
+00:19:55,959 --> 00:19:59,920
+like breaking it out into what's critical and not critical. It's, it's impossible
+
+480
+00:20:00,109 --> 00:20:02,699
+-- and it's subjective.
+-- It is, it's an impossible task.
+
+481
+00:20:02,709 --> 00:20:06,260
+And right, and this is exactly why open SSL ended up doing what they did.
+
+482
+00:20:06,270 --> 00:20:08,880
+And I get that, I'm completely receptive to this.
+
+483
+00:20:08,890 --> 00:20:11,359
+Well, because also it, it kind of comes back to the,
+
+484
+00:20:11,369 --> 00:20:14,510
+even if you want to do it the way the companies want you to do it, it,
+
+485
+00:20:14,520 --> 00:20:16,150
+-- it won't
+-- work and it never does.
+
+486
+00:20:16,160 --> 00:20:16,800
+You end up, well,
+
+487
+00:20:16,944 --> 00:20:17,295
+you leak,
+
+488
+00:20:17,305 --> 00:20:20,125
+you leak crap all the time because there's someone talking about something.
+
+489
+00:20:20,135 --> 00:20:22,604
+Well, companies leak stuff. We've had that happen. Right.
+
+490
+00:20:22,915 --> 00:20:24,785
+It's, it's persistent for sure.
+
+491
+00:20:24,795 --> 00:20:27,324
+My favorite always was, I remember when we were at Red Hat,
+
+492
+00:20:27,334 --> 00:20:29,385
+we would watch lots of other bug trackers
+
+493
+00:20:29,395 --> 00:20:32,185
+from different Linux distributions and projects and things
+
+494
+00:20:32,604 --> 00:20:33,814
+and it was very common.
+
+495
+00:20:33,824 --> 00:20:37,675
+They would file a public bug and then hide it and we would catch it before they hit it.
+
+496
+00:20:38,175 --> 00:20:42,265
+Well, that happened with oracle and Myers QL and they totally, you know, II,
+
+497
+00:20:42,275 --> 00:20:43,724
+I was like, literally just like,
+
+498
+00:20:44,089 --> 00:20:44,119
+I
+
+499
+00:20:44,219 --> 00:20:48,310
+want to sign this anyways. They were a nightmare to deal with and I just gave up.
+
+500
+00:20:48,319 --> 00:20:50,989
+But I mean, the other thing to remember is like,
+
+501
+00:20:51,000 --> 00:20:55,369
+it's not a secret once you've told 10 or 20 or 30 or 40 companies,
+
+502
+00:20:55,380 --> 00:20:58,550
+I'm not even gonna say people because there's like, more than
+
+503
+00:20:58,790 --> 00:21:00,550
+that number of people. Like, there's,
+
+504
+00:21:01,359 --> 00:21:04,150
+it's just, it's a, it's, it's ridiculous to me that,
+
+505
+00:21:05,260 --> 00:21:08,349
+yeah, like every time government conspiracy stuff comes up, I'm like,
+
+506
+00:21:08,359 --> 00:21:09,689
+all that stuff ends up being public at
+
+507
+00:21:09,699 --> 00:21:12,239
+some point because people suck at keeping secrets.
+
+508
+00:21:12,689 --> 00:21:13,119
+Right?
+
+509
+00:21:13,130 --> 00:21:15,459
+And I, my favorite is always if someone asks one time, it's like,
+
+510
+00:21:15,469 --> 00:21:18,780
+do you actually think the government is competent enough to have done that?
+
+511
+00:21:18,790 --> 00:21:19,439
+And they're like,
+
+512
+00:21:19,680 --> 00:21:20,550
+no.
+
+513
+00:21:20,810 --> 00:21:23,920
+-- Yeah, the government is just people like us
+-- basically
+
+514
+00:21:24,150 --> 00:21:24,739
+back to the. So
+
+515
+00:21:24,989 --> 00:21:25,219
+I,
+
+516
+00:21:25,446 --> 00:21:26,235
+yeah, that's the thing.
+
+517
+00:21:26,245 --> 00:21:26,515
+So the,
+
+518
+00:21:26,526 --> 00:21:29,475
+the whole thing leaked and of course it turned out to basically be a nothing burger.
+
+519
+00:21:29,635 --> 00:21:33,576
+I feel like the co ordinated disclosure like let's keep secrets. Thing
+
+520
+00:21:33,885 --> 00:21:37,345
+is definitely on a downward trend these days because
+
+521
+00:21:37,355 --> 00:21:39,296
+a lot of things just come out well,
+
+522
+00:21:39,306 --> 00:21:40,456
+it doesn't work anymore.
+
+523
+00:21:40,505 --> 00:21:42,265
+It probably never did occur.
+
+524
+00:21:42,706 --> 00:21:46,651
+It also with the number of vulnerabilities we're handling.
+
+525
+00:21:46,661 --> 00:21:47,261
+-- Now,
+-- do
+
+526
+00:21:47,271 --> 00:21:50,712
+-- you
+-- remember when Google Project Zero said 90 day embargo,
+
+527
+00:21:50,722 --> 00:21:51,751
+-- no questions
+-- asked.
+
+528
+00:21:51,852 --> 00:21:53,011
+People lost their minds.
+
+529
+00:21:53,631 --> 00:21:55,901
+Right? And then it turned out everything's fine.
+
+530
+00:21:55,952 --> 00:22:01,832
+And I think this is an example of, back in those days you would have organizations,
+
+531
+00:22:01,842 --> 00:22:05,352
+especially the big ones, like a Microsoft or an Oracle or someone like that.
+
+532
+00:22:05,569 --> 00:22:08,500
+-- That would literally take years to fix a bug.
+-- Oh,
+
+533
+00:22:08,819 --> 00:22:12,510
+yeah. Those timelines were bonkers. Like, I think one was eight years with oracle
+
+534
+00:22:13,020 --> 00:22:13,670
+and it was a normal
+
+535
+00:22:13,859 --> 00:22:15,550
+code execution. It wasn't like a minor thing.
+
+536
+00:22:15,709 --> 00:22:18,260
+Yeah. Right. Right. Exactly. And, and if you think
+
+537
+00:22:18,869 --> 00:22:19,500
+the
+
+538
+00:22:19,719 --> 00:22:21,609
+A PT style Attackers
+
+539
+00:22:21,819 --> 00:22:24,420
+didn't know about this stuff, like you're, you're fooling yourself.
+
+540
+00:22:24,430 --> 00:22:27,400
+Of course, they did. They have people on the inside, they're watching everything.
+
+541
+00:22:27,630 --> 00:22:30,369
+I mean, heck, I remember when we, we knew vendor
+
+542
+00:22:30,500 --> 00:22:30,670
+se
+
+543
+00:22:30,890 --> 00:22:30,910
+the,
+
+544
+00:22:31,109 --> 00:22:35,569
+the, like, secret mailing list for Linux distributions, we knew it was backdoor.
+
+545
+00:22:35,859 --> 00:22:36,689
+Well, and it was,
+
+546
+00:22:36,810 --> 00:22:40,900
+it, I mean, not to throw solar designer under the bus, but it's run by a guy in Russia.
+
+547
+00:22:40,910 --> 00:22:41,819
+-- Like, no,
+-- no,
+
+548
+00:22:41,930 --> 00:22:44,989
+no. So solar designer runs the distro list now.
+
+549
+00:22:45,119 --> 00:22:47,430
+I don't know if he's moved the servers out of Russia.
+
+550
+00:22:47,439 --> 00:22:49,109
+I know he was trying to get funding from the,
+
+551
+00:22:49,119 --> 00:22:51,280
+the Linux foundation to help with that vendor
+
+552
+00:22:51,500 --> 00:22:53,949
+se was run by, um, Germans.
+
+553
+00:22:53,959 --> 00:22:57,989
+It was the sous guys and we knew it was hacked and we couldn't do anything about it.
+
+554
+00:22:58,000 --> 00:23:00,520
+And that's actually because eventually we just shut, the vendor
+
+555
+00:23:00,760 --> 00:23:05,140
+was just killed and like, we can't fix it like it, it's dead by.
+
+556
+00:23:05,380 --> 00:23:08,270
+And that's when solar then set up Os S security
+
+557
+00:23:08,589 --> 00:23:11,670
+and distro list which now there's like a bunch of distro list variants,
+
+558
+00:23:11,680 --> 00:23:15,250
+which is where the distributions can speak in private about various things.
+
+559
+00:23:15,270 --> 00:23:17,369
+Why is this run by a single human being?
+
+560
+00:23:17,609 --> 00:23:20,310
+Because he's the only one who is willing to do it.
+
+561
+00:23:20,540 --> 00:23:24,670
+Here's the reality. This is like you and I argue about this in private all the time.
+
+562
+00:23:24,680 --> 00:23:27,000
+Like the whole, this is the security, the market wants.
+
+563
+00:23:27,540 --> 00:23:31,160
+That is the security, the market it wants because when,
+
+564
+00:23:31,170 --> 00:23:35,380
+when Red Hat or Su or anyone else was asked to step up and help with this,
+
+565
+00:23:35,489 --> 00:23:36,400
+none of them did.
+
+566
+00:23:36,410 --> 00:23:41,160
+But solar designer was willing to do it and it's no doubt been significant cost
+
+567
+00:23:41,170 --> 00:23:44,829
+and time on his part over the how many decades he's been doing this now?
+
+568
+00:23:44,869 --> 00:23:45,890
+Well, I mean, case in point,
+
+569
+00:23:45,900 --> 00:23:49,400
+you can see Red Hat CV as she once falls off a cliff after I left
+
+570
+00:23:49,520 --> 00:23:50,239
+like it's done.
+
+571
+00:23:50,420 --> 00:23:51,780
+I, yeah, that doesn't surprise
+
+572
+00:23:51,880 --> 00:23:51,910
+me
+
+573
+00:23:52,560 --> 00:23:55,750
+again though. This is what is, what is the market want? Right?
+
+574
+00:23:55,760 --> 00:24:00,260
+And, and the market doesn't want good security. The market wants good pr,
+
+575
+00:24:00,380 --> 00:24:00,760
+well,
+
+576
+00:24:00,770 --> 00:24:03,790
+I think the market wants good security but also I want the good
+
+577
+00:24:03,800 --> 00:24:07,140
+-- security without having to pay for it or do anything or
+-- no,
+
+578
+00:24:07,150 --> 00:24:07,670
+that doesn't.
+
+579
+00:24:07,680 --> 00:24:10,369
+That's not how the market works. That means the market doesn't want
+
+580
+00:24:10,469 --> 00:24:10,489
+it.
+
+581
+00:24:10,689 --> 00:24:11,099
+Yeah.
+
+582
+00:24:11,500 --> 00:24:14,869
+Well, the market's not willing to pay a market rate for it like there.
+
+583
+00:24:14,880 --> 00:24:17,150
+-- Then
+-- the market doesn't want it. That's how that works
+
+584
+00:24:17,959 --> 00:24:20,630
+anyway. Anyway. So, here's my take on this.
+
+585
+00:24:20,859 --> 00:24:22,859
+I do think the researcher
+
+586
+00:24:22,979 --> 00:24:26,420
+-- is a little complaining.
+-- Oh, there was, there was way too much drama.
+
+587
+00:24:26,449 --> 00:24:29,949
+It was very drama filled. And I think the reporter was definitely part of that.
+
+588
+00:24:29,959 --> 00:24:33,500
+I'm not going to put this, let, let this person get off the hook by any means.
+
+589
+00:24:33,510 --> 00:24:36,380
+-- No, 100
+-- percent. Like they, they created this drama.
+
+590
+00:24:36,780 --> 00:24:37,540
+But here's the thing
+
+591
+00:24:38,010 --> 00:24:42,180
+I think given the way everything has been working for
+
+592
+00:24:42,189 --> 00:24:44,680
+the last 20 plus years in the world of security,
+
+593
+00:24:44,689 --> 00:24:47,979
+I do think embargoes are less important than they maybe were in the past.
+
+594
+00:24:48,430 --> 00:24:52,969
+I feel like most of the truly impressive security vulnerabilities we have
+
+595
+00:24:52,979 --> 00:24:56,510
+seen in the last couple of years have not been privately reported.
+
+596
+00:24:56,520 --> 00:25:00,319
+There was not time to patch and, and test and all this.
+
+597
+00:25:00,369 --> 00:25:02,250
+We were thrown into the fire and quite
+
+598
+00:25:02,365 --> 00:25:04,826
+frankly, I don't think they turned out that bad.
+
+599
+00:25:04,875 --> 00:25:08,625
+Well, there's also a lot more compensating controls now, like back in the day,
+
+600
+00:25:08,786 --> 00:25:09,286
+having
+
+601
+00:25:09,495 --> 00:25:11,306
+firewall was like, whoa,
+
+602
+00:25:11,895 --> 00:25:15,196
+-- you could buy them. People sold firewalls.
+-- Yeah.
+
+603
+00:25:15,206 --> 00:25:15,465
+Well,
+
+604
+00:25:15,475 --> 00:25:18,026
+like literally the Linux administrator security guide talks
+
+605
+00:25:18,036 --> 00:25:20,786
+about stuff like turning off default services,
+
+606
+00:25:20,796 --> 00:25:21,026
+right?
+
+607
+00:25:21,036 --> 00:25:23,215
+That was a big deal in the nineties that was like
+
+608
+00:25:23,225 --> 00:25:26,745
+-- a major way to do security was turning
+-- off the cups.
+
+609
+00:25:26,852 --> 00:25:27,871
+Resolver
+
+610
+00:25:28,011 --> 00:25:30,871
+is one of the ways to mitigate this.
+
+611
+00:25:30,911 --> 00:25:32,832
+But then that became like an industry standard where,
+
+612
+00:25:32,842 --> 00:25:35,472
+remember at one point finally Red Hat was like, yeah,
+
+613
+00:25:35,482 --> 00:25:38,371
+everything's turned off by default except ssh, so you can SSH.
+
+614
+00:25:38,381 --> 00:25:38,602
+N
+
+615
+00:25:38,722 --> 00:25:43,671
+and that took a major amount of teeth gnashing because customers are like,
+
+616
+00:25:43,682 --> 00:25:45,722
+I have to turn stuff on and it's inconvenient and it's
+
+617
+00:25:45,732 --> 00:25:47,391
+a pain in the butt and it just doesn't work,
+
+618
+00:25:47,401 --> 00:25:47,832
+you know,
+
+619
+00:25:48,281 --> 00:25:51,192
+and we have a lot more compensating controls now where
+
+620
+00:25:51,680 --> 00:25:55,969
+the reality too is everything. Every piece of software we have,
+
+621
+00:25:56,079 --> 00:25:58,369
+we know has remote code executions in it
+
+622
+00:25:58,800 --> 00:26:00,829
+because it did, like, and
+
+623
+00:26:01,099 --> 00:26:05,030
+-- they're not all fixed or gone,
+-- they will never be fixed if it's written in C,
+
+624
+00:26:05,079 --> 00:26:07,660
+even if it's not written in C, it probably has problems.
+
+625
+00:26:07,670 --> 00:26:10,550
+Yeah, I was gonna say, even if it's written in rust, you'll still have logic bugs.
+
+626
+00:26:10,880 --> 00:26:14,020
+It, yeah, it just takes away the memory safety issues.
+
+627
+00:26:14,040 --> 00:26:18,699
+Uh, but the thing is like, we, we can't make a perfectly safe, secure the world.
+
+628
+00:26:18,709 --> 00:26:19,130
+Right.
+
+629
+00:26:19,140 --> 00:26:23,469
+We just recently had an oil well, catch fire and explode and, like,
+
+630
+00:26:23,479 --> 00:26:26,410
+really harm five people down in Calgary,
+
+631
+00:26:26,890 --> 00:26:28,689
+uh, made the news and it's like,
+
+632
+00:26:28,869 --> 00:26:29,699
+obviously,
+
+633
+00:26:29,839 --> 00:26:30,060
+you know,
+
+634
+00:26:30,069 --> 00:26:31,859
+there's an incentive to make these things somewhat safe
+
+635
+00:26:31,869 --> 00:26:33,780
+because they're really expensive when they blow up.
+
+636
+00:26:33,790 --> 00:26:36,469
+But, you know, we can't make them 100% safe
+
+637
+00:26:36,760 --> 00:26:40,000
+and for sure to do, like, we talked about that with the house fire stuff.
+
+638
+00:26:40,010 --> 00:26:40,219
+Like,
+
+639
+00:26:40,229 --> 00:26:43,579
+could we build fireproof buildings with fire suppression that can't burn down?
+
+640
+00:26:43,589 --> 00:26:44,699
+Absolutely. We could,
+
+641
+00:26:45,030 --> 00:26:47,060
+would it be cost effective? No,
+
+642
+00:26:47,189 --> 00:26:47,810
+no,
+
+643
+00:26:48,000 --> 00:26:51,290
+no, for sure, for sure. But I mean, this is the concept of risk.
+
+644
+00:26:51,300 --> 00:26:52,800
+I mean, this is one of the things I think
+
+645
+00:26:53,180 --> 00:26:59,849
+the infosec universe has gotten wrong over the years is we try to eliminate risk.
+
+646
+00:26:59,979 --> 00:27:03,869
+We don't try to reduce and control it. I think it's getting better in recent years.
+
+647
+00:27:03,880 --> 00:27:05,180
+But I think fundamentally
+
+648
+00:27:05,380 --> 00:27:09,290
+an enormous amount of our industry was built around this concept of elimination,
+
+649
+00:27:09,569 --> 00:27:10,589
+which doesn't work.
+
+650
+00:27:10,839 --> 00:27:13,089
+I think what and what you just said is, it's,
+
+651
+00:27:13,099 --> 00:27:15,310
+I think the problem is not trying to eliminate risk.
+
+652
+00:27:15,319 --> 00:27:16,729
+It's thinking that we can
+
+653
+00:27:17,119 --> 00:27:17,560
+and we can
+
+654
+00:27:18,300 --> 00:27:18,780
+and that's,
+
+655
+00:27:19,239 --> 00:27:21,670
+that's a maturity step of saying, you know, like,
+
+656
+00:27:22,609 --> 00:27:26,069
+yeah, we can't accomplish this perfectly. But can we make it bearable?
+
+657
+00:27:26,079 --> 00:27:27,020
+Can we make it? So,
+
+658
+00:27:27,199 --> 00:27:28,900
+you know, the world works basically, like,
+
+659
+00:27:28,910 --> 00:27:31,959
+we don't have constant major cell phone outages like Verizon
+
+660
+00:27:31,969 --> 00:27:34,339
+or Rogers here in Canada did that one time,
+
+661
+00:27:34,349 --> 00:27:35,900
+you know, maybe we should have some change control.
+
+662
+00:27:35,910 --> 00:27:40,974
+-- So we don't push out a bad B GP route. Take down the half the internet
+-- or crowd strike.
+
+663
+00:27:41,244 --> 00:27:41,645
+Yeah.
+
+664
+00:27:41,875 --> 00:27:42,625
+You know, like,
+
+665
+00:27:42,635 --> 00:27:45,194
+and apparently crowdstrike had really poor internal testing
+
+666
+00:27:45,204 --> 00:27:47,625
+and gating of updates and everything and like,
+
+667
+00:27:47,645 --> 00:27:50,974
+and, and, and, but here's the thing, I would point out it was totally fine
+
+668
+00:27:51,125 --> 00:27:52,535
+until the one day it wasn't.
+
+669
+00:27:53,520 --> 00:27:54,619
+That's right. That's right.
+
+670
+00:27:54,890 --> 00:27:59,859
+And I mean, that's, that's kind of the story of disaster. It was fine until it wasn't.
+
+671
+00:27:59,869 --> 00:28:03,260
+Well, I mean, I've, I've accidentally left my front door unlocked and then, like,
+
+672
+00:28:03,270 --> 00:28:04,099
+come home
+
+673
+00:28:04,550 --> 00:28:07,160
+and gone to grab a package, you know, go into the garage,
+
+674
+00:28:07,170 --> 00:28:09,260
+come out through the front door and look at my front door as I'm leaving.
+
+675
+00:28:09,270 --> 00:28:10,540
+And I'm like, oh, I didn't lock it. Oops.
+
+676
+00:28:11,000 --> 00:28:12,699
+You know, and it was unlocked for a couple of hours.
+
+677
+00:28:12,709 --> 00:28:13,349
+Like, granted,
+
+678
+00:28:13,359 --> 00:28:15,849
+I would have gotten doorbell alerts that somebody came to my front door
+
+679
+00:28:16,079 --> 00:28:18,689
+and I would have noticed if somebody, like, walked in through my front door. But
+
+680
+00:28:18,930 --> 00:28:19,640
+the reality is,
+
+681
+00:28:19,650 --> 00:28:22,719
+it's not like people are constantly trying to break into my house and, like,
+
+682
+00:28:22,729 --> 00:28:24,540
+jiggle the front door and see if it's unlocked.
+
+683
+00:28:24,560 --> 00:28:27,969
+-- Right.
+-- Right. Well, and this is how disastrous work is, is
+
+684
+00:28:28,369 --> 00:28:29,000
+there is
+
+685
+00:28:29,660 --> 00:28:32,880
+generally speaking, a disaster isn't like one
+
+686
+00:28:33,000 --> 00:28:34,219
+singular event.
+
+687
+00:28:34,229 --> 00:28:36,770
+It's like 10 things that all went wrong at
+
+688
+00:28:36,780 --> 00:28:39,579
+the same time that led to some horrific disaster.
+
+689
+00:28:39,849 --> 00:28:40,229
+Yeah.
+
+690
+00:28:40,640 --> 00:28:43,390
+And we don't think like that in security. We often think of singular events.
+
+691
+00:28:43,400 --> 00:28:44,329
+So, anyway. Ok.
+
+692
+00:28:44,489 --> 00:28:44,819
+Ok,
+
+693
+00:28:44,829 --> 00:28:47,270
+we're kind of running ourselves out of time here and I feel
+
+694
+00:28:47,280 --> 00:28:50,469
+like we have danced all around this because that was the point.
+
+695
+00:28:50,619 --> 00:28:52,349
+-- I
+-- have
+-- a proposal.
+
+696
+00:28:52,930 --> 00:28:54,599
+The new metric for
+
+697
+00:28:54,859 --> 00:28:56,229
+vulnerability disclosure
+
+698
+00:28:56,540 --> 00:29:00,500
+should be measured by causing the least amount of drama. I mean,
+
+699
+00:29:01,369 --> 00:29:02,020
+no,
+
+700
+00:29:02,310 --> 00:29:06,560
+and, and I don't mean like you, you're gonna roll over and play nice to the companies.
+
+701
+00:29:06,569 --> 00:29:09,000
+I mean, things, like, for example, Google saying 90 days
+
+702
+00:29:09,229 --> 00:29:09,790
+done
+
+703
+00:29:10,250 --> 00:29:13,910
+and, like, the companies threw tantrums and Google's like, no, it's like a parent,
+
+704
+00:29:13,920 --> 00:29:14,079
+right?
+
+705
+00:29:14,089 --> 00:29:16,729
+Like I hear you screaming. I see that you're upset.
+
+706
+00:29:17,099 --> 00:29:21,430
+-- I'm still not buying you seven candy bars.
+-- I mean, so, look, Google was in a position.
+
+707
+00:29:21,439 --> 00:29:22,170
+They could
+
+708
+00:29:22,439 --> 00:29:25,550
+exert that pressure with impunity.
+
+709
+00:29:25,959 --> 00:29:30,150
+They, they weren't worried about very much if you are a security researcher.
+
+710
+00:29:30,160 --> 00:29:31,430
+That's part of a bug bounty.
+
+711
+00:29:31,709 --> 00:29:34,630
+Yeah, you're not going to get paid if you don't play by their rules.
+
+712
+00:29:34,640 --> 00:29:35,729
+That's how that works.
+
+713
+00:29:35,920 --> 00:29:37,790
+Yeah. Well, and that's part of the not causing drama. Like
+
+714
+00:29:37,890 --> 00:29:40,900
+they have set these rules if you want to get paid, you do it their way.
+
+715
+00:29:41,250 --> 00:29:42,910
+I, I guess that's fair
+
+716
+00:29:43,040 --> 00:29:47,010
+if you don't agree with it, you can also just push it out publicly and not get paid.
+
+717
+00:29:47,020 --> 00:29:49,300
+I mean, and, and that's kind of this sort of situation, right.
+
+718
+00:29:49,310 --> 00:29:51,469
+This is an example of the researcher
+
+719
+00:29:51,920 --> 00:29:55,829
+to the best of my knowledge was not compensated in any way for this
+
+720
+00:29:56,239 --> 00:29:58,510
+and they tried to do the right thing and they
+
+721
+00:29:58,520 --> 00:30:01,880
+got hung up in the madness of coordinate disclosure,
+
+722
+00:30:01,890 --> 00:30:02,910
+which is really hard to do.
+
+723
+00:30:02,920 --> 00:30:05,430
+And they did say in one of their many, many messages
+
+724
+00:30:05,760 --> 00:30:10,260
+that the ubuntu security people were doing a marvelous job trying to help, like,
+
+725
+00:30:10,270 --> 00:30:14,329
+bridge all the gaps and keep everything under control, which it's very hard
+
+726
+00:30:14,530 --> 00:30:17,459
+to be in that position. Like I've been there. Many times it sucks.
+
+727
+00:30:17,469 --> 00:30:19,670
+Everyone hates you because no matter what you do,
+
+728
+00:30:19,780 --> 00:30:21,160
+someone is disappointed.
+
+729
+00:30:21,290 --> 00:30:22,729
+Well, and that's why con honestly,
+
+730
+00:30:22,739 --> 00:30:25,079
+if somebody came to me and said I have a massive security flaw,
+
+731
+00:30:25,089 --> 00:30:25,910
+I really don't want to deal with it.
+
+732
+00:30:25,920 --> 00:30:29,260
+I'd be like, do you want me to just post it anonymously on your behalf? So, it's done.
+
+733
+00:30:29,270 --> 00:30:29,910
+-- So.
+-- Ok.
+
+734
+00:30:30,030 --> 00:30:32,489
+So let, let's close out with this. Let's say they did,
+
+735
+00:30:32,630 --> 00:30:34,260
+let's say they did post
+
+736
+00:30:34,619 --> 00:30:37,280
+not anonymously. Let's say they posted it as themselves.
+
+737
+00:30:37,530 --> 00:30:39,800
+How many people would be like, oh, good job.
+
+738
+00:30:39,939 --> 00:30:40,819
+And how many people would be?
+
+739
+00:30:40,829 --> 00:30:41,280
+Like,
+
+740
+00:30:41,290 --> 00:30:43,270
+you're a terrible person and you're destroying
+
+741
+00:30:43,280 --> 00:30:45,479
+the planet by posting this publicly.
+
+742
+00:30:46,380 --> 00:30:47,540
+-- I think
+-- there would be a lot of people
+
+743
+00:30:47,550 --> 00:30:50,239
+complaining that it was posted publicly with no notice
+
+744
+00:30:51,020 --> 00:30:53,439
+and you can't win. Right. There's, there's no way to win this.
+
+745
+00:30:53,449 --> 00:30:57,000
+I, I think if I was a security researcher and I found, I found something bad,
+
+746
+00:30:57,410 --> 00:30:59,760
+I don't know what I would do. I would think about it.
+
+747
+00:30:59,770 --> 00:31:03,310
+-- I'd probably talk to a couple of people I know first, but I
+-- have
+
+748
+00:31:03,660 --> 00:31:06,910
+straight up notice things and websites I use and just gone.
+
+749
+00:31:06,949 --> 00:31:08,959
+I mean, sometimes you do that.
+
+750
+00:31:08,969 --> 00:31:12,119
+-- I, I get
+-- that I'm not going to try and interact with the bank.
+
+751
+00:31:12,219 --> 00:31:14,719
+-- Uh
+-- I would not want to interact with the bank,
+
+752
+00:31:15,410 --> 00:31:17,739
+but that's also kind of different. Like
+
+753
+00:31:17,930 --> 00:31:21,520
+that's a singular customer essentially of,
+
+754
+00:31:21,760 --> 00:31:23,420
+of like the, the bug, right?
+
+755
+00:31:23,630 --> 00:31:26,800
+Versus let's say you find an R CE in open SSH.
+
+756
+00:31:26,969 --> 00:31:27,890
+What do you do?
+
+757
+00:31:28,260 --> 00:31:32,400
+You go to open SSH and be like, hey, I found this bug. Would you just post it in public?
+
+758
+00:31:32,410 --> 00:31:35,719
+Are we talking like, like a like basically like worst case scenario,
+
+759
+00:31:35,729 --> 00:31:36,839
+single packet remote,
+
+760
+00:31:37,109 --> 00:31:37,300
+the worst
+
+761
+00:31:37,579 --> 00:31:40,760
+case scenario, the absolute worst bug you could possibly imagine.
+
+762
+00:31:40,770 --> 00:31:42,219
+I mean, what would you do? Like
+
+763
+00:31:42,420 --> 00:31:46,560
+-- there's, I, I could make arguments in every direction
+-- my thought would be, oh,
+
+764
+00:31:46,569 --> 00:31:48,119
+and this is a kind of a jerk move.
+
+765
+00:31:48,130 --> 00:31:50,290
+But I know enough people in the industry that I would just
+
+766
+00:31:50,300 --> 00:31:52,760
+anonymously send it to a bunch of them with AC C and it's
+
+767
+00:31:52,979 --> 00:31:57,020
+-- their problem. Now.
+-- That's true. That would be one of the ways to do that.
+
+768
+00:31:57,030 --> 00:31:58,560
+But the secret is like,
+
+769
+00:31:58,729 --> 00:32:00,969
+I know these people, I know who they are.
+
+770
+00:32:00,979 --> 00:32:02,339
+I know their personal email addresses and
+
+771
+00:32:02,349 --> 00:32:05,119
+stuff like that's not the normal situation
+
+772
+00:32:05,290 --> 00:32:08,839
+-- like we're cheating basically.
+-- I mean, and that's part of it too.
+
+773
+00:32:08,849 --> 00:32:11,640
+Like, for example, this reporter went to Sirte,
+
+774
+00:32:11,729 --> 00:32:14,010
+I would not go to Sirte in a billion years.
+
+775
+00:32:14,020 --> 00:32:17,359
+I've dealt with CT and they are a very heavy,
+
+776
+00:32:17,650 --> 00:32:20,150
+difficult organization to work with. I found
+
+777
+00:32:20,410 --> 00:32:23,709
+and that may have changed in the last like five or 10 years since I've talked to them.
+
+778
+00:32:23,719 --> 00:32:27,369
+But I've, I've never had a lot of positive experience with cert,
+
+779
+00:32:27,380 --> 00:32:31,619
+remember that uh point of sale system company in New Zealand found that
+
+780
+00:32:31,630 --> 00:32:36,160
+uh http or http S proxy bug that affected like multiple web servers
+
+781
+00:32:36,410 --> 00:32:37,859
+and reported it to Red Hat.
+
+782
+00:32:37,869 --> 00:32:39,760
+And then like I ended up having to report it
+
+783
+00:32:39,770 --> 00:32:41,660
+to Microsoft because we literally said to these guys,
+
+784
+00:32:41,670 --> 00:32:41,939
+like,
+
+785
+00:32:42,599 --> 00:32:43,390
+do you want us to help?
+
+786
+00:32:43,400 --> 00:32:45,800
+And they're like, yeah, they're like, we make point of sale software.
+
+787
+00:32:45,810 --> 00:32:49,060
+We don't want to deal with this global security thing.
+
+788
+00:32:49,069 --> 00:32:51,140
+Also time zones suck because we're in New Zealand
+
+789
+00:32:51,390 --> 00:32:54,369
+and like we handled it for them and it was,
+
+790
+00:32:54,920 --> 00:32:57,849
+it was tedious, I would say, not a nightmare, but it was tedious.
+
+791
+00:32:57,859 --> 00:33:02,410
+-- It is
+-- easy to say, just don't, don't try to do coordinate disclosure. Right.
+
+792
+00:33:02,420 --> 00:33:04,979
+Very easy to say. Would I do that?
+
+793
+00:33:05,189 --> 00:33:06,810
+I know I wouldn't work with c my,
+
+794
+00:33:06,819 --> 00:33:09,859
+my suspicion is if I found something bad and it affected a Red hat,
+
+795
+00:33:09,869 --> 00:33:12,089
+I would go to them just because I know a lot of Red Hat people.
+
+796
+00:33:12,099 --> 00:33:13,339
+I know they're gonna help me out. I
+
+797
+00:33:13,780 --> 00:33:16,849
+think that's part of the story is there's also an aspect of
+
+798
+00:33:16,859 --> 00:33:20,125
+how much personal pain and suffering am I going to endure?
+
+799
+00:33:20,296 --> 00:33:23,806
+If I try to do this, we'll say the right way and we'll put the right way in. Quote,
+
+800
+00:33:23,916 --> 00:33:27,885
+what you just said, Red Hat will help me. Why have Red Hat helped you?
+
+801
+00:33:27,895 --> 00:33:29,926
+Why not just have Red Hat do the work? It affects them.
+
+802
+00:33:29,936 --> 00:33:32,426
+-- Well, that's what I mean, they would do all of the work.
+-- Oh, ok.
+
+803
+00:33:32,436 --> 00:33:35,005
+That wasn't clear, like it sounded like you were going to still be involved.
+
+804
+00:33:35,015 --> 00:33:39,725
+-- No, I would expect them to do, like, 99% of the work I
+-- would just throw, I would,
+
+805
+00:33:39,735 --> 00:33:43,005
+I would basically tie a note to a brick and throw it through the window and run away.
+
+806
+00:33:43,036 --> 00:33:44,891
+I mean, maybe, and that's the thing. Like,
+
+807
+00:33:45,251 --> 00:33:49,881
+there are other companies that I know would be very difficult to work
+
+808
+00:33:49,891 --> 00:33:53,602
+with in an instance like this and those are the places I might not
+
+809
+00:33:53,881 --> 00:33:56,041
+have any desire to interact with.
+
+810
+00:33:56,182 --> 00:33:56,991
+Yeah, I might not even,
+
+811
+00:33:57,092 --> 00:33:59,531
+I wouldn't even throw a brick through their window. Maybe not.
+
+812
+00:33:59,541 --> 00:34:04,362
+And I think that's part of it and I think that, that also kind of tells the story of the,
+
+813
+00:34:04,491 --> 00:34:07,362
+the things that are truly significant
+
+814
+00:34:07,572 --> 00:34:11,041
+that are going to affect a large percentage of the internet
+
+815
+00:34:11,719 --> 00:34:14,389
+are almost certainly going to be an open source software
+
+816
+00:34:14,570 --> 00:34:17,429
+-- or windows,
+-- even, even windows.
+
+817
+00:34:17,438 --> 00:34:21,100
+I don't think there are that many windows bugs that would, I would care about.
+
+818
+00:34:21,290 --> 00:34:22,000
+-- Not
+-- Peter.
+
+819
+00:34:24,639 --> 00:34:28,149
+Maybe. I mean, that was not, that was an attack though. It wasn't a bug. Right.
+
+820
+00:34:28,250 --> 00:34:32,179
+Well, no, it was a, it was a known security flaw that had been patched and leaked and
+
+821
+00:34:32,350 --> 00:34:35,090
+I can't even wrap my head around that because I don't, I don't even,
+
+822
+00:34:35,100 --> 00:34:37,300
+I don't even run windows like there's,
+
+823
+00:34:37,310 --> 00:34:40,659
+there's a 0% chance of me finding a windows vulnerability.
+
+824
+00:34:40,668 --> 00:34:42,540
+Like, it's just not going to happen.
+
+825
+00:34:43,010 --> 00:34:43,458
+Right.
+
+826
+00:34:43,790 --> 00:34:45,060
+And so I, I don't know. I mean,
+
+827
+00:34:45,469 --> 00:34:47,899
+I don't have a good answer for this. I feel like
+
+828
+00:34:48,610 --> 00:34:52,280
+I feel like if I can't tell Red Hat or Ubuntu,
+
+829
+00:34:52,429 --> 00:34:53,699
+maybe Debbie and, or su
+
+830
+00:34:54,050 --> 00:34:57,149
+I would feel bad for Debbie though because they're volunteers. But, like,
+
+831
+00:34:57,570 --> 00:34:58,909
+I don't know what I would do,
+
+832
+00:34:58,919 --> 00:35:01,340
+but I think I'm willing to say if it's something that they would,
+
+833
+00:35:01,350 --> 00:35:04,429
+those large Linux distributions were involved with,
+
+834
+00:35:04,439 --> 00:35:06,669
+I would almost certainly go to them right away
+
+835
+00:35:06,840 --> 00:35:07,929
+because I know
+
+836
+00:35:08,199 --> 00:35:10,770
+I would have a reasonable experience.
+
+837
+00:35:11,239 --> 00:35:13,149
+I don't think I would ever go to cert,
+
+838
+00:35:13,159 --> 00:35:16,199
+I think I would opt for a public disclosure over going to cert,
+
+839
+00:35:16,919 --> 00:35:21,510
+I might report something via a bug bounty. Maybe it would depend who it is.
+
+840
+00:35:21,520 --> 00:35:23,820
+Again, I think that's part of that whole, like
+
+841
+00:35:23,939 --> 00:35:27,110
+depending on the company, I'm going to think long and hard about this.
+
+842
+00:35:27,120 --> 00:35:30,439
+But yeah, I mean, I guess, you know, that's, that's the story here, Kurt, right?
+
+843
+00:35:30,449 --> 00:35:32,209
+Like that's the thing to tell is
+
+844
+00:35:32,399 --> 00:35:35,729
+there is no singular answer to problems like this.
+
+845
+00:35:35,739 --> 00:35:38,090
+It's easy to say you should always do responsible disclosure.
+
+846
+00:35:38,100 --> 00:35:40,850
+It's easy to say you should never do responsible disclosure.
+
+847
+00:35:41,050 --> 00:35:42,580
+But this is like everything.
+
+848
+00:35:42,709 --> 00:35:45,489
+It's this big muddy gray space in the middle
+
+849
+00:35:45,709 --> 00:35:46,370
+and that's
+
+850
+00:35:46,770 --> 00:35:48,739
+in this particular instance, like
+
+851
+00:35:49,040 --> 00:35:51,929
+it got reported and it got dealt with it did leak early.
+
+852
+00:35:51,939 --> 00:35:55,330
+So I wouldn't say it was a particularly co ordinated event.
+
+853
+00:35:55,550 --> 00:35:58,090
+Ok. I've got one last kind of point to,
+
+854
+00:35:58,270 --> 00:35:59,409
+to, to leave on.
+
+855
+00:35:59,709 --> 00:36:00,620
+So once
+
+856
+00:36:00,989 --> 00:36:02,459
+we figured out it was cuts,
+
+857
+00:36:03,010 --> 00:36:05,620
+I was thinking I could publish this
+
+858
+00:36:06,320 --> 00:36:08,020
+and say, hey, everyone, this
+
+859
+00:36:08,419 --> 00:36:09,139
+is Cups.
+
+860
+00:36:09,729 --> 00:36:12,209
+And the reason I'm telling you is because I'm not smart
+
+861
+00:36:12,219 --> 00:36:16,239
+and smarter people than me have certainly figured this out.
+
+862
+00:36:16,879 --> 00:36:19,100
+But then at the same time, it's like, if I do that,
+
+863
+00:36:19,550 --> 00:36:20,389
+if I do that,
+
+864
+00:36:20,399 --> 00:36:22,260
+I'm gonna be the bad guy to a whole bunch of
+
+865
+00:36:22,270 --> 00:36:24,179
+people and I just didn't want to deal with that crap.
+
+866
+00:36:24,600 --> 00:36:29,050
+Ditto. I like, literally look, it's like, like I'm like, should we post about this
+
+867
+00:36:29,520 --> 00:36:31,844
+-- and,
+-- and yeah, yeah, it so I, I don't know.
+
+868
+00:36:31,854 --> 00:36:34,965
+I mean, this stuff is always so hard to do and I guess
+
+869
+00:36:35,344 --> 00:36:39,635
+-- there's, there's just never a good answer.
+-- Is there any possible benefit?
+
+870
+00:36:39,685 --> 00:36:42,905
+Not just to us, but will this actually make the situation any better?
+
+871
+00:36:42,945 --> 00:36:46,205
+I think it might have actually because it would have made everyone go
+
+872
+00:36:46,215 --> 00:36:49,895
+public finally instead of pretending it was a secret because it wasn't true.
+
+873
+00:36:49,905 --> 00:36:51,745
+And if it is cups then everybody's like, ok,
+
+874
+00:36:51,754 --> 00:36:53,975
+I don't have that uh exposed to the internet.
+
+875
+00:36:53,985 --> 00:36:54,544
+So me,
+
+876
+00:36:55,179 --> 00:36:55,199
+I
+
+877
+00:36:55,330 --> 00:36:58,080
+mean, yeah, that's basically kind of how I felt about it.
+
+878
+00:36:58,090 --> 00:37:01,800
+Well, except a lot of people do like 100,000 people have cups on the internet. So,
+
+879
+00:37:02,290 --> 00:37:06,389
+yeah, but I mean, at the scale of humanity, like 100,000 people have a cup of cite
+
+880
+00:37:06,639 --> 00:37:09,760
+-- in their bathroom
+-- and that's not a lot. Right. Right. Ok.
+
+881
+00:37:09,870 --> 00:37:13,000
+All right. So in summary, we have no idea.
+
+882
+00:37:13,979 --> 00:37:16,040
+Try not to make the world a worse place,
+
+883
+00:37:16,050 --> 00:37:18,969
+but it's not your job necessarily to go out
+
+884
+00:37:18,979 --> 00:37:21,199
+of your way at significant personal cost to try and
+
+885
+00:37:21,649 --> 00:37:23,290
+help make the world a better place. Like
+
+886
+00:37:23,560 --> 00:37:24,639
+be reasonable.
+
+887
+00:37:24,649 --> 00:37:27,850
+And I think that boils back down to a lot of this open source developer
+
+888
+00:37:27,860 --> 00:37:30,719
+burnout where they really are taking the weight of the worlds on their shoulders.
+
+889
+00:37:30,949 --> 00:37:34,760
+And it's like, like one of the no, like it,
+
+890
+00:37:34,969 --> 00:37:35,479
+no,
+
+891
+00:37:35,590 --> 00:37:38,054
+like companies that benefit from this and make money from this.
+
+892
+00:37:38,064 --> 00:37:41,254
+-- Maybe they can step up and do a bit more.
+-- Agreed. All right, I'm calling it.
+
+893
+00:37:41,264 --> 00:37:42,844
+Thank you, Kurt. Thank you for listening. Go to
+
+894
+00:37:43,064 --> 00:37:44,314
+source Security, podcast.com. Head up to
+
+895
+00:37:44,554 --> 00:37:44,935
+shout, Susy Podos
+
+896
+00:37:45,185 --> 00:37:46,364
+says podcast. Hashtag I'm as
+
+897
+00:37:46,695 --> 00:37:48,455
+on Kurt. Have a marvelous rest of your day.
+
+898
+00:37:48,725 --> 00:37:50,074
+-- You
+-- too. Thanks everybody.
+
+899
+00:37:50,084 --> 00:37:52,284
+Thanks everyone. Bye bye.

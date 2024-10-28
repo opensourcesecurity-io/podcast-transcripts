@@ -1,0 +1,4772 @@
+0
+00:00:05,219 --> 00:00:09,439
+Hello and welcome to the open source Security podcast episode 53 with myself,
+
+1
+00:00:09,449 --> 00:00:11,640
+Kurt Siefried and my partner in Thought Crime.
+
+2
+00:00:11,649 --> 00:00:15,039
+-- Josh
+-- Presser. Thought Crime. That's very clever. Well done, sir.
+
+3
+00:00:15,619 --> 00:00:19,760
+Well, just technically we've been admitting to felonies for the last 52 episodes.
+
+4
+00:00:20,569 --> 00:00:21,379
+My partner in crime
+
+5
+00:00:22,079 --> 00:00:23,620
+partner in crime, I understand
+
+6
+00:00:24,729 --> 00:00:27,379
+your crime. It doesn't necessarily have to be a felony.
+
+7
+00:00:27,760 --> 00:00:28,020
+Well,
+
+8
+00:00:28,030 --> 00:00:29,219
+I just over the weekend I learned a
+
+9
+00:00:29,229 --> 00:00:31,489
+lot about various indictable offenses and what not.
+
+10
+00:00:31,500 --> 00:00:34,669
+So it's, uh, I like to avoid admitting to anything I should or haven't,
+
+11
+00:00:34,680 --> 00:00:35,990
+definitely haven't done.
+
+12
+00:00:36,080 --> 00:00:37,599
+I see, I see that that's
+
+13
+00:00:37,709 --> 00:00:39,590
+fair. I can totally understand that.
+
+14
+00:00:39,720 --> 00:00:41,380
+And, and I'm a huge fan of
+
+15
+00:00:41,500 --> 00:00:43,400
+not telling people anything they don't need to know.
+
+16
+00:00:43,700 --> 00:00:45,520
+In fact, it's always funny because
+
+17
+00:00:45,819 --> 00:00:48,349
+whenever my wife and I have like a business dealing
+
+18
+00:00:48,360 --> 00:00:50,599
+or something or like buying a car or whatever,
+
+19
+00:00:50,770 --> 00:00:54,159
+she's very willing to give up information
+
+20
+00:00:54,270 --> 00:00:56,159
+without being prompted for it. And I was like,
+
+21
+00:00:56,599 --> 00:00:57,639
+stop, stop telling them those
+
+22
+00:00:57,860 --> 00:00:59,200
+things, you know, they don't need to know that.
+
+23
+00:00:59,419 --> 00:01:01,409
+And she thinks I'm some sort of paranoid nut,
+
+24
+00:01:01,509 --> 00:01:02,069
+which
+
+25
+00:01:02,299 --> 00:01:05,589
+probably because I'm some sort of paranoid nut Yeah.
+
+26
+00:01:05,790 --> 00:01:08,680
+Yeah, I actually got that comment from one of the other parents at school today.
+
+27
+00:01:11,129 --> 00:01:13,019
+That's when, you know, you're doing good.
+
+28
+00:01:14,010 --> 00:01:18,279
+Yeah. So, anyway, so some, there's a,
+
+29
+00:01:19,099 --> 00:01:22,029
+there's been an interesting development in, I guess, flight software.
+
+30
+00:01:22,500 --> 00:01:27,120
+Yes. And you promised to explain all of this to me and I have no idea what's going on.
+
+31
+00:01:27,519 --> 00:01:30,040
+So I will let you take it from here.
+
+32
+00:01:30,330 --> 00:01:34,209
+Ok. So I'm a classic, like, armchair aviation is,
+
+33
+00:01:34,720 --> 00:01:36,919
+I guess, is the word aviation
+
+34
+00:01:37,019 --> 00:01:38,839
+enthusiast. Yeah, there we go.
+
+35
+00:01:39,370 --> 00:01:39,650
+Um,
+
+36
+00:01:39,660 --> 00:01:42,819
+so I'm probably basically wrong about everything I'm going to talk about right now.
+
+37
+00:01:42,989 --> 00:01:47,040
+But having said that so traditionally, uh there's a concept
+
+38
+00:01:47,449 --> 00:01:51,519
+in software and security in general called security through obscurity,
+
+39
+00:01:52,230 --> 00:01:53,930
+which basically is to say
+
+40
+00:01:54,250 --> 00:01:57,010
+that by keeping something secret, it'll help make it more secure.
+
+41
+00:01:57,680 --> 00:01:58,569
+And
+
+42
+00:01:58,940 --> 00:02:00,900
+a lot of people hate this principle
+
+43
+00:02:01,129 --> 00:02:04,199
+-- and a lot of people like
+-- this principle, it doesn't work.
+
+44
+00:02:04,480 --> 00:02:05,620
+Let's just say that.
+
+45
+00:02:05,750 --> 00:02:06,120
+Ok.
+
+46
+00:02:06,129 --> 00:02:11,070
+-- Well, at least in software security, it doesn't work security
+-- through obscurity,
+
+47
+00:02:11,149 --> 00:02:14,690
+really doesn't work if you can't change the secret.
+
+48
+00:02:15,649 --> 00:02:18,509
+So for example, you have a password, the password must be
+
+49
+00:02:18,789 --> 00:02:21,570
+secret, right? If somebody knows the password, they can log in as you.
+
+50
+00:02:21,750 --> 00:02:24,839
+But with a password typically, you can change it very quickly and easily.
+
+51
+00:02:25,330 --> 00:02:29,860
+Obviously, software is like at the opposite end of the easy to change spectrum,
+
+52
+00:02:30,990 --> 00:02:31,410
+you know,
+
+53
+00:02:31,789 --> 00:02:34,330
+if, if you're trying to keep your software uh
+
+54
+00:02:34,660 --> 00:02:36,830
+secure and un viewed
+
+55
+00:02:37,580 --> 00:02:42,110
+uh while the second it becomes exposed, uh you know, it's going to take you days,
+
+56
+00:02:42,119 --> 00:02:44,520
+weeks, months, years, decades to rewrite the whole thing.
+
+57
+00:02:44,669 --> 00:02:47,779
+So, it's just basically, it's not possible really, in most cases,
+
+58
+00:02:49,330 --> 00:02:49,740
+you know,
+
+59
+00:02:50,570 --> 00:02:51,440
+I don't even,
+
+60
+00:02:51,690 --> 00:02:57,029
+I don't even think it's that as much as I think there's, I, I, I've seen two
+
+61
+00:02:57,550 --> 00:02:59,839
+kind of attitudes here is you've got encryption
+
+62
+00:03:00,050 --> 00:03:02,279
+where people would say if you don't know the algorithm,
+
+63
+00:03:02,289 --> 00:03:03,639
+how could you possibly crack it?
+
+64
+00:03:03,649 --> 00:03:08,020
+And actually if, if you do any sort of research and encrypt analysis, uh yeah, that,
+
+65
+00:03:08,029 --> 00:03:10,619
+that doesn't matter because they have ways to do this.
+
+66
+00:03:11,009 --> 00:03:11,800
+And then,
+
+67
+00:03:12,089 --> 00:03:13,690
+-- and
+-- that's the public stuff we know about.
+
+68
+00:03:14,679 --> 00:03:15,399
+Right.
+
+69
+00:03:15,720 --> 00:03:16,919
+It's anyway.
+
+70
+00:03:17,119 --> 00:03:18,419
+And then, then there's
+
+71
+00:03:18,759 --> 00:03:21,679
+the kind of I'm going to keep my source code a secret.
+
+72
+00:03:21,690 --> 00:03:24,550
+So the bad guys can't find bugs in it. And I think
+
+73
+00:03:24,750 --> 00:03:27,690
+the history of windows is kind of the,
+
+74
+00:03:27,699 --> 00:03:31,479
+the body ridden path that proves that does not work.
+
+75
+00:03:31,490 --> 00:03:35,960
+-- Right.
+-- Well, the reality is there's a lot of security flaws that are trivial to find.
+
+76
+00:03:35,970 --> 00:03:37,669
+I mean, cross site scripting is a great example, right?
+
+77
+00:03:37,679 --> 00:03:42,399
+You just plug in random wonky values and uh Boop comes a javascript alert.
+
+78
+00:03:42,419 --> 00:03:46,250
+That's true. And you generally don't have access to that source code.
+
+79
+00:03:46,949 --> 00:03:48,479
+Well, look at what Tavis has done, you know,
+
+80
+00:03:48,490 --> 00:03:51,149
+he was fuzzing Windows defender software and
+
+81
+00:03:51,460 --> 00:03:54,910
+he apparently got tired. It was very slow on windows.
+
+82
+00:03:54,919 --> 00:03:56,929
+So he actually ported it over to Linux.
+
+83
+00:03:57,289 --> 00:03:58,199
+Uh, we'll,
+
+84
+00:03:58,210 --> 00:04:01,089
+we'll include show notes to that because I don't even want to try and explain that.
+
+85
+00:04:01,630 --> 00:04:03,440
+Uh, it makes my head hurt when I think about it.
+
+86
+00:04:03,800 --> 00:04:07,699
+And, um, so, yeah, he's fuzzing Windows Defender on Linux machines and, you know,
+
+87
+00:04:07,710 --> 00:04:08,580
+he's found,
+
+88
+00:04:08,800 --> 00:04:09,080
+uh,
+
+89
+00:04:09,089 --> 00:04:10,570
+I think there was just a new article on the
+
+90
+00:04:10,580 --> 00:04:13,919
+register with him mentioned from yesterday or the day before.
+
+91
+00:04:14,570 --> 00:04:14,830
+Yeah.
+
+92
+00:04:14,839 --> 00:04:19,970
+Yeah, he just released, I think two days ago from when we're recording this, his,
+
+93
+00:04:20,119 --> 00:04:24,429
+-- his latest Windows defender security problem.
+-- Exactly.
+
+94
+00:04:24,519 --> 00:04:25,100
+So, like, yeah,
+
+95
+00:04:25,109 --> 00:04:29,230
+clearly you don't need access to the source code to find really nasty flaws.
+
+96
+00:04:30,010 --> 00:04:30,730
+Um,
+
+97
+00:04:31,440 --> 00:04:34,390
+and on the flip side, however, I wouldn't say that, like,
+
+98
+00:04:34,399 --> 00:04:37,250
+just because you're open source means everybody's going to like, look at your code,
+
+99
+00:04:37,260 --> 00:04:38,459
+find the flaws and fix them.
+
+100
+00:04:38,859 --> 00:04:42,850
+And that was uh Eric Raymond coined the term Linus's law,
+
+101
+00:04:42,859 --> 00:04:46,559
+which was what with enough eyeballs, all bugs are shallow and that, uh,
+
+102
+00:04:46,820 --> 00:04:48,290
+that law is false,
+
+103
+00:04:48,529 --> 00:04:49,940
+right? That, that is not a law.
+
+104
+00:04:50,709 --> 00:04:51,170
+The trick
+
+105
+00:04:51,380 --> 00:04:51,399
+is
+
+106
+00:04:51,790 --> 00:04:52,029
+nonsense.
+
+107
+00:04:52,600 --> 00:04:52,850
+Well,
+
+108
+00:04:52,859 --> 00:04:56,220
+the problem is people have to know that they're looking for bugs and quite honestly,
+
+109
+00:04:56,230 --> 00:04:58,200
+most of us don't have time to go looking for bugs.
+
+110
+00:04:58,209 --> 00:05:00,769
+-- We, we're so busy like fixing stuff or
+-- even the
+
+111
+00:05:01,304 --> 00:05:02,204
+man, I mean,
+
+112
+00:05:02,234 --> 00:05:06,524
+this actually came up just the other day at work where someone basically said, oh,
+
+113
+00:05:06,535 --> 00:05:07,315
+look what I found.
+
+114
+00:05:07,325 --> 00:05:10,325
+And I said that's a security issue because of this, this you know,
+
+115
+00:05:10,334 --> 00:05:11,524
+and then I laid out what,
+
+116
+00:05:11,535 --> 00:05:14,975
+what would happen and it was a very complicated process and they're like, oh, crap.
+
+117
+00:05:15,165 --> 00:05:18,665
+I said, you know, security guy ruins it again, you know.
+
+118
+00:05:19,214 --> 00:05:20,434
+Never fails.
+
+119
+00:05:20,584 --> 00:05:21,075
+Yeah.
+
+120
+00:05:21,915 --> 00:05:22,834
+Yeah. So,
+
+121
+00:05:23,024 --> 00:05:26,214
+I, so, yeah, the reality is, um,
+
+122
+00:05:26,225 --> 00:05:29,065
+I think if you're heavily relying on security through obscurity,
+
+123
+00:05:29,075 --> 00:05:30,765
+you're probably gonna have a bad time
+
+124
+00:05:31,399 --> 00:05:35,350
+because quite frankly, the bad guys generally don't need to see it.
+
+125
+00:05:35,859 --> 00:05:38,200
+-- Even the good guys
+-- don't. Yeah, exactly.
+
+126
+00:05:38,739 --> 00:05:43,170
+Um And the flip side too is, is at some point, you know, everything leaks eventually.
+
+127
+00:05:43,869 --> 00:05:46,109
+That's true. And that's another story
+
+128
+00:05:46,309 --> 00:05:48,410
+we can get to after you tell me all about
+
+129
+00:05:48,420 --> 00:05:50,410
+this airplane because I actually really want to know.
+
+130
+00:05:50,890 --> 00:05:51,019
+Yeah.
+
+131
+00:05:51,500 --> 00:05:54,489
+So, ok, so basically, uh apparently
+
+132
+00:05:56,209 --> 00:05:56,480
+in a pro
+
+133
+00:05:56,670 --> 00:05:57,570
+this is off of Bru's
+
+134
+00:05:57,899 --> 00:05:58,529
+blog.
+
+135
+00:05:58,540 --> 00:06:04,410
+Uh So in a proposed rule by the FAA, it argues that the software in an ors a model E RJ,
+
+136
+00:06:04,420 --> 00:06:06,140
+that's a uh what does it stand for something?
+
+137
+00:06:06,149 --> 00:06:07,010
+Regional jet
+
+138
+00:06:07,450 --> 00:06:09,170
+enterprise, regional jet, whatever
+
+139
+00:06:09,470 --> 00:06:15,429
+uh model 1 90-300 airplane is secure because it is proprietary. So to quote,
+
+140
+00:06:15,670 --> 00:06:16,089
+in addition,
+
+141
+00:06:16,100 --> 00:06:17,709
+the operating systems for current airplane
+
+142
+00:06:17,720 --> 00:06:20,079
+systems are usually and historically proprietary.
+
+143
+00:06:20,290 --> 00:06:24,255
+Um And I suspect that's more true for like legal reasons than, and actual like,
+
+144
+00:06:24,265 --> 00:06:24,654
+you know,
+
+145
+00:06:24,984 --> 00:06:27,695
+security reasons realistically, um you know,
+
+146
+00:06:27,704 --> 00:06:30,815
+you don't want your competitors to see your special sauce, right?
+
+147
+00:06:31,035 --> 00:06:32,415
+Airbus versus Boeing.
+
+148
+00:06:33,225 --> 00:06:34,234
+Uh Anyways,
+
+149
+00:06:34,404 --> 00:06:37,505
+therefore, they are not as susceptible to corruption from worms,
+
+150
+00:06:37,515 --> 00:06:39,214
+viruses and other militias actions
+
+151
+00:06:39,714 --> 00:06:40,345
+as are.
+
+152
+00:06:40,355 --> 00:06:44,584
+Well, and of course, I hope to, goodness sake,
+
+153
+00:06:44,595 --> 00:06:46,954
+none of these are running on Windows XP.
+
+154
+00:06:47,290 --> 00:06:48,829
+No, they're, they're not actually.
+
+155
+00:06:48,839 --> 00:06:51,380
+So this part I do know something about because
+
+156
+00:06:51,390 --> 00:06:53,950
+I've had dealings with the FAA in the past is
+
+157
+00:06:54,200 --> 00:06:57,190
+when you write software to run on airplanes.
+
+158
+00:06:57,200 --> 00:06:57,350
+Now,
+
+159
+00:06:57,359 --> 00:06:59,529
+there's a huge difference between software that runs on
+
+160
+00:06:59,540 --> 00:07:01,329
+the ground and software that runs in the air,
+
+161
+00:07:01,339 --> 00:07:02,540
+the stuff on the ground,
+
+162
+00:07:02,640 --> 00:07:04,059
+there's a bit more leeway and you can
+
+163
+00:07:04,070 --> 00:07:06,279
+start getting into general purpose operating systems.
+
+164
+00:07:06,649 --> 00:07:10,489
+But the stuff that's in the air, basically, it has to be,
+
+165
+00:07:11,029 --> 00:07:12,809
+it, it has to be custom written
+
+166
+00:07:12,910 --> 00:07:18,450
+because you have to be able to show why every line of code exists in that. And then
+
+167
+00:07:18,700 --> 00:07:21,170
+basically anytime there's a change,
+
+168
+00:07:21,179 --> 00:07:23,649
+you have to show exactly why the code is changing
+
+169
+00:07:23,660 --> 00:07:26,070
+for what reason and it has to be fully documented.
+
+170
+00:07:26,079 --> 00:07:26,510
+So they,
+
+171
+00:07:26,709 --> 00:07:29,809
+they literally can take this operating system that's running on an airplane
+
+172
+00:07:30,119 --> 00:07:33,989
+and they can trace it back to the dude who wrote the first line of code or JT,
+
+173
+00:07:34,290 --> 00:07:37,540
+I guess, you know, we won't be those guys, but you know what I mean?
+
+174
+00:07:37,559 --> 00:07:40,239
+It's, they can literally, they can show the history,
+
+175
+00:07:40,250 --> 00:07:42,859
+they can show the provenance of all of this stuff.
+
+176
+00:07:42,869 --> 00:07:44,940
+It's crazy how strict it is.
+
+177
+00:07:46,190 --> 00:07:48,980
+Well, the reality is, planes are really expensive.
+
+178
+00:07:49,429 --> 00:07:50,119
+Uh Well,
+
+179
+00:07:50,130 --> 00:07:54,739
+they're expensive but there's also like that whole like people die if it crashes,
+
+180
+00:07:54,859 --> 00:07:58,760
+right? It's, if your car crashes or stops working,
+
+181
+00:07:59,309 --> 00:08:01,730
+it could be bad. You may or may not die.
+
+182
+00:08:01,739 --> 00:08:05,040
+But if the plane stops working, like you're going to die, you know.
+
+183
+00:08:06,070 --> 00:08:07,350
+Uh but anyways going back to this.
+
+184
+00:08:07,359 --> 00:08:10,790
+So uh because access to the design details of these proprietary operating
+
+185
+00:08:10,799 --> 00:08:14,970
+systems is limited to limited to the system developer and airplane integrator.
+
+186
+00:08:15,170 --> 00:08:20,540
+Some systems installed in the umbrere model E RJ 91 90-3 300 airplane will use
+
+187
+00:08:20,549 --> 00:08:21,709
+operating systems that are widely used and
+
+188
+00:08:21,720 --> 00:08:24,410
+commercially available from third party software suppliers.
+
+189
+00:08:24,420 --> 00:08:26,850
+So I'm assuming that's stuff like the entertainment system or whatever.
+
+190
+00:08:26,859 --> 00:08:27,730
+Let's hope so.
+
+191
+00:08:28,540 --> 00:08:31,029
+Um The security vulnerabilities of these operating systems may be
+
+192
+00:08:31,040 --> 00:08:34,380
+more widely known than the vulnerabilities of proprietor operating systems
+
+193
+00:08:34,570 --> 00:08:36,950
+that the avionics manufacturer currently use. So
+
+194
+00:08:37,469 --> 00:08:38,280
+um
+
+195
+00:08:39,650 --> 00:08:42,989
+I'm gonna say they're not entirely 100% wrong but
+
+196
+00:08:43,000 --> 00:08:45,630
+they're basically mostly wrong and I think they're wrong.
+
+197
+00:08:45,640 --> 00:08:47,219
+Probably not for the reasons that
+
+198
+00:08:47,440 --> 00:08:48,830
+people and you
+
+199
+00:08:49,010 --> 00:08:49,840
+think they are.
+
+200
+00:08:50,270 --> 00:08:50,890
+Um
+
+201
+00:08:51,239 --> 00:08:55,349
+my first comment would be again, you know, back to this whole source code versus like
+
+202
+00:08:55,539 --> 00:09:00,419
+binary thing is I'm pretty sure if we lease a one of
+
+203
+00:09:00,429 --> 00:09:03,059
+these jets and like do a uh a memory dump of,
+
+204
+00:09:03,070 --> 00:09:04,429
+you know, the operating system and everything.
+
+205
+00:09:04,909 --> 00:09:06,640
+I'm pretty sure somebody like Tavis given
+
+206
+00:09:06,650 --> 00:09:08,549
+a week could probably find something nasty.
+
+207
+00:09:08,580 --> 00:09:13,409
+He probably doesn't need a dump of it. You would just need some level of access.
+
+208
+00:09:13,419 --> 00:09:15,669
+And I'm going to hope now,
+
+209
+00:09:15,679 --> 00:09:19,369
+although there's that guy who claims he hacked an airplane and made it, like,
+
+210
+00:09:19,380 --> 00:09:21,520
+turn or something through the entertainment center.
+
+211
+00:09:21,530 --> 00:09:21,969
+Right.
+
+212
+00:09:22,179 --> 00:09:23,489
+I think that was debunked.
+
+213
+00:09:23,500 --> 00:09:27,929
+But the reality is, I know on some models of plane, apparently now they are using
+
+214
+00:09:28,099 --> 00:09:31,900
+a single physical data bus with essentially V
+
+215
+00:09:32,059 --> 00:09:34,000
+lands to separate entertainment. And,
+
+216
+00:09:35,390 --> 00:09:37,729
+-- well,
+-- I agree.
+
+217
+00:09:38,000 --> 00:09:39,539
+Yes and no, because here's the thing,
+
+218
+00:09:39,549 --> 00:09:41,859
+this is a difficult trade off because on the one hand V
+
+219
+00:09:41,989 --> 00:09:43,460
+lands and that type of tech technology
+
+220
+00:09:43,469 --> 00:09:45,570
+is quite well understood and reasonably secure.
+
+221
+00:09:45,690 --> 00:09:47,340
+And the reality is adding
+
+222
+00:09:47,590 --> 00:09:51,099
+secondary wiring to a plane. You know, it's going to be at least
+
+223
+00:09:51,580 --> 00:09:54,900
+several dozen, if not hundreds of pounds of wiring equipment.
+
+224
+00:09:55,320 --> 00:09:57,940
+And that has a real long term cost on the plane.
+
+225
+00:09:58,929 --> 00:10:02,469
+Um Air Canada's uh subsidiary Jazz is a great example of this.
+
+226
+00:10:02,479 --> 00:10:05,469
+So Air Canada has this like cheap flights, thing called jazz.
+
+227
+00:10:05,710 --> 00:10:08,070
+Uh And they took all the life jackets off all the planes
+
+228
+00:10:08,479 --> 00:10:11,599
+-- to save weight.
+-- Does it never fly over water?
+
+229
+00:10:11,919 --> 00:10:15,070
+Uh It has to fly within like 20 or 30 minutes of the coast or something.
+
+230
+00:10:15,080 --> 00:10:18,229
+So, in theory, you can like glide to the beach if like it's,
+
+231
+00:10:18,460 --> 00:10:22,109
+yeah, basically so that the flight is uh somewhat restricted,
+
+232
+00:10:22,119 --> 00:10:24,380
+but they're mostly flying over Canada, right?
+
+233
+00:10:24,409 --> 00:10:27,789
+They're not doing like, uh cross ocean flights.
+
+234
+00:10:28,059 --> 00:10:28,280
+Um,
+
+235
+00:10:28,289 --> 00:10:31,710
+but the reality is this like even a cost savings of like 100
+
+236
+00:10:31,719 --> 00:10:35,700
+pounds over the co over the like life of one of these aircraft
+
+237
+00:10:36,219 --> 00:10:37,869
+is a lot of fuel
+
+238
+00:10:38,119 --> 00:10:38,960
+saved,
+
+239
+00:10:39,130 --> 00:10:39,599
+you know.
+
+240
+00:10:41,179 --> 00:10:44,599
+Um, so, yeah, it's, I mean, on the one hand I, I am like, oh yeah,
+
+241
+00:10:44,609 --> 00:10:47,039
+you should just physically separate this all out, but on the other hand, you know,
+
+242
+00:10:47,049 --> 00:10:50,719
+that's like an extra 100 pounds or 200 pounds of equipment and wiring and everything
+
+243
+00:10:51,109 --> 00:10:53,940
+and that really does add up especially across a fleet of planes.
+
+244
+00:10:55,109 --> 00:10:55,750
+Um
+
+245
+00:10:55,969 --> 00:10:59,010
+But what's really fascinating to me is that
+
+246
+00:10:59,309 --> 00:11:02,020
+uh reading uh so there's an FAA bulletin
+
+247
+00:11:02,299 --> 00:11:03,289
+um
+
+248
+00:11:04,190 --> 00:11:05,739
+essentially special conditions, Ombre
+
+249
+00:11:05,989 --> 00:11:08,039
+S A model E RJ 190 slash
+
+250
+00:11:08,150 --> 00:11:12,549
+dash 300 airplane, flight envelope protection, general limiting requirements.
+
+251
+00:11:12,559 --> 00:11:14,609
+I don't understand anything you just said,
+
+252
+00:11:14,799 --> 00:11:15,010
+ok,
+
+253
+00:11:15,219 --> 00:11:16,969
+so basically, um
+
+254
+00:11:17,419 --> 00:11:19,619
+when we started out with uh like planes,
+
+255
+00:11:19,630 --> 00:11:23,479
+we literally had wires connected to stuff that you would like when you pulled the,
+
+256
+00:11:23,489 --> 00:11:25,869
+the the stick, like say when you pulled it backwards,
+
+257
+00:11:26,090 --> 00:11:29,109
+it would actually like pull on a cable that would physically move
+
+258
+00:11:29,520 --> 00:11:30,140
+Arons and
+
+259
+00:11:30,700 --> 00:11:32,590
+like move stuff around, right?
+
+260
+00:11:32,599 --> 00:11:33,710
+And like, so, you know,
+
+261
+00:11:33,719 --> 00:11:36,960
+flying was a physically demanding and exhausting profession.
+
+262
+00:11:37,299 --> 00:11:37,960
+Um
+
+263
+00:11:38,289 --> 00:11:41,039
+And you know, then you got things like power assist like in your car and
+
+264
+00:11:41,320 --> 00:11:42,929
+eventually you got fly by wire where you
+
+265
+00:11:42,940 --> 00:11:44,859
+essentially have like a joystick telling a computer,
+
+266
+00:11:44,869 --> 00:11:45,030
+you know,
+
+267
+00:11:45,039 --> 00:11:48,989
+like turn the plane to the right and then the plane decides what to actually you know,
+
+268
+00:11:49,000 --> 00:11:49,979
+it turns the a
+
+269
+00:11:50,229 --> 00:11:51,130
+or, you know, moves
+
+270
+00:11:51,450 --> 00:11:51,969
+Arons or
+
+271
+00:11:52,229 --> 00:11:55,119
+the flaps or whatever needs to happen to turn the plane in that direction.
+
+272
+00:11:55,609 --> 00:11:58,729
+Even outside of computer, there's a certain
+
+273
+00:11:59,789 --> 00:12:04,049
+hesitation for a lot of people to think that like when you move the stick,
+
+274
+00:12:04,059 --> 00:12:08,049
+you're just flipping a switch that then goes through a wire as electricity and you
+
+275
+00:12:08,179 --> 00:12:08,210
+have
+
+276
+00:12:08,380 --> 00:12:08,929
+something to do.
+
+277
+00:12:09,989 --> 00:12:12,849
+What does, it doesn't even have to be a computer necessarily, right?
+
+278
+00:12:12,859 --> 00:12:15,250
+It can basically be a switch
+
+279
+00:12:15,650 --> 00:12:18,609
+that does something sort of stuff, regardless.
+
+280
+00:12:19,219 --> 00:12:20,369
+It's all computerized now.
+
+281
+00:12:21,590 --> 00:12:24,039
+So, and what's interesting is so, you know, as, as time goes on,
+
+282
+00:12:24,049 --> 00:12:27,280
+we've gotten a better understanding of aerodynamics and crashes of planes.
+
+283
+00:12:27,650 --> 00:12:29,960
+And so, for example, we have things like stall warnings, you know,
+
+284
+00:12:29,969 --> 00:12:30,869
+like you're going too slow,
+
+285
+00:12:30,880 --> 00:12:33,229
+so you get a stall warning or you're going too close to the ground.
+
+286
+00:12:33,239 --> 00:12:35,309
+So you get a proximity alert, you know, saying pull up.
+
+287
+00:12:36,669 --> 00:12:38,380
+Um, but as of yet,
+
+288
+00:12:38,760 --> 00:12:42,369
+there are very few, like there are some specific
+
+289
+00:12:42,700 --> 00:12:46,359
+things in flight systems for certain well understood corner cases where the,
+
+290
+00:12:46,369 --> 00:12:47,190
+like the plane,
+
+291
+00:12:47,479 --> 00:12:50,869
+some models can essentially take control and get you out of the problem before.
+
+292
+00:12:50,880 --> 00:12:52,750
+Like the humans realize it's a problem,
+
+293
+00:12:53,219 --> 00:12:55,820
+right? Because part of the problem too is with a lot of these aviation things.
+
+294
+00:12:55,830 --> 00:12:58,849
+Like if you have a problem and you don't react to it in five or 10 seconds, you're dead,
+
+295
+00:12:59,700 --> 00:13:02,320
+you know, you're literally you're gonna hit the ground.
+
+296
+00:13:02,880 --> 00:13:06,289
+So what it sounds like is uh blah, blah, blah,
+
+297
+00:13:07,179 --> 00:13:10,580
+this airplane will have a novel or unusual design feature when compared to
+
+298
+00:13:10,590 --> 00:13:12,080
+the state of technology envisioned in the
+
+299
+00:13:12,090 --> 00:13:14,940
+airworthiness standards for transport category airplanes.
+
+300
+00:13:14,950 --> 00:13:17,210
+Uh So basically what they're saying is this airplane has a
+
+301
+00:13:17,219 --> 00:13:19,840
+new thing compared to all the other transport planes and,
+
+302
+00:13:19,849 --> 00:13:20,950
+and when they say transport planes,
+
+303
+00:13:20,960 --> 00:13:23,799
+they don't mean just like transporting stuff but they mean people as well
+
+304
+00:13:24,080 --> 00:13:25,409
+to be clear these planes
+
+305
+00:13:25,679 --> 00:13:25,700
+for
+
+306
+00:13:25,859 --> 00:13:26,520
+people.
+
+307
+00:13:26,900 --> 00:13:27,919
+Yeah, exactly.
+
+308
+00:13:28,030 --> 00:13:29,780
+Just really bothersome cargo.
+
+309
+00:13:30,190 --> 00:13:32,609
+Uh This design feature is a new control
+
+310
+00:13:32,619 --> 00:13:34,820
+architecture and full digital flight control system,
+
+311
+00:13:34,830 --> 00:13:37,080
+both of which provide flight envelope protection.
+
+312
+00:13:37,090 --> 00:13:41,080
+So what is a flight envelope? Well, a flight envelope is a fancy way of saying
+
+313
+00:13:41,750 --> 00:13:44,530
+if you go outside the flight envelope, like you go outside these parameters,
+
+314
+00:13:44,539 --> 00:13:45,080
+you die.
+
+315
+00:13:45,940 --> 00:13:46,840
+That's it, right.
+
+316
+00:13:47,219 --> 00:13:47,900
+Um The,
+
+317
+00:13:48,219 --> 00:13:51,789
+the air France disaster uh over the
+
+318
+00:13:51,799 --> 00:13:54,760
+South Atlantic is a great example because essentially
+
+319
+00:13:55,950 --> 00:13:56,950
+to fly
+
+320
+00:13:57,169 --> 00:14:03,090
+in a very fuel efficient manner, you have to fly very close to what is safe
+
+321
+00:14:03,830 --> 00:14:07,539
+and if you go a little bit slower or a little bit faster or a little bit too,
+
+322
+00:14:07,799 --> 00:14:10,210
+you know, a slightly different angle of attack,
+
+323
+00:14:10,659 --> 00:14:12,599
+uh the plane will stall or,
+
+324
+00:14:12,869 --> 00:14:15,080
+you know, bad things will happen and you will die.
+
+325
+00:14:15,500 --> 00:14:16,130
+Um
+
+326
+00:14:16,520 --> 00:14:19,169
+So essentially these planes are, you know,
+
+327
+00:14:19,179 --> 00:14:24,450
+flying in a manner where even a slight change in circumstances mean you,
+
+328
+00:14:24,460 --> 00:14:26,359
+you're now up up the creek without a paddle.
+
+329
+00:14:27,799 --> 00:14:31,630
+But if you can fly that way, reliably, you can save a ton of fuel,
+
+330
+00:14:31,640 --> 00:14:33,549
+you can get there quicker, all these good things.
+
+331
+00:14:33,869 --> 00:14:37,590
+And so what it sounds like is that this flight software is now
+
+332
+00:14:37,909 --> 00:14:40,539
+sort of understanding the flight envelope of the plane
+
+333
+00:14:40,549 --> 00:14:43,119
+and ensuring that it stays within that flight envelope.
+
+334
+00:14:43,130 --> 00:14:43,489
+So
+
+335
+00:14:43,590 --> 00:14:44,549
+I think, um,
+
+336
+00:14:44,559 --> 00:14:47,630
+like there's been cases for example of where people had the autopilot going,
+
+337
+00:14:47,710 --> 00:14:49,349
+they were flying a certain speed,
+
+338
+00:14:49,719 --> 00:14:53,549
+uh, you know, and then they hit some weather or they hit like, um, you know,
+
+339
+00:14:53,559 --> 00:14:56,229
+hotter air or colder air which has a different density
+
+340
+00:14:56,969 --> 00:14:59,419
+and that changes the, the characteristics of the flight
+
+341
+00:14:59,659 --> 00:15:01,000
+and the flight envelope and
+
+342
+00:15:01,260 --> 00:15:02,520
+you can have a problem
+
+343
+00:15:03,010 --> 00:15:03,369
+and the auto
+
+344
+00:15:03,969 --> 00:15:04,919
+doesn't like that.
+
+345
+00:15:05,419 --> 00:15:07,650
+Well, what if they're like having a nap or eating their dinner? And
+
+346
+00:15:08,200 --> 00:15:08,409
+I don't
+
+347
+00:15:08,510 --> 00:15:08,659
+know, I
+
+348
+00:15:08,799 --> 00:15:09,140
+don't know how,
+
+349
+00:15:10,510 --> 00:15:11,820
+well again, autopilot.
+
+350
+00:15:11,830 --> 00:15:14,719
+So, I mean, depending on how sophisticated they are,
+
+351
+00:15:14,729 --> 00:15:17,169
+some autopilots literally are just like, keep you on a bearing
+
+352
+00:15:18,049 --> 00:15:18,200
+to
+
+353
+00:15:18,440 --> 00:15:19,150
+the wheel
+
+354
+00:15:19,340 --> 00:15:19,489
+pretty
+
+355
+00:15:19,679 --> 00:15:20,309
+much. Yeah.
+
+356
+00:15:20,320 --> 00:15:22,000
+And again, that's, that was a, there was a,
+
+357
+00:15:22,010 --> 00:15:25,869
+there was a flight that crashed up in northern Canada because
+
+358
+00:15:26,210 --> 00:15:28,479
+they engaged the autopilot to fly a certain course
+
+359
+00:15:28,489 --> 00:15:30,229
+and that course flew them into a hill.
+
+360
+00:15:30,799 --> 00:15:31,460
+Whoops.
+
+361
+00:15:31,780 --> 00:15:32,159
+Yeah.
+
+362
+00:15:32,210 --> 00:15:36,859
+Uh, the worst part is the second officer raised this concern and was overruled.
+
+363
+00:15:38,330 --> 00:15:39,119
+-- Yeah.
+-- Well,
+
+364
+00:15:40,419 --> 00:15:44,080
+what, like we're flying right at that hill.
+
+365
+00:15:44,210 --> 00:15:44,640
+What
+
+366
+00:15:44,770 --> 00:15:45,429
+basically
+
+367
+00:15:45,770 --> 00:15:46,469
+what happened
+
+368
+00:15:47,330 --> 00:15:47,450
+had
+
+369
+00:15:49,080 --> 00:15:50,979
+day we're flying right at that hill,
+
+370
+00:15:51,400 --> 00:15:51,659
+you know.
+
+371
+00:15:53,039 --> 00:15:56,260
+-- But anyway, sorry, autopilot. So, what does autopilot do
+-- today?
+
+372
+00:15:56,270 --> 00:16:00,309
+So, there's, there's a variety of sophistication but like a variety of autopilots.
+
+373
+00:16:00,320 --> 00:16:03,219
+Uh, well, obviously the more sophisticated ones now will do, you know, they,
+
+374
+00:16:03,229 --> 00:16:04,609
+they'll do things like, keep you,
+
+375
+00:16:05,059 --> 00:16:08,239
+um, at a stable altitude, you know, regardless of, you know,
+
+376
+00:16:08,250 --> 00:16:09,919
+kind of a little bit of variation,
+
+377
+00:16:10,530 --> 00:16:11,859
+you know, they'll keep you on the same heading.
+
+378
+00:16:11,869 --> 00:16:14,760
+Like, so even if you hit, like say a wind coming across,
+
+379
+00:16:15,010 --> 00:16:17,650
+you know, it'll turn you into the wind a little bit to keep you on course, you know,
+
+380
+00:16:17,659 --> 00:16:18,510
+-- things like that,
+-- right?
+
+381
+00:16:19,010 --> 00:16:19,609
+I got you
+
+382
+00:16:20,020 --> 00:16:20,250
+right.
+
+383
+00:16:20,260 --> 00:16:24,000
+Because what you could hit a jet stream hitting you sideways at 100 miles an hour,
+
+384
+00:16:25,179 --> 00:16:26,429
+right? If you're flying,
+
+385
+00:16:27,580 --> 00:16:31,510
+well, no, it's, it's people fly through the jet stream all the time, right? And
+
+386
+00:16:31,929 --> 00:16:35,380
+uh a lot of airline routes take this into account so that they can, you know,
+
+387
+00:16:35,390 --> 00:16:37,309
+use it as a tail wind to get there faster.
+
+388
+00:16:37,510 --> 00:16:39,869
+But anyway, so the thing is with these autopilots,
+
+389
+00:16:39,880 --> 00:16:42,820
+like the majority of them will essentially keep you on course.
+
+390
+00:16:43,479 --> 00:16:46,590
+Um But they won't necessarily like keep you
+
+391
+00:16:46,719 --> 00:16:49,609
+within a safe flight envelope, right? Like if,
+
+392
+00:16:50,090 --> 00:16:53,830
+and it sounds like this one is essentially, it's that next level of smart
+
+393
+00:16:55,239 --> 00:16:55,849
+uh
+
+394
+00:16:56,049 --> 00:16:57,770
+so that it will, you know, for example,
+
+395
+00:16:57,780 --> 00:17:00,010
+if you hit a thunderstorm or something like that,
+
+396
+00:17:00,020 --> 00:17:02,940
+it'll take appropriate action to maybe speed up or slow down or,
+
+397
+00:17:03,119 --> 00:17:05,848
+you know, just otherwise reconfigure the flaps of the plane.
+
+398
+00:17:06,160 --> 00:17:06,709
+Um,
+
+399
+00:17:06,959 --> 00:17:08,368
+because here's a dirty secret. Right.
+
+400
+00:17:08,380 --> 00:17:13,118
+You want the plane to have as little drag as possible so that it flies efficiently.
+
+401
+00:17:13,130 --> 00:17:17,949
+-- Dirty secret. I think that's like the fundamentals of avionics.
+-- Right. Right.
+
+402
+00:17:17,959 --> 00:17:20,479
+But the thing is they've pushed it very far
+
+403
+00:17:20,489 --> 00:17:22,329
+now to the point where it's almost dangerous.
+
+404
+00:17:22,339 --> 00:17:24,630
+But if you fly correctly it's, it's ok.
+
+405
+00:17:25,020 --> 00:17:25,829
+I got you.
+
+406
+00:17:26,479 --> 00:17:26,939
+You know,
+
+407
+00:17:28,010 --> 00:17:30,099
+so when it works, it's great when it doesn't work. You know,
+
+408
+00:17:30,890 --> 00:17:34,390
+because like, lift is one of the side effects of drag.
+
+409
+00:17:34,800 --> 00:17:35,109
+So
+
+410
+00:17:35,969 --> 00:17:39,569
+-- if you have no drag by definition, you have no lift.
+-- Exactly.
+
+411
+00:17:39,579 --> 00:17:42,349
+And that's what happened to air France over the South Atlantic. Apparently
+
+412
+00:17:42,510 --> 00:17:43,089
+I got you.
+
+413
+00:17:43,670 --> 00:17:43,839
+So
+
+414
+00:17:43,989 --> 00:17:44,329
+they
+
+415
+00:17:44,630 --> 00:17:44,739
+fell
+
+416
+00:17:44,869 --> 00:17:45,390
+out of the sky.
+
+417
+00:17:45,560 --> 00:17:49,349
+This sounds to me like self driving airplane.
+
+418
+00:17:50,040 --> 00:17:51,060
+Um, it's,
+
+419
+00:17:52,319 --> 00:17:53,560
+well, here's the reality, right?
+
+420
+00:17:53,569 --> 00:17:56,510
+You could have a self driving car and just give a GPS coordinates and like,
+
+421
+00:17:56,520 --> 00:17:59,010
+just hope to goodness that nothing gets in your way.
+
+422
+00:17:59,160 --> 00:17:59,430
+Right.
+
+423
+00:17:59,709 --> 00:18:03,260
+-- Sure.
+-- You know. But, but obviously that would be insane and not
+
+424
+00:18:03,280 --> 00:18:03,349
+very
+
+425
+00:18:03,760 --> 00:18:03,849
+smart
+
+426
+00:18:04,219 --> 00:18:05,859
+-- to not hit things though.
+-- Right.
+
+427
+00:18:05,949 --> 00:18:08,400
+Well, and so that's obviously we have to take that into account. Right.
+
+428
+00:18:08,410 --> 00:18:12,260
+Because the situations change, deer come out of the road, other cars, whatever.
+
+429
+00:18:12,270 --> 00:18:12,540
+Right.
+
+430
+00:18:12,949 --> 00:18:17,479
+Well, have you seen that video of the Teslas detecting crashes?
+
+431
+00:18:17,859 --> 00:18:19,209
+And it's like as a human,
+
+432
+00:18:19,390 --> 00:18:23,040
+I have no idea what's going on and the Tesla already knows what's coming.
+
+433
+00:18:23,069 --> 00:18:24,569
+And it's, it's amazing.
+
+434
+00:18:25,020 --> 00:18:25,400
+Yeah.
+
+435
+00:18:25,599 --> 00:18:28,229
+And so that's, that's a good example of this, you know, in theory,
+
+436
+00:18:28,239 --> 00:18:30,920
+this flight envelope thing, you know, can detect, oh, you know,
+
+437
+00:18:30,930 --> 00:18:35,150
+we're losing lift because we're approaching our, you know, the, the, the
+
+438
+00:18:35,520 --> 00:18:38,260
+arons are trimmed to, you know, make us very fuel efficient,
+
+439
+00:18:38,410 --> 00:18:40,209
+but we're losing lift for whatever reason.
+
+440
+00:18:40,439 --> 00:18:43,760
+Maybe I need to sacrifice a bit of fuel efficiency. So we don't all die.
+
+441
+00:18:44,550 --> 00:18:46,479
+I, I, I'm comfortable with that decision.
+
+442
+00:18:47,359 --> 00:18:52,709
+Um, you know, but to make that decision and say 1/10 of a second versus a human being,
+
+443
+00:18:52,719 --> 00:18:55,890
+which may take, you know, 1030 seconds or a minute or two.
+
+444
+00:18:55,939 --> 00:18:56,609
+Yes,
+
+445
+00:18:56,880 --> 00:18:57,489
+that's right.
+
+446
+00:18:57,790 --> 00:19:00,040
+-- Yeah. No, I
+-- get that and that's a big difference.
+
+447
+00:19:00,290 --> 00:19:04,170
+Well, and not only that, you know what the thing that's going to be really cool.
+
+448
+00:19:04,180 --> 00:19:06,900
+And I don't know if this system can do this and, and it may not,
+
+449
+00:19:06,910 --> 00:19:12,209
+but once these planes can start recording all of the data about all of their flights,
+
+450
+00:19:12,760 --> 00:19:13,199
+then they
+
+451
+00:19:13,319 --> 00:19:15,760
+start using things like machine learning and artificial
+
+452
+00:19:15,770 --> 00:19:20,060
+intelligence to basically make the autopilot significantly smarter.
+
+453
+00:19:20,069 --> 00:19:24,500
+-- Right?
+-- Oh, they already do that. Uh And for example, the engines, uh
+
+454
+00:19:24,680 --> 00:19:28,119
+see here's the thing, for example, like when you buy a plane engine,
+
+455
+00:19:28,130 --> 00:19:31,459
+you typically don't like a lot of times you don't buy them, you're just leasing them.
+
+456
+00:19:31,839 --> 00:19:35,420
+Um And I know the, the nicer, like the Rolls Royce engines, the higher end ones that,
+
+457
+00:19:35,430 --> 00:19:37,339
+you know, are like on 740 sevens and whatnot.
+
+458
+00:19:37,719 --> 00:19:38,920
+They essentially send back telemetry.
+
+459
+00:19:39,800 --> 00:19:41,430
+I, I remember that because the
+
+460
+00:19:41,599 --> 00:19:45,000
+plane that vanished with the Malaysian Airlines plane
+
+461
+00:19:45,790 --> 00:19:45,880
+and
+
+462
+00:19:46,760 --> 00:19:49,170
+the engine, people had
+
+463
+00:19:49,380 --> 00:19:52,550
+some, some information about where the plane was, which
+
+464
+00:19:52,650 --> 00:19:53,329
+basically
+
+465
+00:19:54,569 --> 00:19:57,719
+where it was based on like Doppler shift and what not going back to the Inmarsat,
+
+466
+00:19:58,290 --> 00:19:59,510
+-- which
+-- is wild.
+
+467
+00:19:59,959 --> 00:20:00,910
+Yeah. So, I mean,
+
+468
+00:20:01,079 --> 00:20:01,800
+the, the real,
+
+469
+00:20:01,939 --> 00:20:04,469
+the thing is like a plane isn't like a car,
+
+470
+00:20:04,479 --> 00:20:07,069
+these things are really expensive and so quite often,
+
+471
+00:20:07,640 --> 00:20:08,420
+um,
+
+472
+00:20:08,750 --> 00:20:11,900
+the plane you're on, you know, the company operating, it probably doesn't own it.
+
+473
+00:20:11,910 --> 00:20:14,160
+They may be leasing it dry leasing or wet leasing.
+
+474
+00:20:14,170 --> 00:20:15,829
+So a dry lease is where you just lease the plane,
+
+475
+00:20:15,839 --> 00:20:17,780
+a wet lease is where you lease the plane and a crew.
+
+476
+00:20:18,569 --> 00:20:20,390
+Um, and you know, for all, you know,
+
+477
+00:20:21,040 --> 00:20:21,479
+that
+
+478
+00:20:21,709 --> 00:20:26,479
+that plane may not own those engines, they, those engines may be leased.
+
+479
+00:20:26,849 --> 00:20:29,750
+Uh, because the thing is like, there's a lot of aviation companies that, you know,
+
+480
+00:20:29,760 --> 00:20:32,000
+they don't have the expertise to fix one of these engines.
+
+481
+00:20:32,130 --> 00:20:33,959
+I doubt any of them do.
+
+482
+00:20:33,969 --> 00:20:36,050
+I mean, if you didn't build it,
+
+483
+00:20:36,060 --> 00:20:39,150
+I'm skeptical you can touch it because have you ever seen what
+
+484
+00:20:40,300 --> 00:20:41,000
+looks like?
+
+485
+00:20:41,500 --> 00:20:43,319
+Do you think a big airline can though?
+
+486
+00:20:43,699 --> 00:20:43,849
+Oh, they
+
+487
+00:20:43,979 --> 00:20:45,689
+do? Yeah, like Air Canada, for example.
+
+488
+00:20:45,699 --> 00:20:45,880
+Um,
+
+489
+00:20:45,890 --> 00:20:48,300
+actually the Air Canada and several North
+
+490
+00:20:48,310 --> 00:20:50,209
+American Airlines have now moved all their,
+
+491
+00:20:50,229 --> 00:20:50,349
+um,
+
+492
+00:20:50,859 --> 00:20:54,119
+major sort of repairs and refit down to South America
+
+493
+00:20:54,280 --> 00:20:56,770
+because it's actually cheaper to fly the plane down there and take
+
+494
+00:20:56,780 --> 00:20:58,729
+it out of service for an extra 12 or 20 hours.
+
+495
+00:20:58,739 --> 00:21:01,719
+But fly it down to a country where the wages are so much cheaper
+
+496
+00:21:02,530 --> 00:21:04,199
+to do all the maintenance refit,
+
+497
+00:21:04,449 --> 00:21:06,699
+you know, and, like, take the plane out of service for three days and, like,
+
+498
+00:21:06,709 --> 00:21:08,599
+tear it apart and put it back together, basically.
+
+499
+00:21:09,150 --> 00:21:12,229
+Right. I've, I've read about such things actually and it's a,
+
+500
+00:21:12,630 --> 00:21:13,050
+because I,
+
+501
+00:21:13,060 --> 00:21:17,300
+I didn't realize this but most airplanes are in service for 20 or more years.
+
+502
+00:21:17,489 --> 00:21:19,410
+Which is just crazy to me.
+
+503
+00:21:20,079 --> 00:21:20,829
+What is the, hang
+
+504
+00:21:20,930 --> 00:21:20,949
+on
+
+505
+00:21:21,079 --> 00:21:21,329
+a second
+
+506
+00:21:21,910 --> 00:21:25,150
+-- and
+-- they, like, just keep taking them apart and fixing them and then, like,
+
+507
+00:21:25,160 --> 00:21:26,930
+they'll put in new seats or they'll put,
+
+508
+00:21:28,689 --> 00:21:30,300
+-- starts to crack.
+-- Right.
+
+509
+00:21:30,479 --> 00:21:30,560
+Right.
+
+510
+00:21:30,839 --> 00:21:33,739
+Or, you know, the wings, you can essentially,
+
+511
+00:21:34,319 --> 00:21:37,900
+yeah, you can just keep, like replacing the engines and all the other bits.
+
+512
+00:21:38,569 --> 00:21:39,469
+Um,
+
+513
+00:21:40,310 --> 00:21:44,540
+what is the B 52 service lifetime at this point? I think it's going to be 75 years.
+
+514
+00:21:44,859 --> 00:21:45,339
+Uh,
+
+515
+00:21:45,449 --> 00:21:45,839
+do, do, do,
+
+516
+00:21:46,040 --> 00:21:46,140
+do
+
+517
+00:21:46,800 --> 00:21:46,819
+it.
+
+518
+00:21:47,349 --> 00:21:49,140
+They're planning until 2040.
+
+519
+00:21:49,890 --> 00:21:53,189
+So that's another 20 some years. And it's been around for about 50 years so far.
+
+520
+00:21:53,500 --> 00:21:54,300
+It's a good plan,
+
+521
+00:21:54,849 --> 00:21:55,989
+I guess so.
+
+522
+00:21:56,079 --> 00:21:58,900
+And here's the reality after what the F-35 and
+
+523
+00:21:58,910 --> 00:22:02,780
+F-22 cost to design and build and produce,
+
+524
+00:22:03,250 --> 00:22:04,150
+I don't know.
+
+525
+00:22:04,160 --> 00:22:08,560
+That we can actually have a large bomber program that wouldn't turn into a,
+
+526
+00:22:08,569 --> 00:22:09,910
+like trillion dollar
+
+527
+00:22:10,099 --> 00:22:11,030
+train wreck.
+
+528
+00:22:11,239 --> 00:22:11,660
+Well,
+
+529
+00:22:11,849 --> 00:22:15,089
+you don't even need bombers anyway. Just drones, man, everything,
+
+530
+00:22:15,300 --> 00:22:15,750
+drones. And
+
+531
+00:22:16,280 --> 00:22:16,449
+that's
+
+532
+00:22:16,619 --> 00:22:17,310
+the other problem.
+
+533
+00:22:17,719 --> 00:22:18,719
+Well, the other problem too is I,
+
+534
+00:22:18,729 --> 00:22:22,119
+I don't think the US has ever sold the B 52 to another nation.
+
+535
+00:22:22,130 --> 00:22:22,540
+Right.
+
+536
+00:22:23,630 --> 00:22:26,449
+So they can't, you know, kind of defray the cost, like, you know,
+
+537
+00:22:26,459 --> 00:22:30,579
+with Canada and Australia and variety of other nations buying F-35s for example.
+
+538
+00:22:30,939 --> 00:22:31,410
+So,
+
+539
+00:22:31,660 --> 00:22:35,099
+but no, this is interesting because, um, like on the one hand, see,
+
+540
+00:22:35,109 --> 00:22:39,209
+here's the other thing, right is if the plain avionic system doesn't have like
+
+541
+00:22:39,449 --> 00:22:39,459
+a,
+
+542
+00:22:39,689 --> 00:22:43,829
+an interface you can talk to, like, it doesn't have a Wi Fi or a network port, you know,
+
+543
+00:22:43,839 --> 00:22:45,380
+it's not on the internet, I hope.
+
+544
+00:22:45,390 --> 00:22:46,280
+Oh, boy, I hope,
+
+545
+00:22:46,630 --> 00:22:47,329
+um,
+
+546
+00:22:47,750 --> 00:22:49,530
+you know, it's really hard to attack this thing.
+
+547
+00:22:49,540 --> 00:22:53,410
+You know, you have to go like the Stuxnet route of like a USB stick or something.
+
+548
+00:22:54,040 --> 00:22:56,880
+Yes. And that's, that's fair.
+
+549
+00:22:56,890 --> 00:22:59,160
+This is a good reason to not tie the
+
+550
+00:22:59,170 --> 00:23:02,920
+entertainment center in with the now self-driving airplane.
+
+551
+00:23:03,369 --> 00:23:04,640
+But you, you're probably the
+
+552
+00:23:05,180 --> 00:23:05,250
+self
+
+553
+00:23:05,439 --> 00:23:05,949
+driving.
+
+554
+00:23:06,819 --> 00:23:09,390
+Let's be clear on this. They, they autopilot.
+
+555
+00:23:09,400 --> 00:23:13,339
+-- Most airplanes spend something like 98% of their flying time on autopilot.
+-- Right.
+
+556
+00:23:13,349 --> 00:23:13,910
+Right.
+
+557
+00:23:14,770 --> 00:23:16,339
+Well, you know, it's going to be really wild.
+
+558
+00:23:16,349 --> 00:23:19,349
+I wonder how long until we see the first flight
+
+559
+00:23:19,359 --> 00:23:23,829
+that basically takes off and lands completely under computer control.
+
+560
+00:23:24,349 --> 00:23:24,359
+Uh,
+
+561
+00:23:24,520 --> 00:23:26,030
+so that's already happened.
+
+562
+00:23:26,219 --> 00:23:26,250
+Has
+
+563
+00:23:26,510 --> 00:23:26,560
+really
+
+564
+00:23:27,069 --> 00:23:27,119
+ok
+
+565
+00:23:27,489 --> 00:23:28,900
+with people on it.
+
+566
+00:23:29,239 --> 00:23:31,699
+I'm not 100% certain. I know the, I think it was DARPA
+
+567
+00:23:32,719 --> 00:23:33,069
+with,
+
+568
+00:23:33,199 --> 00:23:36,510
+no, no, I'm saying like a passenger jet, not like some DARPA
+
+569
+00:23:36,699 --> 00:23:40,500
+crazy airplane that's fueled by like, you know, rodents or something. I mean,
+
+570
+00:23:40,890 --> 00:23:42,670
+like an actual airplane
+
+571
+00:23:42,839 --> 00:23:45,550
+with, with not me sitting in the city,
+
+572
+00:23:46,359 --> 00:23:49,599
+it's a tough sell. I mean, I, I suspect it will happen
+
+573
+00:23:49,770 --> 00:23:52,609
+after self driving cars because we'll get used
+
+574
+00:23:52,619 --> 00:23:54,829
+to self driving cars and giving up that control
+
+575
+00:23:55,270 --> 00:23:56,969
+and that perception of control.
+
+576
+00:23:56,979 --> 00:24:00,130
+I don't know if it, it's gonna be that hard to sell though, man. I mean,
+
+577
+00:24:00,459 --> 00:24:06,050
+I feel like self driving cars are being nearly everybody accepts them and,
+
+578
+00:24:06,060 --> 00:24:10,489
+and basically anyone I run into that says I don't trust a computer to drive a car.
+
+579
+00:24:10,550 --> 00:24:11,250
+And I say
+
+580
+00:24:11,380 --> 00:24:14,569
+you honestly think anything can be worse than a person. They go.
+
+581
+00:24:14,579 --> 00:24:17,089
+Yeah, you're, you're probably right, like, literally,
+
+582
+00:24:17,099 --> 00:24:20,869
+I have yet to find anyone that you have to stand their ground on this one.
+
+583
+00:24:20,880 --> 00:24:24,250
+And I suspect airplane now, granted pilots are highly trained
+
+584
+00:24:24,660 --> 00:24:28,369
+and so it's slightly different there because it's not just like any Yahoo who,
+
+585
+00:24:28,380 --> 00:24:28,739
+you know,
+
+586
+00:24:29,050 --> 00:24:32,479
+paid 20 bucks to the DMV and passed their crappy test
+
+587
+00:24:33,359 --> 00:24:35,839
+pilots are, are a different breed. However,
+
+588
+00:24:36,310 --> 00:24:39,810
+I would still trust a computer over a person
+
+589
+00:24:39,939 --> 00:24:42,109
+any day because a computer doesn't show up drunk.
+
+590
+00:24:42,119 --> 00:24:44,989
+The computer doesn't fall asleep and I know the computer is going to do it
+
+591
+00:24:45,329 --> 00:24:46,890
+is you can literally hit
+
+592
+00:24:47,180 --> 00:24:49,500
+realistic scenarios in flight that like nobody's
+
+593
+00:24:49,510 --> 00:24:51,199
+ever accounted for like um captain.
+
+594
+00:24:51,209 --> 00:24:53,290
+So with the, I've lost both engines
+
+595
+00:24:54,020 --> 00:24:54,280
+-- on
+-- take
+
+596
+00:24:54,390 --> 00:24:56,489
+off, there are always going to be
+
+597
+00:24:57,290 --> 00:25:02,949
+those kind of extra strenuous circumstances and, and I expect that to be the case
+
+598
+00:25:03,520 --> 00:25:03,989
+and
+
+599
+00:25:04,680 --> 00:25:09,339
+I this is where it gets tricky is, I can envision two scenarios.
+
+600
+00:25:09,349 --> 00:25:11,469
+Number one is where you have
+
+601
+00:25:11,640 --> 00:25:14,339
+kind of some sort of remote command and control room
+
+602
+00:25:14,349 --> 00:25:16,829
+with qualified personnel in it that are able to,
+
+603
+00:25:16,839 --> 00:25:17,739
+you know, kind of take over.
+
+604
+00:25:17,819 --> 00:25:17,839
+You
+
+605
+00:25:17,949 --> 00:25:18,020
+have
+
+606
+00:25:18,180 --> 00:25:20,180
+to be able to redirect the flights because of weather
+
+607
+00:25:20,310 --> 00:25:20,719
+and,
+
+608
+00:25:20,910 --> 00:25:22,900
+well, the computer can redirect flights.
+
+609
+00:25:23,250 --> 00:25:23,560
+Well,
+
+610
+00:25:23,569 --> 00:25:25,099
+but at some point you have to be able to tell
+
+611
+00:25:25,109 --> 00:25:28,069
+the airplane like you cannot land here because for example,
+
+612
+00:25:28,079 --> 00:25:29,500
+there's a national ground stop.
+
+613
+00:25:29,670 --> 00:25:31,819
+Well, yeah, but why couldn't you? I mean,
+
+614
+00:25:32,880 --> 00:25:33,979
+well, I'm saying you can
+
+615
+00:25:34,114 --> 00:25:37,625
+just ask the plane nicely. You want to be able to, like you said, control it.
+
+616
+00:25:37,635 --> 00:25:40,484
+I would assume there'd be some sort of centralized
+
+617
+00:25:40,494 --> 00:25:44,574
+air traffic control system that's fundamentally making sure these planes
+
+618
+00:25:44,755 --> 00:25:46,045
+and part of it too is
+
+619
+00:25:46,265 --> 00:25:48,805
+you're going to have to make sure the planes aren't too near each other.
+
+620
+00:25:48,814 --> 00:25:51,084
+I would imagine when it's computer controlled you'd
+
+621
+00:25:51,094 --> 00:25:52,854
+want to keep them even farther apart,
+
+622
+00:25:52,925 --> 00:25:53,564
+maybe
+
+623
+00:25:54,025 --> 00:25:54,074
+closer,
+
+624
+00:25:54,625 --> 00:25:56,045
+-- safer.
+-- You think? So, I don't know.
+
+625
+00:25:56,214 --> 00:25:56,864
+Anyway,
+
+626
+00:25:57,055 --> 00:25:57,214
+you can
+
+627
+00:25:57,724 --> 00:25:57,734
+a
+
+628
+00:25:57,944 --> 00:26:00,625
+-- heck of a lot faster than people.
+-- Here's the second part though.
+
+629
+00:26:00,635 --> 00:26:03,285
+The alternative is you just say
+
+630
+00:26:03,670 --> 00:26:05,329
+there are going to be rare events
+
+631
+00:26:05,760 --> 00:26:07,569
+and the computer is going to do its best,
+
+632
+00:26:07,829 --> 00:26:08,329
+but
+
+633
+00:26:08,540 --> 00:26:10,209
+sometimes it's gonna crash
+
+634
+00:26:10,319 --> 00:26:13,510
+and that's even true of people, honestly. Right. I mean,
+
+635
+00:26:14,189 --> 00:26:19,130
+Sully was an anomaly because you had a very experienced seasoned pilot
+
+636
+00:26:19,380 --> 00:26:20,930
+that, that knew what to do,
+
+637
+00:26:21,439 --> 00:26:25,520
+you know. II I, if it was anyone else, that plane might have crashed,
+
+638
+00:26:26,420 --> 00:26:28,719
+the problem is the perception of control. Right.
+
+639
+00:26:28,729 --> 00:26:30,790
+Like my understanding is a lot of people,
+
+640
+00:26:30,800 --> 00:26:33,599
+their fear of flying is not a fear of flying per se.
+
+641
+00:26:33,609 --> 00:26:36,829
+It's a fear of not being in control while they are flying.
+
+642
+00:26:36,839 --> 00:26:39,760
+The problem isn't flying, the problem is crashing. Right.
+
+643
+00:26:40,119 --> 00:26:42,680
+Well, yeah. And, but the problem is they, they're not the one driving.
+
+644
+00:26:42,689 --> 00:26:44,739
+Like they have to trust somebody else to, you know,
+
+645
+00:26:44,750 --> 00:26:47,430
+not crash the plane and some people just can't handle that.
+
+646
+00:26:48,040 --> 00:26:48,790
+You know,
+
+647
+00:26:49,069 --> 00:26:52,349
+I, I, and I see the same argument with self driving cars. Right.
+
+648
+00:26:52,359 --> 00:26:56,150
+-- I want to be in control of it. I don't trust a computer. I don't
+-- trust me.
+
+649
+00:26:56,890 --> 00:26:57,030
+I
+
+650
+00:26:57,140 --> 00:26:57,540
+trust, I
+
+651
+00:26:57,780 --> 00:26:58,699
+trust taxi drivers.
+
+652
+00:26:59,920 --> 00:27:02,430
+Yeah. Right. No, I, I agree. I agree completely.
+
+653
+00:27:02,689 --> 00:27:06,709
+Uh, so anyway, I used to be afraid to fly and I, I didn't fly very much.
+
+654
+00:27:06,719 --> 00:27:09,630
+I, I was, um, I, I did not like it and I don't know
+
+655
+00:27:10,000 --> 00:27:13,459
+it, I don't feel like it was a control thing. I just didn't,
+
+656
+00:27:14,520 --> 00:27:16,459
+airplanes are very bumpy things
+
+657
+00:27:16,729 --> 00:27:20,540
+and, and like I took my first airplane flight, I'll be honest with you.
+
+658
+00:27:20,550 --> 00:27:25,239
+I was 22 years old when I got in an airplane for the first time. I was very old. Right.
+
+659
+00:27:25,250 --> 00:27:26,290
+Right. I never flew.
+
+660
+00:27:26,739 --> 00:27:28,910
+And so I remember just like all the bumps and the
+
+661
+00:27:28,920 --> 00:27:31,540
+weird noises and things happening and I was always like,
+
+662
+00:27:31,900 --> 00:27:31,979
+the
+
+663
+00:27:32,119 --> 00:27:32,390
+plane is
+
+664
+00:27:32,719 --> 00:27:32,760
+what's
+
+665
+00:27:32,949 --> 00:27:33,000
+going
+
+666
+00:27:33,119 --> 00:27:33,150
+on,
+
+667
+00:27:33,449 --> 00:27:34,020
+lack of control
+
+668
+00:27:34,670 --> 00:27:34,790
+it,
+
+669
+00:27:35,609 --> 00:27:38,170
+you know, it might have been because now that I understand what's going on.
+
+670
+00:27:38,180 --> 00:27:39,650
+II I don't get bothered at all.
+
+671
+00:27:39,660 --> 00:27:40,170
+And in fact,
+
+672
+00:27:40,180 --> 00:27:43,209
+I've been on flights where people were like screaming because we were
+
+673
+00:27:43,219 --> 00:27:46,619
+like crazy things were happening and I was just sitting there like,
+
+674
+00:27:46,630 --> 00:27:48,890
+man, it's fine and I remember turning to the person next to me, I'm like
+
+675
+00:27:49,229 --> 00:27:50,650
+this happens, it's gonna be ok.
+
+676
+00:27:50,829 --> 00:27:51,369
+You know.
+
+677
+00:27:51,979 --> 00:27:55,250
+No, I think I've been flying since I was like four, maybe three.
+
+678
+00:27:55,420 --> 00:27:55,930
+Nice.
+
+679
+00:27:55,939 --> 00:27:58,609
+Well, one of my kids are the same way they've been, I mean, they,
+
+680
+00:27:58,619 --> 00:28:02,329
+they won't remember not flying because I've been an airplane so much.
+
+681
+00:28:03,500 --> 00:28:04,609
+And yeah, I mean, it's just,
+
+682
+00:28:04,619 --> 00:28:07,770
+it's a non event because I trust in the system because by and large, yeah,
+
+683
+00:28:07,780 --> 00:28:10,010
+these are professionals with well maintained machines.
+
+684
+00:28:10,020 --> 00:28:11,839
+Much more so than say a taxi.
+
+685
+00:28:12,439 --> 00:28:17,050
+Oh man, I know, I know. Actually the most terrifying taxi I ever had was in Canada.
+
+686
+00:28:17,060 --> 00:28:17,869
+Did you know that
+
+687
+00:28:19,449 --> 00:28:21,709
+it was in, it was in Ottawa. In fact,
+
+688
+00:28:22,959 --> 00:28:23,900
+I was, uh,
+
+689
+00:28:24,290 --> 00:28:25,949
+it was technically an Uber ride
+
+690
+00:28:26,050 --> 00:28:27,010
+but I was, uh,
+
+691
+00:28:27,119 --> 00:28:31,060
+I was watching the map and I was worried I was being driven somewhere to be murdered.
+
+692
+00:28:31,640 --> 00:28:33,810
+Luckily I was not.
+
+693
+00:28:34,640 --> 00:28:38,000
+-- Yeah. Anyway, anyway, all right,
+-- back to the flight control software.
+
+694
+00:28:38,010 --> 00:28:39,609
+So, I mean, the thing is
+
+695
+00:28:39,930 --> 00:28:42,420
+the biggest, I think, honestly, one of the biggest things nowadays is,
+
+696
+00:28:42,430 --> 00:28:46,650
+is it attached to a network and, or the network being the internet, of course,
+
+697
+00:28:46,660 --> 00:28:48,839
+and if it's not attached to the, the internet,
+
+698
+00:28:49,319 --> 00:28:51,369
+bam, it's a lot harder to attack because, you know,
+
+699
+00:28:51,380 --> 00:28:53,170
+some schmuck from Russia can't just like,
+
+700
+00:28:53,859 --> 00:28:54,430
+connect to it.
+
+701
+00:28:54,609 --> 00:28:56,130
+Well, so here's the thing, I,
+
+702
+00:28:56,140 --> 00:29:00,869
+I think of the immediately is if you have the equivalent of a self driving airplane,
+
+703
+00:29:00,880 --> 00:29:03,750
+you're going to have quite a lot of
+
+704
+00:29:03,760 --> 00:29:06,880
+communication happening between the airplane and the ground
+
+705
+00:29:07,280 --> 00:29:07,910
+and
+
+706
+00:29:08,189 --> 00:29:11,790
+you're going to have some sort of routed protocol.
+
+707
+00:29:11,800 --> 00:29:16,349
+I suspect even though it's going to be happening obviously over satellite or, or,
+
+708
+00:29:16,359 --> 00:29:17,989
+you know, ground to air or whatever.
+
+709
+00:29:18,650 --> 00:29:19,229
+And
+
+710
+00:29:20,010 --> 00:29:24,310
+the issue I could see being that if they have, say a central
+
+711
+00:29:24,640 --> 00:29:29,469
+kind of control, uh uh flight tower or whatever you wanna call it, right.
+
+712
+00:29:29,479 --> 00:29:32,630
+Keeping track of all the airplanes and, and telling them all what to do,
+
+713
+00:29:32,640 --> 00:29:33,619
+kind of like autos,
+
+714
+00:29:34,170 --> 00:29:36,060
+air traffic control. I don't know what you even call it.
+
+715
+00:29:36,290 --> 00:29:36,910
+But anyway,
+
+716
+00:29:37,390 --> 00:29:40,160
+that is probably going to be connected to the internet because
+
+717
+00:29:40,170 --> 00:29:43,189
+you're gonna have many of them scattered around the country and
+
+718
+00:29:43,680 --> 00:29:47,339
+even if it's a VPN, like they're on the internet,
+
+719
+00:29:47,349 --> 00:29:49,459
+which means people can get to the airplanes.
+
+720
+00:29:49,469 --> 00:29:52,540
+So here's the good news, there's already an industry that has,
+
+721
+00:29:53,380 --> 00:29:56,939
+uh, encountered and addressed and solved that problem largely.
+
+722
+00:29:56,969 --> 00:30:01,119
+-- Which,
+-- which problem I mentioned 10 things. What about satellites?
+
+723
+00:30:01,300 --> 00:30:02,359
+Satellite control?
+
+724
+00:30:03,890 --> 00:30:04,290
+Right.
+
+725
+00:30:04,300 --> 00:30:08,540
+There's ground stations that control the satellites, military, civilian,
+
+726
+00:30:08,550 --> 00:30:09,140
+whatever.
+
+727
+00:30:09,270 --> 00:30:11,250
+And, you know, and let's face it, satellites,
+
+728
+00:30:11,260 --> 00:30:13,150
+they're even more expensive and container
+
+729
+00:30:13,479 --> 00:30:14,329
+than airplanes.
+
+730
+00:30:14,619 --> 00:30:15,140
+Right. How
+
+731
+00:30:15,310 --> 00:30:18,540
+-- many breaks? You can't go fix
+-- it. How many of these ground stations are there?
+
+732
+00:30:19,305 --> 00:30:19,604
+Uh, I
+
+733
+00:30:19,785 --> 00:30:19,915
+don't know.
+
+734
+00:30:20,704 --> 00:30:23,324
+Uh, the US government military operates a bunch. Right.
+
+735
+00:30:23,334 --> 00:30:23,484
+I mean,
+
+736
+00:30:23,494 --> 00:30:27,744
+-- the GPS thing alone is like quite
+-- the military is different because they have,
+
+737
+00:30:27,755 --> 00:30:29,084
+they have their, it's called super
+
+738
+00:30:29,305 --> 00:30:30,925
+net and it, they're kind of, you know,
+
+739
+00:30:31,104 --> 00:30:35,084
+classified network that, that's very well controlled. Right.
+
+740
+00:30:35,564 --> 00:30:37,324
+I could and granted, don't get me wrong.
+
+741
+00:30:37,334 --> 00:30:41,244
+I don't think this is going to be a problem because for two reasons, first of all,
+
+742
+00:30:41,255 --> 00:30:43,364
+I don't know if anyone's a big enough dirt bag
+
+743
+00:30:43,375 --> 00:30:45,694
+to actually crash an airplane on purpose like this.
+
+744
+00:30:45,704 --> 00:30:46,114
+I mean,
+
+745
+00:30:47,160 --> 00:30:49,459
+uh it's already been hypothesized. Remember what was it?
+
+746
+00:30:49,469 --> 00:30:52,810
+I want to say the Polish Defense Minister or Prime Minister or
+
+747
+00:30:52,819 --> 00:30:55,739
+something like that and his entire cabinet or something was aboard.
+
+748
+00:30:56,449 --> 00:30:59,880
+Oh, here we go. Yeah, Poland claims proof Russia caused presidential
+
+749
+00:31:00,079 --> 00:31:00,880
+plane crash.
+
+750
+00:31:01,229 --> 00:31:02,660
+So, yeah, it was the Polish
+
+751
+00:31:03,770 --> 00:31:05,099
+President and his cabinet.
+
+752
+00:31:05,319 --> 00:31:08,859
+I, I don't think that's comparable to an airplane I'm going to be on.
+
+753
+00:31:09,339 --> 00:31:09,780
+Ok.
+
+754
+00:31:10,439 --> 00:31:13,180
+No, but, you know, maybe somebody else important is on that airplane.
+
+755
+00:31:13,189 --> 00:31:14,119
+-- Let's
+-- hope not.
+
+756
+00:31:14,329 --> 00:31:18,060
+I, I'll make a point of avoiding planes with important people.
+
+757
+00:31:20,709 --> 00:31:21,359
+But anyway,
+
+758
+00:31:21,689 --> 00:31:23,189
+let's face it too.
+
+759
+00:31:23,199 --> 00:31:23,339
+Uh,
+
+760
+00:31:23,349 --> 00:31:25,920
+even if they connect these things to the internet
+
+761
+00:31:25,930 --> 00:31:27,739
+and they're using VPN S or whatever to,
+
+762
+00:31:27,750 --> 00:31:29,760
+to communicate between them and whatnot.
+
+763
+00:31:29,780 --> 00:31:29,790
+Uh,
+
+764
+00:31:30,439 --> 00:31:33,540
+for the most part, this stuff works pretty well and,
+
+765
+00:31:33,550 --> 00:31:37,660
+and even if they get broken into which, which will inevitably happen,
+
+766
+00:31:38,109 --> 00:31:42,290
+if, if they've done it right, they're gonna figure it out and deal with it quickly.
+
+767
+00:31:42,670 --> 00:31:42,969
+I mean,
+
+768
+00:31:42,979 --> 00:31:45,760
+that's just kind of becoming the reality of the world now is
+
+769
+00:31:45,859 --> 00:31:48,380
+people are getting hacked a lot and if you have a very,
+
+770
+00:31:48,430 --> 00:31:50,489
+very high profile resource,
+
+771
+00:31:50,790 --> 00:31:52,290
+you have to be extra vigilant.
+
+772
+00:31:53,020 --> 00:31:53,359
+Yeah.
+
+773
+00:31:53,489 --> 00:31:53,660
+Well,
+
+774
+00:31:53,670 --> 00:31:58,390
+I think that in this case we actually have economics working for us in the sense of
+
+775
+00:31:58,569 --> 00:32:01,819
+you have airplanes, especially the commercial,
+
+776
+00:32:01,979 --> 00:32:04,390
+you know, wide body, uh, carriers
+
+777
+00:32:04,660 --> 00:32:07,040
+are a massive capital cost.
+
+778
+00:32:07,400 --> 00:32:07,790
+Yes,
+
+779
+00:32:07,800 --> 00:32:10,750
+there's that not only that the FAA has a ton
+
+780
+00:32:10,760 --> 00:32:13,069
+of power here and if they tell you to do something
+
+781
+00:32:13,199 --> 00:32:16,109
+you're gonna do it because you don't have a choice. Right.
+
+782
+00:32:16,119 --> 00:32:19,339
+It's not like an IOT light bulb where nobody cares.
+
+783
+00:32:20,290 --> 00:32:22,540
+So, I think that's, and, and to be honest, that's, you know,
+
+784
+00:32:22,550 --> 00:32:24,650
+one of the reasons I would generally trust the system.
+
+785
+00:32:24,660 --> 00:32:26,430
+Will there be problems? Yeah. Will people die?
+
+786
+00:32:26,569 --> 00:32:30,189
+Um, yeah, I mean, that's the nature of almost any technological, you know,
+
+787
+00:32:30,400 --> 00:32:34,030
+system, especially when you're moving people around at hundreds of miles an hour.
+
+788
+00:32:35,010 --> 00:32:38,119
+Um, but is it going to be safer than driving a car from point A to point B
+
+789
+00:32:38,239 --> 00:32:41,329
+-- almost certainly
+-- until self driving cars are here.
+
+790
+00:32:41,359 --> 00:32:43,829
+And then actually, you know, that's one of the things I think about is,
+
+791
+00:32:43,839 --> 00:32:44,849
+is self driving,
+
+792
+00:32:44,859 --> 00:32:49,239
+cars are going to change the travel industry in ways we can't even imagine because,
+
+793
+00:32:49,250 --> 00:32:51,140
+like, here's a great example is
+
+794
+00:32:51,250 --> 00:32:55,199
+if I need to go to the east coast, the east coast is like a 13 hour drive for me. Right.
+
+795
+00:32:55,560 --> 00:32:56,430
+I'm not driving that
+
+796
+00:32:56,689 --> 00:32:59,229
+I get on an airplane. I fly there. Right. However,
+
+797
+00:32:59,410 --> 00:33:02,709
+if I could get in a car, like at six in the afternoon
+
+798
+00:33:03,270 --> 00:33:06,050
+and fall asleep and wake up, you know, in Boston.
+
+799
+00:33:06,699 --> 00:33:09,989
+That's sweet. You know, I would seriously consider doing that.
+
+800
+00:33:10,579 --> 00:33:14,000
+There's, I mean, I was reading an article talking about this that it really,
+
+801
+00:33:14,010 --> 00:33:16,880
+in theory, yeah, self driving cars, especially if you go overnight
+
+802
+00:33:17,140 --> 00:33:22,160
+would just decimate the airline industry for anything less than 500 mile flights.
+
+803
+00:33:22,189 --> 00:33:22,780
+Yeah. Right.
+
+804
+00:33:22,790 --> 00:33:27,150
+And, and it would be way more convenient to do that in, in, in all seriousness.
+
+805
+00:33:27,310 --> 00:33:29,280
+The vast majority of my flights
+
+806
+00:33:29,689 --> 00:33:33,050
+I go there a day before because I can't, you know,
+
+807
+00:33:33,060 --> 00:33:36,510
+I have got a morning meeting so I cannot show up the day of,
+
+808
+00:33:36,790 --> 00:33:37,959
+and then I end up leaving at, like,
+
+809
+00:33:37,969 --> 00:33:40,390
+noon because it's the only time the stupid airplane leaves.
+
+810
+00:33:40,400 --> 00:33:41,079
+You know what I mean?
+
+811
+00:33:41,239 --> 00:33:43,550
+Unless I want to get in at 2 a.m. which I don't.
+
+812
+00:33:43,829 --> 00:33:44,219
+So,
+
+813
+00:33:44,739 --> 00:33:44,979
+yeah.
+
+814
+00:33:44,989 --> 00:33:49,050
+No, this would be ii, I actually hope that this, you know,
+
+815
+00:33:49,060 --> 00:33:50,339
+in theory this could result in like,
+
+816
+00:33:50,349 --> 00:33:53,869
+essentially all the regional air traffic being pretty much gutted.
+
+817
+00:33:54,520 --> 00:33:55,479
+I'm ok with that.
+
+818
+00:33:55,489 --> 00:33:56,459
+And, um, you know,
+
+819
+00:33:56,469 --> 00:33:59,180
+just essentially maintaining the big hubs to fly
+
+820
+00:33:59,189 --> 00:34:01,099
+people to Europe or Canada or whatever.
+
+821
+00:34:01,160 --> 00:34:02,260
+-- Yeah,
+-- I could see it, man.
+
+822
+00:34:02,430 --> 00:34:05,810
+It's, it's certainly possible. Not only that, the other thing I think of a lot is
+
+823
+00:34:05,949 --> 00:34:09,159
+so I live in, in an area where the,
+
+824
+00:34:09,659 --> 00:34:12,179
+the o'hare airport is basically like the, the
+
+825
+00:34:12,330 --> 00:34:14,219
+Giganto airport for the region
+
+826
+00:34:15,110 --> 00:34:16,679
+and it's three hours away by car.
+
+827
+00:34:16,688 --> 00:34:19,469
+So II, I never drive to o'hare because it's too far to drive.
+
+828
+00:34:19,820 --> 00:34:22,090
+And also I don't want to waste six hours of my life.
+
+829
+00:34:22,100 --> 00:34:25,438
+Well, between that and security and everything you're looking at like, five hours.
+
+830
+00:34:25,610 --> 00:34:26,850
+Yeah, at least. Exactly.
+
+831
+00:34:27,030 --> 00:34:30,899
+But like, if I could get in a car that was gonna drive me there and I could, like,
+
+832
+00:34:30,909 --> 00:34:34,070
+work or read or play video games or whatever, like,
+
+833
+00:34:34,080 --> 00:34:37,290
+I would seriously consider that because that would not be a waste of my time.
+
+834
+00:34:37,300 --> 00:34:37,929
+You know what I mean?
+
+835
+00:34:38,580 --> 00:34:42,760
+Well, I, I think that's going to be a big thing. Is. I, I know a lot of people who commute
+
+836
+00:34:43,310 --> 00:34:46,159
+and that's an extra 2030 minutes each way that,
+
+837
+00:34:46,300 --> 00:34:49,719
+yeah, they can't work. They can't really do much of anything useful
+
+838
+00:34:50,090 --> 00:34:51,840
+other than listen to, like, books on tape.
+
+839
+00:34:52,478 --> 00:34:55,080
+-- No,
+-- I get it, man. It's gonna be, it's gonna be crazy
+
+840
+00:34:55,688 --> 00:34:57,138
+anyway. All right, we're, we're in the weeds. Uh,
+
+841
+00:34:57,279 --> 00:34:58,188
+let's
+
+842
+00:34:58,319 --> 00:35:01,519
+speaking on the topic of security through obscurity.
+
+843
+00:35:01,529 --> 00:35:04,089
+There was also the Microsoft leak
+
+844
+00:35:04,229 --> 00:35:05,108
+that happened.
+
+845
+00:35:05,468 --> 00:35:07,579
+What was that? When, whenever, whenever it happened,
+
+846
+00:35:07,829 --> 00:35:08,418
+that's when it happened
+
+847
+00:35:09,529 --> 00:35:12,269
+last week, a couple of days, whatever, it doesn't matter, it doesn't matter.
+
+848
+00:35:12,398 --> 00:35:14,428
+So what, what basically happened was
+
+849
+00:35:15,070 --> 00:35:18,820
+some guy found on an FTP site, a dump of a,
+
+850
+00:35:18,830 --> 00:35:22,260
+what is it like 32 terabytes of windows source code or something?
+
+851
+00:35:22,270 --> 00:35:23,129
+Apparently
+
+852
+00:35:23,370 --> 00:35:23,889
+something like
+
+853
+00:35:25,389 --> 00:35:26,689
+official and nonpublic.
+
+854
+00:35:27,030 --> 00:35:29,169
+I don't know, it was installation images
+
+855
+00:35:29,560 --> 00:35:30,449
+and they say so
+
+856
+00:35:30,655 --> 00:35:31,784
+for blueprints, what is it?
+
+857
+00:35:35,435 --> 00:35:36,514
+What is the software blueprint?
+
+858
+00:35:36,524 --> 00:35:38,584
+It doesn't matter because we're going to talk
+
+859
+00:35:38,594 --> 00:35:40,715
+about source code and hiding source code.
+
+860
+00:35:40,725 --> 00:35:43,274
+And, and so, and then of course, Twitter lights up
+
+861
+00:35:43,485 --> 00:35:46,225
+as, as it does and this is what makes Twitter so much fun
+
+862
+00:35:46,455 --> 00:35:47,274
+because everyone's like, oh,
+
+863
+00:35:47,284 --> 00:35:50,705
+someone at Microsoft is freaking out that's ruined their weekend, whatever.
+
+864
+00:35:50,715 --> 00:35:52,235
+And I was thinking about this and
+
+865
+00:35:52,919 --> 00:35:55,379
+yeah, I'm sure there's people at Microsoft that weren't happy,
+
+866
+00:35:55,389 --> 00:35:56,659
+but like at the end of the day
+
+867
+00:35:57,530 --> 00:35:59,689
+doesn't really matter. I don't think it does.
+
+868
+00:36:00,250 --> 00:36:00,830
+Like, like,
+
+869
+00:36:00,840 --> 00:36:03,129
+I think Microsoft is so far past the point of
+
+870
+00:36:03,139 --> 00:36:06,620
+believing their source code is some sort of security asset.
+
+871
+00:36:06,629 --> 00:36:06,719
+Now,
+
+872
+00:36:06,729 --> 00:36:09,989
+granted there's there's trade secrets and we won't talk about that necessarily.
+
+873
+00:36:10,000 --> 00:36:10,330
+But
+
+874
+00:36:10,439 --> 00:36:12,500
+as a security asset, I don't buy it.
+
+875
+00:36:12,949 --> 00:36:13,129
+Well,
+
+876
+00:36:13,139 --> 00:36:18,189
+it says that the uh the leak code is Microsoft's Microsoft's shared source kit.
+
+877
+00:36:18,199 --> 00:36:18,719
+So this is
+
+878
+00:36:19,004 --> 00:36:21,264
+assuming that is source code that they share with
+
+879
+00:36:21,274 --> 00:36:23,754
+-- partners and what
+-- the shared source thing was.
+
+880
+00:36:23,764 --> 00:36:25,485
+Oh man, I've got a great story about this.
+
+881
+00:36:25,554 --> 00:36:27,705
+So shared source was the thing they started where
+
+882
+00:36:27,715 --> 00:36:29,824
+like if you were a university student or,
+
+883
+00:36:29,834 --> 00:36:33,544
+or part of faculty or something, you could get access to Windows source code to,
+
+884
+00:36:33,554 --> 00:36:34,304
+to do stuff,
+
+885
+00:36:34,564 --> 00:36:37,745
+right? You could look at it and I think you could build some of it. I don't,
+
+886
+00:36:37,995 --> 00:36:41,274
+I'm sure you could send them changes whether they took them or not. Who knows?
+
+887
+00:36:41,284 --> 00:36:43,745
+And you of course, had to sign a phone book contract and,
+
+888
+00:36:43,915 --> 00:36:44,655
+and all this. And
+
+889
+00:36:44,989 --> 00:36:47,909
+I remember I was out for dinner one night with a Microsoft sales rep.
+
+890
+00:36:47,919 --> 00:36:51,020
+This was, this was right when shared source first started. And I was,
+
+891
+00:36:51,340 --> 00:36:54,979
+I don't even know if I worked at Red Hat back then. It was a long time ago.
+
+892
+00:36:55,330 --> 00:36:57,939
+And anyway, I remember this guy looks at me and he says, why do,
+
+893
+00:36:57,949 --> 00:36:59,179
+why do you do this stuff?
+
+894
+00:36:59,189 --> 00:37:01,020
+I don't, I don't get this open source.
+
+895
+00:37:01,270 --> 00:37:04,530
+I'm like, it's fun, you know, I can, I've got all this source code.
+
+896
+00:37:04,540 --> 00:37:07,239
+I've got all these tools. None of it costs money. I can work on it.
+
+897
+00:37:07,250 --> 00:37:09,139
+I can contribute back, you know, whatever.
+
+898
+00:37:09,540 --> 00:37:12,129
+And he looks at me and like he was completely honest and he said,
+
+899
+00:37:12,250 --> 00:37:14,969
+but we do that. We shared source and
+
+900
+00:37:15,300 --> 00:37:19,439
+he took everything in me to not laugh out loud at this guy.
+
+901
+00:37:19,449 --> 00:37:20,399
+And it's like I,
+
+902
+00:37:20,409 --> 00:37:24,399
+I would love to educate you but you don't get it and I don't think you ever will.
+
+903
+00:37:24,459 --> 00:37:27,800
+-- It's just, they are not the same thing.
+-- No, no.
+
+904
+00:37:28,139 --> 00:37:31,600
+My understanding is that well, I mean, according to the article it's things. Uh,
+
+905
+00:37:32,120 --> 00:37:35,399
+yeah, it's not even close to what you would need to build windows.
+
+906
+00:37:35,540 --> 00:37:39,810
+Uh, well, no, probably not. And, and, but wasn't there a windows dump once?
+
+907
+00:37:39,820 --> 00:37:41,409
+And somebody did find some security
+
+908
+00:37:41,600 --> 00:37:41,659
+issues
+
+909
+00:37:42,000 --> 00:37:42,370
+for
+
+910
+00:37:43,030 --> 00:37:44,209
+it was a long time
+
+911
+00:37:44,379 --> 00:37:44,540
+ago.
+
+912
+00:37:44,899 --> 00:37:45,219
+And,
+
+913
+00:37:45,449 --> 00:37:47,360
+but whatever the point is though,
+
+914
+00:37:47,370 --> 00:37:50,760
+that Microsoft has a very mature and when I use a mature, I mean,
+
+915
+00:37:50,770 --> 00:37:54,110
+like the granddaddy of security development life cycle programs
+
+916
+00:37:54,540 --> 00:37:59,110
+and these guys have been through it all. They've seen it all
+
+917
+00:37:59,330 --> 00:38:02,860
+and, and let's face it. Worst case scenario, bad guy gets a source code.
+
+918
+00:38:03,639 --> 00:38:05,129
+They deal with it. Right. I mean,
+
+919
+00:38:05,300 --> 00:38:05,330
+yeah,
+
+920
+00:38:05,469 --> 00:38:07,500
+-- well,
+-- just like with the stuff Tavis is finding
+
+921
+00:38:08,260 --> 00:38:10,139
+because he's found at this point. Probably.
+
+922
+00:38:10,149 --> 00:38:12,270
+I haven't been keeping track of everything he's found, but it's,
+
+923
+00:38:12,280 --> 00:38:15,739
+it feels like a couple dozen really bad windows related security
+
+924
+00:38:15,750 --> 00:38:18,129
+flaws and windows and defender and a bunch of other stuff.
+
+925
+00:38:18,139 --> 00:38:18,790
+-- He was looking
+-- at
+
+926
+00:38:19,000 --> 00:38:19,939
+everything
+
+927
+00:38:20,300 --> 00:38:20,979
+-- Tavis has
+-- broken.
+
+928
+00:38:21,370 --> 00:38:23,389
+I'm thinking of all the antivirus that he beat up and then
+
+929
+00:38:23,399 --> 00:38:25,419
+just kind of gave up on because it was so terrible.
+
+930
+00:38:25,780 --> 00:38:27,179
+I don't know if he gave up on it, but
+
+931
+00:38:28,229 --> 00:38:33,020
+here's, here's, well, actually, so this is another part of this story is uh open VPN.
+
+932
+00:38:33,510 --> 00:38:33,810
+Right.
+
+933
+00:38:33,820 --> 00:38:37,560
+There were what two professional audits done of Open VPN where,
+
+934
+00:38:37,570 --> 00:38:41,800
+like people looked at code and they scanned the code and they did their thing, right.
+
+935
+00:38:41,810 --> 00:38:43,639
+And they found a bunch of minor stuff
+
+936
+00:38:43,899 --> 00:38:46,080
+and like some dude fuzzed
+
+937
+00:38:46,260 --> 00:38:47,610
+it. He found a whole bunch of
+
+938
+00:38:48,290 --> 00:38:48,830
+bugs.
+
+939
+00:38:49,610 --> 00:38:49,870
+Yeah.
+
+940
+00:38:49,879 --> 00:38:51,479
+Well, and there were, actually, there was about,
+
+941
+00:38:51,489 --> 00:38:55,469
+I think there were three other flaws that we didn't give CV S because they just,
+
+942
+00:38:55,479 --> 00:38:57,939
+they weren't exploitable in any way, shape or form.
+
+943
+00:38:58,449 --> 00:38:58,989
+Um,
+
+944
+00:38:59,239 --> 00:39:01,830
+but, but here's, here's the point too. It doesn't matter
+
+945
+00:39:02,010 --> 00:39:05,409
+how hard you look at it, it doesn't matter how good your SDLC is.
+
+946
+00:39:05,600 --> 00:39:10,120
+All it takes is some guy to show up and run a tool and now you've got a new bug and I mean,
+
+947
+00:39:10,129 --> 00:39:10,610
+that's the thing.
+
+948
+00:39:10,620 --> 00:39:13,540
+Like you move with Tavis. Tavis can work on this stuff forever
+
+949
+00:39:13,979 --> 00:39:16,199
+and you know what the next day he could come in
+
+950
+00:39:16,209 --> 00:39:18,639
+and find a bug worse than anything he's found yet.
+
+951
+00:39:18,649 --> 00:39:20,760
+It's just, it's the nature of this stuff.
+
+952
+00:39:21,429 --> 00:39:23,070
+Well, and it keeps changing and moving. Right.
+
+953
+00:39:23,080 --> 00:39:26,399
+It's not like we're, you know, assessing a bridge for flaws. It's,
+
+954
+00:39:26,750 --> 00:39:28,469
+we're assessing all the bridges
+
+955
+00:39:28,709 --> 00:39:31,239
+that are constantly being rebuilt and refurbished.
+
+956
+00:39:31,439 --> 00:39:32,419
+You know, I like.
+
+957
+00:39:32,429 --> 00:39:36,649
+And if you look at the, if you look at the turn rate in some open source code projects,
+
+958
+00:39:37,050 --> 00:39:39,979
+the Linux kernel is a great example, like how many
+
+959
+00:39:40,550 --> 00:39:45,590
+lines of code are added, removed, changed every, you know, major release.
+
+960
+00:39:45,600 --> 00:39:49,090
+-- And the answer is like, well, it's a lot,
+-- you know, that would be really fun.
+
+961
+00:39:49,100 --> 00:39:52,629
+I might do that. I should, I should take the GIT repo of the kernel
+
+962
+00:39:52,989 --> 00:39:56,129
+and look at how many lines because obviously you can only
+
+963
+00:39:56,139 --> 00:39:58,360
+go back to when it was imported into GIT because,
+
+964
+00:39:58,370 --> 00:40:00,459
+you know, line is used in FTP site.
+
+965
+00:40:00,760 --> 00:40:02,750
+It starts code management a long time ago.
+
+966
+00:40:02,959 --> 00:40:05,909
+But it'd be really interesting to look at how many lines of code were
+
+967
+00:40:05,919 --> 00:40:09,449
+in that initial commit that are still actually part of the kernel today.
+
+968
+00:40:10,379 --> 00:40:12,959
+Probably, oh, even the license might
+
+969
+00:40:13,929 --> 00:40:17,639
+ignoring text files in license files and things like that. Right.
+
+970
+00:40:17,649 --> 00:40:21,080
+I'm talking about like c source code and we can even ignore comments
+
+971
+00:40:21,330 --> 00:40:25,040
+but like actual compiled code. I'd be interested to see
+
+972
+00:40:25,179 --> 00:40:26,189
+that'd be fun to you too.
+
+973
+00:40:26,199 --> 00:40:28,959
+I bet I could get GCC to tell me which lines were c,
+
+974
+00:40:28,969 --> 00:40:31,139
+like which lines it compiles and which lines it doesn't.
+
+975
+00:40:31,149 --> 00:40:33,280
+This would be a fun project. Maybe I'll do that this weekend.
+
+976
+00:40:33,750 --> 00:40:34,219
+Yeah.
+
+977
+00:40:34,590 --> 00:40:34,850
+Yeah.
+
+978
+00:40:34,860 --> 00:40:38,929
+No, I mean, and, and not only that but the underlying technology, you know,
+
+979
+00:40:38,939 --> 00:40:40,810
+part of it too is, and this is what I love is,
+
+980
+00:40:40,820 --> 00:40:43,969
+this technology is so complex that we have emergent behavior.
+
+981
+00:40:43,979 --> 00:40:46,120
+Like a great example being the Kuala stack
+
+982
+00:40:46,229 --> 00:40:46,850
+card stuff,
+
+983
+00:40:48,159 --> 00:40:49,989
+it's like literally whoops,
+
+984
+00:40:50,260 --> 00:40:50,750
+you know,
+
+985
+00:40:50,860 --> 00:40:52,550
+that didn't do what we thought it would.
+
+986
+00:40:53,629 --> 00:40:55,070
+Yep. Yep. Yeah,
+
+987
+00:40:56,770 --> 00:40:57,729
+you gotta love it, man.
+
+988
+00:40:58,820 --> 00:40:59,479
+What do you do?
+
+989
+00:41:00,310 --> 00:41:05,729
+Well, I mean, train people to react quickly when the law is found and get it,
+
+990
+00:41:06,040 --> 00:41:09,000
+get it fixed and get the fix out to customers and to users.
+
+991
+00:41:09,120 --> 00:41:09,129
+I
+
+992
+00:41:09,379 --> 00:41:09,860
+tend to agree
+
+993
+00:41:10,020 --> 00:41:14,280
+with that. I, I think that's the only answer because even if you have the best
+
+994
+00:41:14,530 --> 00:41:18,840
+security training and security reviews and, and whatever
+
+995
+00:41:19,350 --> 00:41:20,260
+in place,
+
+996
+00:41:20,780 --> 00:41:24,719
+it, it doesn't matter because you still have software for the critical issues.
+
+997
+00:41:25,310 --> 00:41:28,370
+I'm, I can't, I'm sure it's out there,
+
+998
+00:41:28,379 --> 00:41:32,919
+but I'm trying to think of a major vendor of software related stuff
+
+999
+00:41:33,719 --> 00:41:35,340
+that actually builds
+
+1000
+00:41:35,830 --> 00:41:39,000
+reliably 100% of their own stuff.
+
+1001
+00:41:39,010 --> 00:41:41,020
+Like even the sombre thing is saying that
+
+1002
+00:41:41,030 --> 00:41:43,340
+we use third party code and operating systems.
+
+1003
+00:41:44,830 --> 00:41:45,030
+The only,
+
+1004
+00:41:45,270 --> 00:41:48,320
+the only thing I could possibly think of would be the space shuttle and only
+
+1005
+00:41:48,330 --> 00:41:49,750
+because it's running like a code base
+
+1006
+00:41:49,760 --> 00:41:52,969
+-- from 1970 the
+-- space shuttle doesn't fly anymore
+
+1007
+00:41:53,629 --> 00:41:55,439
+and I'm sure it used.
+
+1008
+00:41:55,449 --> 00:41:56,969
+Well, I'm sure some of the airplanes,
+
+1009
+00:41:56,979 --> 00:42:02,250
+I bet this operating system that we read about is probably 100% proprietary
+
+1010
+00:42:03,129 --> 00:42:04,199
+but the whole, but no, no, no,
+
+1011
+00:42:04,209 --> 00:42:06,870
+I'm saying the plane as a whole includes other components.
+
+1012
+00:42:06,879 --> 00:42:07,750
+And that's what I mean is,
+
+1013
+00:42:08,020 --> 00:42:12,229
+I don't think there's a single thing anymore that ships with software
+
+1014
+00:42:12,870 --> 00:42:14,560
+that is 100% like in
+
+1015
+00:42:14,850 --> 00:42:15,199
+house. You
+
+1016
+00:42:15,310 --> 00:42:16,090
+-- know
+-- what this is though?
+
+1017
+00:42:16,959 --> 00:42:17,040
+You're
+
+1018
+00:42:17,199 --> 00:42:18,760
+shipping somebody else's stuff as well.
+
+1019
+00:42:18,870 --> 00:42:19,330
+Did you?
+
+1020
+00:42:20,560 --> 00:42:21,500
+No, no, no, you're uh
+
+1021
+00:42:21,639 --> 00:42:22,399
+you're on Reddit.
+
+1022
+00:42:22,570 --> 00:42:23,590
+So I know you saw this.
+
+1023
+00:42:23,600 --> 00:42:27,909
+Did you see the story about the guy who made the $1500 chicken sandwich?
+
+1024
+00:42:29,050 --> 00:42:29,169
+Uh
+
+1025
+00:42:29,459 --> 00:42:30,469
+-- No.
+-- Ok.
+
+1026
+00:42:30,639 --> 00:42:32,270
+Uh So it rings a bell.
+
+1027
+00:42:32,280 --> 00:42:33,760
+This is, this is old, I think,
+
+1028
+00:42:33,770 --> 00:42:37,239
+but it showed up on one of the subreddits over the weekend and
+
+1029
+00:42:37,399 --> 00:42:39,270
+I've not heard this story before now,
+
+1030
+00:42:39,520 --> 00:42:43,149
+but apparently this guy decided he was going to like, make a chicken sandwich as in,
+
+1031
+00:42:43,159 --> 00:42:45,919
+he's going to raise the chicken and grow the wheat and he like,
+
+1032
+00:42:45,929 --> 00:42:48,590
+grew all the vegetables and everything to make this sandwich.
+
+1033
+00:42:48,909 --> 00:42:52,649
+And it ended up costing him $1500 and took six months, right?
+
+1034
+00:42:52,959 --> 00:42:53,479
+That's why
+
+1035
+00:42:53,830 --> 00:42:55,209
+build a toaster from scratch.
+
+1036
+00:42:55,389 --> 00:42:59,169
+-- The guy who tried to watch the
+-- TED talk, a TED talk. This guy tried to build
+
+1037
+00:42:59,389 --> 00:43:01,290
+a simple electronic toaster
+
+1038
+00:43:02,320 --> 00:43:05,840
+that TED talk was stupid. Like this guy actually made a sandwich, right?
+
+1039
+00:43:05,850 --> 00:43:10,360
+That the TED Talk guy, he, he made a wire, right? Like it was
+
+1040
+00:43:12,169 --> 00:43:13,290
+my life were not bad.
+
+1041
+00:43:13,750 --> 00:43:15,229
+What was your favorite part of the process?
+
+1042
+00:43:15,239 --> 00:43:16,770
+I really enjoyed milking the cow,
+
+1043
+00:43:16,780 --> 00:43:19,560
+they were friendly and like to be rubbed on the base of their tail.
+
+1044
+00:43:19,639 --> 00:43:22,459
+But it was also scary because the farmer was telling me
+
+1045
+00:43:22,469 --> 00:43:25,770
+that if spooked they kick with what's called the death kick.
+
+1046
+00:43:26,179 --> 00:43:26,669
+Uh,
+
+1047
+00:43:26,800 --> 00:43:28,620
+yeah, that, that burnt down in Chicago.
+
+1048
+00:43:30,350 --> 00:43:32,600
+But, but anyway, so here's the deal, right?
+
+1049
+00:43:32,649 --> 00:43:35,600
+This is why nobody writes all their own software
+
+1050
+00:43:35,610 --> 00:43:38,560
+because otherwise you end up spending $1500 on,
+
+1051
+00:43:38,570 --> 00:43:40,370
+-- on a chicken sandwich and it takes
+-- you a
+
+1052
+00:43:40,489 --> 00:43:41,320
+web server
+
+1053
+00:43:41,469 --> 00:43:44,199
+or even a basic network communications protocol. Like,
+
+1054
+00:43:44,370 --> 00:43:46,669
+have you not noticed all those places that, you know,
+
+1055
+00:43:46,679 --> 00:43:48,360
+use UDP and then try to make it into
+
+1056
+00:43:48,370 --> 00:43:51,610
+reliable delivery and end up badly recreating TCP.
+
+1057
+00:43:51,840 --> 00:43:54,629
+They create a broken TCP every time.
+
+1058
+00:43:56,419 --> 00:43:59,149
+Yeah, I mean, and I think this goes back to a lot of,
+
+1059
+00:43:59,159 --> 00:44:00,879
+you know what I've said about security is I think we'd
+
+1060
+00:44:00,889 --> 00:44:03,120
+be better off if we had people focus on using,
+
+1061
+00:44:03,129 --> 00:44:03,479
+you know,
+
+1062
+00:44:03,610 --> 00:44:07,719
+some of the better frameworks and just like, please, for the love of whatever,
+
+1063
+00:44:07,729 --> 00:44:11,239
+don't like, don't write your own encryption or web server or whatever.
+
+1064
+00:44:11,250 --> 00:44:14,479
+-- Like
+-- the news, one of these professional stats is off.
+
+1065
+00:44:14,659 --> 00:44:15,629
+Don't roll your own.
+
+1066
+00:44:16,939 --> 00:44:17,020
+I
+
+1067
+00:44:17,199 --> 00:44:17,219
+know.
+
+1068
+00:44:17,239 --> 00:44:18,399
+Oh yeah, I saw,
+
+1069
+00:44:18,409 --> 00:44:22,919
+I just like two weeks ago saw a new one mentioned on Reddit and it was like,
+
+1070
+00:44:23,600 --> 00:44:25,280
+just all the y
+
+1071
+00:44:26,649 --> 00:44:28,080
+because they can
+
+1072
+00:44:28,520 --> 00:44:32,040
+because we, we finally convinced them not to roll their own crypto. So
+
+1073
+00:44:32,169 --> 00:44:33,300
+now they're rolling their own off
+
+1074
+00:44:34,139 --> 00:44:34,419
+which,
+
+1075
+00:44:34,830 --> 00:44:35,560
+well, and, and
+
+1076
+00:44:35,739 --> 00:44:37,239
+o has to involve crypto now.
+
+1077
+00:44:37,479 --> 00:44:39,159
+Yeah, it usually does, doesn't it?
+
+1078
+00:44:39,540 --> 00:44:39,709
+Well,
+
+1079
+00:44:40,149 --> 00:44:43,959
+how are you going to transport in store and verify secrets without crypto?
+
+1080
+00:44:44,080 --> 00:44:45,399
+It's true. It's true.
+
+1081
+00:44:45,739 --> 00:44:45,750
+Oh,
+
+1082
+00:44:45,889 --> 00:44:46,760
+my goodness.
+
+1083
+00:44:46,909 --> 00:44:51,239
+I guess the moral of the story is buy your groceries at the store.
+
+1084
+00:44:51,540 --> 00:44:55,080
+Yes. Well, not only that, could you imagine the, just
+
+1085
+00:44:55,489 --> 00:44:59,060
+absurdity if everyone trying to kind of grow and,
+
+1086
+00:44:59,070 --> 00:45:02,550
+and do their own thing for food instead of relying on, you know,
+
+1087
+00:45:02,560 --> 00:45:04,250
+essentially factory farms.
+
+1088
+00:45:04,360 --> 00:45:05,629
+Well, we, we did that.
+
+1089
+00:45:05,639 --> 00:45:10,000
+It was called the agrarian, you know, the agricultural revolution.
+
+1090
+00:45:10,399 --> 00:45:10,810
+And like
+
+1091
+00:45:11,185 --> 00:45:14,814
+8% of people spent all their time trying to grow food and not starve to death.
+
+1092
+00:45:14,824 --> 00:45:15,804
+That's a good point
+
+1093
+00:45:16,524 --> 00:45:16,864
+and
+
+1094
+00:45:17,185 --> 00:45:17,995
+kind of sucked.
+
+1095
+00:45:18,004 --> 00:45:22,195
+And then we did the industrial revolution and it was not super awesome for a while,
+
+1096
+00:45:22,205 --> 00:45:22,524
+but
+
+1097
+00:45:22,675 --> 00:45:23,465
+it got better.
+
+1098
+00:45:23,665 --> 00:45:26,625
+It did. And we cured polio, which is a big deal.
+
+1099
+00:45:27,094 --> 00:45:30,935
+And now obesity is one of the leading causes of death globally,
+
+1100
+00:45:30,945 --> 00:45:32,165
+not just in North America.
+
+1101
+00:45:32,375 --> 00:45:32,705
+So
+
+1102
+00:45:33,094 --> 00:45:34,145
+we win.
+
+1103
+00:45:34,524 --> 00:45:36,604
+Yeah, 2 billion people are overweight now.
+
+1104
+00:45:37,254 --> 00:45:38,034
+Yay,
+
+1105
+00:45:38,689 --> 00:45:41,850
+whatever. All right. So the moral of this story is
+
+1106
+00:45:42,610 --> 00:45:46,709
+you, you, you have to work with other groups, you have to use third party software.
+
+1107
+00:45:46,719 --> 00:45:48,229
+And so I guess our trick now
+
+1108
+00:45:48,570 --> 00:45:51,030
+is how do we vet third party software?
+
+1109
+00:45:51,060 --> 00:45:53,149
+And, and I don't think we're going to answer that today
+
+1110
+00:45:53,389 --> 00:45:58,830
+because that could be probably a, a 10 part episode if we wanted to cover it.
+
+1111
+00:45:59,320 --> 00:46:02,030
+But II, I think that's becoming the new issue and,
+
+1112
+00:46:02,040 --> 00:46:05,419
+and I see a lot of people are being like, oh, open source bad.
+
+1113
+00:46:05,600 --> 00:46:06,830
+But in reality it's like,
+
+1114
+00:46:07,159 --> 00:46:12,129
+it's, it's just a tool. You know, it, it, it's your hammerer. Now. Go find some nails.
+
+1115
+00:46:12,719 --> 00:46:14,780
+Well, more to the point. You're,
+
+1116
+00:46:15,000 --> 00:46:16,139
+what choice do you have?
+
+1117
+00:46:17,479 --> 00:46:19,360
+-- You don't, you don't have, like,
+-- do you remember?
+
+1118
+00:46:19,370 --> 00:46:19,729
+I mean,
+
+1119
+00:46:19,739 --> 00:46:24,500
+I remember when there were several very successful closed source web servers,
+
+1120
+00:46:25,689 --> 00:46:26,979
+-- they're mostly dead
+-- now.
+
+1121
+00:46:27,229 --> 00:46:30,870
+-- I the Microsoft one is still around, isn't it
+-- true?
+
+1122
+00:46:30,879 --> 00:46:33,010
+But that's only because, you know, Microsoft,
+
+1123
+00:46:33,399 --> 00:46:34,879
+-- but nobody else can afford to
+-- do
+
+1124
+00:46:34,889 --> 00:46:35,110
+that.
+
+1125
+00:46:35,120 --> 00:46:37,560
+Yeah, the other big one was what the, the Netscape
+
+1126
+00:46:38,290 --> 00:46:39,080
+-- Netscape
+-- had one,
+
+1127
+00:46:40,120 --> 00:46:40,870
+had one
+
+1128
+00:46:41,080 --> 00:46:41,429
+and so
+
+1129
+00:46:41,530 --> 00:46:43,010
+had one and there was that one from that
+
+1130
+00:46:43,020 --> 00:46:45,370
+company in Italy that was actually really quite,
+
+1131
+00:46:45,379 --> 00:46:47,030
+quite efficient and nice.
+
+1132
+00:46:47,530 --> 00:46:48,389
+Um
+
+1133
+00:46:49,020 --> 00:46:50,969
+I can't remember the names anymore. They're just
+
+1134
+00:46:51,290 --> 00:46:52,709
+gone to the winds of time
+
+1135
+00:46:53,030 --> 00:46:55,479
+and, you know, the more successful one now is while Engen
+
+1136
+00:46:55,590 --> 00:46:59,169
+X, which is, of course, open source and Apache, the granddaddy, open source,
+
+1137
+00:47:00,939 --> 00:47:02,219
+you know, so
+
+1138
+00:47:02,770 --> 00:47:05,840
+although the Google web server serves a lot of traffic,
+
+1139
+00:47:05,850 --> 00:47:09,000
+not that anyone can run it but them, but I don't even know what that is.
+
+1140
+00:47:09,010 --> 00:47:12,149
+If it's just some bastardized Apache or if,
+
+1141
+00:47:12,729 --> 00:47:14,639
+or if they've, they've written their own.
+
+1142
+00:47:15,889 --> 00:47:19,280
+My suspicion is it's probably a whole bunch of open source put together.
+
+1143
+00:47:20,379 --> 00:47:22,840
+Uh I think they're smart enough to
+
+1144
+00:47:23,139 --> 00:47:25,300
+not completely suffer from not invented
+
+1145
+00:47:25,310 --> 00:47:27,610
+here syndrome unless it's absolutely necessary,
+
+1146
+00:47:27,620 --> 00:47:29,520
+like, say the chrome web browser.
+
+1147
+00:47:29,530 --> 00:47:30,800
+But even that uses it
+
+1148
+00:47:31,659 --> 00:47:31,669
+a
+
+1149
+00:47:31,840 --> 00:47:31,879
+bunch
+
+1150
+00:47:32,159 --> 00:47:32,179
+of
+
+1151
+00:47:32,320 --> 00:47:34,340
+-- other
+-- stuff. It wasn't not invented here.
+
+1152
+00:47:34,350 --> 00:47:37,780
+It's just when Web KT became difficult to work with, they had to fork
+
+1153
+00:47:39,189 --> 00:47:41,040
+and I don't, I don't blame them for that.
+
+1154
+00:47:41,070 --> 00:47:43,899
+I, I remember when that happened, it was, it was kind of messed up.
+
+1155
+00:47:43,909 --> 00:47:46,060
+I think I was on the security team when that happened.
+
+1156
+00:47:47,030 --> 00:47:49,159
+I was on the web KT security team at one point.
+
+1157
+00:47:49,600 --> 00:47:51,629
+I was, I assigned other CV S
+
+1158
+00:47:53,120 --> 00:47:56,149
+man. That was a long time ago. I forgot that was even a thing.
+
+1159
+00:47:57,000 --> 00:47:58,300
+Anyway. Anyway,
+
+1160
+00:47:59,020 --> 00:48:01,929
+it's, it's time to call it. I think any funny thoughts, Kurt.
+
+1161
+00:48:02,540 --> 00:48:02,550
+Uh
+
+1162
+00:48:03,639 --> 00:48:06,399
+Yeah, I don't know, hobby farming. It sounds fun but
+
+1163
+00:48:07,959 --> 00:48:08,879
+terrible.
+
+1164
+00:48:09,090 --> 00:48:09,290
+Like
+
+1165
+00:48:10,129 --> 00:48:13,919
+I love that I can go buy fruits and vegetables at the grocery store.
+
+1166
+00:48:14,620 --> 00:48:18,780
+Yeah, I think fundamentally, I mean, specialization of economic labor. It's,
+
+1167
+00:48:19,280 --> 00:48:19,989
+it works.
+
+1168
+00:48:20,649 --> 00:48:21,739
+Yes, it does.
+
+1169
+00:48:22,110 --> 00:48:23,000
+Yes, it does.
+
+1170
+00:48:23,229 --> 00:48:23,830
+All right, man.
+
+1171
+00:48:24,530 --> 00:48:26,229
+Thank you, everybody for listening.
+
+1172
+00:48:26,239 --> 00:48:29,300
+Thank you, Kurt for a, a enlightening conversation.
+
+1173
+00:48:29,310 --> 00:48:33,949
+As always, we'll have the show notes at open source Security podcast.com.
+
+1174
+00:48:33,959 --> 00:48:36,489
+We have all kinds of crazy stuff this week to talk about.
+
+1175
+00:48:36,919 --> 00:48:40,790
+You can use the Pound Os S podcast. Hashtag to get a hold of us.
+
+1176
+00:48:40,800 --> 00:48:44,669
+We have links to Twitter and Facebook there you can use and if nothing else,
+
+1177
+00:48:44,679 --> 00:48:45,070
+thank you.
+
+1178
+00:48:45,080 --> 00:48:49,550
+Everyone for listening. Kurt. You have a fantastic rest of your day.
+
+1179
+00:48:49,879 --> 00:48:50,429
+You too.
